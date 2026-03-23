@@ -1,196 +1,12 @@
 using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 using Terraria.Achievements;
 
 namespace Terraria
 {
 	public sealed class NPC
 	{
-		public enum ID
-		{
-			NONE,
-			SLIME,
-			DEMON_EYE,
-			ZOMBIE,
-			EYE_OF_CTHULHU,
-			SERVANT_OF_CTHULHU,
-			EATER_OF_SOULS,
-			DEVOURER_HEAD,
-			DEVOURER_BODY,
-			DEVOURER_TAIL,
-			GIANT_WORM_HEAD,
-			GIANT_WORM_BODY,
-			GIANT_WORM_TAIL,
-			EATER_OF_WORLDS_HEAD,
-			EATER_OF_WORLDS_BODY,
-			EATER_OF_WORLDS_TAIL,
-			MOTHER_SLIME,
-			MERCHANT,
-			NURSE,
-			ARMS_DEALER,
-			DRYAD,
-			SKELETON,
-			GUIDE,
-			METEOR_HEAD,
-			FIRE_IMP,
-			BURNING_SPHERE,
-			GOBLIN_PEON,
-			GOBLIN_THIEF,
-			GOBLIN_WARRIOR,
-			GOBLIN_SORCERER,
-			CHAOS_BALL,
-			BONES,
-			DARK_CASTER,
-			WATER_SPHERE,
-			CURSED_SKULL,
-			SKELETRON_HEAD,
-			SKELETRON_HAND,
-			OLD_MAN,
-			DEMOLITIONIST,
-			BONE_SERPENT_HEAD,
-			BONE_SERPENT_BODY,
-			BONE_SERPENT_TAIL,
-			HORNET,
-			MAN_EATER,
-			UNDEAD_MINER,
-			TIM,
-			BUNNY,
-			CORRUPT_BUNNY,
-			HARPY,
-			CAVE_BAT,
-			KING_SLIME,
-			JUNGLE_BAT,
-			DOCTOR_BONES,
-			THE_GROOM,
-			CLOTHIER,
-			GOLDFISH,
-			SNATCHER,
-			CORRUPT_GOLDFISH,
-			PIRANHA,
-			LAVA_SLIME,
-			HELLBAT,
-			VULTURE,
-			DEMON,
-			BLUE_JELLYFISH,
-			PINK_JELLYFISH,
-			SHARK,
-			VOODOO_DEMON,
-			CRAB,
-			DUNGEON_GUARDIAN,
-			ANTLION,
-			SPIKE_BALL,
-			DUNGEON_SLIME,
-			BLAZING_WHEEL,
-			GOBLIN_SCOUT,
-			BIRD,
-			PIXIE,
-			XXX_UNUSED_XXX, // Known as None2, has a wandering eye sprite
-			ARMORED_SKELETON,
-			MUMMY,
-			DARK_MUMMY,
-			LIGHT_MUMMY,
-			CORRUPT_SLIME,
-			WRAITH,
-			CURSED_HAMMER,
-			ENCHANTED_SWORD,
-			MIMIC,
-			UNICORN,
-			WYVERN_HEAD,
-			WYVERN_LEGS,
-			WYVERN_BODY1,
-			WYVERN_BODY2,
-			WYVERN_BODY3,
-			WYVERN_TAIL,
-			GIANT_BAT,
-			CORRUPTOR,
-			DIGGER_HEAD,
-			DIGGER_BODY,
-			DIGGER_TAIL,
-			SEEKER_HEAD, // World Feeder
-			SEEKER_BODY,
-			SEEKER_TAIL,
-			CLINGER,
-			ANGLER_FISH,
-			GREEN_JELLYFISH,
-			WEREWOLF,
-			BOUND_GOBLIN,
-			BOUND_WIZARD,
-			GOBLIN_TINKERER,
-			WIZARD,
-			CLOWN,
-			SKELETON_ARCHER,
-			GOBLIN_ARCHER,
-			VILE_SPIT,
-			WALL_OF_FLESH,
-			WALL_OF_FLESH_EYE,
-			THE_HUNGRY,
-			THE_HUNGRY_II,
-			LEECH_HEAD,
-			LEECH_BODY,
-			LEECH_TAIL,
-			CHAOS_ELEMENTAL,
-			SLIMER,
-			GASTROPOD,
-			BOUND_MECHANIC,
-			MECHANIC,
-			RETINAZER,
-			SPAZMATISM,
-			SKELETRON_PRIME,
-			PRIME_CANNON,
-			PRIME_SAW,
-			PRIME_VICE,
-			PRIME_LASER,
-			BALD_ZOMBIE,
-			WANDERING_EYE,
-			THE_DESTROYER_HEAD,
-			THE_DESTROYER_BODY,
-			THE_DESTROYER_TAIL,
-			ILLUMINANT_BAT,
-			ILLUMINANT_SLIME,
-			PROBE,
-			POSSESSED_ARMOR,
-			TOXIC_SLUDGE,
-			SANTA_CLAUS,
-			SNOWMAN_GANGSTA,
-			MISTER_STABBY,
-			SNOW_BALLA,
-			SUICIDE_SNOWMAN, // The unused exploding one
-			ALBINO_ANTLION,
-			ORKA, // Not how its spelt...
-			VAMPIRE_MINER,
-			SHADOW_SLIME,
-			SHADOW_HAMMER,
-			SHADOW_MUMMY,
-			SPECTRAL_GASTROPOD,
-			SPECTRAL_ELEMENTAL,
-			SPECTRAL_MUMMY,
-			DRAGON_SNATCHER,
-			DRAGON_HORNET,
-			DRAGON_SKULL,
-			ARCH_WYVERN_HEAD,
-			ARCH_WYVERN_LEGS,
-			ARCH_WYVERN_BODY1,
-			ARCH_WYVERN_BODY2,
-			ARCH_WYVERN_BODY3,
-			ARCH_WYVERN_TAIL,
-			ARCH_DEMON,
-			OCRAM,
-			SERVANT_OF_OCRAM,
-			CATARACT_EYE,
-			SLEEPY_EYE,
-			DIALATED_EYE,
-			GREEN_EYE,
-			PURPLE_EYE,
-			PINCUSHION_ZOMBIE,
-			SLIMED_ZOMBIE,
-			SWAMP_ZOMBIE,
-			TWIGGY_ZOMBIE,
-			FEMALE_ZOMBIE,
-			ZOMBIE_MUSHROOM,
-			ZOMBIE_MUSHROOM_HAT,
-			NUM_TYPES
-		}
-
 		public const int MaxNumNPCs = 196;
 
 		private const int SpawnSpaceX = 3;
@@ -227,7 +43,7 @@ namespace Terraria
 
 		public const int DrawNameWhenNearby = 32;
 
-		public const int MaxNumNPCTypes = (int)ID.NUM_TYPES;
+		public const int MaxNumNPCTypes = (int)EntityID.NPCID.NUM_TYPES;
 
 		public const int MaxNumNamedNPCs = 125;
 
@@ -240,7 +56,7 @@ namespace Terraria
 		public static byte[] NpcFrameCount = new byte[MaxNumNPCTypes]
 		{
 			1,
-			2,
+			2,	// Blue Slime
 			2,
 			3,
 			6,
@@ -324,7 +140,7 @@ namespace Terraria
 			4,
 			6,
 			6,
-			18,
+			24,
 			16,
 			1,
 			1,
@@ -385,8 +201,246 @@ namespace Terraria
 			4,
 			5,
 			7,
+			3,	// Unused Snowman
+
+#if VERSION_103 || VERSION_FINAL
+			2,	// Ice Slime
+			12,
+			12,
+			4,
+			4,
+			4,
+			8,
+			8,
+			9,
+			2,
+			6,
+			4,
+			15,
+			16,
+			3,
+			3,
+			8,
+			5,
+			4,
+			3,
+			15,
+			12,
+			4,
+			14,
+			14,
+			3,
+			2,
+			5,
+			3,
+			2,
+			3,
+			14,
+			5,
+			14,
+			16,
+			5,
+			2,
+			2,
+			12,
+			3,
+			3,
+			3,
+			3,
+			2,
+			2,
+			2,
+			2,
+			2,
+			7,
+			14,
+			15,
+			16,
+			8,
+			3,
+			15,
+			15,
+			15,
+			2,
+			3,
+			20,
+			16,
+			14,
+			16,
+			4,
+			4,
+			16,
+			16,
+			20,
+			20,
+			20,
+			2,
+			2,
+			2,
+			2,
+			8,
+			12,
+			3,
+			4,
+			2,
+			4,
+			16,
+			16,
+			15,
+			6,
+			3,
+			3,
+			3,
+			3,
+			3,
+			3,
+			4,
+			4,
+			5,
+			4,
+			6,
+			7,
+			15,
+			4,
+			7,
+			6,
+			1,
+			1,
+			2,
+			4,
 			3,
 			5,
+			3,
+			3,
+			3,
+			4,
+			5,
+			6,
+			4,
+			2,
+			1,
+			8,
+			4,
+			4,
+			1,
+			8,
+			1,
+			4,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			15,
+			3,
+			3,
+			3,
+			3,
+			3,
+			3,
+			15,
+			3,
+			6,
+			12,
+			20,
+			20,
+			20,
+			15,
+			15,
+			15,
+			5,
+			5,
+			6,
+			6,
+			5,
+			2,
+			7,
+			2,
+			6,
+			6,
+			6,
+			6,
+			6,
+			15,
+			15,
+			15,
+			15,
+			15,
+			11,
+			4,
+			2,
+			2,
+			3,
+			3,
+			3,
+			15,
+			15,
+			15,
+			10,
+			14,
+			12,
+			1,
+			10,
+			8,	// Poltergeist
+
+#if VERSION_FINAL
+			3,	// Xmas Zombie
+			3,
+			2,
+			2,
+			2,
+			2,
+			7,
+			15,
+			15,
+			15,
+			6,
+			3,
+			10,
+			10,
+			6,
+			9,
+			8,
+			9,
+			8,
+			20,
+			10,
+			6,
+			14,
+			1,
+			4,
+			24,
+			2,
+			4,
+			6,
+			6,
+			10,
+			15,
+			15,
+			15,
+			15,
+			4,
+			4,
+			19,
+			14,
+			8,
+			2,
+			4,
+			4,
+			4,
+			4,
+			2,
+			2,	// Grasshopper
+#endif
+#endif
+
+			5,	// Albino Antlion
 			4,
 			15,
 			2,
@@ -406,9 +460,10 @@ namespace Terraria
 			1,
 			2,
 			6,
-			2,
+			2,	// Servant of Ocram
 
-			2, // 1.01 additions here
+#if VERSION_101
+			2,	// Demon Eye variant
 			2,
 			2,
 			2,
@@ -419,7 +474,8 @@ namespace Terraria
 			3,
 			3,
 			3,
-			3
+			3	// Mushroom Zombie variant
+#endif
 		};
 
 		public static int WoF = -1;
@@ -454,7 +510,7 @@ namespace Terraria
 
 		public Buff[] ActiveBuffs = new Buff[MaxNumNPCBuffs];
 
-		public bool[] BuffImmune = new bool[(int)Buff.ID.NUM_TYPES];
+		public bool[] BuffImmune = new bool[(int)EntityID.BuffID.NUM_BUFFS];
 
 		public bool IsPoisoned;
 
@@ -660,7 +716,7 @@ namespace Terraria
 
 		public static void SetNames()
 		{
-			if (TypeNames[(int)ID.NURSE] == null)
+			if (TypeNames[(int)EntityID.NPCID.NURSE] == null)
 			{
 				string NurseName;
 				switch (WorldGen.genRand.Next(23))
@@ -735,9 +791,9 @@ namespace Terraria
 						NurseName = "Allison";
 						break;
 				}
-				TypeNames[(int)ID.NURSE] = NurseName;
+				TypeNames[(int)EntityID.NPCID.NURSE] = NurseName;
 			}
-			if (TypeNames[(int)ID.MECHANIC] == null)
+			if (TypeNames[(int)EntityID.NPCID.MECHANIC] == null)
 			{
 				string MechName;
 				switch (WorldGen.genRand.Next(24))
@@ -815,9 +871,9 @@ namespace Terraria
 						MechName = "Sally";
 						break;
 				}
-				TypeNames[(int)ID.MECHANIC] = MechName;
+				TypeNames[(int)EntityID.NPCID.MECHANIC] = MechName;
 			}
-			if (TypeNames[(int)ID.ARMS_DEALER] == null)
+			if (TypeNames[(int)EntityID.NPCID.ARMS_DEALER] == null)
 			{
 				string DealerName;
 				switch (WorldGen.genRand.Next(23))
@@ -892,9 +948,9 @@ namespace Terraria
 						DealerName = "Darryl";
 						break;
 				}
-				TypeNames[(int)ID.ARMS_DEALER] = DealerName;
+				TypeNames[(int)EntityID.NPCID.ARMS_DEALER] = DealerName;
 			}
-			if (TypeNames[(int)ID.GUIDE] == null)
+			if (TypeNames[(int)EntityID.NPCID.GUIDE] == null)
 			{
 				string GuideName;
 				switch (WorldGen.genRand.Next(35))
@@ -1005,9 +1061,9 @@ namespace Terraria
 						GuideName = "Colin";
 						break;
 				}
-				TypeNames[(int)ID.GUIDE] = GuideName;
+				TypeNames[(int)EntityID.NPCID.GUIDE] = GuideName;
 			}
-			if (TypeNames[(int)ID.DRYAD] == null)
+			if (TypeNames[(int)EntityID.NPCID.DRYAD] == null)
 			{
 				string DryadName;
 				switch (WorldGen.genRand.Next(22))
@@ -1079,9 +1135,9 @@ namespace Terraria
 						DryadName = "Xylia";
 						break;
 				}
-				TypeNames[(int)ID.DRYAD] = DryadName;
+				TypeNames[(int)EntityID.NPCID.DRYAD] = DryadName;
 			}
-			if (TypeNames[(int)ID.DEMOLITIONIST] == null)
+			if (TypeNames[(int)EntityID.NPCID.DEMOLITIONIST] == null)
 			{
 				string DemoName;
 				switch (WorldGen.genRand.Next(22))
@@ -1153,9 +1209,9 @@ namespace Terraria
 						DemoName = "Darur";
 						break;
 				}
-				TypeNames[(int)ID.DEMOLITIONIST] = DemoName;
+				TypeNames[(int)EntityID.NPCID.DEMOLITIONIST] = DemoName;
 			}
-			if (TypeNames[(int)ID.WIZARD] == null)
+			if (TypeNames[(int)EntityID.NPCID.WIZARD] == null)
 			{
 				string WizardName;
 				switch (WorldGen.genRand.Next(21))
@@ -1224,9 +1280,9 @@ namespace Terraria
 						WizardName = "Xanadu";
 						break;
 				}
-				TypeNames[(int)ID.WIZARD] = WizardName;
+				TypeNames[(int)EntityID.NPCID.WIZARD] = WizardName;
 			}
-			if (TypeNames[(int)ID.MERCHANT] == null)
+			if (TypeNames[(int)EntityID.NPCID.MERCHANT] == null)
 			{
 				string MerchName;
 				switch (WorldGen.genRand.Next(23))
@@ -1301,9 +1357,9 @@ namespace Terraria
 						MerchName = "Ralph";
 						break;
 				}
-				TypeNames[(int)ID.MERCHANT] = MerchName;
+				TypeNames[(int)EntityID.NPCID.MERCHANT] = MerchName;
 			}
-			if (TypeNames[(int)ID.CLOTHIER] == null)
+			if (TypeNames[(int)EntityID.NPCID.CLOTHIER] == null)
 			{
 				string ClothName;
 				switch (WorldGen.genRand.Next(24))
@@ -1381,9 +1437,9 @@ namespace Terraria
 						ClothName = "Rodrick";
 						break;
 				}
-				TypeNames[(int)ID.CLOTHIER] = ClothName;
+				TypeNames[(int)EntityID.NPCID.CLOTHIER] = ClothName;
 			}
-			if (TypeNames[(int)ID.GOBLIN_TINKERER] == null)
+			if (TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER] == null)
 			{
 				string GoblinName;
 				switch (WorldGen.genRand.Next(25))
@@ -1464,7 +1520,7 @@ namespace Terraria
 						GoblinName = "Knub";
 						break;
 				}
-				TypeNames[(int)ID.GOBLIN_TINKERER] = GoblinName;
+				TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER] = GoblinName;
 			}
 		}
 
@@ -1525,7 +1581,7 @@ namespace Terraria
 					case -17:
 						SetDefaults("Big Stinger");
 						break;
-					case -18:
+					case (int)EntityID.NPCID.SLIMELING2:
 						SetDefaults("Slimeling2");
 						break;
 				}
@@ -1541,37 +1597,37 @@ namespace Terraria
 			switch (Name)
 			{
 				case "Slimeling":
-					SetDefaults((int)ID.CORRUPT_SLIME, 0.6);
+					SetDefaults((int)EntityID.NPCID.CORRUPT_SLIME, 0.6);
 					TypeName = Name;
 					Damage = 45;
 					Defense = 10;
 					Life = 90;
 					KnockBackResist = 1.2f;
 					Value = 100f;
-					NetID = -1;
+					NetID = (short)EntityID.NPCID.SLIMELING;
 					break;
 				case "Slimeling2":
-					SetDefaults((int)ID.SHADOW_SLIME, 0.6);
+					SetDefaults((int)EntityID.NPCID.SHADOW_SLIME, 0.6);
 					TypeName = Name;
 					Damage = 45;
 					Defense = 10;
 					Life = 105;
 					KnockBackResist = 1.2f;
 					Value = 100f;
-					NetID = -18;
+					NetID = (short)EntityID.NPCID.SLIMELING2;
 					break;
 				case "Slimer2":
-					SetDefaults((int)ID.CORRUPT_SLIME, 0.9);
+					SetDefaults((int)EntityID.NPCID.CORRUPT_SLIME, 0.9);
 					TypeName = Name;
 					Damage = 45;
 					Defense = 20;
 					Life = 90;
 					KnockBackResist = 1.2f;
 					Value = 100f;
-					NetID = -2;
+					NetID = (short)EntityID.NPCID.SLIMER2;
 					break;
 				case "Green Slime":
-					SetDefaults((int)ID.SLIME, 0.9);
+					SetDefaults((int)EntityID.NPCID.SLIME, 0.9);
 					TypeName = Name;
 					Damage = 6;
 					Defense = 0;
@@ -1579,10 +1635,10 @@ namespace Terraria
 					KnockBackResist = 1.2f;
 					Colour = new Color(0, 220, 40, 100);
 					Value = 3f;
-					NetID = -3;
+					NetID = (short)EntityID.NPCID.GREEN_SLIME;
 					break;
 				case "Pinky":
-					SetDefaults((int)ID.SLIME, 0.6);
+					SetDefaults((int)EntityID.NPCID.SLIME, 0.6);
 					TypeName = Name;
 					Damage = 5;
 					Defense = 5;
@@ -1590,10 +1646,10 @@ namespace Terraria
 					KnockBackResist = 1.4f;
 					Colour = new Color(250, 30, 90, 90);
 					Value = 10000f;
-					NetID = -4;
+					NetID = (short)EntityID.NPCID.PINKY;
 					break;
 				case "Baby Slime":
-					SetDefaults((int)ID.SLIME, 0.9);
+					SetDefaults((int)EntityID.NPCID.SLIME, 0.9);
 					TypeName = Name;
 					Damage = 13;
 					Defense = 4;
@@ -1602,20 +1658,20 @@ namespace Terraria
 					Alpha = 120;
 					Colour = new Color(0, 0, 0, 50);
 					Value = 10f;
-					NetID = -5;
+					NetID = (short)EntityID.NPCID.BABY_SLIME;
 					break;
 				case "Black Slime":
-					SetDefaults((int)ID.SLIME);
+					SetDefaults((int)EntityID.NPCID.SLIME);
 					TypeName = Name;
 					Damage = 15;
 					Defense = 4;
 					Life = 45;
 					Colour = new Color(0, 0, 0, 50);
 					Value = 20f;
-					NetID = -6;
+					NetID = (short)EntityID.NPCID.BLACK_SLIME;
 					break;
 				case "Purple Slime":
-					SetDefaults((int)ID.SLIME, 1.2);
+					SetDefaults((int)EntityID.NPCID.SLIME, 1.2);
 					TypeName = Name;
 					Damage = 12;
 					Defense = 6;
@@ -1623,40 +1679,40 @@ namespace Terraria
 					KnockBackResist = 0.9f;
 					Colour = new Color(200, 0, 255, 150);
 					Value = 10f;
-					NetID = -7;
+					NetID = (short)EntityID.NPCID.PURPLE_SLIME;
 					break;
 				case "Red Slime":
-					SetDefaults((int)ID.SLIME);
+					SetDefaults((int)EntityID.NPCID.SLIME);
 					TypeName = Name;
 					Damage = 12;
 					Defense = 4;
 					Life = 35;
 					Colour = new Color(255, 30, 0, 100);
 					Value = 8f;
-					NetID = -8;
+					NetID = (short)EntityID.NPCID.RED_SLIME;
 					break;
 				case "Yellow Slime":
-					SetDefaults((int)ID.SLIME, 1.2);
+					SetDefaults((int)EntityID.NPCID.SLIME, 1.2);
 					TypeName = Name;
 					Damage = 15;
 					Defense = 7;
 					Life = 45;
 					Colour = new Color(255, 255, 0, 100);
 					Value = 10f;
-					NetID = -9;
+					NetID = (short)EntityID.NPCID.YELLOW_SLIME;
 					break;
 				case "Jungle Slime":
-					SetDefaults((int)ID.SLIME, 1.1);
+					SetDefaults((int)EntityID.NPCID.SLIME, 1.1);
 					TypeName = Name;
 					Damage = 18;
 					Defense = 6;
 					Life = 60;
 					Colour = new Color(143, 215, 93, 100);
 					Value = 500f;
-					NetID = -10;
+					NetID = (short)EntityID.NPCID.JUNGLE_SLIME;
 					break;
 				case "Little Eater":
-					SetDefaults((int)ID.EATER_OF_SOULS, 0.85);
+					SetDefaults((int)EntityID.NPCID.EATER_OF_SOULS, 0.85);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1664,10 +1720,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -11;
+					NetID = (short)EntityID.NPCID.LITTLE_EATER;
 					break;
 				case "Big Eater":
-					SetDefaults((int)ID.EATER_OF_SOULS, 1.15);
+					SetDefaults((int)EntityID.NPCID.EATER_OF_SOULS, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1675,19 +1731,19 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -12;
+					NetID = (short)EntityID.NPCID.BIG_EATER;
 					break;
 				case "Short Bones":
-					SetDefaults((int)ID.BONES, 0.9);
+					SetDefaults((int)EntityID.NPCID.BONES, 0.9);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
 					Life = (int)(Life * Scale);
 					Value = (int)(Value * Scale);
-					NetID = -13;
+					NetID = (short)EntityID.NPCID.SHORT_BONES;
 					break;
 				case "Big Boned":
-					SetDefaults((int)ID.BONES, 1.15);
+					SetDefaults((int)EntityID.NPCID.BONES, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)((double)(Damage * Scale) * 1.1);
@@ -1695,10 +1751,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots = 2f;
 					KnockBackResist *= 2f - Scale;
-					NetID = -14;
+					NetID = (short)EntityID.NPCID.BIG_BONED;
 					break;
 				case "Heavy Skeleton":
-					SetDefaults((int)ID.ARMORED_SKELETON, 1.15);
+					SetDefaults((int)EntityID.NPCID.ARMORED_SKELETON, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)((double)(Damage * Scale) * 1.1);
@@ -1707,10 +1763,10 @@ namespace Terraria
 					NpcSlots = 2f;
 					KnockBackResist *= 2f - Scale;
 					Height = 44;
-					NetID = -15;
+					NetID = (short)EntityID.NPCID.HEAVY_SKELETON;
 					break;
 				case "Little Stinger":
-					SetDefaults((int)ID.HORNET, 0.85);
+					SetDefaults((int)EntityID.NPCID.HORNET, 0.85);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1718,10 +1774,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -16;
+					NetID = (short)EntityID.NPCID.LITTLE_STINGER;
 					break;
 				case "Big Stinger":
-					SetDefaults((int)ID.HORNET, 1.2);
+					SetDefaults((int)EntityID.NPCID.HORNET, 1.2);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1729,11 +1785,11 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -17;
+					NetID = (short)EntityID.NPCID.BIG_STINGER;
 					break;
 #if VERSION_101
 				case "Small Zombie":
-					SetDefaults((int)ID.ZOMBIE, 0.9);
+					SetDefaults((int)EntityID.NPCID.ZOMBIE, 0.9);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1741,10 +1797,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -26;
+					NetID = (short)EntityID.NPCID.SMALL_ZOMBIE;
 					break;
 				case "Big Zombie":
-					SetDefaults((int)ID.ZOMBIE, 1.1);
+					SetDefaults((int)EntityID.NPCID.ZOMBIE, 1.1);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1752,10 +1808,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -27;
+					NetID = (short)EntityID.NPCID.BIG_ZOMBIE;
 					break;
 				case "Small Bald Zombie":
-					SetDefaults((int)ID.BALD_ZOMBIE, 0.85);
+					SetDefaults((int)EntityID.NPCID.BALD_ZOMBIE, 0.85);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1763,10 +1819,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -28;
+					NetID = (short)EntityID.NPCID.SMALL_BALD_ZOMBIE;
 					break;
 				case "Big Bald Zombie":
-					SetDefaults((int)ID.BALD_ZOMBIE, 1.15);
+					SetDefaults((int)EntityID.NPCID.BALD_ZOMBIE, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1774,10 +1830,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -29;
+					NetID = (short)EntityID.NPCID.BIG_BALD_ZOMBIE;
 					break;
 				case "Small Pincushion Zombie":
-					SetDefaults((int)ID.PINCUSHION_ZOMBIE, 0.93);
+					SetDefaults((int)EntityID.NPCID.PINCUSHION_ZOMBIE, 0.93);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1785,10 +1841,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -30;
+					NetID = (short)EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE;
 					break;
 				case "Big Pincushion Zombie":
-					SetDefaults((int)ID.PINCUSHION_ZOMBIE, 1.13);
+					SetDefaults((int)EntityID.NPCID.PINCUSHION_ZOMBIE, 1.13);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1796,10 +1852,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -31;
+					NetID = (short)EntityID.NPCID.BIG_PINCUSHION_ZOMBIE;
 					break;
 				case "Small Slimed Zombie":
-					SetDefaults((int)ID.SLIMED_ZOMBIE, 0.89);
+					SetDefaults((int)EntityID.NPCID.SLIMED_ZOMBIE, 0.89);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1807,10 +1863,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -32;
+					NetID = (short)EntityID.NPCID.SMALL_SLIMED_ZOMBIE;
 					break;
 				case "Big Slimed Zombie":
-					SetDefaults((int)ID.SLIMED_ZOMBIE, 1.11);
+					SetDefaults((int)EntityID.NPCID.SLIMED_ZOMBIE, 1.11);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1818,10 +1874,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -33;
+					NetID = (short)EntityID.NPCID.BIG_SLIMED_ZOMBIE;
 					break;
 				case "Small Swamp Zombie":
-					SetDefaults((int)ID.SWAMP_ZOMBIE, 0.87);
+					SetDefaults((int)EntityID.NPCID.SWAMP_ZOMBIE, 0.87);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1829,10 +1885,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -34;
+					NetID = (short)EntityID.NPCID.SMALL_SWAMP_ZOMBIE;
 					break;
 				case "Big Swamp Zombie":
-					SetDefaults((int)ID.SWAMP_ZOMBIE, 1.13);
+					SetDefaults((int)EntityID.NPCID.SWAMP_ZOMBIE, 1.13);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1840,10 +1896,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -35;
+					NetID = (short)EntityID.NPCID.BIG_SWAMP_ZOMBIE;
 					break;
 				case "Small Twiggy Zombie":
-					SetDefaults((int)ID.TWIGGY_ZOMBIE, 0.92);
+					SetDefaults((int)EntityID.NPCID.TWIGGY_ZOMBIE, 0.92);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1851,10 +1907,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -36;
+					NetID = (short)EntityID.NPCID.SMALL_TWIGGY_ZOMBIE;
 					break;
 				case "Big Twiggy Zombie":
-					SetDefaults((int)ID.TWIGGY_ZOMBIE, 1.08);
+					SetDefaults((int)EntityID.NPCID.TWIGGY_ZOMBIE, 1.08);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1862,10 +1918,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -37;
+					NetID = (short)EntityID.NPCID.BIG_TWIGGY_ZOMBIE;
 					break;
 				case "Cataract Eye 2":
-					SetDefaults((int)ID.CATARACT_EYE, 1.15);
+					SetDefaults((int)EntityID.NPCID.CATARACT_EYE, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1873,10 +1929,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -38;
+					NetID = (short)EntityID.NPCID.CATARACT_EYE2;
 					break;
 				case "Sleepy Eye 2":
-					SetDefaults((int)ID.SLEEPY_EYE, 1.1);
+					SetDefaults((int)EntityID.NPCID.SLEEPY_EYE, 1.1);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1884,10 +1940,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -39;
+					NetID = (short)EntityID.NPCID.SLEEPY_EYE2;
 					break;
 				case "Dialated Eye 2":
-					SetDefaults((int)ID.DIALATED_EYE, 0.9);
+					SetDefaults((int)EntityID.NPCID.DIALATED_EYE, 0.9);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1895,10 +1951,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -40;
+					NetID = (short)EntityID.NPCID.DIALATED_EYE2;
 					break;
 				case "Green Eye 2":
-					SetDefaults((int)ID.GREEN_EYE, 0.85);
+					SetDefaults((int)EntityID.NPCID.GREEN_EYE, 0.85);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1906,10 +1962,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -41;
+					NetID = (short)EntityID.NPCID.GREEN_EYE2;
 					break;
 				case "Purple Eye 2":
-					SetDefaults((int)ID.PURPLE_EYE, 1.1);
+					SetDefaults((int)EntityID.NPCID.PURPLE_EYE, 1.1);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1917,10 +1973,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -42;
+					NetID = (short)EntityID.NPCID.PURPLE_EYE2;
 					break;
 				case "Demon Eye 2":
-					SetDefaults((int)ID.DEMON_EYE, 1.15);
+					SetDefaults((int)EntityID.NPCID.DEMON_EYE, 1.15);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1928,10 +1984,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -43;
+					NetID = (short)EntityID.NPCID.DEMON_EYE2;
 					break;
 				case "Small Female Zombie":
-					SetDefaults((int)ID.FEMALE_ZOMBIE, 0.87);
+					SetDefaults((int)EntityID.NPCID.FEMALE_ZOMBIE, 0.87);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1939,10 +1995,10 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -44;
+					NetID = (short)EntityID.NPCID.SMALL_FEMALE_ZOMBIE;
 					break;
 				case "Big Female Zombie":
-					SetDefaults((int)ID.FEMALE_ZOMBIE, 1.05);
+					SetDefaults((int)EntityID.NPCID.FEMALE_ZOMBIE, 1.05);
 					TypeName = Name;
 					Defense = (int)(Defense * Scale);
 					Damage = (int)(Damage * Scale);
@@ -1950,7 +2006,7 @@ namespace Terraria
 					Value = (int)(Value * Scale);
 					NpcSlots *= Scale;
 					KnockBackResist *= 2f - Scale;
-					NetID = -45;
+					NetID = (short)EntityID.NPCID.BIG_FEMALE_ZOMBIE;
 					break;
 #endif
 			}
@@ -1963,9 +2019,9 @@ namespace Terraria
 
 		public bool CanTalk()
 		{
-			if (!IsTownNPC && Type != (int)ID.BOUND_GOBLIN && Type != (int)ID.BOUND_WIZARD)
+			if (!IsTownNPC && Type != (int)EntityID.NPCID.BOUND_GOBLIN && Type != (int)EntityID.NPCID.BOUND_WIZARD)
 			{
-				return Type == (int)ID.BOUND_MECHANIC;
+				return Type == (int)EntityID.NPCID.BOUND_MECHANIC;
 			}
 			return true;
 		}
@@ -2003,29 +2059,29 @@ namespace Terraria
 
 		public int GetHeadTextureID()
 		{
-			switch ((ID)Type)
+			switch ((EntityID.NPCID)Type)
 			{
-				case ID.MERCHANT:
+				case EntityID.NPCID.MERCHANT:
 					return 2;
-				case ID.NURSE:
+				case EntityID.NPCID.NURSE:
 					return 3;
-				case ID.ARMS_DEALER:
+				case EntityID.NPCID.ARMS_DEALER:
 					return 6;
-				case ID.DRYAD:
+				case EntityID.NPCID.DRYAD:
 					return 5;
-				case ID.GUIDE:
+				case EntityID.NPCID.GUIDE:
 					return 1;
-				case ID.DEMOLITIONIST:
+				case EntityID.NPCID.DEMOLITIONIST:
 					return 4;
-				case ID.CLOTHIER:
+				case EntityID.NPCID.CLOTHIER:
 					return 7;
-				case ID.GOBLIN_TINKERER:
+				case EntityID.NPCID.GOBLIN_TINKERER:
 					return 9;
-				case ID.WIZARD:
+				case EntityID.NPCID.WIZARD:
 					return 10;
-				case ID.MECHANIC:
+				case EntityID.NPCID.MECHANIC:
 					return 8;
-				case ID.SANTA_CLAUS:
+				case EntityID.NPCID.SANTA_CLAUS:
 					return 11;
 				default:
 					return -1;
@@ -2049,11 +2105,11 @@ namespace Terraria
 				ActiveBuffs[NPCBuffIdx].Time = 0;
 				ActiveBuffs[NPCBuffIdx].Type = 0;
 			}
-			for (int BuffIdx = 0; BuffIdx < (int)Buff.ID.NUM_TYPES; BuffIdx++)
+			for (int BuffIdx = 0; BuffIdx < (int)EntityID.BuffID.NUM_BUFFS; BuffIdx++)
 			{
 				BuffImmune[BuffIdx] = false;
 			}
-			BuffImmune[(int)Buff.ID.CONFUSED] = true;
+			BuffImmune[(int)EntityID.BuffID.CONFUSED] = true;
 			NetSkip = -2;
 			RealLife = -1;
 			LifeRegenCount = 0;
@@ -2105,13 +2161,13 @@ namespace Terraria
 			LocalAI1 = 0;
 			LocalAI2 = 0;
 			LocalAI3 = 0;
-			switch ((ID)NPCType)
+			switch ((EntityID.NPCID)NPCType)
 			{
-				case ID.SLIME:
+				case EntityID.NPCID.SLIME:
 					TypeName = "Blue Slime";
 					Width = 24;
 					Height = 18;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 7;
 					Defense = 2;
 					LifeMax = 25;
@@ -2120,14 +2176,14 @@ namespace Terraria
 					Alpha = 175;
 					Colour = new Color(0, 80, 255, 100);
 					Value = 25f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.DEMON_EYE:
+				case EntityID.NPCID.DEMON_EYE:
 					TypeName = "Demon Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 18;
 					Defense = 2;
 					LifeMax = 60;
@@ -2135,13 +2191,13 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 1;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.ZOMBIE:
+				case EntityID.NPCID.ZOMBIE:
 					TypeName = "Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 14;
 					Defense = 6;
 					LifeMax = 45;
@@ -2149,13 +2205,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 60f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.EYE_OF_CTHULHU:
+				case EntityID.NPCID.EYE_OF_CTHULHU:
 					TypeName = "Eye of Cthulhu";
 					Width = 100;
 					Height = 110;
-					AIStyle = 4;
+					AIStyle = (byte)EntityID.NPCStyleID.EYE_OF_CTHULHU;
 					Damage = 15;
 					Defense = 12;
 					LifeMax = 2800;
@@ -2169,11 +2225,11 @@ namespace Terraria
 					Value = 30000f;
 					NpcSlots = 5f;
 					break;
-				case ID.OCRAM:
+				case EntityID.NPCID.OCRAM:
 					TypeName = "Ocram";
 					Width = 100; // Ocram's dimensions should not be 100/110, but the programmer copied over the EoC's values without adjustment; they should be more like 195/155.
 					Height = 110;
-					AIStyle = 39;
+					AIStyle = (byte)EntityID.NPCStyleID.OCRAM;
 					Damage = 65;
 					Defense = 20;
 					LifeMax = 35000;
@@ -2186,13 +2242,13 @@ namespace Terraria
 					IsBoss = true;
 					Value = 100000f;
 					NpcSlots = 5f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.SERVANT_OF_CTHULHU:
+				case EntityID.NPCID.SERVANT_OF_CTHULHU:
 					TypeName = "Servant of Cthulhu";
 					Width = 20;
 					Height = 20;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 13;
 					Defense = 0;
 					LifeMax = 10;
@@ -2201,11 +2257,11 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					break;
-				case ID.SERVANT_OF_OCRAM:
+				case EntityID.NPCID.SERVANT_OF_OCRAM:
 					TypeName = "Servant of Ocram";
 					Width = 20;
 					Height = 20;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 35;
 					Defense = 5;
 					LifeMax = 130;
@@ -2214,12 +2270,12 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					break;
-				case ID.EATER_OF_SOULS:
+				case EntityID.NPCID.EATER_OF_SOULS:
 					NpcSlots = 1f;
 					TypeName = "Eater of Souls";
 					Width = 30;
 					Height = 30;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 22;
 					Defense = 8;
 					LifeMax = 40;
@@ -2229,12 +2285,12 @@ namespace Terraria
 					KnockBackResist = 0.5f;
 					Value = 90f;
 					break;
-				case ID.DEVOURER_HEAD:
+				case EntityID.NPCID.DEVOURER_HEAD:
 					NpcSlots = 3.5f;
 					TypeName = "Devourer Head";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					Damage = 31;
 					Defense = 2;
 					LifeMax = 100;
@@ -2247,11 +2303,11 @@ namespace Terraria
 					Value = 140f;
 					NetAlways = true;
 					break;
-				case ID.DEVOURER_BODY:
+				case EntityID.NPCID.DEVOURER_BODY:
 					TypeName = "Devourer Body";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 16;
 					Defense = 6;
@@ -2264,11 +2320,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 140f;
 					break;
-				case ID.DEVOURER_TAIL:
+				case EntityID.NPCID.DEVOURER_TAIL:
 					TypeName = "Devourer Tail";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 13;
 					Defense = 10;
@@ -2281,11 +2337,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 140f;
 					break;
-				case ID.GIANT_WORM_HEAD:
+				case EntityID.NPCID.GIANT_WORM_HEAD:
 					TypeName = "Giant Worm Head";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 8;
 					Defense = 0;
@@ -2298,11 +2354,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 40f;
 					break;
-				case ID.GIANT_WORM_BODY:
+				case EntityID.NPCID.GIANT_WORM_BODY:
 					TypeName = "Giant Worm Body";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 4;
 					Defense = 4;
@@ -2315,11 +2371,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 40f;
 					break;
-				case ID.GIANT_WORM_TAIL:
+				case EntityID.NPCID.GIANT_WORM_TAIL:
 					TypeName = "Giant Worm Tail";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 4;
 					Defense = 6;
@@ -2332,12 +2388,12 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 40f;
 					break;
-				case ID.EATER_OF_WORLDS_HEAD:
+				case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
 					NpcSlots = 5f;
 					TypeName = "Eater of Worlds Head";
 					Width = 38;
 					Height = 38;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 22;
 					Defense = 2;
@@ -2350,15 +2406,15 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 300f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.EATER_OF_WORLDS_BODY:
+				case EntityID.NPCID.EATER_OF_WORLDS_BODY:
 					TypeName = "Eater of Worlds Body";
 					Width = 38;
 					Height = 38;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 13;
 					Defense = 4;
@@ -2371,15 +2427,15 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 300f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.EATER_OF_WORLDS_TAIL:
+				case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 					TypeName = "Eater of Worlds Tail";
 					Width = 38;
 					Height = 38;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 11;
 					Defense = 8;
@@ -2392,16 +2448,16 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 300f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.MOTHER_SLIME:
+				case EntityID.NPCID.MOTHER_SLIME:
 					NpcSlots = 2f;
 					TypeName = "Mother Slime";
 					Width = 36;
 					Height = 24;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 20;
 					Defense = 7;
 					LifeMax = 90;
@@ -2412,16 +2468,16 @@ namespace Terraria
 					Value = 75f;
 					Scale = 1.25f;
 					KnockBackResist = 0.6f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.MERCHANT:
+				case EntityID.NPCID.MERCHANT:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Merchant";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2429,13 +2485,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.NURSE:
+				case EntityID.NPCID.NURSE:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Nurse";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2443,13 +2499,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.ARMS_DEALER:
+				case EntityID.NPCID.ARMS_DEALER:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Arms Dealer";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2457,13 +2513,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.DRYAD:
+				case EntityID.NPCID.DRYAD:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Dryad";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2471,11 +2527,11 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.SKELETON:
+				case EntityID.NPCID.SKELETON:
 					TypeName = "Skeleton";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 8;
 					LifeMax = 60;
@@ -2483,16 +2539,16 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 100f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GUIDE:
+				case EntityID.NPCID.GUIDE:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Guide";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2500,11 +2556,11 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.METEOR_HEAD:
+				case EntityID.NPCID.METEOR_HEAD:
 					TypeName = "Meteor Head";
 					Width = 22;
 					Height = 22;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 40;
 					Defense = 6;
 					LifeMax = 26;
@@ -2514,16 +2570,16 @@ namespace Terraria
 					HasNoTileCollide = true;
 					Value = 80f;
 					KnockBackResist = 0.4f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.FIRE_IMP:
+				case EntityID.NPCID.FIRE_IMP:
 					NpcSlots = 3f;
 					TypeName = "Fire Imp";
 					Width = 18;
 					Height = 40;
-					AIStyle = 8;
+					AIStyle = (byte)EntityID.NPCStyleID.SORCERER;
 					Damage = 30;
 					Defense = 16;
 					LifeMax = 70;
@@ -2532,14 +2588,14 @@ namespace Terraria
 					KnockBackResist = 0.5f;
 					IsLavaImmune = true;
 					Value = 350f;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.BURNING_SPHERE:
+				case EntityID.NPCID.BURNING_SPHERE:
 					TypeName = "Burning Sphere";
 					Width = 16;
 					Height = 16;
-					AIStyle = 9;
+					AIStyle = (byte)EntityID.NPCStyleID.SPHERE;
 					Damage = 30;
 					Defense = 0;
 					LifeMax = 1;
@@ -2550,12 +2606,12 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Alpha = 100;
 					break;
-				case ID.GOBLIN_PEON:
+				case EntityID.NPCID.GOBLIN_PEON:
 					TypeName = "Goblin Peon";
 					Scale = 0.9f;
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 12;
 					Defense = 4;
 					LifeMax = 60;
@@ -2563,14 +2619,14 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.8f;
 					Value = 100f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GOBLIN_THIEF:
+				case EntityID.NPCID.GOBLIN_THIEF:
 					TypeName = "Goblin Thief";
 					Scale = 0.95f;
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 6;
 					LifeMax = 80;
@@ -2578,14 +2634,14 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.7f;
 					Value = 200f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GOBLIN_WARRIOR:
+				case EntityID.NPCID.GOBLIN_WARRIOR:
 					TypeName = "Goblin Warrior";
 					Scale = 1.1f;
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 25;
 					Defense = 8;
 					LifeMax = 110;
@@ -2593,13 +2649,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					Value = 150f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GOBLIN_SORCERER:
+				case EntityID.NPCID.GOBLIN_SORCERER:
 					TypeName = "Goblin Sorcerer";
 					Width = 18;
 					Height = 40;
-					AIStyle = 8;
+					AIStyle = (byte)EntityID.NPCStyleID.SORCERER;
 					Damage = 20;
 					Defense = 2;
 					LifeMax = 40;
@@ -2608,11 +2664,11 @@ namespace Terraria
 					KnockBackResist = 0.6f;
 					Value = 200f;
 					break;
-				case ID.CHAOS_BALL:
+				case EntityID.NPCID.CHAOS_BALL:
 					TypeName = "Chaos Ball";
 					Width = 16;
 					Height = 16;
-					AIStyle = 9;
+					AIStyle = (byte)EntityID.NPCStyleID.SPHERE;
 					Damage = 20;
 					Defense = 0;
 					LifeMax = 1;
@@ -2623,11 +2679,11 @@ namespace Terraria
 					Alpha = 100;
 					KnockBackResist = 0f;
 					break;
-				case ID.BONES:
+				case EntityID.NPCID.BONES:
 					TypeName = "Angry Bones";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 26;
 					Defense = 8;
 					LifeMax = 80;
@@ -2635,14 +2691,14 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.8f;
 					Value = 130f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.DARK_CASTER:
+				case EntityID.NPCID.DARK_CASTER:
 					TypeName = "Dark Caster";
 					Width = 18;
 					Height = 40;
-					AIStyle = 8;
+					AIStyle = (byte)EntityID.NPCStyleID.SORCERER;
 					Damage = 20;
 					Defense = 2;
 					LifeMax = 50;
@@ -2651,13 +2707,13 @@ namespace Terraria
 					KnockBackResist = 0.6f;
 					Value = 140f;
 					NpcSlots = 2f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.WATER_SPHERE:
+				case EntityID.NPCID.WATER_SPHERE:
 					TypeName = "Water Sphere";
 					Width = 16;
 					Height = 16;
-					AIStyle = 9;
+					AIStyle = (byte)EntityID.NPCStyleID.SPHERE;
 					Damage = 20;
 					Defense = 0;
 					LifeMax = 1;
@@ -2668,11 +2724,11 @@ namespace Terraria
 					Alpha = 100;
 					KnockBackResist = 0f;
 					break;
-				case ID.CURSED_SKULL:
+				case EntityID.NPCID.CURSED_SKULL:
 					TypeName = "Cursed Skull";
 					Width = 26;
 					Height = 28;
-					AIStyle = 10;
+					AIStyle = (byte)EntityID.NPCStyleID.CURSED_SKULL;
 					Damage = 35;
 					Defense = 6;
 					LifeMax = 40;
@@ -2683,15 +2739,15 @@ namespace Terraria
 					Value = 150f;
 					KnockBackResist = 0.2f;
 					NpcSlots = 0.75f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.DRAGON_SKULL:
+				case EntityID.NPCID.DRAGON_SKULL:
 					TypeName = "Dragon Skull";
 					Width = 56;
 					Height = 28;
-					AIStyle = 10;
+					AIStyle = (byte)EntityID.NPCStyleID.CURSED_SKULL;
 					Damage = 45;
 					Defense = 8;
 					LifeMax = 50;
@@ -2702,15 +2758,15 @@ namespace Terraria
 					Value = 150f;
 					KnockBackResist = 0.2f;
 					NpcSlots = 0.75f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.SKELETRON_HEAD:
+				case EntityID.NPCID.SKELETRON_HEAD:
 					TypeName = "Skeletron Head";
 					Width = 80;
 					Height = 102;
-					AIStyle = 11;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_HEAD;
 					Damage = 32;
 					Defense = 10;
 					LifeMax = 4400;
@@ -2722,15 +2778,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBoss = true;
 					NpcSlots = 6f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.SKELETRON_HAND:
+				case EntityID.NPCID.SKELETRON_HAND:
 					TypeName = "Skeletron Hand";
 					Width = 52;
 					Height = 52;
-					AIStyle = 12;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_HAND;
 					Damage = 20;
 					Defense = 14;
 					LifeMax = 600;
@@ -2739,17 +2795,17 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.OLD_MAN:
+				case EntityID.NPCID.OLD_MAN:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Old Man";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2757,13 +2813,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.DEMOLITIONIST:
+				case EntityID.NPCID.DEMOLITIONIST:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Demolitionist";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -2771,12 +2827,12 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.BONE_SERPENT_HEAD:
+				case EntityID.NPCID.BONE_SERPENT_HEAD:
 					NpcSlots = 6f;
 					TypeName = "Bone Serpent Head";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 30;
 					Defense = 10;
@@ -2788,15 +2844,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					Value = 1200f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.BONE_SERPENT_BODY:
+				case EntityID.NPCID.BONE_SERPENT_BODY:
 					TypeName = "Bone Serpent Body";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 15;
 					Defense = 12;
@@ -2808,15 +2864,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					Value = 1200f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.BONE_SERPENT_TAIL:
+				case EntityID.NPCID.BONE_SERPENT_TAIL:
 					TypeName = "Bone Serpent Tail";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 10;
 					Defense = 18;
@@ -2828,15 +2884,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					Value = 1200f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.HORNET:
+				case EntityID.NPCID.HORNET:
 					TypeName = "Hornet";
 					Width = 34;
 					Height = 32;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 34;
 					Defense = 12;
 					LifeMax = 50;
@@ -2845,13 +2901,13 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 200f;
 					HasNoGravity = true;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.DRAGON_HORNET:
+				case EntityID.NPCID.DRAGON_HORNET:
 					TypeName = "Dragon Hornet";
 					Width = 34;
 					Height = 32;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 39;
 					Defense = 17;
 					LifeMax = 65;
@@ -2860,15 +2916,15 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 200f;
 					HasNoGravity = true;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.MAN_EATER:
+				case EntityID.NPCID.MAN_EATER:
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					TypeName = "Man Eater";
 					Width = 30;
 					Height = 30;
-					AIStyle = 13;
+					AIStyle = (byte)EntityID.NPCStyleID.PLANT;
 					Damage = 42;
 					Defense = 14;
 					LifeMax = 130;
@@ -2876,13 +2932,13 @@ namespace Terraria
 					KnockBackResist = 0f;
 					SoundKilled = 1;
 					Value = 350f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.UNDEAD_MINER:
+				case EntityID.NPCID.UNDEAD_MINER:
 					TypeName = "Undead Miner";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 22;
 					Defense = 9;
 					LifeMax = 70;
@@ -2890,14 +2946,14 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 250f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.VAMPIRE_MINER:
+				case EntityID.NPCID.VAMPIRE_MINER:
 					TypeName = "Vampire Miner";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 30;
 					Defense = 9;
 					LifeMax = 90;
@@ -2905,14 +2961,14 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.7f;
 					Value = 250f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.TIM:
+				case EntityID.NPCID.TIM:
 					TypeName = "Tim";
 					Width = 18;
 					Height = 40;
-					AIStyle = 8;
+					AIStyle = (byte)EntityID.NPCStyleID.SORCERER;
 					Damage = 20;
 					Defense = 4;
 					LifeMax = 200;
@@ -2920,37 +2976,37 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.6f;
 					Value = 5000f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.BUNNY:
+				case EntityID.NPCID.BUNNY:
 					TypeName = "Bunny";
 					Width = 18;
 					Height = 20;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 0;
 					Defense = 0;
 					LifeMax = 5;
 					SoundHit = 1;
 					SoundKilled = 1;
 					break;
-				case ID.CORRUPT_BUNNY:
+				case EntityID.NPCID.CORRUPT_BUNNY:
 					TypeName = "Corrupt Bunny";
 					Width = 18;
 					Height = 20;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 4;
 					LifeMax = 70;
 					SoundHit = 1;
 					SoundKilled = 1;
 					Value = 500f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.HARPY:
+				case EntityID.NPCID.HARPY:
 					TypeName = "Harpy";
 					Width = 24;
 					Height = 34;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 25;
 					Defense = 8;
 					LifeMax = 100;
@@ -2959,12 +3015,12 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 300f;
 					break;
-				case ID.CAVE_BAT:
+				case EntityID.NPCID.CAVE_BAT:
 					NpcSlots = 0.5f;
 					TypeName = "Cave Bat";
 					Width = 22;
 					Height = 18;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 13;
 					Defense = 2;
 					LifeMax = 16;
@@ -2972,14 +3028,14 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 4;
 					Value = 90f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.KING_SLIME:
+				case EntityID.NPCID.KING_SLIME:
 					IsBoss = true;
 					TypeName = "King Slime";
 					Width = 98;
 					Height = 92;
-					AIStyle = 15;
+					AIStyle = (byte)EntityID.NPCStyleID.KING_SLIME;
 					Damage = 40;
 					Defense = 10;
 					LifeMax = 2000;
@@ -2989,14 +3045,14 @@ namespace Terraria
 					Alpha = 30;
 					Value = 10000f;
 					Scale = 1.25f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.JUNGLE_BAT:
+				case EntityID.NPCID.JUNGLE_BAT:
 					NpcSlots = 0.5f;
 					TypeName = "Jungle Bat";
 					Width = 22;
 					Height = 18;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 20;
 					Defense = 4;
 					LifeMax = 34;
@@ -3004,13 +3060,13 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 4;
 					Value = 80f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.DOCTOR_BONES:
+				case EntityID.NPCID.DOCTOR_BONES:
 					TypeName = "Doctor Bones";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 10;
 					LifeMax = 500;
@@ -3018,13 +3074,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.THE_GROOM:
+				case EntityID.NPCID.THE_GROOM:
 					TypeName = "The Groom";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 14;
 					Defense = 8;
 					LifeMax = 200;
@@ -3032,15 +3088,15 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.CLOTHIER:
+				case EntityID.NPCID.CLOTHIER:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Clothier";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -3048,12 +3104,12 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.GOLDFISH:
+				case EntityID.NPCID.GOLDFISH:
 					HasNoGravity = true;
 					TypeName = "Goldfish";
 					Width = 20;
 					Height = 18;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 0;
 					Defense = 0;
 					LifeMax = 5;
@@ -3061,13 +3117,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.SNATCHER:
+				case EntityID.NPCID.SNATCHER:
 					HasNoTileCollide = true;
 					HasNoGravity = true;
 					TypeName = "Snatcher";
 					Width = 30;
 					Height = 30;
-					AIStyle = 13;
+					AIStyle = (byte)EntityID.NPCStyleID.PLANT;
 					Damage = 25;
 					Defense = 10;
 					LifeMax = 60;
@@ -3075,15 +3131,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					SoundKilled = 1;
 					Value = 90f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.DRAGON_SNATCHER:
+				case EntityID.NPCID.DRAGON_SNATCHER:
 					HasNoTileCollide = true;
 					HasNoGravity = true;
 					TypeName = "Dragon Snatcher";
 					Width = 30;
 					Height = 30;
-					AIStyle = 13;
+					AIStyle = (byte)EntityID.NPCStyleID.PLANT;
 					Damage = 30;
 					Defense = 15;
 					LifeMax = 75;
@@ -3091,14 +3147,14 @@ namespace Terraria
 					KnockBackResist = 0f;
 					SoundKilled = 1;
 					Value = 90f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.CORRUPT_GOLDFISH:
+				case EntityID.NPCID.CORRUPT_GOLDFISH:
 					HasNoGravity = true;
 					TypeName = "Corrupt Goldfish";
 					Width = 18;
 					Height = 20;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 30;
 					Defense = 6;
 					LifeMax = 100;
@@ -3106,13 +3162,13 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 500f;
 					break;
-				case ID.PIRANHA:
+				case EntityID.NPCID.PIRANHA:
 					NpcSlots = 0.5f;
 					HasNoGravity = true;
 					TypeName = "Piranha";
 					Width = 18;
 					Height = 20;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 25;
 					Defense = 2;
 					LifeMax = 30;
@@ -3120,11 +3176,11 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 50f;
 					break;
-				case ID.LAVA_SLIME:
+				case EntityID.NPCID.LAVA_SLIME:
 					TypeName = "Lava Slime";
 					Width = 24;
 					Height = 18;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 15;
 					Defense = 10;
 					LifeMax = 50;
@@ -3134,17 +3190,17 @@ namespace Terraria
 					Alpha = 50;
 					IsLavaImmune = true;
 					Value = 120f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.HELLBAT:
+				case EntityID.NPCID.HELLBAT:
 					NpcSlots = 0.5f;
 					TypeName = "Hellbat";
 					Width = 22;
 					Height = 18;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 35;
 					Defense = 8;
 					LifeMax = 46;
@@ -3154,15 +3210,15 @@ namespace Terraria
 					Value = 120f;
 					Scale = 1.1f;
 					IsLavaImmune = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.VULTURE:
+				case EntityID.NPCID.VULTURE:
 					TypeName = "Vulture";
 					Width = 36;
 					Height = 36;
-					AIStyle = 17;
+					AIStyle = (byte)EntityID.NPCStyleID.VULTURE;
 					Damage = 15;
 					Defense = 4;
 					LifeMax = 40;
@@ -3171,12 +3227,12 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 60f;
 					break;
-				case ID.DEMON:
+				case EntityID.NPCID.DEMON:
 					NpcSlots = 2f;
 					TypeName = "Demon";
 					Width = 28;
 					Height = 48;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 32;
 					Defense = 8;
 					LifeMax = 120;
@@ -3185,15 +3241,15 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 300f;
 					IsLavaImmune = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_DEMON:
+				case EntityID.NPCID.ARCH_DEMON:
 					NpcSlots = 2f;
 					TypeName = "Arch Demon";
 					Width = 28;
 					Height = 48;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 42;
 					Defense = 8;
 					LifeMax = 140;
@@ -3202,15 +3258,15 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 300f;
 					IsLavaImmune = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.BLUE_JELLYFISH:
+				case EntityID.NPCID.BLUE_JELLYFISH:
 					HasNoGravity = true;
 					TypeName = "Blue Jellyfish";
 					Width = 26;
 					Height = 26;
-					AIStyle = 18;
+					AIStyle = (byte)EntityID.NPCStyleID.JELLYFISH;
 					Damage = 20;
 					Defense = 2;
 					LifeMax = 30;
@@ -3219,12 +3275,12 @@ namespace Terraria
 					Value = 100f;
 					Alpha = 20;
 					break;
-				case ID.PINK_JELLYFISH:
+				case EntityID.NPCID.PINK_JELLYFISH:
 					HasNoGravity = true;
 					TypeName = "Pink Jellyfish";
 					Width = 26;
 					Height = 26;
-					AIStyle = 18;
+					AIStyle = (byte)EntityID.NPCStyleID.JELLYFISH;
 					Damage = 30;
 					Defense = 6;
 					LifeMax = 70;
@@ -3233,12 +3289,12 @@ namespace Terraria
 					Value = 100f;
 					Alpha = 20;
 					break;
-				case ID.SHARK:
+				case EntityID.NPCID.SHARK:
 					HasNoGravity = true;
 					TypeName = "Shark";
 					Width = 100;
 					Height = 24;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 40;
 					Defense = 2;
 					LifeMax = 300;
@@ -3247,12 +3303,12 @@ namespace Terraria
 					Value = 400f;
 					KnockBackResist = 0.7f;
 					break;
-				case ID.ORKA:
+				case EntityID.NPCID.ORKA:
 					HasNoGravity = true;
 					TypeName = "Orka";
 					Width = 100;
 					Height = 24;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 30;
 					Defense = 4;
 					LifeMax = 350;
@@ -3261,12 +3317,12 @@ namespace Terraria
 					Value = 400f;
 					KnockBackResist = 0.6f;
 					break;
-				case ID.VOODOO_DEMON:
+				case EntityID.NPCID.VOODOO_DEMON:
 					NpcSlots = 2f;
 					TypeName = "Voodoo Demon";
 					Width = 28;
 					Height = 48;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 32;
 					Defense = 8;
 					LifeMax = 140;
@@ -3275,14 +3331,14 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 1000f;
 					IsLavaImmune = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.CRAB:
+				case EntityID.NPCID.CRAB:
 					TypeName = "Crab";
 					Width = 28;
 					Height = 20;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 10;
 					LifeMax = 40;
@@ -3290,11 +3346,11 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 60f;
 					break;
-				case ID.DUNGEON_GUARDIAN:
+				case EntityID.NPCID.DUNGEON_GUARDIAN:
 					TypeName = "Dungeon Guardian";
 					Width = 80;
 					Height = 102;
-					AIStyle = 11;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_HEAD;
 					Damage = 9000;
 					Defense = 9000;
 					LifeMax = 9999;
@@ -3303,15 +3359,15 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ANTLION:
+				case EntityID.NPCID.ANTLION:
 					TypeName = "Antlion";
 					Width = 24;
 					Height = 24;
-					AIStyle = 19;
+					AIStyle = (byte)EntityID.NPCStyleID.ANTLION;
 					Damage = 10;
 					Defense = 6;
 					LifeMax = 45;
@@ -3321,11 +3377,11 @@ namespace Terraria
 					Value = 60f;
 					IsBehindTiles = true;
 					break;
-				case ID.ALBINO_ANTLION:
+				case EntityID.NPCID.ALBINO_ANTLION:
 					TypeName = "Albino Antlion";
 					Width = 24;
 					Height = 24;
-					AIStyle = 19;
+					AIStyle = (byte)EntityID.NPCStyleID.ANTLION;
 					Damage = 12;
 					Defense = 8;
 					LifeMax = 60;
@@ -3335,12 +3391,12 @@ namespace Terraria
 					Value = 60f;
 					IsBehindTiles = true;
 					break;
-				case ID.SPIKE_BALL:
+				case EntityID.NPCID.SPIKE_BALL:
 					NpcSlots = 0.3f;
 					TypeName = "Spike Ball";
 					Width = 34;
 					Height = 34;
-					AIStyle = 20;
+					AIStyle = (byte)EntityID.NPCStyleID.SPIKE_BALL;
 					Damage = 32;
 					Defense = 100;
 					LifeMax = 100;
@@ -3352,12 +3408,12 @@ namespace Terraria
 					DontTakeDamage = true;
 					Scale = 1.5f;
 					break;
-				case ID.DUNGEON_SLIME:
+				case EntityID.NPCID.DUNGEON_SLIME:
 					NpcSlots = 2f;
 					TypeName = "Dungeon Slime";
 					Width = 36;
 					Height = 24;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 30;
 					Defense = 7;
 					LifeMax = 150;
@@ -3367,15 +3423,15 @@ namespace Terraria
 					Value = 150f;
 					Scale = 1.25f;
 					KnockBackResist = 0.6f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.BLAZING_WHEEL:
+				case EntityID.NPCID.BLAZING_WHEEL:
 					NpcSlots = 0.3f;
 					TypeName = "Blazing Wheel";
 					Width = 34;
 					Height = 34;
-					AIStyle = 21;
+					AIStyle = (byte)EntityID.NPCStyleID.BLAZE_WHEEL;
 					Damage = 24;
 					Defense = 100;
 					LifeMax = 100;
@@ -3387,16 +3443,16 @@ namespace Terraria
 					HasNoGravity = true;
 					DontTakeDamage = true;
 					Scale = 1.2f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.GOBLIN_SCOUT:
+				case EntityID.NPCID.GOBLIN_SCOUT:
 					TypeName = "Goblin Scout";
 					Scale = 0.95f;
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 6;
 					LifeMax = 80;
@@ -3404,13 +3460,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.7f;
 					Value = 200f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.BIRD:
+				case EntityID.NPCID.BIRD:
 					TypeName = "Bird";
 					Width = 14;
 					Height = 14;
-					AIStyle = 24;
+					AIStyle = (byte)EntityID.NPCStyleID.BIRD;
 					Damage = 0;
 					Defense = 0;
 					LifeMax = 5;
@@ -3418,12 +3474,12 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 1;
 					break;
-				case ID.PIXIE:
+				case EntityID.NPCID.PIXIE:
 					HasNoGravity = true;
 					TypeName = "Pixie";
 					Width = 20;
 					Height = 20;
-					AIStyle = 22;
+					AIStyle = (byte)EntityID.NPCStyleID.HOVERING;
 					Damage = 55;
 					Defense = 20;
 					LifeMax = 150;
@@ -3431,16 +3487,16 @@ namespace Terraria
 					KnockBackResist = 0.6f;
 					SoundKilled = 7;
 					Value = 350f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.ARMORED_SKELETON:
+				case EntityID.NPCID.ARMORED_SKELETON:
 					TypeName = "Armored Skeleton";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 60;
 					Defense = 36;
 					LifeMax = 340;
@@ -3448,14 +3504,14 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.4f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.MUMMY:
+				case EntityID.NPCID.MUMMY:
 					TypeName = "Mummy";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 50;
 					Defense = 16;
 					LifeMax = 130;
@@ -3463,13 +3519,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.6f;
 					Value = 600f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.DARK_MUMMY:
+				case EntityID.NPCID.DARK_MUMMY:
 					TypeName = "Dark Mummy";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 60;
 					Defense = 18;
 					LifeMax = 180;
@@ -3477,13 +3533,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.5f;
 					Value = 700f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SHADOW_MUMMY:
+				case EntityID.NPCID.SHADOW_MUMMY:
 					TypeName = "Shadow Mummy";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 60;
 					Defense = 25;
 					LifeMax = 190;
@@ -3491,13 +3547,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.5f;
 					Value = 700f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.LIGHT_MUMMY:
+				case EntityID.NPCID.LIGHT_MUMMY:
 					TypeName = "Light Mummy";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 55;
 					Defense = 18;
 					LifeMax = 200;
@@ -3505,13 +3561,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.55f;
 					Value = 700f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SPECTRAL_MUMMY:
+				case EntityID.NPCID.SPECTRAL_MUMMY:
 					TypeName = "Spectral Mummy";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 65;
 					Defense = 10;
 					LifeMax = 270;
@@ -3519,13 +3575,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.55f;
 					Value = 700f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.CORRUPT_SLIME:
+				case EntityID.NPCID.CORRUPT_SLIME:
 					TypeName = "Corrupt Slime";
 					Width = 40;
 					Height = 30;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 55;
 					Defense = 20;
 					LifeMax = 170;
@@ -3534,14 +3590,14 @@ namespace Terraria
 					Alpha = 55;
 					Value = 400f;
 					Scale = 1.1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SHADOW_SLIME:
+				case EntityID.NPCID.SHADOW_SLIME:
 					TypeName = "Shadow Slime";
 					Width = 40;
 					Height = 30;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 60;
 					Defense = 25;
 					LifeMax = 180;
@@ -3550,16 +3606,16 @@ namespace Terraria
 					Alpha = 55;
 					Value = 400f;
 					Scale = 1.1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.WRAITH:
+				case EntityID.NPCID.WRAITH:
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					TypeName = "Wraith";
 					Width = 24;
 					Height = 44;
-					AIStyle = 22;
+					AIStyle = (byte)EntityID.NPCStyleID.HOVERING;
 					Damage = 75;
 					Defense = 18;
 					LifeMax = 200;
@@ -3567,64 +3623,64 @@ namespace Terraria
 					SoundKilled = 6;
 					Alpha = 100;
 					Value = 500f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					KnockBackResist = 0.7f;
 					break;
-				case ID.CURSED_HAMMER:
+				case EntityID.NPCID.CURSED_HAMMER:
 					TypeName = "Cursed Hammer";
 					Width = 40;
 					Height = 40;
-					AIStyle = 23;
+					AIStyle = (byte)EntityID.NPCStyleID.ENCHANTED_WEAPON;
 					Damage = 80;
 					Defense = 18;
 					LifeMax = 200;
 					SoundHit = 4;
 					SoundKilled = 6;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					KnockBackResist = 0.4f;
 					break;
-				case ID.SHADOW_HAMMER:
+				case EntityID.NPCID.SHADOW_HAMMER:
 					TypeName = "Shadow Hammer";
 					Width = 40;
 					Height = 40;
-					AIStyle = 23;
+					AIStyle = (byte)EntityID.NPCStyleID.ENCHANTED_WEAPON;
 					Damage = 95;
 					Defense = 18;
 					LifeMax = 180;
 					SoundHit = 4;
 					SoundKilled = 6;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					KnockBackResist = 0.4f;
 					break;
-				case ID.ENCHANTED_SWORD:
+				case EntityID.NPCID.ENCHANTED_SWORD:
 					TypeName = "Enchanted Sword";
 					Width = 40;
 					Height = 40;
-					AIStyle = 23;
+					AIStyle = (byte)EntityID.NPCStyleID.ENCHANTED_WEAPON;
 					Damage = 80;
 					Defense = 18;
 					LifeMax = 200;
 					SoundHit = 4;
 					SoundKilled = 6;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					KnockBackResist = 0.4f;
 					break;
-				case ID.MIMIC:
+				case EntityID.NPCID.MIMIC:
 					TypeName = "Mimic";
 					Width = 24;
 					Height = 24;
-					AIStyle = 25;
+					AIStyle = (byte)EntityID.NPCStyleID.MIMIC;
 					Damage = 80;
 					Defense = 30;
 					LifeMax = 500;
@@ -3632,15 +3688,15 @@ namespace Terraria
 					SoundKilled = 6;
 					Value = 100000f;
 					KnockBackResist = 0.3f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.UNICORN:
+				case EntityID.NPCID.UNICORN:
 					TypeName = "Unicorn";
 					Width = 46;
 					Height = 42;
-					AIStyle = 26;
+					AIStyle = (byte)EntityID.NPCStyleID.UNICORN;
 					Damage = 65;
 					Defense = 30;
 					LifeMax = 400;
@@ -3648,15 +3704,15 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.3f;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.WYVERN_HEAD:
+				case EntityID.NPCID.WYVERN_HEAD:
 					HasNoTileCollide = true;
 					NpcSlots = 5f;
 					TypeName = "Wyvern Head";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 80;
 					Defense = 10;
@@ -3667,17 +3723,17 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_HEAD:
+				case EntityID.NPCID.ARCH_WYVERN_HEAD:
 					HasNoTileCollide = true;
 					NpcSlots = 5f;
 					TypeName = "Arch Wyvern Head";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 100;
 					Defense = 15;
@@ -3688,16 +3744,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.WYVERN_LEGS:
+				case EntityID.NPCID.WYVERN_LEGS:
 					HasNoTileCollide = true;
 					TypeName = "Wyvern Legs";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3708,16 +3764,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_LEGS:
+				case EntityID.NPCID.ARCH_WYVERN_LEGS:
 					HasNoTileCollide = true;
 					TypeName = "Arch Wyvern Legs";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 50;
 					Defense = 25;
@@ -3728,16 +3784,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.WYVERN_BODY1:
+				case EntityID.NPCID.WYVERN_BODY1:
 					HasNoTileCollide = true;
 					TypeName = "Wyvern Body";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3748,16 +3804,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 2000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_BODY1:
+				case EntityID.NPCID.ARCH_WYVERN_BODY1:
 					HasNoTileCollide = true;
 					TypeName = "Arch Wyvern Body";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 45;
 					Defense = 20;
@@ -3768,16 +3824,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 2000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.WYVERN_BODY2:
+				case EntityID.NPCID.WYVERN_BODY2:
 					HasNoTileCollide = true;
 					TypeName = "Wyvern Body 2";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3788,16 +3844,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_BODY2:
+				case EntityID.NPCID.ARCH_WYVERN_BODY2:
 					HasNoTileCollide = true;
 					TypeName = "Arch Wyvern Body 2";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3808,16 +3864,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.WYVERN_BODY3:
+				case EntityID.NPCID.WYVERN_BODY3:
 					HasNoTileCollide = true;
 					TypeName = "Wyvern Body 3";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3828,16 +3884,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_BODY3:
+				case EntityID.NPCID.ARCH_WYVERN_BODY3:
 					HasNoTileCollide = true;
 					TypeName = "Arch Wyvern Body 3";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 45;
 					Defense = 20;
@@ -3848,16 +3904,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.WYVERN_TAIL:
+				case EntityID.NPCID.WYVERN_TAIL:
 					HasNoTileCollide = true;
 					TypeName = "Wyvern Tail";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 20;
@@ -3868,16 +3924,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ARCH_WYVERN_TAIL:
+				case EntityID.NPCID.ARCH_WYVERN_TAIL:
 					HasNoTileCollide = true;
 					TypeName = "Arch Wyvern Tail";
 					Width = 32;
 					Height = 32;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 55;
 					Defense = 15;
@@ -3888,16 +3944,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Value = 10000f;
 					Scale = 1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.GIANT_BAT:
+				case EntityID.NPCID.GIANT_BAT:
 					NpcSlots = 0.5f;
 					TypeName = "Giant Bat";
 					Width = 26;
 					Height = 20;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 70;
 					Defense = 20;
 					LifeMax = 160;
@@ -3905,14 +3961,14 @@ namespace Terraria
 					KnockBackResist = 0.75f;
 					SoundKilled = 4;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.CORRUPTOR:
+				case EntityID.NPCID.CORRUPTOR:
 					NpcSlots = 1f;
 					TypeName = "Corruptor";
 					Width = 44;
 					Height = 44;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 60;
 					Defense = 32;
 					LifeMax = 230;
@@ -3922,11 +3978,11 @@ namespace Terraria
 					KnockBackResist = 0.55f;
 					Value = 500f;
 					break;
-				case ID.DIGGER_HEAD:
+				case EntityID.NPCID.DIGGER_HEAD:
 					TypeName = "Digger Head";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 45;
 					Defense = 10;
@@ -3940,11 +3996,11 @@ namespace Terraria
 					Scale = 0.9f;
 					Value = 300f;
 					break;
-				case ID.DIGGER_BODY:
+				case EntityID.NPCID.DIGGER_BODY:
 					TypeName = "Digger Body";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 28;
 					Defense = 20;
@@ -3958,11 +4014,11 @@ namespace Terraria
 					Scale = 0.9f;
 					Value = 300f;
 					break;
-				case ID.DIGGER_TAIL:
+				case EntityID.NPCID.DIGGER_TAIL:
 					TypeName = "Digger Tail";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 26;
 					Defense = 30;
@@ -3976,12 +4032,12 @@ namespace Terraria
 					Scale = 0.9f;
 					Value = 300f;
 					break;
-				case ID.SEEKER_HEAD:
+				case EntityID.NPCID.SEEKER_HEAD:
 					NpcSlots = 3.5f;
 					TypeName = "Seeker Head";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 70;
 					Defense = 36;
@@ -3994,11 +4050,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 700f;
 					break;
-				case ID.SEEKER_BODY:
+				case EntityID.NPCID.SEEKER_BODY:
 					TypeName = "Seeker Body";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 55;
 					Defense = 40;
@@ -4011,11 +4067,11 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 700f;
 					break;
-				case ID.SEEKER_TAIL:
+				case EntityID.NPCID.SEEKER_TAIL:
 					TypeName = "Seeker Tail";
 					Width = 22;
 					Height = 22;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 40;
 					Defense = 44;
@@ -4028,14 +4084,14 @@ namespace Terraria
 					IsBehindTiles = true;
 					Value = 700f;
 					break;
-				case ID.CLINGER:
+				case EntityID.NPCID.CLINGER:
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					IsBehindTiles = true;
 					TypeName = "Clinger";
 					Width = 30;
 					Height = 30;
-					AIStyle = 13;
+					AIStyle = (byte)EntityID.NPCStyleID.PLANT;
 					Damage = 70;
 					Defense = 30;
 					LifeMax = 320;
@@ -4044,13 +4100,13 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 600f;
 					break;
-				case ID.ANGLER_FISH:
+				case EntityID.NPCID.ANGLER_FISH:
 					NpcSlots = 0.5f;
 					HasNoGravity = true;
 					TypeName = "Angler Fish";
 					Width = 18;
 					Height = 20;
-					AIStyle = 16;
+					AIStyle = (byte)EntityID.NPCStyleID.FISH;
 					Damage = 80;
 					Defense = 22;
 					LifeMax = 90;
@@ -4058,12 +4114,12 @@ namespace Terraria
 					SoundKilled = 1;
 					Value = 500f;
 					break;
-				case ID.GREEN_JELLYFISH:
+				case EntityID.NPCID.GREEN_JELLYFISH:
 					HasNoGravity = true;
 					TypeName = "Green Jellyfish";
 					Width = 26;
 					Height = 26;
-					AIStyle = 18;
+					AIStyle = (byte)EntityID.NPCStyleID.JELLYFISH;
 					Damage = 80;
 					Defense = 30;
 					LifeMax = 120;
@@ -4072,11 +4128,11 @@ namespace Terraria
 					Value = 800f;
 					Alpha = 20;
 					break;
-				case ID.WEREWOLF:
+				case EntityID.NPCID.WEREWOLF:
 					TypeName = "Werewolf";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 70;
 					Defense = 40;
 					LifeMax = 400;
@@ -4084,14 +4140,14 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.4f;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.BOUND_GOBLIN:
+				case EntityID.NPCID.BOUND_GOBLIN:
 					IsFriendly = true;
 					TypeName = "Bound Goblin";
 					Width = 18;
 					Height = 34;
-					AIStyle = 0;
+					AIStyle = (byte)EntityID.NPCStyleID.BOUND;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4100,12 +4156,12 @@ namespace Terraria
 					KnockBackResist = 0.5f;
 					Scale = 0.9f;
 					break;
-				case ID.BOUND_WIZARD:
+				case EntityID.NPCID.BOUND_WIZARD:
 					IsFriendly = true;
 					TypeName = "Bound Wizard";
 					Width = 18;
 					Height = 40;
-					AIStyle = 0;
+					AIStyle = (byte)EntityID.NPCStyleID.BOUND;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4113,13 +4169,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.GOBLIN_TINKERER:
+				case EntityID.NPCID.GOBLIN_TINKERER:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Goblin Tinkerer";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4128,13 +4184,13 @@ namespace Terraria
 					KnockBackResist = 0.5f;
 					Scale = 0.9f;
 					break;
-				case ID.WIZARD:
+				case EntityID.NPCID.WIZARD:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Wizard";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4142,11 +4198,11 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.CLOWN:
+				case EntityID.NPCID.CLOWN:
 					TypeName = "Clown";
 					Width = 34;
 					Height = 78;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 50;
 					Defense = 20;
 					LifeMax = 400;
@@ -4155,11 +4211,11 @@ namespace Terraria
 					KnockBackResist = 0.4f;
 					Value = 8000f;
 					break;
-				case ID.SKELETON_ARCHER:
+				case EntityID.NPCID.SKELETON_ARCHER:
 					TypeName = "Skeleton Archer";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 55;
 					Defense = 28;
 					LifeMax = 260;
@@ -4167,15 +4223,15 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.55f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GOBLIN_ARCHER:
+				case EntityID.NPCID.GOBLIN_ARCHER:
 					TypeName = "Goblin Archer";
 					Scale = 0.95f;
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 20;
 					Defense = 6;
 					LifeMax = 80;
@@ -4183,13 +4239,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.7f;
 					Value = 200f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.VILE_SPIT:
+				case EntityID.NPCID.VILE_SPIT:
 					TypeName = "Vile Spit";
 					Width = 16;
 					Height = 16;
-					AIStyle = 9;
+					AIStyle = (byte)EntityID.NPCStyleID.SPHERE;
 					Damage = 65;
 					Defense = 0;
 					LifeMax = 1;
@@ -4201,12 +4257,12 @@ namespace Terraria
 					Scale = 0.9f;
 					Alpha = 80;
 					break;
-				case ID.WALL_OF_FLESH:
+				case EntityID.NPCID.WALL_OF_FLESH:
 					NpcSlots = 10f;
 					TypeName = "Wall of Flesh";
 					Width = 100;
 					Height = 100;
-					AIStyle = 27;
+					AIStyle = (byte)EntityID.NPCStyleID.WALL_OF_FLESH_MOUTH;
 					Damage = 50;
 					Defense = 12;
 					LifeMax = 8000;
@@ -4218,16 +4274,16 @@ namespace Terraria
 					KnockBackResist = 0f;
 					Scale = 1.2f;
 					IsBoss = true;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					Value = 80000f;
 					break;
-				case ID.WALL_OF_FLESH_EYE:
+				case EntityID.NPCID.WALL_OF_FLESH_EYE:
 					TypeName = "Wall of Flesh Eye";
 					Width = 100;
 					Height = 100;
-					AIStyle = 28;
+					AIStyle = (byte)EntityID.NPCStyleID.WALL_OF_FLESH_EYES;
 					Damage = 50;
 					Defense = 0;
 					LifeMax = 8000;
@@ -4238,16 +4294,16 @@ namespace Terraria
 					IsBehindTiles = true;
 					KnockBackResist = 0f;
 					Scale = 1.2f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					Value = 80000f;
 					break;
-				case ID.THE_HUNGRY:
+				case EntityID.NPCID.THE_HUNGRY:
 					TypeName = "The Hungry";
 					Width = 30;
 					Height = 30;
-					AIStyle = 29;
+					AIStyle = (byte)EntityID.NPCStyleID.WALL_OF_FLESH_TENTACLE;
 					Damage = 30;
 					Defense = 10;
 					LifeMax = 240;
@@ -4258,11 +4314,11 @@ namespace Terraria
 					HasNoTileCollide = true;
 					KnockBackResist = 1.1f;
 					break;
-				case ID.THE_HUNGRY_II:
+				case EntityID.NPCID.THE_HUNGRY_II:
 					TypeName = "The Hungry II";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 30;
 					Defense = 6;
 					LifeMax = 80;
@@ -4270,11 +4326,11 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 12;
 					break;
-				case ID.LEECH_HEAD:
+				case EntityID.NPCID.LEECH_HEAD:
 					TypeName = "Leech Head";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 26;
 					Defense = 2;
@@ -4286,11 +4342,11 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					break;
-				case ID.LEECH_BODY:
+				case EntityID.NPCID.LEECH_BODY:
 					TypeName = "Leech Body";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 22;
 					Defense = 6;
@@ -4302,11 +4358,11 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					break;
-				case ID.LEECH_TAIL:
+				case EntityID.NPCID.LEECH_TAIL:
 					TypeName = "Leech Tail";
 					Width = 14;
 					Height = 14;
-					AIStyle = 6;
+					AIStyle = (byte)EntityID.NPCStyleID.WORM;
 					NetAlways = true;
 					Damage = 18;
 					Defense = 10;
@@ -4318,11 +4374,11 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBehindTiles = true;
 					break;
-				case ID.CHAOS_ELEMENTAL:
+				case EntityID.NPCID.CHAOS_ELEMENTAL:
 					TypeName = "Chaos Elemental";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 40;
 					Defense = 30;
 					LifeMax = 370;
@@ -4330,16 +4386,16 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.4f;
 					Value = 600f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SPECTRAL_ELEMENTAL:
+				case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 					TypeName = "Spectral Elemental";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 50;
 					Defense = 35;
 					LifeMax = 400;
@@ -4347,16 +4403,16 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.4f;
 					Value = 600f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SLIMER:
+				case EntityID.NPCID.SLIMER:
 					TypeName = "Slimer";
 					Width = 40;
 					Height = 30;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 45;
 					Defense = 20;
 					LifeMax = 60;
@@ -4364,15 +4420,15 @@ namespace Terraria
 					Alpha = 55;
 					KnockBackResist = 0.8f;
 					Scale = 1.1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GASTROPOD:
+				case EntityID.NPCID.GASTROPOD:
 					HasNoGravity = true;
 					TypeName = "Gastropod";
 					Width = 20;
 					Height = 20;
-					AIStyle = 22;
+					AIStyle = (byte)EntityID.NPCStyleID.HOVERING;
 					Damage = 60;
 					Defense = 22;
 					LifeMax = 220;
@@ -4380,14 +4436,14 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 1;
 					Value = 600f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.SPECTRAL_GASTROPOD:
+				case EntityID.NPCID.SPECTRAL_GASTROPOD:
 					HasNoGravity = true;
 					TypeName = "Spectral Gastropod";
 					Width = 20;
 					Height = 20;
-					AIStyle = 22;
+					AIStyle = (byte)EntityID.NPCStyleID.HOVERING;
 					Damage = 60;
 					Defense = 22;
 					LifeMax = 220;
@@ -4395,14 +4451,14 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 1;
 					Value = 600f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
 					break;
-				case ID.BOUND_MECHANIC:
+				case EntityID.NPCID.BOUND_MECHANIC:
 					IsFriendly = true;
 					TypeName = "Bound Mechanic";
 					Width = 18;
 					Height = 34;
-					AIStyle = 0;
+					AIStyle = (byte)EntityID.NPCStyleID.BOUND;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4411,13 +4467,13 @@ namespace Terraria
 					KnockBackResist = 0.5f;
 					Scale = 0.9f;
 					break;
-				case ID.MECHANIC:
+				case EntityID.NPCID.MECHANIC:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Mechanic";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4425,11 +4481,11 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.RETINAZER:
+				case EntityID.NPCID.RETINAZER:
 					TypeName = "Retinazer";
 					Width = 100;
 					Height = 110;
-					AIStyle = 30;
+					AIStyle = (byte)EntityID.NPCStyleID.RETINAZER;
 					Damage = 50;
 					Defense = 10;
 					LifeMax = 24000;
@@ -4443,11 +4499,11 @@ namespace Terraria
 					Value = 120000f;
 					NpcSlots = 5f;
 					break;
-				case ID.SPAZMATISM:
+				case EntityID.NPCID.SPAZMATISM:
 					TypeName = "Spazmatism";
 					Width = 100;
 					Height = 110;
-					AIStyle = 31;
+					AIStyle = (byte)EntityID.NPCStyleID.SPAZMATISM;
 					Damage = 50;
 					Defense = 10;
 					LifeMax = 24000;
@@ -4461,11 +4517,11 @@ namespace Terraria
 					Value = 120000f;
 					NpcSlots = 5f;
 					break;
-				case ID.SKELETRON_PRIME:
+				case EntityID.NPCID.SKELETRON_PRIME:
 					TypeName = "Skeletron Prime";
 					Width = 80;
 					Height = 102;
-					AIStyle = 32;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_PRIME_HEAD;
 					Damage = 50;
 					Defense = 25;
 					LifeMax = 30000;
@@ -4477,15 +4533,15 @@ namespace Terraria
 					KnockBackResist = 0f;
 					IsBoss = true;
 					NpcSlots = 6f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.PRIME_CANNON:
+				case EntityID.NPCID.PRIME_CANNON:
 					TypeName = "Prime Cannon";
 					Width = 52;
 					Height = 52;
-					AIStyle = 35;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_PRIME_CANNON;
 					Damage = 30;
 					Defense = 25;
 					LifeMax = 7000;
@@ -4494,15 +4550,15 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
 					NetAlways = true;
 					break;
-				case ID.PRIME_SAW:
+				case EntityID.NPCID.PRIME_SAW:
 					TypeName = "Prime Saw";
 					Width = 52;
 					Height = 52;
-					AIStyle = 33;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_PRIME_SAW;
 					Damage = 52;
 					Defense = 40;
 					LifeMax = 10000;
@@ -4511,15 +4567,15 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
 					NetAlways = true;
 					break;
-				case ID.PRIME_VICE:
+				case EntityID.NPCID.PRIME_VICE:
 					TypeName = "Prime Vice";
 					Width = 52;
 					Height = 52;
-					AIStyle = 34;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_PRIME_VICE;
 					Damage = 45;
 					Defense = 35;
 					LifeMax = 10000;
@@ -4528,15 +4584,15 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
 					NetAlways = true;
 					break;
-				case ID.PRIME_LASER:
+				case EntityID.NPCID.PRIME_LASER:
 					TypeName = "Prime Laser";
 					Width = 52;
 					Height = 52;
-					AIStyle = 36;
+					AIStyle = (byte)EntityID.NPCStyleID.SKELETRON_PRIME_LASER;
 					Damage = 29;
 					Defense = 20;
 					LifeMax = 6000;
@@ -4545,15 +4601,15 @@ namespace Terraria
 					HasNoGravity = true;
 					HasNoTileCollide = true;
 					KnockBackResist = 0f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
 					NetAlways = true;
 					break;
-				case ID.BALD_ZOMBIE:
+				case EntityID.NPCID.BALD_ZOMBIE:
 					TypeName = "Bald Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 14;
 					Defense = 6;
 					LifeMax = 45;
@@ -4561,13 +4617,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.5f;
 					Value = 60f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.WANDERING_EYE:
+				case EntityID.NPCID.WANDERING_EYE:
 					TypeName = "Wandering Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 40;
 					Defense = 20;
 					LifeMax = 300;
@@ -4575,14 +4631,14 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					SoundKilled = 1;
 					Value = 500f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.THE_DESTROYER_HEAD:
+				case EntityID.NPCID.THE_DESTROYER_HEAD:
 					NpcSlots = 5f;
 					TypeName = "The Destroyer";
 					Width = 38;
 					Height = 38;
-					AIStyle = 37;
+					AIStyle = (byte)EntityID.NPCStyleID.DESTROYER;
 					Damage = 60;
 					Defense = 0;
 					LifeMax = 80000;
@@ -4596,16 +4652,16 @@ namespace Terraria
 					Scale = 1.25f;
 					IsBoss = true;
 					NetAlways = true;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.THE_DESTROYER_BODY:
+				case EntityID.NPCID.THE_DESTROYER_BODY:
 					NpcSlots = 5f;
 					TypeName = "The Destroyer Body";
 					Width = 38;
 					Height = 38;
-					AIStyle = 37;
+					AIStyle = (byte)EntityID.NPCStyleID.DESTROYER;
 					Damage = 40;
 					Defense = 30;
 					LifeMax = 80000;
@@ -4617,16 +4673,16 @@ namespace Terraria
 					IsBehindTiles = true;
 					NetAlways = true;
 					Scale = 1.25f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.THE_DESTROYER_TAIL:
+				case EntityID.NPCID.THE_DESTROYER_TAIL:
 					NpcSlots = 5f;
 					TypeName = "The Destroyer Tail";
 					Width = 38;
 					Height = 38;
-					AIStyle = 37;
+					AIStyle = (byte)EntityID.NPCStyleID.DESTROYER;
 					Damage = 20;
 					Defense = 35;
 					LifeMax = 80000;
@@ -4638,15 +4694,15 @@ namespace Terraria
 					IsBehindTiles = true;
 					Scale = 1.25f;
 					NetAlways = true;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.ILLUMINANT_BAT:
+				case EntityID.NPCID.ILLUMINANT_BAT:
 					TypeName = "Illuminant Bat";
 					Width = 26;
 					Height = 20;
-					AIStyle = 14;
+					AIStyle = (byte)EntityID.NPCStyleID.FLYER;
 					Damage = 75;
 					Defense = 30;
 					LifeMax = 200;
@@ -4654,16 +4710,16 @@ namespace Terraria
 					KnockBackResist = 0.75f;
 					SoundKilled = 6;
 					Value = 500f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.ILLUMINANT_SLIME:
+				case EntityID.NPCID.ILLUMINANT_SLIME:
 					TypeName = "Illuminant Slime";
 					Width = 24;
 					Height = 18;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 70;
 					Defense = 30;
 					LifeMax = 180;
@@ -4671,19 +4727,19 @@ namespace Terraria
 					SoundKilled = 6;
 					Alpha = 100;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					KnockBackResist = 0.85f;
 					Scale = 1.05f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.PROBE:
+				case EntityID.NPCID.PROBE:
 					NpcSlots = 1f;
 					TypeName = "Probe";
 					Width = 30;
 					Height = 30;
-					AIStyle = 5;
+					AIStyle = (byte)EntityID.NPCStyleID.AGGRESSIVE_FLYER;
 					Damage = 50;
 					Defense = 20;
 					LifeMax = 200;
@@ -4693,11 +4749,11 @@ namespace Terraria
 					KnockBackResist = 0.8f;
 					HasNoTileCollide = true;
 					break;
-				case ID.POSSESSED_ARMOR:
+				case EntityID.NPCID.POSSESSED_ARMOR:
 					TypeName = "Possessed Armor";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 55;
 					Defense = 28;
 					LifeMax = 260;
@@ -4705,15 +4761,15 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.4f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
 					break;
-				case ID.TOXIC_SLUDGE:
+				case EntityID.NPCID.TOXIC_SLUDGE:
 					TypeName = "Toxic Sludge";
 					Width = 34;
 					Height = 28;
-					AIStyle = 1;
+					AIStyle = (byte)EntityID.NPCStyleID.SLIME;
 					Damage = 50;
 					Defense = 18;
 					LifeMax = 150;
@@ -4722,17 +4778,17 @@ namespace Terraria
 					Alpha = 55;
 					Value = 400f;
 					Scale = 1.1f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					KnockBackResist = 0.8f;
 					break;
-				case ID.SANTA_CLAUS:
+				case EntityID.NPCID.SANTA_CLAUS:
 					IsTownNPC = true;
 					IsFriendly = true;
 					TypeName = "Santa Claus";
 					Width = 18;
 					Height = 40;
-					AIStyle = 7;
+					AIStyle = (byte)EntityID.NPCStyleID.TOWNSFOLK;
 					Damage = 10;
 					Defense = 15;
 					LifeMax = 250;
@@ -4740,11 +4796,11 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.5f;
 					break;
-				case ID.SNOWMAN_GANGSTA:
+				case EntityID.NPCID.SNOWMAN_GANGSTA:
 					TypeName = "Snowman Gangsta";
 					Width = 26;
 					Height = 40;
-					AIStyle = 38;
+					AIStyle = (byte)EntityID.NPCStyleID.SNOWMAN;
 					Damage = 50;
 					Defense = 20;
 					LifeMax = 200;
@@ -4752,16 +4808,16 @@ namespace Terraria
 					SoundKilled = 15;
 					KnockBackResist = 0.6f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.MISTER_STABBY:
+				case EntityID.NPCID.MISTER_STABBY:
 					TypeName = "Mister Stabby";
 					Width = 26;
 					Height = 40;
-					AIStyle = 38;
+					AIStyle = (byte)EntityID.NPCStyleID.SNOWMAN;
 					Damage = 65;
 					Defense = 26;
 					LifeMax = 240;
@@ -4769,16 +4825,16 @@ namespace Terraria
 					SoundKilled = 15;
 					KnockBackResist = 0.6f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
-				case ID.SNOW_BALLA:
+				case EntityID.NPCID.SNOW_BALLA:
 					TypeName = "Snow Balla";
 					Width = 26;
 					Height = 40;
-					AIStyle = 38;
+					AIStyle = (byte)EntityID.NPCStyleID.SNOWMAN;
 					Damage = 55;
 					Defense = 22;
 					LifeMax = 220;
@@ -4786,17 +4842,17 @@ namespace Terraria
 					SoundKilled = 15;
 					KnockBackResist = 0.6f;
 					Value = 400f;
-					BuffImmune[(int)Buff.ID.POISONED] = true;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
-					BuffImmune[(int)Buff.ID.ON_FIRE] = true;
-					BuffImmune[(int)Buff.ID.ON_FIRE_2] = true;
+					BuffImmune[(int)EntityID.BuffID.POISONED] = true;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE] = true;
+					BuffImmune[(int)EntityID.BuffID.ON_FIRE_2] = true;
 					break;
 #if VERSION_101
-				case ID.PINCUSHION_ZOMBIE:
+				case EntityID.NPCID.PINCUSHION_ZOMBIE:
 					TypeName = "Pincushion Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 16;
 					Defense = 8;
 					LifeMax = 50;
@@ -4804,13 +4860,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.45f;
 					Value = 65f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SLIMED_ZOMBIE:
+				case EntityID.NPCID.SLIMED_ZOMBIE:
 					TypeName = "Slimed Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 13;
 					Defense = 6;
 					LifeMax = 40;
@@ -4818,13 +4874,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.55f;
 					Value = 55f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SWAMP_ZOMBIE:
+				case EntityID.NPCID.SWAMP_ZOMBIE:
 					TypeName = "Swamp Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 13;
 					Defense = 8;
 					LifeMax = 45;
@@ -4832,13 +4888,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.45f;
 					Value = 80f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.TWIGGY_ZOMBIE:
+				case EntityID.NPCID.TWIGGY_ZOMBIE:
 					TypeName = "Twiggy Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 16;
 					Defense = 4;
 					LifeMax = 45;
@@ -4846,13 +4902,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.55f;
 					Value = 70f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.CATARACT_EYE:
+				case EntityID.NPCID.CATARACT_EYE:
 					TypeName = "Cataract Eye"; // Why the IDs are out of order I got no idea; PC does it as well.
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 18;
 					Defense = 4;
 					LifeMax = 65;
@@ -4860,13 +4916,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.7f;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.SLEEPY_EYE:
+				case EntityID.NPCID.SLEEPY_EYE:
 					TypeName = "Sleepy Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 16;
 					Defense = 2;
 					LifeMax = 60;
@@ -4874,13 +4930,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.85f;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.DIALATED_EYE:
+				case EntityID.NPCID.DIALATED_EYE:
 					TypeName = "Dialated Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 18;
 					Defense = 2;
 					LifeMax = 50;
@@ -4888,13 +4944,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.8f;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.GREEN_EYE:
+				case EntityID.NPCID.GREEN_EYE:
 					TypeName = "Green Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 20;
 					Defense = 0;
 					LifeMax = 60;
@@ -4902,13 +4958,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.8f;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.PURPLE_EYE:
+				case EntityID.NPCID.PURPLE_EYE:
 					TypeName = "Purple Eye";
 					Width = 30;
 					Height = 32;
-					AIStyle = 2;
+					AIStyle = (byte)EntityID.NPCStyleID.DEMON_EYE;
 					Damage = 14;
 					Defense = 4;
 					LifeMax = 60;
@@ -4916,13 +4972,13 @@ namespace Terraria
 					SoundKilled = 1;
 					KnockBackResist = 0.8f;
 					Value = 75f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.FEMALE_ZOMBIE:
+				case EntityID.NPCID.FEMALE_ZOMBIE:
 					TypeName = "Female Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 12;
 					Defense = 4;
 					LifeMax = 38;
@@ -4930,13 +4986,13 @@ namespace Terraria
 					SoundKilled = 2;
 					KnockBackResist = 0.6f;
 					Value = 65f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.ZOMBIE_MUSHROOM:
+				case EntityID.NPCID.ZOMBIE_MUSHROOM:
 					TypeName = "Spore Zombie"; // It wasn't until 1.3 that these 2 became known as Spore Zombies...
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 40;
 					Defense = 10;
 					LifeMax = 180;
@@ -4944,13 +5000,13 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.4f;
 					Value = 1000f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
-				case ID.ZOMBIE_MUSHROOM_HAT:
+				case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 					TypeName = "Spore Zombie";
 					Width = 18;
 					Height = 40;
-					AIStyle = 3;
+					AIStyle = (byte)EntityID.NPCStyleID.WALKER;
 					Damage = 38;
 					Defense = 16;
 					LifeMax = 220;
@@ -4958,7 +5014,7 @@ namespace Terraria
 					SoundKilled = 6;
 					KnockBackResist = 0.3f;
 					Value = 1200f;
-					BuffImmune[(int)Buff.ID.CONFUSED] = false;
+					BuffImmune[(int)EntityID.BuffID.CONFUSED] = false;
 					break;
 #endif
 			}
@@ -5003,19 +5059,19 @@ namespace Terraria
 				{
 					if (Main.PlayerSet[i].Active != 0 && Main.PlayerSet[i].TalkNPC == WhoAmI)
 					{
-						if (Type == (int)ID.BOUND_GOBLIN)
+						if (Type == (int)EntityID.NPCID.BOUND_GOBLIN)
 						{
-							Transform((int)ID.GOBLIN_TINKERER);
+							Transform((int)EntityID.NPCID.GOBLIN_TINKERER);
 							return;
 						}
-						if (Type == (int)ID.BOUND_WIZARD)
+						if (Type == (int)EntityID.NPCID.BOUND_WIZARD)
 						{
-							Transform((int)ID.WIZARD);
+							Transform((int)EntityID.NPCID.WIZARD);
 							return;
 						}
-						if (Type == (int)ID.BOUND_MECHANIC)
+						if (Type == (int)EntityID.NPCID.BOUND_MECHANIC)
 						{
-							Transform((int)ID.MECHANIC);
+							Transform((int)EntityID.NPCID.MECHANIC);
 							return;
 						}
 					}
@@ -5033,7 +5089,7 @@ namespace Terraria
 		private unsafe void SlimeAI()
 		{
 			bool flag = !Main.GameTime.DayTime || Life != LifeMax || XYWH.Y > Main.WorldSurface << 4;
-			if (Type == (int)ID.CORRUPT_SLIME)
+			if (Type == (int)EntityID.NPCID.CORRUPT_SLIME)
 			{
 				flag = true;
 				if (Main.Rand.Next(32) == 0)
@@ -5046,10 +5102,10 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.LAVA_SLIME)
+			else if (Type == (int)EntityID.NPCID.LAVA_SLIME)
 			{
 				Lighting.AddLight(XYWH.X + (Width >> 1) >> 4, XYWH.Y + (Height >> 1) >> 4, new Vector3(1f, 0.3f, 0.1f));
-				Dust* ptr2 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 1.7000000476837158);
+				Dust* ptr2 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 1.7f);
 				if (ptr2 != null)
 				{
 					ptr2->NoGravity = true;
@@ -5077,7 +5133,7 @@ namespace Terraria
 				{
 					AI3 = Position.X;
 				}
-				if (Type == (int)ID.LAVA_SLIME)
+				if (Type == (int)EntityID.NPCID.LAVA_SLIME)
 				{
 					if (Velocity.Y > 2f)
 					{
@@ -5135,19 +5191,19 @@ namespace Terraria
 					AI0 += 1f;
 				}
 				AI0 += 1f;
-				if (Type == (int)ID.LAVA_SLIME)
+				if (Type == (int)EntityID.NPCID.LAVA_SLIME)
 				{
 					AI0 += 2f;
 				}
-				else if (Type == (int)ID.DUNGEON_SLIME)
+				else if (Type == (int)EntityID.NPCID.DUNGEON_SLIME)
 				{
 					AI0 += 3f;
 				}
-				else if (Type == (int)ID.ILLUMINANT_SLIME)
+				else if (Type == (int)EntityID.NPCID.ILLUMINANT_SLIME)
 				{
 					AI0 += 2f;
 				}
-				else if (Type == (int)ID.CORRUPT_SLIME)
+				else if (Type == (int)EntityID.NPCID.CORRUPT_SLIME)
 				{
 					if (Scale >= 0f)
 					{
@@ -5167,7 +5223,7 @@ namespace Terraria
 					}
 					if (AI1 == 2f)
 					{
-						if (Type == (int)ID.LAVA_SLIME)
+						if (Type == (int)EntityID.NPCID.LAVA_SLIME)
 						{
 							Velocity.X += 3.5f * Direction;
 							Velocity.Y = -10f;
@@ -5185,14 +5241,14 @@ namespace Terraria
 					{
 						Velocity.Y = -6f;
 						Velocity.X += 2 * Direction;
-						if (Type == (int)ID.LAVA_SLIME)
+						if (Type == (int)EntityID.NPCID.LAVA_SLIME)
 						{
 							Velocity.X += 2 * Direction;
 						}
 						AI0 = -120f;
 						AI1 += 1f;
 					}
-					if (Type == (int)ID.TOXIC_SLUDGE)
+					if (Type == (int)EntityID.NPCID.TOXIC_SLUDGE)
 					{
 						Velocity.Y *= 1.3f;
 						Velocity.X *= 1.2f;
@@ -5246,11 +5302,7 @@ namespace Terraria
 					}
 				}
 			}
-#if VERSION_INITIAL
-			if ((Type == (int)ID.DEMON_EYE || Type == (int)ID.WANDERING_EYE) && Main.GameTime.DayTime && XYWH.Y <= Main.WorldSurfacePixels)
-#else
-			if ((Type == (int)ID.DEMON_EYE || Type == (int)ID.WANDERING_EYE || Type == (int)ID.CATARACT_EYE || Type == (int)ID.SLEEPY_EYE || Type == (int)ID.DIALATED_EYE || Type == (int)ID.GREEN_EYE || Type == (int)ID.PURPLE_EYE) && Main.GameTime.DayTime && XYWH.Y <= Main.WorldSurfacePixels)
-#endif
+			if ((EntityID.DemonEyeTypes.Contains((EntityID.NPCID)Type) || Type == (int)EntityID.NPCID.WANDERING_EYE) && Main.GameTime.DayTime && XYWH.Y <= Main.WorldSurfacePixels)
 			{
 				if (TimeLeft > 10)
 				{
@@ -5263,7 +5315,7 @@ namespace Terraria
 			{
 				TargetClosest();
 			}
-			if (Type == (int)ID.THE_HUNGRY_II)
+			if (Type == (int)EntityID.NPCID.THE_HUNGRY_II)
 			{
 				TargetClosest();
 				Lighting.AddLight(XYWH.X + (Width >> 1) >> 4, XYWH.Y + (Height >> 1) >> 4, new Vector3(0.3f, 0.2f, 0.1f));
@@ -5341,7 +5393,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.WANDERING_EYE)
+			else if (Type == (int)EntityID.NPCID.WANDERING_EYE)
 			{
 				if (Life < LifeMax >> 1)
 				{
@@ -5549,11 +5601,7 @@ namespace Terraria
 					}
 				}
 			}
-#if VERSION_INITIAL
-			if ((Type == (int)ID.DEMON_EYE || Type == (int)ID.WANDERING_EYE) && Main.Rand.Next(40) == 0)
-#else
-			if ((Type == (int)ID.DEMON_EYE || Type == (int)ID.WANDERING_EYE || Type == (int)ID.CATARACT_EYE || Type == (int)ID.SLEEPY_EYE || Type == (int)ID.DIALATED_EYE || Type == (int)ID.GREEN_EYE || Type == (int)ID.PURPLE_EYE) && Main.Rand.Next(40) == 0)
-#endif
+			if ((EntityID.DemonEyeTypes.Contains((EntityID.NPCID)Type) || Type == (int)EntityID.NPCID.WANDERING_EYE) && Main.Rand.Next(40) == 0)
 			{
 				Dust* ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + (Height >> 2), Width, Height >> 1, 5, Velocity.X, 2.0);
 				if (ptr2 != null)
@@ -5580,7 +5628,7 @@ namespace Terraria
 		private unsafe void WalkAI()
 		{
 			int num = 60;
-			if (Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL)
+			if (Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL)
 			{
 				num = 20;
 				if (AI3 == -120f)
@@ -5620,11 +5668,11 @@ namespace Terraria
 			}
 			bool flag = false;
 			bool flag2 = true;
-			if (Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.CRAB || Type == (int)ID.CLOWN || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.GOBLIN_ARCHER || Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL)
+			if (Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.CRAB || Type == (int)EntityID.NPCID.CLOWN || Type == (int)EntityID.NPCID.SKELETON_ARCHER || Type == (int)EntityID.NPCID.GOBLIN_ARCHER || Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL)
 			{
 				flag2 = false;
 			}
-			if ((Type != (int)ID.SKELETON_ARCHER && Type != (int)ID.GOBLIN_ARCHER) || !(AI2 > 0f))
+			if ((Type != (int)EntityID.NPCID.SKELETON_ARCHER && Type != (int)EntityID.NPCID.GOBLIN_ARCHER) || !(AI2 > 0f))
 			{
 				if (Velocity.Y == 0f && ((Velocity.X > 0f && Direction < 0) || (Velocity.X < 0f && Direction > 0)))
 				{
@@ -5652,29 +5700,25 @@ namespace Terraria
 				}
 			}
 #if VERSION_INITIAL
-			if (AI3 < (float)num && (!Main.GameTime.DayTime || XYWH.Y > Main.WorldSurfacePixels || Type == (int)ID.GOBLIN_PEON || Type == (int)ID.GOBLIN_THIEF || Type == (int)ID.GOBLIN_WARRIOR || Type == (int)ID.BONES || Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.CRAB || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.GOBLIN_ARCHER || Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.SPECTRAL_MUMMY))
+			if (AI3 < (float)num && (!Main.GameTime.DayTime || XYWH.Y > Main.WorldSurfacePixels || EntityID.MummyTypes.Contains((EntityID.NPCID)Type) || Type == (int)EntityID.NPCID.GOBLIN_PEON || Type == (int)EntityID.NPCID.GOBLIN_THIEF || Type == (int)EntityID.NPCID.GOBLIN_WARRIOR || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.CRAB || Type == (int)EntityID.NPCID.GOBLIN_SCOUT || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.SKELETON_ARCHER || Type == (int)EntityID.NPCID.GOBLIN_ARCHER || Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL))
 #else
-			if (AI3 < num && (!Main.GameTime.DayTime || XYWH.Y > Main.WorldSurfacePixels || Type == (int)ID.GOBLIN_PEON || Type == (int)ID.GOBLIN_THIEF || Type == (int)ID.GOBLIN_WARRIOR || Type == (int)ID.BONES || Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.CRAB || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.GOBLIN_ARCHER || Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.SPECTRAL_MUMMY || Type == (int)ID.ZOMBIE_MUSHROOM || Type == (int)ID.ZOMBIE_MUSHROOM_HAT))
+			if (AI3 < num && (!Main.GameTime.DayTime || XYWH.Y > Main.WorldSurfacePixels || EntityID.MummyTypes.Contains((EntityID.NPCID)Type) || Type == (int)EntityID.NPCID.GOBLIN_PEON || Type == (int)EntityID.NPCID.GOBLIN_THIEF || Type == (int)EntityID.NPCID.GOBLIN_WARRIOR || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.CRAB || Type == (int)EntityID.NPCID.GOBLIN_SCOUT || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.SKELETON_ARCHER || Type == (int)EntityID.NPCID.GOBLIN_ARCHER || Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL || Type == (int)EntityID.NPCID.ZOMBIE_MUSHROOM || Type == (int)EntityID.NPCID.ZOMBIE_MUSHROOM_HAT))
 #endif
 			{
-#if VERSION_INITIAL
-				if (Type == (int)ID.ZOMBIE || Type == (int)ID.SKELETON || Type == (int)ID.BONES || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.BALD_ZOMBIE)
-#else
-				if (Type == (int)ID.ZOMBIE || Type == (int)ID.SKELETON || Type == (int)ID.BONES || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.BALD_ZOMBIE || Type == (int)ID.PINCUSHION_ZOMBIE || Type == (int)ID.SLIMED_ZOMBIE || Type == (int)ID.SWAMP_ZOMBIE || Type == (int)ID.TWIGGY_ZOMBIE || Type == (int)ID.FEMALE_ZOMBIE)
-#endif
+				if (Type == (int)EntityID.NPCID.SKELETON || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.SKELETON_ARCHER || EntityID.ZombieTypes.Contains((EntityID.NPCID)Type))
 				{
 					if (Main.Rand.Next(1000) == 0)
 					{
 						Main.PlaySound(14, XYWH.X, XYWH.Y);
 					}
 				}
-				else if ((Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_MUMMY) && Main.Rand.Next(500) == 0)
+				else if (EntityID.MummyTypes.Contains((EntityID.NPCID)Type) && Main.Rand.Next(500) == 0)
 				{
 					Main.PlaySound(26, XYWH.X, XYWH.Y);
 				}
 				TargetClosest();
 			}
-			else if ((Type != (int)ID.SKELETON_ARCHER && Type != (int)ID.GOBLIN_ARCHER) || !(AI2 > 0f))
+			else if ((Type != (int)EntityID.NPCID.SKELETON_ARCHER && Type != (int)EntityID.NPCID.GOBLIN_ARCHER) || !(AI2 > 0f))
 			{
 				if (Main.GameTime.DayTime && XYWH.Y >> 4 < Main.WorldSurface && TimeLeft > 10)
 				{
@@ -5702,7 +5746,7 @@ namespace Terraria
 					Direction = 1;
 				}
 			}
-			if (Type == (int)ID.CHAOS_ELEMENTAL) // BUG: There is no equivalent check for the spectral elemental, and this results in a slower move speed compared to the chaos elemental (120); Can be fixed by adding a spectral elemental in the check.
+			if (Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL) // BUG: There is no equivalent check for the spectral elemental, and this results in a slower move speed compared to the chaos elemental (120); Can be fixed by adding a spectral elemental in the check.
 			{
 				if (Velocity.X < -3f || Velocity.X > 3f)
 				{
@@ -5736,7 +5780,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.GOBLIN_THIEF || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.WEREWOLF)
+			else if (Type == (int)EntityID.NPCID.GOBLIN_THIEF || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.WEREWOLF)
 			{
 				if (Velocity.X < -2f || Velocity.X > 2f)
 				{
@@ -5762,7 +5806,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.CLOWN)
+			else if (Type == (int)EntityID.NPCID.CLOWN)
 			{
 				if (Velocity.X < -2f || Velocity.X > 2f)
 				{
@@ -5789,9 +5833,9 @@ namespace Terraria
 				}
 			}
 #if VERSION_INITIAL
-			else if (Type == (int)ID.SKELETON || Type == (int)ID.GOBLIN_PEON || Type == (int)ID.BONES || Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.POSSESSED_ARMOR)
+			else if (Type == (int)EntityID.NPCID.SKELETON || Type == (int)EntityID.NPCID.GOBLIN_PEON || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.GOBLIN_SCOUT || Type == (int)EntityID.NPCID.POSSESSED_ARMOR)
 #else
-			else if (Type == (int)ID.SKELETON || Type == (int)ID.GOBLIN_PEON || Type == (int)ID.BONES || Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.POSSESSED_ARMOR || Type == (int)ID.ZOMBIE_MUSHROOM)
+			else if (Type == (int)EntityID.NPCID.SKELETON || Type == (int)EntityID.NPCID.GOBLIN_PEON || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.GOBLIN_SCOUT || Type == (int)EntityID.NPCID.POSSESSED_ARMOR || Type == (int)EntityID.NPCID.ZOMBIE_MUSHROOM)
 #endif
 			{
 				if (Velocity.X < -1.5f || Velocity.X > 1.5f)
@@ -5818,7 +5862,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.CRAB)
+			else if (Type == (int)EntityID.NPCID.CRAB)
 			{
 				if (Velocity.X < -0.5f || Velocity.X > 0.5f)
 				{
@@ -5844,7 +5888,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_MUMMY)
+			else if (EntityID.MummyTypes.Contains((EntityID.NPCID)Type))
 			{
 				float num5 = 1f;
 				float num6 = 0.05f;
@@ -5853,7 +5897,7 @@ namespace Terraria
 					num5 = 2f;
 					num6 = 0.1f;
 				}
-				if (Type == (int)ID.DARK_MUMMY || Type == (int)ID.SHADOW_MUMMY)
+				if (Type == (int)EntityID.NPCID.DARK_MUMMY || Type == (int)EntityID.NPCID.SHADOW_MUMMY)
 				{
 					num5 *= 1.5f;
 				}
@@ -5881,7 +5925,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type != (int)ID.SKELETON_ARCHER && Type != (int)ID.GOBLIN_ARCHER)
+			else if (Type != (int)EntityID.NPCID.SKELETON_ARCHER && Type != (int)EntityID.NPCID.GOBLIN_ARCHER)
 			{
 #if VERSION_INITIAL
 				if (Velocity.X < -1f || Velocity.X > 1f)
@@ -5909,31 +5953,31 @@ namespace Terraria
 				}
 #else
 				float Modifier = 1f;
-				if (Type == (int)ID.PINCUSHION_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.PINCUSHION_ZOMBIE)
 				{
 					Modifier = 1.1f;
 				}
-				if (Type == (int)ID.SLIMED_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.SLIMED_ZOMBIE)
 				{
 					Modifier = 0.9f;
 				}
-				if (Type == (int)ID.SWAMP_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.SWAMP_ZOMBIE)
 				{
 					Modifier = 1.2f;
 				}
-				if (Type == (int)ID.TWIGGY_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.TWIGGY_ZOMBIE)
 				{
 					Modifier = 0.8f;
 				}
-				if (Type == (int)ID.BALD_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.BALD_ZOMBIE)
 				{
 					Modifier = 0.95f;
 				}
-				if (Type == (int)ID.FEMALE_ZOMBIE)
+				if (Type == (int)EntityID.NPCID.FEMALE_ZOMBIE)
 				{
 					Modifier = 0.87f;
 				}
-				if (Type == (int)ID.ZOMBIE || Type == (int)ID.BALD_ZOMBIE || Type == (int)ID.PINCUSHION_ZOMBIE || Type == (int)ID.SLIMED_ZOMBIE || Type == (int)ID.SWAMP_ZOMBIE || Type == (int)ID.TWIGGY_ZOMBIE || Type == (int)ID.FEMALE_ZOMBIE)
+				if (EntityID.ZombieTypes.Contains((EntityID.NPCID)Type))
 				{
 					Modifier *= 1f + (1f - Scale);
 				}
@@ -5962,7 +6006,7 @@ namespace Terraria
 				}
 #endif
 			}
-			if (Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.GOBLIN_ARCHER)
+			if (Type == (int)EntityID.NPCID.SKELETON_ARCHER || Type == (int)EntityID.NPCID.GOBLIN_ARCHER)
 			{
 				if (IsConfused)
 				{
@@ -5979,7 +6023,7 @@ namespace Terraria
 						AI1 = 30f;
 						AI2 = 0f;
 					}
-					int num7 = ((Type == (int)ID.GOBLIN_ARCHER) ? 180 : 70);
+					int num7 = ((Type == (int)EntityID.NPCID.GOBLIN_ARCHER) ? 180 : 70);
 					if (AI2 > 0f)
 					{
 						TargetClosest();
@@ -5988,7 +6032,7 @@ namespace Terraria
 							float num8 = 11f;
 							int num9 = 35;
 							int num10 = 82;
-							if (Type == (int)ID.GOBLIN_ARCHER)
+							if (Type == (int)EntityID.NPCID.GOBLIN_ARCHER)
 							{
 								num8 = 9f;
 								num9 = 11;
@@ -6117,7 +6161,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.CLOWN && Main.NetMode != (byte)NetModeSetting.CLIENT && !Main.PlayerSet[Target].IsDead)
+			else if (Type == (int)EntityID.NPCID.CLOWN && Main.NetMode != (byte)NetModeSetting.CLIENT && !Main.PlayerSet[Target].IsDead)
 			{
 				if (WasJustHit)
 				{
@@ -6155,19 +6199,15 @@ namespace Terraria
 			if (flag3)
 			{
 				int num25 = XYWH.Y + Height - 15 >> 4;
-				int num26 = ((Type != (int)ID.CLOWN) ? (XYWH.X + (Width >> 1) + 15 * Direction) : (XYWH.X + (Width >> 1) + ((Width >> 1) + 16) * Direction));
+				int num26 = ((Type != (int)EntityID.NPCID.CLOWN) ? (XYWH.X + (Width >> 1) + 15 * Direction) : (XYWH.X + (Width >> 1) + ((Width >> 1) + 16) * Direction));
 				num26 >>= 4;
-				if (flag2 && Main.TileSet[num26, num25 - 1].Type == 10 && Main.TileSet[num26, num25 - 1].IsActive != 0)
+				if (flag2 && Main.TileSet[num26, num25 - 1].Type == (int)EntityID.TileID.DOOR_CLOSED && Main.TileSet[num26, num25 - 1].IsActive != 0)
 				{
 					AI2 += 1f;
 					AI3 = 0f;
 					if (AI2 >= 60f)
 					{
-#if VERSION_INITIAL
-						if (!Main.GameTime.IsBloodMoon && (Type == (int)ID.ZOMBIE || Type == (int)ID.BALD_ZOMBIE))
-#else
-						if (!Main.GameTime.IsBloodMoon && (Type == (int)ID.ZOMBIE || Type == (int)ID.BALD_ZOMBIE || Type == (int)ID.PINCUSHION_ZOMBIE || Type == (int)ID.SLIMED_ZOMBIE || Type == (int)ID.SWAMP_ZOMBIE || Type == (int)ID.TWIGGY_ZOMBIE || Type == (int)ID.FEMALE_ZOMBIE))
-#endif
+						if (!Main.GameTime.IsBloodMoon && (EntityID.ZombieTypes.Contains((EntityID.NPCID)Type)))
 						{
 							AI1 = 0f;
 						}
@@ -6177,11 +6217,11 @@ namespace Terraria
 #else
 						AI1 += 5f;
 #endif
-						if (Type == (int)ID.GOBLIN_THIEF)
+						if (Type == (int)EntityID.NPCID.GOBLIN_THIEF)
 						{
 							AI1 += 1f;
 						}
-						else if (Type == (int)ID.BONES)
+						else if (Type == (int)EntityID.NPCID.BONES)
 						{
 							AI1 += 6f;
 						}
@@ -6195,7 +6235,7 @@ namespace Terraria
 						WorldGen.KillTile(num26, num25 - 1, KillToFail: true);
 						if ((Main.NetMode != (byte)NetModeSetting.CLIENT || !flag4) && flag4 && Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
-							if (Type == (int)ID.GOBLIN_PEON)
+							if (Type == (int)EntityID.NPCID.GOBLIN_PEON)
 							{
 								WorldGen.KillTile(num26, num25 - 1);
 								NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, num26, num25 - 1, 0);
@@ -6244,7 +6284,7 @@ namespace Terraria
 							Velocity.Y = -5f;
 							ShouldNetUpdate = true;
 						}
-						else if (DirectionY < 0 && Type != (int)ID.CRAB && (Main.TileSet[num26, num25 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num26, num25 + 1].Type]) && (Main.TileSet[num26 + Direction, num25 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num26 + Direction, num25 + 1].Type]))
+						else if (DirectionY < 0 && Type != (int)EntityID.NPCID.CRAB && (Main.TileSet[num26, num25 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num26, num25 + 1].Type]) && (Main.TileSet[num26 + Direction, num25 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num26 + Direction, num25 + 1].Type]))
 						{
 							Velocity.Y = -8f;
 							Velocity.X *= 1.5f;
@@ -6256,7 +6296,7 @@ namespace Terraria
 							AI2 = 0f;
 						}
 					}
-					if (Type == (int)ID.BONES || Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.WEREWOLF)
+					if (Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.CORRUPT_BUNNY || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.WEREWOLF)
 					{
 						if (Velocity.Y == 0f && Math.Abs(Position.X + (Width >> 1) - (Main.PlayerSet[Target].Position.X + 10f)) < 100f && Math.Abs(Position.Y + (Height >> 1) - (Main.PlayerSet[Target].Position.Y + 21f)) < 50f && ((Direction > 0 && Velocity.X >= 1f) || (Direction < 0 && Velocity.X <= -1f)))
 						{
@@ -6273,7 +6313,7 @@ namespace Terraria
 							ShouldNetUpdate = true;
 						}
 					}
-					else if ((Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL) && Velocity.Y < 0f)
+					else if ((Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL) && Velocity.Y < 0f)
 					{
 						Velocity.Y *= 1.1f;
 					}
@@ -6284,7 +6324,7 @@ namespace Terraria
 				AI1 = 0f;
 				AI2 = 0f;
 			}
-			if ((Type != (int)ID.CHAOS_ELEMENTAL && Type != (int)ID.SPECTRAL_ELEMENTAL) || Main.NetMode == (byte)NetModeSetting.CLIENT || !(AI3 >= num))
+			if ((Type != (int)EntityID.NPCID.CHAOS_ELEMENTAL && Type != (int)EntityID.NPCID.SPECTRAL_ELEMENTAL) || Main.NetMode == (byte)NetModeSetting.CLIENT || !(AI3 >= num))
 			{
 				return;
 			}
@@ -6303,7 +6343,7 @@ namespace Terraria
 				int num34 = Main.Rand.Next(num29 - 20, num29 + 20);
 				for (int l = num34; l < num29 + 20; l++)
 				{
-					if ((l < num29 - 4 || l > num29 + 4 || num33 < num28 - 4 || num33 > num28 + 4) && (l < num31 - 1 || l > num31 + 1 || num33 < num30 - 1 || num33 > num30 + 1) && Main.TileSet[num33, l].IsActive != 0 && (Type != (int)ID.DARK_CASTER || Main.TileSet[num33, l - 1].WallType != 0) && Main.TileSet[num33, l - 1].Lava == 0 && Main.TileSolid[Main.TileSet[num33, l].Type] && !Collision.SolidTiles(num33 - 1, num33 + 1, l - 4, l - 1))
+					if ((l < num29 - 4 || l > num29 + 4 || num33 < num28 - 4 || num33 > num28 + 4) && (l < num31 - 1 || l > num31 + 1 || num33 < num30 - 1 || num33 > num30 + 1) && Main.TileSet[num33, l].IsActive != 0 && (Type != (int)EntityID.NPCID.DARK_CASTER || Main.TileSet[num33, l - 1].WallType != (byte)EntityID.WallID.NONE) && Main.TileSet[num33, l - 1].Lava == 0 && Main.TileSolid[Main.TileSet[num33, l].Type] && !Collision.SolidTiles(num33 - 1, num33 + 1, l - 4, l - 1))
 					{
 						Position.X = (XYWH.X = num33 * 16 - (Width >> 1));
 						Position.Y = (XYWH.Y = l * 16 - Height);
@@ -6354,7 +6394,7 @@ namespace Terraria
 			}
 			if (Rotation < num3)
 			{
-				if ((double)(num3 - Rotation) > 3.1415)
+				if ((double)(num3 - Rotation) > Math.PI)
 				{
 					Rotation -= num4;
 				}
@@ -6365,7 +6405,7 @@ namespace Terraria
 			}
 			else if (Rotation > num3)
 			{
-				if ((double)(Rotation - num3) > 3.1415)
+				if ((double)(Rotation - num3) > Math.PI)
 				{
 					Rotation += num4;
 				}
@@ -6485,7 +6525,7 @@ namespace Terraria
 							vector2.Y += vector3.Y * 10f;
 							if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 							{
-								int num14 = NewNPC((int)vector2.X, (int)vector2.Y, (int)ID.SERVANT_OF_CTHULHU);
+								int num14 = NewNPC((int)vector2.X, (int)vector2.Y, (int)EntityID.NPCID.SERVANT_OF_CTHULHU);
 								if (num14 < MaxNumNPCs)
 								{
 									Main.NPCSet[num14].Velocity.X = vector3.X;
@@ -6599,9 +6639,9 @@ namespace Terraria
 						Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 						for (int j = 0; j < 2; j++)
 						{
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 8);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 7);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 6);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE_OF_CTHULHU1);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE4);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE3);
 						}
 						for (int k = 0; k < 16; k++)
 						{
@@ -6747,29 +6787,29 @@ namespace Terraria
 			float num2;
 			switch (Type)
 			{
-				case (int)ID.SERVANT_OF_CTHULHU:
+				case (int)EntityID.NPCID.SERVANT_OF_CTHULHU:
 					num = 5f;
 					num2 = 0.03f;
 					break;
-				case (int)ID.SERVANT_OF_OCRAM:
+				case (int)EntityID.NPCID.SERVANT_OF_OCRAM:
 					Lighting.AddLight(XYWH.X >> 4, XYWH.Y >> 4, new Vector3(1f, 1f, 1f));
 					num = 9f;
 					num2 = 0.1f;
 					break;
-				case (int)ID.EATER_OF_SOULS:
+				case (int)EntityID.NPCID.EATER_OF_SOULS:
 					num = 4f;
 					num2 = 0.02f;
 					break;
-				case (int)ID.HORNET:
-				case (int)ID.DRAGON_HORNET:
+				case (int)EntityID.NPCID.HORNET:
+				case (int)EntityID.NPCID.DRAGON_HORNET:
 					num = 3.5f;
 					num2 = 0.021f;
 					break;
-				case (int)ID.METEOR_HEAD:
+				case (int)EntityID.NPCID.METEOR_HEAD:
 					num = 1f;
 					num2 = 0.03f;
 					break;
-				case (int)ID.CORRUPTOR:
+				case (int)EntityID.NPCID.CORRUPTOR:
 					num = 4.2f;
 					num2 = 0.022f;
 					break;
@@ -6800,9 +6840,9 @@ namespace Terraria
 				num5 *= num7;
 				num6 *= num7;
 			}
-			if (Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET || Type == (int)ID.CORRUPTOR || Type == (int)ID.PROBE)
+			if (Type == (int)EntityID.NPCID.EATER_OF_SOULS || Type == (int)EntityID.NPCID.HORNET || Type == (int)EntityID.NPCID.DRAGON_HORNET || Type == (int)EntityID.NPCID.CORRUPTOR || Type == (int)EntityID.NPCID.PROBE)
 			{
-				if (Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET || Type == (int)ID.CORRUPTOR || num8 > 10000f)
+				if (Type == (int)EntityID.NPCID.HORNET || Type == (int)EntityID.NPCID.DRAGON_HORNET || Type == (int)EntityID.NPCID.CORRUPTOR || num8 > 10000f)
 				{
 					AI0 += 1f;
 					if (AI0 > 0f)
@@ -6826,7 +6866,7 @@ namespace Terraria
 						AI0 = -200f;
 					}
 				}
-				if ((Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.CORRUPTOR) && num8 < 22500f)
+				if ((Type == (int)EntityID.NPCID.EATER_OF_SOULS || Type == (int)EntityID.NPCID.CORRUPTOR) && num8 < 22500f)
 				{
 					Velocity.X += num5 * 0.007f;
 					Velocity.Y += num6 * 0.007f;
@@ -6840,7 +6880,7 @@ namespace Terraria
 			if (Velocity.X < num5)
 			{
 				Velocity.X += num2;
-				if (Velocity.X < 0f && num5 > 0f && Type != (int)ID.EATER_OF_SOULS && Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.CORRUPTOR && Type != (int)ID.PROBE)
+				if (Velocity.X < 0f && num5 > 0f && Type != (int)EntityID.NPCID.EATER_OF_SOULS && Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.CORRUPTOR && Type != (int)EntityID.NPCID.PROBE)
 				{
 					Velocity.X += num2;
 				}
@@ -6848,7 +6888,7 @@ namespace Terraria
 			else if (Velocity.X > num5)
 			{
 				Velocity.X -= num2;
-				if (Velocity.X > 0f && num5 < 0f && Type != (int)ID.EATER_OF_SOULS && Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.CORRUPTOR && Type != (int)ID.PROBE)
+				if (Velocity.X > 0f && num5 < 0f && Type != (int)EntityID.NPCID.EATER_OF_SOULS && Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.CORRUPTOR && Type != (int)EntityID.NPCID.PROBE)
 				{
 					Velocity.X -= num2;
 				}
@@ -6856,7 +6896,7 @@ namespace Terraria
 			if (Velocity.Y < num6)
 			{
 				Velocity.Y += num2;
-				if (Velocity.Y < 0f && num6 > 0f && Type != (int)ID.EATER_OF_SOULS && Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.CORRUPTOR && Type != (int)ID.PROBE)
+				if (Velocity.Y < 0f && num6 > 0f && Type != (int)EntityID.NPCID.EATER_OF_SOULS && Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.CORRUPTOR && Type != (int)EntityID.NPCID.PROBE)
 				{
 					Velocity.Y += num2;
 				}
@@ -6864,12 +6904,12 @@ namespace Terraria
 			else if (Velocity.Y > num6)
 			{
 				Velocity.Y -= num2;
-				if (Velocity.Y > 0f && num6 < 0f && Type != (int)ID.EATER_OF_SOULS && Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.CORRUPTOR && Type != (int)ID.PROBE)
+				if (Velocity.Y > 0f && num6 < 0f && Type != (int)EntityID.NPCID.EATER_OF_SOULS && Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.CORRUPTOR && Type != (int)EntityID.NPCID.PROBE)
 				{
 					Velocity.Y -= num2;
 				}
 			}
-			if (Type == (int)ID.METEOR_HEAD)
+			if (Type == (int)EntityID.NPCID.METEOR_HEAD)
 			{
 				if (num5 > 0f)
 				{
@@ -6882,7 +6922,7 @@ namespace Terraria
 					Rotation = (float)Math.Atan2(num6, num5) + 3.14f;
 				}
 			}
-			else if (Type == (int)ID.PROBE)
+			else if (Type == (int)EntityID.NPCID.PROBE)
 			{
 				if (WasJustHit)
 				{
@@ -6917,11 +6957,11 @@ namespace Terraria
 					Rotation = (float)Math.Atan2(num6, num5) + 3.14f;
 				}
 			}
-			else if (Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.CORRUPTOR)
+			else if (Type == (int)EntityID.NPCID.EATER_OF_SOULS || Type == (int)EntityID.NPCID.CORRUPTOR)
 			{
 				Rotation = (float)Math.Atan2(num6, num5) - 1.57f;
 			}
-			else if (Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET)
+			else if (Type == (int)EntityID.NPCID.HORNET || Type == (int)EntityID.NPCID.DRAGON_HORNET)
 			{
 				if (num5 > 0f)
 				{
@@ -6937,10 +6977,10 @@ namespace Terraria
 			{
 				Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) - 1.57f;
 			}
-			if (Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.METEOR_HEAD || Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET || Type == (int)ID.CORRUPTOR || Type == (int)ID.PROBE)
+			if (Type == (int)EntityID.NPCID.EATER_OF_SOULS || Type == (int)EntityID.NPCID.METEOR_HEAD || Type == (int)EntityID.NPCID.HORNET || Type == (int)EntityID.NPCID.DRAGON_HORNET || Type == (int)EntityID.NPCID.CORRUPTOR || Type == (int)EntityID.NPCID.PROBE)
 			{
 				float num13 = 0.7f;
-				if (Type == (int)ID.EATER_OF_SOULS)
+				if (Type == (int)EntityID.NPCID.EATER_OF_SOULS)
 				{
 					num13 = 0.4f;
 				}
@@ -6970,7 +7010,7 @@ namespace Terraria
 						Velocity.Y = -2f;
 					}
 				}
-				if (Type == (int)ID.METEOR_HEAD)
+				if (Type == (int)EntityID.NPCID.METEOR_HEAD)
 				{
 					Dust* ptr = Main.DustSet.NewDust((int)(Position.X - Velocity.X), (int)(Position.Y - Velocity.Y), Width, Height, 6, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 2.0);
 					if (ptr != null)
@@ -6980,7 +7020,7 @@ namespace Terraria
 						ptr->Velocity.Y *= 0.3f;
 					}
 				}
-				else if (Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.PROBE && Main.Rand.Next(24) == 0)
+				else if (Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.PROBE && Main.Rand.Next(24) == 0)
 				{
 					Dust* ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + (Height >> 2), Width, Height >> 1, 18, Velocity.X, 2.0, 75, Colour, Scale);
 					if (ptr2 != null)
@@ -6999,7 +7039,7 @@ namespace Terraria
 					ptr3->Velocity.Y *= 0.1f;
 				}
 			}
-			if (Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.CORRUPTOR)
+			if (Type == (int)EntityID.NPCID.EATER_OF_SOULS || Type == (int)EntityID.NPCID.CORRUPTOR)
 			{
 				if (IsWet)
 				{
@@ -7014,7 +7054,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET)
+			else if (Type == (int)EntityID.NPCID.HORNET || Type == (int)EntityID.NPCID.DRAGON_HORNET)
 			{
 				if (IsWet)
 				{
@@ -7072,7 +7112,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.PROBE && flag)
+			else if (Type == (int)EntityID.NPCID.PROBE && flag)
 			{
 				if ((Velocity.X > 0f && num5 > 0f) || (Velocity.X < 0f && num5 < 0f))
 				{
@@ -7086,7 +7126,7 @@ namespace Terraria
 					Velocity.X *= 0.9f;
 				}
 			}
-			if (Main.NetMode != (byte)NetModeSetting.CLIENT && Type == (int)ID.CORRUPTOR && !Main.PlayerSet[Target].IsDead)
+			if (Main.NetMode != (byte)NetModeSetting.CLIENT && Type == (int)EntityID.NPCID.CORRUPTOR && !Main.PlayerSet[Target].IsDead)
 			{
 				if (WasJustHit)
 				{
@@ -7097,12 +7137,12 @@ namespace Terraria
 				{
 					if (Collision.CanHit(ref XYWH, ref Main.PlayerSet[Target].XYWH))
 					{
-						NewNPC((int)(Position.X + Velocity.X) + (Width >> 1), (int)(Position.Y + Velocity.Y) + (Height >> 1), (int)ID.VILE_SPIT);
+						NewNPC((int)(Position.X + Velocity.X) + (Width >> 1), (int)(Position.Y + Velocity.Y) + (Height >> 1), (int)EntityID.NPCID.VILE_SPIT);
 					}
 					LocalAI0 = 0;
 				}
 			}
-			if ((Main.GameTime.DayTime && Type != (int)ID.EATER_OF_SOULS && Type != (int)ID.METEOR_HEAD && Type != (int)ID.HORNET && Type != (int)ID.DRAGON_HORNET && Type != (int)ID.CORRUPTOR) || Main.PlayerSet[Target].IsDead)
+			if ((Main.GameTime.DayTime && Type != (int)EntityID.NPCID.EATER_OF_SOULS && Type != (int)EntityID.NPCID.METEOR_HEAD && Type != (int)EntityID.NPCID.HORNET && Type != (int)EntityID.NPCID.DRAGON_HORNET && Type != (int)EntityID.NPCID.CORRUPTOR) || Main.PlayerSet[Target].IsDead)
 			{
 				Velocity.Y -= num2 * 2f;
 				if (TimeLeft > 10)
@@ -7118,7 +7158,7 @@ namespace Terraria
 
 		private unsafe void WormAI()
 		{
-			if (Type == (int)ID.LEECH_HEAD && LocalAI1 == 0)
+			if (Type == (int)EntityID.NPCID.LEECH_HEAD && LocalAI1 == 0)
 			{
 				LocalAI1 = 1;
 				Main.PlaySound(4, XYWH.X, XYWH.Y, 13);
@@ -7135,7 +7175,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (Type >= (int)ID.EATER_OF_WORLDS_HEAD && Type <= (int)ID.EATER_OF_WORLDS_TAIL)
+			if (Type >= (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD && Type <= (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL)
 			{
 				RealLife = -1;
 			}
@@ -7157,7 +7197,7 @@ namespace Terraria
 			}
 			if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 			{
-				if (Type == (int)ID.WYVERN_HEAD || Type == (int)ID.ARCH_WYVERN_HEAD)
+				if (Type == (int)EntityID.NPCID.WYVERN_HEAD || Type == (int)EntityID.NPCID.ARCH_WYVERN_HEAD)
 				{
 					if (AI0 == 0f)
 					{
@@ -7165,24 +7205,24 @@ namespace Terraria
 						RealLife = WhoAmI;
 						int num2 = 0;
 						int num3 = WhoAmI;
-						int num4 = Type - (int)ID.WYVERN_HEAD;
+						int num4 = Type - (int)EntityID.NPCID.WYVERN_HEAD;
 						for (int j = 0; j < 14; j++)
 						{
-							int num5 = (int)ID.WYVERN_BODY1;
+							int num5 = (int)EntityID.NPCID.WYVERN_BODY1;
 							switch (j)
 							{
 								case 1:
 								case 8:
-									num5 = (int)ID.WYVERN_LEGS;
+									num5 = (int)EntityID.NPCID.WYVERN_LEGS;
 									break;
 								case 11:
-									num5 = (int)ID.WYVERN_BODY2;
+									num5 = (int)EntityID.NPCID.WYVERN_BODY2;
 									break;
 								case 12:
-									num5 = (int)ID.WYVERN_BODY3;
+									num5 = (int)EntityID.NPCID.WYVERN_BODY3;
 									break;
 								case 13:
-									num5 = (int)ID.WYVERN_TAIL;
+									num5 = (int)EntityID.NPCID.WYVERN_TAIL;
 									break;
 							}
 							num2 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, num5 + num4, WhoAmI);
@@ -7196,43 +7236,43 @@ namespace Terraria
 						}
 					}
 				}
-				else if ((Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.DEVOURER_BODY || Type == (int)ID.GIANT_WORM_HEAD || Type == (int)ID.GIANT_WORM_BODY || Type == (int)ID.EATER_OF_WORLDS_HEAD || Type == (int)ID.EATER_OF_WORLDS_BODY || Type == (int)ID.BONE_SERPENT_HEAD || Type == (int)ID.BONE_SERPENT_BODY || Type == (int)ID.DIGGER_HEAD || Type == (int)ID.DIGGER_BODY || Type == (int)ID.SEEKER_HEAD || Type == (int)ID.SEEKER_BODY || Type == (int)ID.LEECH_HEAD || Type == (int)ID.LEECH_BODY) && AI0 == 0f)
+				else if ((Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.DEVOURER_BODY || Type == (int)EntityID.NPCID.GIANT_WORM_HEAD || Type == (int)EntityID.NPCID.GIANT_WORM_BODY || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_BODY || Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD || Type == (int)EntityID.NPCID.BONE_SERPENT_BODY || Type == (int)EntityID.NPCID.DIGGER_HEAD || Type == (int)EntityID.NPCID.DIGGER_BODY || Type == (int)EntityID.NPCID.SEEKER_HEAD || Type == (int)EntityID.NPCID.SEEKER_BODY || Type == (int)EntityID.NPCID.LEECH_HEAD || Type == (int)EntityID.NPCID.LEECH_BODY) && AI0 == 0f)
 				{
-					if (Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.GIANT_WORM_HEAD || Type == (int)ID.EATER_OF_WORLDS_HEAD || Type == (int)ID.BONE_SERPENT_HEAD || Type == (int)ID.DIGGER_HEAD || Type == (int)ID.SEEKER_HEAD || Type == (int)ID.LEECH_HEAD)
+					if (Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.GIANT_WORM_HEAD || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD || Type == (int)EntityID.NPCID.DIGGER_HEAD || Type == (int)EntityID.NPCID.SEEKER_HEAD || Type == (int)EntityID.NPCID.LEECH_HEAD)
 					{
-						if (Type < (int)ID.EATER_OF_WORLDS_HEAD || Type > (int)ID.EATER_OF_WORLDS_TAIL)
+						if (Type < (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type > (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL)
 						{
 							AI3 = WhoAmI;
 							RealLife = WhoAmI;
 						}
 						AI2 = Main.Rand.Next(8, 13);
-						if (Type == (int)ID.GIANT_WORM_HEAD)
+						if (Type == (int)EntityID.NPCID.GIANT_WORM_HEAD)
 						{
 							AI2 = Main.Rand.Next(4, 7);
 						}
-						else if (Type == (int)ID.EATER_OF_WORLDS_HEAD)
+						else if (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD)
 						{
 							AI2 = Main.Rand.Next(45, 56);
 						}
-						else if (Type == (int)ID.BONE_SERPENT_HEAD)
+						else if (Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD)
 						{
 							AI2 = Main.Rand.Next(12, 19);
 						}
-						else if (Type == (int)ID.DIGGER_HEAD)
+						else if (Type == (int)EntityID.NPCID.DIGGER_HEAD)
 						{
 							AI2 = Main.Rand.Next(6, 12);
 						}
-						else if (Type == (int)ID.SEEKER_HEAD)
+						else if (Type == (int)EntityID.NPCID.SEEKER_HEAD)
 						{
 							AI2 = Main.Rand.Next(20, 26);
 						}
-						else if (Type == (int)ID.LEECH_HEAD)
+						else if (Type == (int)EntityID.NPCID.LEECH_HEAD)
 						{
 							AI2 = Main.Rand.Next(3, 6);
 						}
 						AI0 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, Type + 1, WhoAmI);
 					}
-					else if ((Type == (int)ID.DEVOURER_BODY || Type == (int)ID.GIANT_WORM_BODY || Type == (int)ID.EATER_OF_WORLDS_BODY || Type == (int)ID.BONE_SERPENT_BODY || Type == (int)ID.DIGGER_BODY || Type == (int)ID.SEEKER_BODY || Type == (int)ID.LEECH_BODY) && AI2 > 0f)
+					else if ((Type == (int)EntityID.NPCID.DEVOURER_BODY || Type == (int)EntityID.NPCID.GIANT_WORM_BODY || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_BODY || Type == (int)EntityID.NPCID.BONE_SERPENT_BODY || Type == (int)EntityID.NPCID.DIGGER_BODY || Type == (int)EntityID.NPCID.SEEKER_BODY || Type == (int)EntityID.NPCID.LEECH_BODY) && AI2 > 0f)
 					{
 						AI0 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, Type, WhoAmI);
 					}
@@ -7240,7 +7280,7 @@ namespace Terraria
 					{
 						AI0 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, Type + 1, WhoAmI);
 					}
-					if (Type < (int)ID.EATER_OF_WORLDS_HEAD || Type > (int)ID.EATER_OF_WORLDS_TAIL)
+					if (Type < (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type > (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL)
 					{
 						Main.NPCSet[(int)AI0].AI3 = AI3;
 						Main.NPCSet[(int)AI0].RealLife = RealLife;
@@ -7249,7 +7289,7 @@ namespace Terraria
 					Main.NPCSet[(int)AI0].AI2 = AI2 - 1f;
 					ShouldNetUpdate = true;
 				}
-				if ((Type == (int)ID.DEVOURER_BODY || Type == (int)ID.DEVOURER_TAIL || Type == (int)ID.GIANT_WORM_BODY || Type == (int)ID.GIANT_WORM_TAIL || Type == (int)ID.BONE_SERPENT_BODY || Type == (int)ID.BONE_SERPENT_TAIL || Type == (int)ID.DIGGER_BODY || Type == (int)ID.DIGGER_TAIL || Type == (int)ID.SEEKER_BODY || Type == (int)ID.SEEKER_TAIL || (Type > (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type > (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL) || Type == (int)ID.LEECH_BODY || Type == (int)ID.LEECH_TAIL) && (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != AIStyle))
+				if ((Type == (int)EntityID.NPCID.DEVOURER_BODY || Type == (int)EntityID.NPCID.DEVOURER_TAIL || Type == (int)EntityID.NPCID.GIANT_WORM_BODY || Type == (int)EntityID.NPCID.GIANT_WORM_TAIL || Type == (int)EntityID.NPCID.BONE_SERPENT_BODY || Type == (int)EntityID.NPCID.BONE_SERPENT_TAIL || Type == (int)EntityID.NPCID.DIGGER_BODY || Type == (int)EntityID.NPCID.DIGGER_TAIL || Type == (int)EntityID.NPCID.SEEKER_BODY || Type == (int)EntityID.NPCID.SEEKER_TAIL || (Type > (int)EntityID.NPCID.WYVERN_HEAD && Type <= (int)EntityID.NPCID.WYVERN_TAIL) || (Type > (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL) || Type == (int)EntityID.NPCID.LEECH_BODY || Type == (int)EntityID.NPCID.LEECH_TAIL) && (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != AIStyle))
 				{
 					Life = 0;
 					HitEffect();
@@ -7260,7 +7300,7 @@ namespace Terraria
 					}
 					return;
 				}
-				if (Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.DEVOURER_BODY || Type == (int)ID.GIANT_WORM_HEAD || Type == (int)ID.GIANT_WORM_BODY || Type == (int)ID.BONE_SERPENT_HEAD || Type == (int)ID.BONE_SERPENT_BODY || Type == (int)ID.DIGGER_HEAD || Type == (int)ID.DIGGER_BODY || Type == (int)ID.SEEKER_HEAD || Type == (int)ID.SEEKER_BODY || (Type >= (int)ID.WYVERN_HEAD && Type < (int)ID.WYVERN_TAIL) || (Type >= (int)ID.ARCH_WYVERN_HEAD && Type < (int)ID.ARCH_WYVERN_TAIL) || Type == (int)ID.LEECH_HEAD || Type == (int)ID.LEECH_BODY)
+				if (Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.DEVOURER_BODY || Type == (int)EntityID.NPCID.GIANT_WORM_HEAD || Type == (int)EntityID.NPCID.GIANT_WORM_BODY || Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD || Type == (int)EntityID.NPCID.BONE_SERPENT_BODY || Type == (int)EntityID.NPCID.DIGGER_HEAD || Type == (int)EntityID.NPCID.DIGGER_BODY || Type == (int)EntityID.NPCID.SEEKER_HEAD || Type == (int)EntityID.NPCID.SEEKER_BODY || (Type >= (int)EntityID.NPCID.WYVERN_HEAD && Type < (int)EntityID.NPCID.WYVERN_TAIL) || (Type >= (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type < (int)EntityID.NPCID.ARCH_WYVERN_TAIL) || Type == (int)EntityID.NPCID.LEECH_HEAD || Type == (int)EntityID.NPCID.LEECH_BODY)
 				{
 					if (Main.NPCSet[(int)AI0].Active == 0 || Main.NPCSet[(int)AI0].AIStyle != AIStyle)
 					{
@@ -7274,19 +7314,19 @@ namespace Terraria
 						return;
 					}
 				}
-				else if (Type >= (int)ID.EATER_OF_WORLDS_HEAD && Type <= (int)ID.EATER_OF_WORLDS_TAIL)
+				else if (Type >= (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD && Type <= (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL)
 				{
-					if ((Main.NPCSet[(int)AI1].Active == 0 && Main.NPCSet[(int)AI0].Active == 0) || (Type == (int)ID.EATER_OF_WORLDS_HEAD && Main.NPCSet[(int)AI0].Active == 0) || (Type == (int)ID.EATER_OF_WORLDS_TAIL && Main.NPCSet[(int)AI1].Active == 0))
+					if ((Main.NPCSet[(int)AI1].Active == 0 && Main.NPCSet[(int)AI0].Active == 0) || (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD && Main.NPCSet[(int)AI0].Active == 0) || (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL && Main.NPCSet[(int)AI1].Active == 0))
 					{
 						Life = 0;
 						HitEffect();
 						Active = 0;
 					}
-					if (Type == (int)ID.EATER_OF_WORLDS_BODY)
+					if (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_BODY)
 					{
 						if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != AIStyle)
 						{
-							Type = (int)ID.EATER_OF_WORLDS_HEAD;
+							Type = (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD;
 							int num6 = WhoAmI;
 							float num7 = Life / (float)LifeMax;
 							float num8 = AI0;
@@ -7315,7 +7355,7 @@ namespace Terraria
 						bool flag = true;
 						for (int k = 0; k < MaxNumNPCs; k++)
 						{
-							if (Main.NPCSet[k].Type >= (int)ID.EATER_OF_WORLDS_HEAD && Main.NPCSet[k].Type <= (int)ID.EATER_OF_WORLDS_TAIL && Main.NPCSet[k].Active != 0)
+							if (Main.NPCSet[k].Type >= (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD && Main.NPCSet[k].Type <= (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL && Main.NPCSet[k].Active != 0)
 							{
 								flag = false;
 								break;
@@ -7366,7 +7406,7 @@ namespace Terraria
 			{
 				num15 = Main.MaxTilesY;
 			}
-			bool flag2 = (Type >= (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type >= (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL);
+			bool flag2 = (Type >= (int)EntityID.NPCID.WYVERN_HEAD && Type <= (int)EntityID.NPCID.WYVERN_TAIL) || (Type >= (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL);
 			if (!flag2)
 			{
 				Vector2 vector = default;
@@ -7383,7 +7423,7 @@ namespace Terraria
 						if (Position.X + Width > vector.X && Position.X < vector.X + 16f && Position.Y + Height > vector.Y && Position.Y < vector.Y + 16f)
 						{
 							flag2 = true;
-							if (Main.Rand.Next(100) == 0 && Type != (int)ID.LEECH_HEAD && Main.TileSet[l, m].IsActive != 0)
+							if (Main.Rand.Next(100) == 0 && Type != (int)EntityID.NPCID.LEECH_HEAD && Main.TileSet[l, m].IsActive != 0)
 							{
 								WorldGen.KillTile(l, m, KillToFail: true, EffectOnly: true);
 							}
@@ -7391,7 +7431,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (!flag2 && (Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.GIANT_WORM_HEAD || Type == (int)ID.EATER_OF_WORLDS_HEAD || Type == (int)ID.BONE_SERPENT_HEAD || Type == (int)ID.DIGGER_HEAD || Type == (int)ID.SEEKER_HEAD || Type == (int)ID.LEECH_HEAD))
+			if (!flag2 && (Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.GIANT_WORM_HEAD || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD || Type == (int)EntityID.NPCID.DIGGER_HEAD || Type == (int)EntityID.NPCID.SEEKER_HEAD || Type == (int)EntityID.NPCID.LEECH_HEAD))
 			{
 				bool flag3 = true;
 				for (int n = 0; n < Player.MaxNumPlayers; n++)
@@ -7411,7 +7451,7 @@ namespace Terraria
 					flag2 = true;
 				}
 			}
-			if ((Type >= (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type >= (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL))
+			if ((Type >= (int)EntityID.NPCID.WYVERN_HEAD && Type <= (int)EntityID.NPCID.WYVERN_TAIL) || (Type >= (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL))
 			{
 				if (Velocity.X < 0f)
 				{
@@ -7424,27 +7464,27 @@ namespace Terraria
 			}
 			float num16 = 8f;
 			float num17 = 0.07f;
-			if (Type == (int)ID.DIGGER_HEAD)
+			if (Type == (int)EntityID.NPCID.DIGGER_HEAD)
 			{
 				num16 = 5.5f;
 				num17 = 0.045f;
 			}
-			else if (Type == (int)ID.GIANT_WORM_HEAD)
+			else if (Type == (int)EntityID.NPCID.GIANT_WORM_HEAD)
 			{
 				num16 = 6f;
 				num17 = 0.05f;
 			}
-			else if (Type == (int)ID.EATER_OF_WORLDS_HEAD)
+			else if (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD)
 			{
 				num16 = 10f;
 				num17 = 0.07f;
 			}
-			else if (Type == (int)ID.WYVERN_HEAD || Type == (int)ID.ARCH_WYVERN_HEAD)
+			else if (Type == (int)EntityID.NPCID.WYVERN_HEAD || Type == (int)EntityID.NPCID.ARCH_WYVERN_HEAD)
 			{
 				num16 = 11f;
 				num17 = 0.25f;
 			}
-			else if (Type == (int)ID.LEECH_HEAD && WoF >= 0)
+			else if (Type == (int)EntityID.NPCID.LEECH_HEAD && WoF >= 0)
 			{
 				float num18 = Main.NPCSet[WoF].Life / (float)Main.NPCSet[WoF].LifeMax;
 				if ((double)num18 < 0.5)
@@ -7476,7 +7516,7 @@ namespace Terraria
 				num20 = Main.NPCSet[(int)AI1].Position.Y + (Main.NPCSet[(int)AI1].Height >> 1) - vector2.Y;
 				Rotation = (float)(Math.Atan2(num20, num19) + Math.PI / 2.0);
 				float num21 = num19 * num19 + num20 * num20;
-				bool flag4 = (Type >= (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type >= (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL);
+				bool flag4 = (Type >= (int)EntityID.NPCID.WYVERN_HEAD && Type <= (int)EntityID.NPCID.WYVERN_TAIL) || (Type >= (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL);
 				if (num21 > 0f)
 				{
 					num21 = (float)Math.Sqrt(num21);
@@ -7554,7 +7594,7 @@ namespace Terraria
 			else
 			{
 				float num21 = (float)Math.Sqrt(num19 * num19 + num20 * num20);
-				if (SoundDelay == 0 && Type != (int)ID.WYVERN_HEAD && Type != (int)ID.ARCH_WYVERN_HEAD && Type != (int)ID.LEECH_HEAD)
+				if (SoundDelay == 0 && Type != (int)EntityID.NPCID.WYVERN_HEAD && Type != (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type != (int)EntityID.NPCID.LEECH_HEAD)
 				{
 					int num22 = (int)(num21 * 0.025f);
 					if (num22 < 10)
@@ -7573,7 +7613,7 @@ namespace Terraria
 				float num25 = num16 / num21;
 				num19 *= num25;
 				num20 *= num25;
-				if ((Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.EATER_OF_WORLDS_HEAD) && !Main.PlayerSet[Target].ZoneEvil)
+				if ((Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD) && !Main.PlayerSet[Target].ZoneEvil)
 				{
 					bool flag5 = true;
 					for (int num26 = 0; num26 < 8; num26++)
@@ -7608,7 +7648,7 @@ namespace Terraria
 					}
 				}
 				bool flag6 = false;
-				if (Type == (int)ID.WYVERN_HEAD || Type == (int)ID.ARCH_WYVERN_HEAD)
+				if (Type == (int)EntityID.NPCID.WYVERN_HEAD || Type == (int)EntityID.NPCID.ARCH_WYVERN_HEAD)
 				{
 					if (((Velocity.X > 0f && num19 < 0f) || (Velocity.X < 0f && num19 > 0f) || (Velocity.Y > 0f && num20 < 0f) || (Velocity.Y < 0f && num20 > 0f)) && Math.Abs(Velocity.X) + Math.Abs(Velocity.Y) > num17 * 0.5f && num21 < 300f)
 					{
@@ -7726,7 +7766,7 @@ namespace Terraria
 				}
 			}
 			Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 1.57f;
-			if (Type != (int)ID.DEVOURER_HEAD && Type != (int)ID.GIANT_WORM_HEAD && Type != (int)ID.EATER_OF_WORLDS_HEAD && Type != (int)ID.BONE_SERPENT_HEAD && Type != (int)ID.DIGGER_HEAD && Type != (int)ID.SEEKER_HEAD && Type != (int)ID.LEECH_HEAD)
+			if (Type != (int)EntityID.NPCID.DEVOURER_HEAD && Type != (int)EntityID.NPCID.GIANT_WORM_HEAD && Type != (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD && Type != (int)EntityID.NPCID.BONE_SERPENT_HEAD && Type != (int)EntityID.NPCID.DIGGER_HEAD && Type != (int)EntityID.NPCID.SEEKER_HEAD && Type != (int)EntityID.NPCID.LEECH_HEAD)
 			{
 				return;
 			}
@@ -7754,26 +7794,26 @@ namespace Terraria
 
 		private void TownsfolkAI()
 		{
-			if (Type == (int)ID.BUNNY)
+			if (Type == (int)EntityID.NPCID.BUNNY)
 			{
 				if (Target == Player.MaxNumPlayers)
 				{
 					TargetClosest();
 				}
 			}
-			else if (Type == (int)ID.GOBLIN_TINKERER)
+			else if (Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 			{
 				HasSavedGoblin = true;
 			}
-			else if (Type == (int)ID.WIZARD)
+			else if (Type == (int)EntityID.NPCID.WIZARD)
 			{
 				HasSavedWizard = true;
 			}
-			else if (Type == (int)ID.MECHANIC)
+			else if (Type == (int)EntityID.NPCID.MECHANIC)
 			{
 				HasSavedMech = true;
 			}
-			else if (Type == (int)ID.SANTA_CLAUS && Main.NetMode != (byte)NetModeSetting.CLIENT && !Time.xMas)
+			else if (Type == (int)EntityID.NPCID.SANTA_CLAUS && Main.NetMode != (byte)NetModeSetting.CLIENT && !Time.xMas)
 			{
 				StrikeNPC(9999, 0f, 0); // Fucking R.I.P Santa bro; 9999 damage on arrival.
 				NetMessage.SendNpcHurt(WhoAmI, 9999, 0.0, 0);
@@ -7810,12 +7850,12 @@ namespace Terraria
 				Life = -1;
 				HitEffect();
 				Active = 0;
-				if (Type == (int)ID.OLD_MAN)
+				if (Type == (int)EntityID.NPCID.OLD_MAN)
 				{
 					Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 				}
 			}
-			if (Type == (int)ID.OLD_MAN && Main.NetMode != (byte)NetModeSetting.CLIENT)
+			if (Type == (int)EntityID.NPCID.OLD_MAN && Main.NetMode != (byte)NetModeSetting.CLIENT)
 			{
 				IsHomeless = false;
 				HomeTileX = Main.DungeonX;
@@ -7863,7 +7903,7 @@ namespace Terraria
 					}
 					if (flag2)
 					{
-						if (Type == (int)ID.OLD_MAN || !Collision.SolidTiles(HomeTileX - 1, HomeTileX + 1, j - 3, j - 1))
+						if (Type == (int)EntityID.NPCID.OLD_MAN || !Collision.SolidTiles(HomeTileX - 1, HomeTileX + 1, j - 3, j - 1))
 						{
 							Velocity.X = 0f;
 							Velocity.Y = 0f;
@@ -7886,7 +7926,7 @@ namespace Terraria
 				{
 					AI2 -= 1f;
 				}
-				if (!Main.GameTime.DayTime && !flag && Type != (int)ID.BUNNY)
+				if (!Main.GameTime.DayTime && !flag && Type != (int)EntityID.NPCID.BUNNY)
 				{
 					if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 					{
@@ -7950,7 +7990,7 @@ namespace Terraria
 						{
 							AI0 = 1f;
 							AI1 = 200 + Main.Rand.Next(200);
-							if (Type == (int)ID.BUNNY)
+							if (Type == (int)EntityID.NPCID.BUNNY)
 							{
 								AI1 += Main.Rand.Next(200, 400);
 							}
@@ -7992,7 +8032,7 @@ namespace Terraria
 				{
 					return;
 				}
-				if (Main.NetMode != (byte)NetModeSetting.CLIENT && !Main.GameTime.DayTime && num == HomeTileX && num2 == HomeTileY && Type != (int)ID.BUNNY)
+				if (Main.NetMode != (byte)NetModeSetting.CLIENT && !Main.GameTime.DayTime && num == HomeTileX && num2 == HomeTileY && Type != (int)EntityID.NPCID.BUNNY)
 				{
 					AI0 = 0f;
 					AI1 = 200 + Main.Rand.Next(200);
@@ -8016,7 +8056,7 @@ namespace Terraria
 				{
 					AI0 = 0f;
 					AI1 = 300 + Main.Rand.Next(300);
-					if (Type == (int)ID.BUNNY)
+					if (Type == (int)EntityID.NPCID.BUNNY)
 					{
 						AI1 -= Main.Rand.Next(100);
 					}
@@ -8078,7 +8118,7 @@ namespace Terraria
 				AI2 = -1f;
 				int num5 = XYWH.X + (Width >> 1) + 15 * Direction >> 4;
 				int num6 = XYWH.Y + Height - 16 >> 4;
-				if (IsTownNPC && Main.TileSet[num5, num6 - 2].IsActive != 0 && Main.TileSet[num5, num6 - 2].Type == 10 && (Main.Rand.Next(10) == 0 || !Main.GameTime.DayTime))
+				if (IsTownNPC && Main.TileSet[num5, num6 - 2].IsActive != 0 && Main.TileSet[num5, num6 - 2].Type == (int)EntityID.TileID.DOOR_CLOSED && (Main.Rand.Next(10) == 0 || !Main.GameTime.DayTime))
 				{
 					if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 					{
@@ -8152,7 +8192,7 @@ namespace Terraria
 						}
 						ShouldNetUpdate = true;
 					}
-					if (num >= HomeTileX - 35 && num <= HomeTileX + 35 && (Main.TileSet[num5, num6 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 1].Type]) && (Main.TileSet[num5 - Direction, num6 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 1].Type]) && (Main.TileSet[num5, num6 + 2].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 2].Type]) && (Main.TileSet[num5 - Direction, num6 + 2].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 2].Type]) && (Main.TileSet[num5, num6 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 3].Type]) && (Main.TileSet[num5 - Direction, num6 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 3].Type]) && (Main.TileSet[num5, num6 + 4].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 4].Type]) && (Main.TileSet[num5 - Direction, num6 + 4].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 4].Type]) && Type != (int)ID.BUNNY)
+					if (num >= HomeTileX - 35 && num <= HomeTileX + 35 && (Main.TileSet[num5, num6 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 1].Type]) && (Main.TileSet[num5 - Direction, num6 + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 1].Type]) && (Main.TileSet[num5, num6 + 2].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 2].Type]) && (Main.TileSet[num5 - Direction, num6 + 2].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 2].Type]) && (Main.TileSet[num5, num6 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 3].Type]) && (Main.TileSet[num5 - Direction, num6 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 3].Type]) && (Main.TileSet[num5, num6 + 4].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5, num6 + 4].Type]) && (Main.TileSet[num5 - Direction, num6 + 4].IsActive == 0 || !Main.TileSolid[Main.TileSet[num5 - Direction, num6 + 4].Type]) && Type != (int)EntityID.NPCID.BUNNY)
 					{
 						Direction = (sbyte)(-Direction);
 						Velocity.X = 0f - Velocity.X;
@@ -8169,7 +8209,7 @@ namespace Terraria
 					{
 						Velocity.Y *= 1.2f;
 					}
-					if (Type == (int)ID.BUNNY)
+					if (Type == (int)EntityID.NPCID.BUNNY)
 					{
 						Velocity.Y *= 1.2f;
 					}
@@ -8195,7 +8235,7 @@ namespace Terraria
 				for (int i = 0; i < 42; i++)
 				{
 					Dust* ptr;
-					if (Type == (int)ID.GOBLIN_SORCERER || Type == (int)ID.TIM)
+					if (Type == (int)EntityID.NPCID.GOBLIN_SORCERER || Type == (int)EntityID.NPCID.TIM)
 					{
 						ptr = Main.DustSet.NewDust(27, ref XYWH, 0.0, 0.0, 100, default, Main.Rand.Next(1, 3));
 						if (ptr == null)
@@ -8207,7 +8247,7 @@ namespace Terraria
 							ptr->NoGravity = true;
 						}
 					}
-					else if (Type == (int)ID.DARK_CASTER)
+					else if (Type == (int)EntityID.NPCID.DARK_CASTER)
 					{
 						ptr = Main.DustSet.NewDust(29, ref XYWH, 0.0, 0.0, 100, default, 2.5);
 						if (ptr == null)
@@ -8240,7 +8280,7 @@ namespace Terraria
 				for (int j = 0; j < 42; j++)
 				{
 					Dust* ptr2;
-					if (Type == (int)ID.GOBLIN_SORCERER || Type == (int)ID.TIM)
+					if (Type == (int)EntityID.NPCID.GOBLIN_SORCERER || Type == (int)EntityID.NPCID.TIM)
 					{
 						ptr2 = Main.DustSet.NewDust(27, ref XYWH, 0.0, 0.0, 100, default, Main.Rand.Next(1, 3));
 						if (ptr2 == null)
@@ -8252,7 +8292,7 @@ namespace Terraria
 							ptr2->NoGravity = true;
 						}
 					}
-					else if (Type == (int)ID.DARK_CASTER)
+					else if (Type == (int)EntityID.NPCID.DARK_CASTER)
 					{
 						ptr2 = Main.DustSet.NewDust(29, ref XYWH, 0.0, 0.0, 100, default, 2.5);
 						if (ptr2 == null)
@@ -8305,7 +8345,7 @@ namespace Terraria
 						if ((k < num2 - 4 || k > num2 + 4 || num7 < num - 4 || num7 > num + 4) && (k < num4 - 1 || k > num4 + 1 || num7 < num3 - 1 || num7 > num3 + 1) && Main.TileSet[num7, k].IsActive != 0)
 						{
 							bool flag2 = true;
-							if (Type == (int)ID.DARK_CASTER && Main.TileSet[num7, k - 1].WallType == 0)
+							if (Type == (int)EntityID.NPCID.DARK_CASTER && Main.TileSet[num7, k - 1].WallType == (byte)EntityID.WallID.NONE)
 							{
 								flag2 = false;
 							}
@@ -8334,22 +8374,22 @@ namespace Terraria
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 8);
 					if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 					{
-						if (Type == (int)ID.GOBLIN_SORCERER || Type == (int)ID.TIM)
+						if (Type == (int)EntityID.NPCID.GOBLIN_SORCERER || Type == (int)EntityID.NPCID.TIM)
 						{
-							NewNPC(XYWH.X + (Width >> 1), XYWH.Y - 8, (int)ID.CHAOS_BALL);
+							NewNPC(XYWH.X + (Width >> 1), XYWH.Y - 8, (int)EntityID.NPCID.CHAOS_BALL);
 						}
-						else if (Type == (int)ID.DARK_CASTER)
+						else if (Type == (int)EntityID.NPCID.DARK_CASTER)
 						{
-							NewNPC(XYWH.X + (Width >> 1), XYWH.Y - 8, (int)ID.WATER_SPHERE);
+							NewNPC(XYWH.X + (Width >> 1), XYWH.Y - 8, (int)EntityID.NPCID.WATER_SPHERE);
 						}
 						else
 						{
-							NewNPC(XYWH.X + (Width >> 1) + Direction * 8, XYWH.Y + 20, (int)ID.BURNING_SPHERE);
+							NewNPC(XYWH.X + (Width >> 1) + Direction * 8, XYWH.Y + 20, (int)EntityID.NPCID.BURNING_SPHERE);
 						}
 					}
 				}
 			}
-			if (Type == (int)ID.GOBLIN_SORCERER || Type == (int)ID.TIM)
+			if (Type == (int)EntityID.NPCID.GOBLIN_SORCERER || Type == (int)EntityID.NPCID.TIM)
 			{
 				if (Main.Rand.Next(5) == 0)
 				{
@@ -8362,7 +8402,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.DARK_CASTER)
+			else if (Type == (int)EntityID.NPCID.DARK_CASTER)
 			{
 				if (Main.Rand.Next(2) == 0)
 				{
@@ -8393,11 +8433,11 @@ namespace Terraria
 			{
 				TargetClosest();
 				float num = 6f;
-				if (Type == (int)ID.BURNING_SPHERE)
+				if (Type == (int)EntityID.NPCID.BURNING_SPHERE)
 				{
 					num = 5f;
 				}
-				if (Type == (int)ID.VILE_SPIT)
+				if (Type == (int)EntityID.NPCID.VILE_SPIT)
 				{
 					num = 7f;
 				}
@@ -8409,7 +8449,7 @@ namespace Terraria
 				Velocity.X = num2 * num4;
 				Velocity.Y = num3 * num4;
 			}
-			if (Type == (int)ID.VILE_SPIT)
+			if (Type == (int)EntityID.NPCID.VILE_SPIT)
 			{
 				AI0 += 1f;
 				if (AI0 > 3f)
@@ -8450,39 +8490,39 @@ namespace Terraria
 							{
 								if (Math.Abs(j - num5) + Math.Abs(k - num6) < num7 * 0.5)
 								{
-									if (Main.TileSet[j, k].Type == 2)
+									if (Main.TileSet[j, k].Type == (int)EntityID.TileID.GRASS)
 									{
-										Main.TileSet[j, k].Type = 23;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.CORRUPT_GRASS;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
-									else if (Main.TileSet[j, k].Type == 1)
+									else if (Main.TileSet[j, k].Type == (int)EntityID.TileID.STONE)
 									{
-										Main.TileSet[j, k].Type = 25;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.EBONSTONE;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
-									else if (Main.TileSet[j, k].Type == 53)
+									else if (Main.TileSet[j, k].Type == (int)EntityID.TileID.SAND)
 									{
-										Main.TileSet[j, k].Type = 112;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.EBONSAND;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
-									else if (Main.TileSet[j, k].Type == 109)
+									else if (Main.TileSet[j, k].Type == (int)EntityID.TileID.HALLOWED_GRASS)
 									{
-										Main.TileSet[j, k].Type = 23;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.CORRUPT_GRASS;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
-									else if (Main.TileSet[j, k].Type == 117)
+									else if (Main.TileSet[j, k].Type == (int)EntityID.TileID.PEARLSTONE)
 									{
-										Main.TileSet[j, k].Type = 25;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.EBONSTONE;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
-									else if (Main.TileSet[j, k].Type == 116)
+									else if (Main.TileSet[j, k].Type == (int)EntityID.TileID.PEARLSAND)
 									{
-										Main.TileSet[j, k].Type = 112;
+										Main.TileSet[j, k].Type = (int)EntityID.TileID.EBONSAND;
 										WorldGen.SquareTileFrame(j, k);
 										NetMessage.SendTile(j, k);
 									}
@@ -8500,7 +8540,7 @@ namespace Terraria
 			for (int l = 0; l < 2; l++)
 			{
 				Dust* ptr2;
-				if (Type == (int)ID.CHAOS_BALL)
+				if (Type == (int)EntityID.NPCID.CHAOS_BALL)
 				{
 					ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + 2, Width, Height, 27, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 2.0);
 					if (ptr2 == null)
@@ -8508,7 +8548,7 @@ namespace Terraria
 						break;
 					}
 				}
-				else if (Type == (int)ID.WATER_SPHERE)
+				else if (Type == (int)EntityID.NPCID.WATER_SPHERE)
 				{
 					ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + 2, Width, Height, 29, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 2.0);
 					if (ptr2 == null)
@@ -8516,7 +8556,7 @@ namespace Terraria
 						break;
 					}
 				}
-				else if (Type == (int)ID.VILE_SPIT)
+				else if (Type == (int)EntityID.NPCID.VILE_SPIT)
 				{
 					ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + 2, Width, Height, 18, Velocity.X * 0.1f, Velocity.Y * 0.1f, 80, default, 1.3f);
 					if (ptr2 == null)
@@ -8534,7 +8574,7 @@ namespace Terraria
 					ptr2->NoGravity = true;
 					ptr2->Velocity.X *= 0.3f;
 					ptr2->Velocity.Y *= 0.3f;
-					if (Type == (int)ID.CHAOS_BALL)
+					if (Type == (int)EntityID.NPCID.CHAOS_BALL)
 					{
 						ptr2->Velocity.X -= Velocity.X * 0.2f;
 						ptr2->Velocity.Y -= Velocity.Y * 0.2f;
@@ -8645,14 +8685,14 @@ namespace Terraria
 			{
 				TargetClosest();
 				AI0 = 1f;
-				if (Type != (int)ID.DUNGEON_GUARDIAN)
+				if (Type != (int)EntityID.NPCID.DUNGEON_GUARDIAN)
 				{
-					int num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.SKELETRON_HAND, WhoAmI);
+					int num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.SKELETRON_HAND, WhoAmI);
 					Main.NPCSet[num].AI0 = -1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].Target = Target;
 					Main.NPCSet[num].ShouldNetUpdate = true;
-					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.SKELETRON_HAND, WhoAmI);
+					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.SKELETRON_HAND, WhoAmI);
 					Main.NPCSet[num].AI0 = 1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].AI3 = 150f;
@@ -8660,7 +8700,7 @@ namespace Terraria
 					Main.NPCSet[num].ShouldNetUpdate = true;
 				}
 			}
-			if (Type == (int)ID.DUNGEON_GUARDIAN && AI1 != 3f && AI1 != 2f)
+			if (Type == (int)EntityID.NPCID.DUNGEON_GUARDIAN && AI1 != 3f && AI1 != 2f)
 			{
 				Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 				AI1 = 2f;
@@ -8787,7 +8827,7 @@ namespace Terraria
 					TimeLeft = 500;
 				}
 			}
-			if (AI1 == 2f || AI1 == 3f || Type == (int)ID.DUNGEON_GUARDIAN)
+			if (AI1 == 2f || AI1 == 3f || Type == (int)EntityID.NPCID.DUNGEON_GUARDIAN)
 			{
 				return;
 			}
@@ -8815,7 +8855,7 @@ namespace Terraria
 		private void SkeletronHandAI()
 		{
 			SpriteDirection = (sbyte)(0f - AI0);
-			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != 11)
+			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != (byte)EntityID.NPCStyleID.SKELETRON_HEAD)
 			{
 				AI2 += 10f;
 				if (AI2 > 50f || Main.NetMode != (byte)NetModeSetting.SERVER)
@@ -9027,11 +9067,11 @@ namespace Terraria
 			TargetClosest();
 			float num = 0.035f;
 			float num2 = 150f;
-			if (Type == (int)ID.MAN_EATER)
+			if (Type == (int)EntityID.NPCID.MAN_EATER)
 			{
 				num2 = 250f;
 			}
-			if (Type == (int)ID.CLINGER)
+			if (Type == (int)EntityID.NPCID.CLINGER)
 			{
 				num2 = 175f;
 			}
@@ -9086,7 +9126,7 @@ namespace Terraria
 					Velocity.Y -= num * 1.5f;
 				}
 			}
-			if (Type == (int)ID.MAN_EATER)
+			if (Type == (int)EntityID.NPCID.MAN_EATER)
 			{
 				if (Velocity.X > 3f)
 				{
@@ -9160,7 +9200,7 @@ namespace Terraria
 					Velocity.Y = -2f;
 				}
 			}
-			if (Main.NetMode == (byte)NetModeSetting.CLIENT || Type != (int)ID.CLINGER || Main.PlayerSet[Target].IsDead)
+			if (Main.NetMode == (byte)NetModeSetting.CLIENT || Type != (int)EntityID.NPCID.CLINGER || Main.PlayerSet[Target].IsDead)
 			{
 				return;
 			}
@@ -9196,7 +9236,7 @@ namespace Terraria
 
 		private unsafe void FlyerAI()
 		{
-			if (Type == (int)ID.HELLBAT)
+			if (Type == (int)EntityID.NPCID.HELLBAT)
 			{
 				Dust* ptr = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2f, Velocity.Y * 0.2f, 100, default, 2.0);
 				if (ptr != null)
@@ -9294,7 +9334,7 @@ namespace Terraria
 					Velocity.Y = 1.5f;
 				}
 			}
-			if (Type == (int)ID.CAVE_BAT || Type == (int)ID.JUNGLE_BAT || Type == (int)ID.HELLBAT || Type == (int)ID.DEMON || Type == (int)ID.ARCH_DEMON || Type == (int)ID.VOODOO_DEMON || Type == (int)ID.GIANT_BAT || Type == (int)ID.ILLUMINANT_BAT)
+			if (Type == (int)EntityID.NPCID.CAVE_BAT || Type == (int)EntityID.NPCID.JUNGLE_BAT || Type == (int)EntityID.NPCID.HELLBAT || Type == (int)EntityID.NPCID.DEMON || Type == (int)EntityID.NPCID.ARCH_DEMON || Type == (int)EntityID.NPCID.VOODOO_DEMON || Type == (int)EntityID.NPCID.GIANT_BAT || Type == (int)EntityID.NPCID.ILLUMINANT_BAT)
 			{
 				if (IsWet)
 				{
@@ -9309,7 +9349,7 @@ namespace Terraria
 					}
 					TargetClosest();
 				}
-				if (Type == (int)ID.HELLBAT)
+				if (Type == (int)EntityID.NPCID.HELLBAT)
 				{
 					if (Direction == -1 && Velocity.X > -4f)
 					{
@@ -9455,7 +9495,7 @@ namespace Terraria
 				float num2 = 0.1f;
 				float num3 = 4f;
 				float num4 = 1.5f;
-				if (Type == (int)ID.HARPY || Type == (int)ID.DEMON || Type == (int)ID.ARCH_DEMON || Type == (int)ID.VOODOO_DEMON)
+				if (Type == (int)EntityID.NPCID.HARPY || Type == (int)EntityID.NPCID.DEMON || Type == (int)EntityID.NPCID.ARCH_DEMON || Type == (int)EntityID.NPCID.VOODOO_DEMON)
 				{
 					num = 0.12f;
 					num2 = 0.07f;
@@ -9498,7 +9538,7 @@ namespace Terraria
 			{
 				return;
 			}
-			if (Type == (int)ID.HARPY)
+			if (Type == (int)EntityID.NPCID.HARPY)
 			{
 				AI0 += 1f;
 				if (AI0 == 30f || AI0 == 60f || AI0 == 90f)
@@ -9526,7 +9566,7 @@ namespace Terraria
 			}
 			else
 			{
-				if (Type != (int)ID.DEMON && Type != (int)ID.ARCH_DEMON && Type != (int)ID.VOODOO_DEMON)
+				if (Type != (int)EntityID.NPCID.DEMON && Type != (int)EntityID.NPCID.ARCH_DEMON && Type != (int)EntityID.NPCID.VOODOO_DEMON)
 				{
 					return;
 				}
@@ -9685,10 +9725,10 @@ namespace Terraria
 			{
 				int x = XYWH.X + Main.Rand.Next(Width - 32);
 				int y = XYWH.Y + Main.Rand.Next(Height - 32);
-				int num5 = NewNPC(x, y, (int)ID.SLIME);
+				int num5 = NewNPC(x, y, (int)EntityID.NPCID.SLIME);
 				if (num5 < MaxNumNPCs)
 				{
-					Main.NPCSet[num5].SetDefaults((int)ID.SLIME);
+					Main.NPCSet[num5].SetDefaults((int)EntityID.NPCID.SLIME);
 					Main.NPCSet[num5].Velocity.X = Main.Rand.Next(-15, 16) * 0.1f;
 					Main.NPCSet[num5].Velocity.Y = Main.Rand.Next(-30, 1) * 0.1f;
 					Main.NPCSet[num5].AI1 = Main.Rand.Next(3);
@@ -9707,7 +9747,7 @@ namespace Terraria
 			if (IsWet)
 			{
 				bool flag = false;
-				if (Type != (int)ID.GOLDFISH)
+				if (Type != (int)EntityID.NPCID.GOLDFISH)
 				{
 					TargetClosest(ShouldFaceTarget: false);
 					if (Main.PlayerSet[Target].IsWet && !Main.PlayerSet[Target].IsDead)
@@ -9739,14 +9779,14 @@ namespace Terraria
 						}
 					}
 				}
-				if (Type == (int)ID.ANGLER_FISH)
+				if (Type == (int)EntityID.NPCID.ANGLER_FISH)
 				{
 					Lighting.AddLight(XYWH.X + (Width >> 1) + Direction * (Width + 8) >> 4, XYWH.Y + 2 >> 4, new Vector3(0.07f, 0.04f, 0.025f));
 				}
 				if (flag)
 				{
 					TargetClosest();
-					if (Type == (int)ID.SHARK || Type == (int)ID.ANGLER_FISH || Type == (int)ID.ORKA)
+					if (Type == (int)EntityID.NPCID.SHARK || Type == (int)EntityID.NPCID.ANGLER_FISH || Type == (int)EntityID.NPCID.ORKA)
 					{
 						Velocity.X += Direction * 0.15f;
 						Velocity.Y += DirectionY * 0.15f;
@@ -9835,7 +9875,7 @@ namespace Terraria
 			{
 				if (Velocity.Y == 0f)
 				{
-					if (Type == (int)ID.SHARK || Type == (int)ID.ORKA)
+					if (Type == (int)EntityID.NPCID.SHARK || Type == (int)EntityID.NPCID.ORKA)
 					{
 						Velocity.X *= 0.94f;
 						if (Velocity.X > -0.2f && Velocity.X < 0.2f)
@@ -9997,7 +10037,7 @@ namespace Terraria
 
 		private void JellyfishAI()
 		{
-			Lighting.AddLight(RGB: (Type == (int)ID.BLUE_JELLYFISH) ? new Vector3(0.05f, 0.15f, 0.4f) : ((Type == (int)ID.GREEN_JELLYFISH) ? new Vector3(0.05f, 0.45f, 0.1f) : new Vector3(0.35f, 0.05f, 0.2f)), LightX: XYWH.X + (Height >> 1) >> 4, LightY: XYWH.Y + (Height >> 1) >> 4);
+			Lighting.AddLight(RGB: (Type == (int)EntityID.NPCID.BLUE_JELLYFISH) ? new Vector3(0.05f, 0.15f, 0.4f) : ((Type == (int)EntityID.NPCID.GREEN_JELLYFISH) ? new Vector3(0.05f, 0.45f, 0.1f) : new Vector3(0.35f, 0.05f, 0.2f)), LightX: XYWH.X + (Height >> 1) >> 4, LightY: XYWH.Y + (Height >> 1) >> 4);
 			if (Direction == 0)
 			{
 				TargetClosest();
@@ -10038,7 +10078,7 @@ namespace Terraria
 					Velocity.X *= 0.98f;
 					Velocity.Y *= 0.98f;
 					float num = 0.2f;
-					if (Type == (int)ID.GREEN_JELLYFISH)
+					if (Type == (int)EntityID.NPCID.GREEN_JELLYFISH)
 					{
 						Velocity.X *= 0.98f;
 						Velocity.Y *= 0.98f;
@@ -10047,7 +10087,7 @@ namespace Terraria
 					if (Velocity.X > 0f - num && Velocity.X < num && Velocity.Y > 0f - num && Velocity.Y < num)
 					{
 						TargetClosest();
-						float num2 = ((Type == (int)ID.GREEN_JELLYFISH) ? 9 : 7);
+						float num2 = ((Type == (int)EntityID.NPCID.GREEN_JELLYFISH) ? 9 : 7);
 						Vector2 vector = new Vector2(Position.X + Width * 0.5f, Position.Y + Height * 0.5f);
 						float num3 = Main.PlayerSet[Target].Position.X + 10f - vector.X;
 						float num4 = Main.PlayerSet[Target].Position.Y + 21f - vector.Y;
@@ -10413,7 +10453,7 @@ namespace Terraria
 			bool flag4 = true;
 			bool flag5 = false;
 			int num4 = 3;
-			if (Type == (int)ID.GASTROPOD || Type == (int)ID.SPECTRAL_GASTROPOD)
+			if (Type == (int)EntityID.NPCID.GASTROPOD || Type == (int)EntityID.NPCID.SPECTRAL_GASTROPOD)
 			{
 				if (WasJustHit)
 				{
@@ -10452,7 +10492,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.PIXIE)
+			else if (Type == (int)EntityID.NPCID.PIXIE)
 			{
 				num4 = 4;
 				if (Main.Rand.Next(7) == 0)
@@ -10488,7 +10528,7 @@ namespace Terraria
 			}
 			if (flag4)
 			{
-				if (Type == (int)ID.PIXIE)
+				if (Type == (int)EntityID.NPCID.PIXIE)
 				{
 					Velocity.Y += 0.2f;
 					if (Velocity.Y > 2f)
@@ -10507,7 +10547,7 @@ namespace Terraria
 			}
 			else
 			{
-				if (Type == (int)ID.PIXIE)
+				if (Type == (int)EntityID.NPCID.PIXIE)
 				{
 					if ((DirectionY < 0 && Velocity.Y > 0f) || flag5)
 					{
@@ -10523,7 +10563,7 @@ namespace Terraria
 					Velocity.Y = -4f;
 				}
 			}
-			if (Type == (int)ID.PIXIE && IsWet)
+			if (Type == (int)EntityID.NPCID.PIXIE && IsWet)
 			{
 				Velocity.Y -= 0.2f;
 				if (Velocity.Y < -2f)
@@ -10555,7 +10595,7 @@ namespace Terraria
 					Velocity.Y = -1f;
 				}
 			}
-			float num9 = ((Type == (int)ID.PIXIE) ? 3 : 2);
+			float num9 = ((Type == (int)EntityID.NPCID.PIXIE) ? 3 : 2);
 			if (Direction == -1 && Velocity.X > 0f - num9)
 			{
 				Velocity.X -= 0.1f;
@@ -10620,7 +10660,7 @@ namespace Terraria
 					Velocity.Y = 1.5f;
 				}
 			}
-			if (Type == (int)ID.GASTROPOD || Type == (int)ID.SPECTRAL_GASTROPOD)
+			if (Type == (int)EntityID.NPCID.GASTROPOD || Type == (int)EntityID.NPCID.SPECTRAL_GASTROPOD)
 			{
 				Lighting.AddLight(XYWH.X >> 4, XYWH.Y >> 4, new Vector3(0.4f, 0f, 0.25f));
 			}
@@ -10633,10 +10673,10 @@ namespace Terraria
 			Vector3 rgb = new Vector3(0.05f, 0.2f, 0.3f);
 			switch (Type)
 			{
-				case (int)ID.CURSED_HAMMER:
+				case (int)EntityID.NPCID.CURSED_HAMMER:
 					rgb = new Vector3(0.2f, 0.05f, 0.3f);
 					break;
-				case (int)ID.SHADOW_HAMMER:
+				case (int)EntityID.NPCID.SHADOW_HAMMER:
 					rgb = new Vector3(0.3f, 0.05f, 0.2f);
 					break;
 			}
@@ -11087,7 +11127,7 @@ namespace Terraria
 				}
 				if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
-					int num2 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1) + 20, (int)ID.LEECH_HEAD, 1);
+					int num2 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1) + 20, (int)EntityID.NPCID.LEECH_HEAD, 1);
 					Main.NPCSet[num2].Velocity.X = Direction << 3;
 				}
 			}
@@ -11253,17 +11293,17 @@ namespace Terraria
 				LocalAI0 = 2;
 				num8 = WoFBottom + WoFTop >> 1;
 				num8 = num8 + WoFTop >> 1;
-				int num13 = NewNPC(XYWH.X, num8, (int)ID.WALL_OF_FLESH_EYE, WhoAmI);
+				int num13 = NewNPC(XYWH.X, num8, (int)EntityID.NPCID.WALL_OF_FLESH_EYE, WhoAmI);
 				Main.NPCSet[num13].AI0 = 1f;
 				num8 = WoFBottom + WoFTop >> 1;
 				num8 = num8 + WoFBottom >> 1;
-				num13 = NewNPC(XYWH.X, num8, (int)ID.WALL_OF_FLESH_EYE, WhoAmI);
+				num13 = NewNPC(XYWH.X, num8, (int)EntityID.NPCID.WALL_OF_FLESH_EYE, WhoAmI);
 				Main.NPCSet[num13].AI0 = -1f;
 				num8 = WoFBottom + WoFTop >> 1;
 				num8 = num8 + WoFBottom >> 1;
 				for (int k = 0; k < 11; k++)
 				{
-					num13 = NewNPC(XYWH.X, num8, (int)ID.THE_HUNGRY, WhoAmI);
+					num13 = NewNPC(XYWH.X, num8, (int)EntityID.NPCID.THE_HUNGRY, WhoAmI);
 					Main.NPCSet[num13].AI0 = k * 0.1f - 0.05f;
 				}
 			}
@@ -11561,7 +11601,7 @@ namespace Terraria
 			}
 			if (Rotation < num3)
 			{
-				if ((double)(num3 - Rotation) > 3.1415)
+				if ((double)(num3 - Rotation) > Math.PI)
 				{
 					Rotation -= 0.1f;
 				}
@@ -11572,7 +11612,7 @@ namespace Terraria
 			}
 			else if (Rotation > num3)
 			{
-				if ((double)(Rotation - num3) > 3.1415)
+				if ((double)(Rotation - num3) > Math.PI)
 				{
 					Rotation += 0.1f;
 				}
@@ -11796,9 +11836,9 @@ namespace Terraria
 						Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 						for (int i = 0; i < 2; i++)
 						{
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 143);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 7);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 6);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.RETINAZER_EYE);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE4);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE3);
 						}
 						for (int j = 0; j < 16; j++)
 						{
@@ -12026,7 +12066,7 @@ namespace Terraria
 			}
 			if (Rotation < num3)
 			{
-				if ((double)(num3 - Rotation) > 3.1415)
+				if ((double)(num3 - Rotation) > Math.PI)
 				{
 					Rotation -= 0.15f;
 				}
@@ -12037,7 +12077,7 @@ namespace Terraria
 			}
 			else if (Rotation > num3)
 			{
-				if ((double)(Rotation - num3) > 3.1415)
+				if ((double)(Rotation - num3) > Math.PI)
 				{
 					Rotation += 0.15f;
 				}
@@ -12261,9 +12301,9 @@ namespace Terraria
 						Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 						for (int i = 0; i < 2; i++)
 						{
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 144);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 7);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 6);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.SPAZMATISM_EYE);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE4);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE3);
 						}
 						for (int j = 0; j < 16; j++)
 						{
@@ -12461,25 +12501,25 @@ namespace Terraria
 			{
 				TargetClosest();
 				AI0 = 1f;
-				if (Type != (int)ID.DUNGEON_GUARDIAN)
+				if (Type != (int)EntityID.NPCID.DUNGEON_GUARDIAN)
 				{
-					int num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.PRIME_CANNON, WhoAmI);
+					int num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.PRIME_CANNON, WhoAmI);
 					Main.NPCSet[num].AI0 = -1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].Target = Target;
 					Main.NPCSet[num].ShouldNetUpdate = true;
-					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.PRIME_SAW, WhoAmI);
+					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.PRIME_SAW, WhoAmI);
 					Main.NPCSet[num].AI0 = 1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].Target = Target;
 					Main.NPCSet[num].ShouldNetUpdate = true;
-					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.PRIME_VICE, WhoAmI);
+					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.PRIME_VICE, WhoAmI);
 					Main.NPCSet[num].AI0 = -1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].Target = Target;
 					Main.NPCSet[num].AI3 = 150f;
 					Main.NPCSet[num].ShouldNetUpdate = true;
-					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)ID.PRIME_LASER, WhoAmI);
+					num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + (Height >> 1), (int)EntityID.NPCID.PRIME_LASER, WhoAmI);
 					Main.NPCSet[num].AI0 = 1f;
 					Main.NPCSet[num].AI1 = WhoAmI;
 					Main.NPCSet[num].Target = Target;
@@ -12487,7 +12527,7 @@ namespace Terraria
 					Main.NPCSet[num].AI3 = 150f;
 				}
 			}
-			if (Type == (int)ID.DUNGEON_GUARDIAN && AI1 != 3f && AI1 != 2f)
+			if (Type == (int)EntityID.NPCID.DUNGEON_GUARDIAN && AI1 != 3f && AI1 != 2f)
 			{
 				Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 				AI1 = 2f;
@@ -12634,7 +12674,7 @@ namespace Terraria
 				AI2 = 0f;
 			}
 			SpriteDirection = (sbyte)(0f - AI0);
-			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != 32)
+			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != (byte)EntityID.NPCStyleID.SKELETRON_PRIME_HEAD)
 			{
 				AI2 += 10f;
 				if (AI2 > 50f || Main.NetMode != (byte)NetModeSetting.SERVER)
@@ -12941,7 +12981,7 @@ namespace Terraria
 			{
 				AI2 = 0f;
 			}
-			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != 32)
+			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != (byte)EntityID.NPCStyleID.SKELETRON_PRIME_HEAD)
 			{
 				AI2 += 10f;
 				if (AI2 > 50f || Main.NetMode != (byte)NetModeSetting.SERVER)
@@ -13209,7 +13249,7 @@ namespace Terraria
 		private void SkeletronPrimeCannonHand()
 		{
 			SpriteDirection = (sbyte)(0f - AI0);
-			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != 32)
+			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != (byte)EntityID.NPCStyleID.SKELETRON_PRIME_HEAD)
 			{
 				AI2 += 10f;
 				if (AI2 > 50f || Main.NetMode != (byte)NetModeSetting.SERVER)
@@ -13441,7 +13481,7 @@ namespace Terraria
 		private void SkeletronPrimeLaserHand()
 		{
 			SpriteDirection = (sbyte)(0f - AI0);
-			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != 32)
+			if (Main.NPCSet[(int)AI1].Active == 0 || Main.NPCSet[(int)AI1].AIStyle != (byte)EntityID.NPCStyleID.SKELETRON_PRIME_HEAD)
 			{
 				AI2 += 10f;
 				if (AI2 > 50f || Main.NetMode != (byte)NetModeSetting.SERVER)
@@ -13679,7 +13719,7 @@ namespace Terraria
 			{
 				TargetClosest();
 			}
-			if (Type > (int)ID.THE_DESTROYER_HEAD)
+			if (Type > (int)EntityID.NPCID.THE_DESTROYER_HEAD)
 			{
 				bool flag = false;
 				if (AI1 <= 0f)
@@ -13702,7 +13742,7 @@ namespace Terraria
 			}
 			if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 			{
-				if (AI0 == 0f && Type == (int)ID.THE_DESTROYER_HEAD)
+				if (AI0 == 0f && Type == (int)EntityID.NPCID.THE_DESTROYER_HEAD)
 				{
 					AI3 = WhoAmI;
 					RealLife = WhoAmI;
@@ -13711,10 +13751,10 @@ namespace Terraria
 					int num3 = 80;
 					for (int i = 0; i <= num3; i++)
 					{
-						int num4 = (int)ID.THE_DESTROYER_BODY;
+						int num4 = (int)EntityID.NPCID.THE_DESTROYER_BODY;
 						if (i == num3)
 						{
-							num4 = (int)ID.THE_DESTROYER_TAIL;
+							num4 = (int)EntityID.NPCID.THE_DESTROYER_TAIL;
 						}
 						num = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, num4, WhoAmI);
 						Main.NPCSet[num].AI3 = WhoAmI;
@@ -13726,7 +13766,7 @@ namespace Terraria
 						num2 = num;
 					}
 				}
-				if (Type == (int)ID.THE_DESTROYER_BODY)
+				if (Type == (int)EntityID.NPCID.THE_DESTROYER_BODY)
 				{
 					LocalAI0 += Main.Rand.Next(4);
 					if (LocalAI0 >= Main.Rand.Next(1400, 26000))
@@ -13799,12 +13839,12 @@ namespace Terraria
 			}
 			if (!flag2)
 			{
-				if (Type != (int)ID.THE_DESTROYER_BODY || AI2 != 1f)
+				if (Type != (int)EntityID.NPCID.THE_DESTROYER_BODY || AI2 != 1f)
 				{
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.3f, 0.1f, 0.05f));
 				}
 				LocalAI1 = 1;
-				if (Type == (int)ID.THE_DESTROYER_HEAD)
+				if (Type == (int)EntityID.NPCID.THE_DESTROYER_HEAD)
 				{
 					Rectangle rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
 					bool flag3 = true;
@@ -14054,7 +14094,7 @@ namespace Terraria
 				}
 			}
 			Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 1.57f;
-			if (Type != (int)ID.THE_DESTROYER_HEAD)
+			if (Type != (int)EntityID.NPCID.THE_DESTROYER_HEAD)
 			{
 				return;
 			}
@@ -14084,17 +14124,17 @@ namespace Terraria
 		{
 			float num = 4f;
 			float num2 = 1f;
-			if (Type == (int)ID.SNOWMAN_GANGSTA)
+			if (Type == (int)EntityID.NPCID.SNOWMAN_GANGSTA)
 			{
 				num = 3f;
 				num2 = 0.7f;
 			}
-			if (Type == (int)ID.SNOW_BALLA)
+			if (Type == (int)EntityID.NPCID.SNOW_BALLA)
 			{
 				num = 3.5f;
 				num2 = 0.8f;
 			}
-			if (Type == (int)ID.SNOWMAN_GANGSTA)
+			if (Type == (int)EntityID.NPCID.SNOWMAN_GANGSTA)
 			{
 				AI2 += 1f;
 				if (AI2 >= 120f)
@@ -14120,7 +14160,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (Type == (int)ID.MISTER_STABBY && AI1 >= 3f)
+			if (Type == (int)EntityID.NPCID.MISTER_STABBY && AI1 >= 3f)
 			{
 				TargetClosest();
 				SpriteDirection = Direction;
@@ -14139,7 +14179,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.SNOW_BALLA && AI1 >= 3f)
+			else if (Type == (int)EntityID.NPCID.SNOW_BALLA && AI1 >= 3f)
 			{
 				TargetClosest();
 				if (Velocity.Y == 0f)
@@ -14262,7 +14302,7 @@ namespace Terraria
 			}
 			if (Rotation < num3)
 			{
-				if ((double)(num3 - Rotation) > 3.1415)
+				if ((double)(num3 - Rotation) > Math.PI)
 				{
 					Rotation -= num4;
 				}
@@ -14273,7 +14313,7 @@ namespace Terraria
 			}
 			else if (Rotation > num3)
 			{
-				if ((double)(Rotation - num3) > 3.1415)
+				if ((double)(Rotation - num3) > Math.PI)
 				{
 					Rotation += num4;
 				}
@@ -14403,7 +14443,7 @@ namespace Terraria
 							vector2.Y += vector3.Y * 10f;
 							if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 							{
-								int num14 = NewNPC((int)vector2.X, (int)vector2.Y, (int)ID.SERVANT_OF_OCRAM);
+								int num14 = NewNPC((int)vector2.X, (int)vector2.Y, (int)EntityID.NPCID.SERVANT_OF_OCRAM);
 								if (num14 < MaxNumNPCs)
 								{
 									Main.NPCSet[num14].Velocity.X = vector3.X;
@@ -14520,9 +14560,9 @@ namespace Terraria
 						Main.PlaySound(3, XYWH.X, XYWH.Y);
 						for (int j = 0; j < 2; j++)
 						{
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 174);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 173);
-							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 172);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM3);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM2);
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM1);
 						}
 						for (int k = 0; k < 16; k++)
 						{
@@ -14696,7 +14736,7 @@ namespace Terraria
 					vector8.Y += vector9.Y * 10f;
 					if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 					{
-						int num31 = NewNPC((int)vector8.X, (int)vector8.Y, (int)ID.SERVANT_OF_OCRAM);
+						int num31 = NewNPC((int)vector8.X, (int)vector8.Y, (int)EntityID.NPCID.SERVANT_OF_OCRAM);
 						if (num31 < MaxNumNPCs)
 						{
 							Main.NPCSet[num31].Velocity.X = vector9.X;
@@ -14724,239 +14764,921 @@ namespace Terraria
 			{
 				State = 4;
 			}
-			if (Type == (int)ID.SLIME || Type == (int)ID.MOTHER_SLIME || Type == (int)ID.LAVA_SLIME || Type == (int)ID.DUNGEON_SLIME || Type == (int)ID.CORRUPT_SLIME || Type == (int)ID.SHADOW_SLIME || Type == (int)ID.ILLUMINANT_SLIME)
+			switch ((EntityID.NPCID)Type)
 			{
-				FrameCounter += 1f;
-				if (State > 0)
-				{
+				case EntityID.NPCID.SLIME:
+				case EntityID.NPCID.MOTHER_SLIME:
+				case EntityID.NPCID.LAVA_SLIME:
+				case EntityID.NPCID.DUNGEON_SLIME:
+				case EntityID.NPCID.CORRUPT_SLIME:
+				case EntityID.NPCID.SHADOW_SLIME:
+				case EntityID.NPCID.ILLUMINANT_SLIME:
 					FrameCounter += 1f;
-				}
-				if (State == 4)
-				{
-					FrameCounter += 1f;
-				}
-				if (FrameCounter >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.TOXIC_SLUDGE)
-			{
-				SpriteDirection = Direction;
-				if (Velocity.Y != 0f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY > FrameHeight)
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.SNOWMAN_GANGSTA)
-			{
-				if (Velocity.Y > 0f)
-				{
-					FrameCounter += 1f;
-				}
-				else if (Velocity.Y < 0f)
-				{
-					FrameCounter -= 1f;
-				}
-				if (FrameCounter < 6f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight * 3);
-				}
-				if (FrameCounter < 0f)
-				{
-					FrameCounter = 0f;
-				}
-				if (FrameCounter > 17f)
-				{
-					FrameCounter = 17f;
-				}
-			}
-			else if (Type == (int)ID.MISTER_STABBY)
-			{
-				if (Velocity.X == 0f && Velocity.Y == 0f)
-				{
-					LocalAI3++;
-					if (LocalAI3 < 6)
-					{
-						FrameY = 0;
-					}
-					else if (LocalAI3 < 12)
-					{
-						FrameY = FrameHeight;
-					}
-					if (LocalAI3 >= 11)
-					{
-						LocalAI3 = 0;
-					}
-					return;
-				}
-				if (Velocity.Y > 0f)
-				{
-					FrameCounter += 1f;
-				}
-				else if (Velocity.Y < 0f)
-				{
-					FrameCounter -= 1f;
-				}
-				if (FrameCounter < 6f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = (short)(FrameHeight * 3);
-				}
-				else if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight << 2);
-				}
-				if (FrameCounter < 0f)
-				{
-					FrameCounter = 0f;
-				}
-				else if (FrameCounter > 17f)
-				{
-					FrameCounter = 17f;
-				}
-			}
-			else if (Type == (int)ID.SNOW_BALLA)
-			{
-				if (Velocity.X == 0f && Velocity.Y == 0f)
-				{
-					if (AI2 < 4f)
-					{
-						FrameY = 0;
-					}
-					else if (AI2 < 8f)
-					{
-						FrameY = FrameHeight;
-					}
-					else if (AI2 < 12f)
-					{
-						FrameY = (short)(FrameHeight << 1);
-					}
-					else if (AI2 < 16f)
-					{
-						FrameY = (short)(FrameHeight * 3);
-					}
-					return;
-				}
-				if (Velocity.Y > 0f)
-				{
-					FrameCounter += 1f;
-				}
-				else if (Velocity.Y < 0f)
-				{
-					FrameCounter -= 1f;
-				}
-				if (FrameCounter < 6f)
-				{
-					FrameY = (short)(FrameHeight << 2);
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = (short)(FrameHeight * 5);
-				}
-				else if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight * 6);
-				}
-				if (FrameCounter < 0f)
-				{
-					FrameCounter = 0f;
-				}
-				if (FrameCounter > 17f)
-				{
-					FrameCounter = 17f;
-				}
-			}
-			else if (Type == (int)ID.KING_SLIME)
-			{
-				if (Velocity.Y != 0f)
-				{
-					FrameY = (short)(FrameHeight << 2);
-					return;
-				}
-				FrameCounter += 1f;
-				if (State > 0)
-				{
-					FrameCounter += 1f;
-				}
-				if (State == 4)
-				{
-					FrameCounter += 1f;
-				}
-				if (FrameCounter >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * 4)
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.THE_DESTROYER_BODY)
-			{
-				if (AI2 == 0f)
-				{
-					FrameY = 0;
-				}
-				else
-				{
-					FrameY = FrameHeight;
-				}
-			}
-			else if (Type == (int)ID.MIMIC)
-			{
-				if (AI0 == 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-				}
-				else
-				{
-					if (Velocity.Y == 0f)
-					{
-						FrameCounter -= 1f;
-					}
-					else
+					if (State > 0)
 					{
 						FrameCounter += 1f;
 					}
+
+					if (State == 4)
+					{
+						FrameCounter += 1f;
+					}
+
+					if (FrameCounter >= 8f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.TOXIC_SLUDGE:
+					SpriteDirection = Direction;
+					if (Velocity.Y != 0f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 8f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY > FrameHeight)
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.SNOWMAN_GANGSTA:
+					if (Velocity.Y > 0f)
+					{
+						FrameCounter += 1f;
+					}
+					else if (Velocity.Y < 0f)
+					{
+						FrameCounter -= 1f;
+					}
+
+					if (FrameCounter < 6f)
+					{
+						FrameY = FrameHeight;
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+					}
+					else if (FrameCounter < 18f)
+					{
+						FrameY = (short)(FrameHeight * 3);
+					}
+
 					if (FrameCounter < 0f)
 					{
 						FrameCounter = 0f;
 					}
-					else if (FrameCounter > 12f)
+
+					if (FrameCounter > 17f)
 					{
-						FrameCounter = 12f;
+						FrameCounter = 17f;
 					}
-					if (FrameCounter < 3f)
+					break;
+
+				case EntityID.NPCID.MISTER_STABBY:
+					if (Velocity.X == 0f && Velocity.Y == 0f)
+					{
+						LocalAI3++;
+						if (LocalAI3 < 6)
+						{
+							FrameY = 0;
+						}
+						else if (LocalAI3 < 12)
+						{
+							FrameY = FrameHeight;
+						}
+
+						if (LocalAI3 >= 11)
+						{
+							LocalAI3 = 0;
+						}
+
+						return;
+					}
+
+					if (Velocity.Y > 0f)
+					{
+						FrameCounter += 1f;
+					}
+					else if (Velocity.Y < 0f)
+					{
+						FrameCounter -= 1f;
+					}
+
+					if (FrameCounter < 6f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = (short)(FrameHeight * 3);
+					}
+					else if (FrameCounter < 18f)
+					{
+						FrameY = (short)(FrameHeight << 2);
+					}
+
+					if (FrameCounter < 0f)
+					{
+						FrameCounter = 0f;
+					}
+					else if (FrameCounter > 17f)
+					{
+						FrameCounter = 17f;
+					}
+					break;
+
+				case EntityID.NPCID.SNOW_BALLA:
+					if (Velocity.X == 0f && Velocity.Y == 0f)
+					{
+						if (AI2 < 4f)
+						{
+							FrameY = 0;
+						}
+						else if (AI2 < 8f)
+						{
+							FrameY = FrameHeight;
+						}
+						else if (AI2 < 12f)
+						{
+							FrameY = (short)(FrameHeight << 1);
+						}
+						else if (AI2 < 16f)
+						{
+							FrameY = (short)(FrameHeight * 3);
+						}
+
+						return;
+					}
+
+					if (Velocity.Y > 0f)
+					{
+						FrameCounter += 1f;
+					}
+					else if (Velocity.Y < 0f)
+					{
+						FrameCounter -= 1f;
+					}
+
+					if (FrameCounter < 6f)
+					{
+						FrameY = (short)(FrameHeight << 2);
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = (short)(FrameHeight * 5);
+					}
+					else if (FrameCounter < 18f)
+					{
+						FrameY = (short)(FrameHeight * 6);
+					}
+
+					if (FrameCounter < 0f)
+					{
+						FrameCounter = 0f;
+					}
+
+					if (FrameCounter > 17f)
+					{
+						FrameCounter = 17f;
+					}
+					break;
+
+				case EntityID.NPCID.KING_SLIME:
+					if (Velocity.Y != 0f)
+					{
+						FrameY = (short)(FrameHeight << 2);
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (State > 0)
+					{
+						FrameCounter += 1f;
+					}
+
+					if (State == 4)
+					{
+						FrameCounter += 1f;
+					}
+
+					if (FrameCounter >= 8f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * 4)
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.THE_DESTROYER_BODY:
+					if (AI2 == 0f)
+					{
+						FrameY = 0;
+					}
+					else
+					{
+						FrameY = FrameHeight;
+					}
+					break;
+
+				case EntityID.NPCID.MIMIC:
+					if (AI0 == 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+					}
+					else
+					{
+						if (Velocity.Y == 0f)
+						{
+							FrameCounter -= 1f;
+						}
+						else
+						{
+							FrameCounter += 1f;
+						}
+
+						if (FrameCounter < 0f)
+						{
+							FrameCounter = 0f;
+						}
+						else if (FrameCounter > 12f)
+						{
+							FrameCounter = 12f;
+						}
+
+						if (FrameCounter < 3f)
+						{
+							FrameY = FrameHeight;
+						}
+						else if (FrameCounter < 6f)
+						{
+							FrameY = (short)(FrameHeight << 1);
+						}
+						else if (FrameCounter < 9f)
+						{
+							FrameY = (short)(FrameHeight * 3);
+						}
+						else if (FrameCounter < 12f)
+						{
+							FrameY = (short)(FrameHeight << 2);
+						}
+						else if (FrameCounter < 15f)
+						{
+							FrameY = (short)(FrameHeight * 5);
+						}
+						else if (FrameCounter < 18f)
+						{
+							FrameY = (short)(FrameHeight << 2);
+						}
+						else if (FrameCounter < 21f)
+						{
+							FrameY = (short)(FrameHeight * 3);
+						}
+						else
+						{
+							FrameY = (short)(FrameHeight << 1);
+							if (FrameCounter >= 24f)
+							{
+								FrameCounter = 3f;
+							}
+						}
+					}
+
+					if (AI3 == 2f)
+					{
+						FrameY = (short)(FrameY + FrameHeight * 6);
+					}
+					else if (AI3 == 3f)
+					{
+						FrameY = (short)(FrameY + FrameHeight * 12);
+					}
+					break;
+
+				case EntityID.NPCID.WALL_OF_FLESH:
+				case EntityID.NPCID.WALL_OF_FLESH_EYE:
+					if (AI2 == 0f)
+					{
+						FrameCounter += 1f;
+						if (FrameCounter >= 12f)
+						{
+							FrameY += FrameHeight;
+							FrameCounter = 0f;
+						}
+
+						if (FrameY >= FrameHeight * NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					else
+					{
+						FrameY = 0;
+						FrameCounter = -60f;
+					}
+					break;
+
+				case EntityID.NPCID.VULTURE:
+					SpriteDirection = Direction;
+					Rotation = Velocity.X * 0.1f;
+					if (Velocity.X == 0f && Velocity.Y == 0f)
+					{
+						FrameY = 0;
+						FrameCounter = 0f;
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter < 4f)
+					{
+						FrameY = FrameHeight;
+						return;
+					}
+
+					FrameY = (short)(FrameHeight << 1);
+					if (FrameCounter >= 7f)
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.GASTROPOD:
+				case EntityID.NPCID.SPECTRAL_GASTROPOD:
+					SpriteDirection = Direction;
+					Rotation = Velocity.X * 0.05f;
+					if (AI3 > 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = (short)((((int)AI3 >> 3) + 3) * FrameHeight);
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 8f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * 3)
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.BIRD:
+					SpriteDirection = Direction;
+					Rotation = Velocity.X * 0.1f;
+					if (Velocity.X == 0f && Velocity.Y == 0f)
+					{
+						FrameY = (short)(FrameHeight << 2);
+						FrameCounter = 0f;
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 4f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.DEMON:
+				case EntityID.NPCID.ARCH_DEMON:
+				case EntityID.NPCID.VOODOO_DEMON:
+					SpriteDirection = Direction;
+					Rotation = Velocity.X * 0.1f;
+					FrameCounter += 1f;
+					if (FrameCounter < 6f)
+					{
+						FrameY = 0;
+						return;
+					}
+
+					FrameY = FrameHeight;
+					if (FrameCounter >= 11f)
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.BLUE_JELLYFISH:
+				case EntityID.NPCID.PINK_JELLYFISH:
+				case EntityID.NPCID.GREEN_JELLYFISH:
+					FrameCounter += 1f;
+					if (FrameCounter < 6f)
+					{
+						FrameY = 0;
+						return;
+					}
+
+					if (FrameCounter < 12f)
+					{
+						FrameY = FrameHeight;
+						return;
+					}
+
+					if (FrameCounter < 18f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+						return;
+					}
+
+					FrameY = (short)(FrameHeight * 3);
+					if (FrameCounter >= 23f)
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.DEMON_EYE:
+				case EntityID.NPCID.METEOR_HEAD:
+				case EntityID.NPCID.SLIMER:
+#if VERSION_101
+				case EntityID.NPCID.CATARACT_EYE:
+				case EntityID.NPCID.SLEEPY_EYE:
+				case EntityID.NPCID.DIALATED_EYE:
+				case EntityID.NPCID.GREEN_EYE:
+				case EntityID.NPCID.PURPLE_EYE:
+#endif
+					if (EntityID.DemonEyeTypes.Contains((EntityID.NPCID)Type))
+					{
+						if (Velocity.X > 0f)
+						{
+							SpriteDirection = 1;
+							Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
+						}
+
+						if (Velocity.X < 0f)
+						{
+							SpriteDirection = -1;
+							Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
+						}
+					}
+					else if (Type == (int)EntityID.NPCID.SLIMER)
+					{
+						if (Velocity.X > 0f)
+						{
+							SpriteDirection = 1;
+						}
+
+						if (Velocity.X < 0f)
+						{
+							SpriteDirection = -1;
+						}
+
+						Rotation = Velocity.X * 0.1f;
+					}
+
+					if ((FrameCounter += 1f) >= 8f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.WANDERING_EYE:
+					if (Velocity.X > 0f)
+					{
+						SpriteDirection = 1;
+						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
+					}
+
+					if (Velocity.X < 0f)
+					{
+						SpriteDirection = -1;
+						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
+					}
+
+					if ((FrameCounter += 1f) >= 8f)
+					{
+						FrameY = FrameHeight;
+					}
+					else
+					{
+						FrameY = 0;
+					}
+
+					if (FrameCounter >= 16f)
+					{
+						FrameY = 0;
+						FrameCounter = 0f;
+					}
+
+					if (Life < LifeMax * 0.5)
+					{
+						FrameY = (short)(FrameY + (FrameHeight << 1));
+					}
+					break;
+
+				case EntityID.NPCID.THE_HUNGRY_II:
+					if (Velocity.X > 0f)
+					{
+						SpriteDirection = 1;
+						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
+					}
+
+					if (Velocity.X < 0f)
+					{
+						SpriteDirection = -1;
+						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
+					}
+
+					if ((FrameCounter += 1f) >= 5f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.PIXIE:
+					if (Velocity.X > 0f)
+					{
+						SpriteDirection = 1;
+					}
+					else
+					{
+						SpriteDirection = -1;
+					}
+
+					Rotation = Velocity.X * 0.1f;
+					if ((FrameCounter += 1f) >= 4f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.GOLDFISH:
+				case EntityID.NPCID.CORRUPT_GOLDFISH:
+				case EntityID.NPCID.PIRANHA:
+				case EntityID.NPCID.ANGLER_FISH:
+					SpriteDirection = Direction;
+					FrameCounter += 1f;
+					if (IsWet)
+					{
+						if (FrameCounter < 6f)
+						{
+							FrameY = 0;
+						}
+						else if (FrameCounter < 12f)
+						{
+							FrameY = FrameHeight;
+						}
+						else if (FrameCounter < 18f)
+						{
+							FrameY = (short)(FrameHeight << 1);
+						}
+						else if (FrameCounter < 24f)
+						{
+							FrameY = (short)(FrameHeight * 3);
+						}
+						else
+						{
+							FrameCounter = 0f;
+						}
+					}
+					else if (FrameCounter < 6f)
+					{
+						FrameY = (short)(FrameHeight << 2);
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = (short)(FrameHeight * 5);
+					}
+					else
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.ANTLION:
+				case EntityID.NPCID.ALBINO_ANTLION:
+					if (AI0 < 190f)
+					{
+						if ((FrameCounter += 1f) >= 6f)
+						{
+							FrameCounter = 0f;
+							FrameY += FrameHeight;
+							if (FrameY / FrameHeight >= NpcFrameCount[Type] - 1)
+							{
+								FrameY = 0;
+							}
+						}
+					}
+					else
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight * (NpcFrameCount[Type] - 1));
+					}
+					break;
+
+				case EntityID.NPCID.UNICORN:
+					if (Velocity.Y == 0f || IsWet)
+					{
+						if (Velocity.X < -2f)
+						{
+							SpriteDirection = -1;
+						}
+						else if (Velocity.X > 2f)
+						{
+							SpriteDirection = 1;
+						}
+						else
+						{
+							SpriteDirection = Direction;
+						}
+					}
+
+					if (Velocity.Y != 0f)
+					{
+						FrameY = (short)(FrameHeight * 15);
+						FrameCounter = 0f;
+						return;
+					}
+
+					if (Velocity.X == 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+						return;
+					}
+
+					if (Math.Abs(Velocity.X) < 3f)
+					{
+						FrameCounter += Math.Abs(Velocity.X);
+						if (FrameCounter >= 6f)
+						{
+							FrameCounter = 0f;
+							FrameY += FrameHeight;
+							if (FrameY / FrameHeight >= 9)
+							{
+								FrameY = FrameHeight;
+							}
+
+							if (FrameY / FrameHeight <= 0)
+							{
+								FrameY = FrameHeight;
+							}
+						}
+
+						return;
+					}
+
+					FrameCounter += Math.Abs(Velocity.X);
+					if (FrameCounter >= 10f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= 15)
+						{
+							FrameY = (short)(FrameHeight * 9);
+						}
+
+						if (FrameY / FrameHeight <= 8)
+						{
+							FrameY = (short)(FrameHeight * 9);
+						}
+					}
+					break;
+
+				case EntityID.NPCID.SKELETRON_PRIME:
+					if (AI1 == 0f)
+					{
+						FrameCounter += 1f;
+						if (FrameCounter >= 12f)
+						{
+							FrameCounter = 0f;
+							FrameY += FrameHeight;
+							if (FrameY / FrameHeight >= 2)
+							{
+								FrameY = 0;
+							}
+						}
+					}
+					else
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight << 1);
+					}
+					break;
+
+				case EntityID.NPCID.PRIME_SAW:
+					if (Velocity.Y == 0f)
+					{
+						SpriteDirection = Direction;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 2f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.PRIME_VICE:
+					if (Velocity.Y == 0f)
+					{
+						SpriteDirection = Direction;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 8f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.CRAB:
+					if (Velocity.Y == 0f)
+					{
+						SpriteDirection = Direction;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 6f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.CLOWN:
+					if (Velocity.Y == 0f && ((Velocity.X <= 0f && Direction < 0) || (Velocity.X >= 0f && Direction > 0)))
+					{
+						SpriteDirection = Direction;
+					}
+
+					FrameCounter += Math.Abs(Velocity.X);
+					if (FrameCounter >= 7f)
+					{
+						FrameCounter -= 7f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.CURSED_HAMMER:
+				case EntityID.NPCID.ENCHANTED_SWORD:
+				case EntityID.NPCID.SHADOW_HAMMER:
+					if (AI0 == 2f)
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+						return;
+					}
+
+					FrameCounter += 1f;
+					if (FrameCounter >= 4f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.BLAZING_WHEEL:
+					FrameCounter += 1f;
+					if (FrameCounter >= 3f)
+					{
+						FrameCounter = 0f;
+						FrameY += FrameHeight;
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.SHARK:
+				case EntityID.NPCID.ORKA:
+					SpriteDirection = Direction;
+					FrameCounter += 1f;
+					if (IsWet)
+					{
+						if (FrameCounter < 6f)
+						{
+							FrameY = 0;
+						}
+						else if (FrameCounter < 12f)
+						{
+							FrameY = FrameHeight;
+						}
+						else if (FrameCounter < 18f)
+						{
+							FrameY = (short)(FrameHeight << 1);
+						}
+						else if (FrameCounter < 24f)
+						{
+							FrameY = (short)(FrameHeight * 3);
+						}
+						else
+						{
+							FrameCounter = 0f;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.HARPY:
+				case EntityID.NPCID.CAVE_BAT:
+				case EntityID.NPCID.JUNGLE_BAT:
+				case EntityID.NPCID.HELLBAT:
+				case EntityID.NPCID.WRAITH:
+				case EntityID.NPCID.GIANT_BAT:
+				case EntityID.NPCID.ILLUMINANT_BAT:
+					if (Velocity.X > 0f)
+					{
+						SpriteDirection = 1;
+					}
+
+					if (Velocity.X < 0f)
+					{
+						SpriteDirection = -1;
+					}
+
+					Rotation = Velocity.X * 0.1f;
+					FrameCounter += 1f;
+					if (FrameCounter >= 6f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * 4)
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.HORNET:
+				case EntityID.NPCID.DRAGON_HORNET:
+					FrameCounter += 1f;
+					if (FrameCounter < 2f)
+					{
+						FrameY = 0;
+					}
+					else if (FrameCounter < 4f)
 					{
 						FrameY = FrameHeight;
 					}
@@ -14964,1030 +15686,531 @@ namespace Terraria
 					{
 						FrameY = (short)(FrameHeight << 1);
 					}
-					else if (FrameCounter < 9f)
+					else if (FrameCounter < 8f)
 					{
-						FrameY = (short)(FrameHeight * 3);
-					}
-					else if (FrameCounter < 12f)
-					{
-						FrameY = (short)(FrameHeight << 2);
-					}
-					else if (FrameCounter < 15f)
-					{
-						FrameY = (short)(FrameHeight * 5);
-					}
-					else if (FrameCounter < 18f)
-					{
-						FrameY = (short)(FrameHeight << 2);
-					}
-					else if (FrameCounter < 21f)
-					{
-						FrameY = (short)(FrameHeight * 3);
+						FrameY = FrameHeight;
 					}
 					else
 					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.MAN_EATER:
+				case EntityID.NPCID.SNATCHER:
+				case EntityID.NPCID.DRAGON_SNATCHER:
+					FrameCounter += 1f;
+					if (FrameCounter < 6f)
+					{
+						FrameY = 0;
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = FrameHeight;
+					}
+					else if (FrameCounter < 18f)
+					{
 						FrameY = (short)(FrameHeight << 1);
-						if (FrameCounter >= 24f)
+					}
+					else if (FrameCounter < 24f)
+					{
+						FrameY = FrameHeight;
+					}
+
+					if (FrameCounter == 23f)
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.THE_HUNGRY:
+					FrameCounter += 1f;
+					if (FrameCounter < 3f)
+					{
+						FrameY = 0;
+					}
+					else if (FrameCounter < 6f)
+					{
+						FrameY = FrameHeight;
+					}
+					else if (FrameCounter < 12f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+					}
+					else if (FrameCounter < 15f)
+					{
+						FrameY = FrameHeight;
+					}
+
+					if (FrameCounter == 15f)
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.CLINGER:
+					FrameCounter += 1f;
+					if (FrameCounter > 6f)
+					{
+						FrameY = (short)(FrameY + (FrameHeight << 1));
+						FrameCounter = 0f;
+					}
+
+					if (FrameY > FrameHeight * 2)
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.MERCHANT:
+				case EntityID.NPCID.NURSE:
+				case EntityID.NPCID.ARMS_DEALER:
+				case EntityID.NPCID.DRYAD:
+				case EntityID.NPCID.GUIDE:
+				case EntityID.NPCID.SANTA_CLAUS:
+				case EntityID.NPCID.DEMOLITIONIST:
+				case EntityID.NPCID.GOBLIN_PEON:
+				case EntityID.NPCID.GOBLIN_THIEF:
+				case EntityID.NPCID.GOBLIN_WARRIOR:
+				case EntityID.NPCID.BONES:
+				case EntityID.NPCID.SKELETON:
+				case EntityID.NPCID.UNDEAD_MINER:
+				case EntityID.NPCID.CLOTHIER:
+				case EntityID.NPCID.OLD_MAN:
+				case EntityID.NPCID.GOBLIN_SCOUT:
+				case EntityID.NPCID.ARMORED_SKELETON:
+				case EntityID.NPCID.MUMMY:
+				case EntityID.NPCID.DARK_MUMMY:
+				case EntityID.NPCID.LIGHT_MUMMY:
+				case EntityID.NPCID.WEREWOLF:
+				case EntityID.NPCID.GOBLIN_TINKERER:
+				case EntityID.NPCID.WIZARD:
+				case EntityID.NPCID.CHAOS_ELEMENTAL:
+				case EntityID.NPCID.SPECTRAL_ELEMENTAL:
+				case EntityID.NPCID.MECHANIC:
+				case EntityID.NPCID.POSSESSED_ARMOR:
+				case EntityID.NPCID.VAMPIRE_MINER:
+				case EntityID.NPCID.SHADOW_MUMMY:
+				case EntityID.NPCID.SPECTRAL_MUMMY:
+					if (Velocity.Y == 0f)
+					{
+						if (Direction == 1)
 						{
-							FrameCounter = 3f;
+							SpriteDirection = 1;
+						}
+						else if (Direction == -1)
+						{
+							SpriteDirection = -1;
+						}
+
+						if (Velocity.X == 0f)
+						{
+							if (Type == (int)EntityID.NPCID.POSSESSED_ARMOR)
+							{
+								FrameY = FrameHeight;
+							}
+							else
+							{
+								FrameY = 0;
+							}
+
+							FrameCounter = 0f;
+							return;
+						}
+
+						FrameCounter += Math.Abs(Velocity.X) * 2f;
+						if ((FrameCounter += 1f) > 6f)
+						{
+							FrameY += FrameHeight;
+							FrameCounter = 0f;
+						}
+
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = (short)(FrameHeight << 1);
 						}
 					}
-				}
-				if (AI3 == 2f)
-				{
-					FrameY = (short)(FrameY + FrameHeight * 6);
-				}
-				else if (AI3 == 3f)
-				{
-					FrameY = (short)(FrameY + FrameHeight * 12);
-				}
-			}
-			else if (Type == (int)ID.WALL_OF_FLESH || Type == (int)ID.WALL_OF_FLESH_EYE)
-			{
-				if (AI2 == 0f)
-				{
-					FrameCounter += 1f;
-					if (FrameCounter >= 12f)
+					else
+					{
+						FrameCounter = 0f;
+						if (EntityID.MummyTypes.Contains((EntityID.NPCID)Type) || Type == (int)EntityID.NPCID.SKELETON || Type == (int)EntityID.NPCID.BONES || Type == (int)EntityID.NPCID.UNDEAD_MINER || Type == (int)EntityID.NPCID.VAMPIRE_MINER || Type == (int)EntityID.NPCID.ARMORED_SKELETON || Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL || Type == (int)EntityID.NPCID.POSSESSED_ARMOR)
+						{
+							FrameY = 0;
+						}
+						else
+						{
+							FrameY = FrameHeight;
+						}
+					}
+					break;
+
+				case EntityID.NPCID.SKELETON_ARCHER:
+					if (Velocity.Y == 0f)
+					{
+						if (Direction != 0)
+						{
+							SpriteDirection = Direction;
+						}
+
+						if (AI2 > 0f)
+						{
+							SpriteDirection = Direction;
+							FrameY = (short)(FrameHeight * (int)AI2);
+							FrameCounter = 0f;
+							return;
+						}
+
+						if (FrameY < FrameHeight * 6)
+						{
+							FrameY = (short)(FrameHeight * 6);
+						}
+
+						FrameCounter += Math.Abs(Velocity.X) * 2f;
+						FrameCounter += Velocity.X;
+						if (FrameCounter > 6f)
+						{
+							FrameY += FrameHeight;
+							FrameCounter = 0f;
+						}
+
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = (short)(FrameHeight * 6);
+						}
+					}
+					else
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.GOBLIN_ARCHER:
+					if (Velocity.Y == 0f)
+					{
+						if (Direction != 0)
+						{
+							SpriteDirection = Direction;
+						}
+
+						if (AI2 > 0f)
+						{
+							SpriteDirection = Direction;
+							FrameY = (short)(FrameHeight * ((int)AI2 - 1));
+							FrameCounter = 0f;
+							return;
+						}
+
+						if (FrameY < FrameHeight * 7)
+						{
+							FrameY = (short)(FrameHeight * 7);
+						}
+
+						FrameCounter += Math.Abs(Velocity.X) * 2f;
+						FrameCounter += Velocity.X * 1.3f;
+						if (FrameCounter > 6f)
+						{
+							FrameY += FrameHeight;
+							FrameCounter = 0f;
+						}
+
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = (short)(FrameHeight * 7);
+						}
+					}
+					else
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight * 6);
+					}
+					break;
+
+				case EntityID.NPCID.ZOMBIE:
+				case EntityID.NPCID.DOCTOR_BONES:
+				case EntityID.NPCID.THE_GROOM:
+				case EntityID.NPCID.BALD_ZOMBIE:
+#if VERSION_101
+				case EntityID.NPCID.PINCUSHION_ZOMBIE:
+				case EntityID.NPCID.SLIMED_ZOMBIE:
+				case EntityID.NPCID.SWAMP_ZOMBIE:
+				case EntityID.NPCID.TWIGGY_ZOMBIE:
+				case EntityID.NPCID.FEMALE_ZOMBIE:
+				case EntityID.NPCID.ZOMBIE_MUSHROOM:
+				case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
+#endif
+					if (Velocity.Y == 0f && Direction != 0)
+					{
+						SpriteDirection = Direction;
+					}
+
+					if (Velocity.Y != 0f || (Direction == -1 && Velocity.X > 0f) || (Direction == 1 && Velocity.X < 0f))
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight << 1);
+						return;
+					}
+
+					if (Velocity.X == 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+						return;
+					}
+
+					FrameCounter += Math.Abs(Velocity.X);
+					if (FrameCounter < 8f)
+					{
+						FrameY = 0;
+					}
+					else if (FrameCounter < 16f)
+					{
+						FrameY = FrameHeight;
+					}
+					else if (FrameCounter < 24f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+					}
+					else if (FrameCounter < 32f)
+					{
+						FrameY = FrameHeight;
+					}
+					else
+					{
+						FrameCounter = 0f;
+					}
+					break;
+
+				case EntityID.NPCID.BUNNY:
+				case EntityID.NPCID.CORRUPT_BUNNY:
+					if (Velocity.Y == 0f)
+					{
+						if (Direction != 0)
+						{
+							SpriteDirection = Direction;
+						}
+
+						if (Velocity.X == 0f)
+						{
+							FrameY = 0;
+							FrameCounter = 0f;
+							return;
+						}
+
+						FrameCounter += Math.Abs(Velocity.X);
+						FrameCounter += 1f;
+						if (FrameCounter > 6f)
+						{
+							FrameY += FrameHeight;
+							FrameCounter = 0f;
+						}
+
+						if (FrameY / FrameHeight >= NpcFrameCount[Type])
+						{
+							FrameY = 0;
+						}
+					}
+					else if (Velocity.Y < 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight << 2);
+					}
+					else if (Velocity.Y > 0f)
+					{
+						FrameCounter = 0f;
+						FrameY = (short)(FrameHeight * 6);
+					}
+					break;
+
+				case EntityID.NPCID.EYE_OF_CTHULHU:
+				case EntityID.NPCID.OCRAM:
+				case EntityID.NPCID.RETINAZER:
+				case EntityID.NPCID.SPAZMATISM:
+					if ((FrameCounter += 1f) < 7f)
+					{
+						FrameY = 0;
+					}
+					else if (FrameCounter < 14f)
+					{
+						FrameY = FrameHeight;
+					}
+					else if (FrameCounter < 21f)
+					{
+						FrameY = (short)(FrameHeight << 1);
+					}
+					else
+					{
+						FrameCounter = 0f;
+						FrameY = 0;
+					}
+
+					if (AI0 > 1f)
+					{
+						FrameY = (short)(FrameY + FrameHeight * 3);
+					}
+					break;
+
+				case EntityID.NPCID.SERVANT_OF_CTHULHU:
+				case EntityID.NPCID.SERVANT_OF_OCRAM:
+					if ((FrameCounter += 1f) >= 8f)
 					{
 						FrameY += FrameHeight;
 						FrameCounter = 0f;
 					}
+
 					if (FrameY >= FrameHeight * NpcFrameCount[Type])
 					{
 						FrameY = 0;
 					}
-				}
-				else
-				{
-					FrameY = 0;
-					FrameCounter = -60f;
-				}
-			}
-			else if (Type == (int)ID.VULTURE)
-			{
-				SpriteDirection = Direction;
-				Rotation = Velocity.X * 0.1f;
-				if (Velocity.X == 0f && Velocity.Y == 0f)
-				{
-					FrameY = 0;
-					FrameCounter = 0f;
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter < 4f)
-				{
-					FrameY = FrameHeight;
-					return;
-				}
-				FrameY = (short)(FrameHeight << 1);
-				if (FrameCounter >= 7f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.GASTROPOD || Type == (int)ID.SPECTRAL_GASTROPOD)
-			{
-				SpriteDirection = Direction;
-				Rotation = Velocity.X * 0.05f;
-				if (AI3 > 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = (short)((((int)AI3 >> 3) + 3) * FrameHeight);
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * 3)
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.BIRD)
-			{
-				SpriteDirection = Direction;
-				Rotation = Velocity.X * 0.1f;
-				if (Velocity.X == 0f && Velocity.Y == 0f)
-				{
-					FrameY = (short)(FrameHeight << 2);
-					FrameCounter = 0f;
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 4f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.DEMON || Type == (int)ID.ARCH_DEMON || Type == (int)ID.VOODOO_DEMON)
-			{
-				SpriteDirection = Direction;
-				Rotation = Velocity.X * 0.1f;
-				FrameCounter += 1f;
-				if (FrameCounter < 6f)
-				{
-					FrameY = 0;
-					return;
-				}
-				FrameY = FrameHeight;
-				if (FrameCounter >= 11f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.BLUE_JELLYFISH || Type == (int)ID.PINK_JELLYFISH || Type == (int)ID.GREEN_JELLYFISH)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter < 6f)
-				{
-					FrameY = 0;
-					return;
-				}
-				if (FrameCounter < 12f)
-				{
-					FrameY = FrameHeight;
-					return;
-				}
-				if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-					return;
-				}
-				FrameY = (short)(FrameHeight * 3);
-				if (FrameCounter >= 23f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-#if VERSION_INITIAL
-			else if (Type == (int)ID.DEMON_EYE || Type == (int)ID.METEOR_HEAD || Type == (int)ID.SLIMER)
-			{
-				if (Type == (int)ID.DEMON_EYE)
-#else
-			else if (Type == (int)ID.DEMON_EYE || Type == (int)ID.METEOR_HEAD || Type == (int)ID.SLIMER || Type == (int)ID.CATARACT_EYE || Type == (int)ID.SLEEPY_EYE || Type == (int)ID.DIALATED_EYE || Type == (int)ID.GREEN_EYE || Type == (int)ID.PURPLE_EYE)
-			{
-				if (Type == (int)ID.DEMON_EYE || Type == (int)ID.CATARACT_EYE || Type == (int)ID.SLEEPY_EYE || Type == (int)ID.DIALATED_EYE || Type == (int)ID.GREEN_EYE || Type == (int)ID.PURPLE_EYE)
-#endif
-				{
-					if (Velocity.X > 0f)
-					{
-						SpriteDirection = 1;
-						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
-					}
-					if (Velocity.X < 0f)
-					{
-						SpriteDirection = -1;
-						Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
-					}
-				}
-				else if (Type == (int)ID.SLIMER)
-				{
-					if (Velocity.X > 0f)
-					{
-						SpriteDirection = 1;
-					}
-					if (Velocity.X < 0f)
-					{
-						SpriteDirection = -1;
-					}
-					Rotation = Velocity.X * 0.1f;
-				}
-				if ((FrameCounter += 1f) >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.WANDERING_EYE)
-			{
-				if (Velocity.X > 0f)
-				{
-					SpriteDirection = 1;
-					Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
-				}
-				if (Velocity.X < 0f)
-				{
-					SpriteDirection = -1;
-					Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
-				}
-				if ((FrameCounter += 1f) >= 8f)
-				{
-					FrameY = FrameHeight;
-				}
-				else
-				{
-					FrameY = 0;
-				}
-				if (FrameCounter >= 16f)
-				{
-					FrameY = 0;
-					FrameCounter = 0f;
-				}
-				if (Life < LifeMax * 0.5)
-				{
-					FrameY = (short)(FrameY + (FrameHeight << 1));
-				}
-			}
-			else if (Type == (int)ID.THE_HUNGRY_II)
-			{
-				if (Velocity.X > 0f)
-				{
-					SpriteDirection = 1;
-					Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X);
-				}
-				if (Velocity.X < 0f)
-				{
-					SpriteDirection = -1;
-					Rotation = (float)Math.Atan2(Velocity.Y, Velocity.X) + 3.14f;
-				}
-				if ((FrameCounter += 1f) >= 5f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.PIXIE)
-			{
-				if (Velocity.X > 0f)
-				{
-					SpriteDirection = 1;
-				}
-				else
-				{
-					SpriteDirection = -1;
-				}
-				Rotation = Velocity.X * 0.1f;
-				if ((FrameCounter += 1f) >= 4f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.GOLDFISH || Type == (int)ID.CORRUPT_GOLDFISH || Type == (int)ID.PIRANHA || Type == (int)ID.ANGLER_FISH)
-			{
-				SpriteDirection = Direction;
-				FrameCounter += 1f;
-				if (IsWet)
-				{
-					if (FrameCounter < 6f)
+					break;
+
+				case EntityID.NPCID.CORRUPTOR:
+					if ((FrameCounter += 1f) < 6f)
 					{
 						FrameY = 0;
+						return;
 					}
-					else if (FrameCounter < 12f)
+
+					if (FrameCounter < 12f)
 					{
 						FrameY = FrameHeight;
+						return;
 					}
-					else if (FrameCounter < 18f)
+
+					if (FrameCounter < 18f)
 					{
 						FrameY = (short)(FrameHeight << 1);
+						return;
 					}
-					else if (FrameCounter < 24f)
-					{
-						FrameY = (short)(FrameHeight * 3);
-					}
-					else
-					{
-						FrameCounter = 0f;
-					}
-				}
-				else if (FrameCounter < 6f)
-				{
-					FrameY = (short)(FrameHeight << 2);
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = (short)(FrameHeight * 5);
-				}
-				else
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.ANTLION || Type == (int)ID.ALBINO_ANTLION)
-			{
-				if (AI0 < 190f)
-				{
-					if ((FrameCounter += 1f) >= 6f)
+
+					FrameY = FrameHeight;
+					if (FrameCounter >= 23f)
 					{
 						FrameCounter = 0f;
-						FrameY += FrameHeight;
-						if (FrameY / FrameHeight >= NpcFrameCount[Type] - 1)
-						{
-							FrameY = 0;
-						}
 					}
-				}
-				else
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight * (NpcFrameCount[Type] - 1));
-				}
-			}
-			else if (Type == (int)ID.UNICORN)
-			{
-				if (Velocity.Y == 0f || IsWet)
-				{
-					if (Velocity.X < -2f)
-					{
-						SpriteDirection = -1;
-					}
-					else if (Velocity.X > 2f)
-					{
-						SpriteDirection = 1;
-					}
-					else
-					{
-						SpriteDirection = Direction;
-					}
-				}
-				if (Velocity.Y != 0f)
-				{
-					FrameY = (short)(FrameHeight * 15);
-					FrameCounter = 0f;
-					return;
-				}
-				if (Velocity.X == 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-					return;
-				}
-				if (Math.Abs(Velocity.X) < 3f)
-				{
-					FrameCounter += Math.Abs(Velocity.X);
-					if (FrameCounter >= 6f)
-					{
-						FrameCounter = 0f;
-						FrameY += FrameHeight;
-						if (FrameY / FrameHeight >= 9)
-						{
-							FrameY = FrameHeight;
-						}
-						if (FrameY / FrameHeight <= 0)
-						{
-							FrameY = FrameHeight;
-						}
-					}
-					return;
-				}
-				FrameCounter += Math.Abs(Velocity.X);
-				if (FrameCounter >= 10f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= 15)
-					{
-						FrameY = (short)(FrameHeight * 9);
-					}
-					if (FrameY / FrameHeight <= 8)
-					{
-						FrameY = (short)(FrameHeight * 9);
-					}
-				}
-			}
-			else if (Type == (int)ID.SKELETRON_PRIME)
-			{
-				if (AI1 == 0f)
-				{
+					break;
+
+				case EntityID.NPCID.EATER_OF_SOULS:
 					FrameCounter += 1f;
-					if (FrameCounter >= 12f)
+					if (FrameCounter >= 8f)
 					{
-						FrameCounter = 0f;
 						FrameY += FrameHeight;
-						if (FrameY / FrameHeight >= 2)
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
+
+				case EntityID.NPCID.FIRE_IMP:
+					if (Velocity.Y == 0f && Direction != 0)
+					{
+						SpriteDirection = Direction;
+					}
+
+					if (AI1 > 0f)
+					{
+						if (FrameY < 4)
 						{
-							FrameY = 0;
+							FrameCounter = 0f;
 						}
-					}
-				}
-				else
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight << 1);
-				}
-			}
-			else if (Type == (int)ID.PRIME_SAW)
-			{
-				if (Velocity.Y == 0f)
-				{
-					SpriteDirection = Direction;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 2f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.PRIME_VICE)
-			{
-				if (Velocity.Y == 0f)
-				{
-					SpriteDirection = Direction;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 8f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.CRAB)
-			{
-				if (Velocity.Y == 0f)
-				{
-					SpriteDirection = Direction;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 6f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.CLOWN)
-			{
-				if (Velocity.Y == 0f && ((Velocity.X <= 0f && Direction < 0) || (Velocity.X >= 0f && Direction > 0)))
-				{
-					SpriteDirection = Direction;
-				}
-				FrameCounter += Math.Abs(Velocity.X);
-				if (FrameCounter >= 7f)
-				{
-					FrameCounter -= 7f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.CURSED_HAMMER || Type == (int)ID.ENCHANTED_SWORD || Type == (int)ID.SHADOW_HAMMER)
-			{
-				if (AI0 == 2f)
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter >= 4f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.BLAZING_WHEEL)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter >= 3f)
-				{
-					FrameCounter = 0f;
-					FrameY += FrameHeight;
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-			}
-			else if (Type == (int)ID.SHARK || Type == (int)ID.ORKA)
-			{
-				SpriteDirection = Direction;
-				FrameCounter += 1f;
-				if (IsWet)
-				{
-					if (FrameCounter < 6f)
-					{
-						FrameY = 0;
-					}
-					else if (FrameCounter < 12f)
-					{
-						FrameY = FrameHeight;
-					}
-					else if (FrameCounter < 18f)
-					{
-						FrameY = (short)(FrameHeight << 1);
-					}
-					else if (FrameCounter < 24f)
-					{
-						FrameY = (short)(FrameHeight * 3);
-					}
-					else
-					{
-						FrameCounter = 0f;
-					}
-				}
-			}
-			else if (Type == (int)ID.HARPY || Type == (int)ID.CAVE_BAT || Type == (int)ID.JUNGLE_BAT || Type == (int)ID.HELLBAT || Type == (int)ID.WRAITH || Type == (int)ID.GIANT_BAT || Type == (int)ID.ILLUMINANT_BAT)
-			{
-				if (Velocity.X > 0f)
-				{
-					SpriteDirection = 1;
-				}
-				if (Velocity.X < 0f)
-				{
-					SpriteDirection = -1;
-				}
-				Rotation = Velocity.X * 0.1f;
-				FrameCounter += 1f;
-				if (FrameCounter >= 6f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * 4)
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter < 2f)
-				{
-					FrameY = 0;
-				}
-				else if (FrameCounter < 4f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 6f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 8f)
-				{
-					FrameY = FrameHeight;
-				}
-				else
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.MAN_EATER || Type == (int)ID.SNATCHER || Type == (int)ID.DRAGON_SNATCHER)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter < 6f)
-				{
-					FrameY = 0;
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 24f)
-				{
-					FrameY = FrameHeight;
-				}
-				if (FrameCounter == 23f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.THE_HUNGRY)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter < 3f)
-				{
-					FrameY = 0;
-				}
-				else if (FrameCounter < 6f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 12f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 15f)
-				{
-					FrameY = FrameHeight;
-				}
-				if (FrameCounter == 15f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.CLINGER)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter > 6f)
-				{
-					FrameY = (short)(FrameY + (FrameHeight << 1));
-					FrameCounter = 0f;
-				}
-				if (FrameY > FrameHeight * 2)
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.MERCHANT || Type == (int)ID.NURSE || Type == (int)ID.ARMS_DEALER || Type == (int)ID.DRYAD || Type == (int)ID.GUIDE || Type == (int)ID.SANTA_CLAUS || Type == (int)ID.DEMOLITIONIST || Type == (int)ID.GOBLIN_PEON || Type == (int)ID.GOBLIN_THIEF || Type == (int)ID.GOBLIN_WARRIOR || Type == (int)ID.BONES || Type == (int)ID.SKELETON || Type == (int)ID.UNDEAD_MINER || Type == (int)ID.CLOTHIER || Type == (int)ID.OLD_MAN || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.WEREWOLF || Type == (int)ID.GOBLIN_TINKERER || Type == (int)ID.WIZARD || Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.MECHANIC || Type == (int)ID.POSSESSED_ARMOR || Type == (int)ID.VAMPIRE_MINER || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_MUMMY)
-			{
-				if (Velocity.Y == 0f)
-				{
-					if (Direction == 1)
-					{
-						SpriteDirection = 1;
-					}
-					else if (Direction == -1)
-					{
-						SpriteDirection = -1;
-					}
-					if (Velocity.X == 0f)
-					{
-						if (Type == (int)ID.POSSESSED_ARMOR)
+
+						FrameCounter += 1f;
+						if (FrameCounter <= 4f)
 						{
-							FrameY = FrameHeight;
+							FrameY = (short)(FrameHeight << 2);
+							return;
 						}
-						else
+
+						if (FrameCounter <= 8f)
 						{
-							FrameY = 0;
+							FrameY = (short)(FrameHeight * 5);
+							return;
 						}
-						FrameCounter = 0f;
+
+						if (FrameCounter <= 12f)
+						{
+							FrameY = (short)(FrameHeight * 6);
+							return;
+						}
+
+						if (FrameCounter <= 16f)
+						{
+							FrameY = (short)(FrameHeight * 7);
+							return;
+						}
+
+						if (FrameCounter <= 20f)
+						{
+							FrameY = (short)(FrameHeight << 3);
+							return;
+						}
+
+						FrameY = (short)(FrameHeight * 9);
+						FrameCounter = 100f;
 						return;
 					}
-					FrameCounter += Math.Abs(Velocity.X) * 2f;
-					if ((FrameCounter += 1f) > 6f)
-					{
-						FrameY += FrameHeight;
-						FrameCounter = 0f;
-					}
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = (short)(FrameHeight << 1);
-					}
-				}
-				else
-				{
-					FrameCounter = 0f;
-					if (Type == (int)ID.SKELETON || Type == (int)ID.BONES || Type == (int)ID.UNDEAD_MINER || Type == (int)ID.VAMPIRE_MINER || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.POSSESSED_ARMOR || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_MUMMY)
-					{
-						FrameY = 0;
-					}
-					else
-					{
-						FrameY = FrameHeight;
-					}
-				}
-			}
-			else if (Type == (int)ID.SKELETON_ARCHER)
-			{
-				if (Velocity.Y == 0f)
-				{
-					if (Direction != 0)
-					{
-						SpriteDirection = Direction;
-					}
-					if (AI2 > 0f)
-					{
-						SpriteDirection = Direction;
-						FrameY = (short)(FrameHeight * (int)AI2);
-						FrameCounter = 0f;
-						return;
-					}
-					if (FrameY < FrameHeight * 6)
-					{
-						FrameY = (short)(FrameHeight * 6);
-					}
-					FrameCounter += Math.Abs(Velocity.X) * 2f;
-					FrameCounter += Velocity.X;
-					if (FrameCounter > 6f)
-					{
-						FrameY += FrameHeight;
-						FrameCounter = 0f;
-					}
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = (short)(FrameHeight * 6);
-					}
-				}
-				else
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.GOBLIN_ARCHER)
-			{
-				if (Velocity.Y == 0f)
-				{
-					if (Direction != 0)
-					{
-						SpriteDirection = Direction;
-					}
-					if (AI2 > 0f)
-					{
-						SpriteDirection = Direction;
-						FrameY = (short)(FrameHeight * ((int)AI2 - 1));
-						FrameCounter = 0f;
-						return;
-					}
-					if (FrameY < FrameHeight * 7)
-					{
-						FrameY = (short)(FrameHeight * 7);
-					}
-					FrameCounter += Math.Abs(Velocity.X) * 2f;
-					FrameCounter += Velocity.X * 1.3f;
-					if (FrameCounter > 6f)
-					{
-						FrameY += FrameHeight;
-						FrameCounter = 0f;
-					}
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = (short)(FrameHeight * 7);
-					}
-				}
-				else
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight * 6);
-				}
-			}
-#if VERSION_INITIAL
-			else if (Type == (int)ID.ZOMBIE || Type == (int)ID.DOCTOR_BONES || Type == (int)ID.THE_GROOM || Type == (int)ID.BALD_ZOMBIE)
-#else
-			else if (Type == (int)ID.ZOMBIE || Type == (int)ID.DOCTOR_BONES || Type == (int)ID.THE_GROOM || Type == (int)ID.BALD_ZOMBIE || Type == (int)ID.PINCUSHION_ZOMBIE || Type == (int)ID.SLIMED_ZOMBIE || Type == (int)ID.SWAMP_ZOMBIE || Type == (int)ID.TWIGGY_ZOMBIE || Type == (int)ID.FEMALE_ZOMBIE || Type == (int)ID.ZOMBIE_MUSHROOM || Type == (int)ID.ZOMBIE_MUSHROOM_HAT)
-#endif
-			{
-				if (Velocity.Y == 0f && Direction != 0)
-				{
-					SpriteDirection = Direction;
-				}
-				if (Velocity.Y != 0f || (Direction == -1 && Velocity.X > 0f) || (Direction == 1 && Velocity.X < 0f))
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight << 1);
-					return;
-				}
-				if (Velocity.X == 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-					return;
-				}
-				FrameCounter += Math.Abs(Velocity.X);
-				if (FrameCounter < 8f)
-				{
-					FrameY = 0;
-				}
-				else if (FrameCounter < 16f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 24f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else if (FrameCounter < 32f)
-				{
-					FrameY = FrameHeight;
-				}
-				else
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.BUNNY || Type == (int)ID.CORRUPT_BUNNY)
-			{
-				if (Velocity.Y == 0f)
-				{
-					if (Direction != 0)
-					{
-						SpriteDirection = Direction;
-					}
-					if (Velocity.X == 0f)
-					{
-						FrameY = 0;
-						FrameCounter = 0f;
-						return;
-					}
-					FrameCounter += Math.Abs(Velocity.X);
-					FrameCounter += 1f;
-					if (FrameCounter > 6f)
-					{
-						FrameY += FrameHeight;
-						FrameCounter = 0f;
-					}
-					if (FrameY / FrameHeight >= NpcFrameCount[Type])
-					{
-						FrameY = 0;
-					}
-				}
-				else if (Velocity.Y < 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight << 2);
-				}
-				else if (Velocity.Y > 0f)
-				{
-					FrameCounter = 0f;
-					FrameY = (short)(FrameHeight * 6);
-				}
-			}
-			else if (Type == (int)ID.EYE_OF_CTHULHU || Type == (int)ID.OCRAM || Type == (int)ID.RETINAZER || Type == (int)ID.SPAZMATISM)
-			{
-				if ((FrameCounter += 1f) < 7f)
-				{
-					FrameY = 0;
-				}
-				else if (FrameCounter < 14f)
-				{
-					FrameY = FrameHeight;
-				}
-				else if (FrameCounter < 21f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-				}
-				else
-				{
-					FrameCounter = 0f;
-					FrameY = 0;
-				}
-				if (AI0 > 1f)
-				{
-					FrameY = (short)(FrameY + FrameHeight * 3);
-				}
-			}
-			else if (Type == (int)ID.SERVANT_OF_CTHULHU || Type == (int)ID.SERVANT_OF_OCRAM)
-			{
-				if ((FrameCounter += 1f) >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.CORRUPTOR)
-			{
-				if ((FrameCounter += 1f) < 6f)
-				{
-					FrameY = 0;
-					return;
-				}
-				if (FrameCounter < 12f)
-				{
-					FrameY = FrameHeight;
-					return;
-				}
-				if (FrameCounter < 18f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-					return;
-				}
-				FrameY = FrameHeight;
-				if (FrameCounter >= 23f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.EATER_OF_SOULS)
-			{
-				FrameCounter += 1f;
-				if (FrameCounter >= 8f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
-			}
-			else if (Type == (int)ID.FIRE_IMP)
-			{
-				if (Velocity.Y == 0f && Direction != 0)
-				{
-					SpriteDirection = Direction;
-				}
-				if (AI1 > 0f)
-				{
-					if (FrameY < 4)
-					{
-						FrameCounter = 0f;
-					}
+
 					FrameCounter += 1f;
 					if (FrameCounter <= 4f)
 					{
-						FrameY = (short)(FrameHeight << 2);
+						FrameY = 0;
 						return;
 					}
+
 					if (FrameCounter <= 8f)
 					{
-						FrameY = (short)(FrameHeight * 5);
+						FrameY = FrameHeight;
 						return;
 					}
+
 					if (FrameCounter <= 12f)
 					{
-						FrameY = (short)(FrameHeight * 6);
+						FrameY = (short)(FrameHeight << 1);
 						return;
 					}
-					if (FrameCounter <= 16f)
+
+					FrameY = (short)(FrameHeight * 3);
+					if (FrameCounter >= 16f)
 					{
-						FrameY = (short)(FrameHeight * 7);
-						return;
+						FrameCounter = 0f;
 					}
-					if (FrameCounter <= 20f)
+					break;
+
+				case EntityID.NPCID.GOBLIN_SORCERER:
+				case EntityID.NPCID.DARK_CASTER:
+				case EntityID.NPCID.TIM:
+					if (Velocity.Y == 0f && Direction != 0)
 					{
-						FrameY = (short)(FrameHeight << 3);
-						return;
+						SpriteDirection = Direction;
 					}
-					FrameY = (short)(FrameHeight * 9);
-					FrameCounter = 100f;
-					return;
-				}
-				FrameCounter += 1f;
-				if (FrameCounter <= 4f)
-				{
+
 					FrameY = 0;
-					return;
-				}
-				if (FrameCounter <= 8f)
-				{
-					FrameY = FrameHeight;
-					return;
-				}
-				if (FrameCounter <= 12f)
-				{
-					FrameY = (short)(FrameHeight << 1);
-					return;
-				}
-				FrameY = (short)(FrameHeight * 3);
-				if (FrameCounter >= 16f)
-				{
-					FrameCounter = 0f;
-				}
-			}
-			else if (Type == (int)ID.GOBLIN_SORCERER || Type == (int)ID.DARK_CASTER || Type == (int)ID.TIM)
-			{
-				if (Velocity.Y == 0f && Direction != 0)
-				{
-					SpriteDirection = Direction;
-				}
-				FrameY = 0;
-				if (Velocity.Y != 0f)
-				{
-					FrameY += FrameHeight;
-				}
-				else if (AI1 > 0f)
-				{
-					FrameY = (short)(FrameY + (FrameHeight << 1));
-				}
-			}
-			else if (Type == (int)ID.CURSED_SKULL || Type == (int)ID.DRAGON_SKULL)
-			{
-				if ((FrameCounter += 1f) >= 4f)
-				{
-					FrameY += FrameHeight;
-					FrameCounter = 0f;
-				}
-				if (FrameY >= FrameHeight * NpcFrameCount[Type])
-				{
-					FrameY = 0;
-				}
+					if (Velocity.Y != 0f)
+					{
+						FrameY += FrameHeight;
+					}
+					else if (AI1 > 0f)
+					{
+						FrameY = (short)(FrameY + (FrameHeight << 1));
+					}
+					break;
+
+				case EntityID.NPCID.CURSED_SKULL:
+				case EntityID.NPCID.DRAGON_SKULL:
+					if ((FrameCounter += 1f) >= 4f)
+					{
+						FrameY += FrameHeight;
+						FrameCounter = 0f;
+					}
+
+					if (FrameY >= FrameHeight * NpcFrameCount[Type])
+					{
+						FrameY = 0;
+					}
+					break;
 			}
 		}
 
@@ -16033,7 +16256,7 @@ namespace Terraria
 
 		public void CheckActive()
 		{
-			if (Active == 0 || Type == (int)ID.DEVOURER_BODY || Type == (int)ID.DEVOURER_TAIL || Type == (int)ID.GIANT_WORM_BODY || Type == (int)ID.GIANT_WORM_TAIL || Type == (int)ID.EATER_OF_WORLDS_BODY || Type == (int)ID.EATER_OF_WORLDS_TAIL || Type == (int)ID.BONE_SERPENT_BODY || Type == (int)ID.BONE_SERPENT_TAIL || Type == (int)ID.DIGGER_BODY || Type == (int)ID.DIGGER_TAIL || Type == (int)ID.SEEKER_BODY || Type == (int)ID.SEEKER_TAIL || (Type > (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type > (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL) || Type == (int)ID.LEECH_BODY || Type == (int)ID.LEECH_TAIL || Type == (int)ID.WALL_OF_FLESH || Type == (int)ID.WALL_OF_FLESH_EYE || Type == (int)ID.THE_HUNGRY || (Type >= (int)ID.THE_DESTROYER_HEAD && Type <= (int)ID.THE_DESTROYER_TAIL))
+			if (Active == 0 || Type == (int)EntityID.NPCID.DEVOURER_BODY || Type == (int)EntityID.NPCID.DEVOURER_TAIL || Type == (int)EntityID.NPCID.GIANT_WORM_BODY || Type == (int)EntityID.NPCID.GIANT_WORM_TAIL || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_BODY || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL || Type == (int)EntityID.NPCID.BONE_SERPENT_BODY || Type == (int)EntityID.NPCID.BONE_SERPENT_TAIL || Type == (int)EntityID.NPCID.DIGGER_BODY || Type == (int)EntityID.NPCID.DIGGER_TAIL || Type == (int)EntityID.NPCID.SEEKER_BODY || Type == (int)EntityID.NPCID.SEEKER_TAIL || (Type > (int)EntityID.NPCID.WYVERN_HEAD && Type <= (int)EntityID.NPCID.WYVERN_TAIL) || (Type > (int)EntityID.NPCID.ARCH_WYVERN_HEAD && Type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL) || Type == (int)EntityID.NPCID.LEECH_BODY || Type == (int)EntityID.NPCID.LEECH_TAIL || Type == (int)EntityID.NPCID.WALL_OF_FLESH || Type == (int)EntityID.NPCID.WALL_OF_FLESH_EYE || Type == (int)EntityID.NPCID.THE_HUNGRY || (Type >= (int)EntityID.NPCID.THE_DESTROYER_HEAD && Type <= (int)EntityID.NPCID.THE_DESTROYER_TAIL))
 			{
 				return;
 			}
@@ -16061,12 +16284,12 @@ namespace Terraria
 				if (ActiveArea.Intersects(Main.PlayerSet[PlayerIdx].XYWH))
 				{
 					Director = true;
-					if (Type != (int)ID.BURNING_SPHERE && Type != (int)ID.CHAOS_BALL && Type != (int)ID.WATER_SPHERE && LifeMax > 0)
+					if (Type != (int)EntityID.NPCID.BURNING_SPHERE && Type != (int)EntityID.NPCID.CHAOS_BALL && Type != (int)EntityID.NPCID.WATER_SPHERE && LifeMax > 0)
 					{
 						Main.PlayerSet[PlayerIdx].ActiveNPCs += NpcSlots;
 					}
 				}
-				else if (IsBoss || Type == (int)ID.DEVOURER_HEAD || Type == (int)ID.GIANT_WORM_HEAD || Type == (int)ID.EATER_OF_WORLDS_HEAD || Type == (int)ID.BONE_SERPENT_HEAD || Type == (int)ID.WYVERN_HEAD || Type == (int)ID.ARCH_WYVERN_HEAD || Type == (int)ID.SKELETRON_HEAD || Type == (int)ID.SKELETRON_HAND || (Type >= (int)ID.SKELETRON_PRIME && Type <= (int)ID.PRIME_LASER))
+				else if (IsBoss || Type == (int)EntityID.NPCID.DEVOURER_HEAD || Type == (int)EntityID.NPCID.GIANT_WORM_HEAD || Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || Type == (int)EntityID.NPCID.BONE_SERPENT_HEAD || Type == (int)EntityID.NPCID.WYVERN_HEAD || Type == (int)EntityID.NPCID.ARCH_WYVERN_HEAD || Type == (int)EntityID.NPCID.SKELETRON_HEAD || Type == (int)EntityID.NPCID.SKELETRON_HAND || (Type >= (int)EntityID.NPCID.SKELETRON_PRIME && Type <= (int)EntityID.NPCID.PRIME_LASER))
 				{
 					Director = true;
 				}
@@ -16091,7 +16314,7 @@ namespace Terraria
 			Life = 0;
 			NetMessage.CreateMessage1(23, WhoAmI);
 			NetMessage.SendMessage();
-			if (AIStyle != 6)
+			if (AIStyle != (byte)EntityID.NPCStyleID.WORM)
 			{
 				return;
 			}
@@ -16241,7 +16464,7 @@ namespace Terraria
 						SpawnRate = (int)(SpawnRate * 0.9f);
 					}
 				}
-				if (Main.PlayerSet[PlayerIdx].Inventory[Main.PlayerSet[PlayerIdx].SelectedItem].Type == (int)Item.ID.WATER_CANDLE)
+				if (Main.PlayerSet[PlayerIdx].Inventory[Main.PlayerSet[PlayerIdx].SelectedItem].Type == (int)EntityID.ItemID.WATER_CANDLE)
 				{
 					SpawnRate = (int)(SpawnRate * 0.75);
 					MaxSpawns = (int)(MaxSpawns * 1.5f);
@@ -16422,7 +16645,7 @@ namespace Terraria
 				}
 				if (flag)
 				{
-					if (Main.PlayerSet[PlayerIdx].ZoneDungeon && (!Main.TileDungeon[Main.TileSet[num, num2].Type] || Main.TileSet[num, num2 - 1].WallType == 0))
+					if (Main.PlayerSet[PlayerIdx].ZoneDungeon && (!Main.TileDungeon[Main.TileSet[num, num2].Type] || Main.TileSet[num, num2 - 1].WallType == (byte)EntityID.WallID.NONE))
 					{
 						flag = false;
 					}
@@ -16442,14 +16665,14 @@ namespace Terraria
 				int y = num2 << 4;
 				if (flag2)
 				{
-					if (Main.InHardMode && Main.Rand.Next(10) == 0 && !AnyNPCs((int)ID.WYVERN_HEAD, (int)ID.ARCH_WYVERN_HEAD))
+					if (Main.InHardMode && Main.Rand.Next(10) == 0 && !AnyNPCs((int)EntityID.NPCID.WYVERN_HEAD, (int)EntityID.NPCID.ARCH_WYVERN_HEAD))
 					{
-						int Type = ((Main.Rand.Next(2) == 0) ? (int)ID.WYVERN_HEAD : (int)ID.ARCH_WYVERN_HEAD);
+						int Type = ((Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.WYVERN_HEAD : (int)EntityID.NPCID.ARCH_WYVERN_HEAD);
 						NewNPC(x, y, Type, 1);
 					}
 					else
 					{
-						NewNPC(x, y, (int)ID.HARPY);
+						NewNPC(x, y, (int)EntityID.NPCID.HARPY);
 					}
 				}
 				else if (InInvasion)
@@ -16458,125 +16681,125 @@ namespace Terraria
 					{
 						if (Main.Rand.Next(9) == 0)
 						{
-							NewNPC(x, y, (int)ID.GOBLIN_SORCERER);
+							NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_SORCERER);
 						}
 						else if (Main.Rand.Next(5) == 0)
 						{
-							NewNPC(x, y, (int)ID.GOBLIN_PEON);
+							NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_PEON);
 						}
 						else if (Main.Rand.Next(3) == 0)
 						{
-							NewNPC(x, y, (int)ID.GOBLIN_ARCHER);
+							NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_ARCHER);
 						}
 						else if (Main.Rand.Next(3) == 0)
 						{
-							NewNPC(x, y, (int)ID.GOBLIN_THIEF);
+							NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_THIEF);
 						}
 						else
 						{
-							NewNPC(x, y, (int)ID.GOBLIN_WARRIOR);
+							NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_WARRIOR);
 						}
 					}
 					else if (Main.InvasionType == 2)
 					{
 						if (Main.Rand.Next(7) == 0)
 						{
-							NewNPC(x, y, (int)ID.SNOW_BALLA);
+							NewNPC(x, y, (int)EntityID.NPCID.SNOW_BALLA);
 						}
 						else if (Main.Rand.Next(3) == 0)
 						{
-							NewNPC(x, y, (int)ID.SNOWMAN_GANGSTA);
+							NewNPC(x, y, (int)EntityID.NPCID.SNOWMAN_GANGSTA);
 						}
 						else
 						{
-							NewNPC(x, y, (int)ID.MISTER_STABBY);
+							NewNPC(x, y, (int)EntityID.NPCID.MISTER_STABBY);
 						}
 					}
 				}
-				else if (InWater && (num < 250 || num > Main.MaxTilesX - 250) && num22 == 53 && num2 < Main.RockLayer)
+				else if (InWater && (num < 250 || num > Main.MaxTilesX - 250) && num22 == (int)EntityID.TileID.SAND && num2 < Main.RockLayer)
 				{
 					int Type;
 					switch (Main.Rand.Next(16))
 					{
 						case 0:
-							Type = (int)ID.SHARK;
+							Type = (int)EntityID.NPCID.SHARK;
 							break;
 						case 1:
-							Type = (int)ID.ORKA;
+							Type = (int)EntityID.NPCID.ORKA;
 							break;
 						case 2:
 						case 3:
 						case 4:
 						case 5:
 						case 6:
-							Type = (int)ID.CRAB;
+							Type = (int)EntityID.NPCID.CRAB;
 							break;
 						default:
-							Type = (int)ID.PINK_JELLYFISH;
+							Type = (int)EntityID.NPCID.PINK_JELLYFISH;
 							break;
 					}
 					NewNPC(x, y, Type);
 				}
-				else if (InWater && ((num2 > Main.RockLayer && Main.Rand.Next(2) == 0) || num22 == 60))
+				else if (InWater && ((num2 > Main.RockLayer && Main.Rand.Next(2) == 0) || num22 == (int)EntityID.TileID.JUNGLE_GRASS))
 				{
 					if (Main.InHardMode && Main.Rand.Next(3) > 0)
 					{
-						NewNPC(x, y, (int)ID.ANGLER_FISH);
+						NewNPC(x, y, (int)EntityID.NPCID.ANGLER_FISH);
 					}
 					else
 					{
-						NewNPC(x, y, (int)ID.PIRANHA);
+						NewNPC(x, y, (int)EntityID.NPCID.PIRANHA);
 					}
 				}
 				else if (InWater && num2 > Main.WorldSurface && Main.Rand.Next(3) == 0)
 				{
 					if (Main.InHardMode)
 					{
-						NewNPC(x, y, (int)ID.GREEN_JELLYFISH);
+						NewNPC(x, y, (int)EntityID.NPCID.GREEN_JELLYFISH);
 					}
 					else
 					{
-						NewNPC(x, y, (int)ID.BLUE_JELLYFISH);
+						NewNPC(x, y, (int)EntityID.NPCID.BLUE_JELLYFISH);
 					}
 				}
 				else if (InWater && Main.Rand.Next(4) == 0)
 				{
 					if (Main.PlayerSet[PlayerIdx].ZoneEvil)
 					{
-						NewNPC(x, y, (int)ID.CORRUPT_GOLDFISH);
+						NewNPC(x, y, (int)EntityID.NPCID.CORRUPT_GOLDFISH);
 					}
 					else
 					{
-						NewNPC(x, y, (int)ID.GOLDFISH);
+						NewNPC(x, y, (int)EntityID.NPCID.GOLDFISH);
 					}
 				}
-				else if (HasDownedGoblins && Main.Rand.Next(20) == 0 && !InWater && num2 >= Main.RockLayer && num2 < Main.MaxTilesY - 210 && !HasSavedGoblin && !AnyNPCs((int)ID.BOUND_GOBLIN))
+				else if (HasDownedGoblins && Main.Rand.Next(20) == 0 && !InWater && num2 >= Main.RockLayer && num2 < Main.MaxTilesY - 210 && !HasSavedGoblin && !AnyNPCs((int)EntityID.NPCID.BOUND_GOBLIN))
 				{
-					NewNPC(x, y, (int)ID.BOUND_GOBLIN);
+					NewNPC(x, y, (int)EntityID.NPCID.BOUND_GOBLIN);
 				}
-				else if (Main.InHardMode && Main.Rand.Next(20) == 0 && !InWater && num2 >= Main.RockLayer && num2 < Main.MaxTilesY - 210 && !HasSavedWizard && !AnyNPCs((int)ID.BOUND_WIZARD))
+				else if (Main.InHardMode && Main.Rand.Next(20) == 0 && !InWater && num2 >= Main.RockLayer && num2 < Main.MaxTilesY - 210 && !HasSavedWizard && !AnyNPCs((int)EntityID.NPCID.BOUND_WIZARD))
 				{
-					NewNPC(x, y, (int)ID.BOUND_WIZARD);
+					NewNPC(x, y, (int)EntityID.NPCID.BOUND_WIZARD);
 				}
 				else if (flag6)
 				{
 					if (InWater)
 					{
-						NewNPC(x, y, (int)ID.GOLDFISH);
+						NewNPC(x, y, (int)EntityID.NPCID.GOLDFISH);
 					}
 					else
 					{
-						if (num22 != 2 && num22 != 109 && num22 != 147 && num2 <= Main.WorldSurface)
+						if (num22 != (int)EntityID.TileID.GRASS && num22 != (int)EntityID.TileID.HALLOWED_GRASS && num22 != (int)EntityID.TileID.SNOW && num2 <= Main.WorldSurface)
 						{
 							break;
 						}
 						if (Main.Rand.Next(2) == 0 && num2 <= Main.WorldSurface)
 						{
-							NewNPC(x, y, (int)ID.BIRD);
+							NewNPC(x, y, (int)EntityID.NPCID.BIRD);
 						}
 						else
 						{
-							NewNPC(x, y, (int)ID.BUNNY);
+							NewNPC(x, y, (int)EntityID.NPCID.BUNNY);
 						}
 					}
 				}
@@ -16584,35 +16807,35 @@ namespace Terraria
 				{
 					if (!HasDownedBoss3)
 					{
-						num23 = NewNPC(x, y, (int)ID.DUNGEON_GUARDIAN);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.DUNGEON_GUARDIAN);
 					}
-					else if (!HasSavedMech && !InWater && Main.Rand.Next(5) == 0 && num2 > Main.RockLayer && !AnyNPCs((int)ID.BOUND_MECHANIC))
+					else if (!HasSavedMech && !InWater && Main.Rand.Next(5) == 0 && num2 > Main.RockLayer && !AnyNPCs((int)EntityID.NPCID.BOUND_MECHANIC))
 					{
-						NewNPC(x, y, (int)ID.BOUND_MECHANIC);
+						NewNPC(x, y, (int)EntityID.NPCID.BOUND_MECHANIC);
 					}
 					else if (Main.Rand.Next(37) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.DUNGEON_SLIME);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.DUNGEON_SLIME);
 					}
 					else if (Main.Rand.Next(4) == 0 && !NearSpikeBall(num, num2))
 					{
-						num23 = NewNPC(x, y, (int)ID.SPIKE_BALL);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.SPIKE_BALL);
 					}
 					else if (Main.Rand.Next(15) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.BLAZING_WHEEL);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.BLAZING_WHEEL);
 					}
 					else if (Main.Rand.Next(9) == 0)
 					{
-						num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.CURSED_SKULL : (int)ID.DRAGON_SKULL);
+						num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.CURSED_SKULL : (int)EntityID.NPCID.DRAGON_SKULL);
 					}
 					else if (Main.Rand.Next(7) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.DARK_CASTER);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.DARK_CASTER);
 					}
 					else
 					{
-						num23 = NewNPC(x, y, (int)ID.BONES);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.BONES);
 						if (Main.Rand.Next(4) == 0)
 						{
 							Main.NPCSet[num23].SetDefaults("Big Boned");
@@ -16625,49 +16848,49 @@ namespace Terraria
 				}
 				else if (Main.PlayerSet[PlayerIdx].ZoneMeteor)
 				{
-					num23 = NewNPC(x, y, (int)ID.METEOR_HEAD);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.METEOR_HEAD);
 				}
-#if !VERSION_INITIAL
-				else if (num22 == 70 && (double)num2 <= Main.WorldSurface && Main.Rand.Next(3) != 0)
+#if VERSION_101
+				else if (num22 == (int)EntityID.TileID.MUSHROOM_GRASS && (double)num2 <= Main.WorldSurface && Main.Rand.Next(3) != 0)
 				{
 					if (Main.Rand.Next(3) != 0)
 					{
-						num23 = ((Main.Rand.Next(2) != 0) ? NewNPC(x, y, (int)ID.ZOMBIE_MUSHROOM_HAT) : NewNPC(x, y, (int)ID.ZOMBIE_MUSHROOM));
+						num23 = ((Main.Rand.Next(2) != 0) ? NewNPC(x, y, (int)EntityID.NPCID.ZOMBIE_MUSHROOM_HAT) : NewNPC(x, y, (int)EntityID.NPCID.ZOMBIE_MUSHROOM));
 					}
 				}
 #endif
 				else if (Main.PlayerSet[PlayerIdx].ZoneEvil && Main.Rand.Next(65) == 0)
 				{
-					num23 = ((!Main.InHardMode || Main.Rand.Next(4) == 0) ? NewNPC(x, y, (int)ID.DEVOURER_HEAD, 1) : NewNPC(x, y, (int)ID.SEEKER_HEAD, 1));
+					num23 = ((!Main.InHardMode || Main.Rand.Next(4) == 0) ? NewNPC(x, y, (int)EntityID.NPCID.DEVOURER_HEAD, 1) : NewNPC(x, y, (int)EntityID.NPCID.SEEKER_HEAD, 1));
 				}
 				else if (Main.InHardMode && num2 > Main.WorldSurface && Main.Rand.Next(75) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.MIMIC);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.MIMIC);
 				}
-				else if (Main.InHardMode && Main.TileSet[num, num2 - 1].WallType == 2 && Main.Rand.Next(20) == 0)
+				else if (Main.InHardMode && Main.TileSet[num, num2 - 1].WallType == (int)EntityID.WallID.DIRT_UNSAFE && Main.Rand.Next(20) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.MIMIC);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.MIMIC);
 				}
 				else if (Main.InHardMode && num2 <= Main.WorldSurface && !Main.GameTime.DayTime && (Main.Rand.Next(20) == 0 || (Main.Rand.Next(5) == 0 && Main.GameTime.MoonPhase == 4)))
 				{
-					num23 = NewNPC(x, y, (int)ID.WRAITH);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.WRAITH);
 				}
-				else if (num22 == 60 && Main.Rand.Next(500) == 0 && !Main.GameTime.DayTime)
+				else if (num22 == (int)EntityID.TileID.JUNGLE_GRASS && Main.Rand.Next(500) == 0 && !Main.GameTime.DayTime)
 				{
-					num23 = NewNPC(x, y, (int)ID.DOCTOR_BONES);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.DOCTOR_BONES);
 				}
-				else if (num22 == 60 && num2 > Main.WorldSurface + Main.RockLayer >> 1)
+				else if (num22 == (int)EntityID.TileID.JUNGLE_GRASS && num2 > Main.WorldSurface + Main.RockLayer >> 1)
 				{
 					if (Main.Rand.Next(3) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.MAN_EATER);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.MAN_EATER);
 						Main.NPCSet[num23].AI0 = num;
 						Main.NPCSet[num23].AI1 = num2;
 						Main.NPCSet[num23].ShouldNetUpdate = true;
 					}
 					else if (Main.Rand.Next(2) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.HORNET);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.HORNET);
 						switch (Main.Rand.Next(8))
 						{
 							case 0:
@@ -16681,45 +16904,45 @@ namespace Terraria
 					}
 					else
 					{
-						num23 = NewNPC(x, y, (int)ID.DRAGON_HORNET);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.DRAGON_HORNET);
 					}
 				}
-				else if (num22 == 60 && Main.Rand.Next(4) == 0)
+				else if (num22 == (int)EntityID.TileID.JUNGLE_GRASS && Main.Rand.Next(4) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.JUNGLE_BAT);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.JUNGLE_BAT);
 				}
-				else if (num22 == 60 && Main.Rand.Next(8) == 0)
+				else if (num22 == (int)EntityID.TileID.JUNGLE_GRASS && Main.Rand.Next(8) == 0)
 				{
-					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.SNATCHER : (int)ID.DRAGON_SNATCHER);
+					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.SNATCHER : (int)EntityID.NPCID.DRAGON_SNATCHER);
 					Main.NPCSet[num23].AI0 = num;
 					Main.NPCSet[num23].AI1 = num2;
 					Main.NPCSet[num23].ShouldNetUpdate = true;
 				}
-				else if (Main.InHardMode && num22 == 53 && Main.Rand.Next(3) == 0)
+				else if (Main.InHardMode && num22 == (int)EntityID.TileID.SAND && Main.Rand.Next(3) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.MUMMY);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.MUMMY);
 				}
-				else if (Main.InHardMode && num22 == 112 && Main.Rand.Next(2) == 0)
+				else if (Main.InHardMode && num22 == (int)EntityID.TileID.EBONSAND && Main.Rand.Next(2) == 0)
 				{
-					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.DARK_MUMMY : (int)ID.SHADOW_MUMMY);
+					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.DARK_MUMMY : (int)EntityID.NPCID.SHADOW_MUMMY);
 				}
-				else if (Main.InHardMode && num22 == 116 && Main.Rand.Next(2) == 0)
+				else if (Main.InHardMode && num22 == (int)EntityID.TileID.PEARLSAND && Main.Rand.Next(2) == 0)
 				{
-					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.LIGHT_MUMMY : (int)ID.SPECTRAL_MUMMY);
+					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.LIGHT_MUMMY : (int)EntityID.NPCID.SPECTRAL_MUMMY);
 				}
-				else if (Main.InHardMode && !InWater && num2 < Main.RockLayer && (num22 == 116 || num22 == 117 || num22 == 109))
+				else if (Main.InHardMode && !InWater && num2 < Main.RockLayer && (num22 == (int)EntityID.TileID.PEARLSAND || num22 == (int)EntityID.TileID.PEARLSTONE || num22 == (int)EntityID.TileID.HALLOWED_GRASS))
 				{
-					num23 = ((!Main.GameTime.DayTime && Main.Rand.Next(2) == 0) ? NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.GASTROPOD : (int)ID.SPECTRAL_GASTROPOD) : ((Main.Rand.Next(10) != 0) ? NewNPC(x, y, (int)ID.PIXIE) : NewNPC(x, y, (int)ID.UNICORN)));
+					num23 = ((!Main.GameTime.DayTime && Main.Rand.Next(2) == 0) ? NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.GASTROPOD : (int)EntityID.NPCID.SPECTRAL_GASTROPOD) : ((Main.Rand.Next(10) != 0) ? NewNPC(x, y, (int)EntityID.NPCID.PIXIE) : NewNPC(x, y, (int)EntityID.NPCID.UNICORN)));
 				}
-				else if (!flag3 && Main.InHardMode && Main.Rand.Next(50) == 0 && !InWater && num2 >= Main.RockLayer && (num22 == 116 || num22 == 117 || num22 == 109))
+				else if (!flag3 && Main.InHardMode && Main.Rand.Next(50) == 0 && !InWater && num2 >= Main.RockLayer && (num22 == (int)EntityID.TileID.PEARLSAND || num22 == (int)EntityID.TileID.PEARLSTONE || num22 == (int)EntityID.TileID.HALLOWED_GRASS))
 				{
-					num23 = NewNPC(x, y, (int)ID.ENCHANTED_SWORD);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.ENCHANTED_SWORD);
 				}
-				else if ((num22 == 22 && Main.PlayerSet[PlayerIdx].ZoneEvil) || num22 == 23 || num22 == 25 || num22 == 112)
+				else if ((num22 == (int)EntityID.TileID.DEMONITE_ORE && Main.PlayerSet[PlayerIdx].ZoneEvil) || num22 == (int)EntityID.TileID.CORRUPT_GRASS || num22 == (int)EntityID.TileID.EBONSTONE || num22 == (int)EntityID.TileID.EBONSAND)
 				{
 					if (Main.InHardMode && num2 >= Main.RockLayer && Main.Rand.Next(3) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.CLINGER);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.CLINGER);
 						Main.NPCSet[num23].AI0 = num;
 						Main.NPCSet[num23].AI1 = num2;
 						Main.NPCSet[num23].ShouldNetUpdate = true;
@@ -16730,28 +16953,28 @@ namespace Terraria
 						switch (Main.Rand.Next(3))
 						{
 							case 0:
-								Type = (int)ID.SHADOW_SLIME;
+								Type = (int)EntityID.NPCID.SHADOW_SLIME;
 								break;
 							case 1:
-								Type = (int)ID.CORRUPT_SLIME;
+								Type = (int)EntityID.NPCID.CORRUPT_SLIME;
 								break;
 							default:
-								Type = (int)ID.SLIMER;
+								Type = (int)EntityID.NPCID.SLIMER;
 								break;
 						}
 						num23 = NewNPC(x, y, Type);
 					}
 					else if (Main.InHardMode && num2 >= Main.RockLayer && Main.Rand.Next(40) == 0)
 					{
-						num23 = ((Main.Rand.Next(2) != 0) ? NewNPC(x, y, (int)ID.SHADOW_HAMMER) : NewNPC(x, y, (int)ID.CURSED_HAMMER));
+						num23 = ((Main.Rand.Next(2) != 0) ? NewNPC(x, y, (int)EntityID.NPCID.SHADOW_HAMMER) : NewNPC(x, y, (int)EntityID.NPCID.CURSED_HAMMER));
 					}
 					else if (Main.InHardMode && (Main.Rand.Next(2) == 0 || num2 > Main.RockLayer))
 					{
-						num23 = NewNPC(x, y, (int)ID.CORRUPTOR);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.CORRUPTOR);
 					}
 					else
 					{
-						num23 = NewNPC(x, y, (int)ID.EATER_OF_SOULS);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.EATER_OF_SOULS);
 						if (Main.Rand.Next(3) == 0)
 						{
 							Main.NPCSet[num23].SetDefaults("Little Eater");
@@ -16767,34 +16990,34 @@ namespace Terraria
 					if (Main.GameTime.DayTime)
 					{
 						int num27 = Math.Abs(num - Main.SpawnTileX);
-						if (num27 < Main.MaxTilesX / 3 && Main.Rand.Next(15) == 0 && (num22 == 2 || num22 == 109 || num22 == 147))
+						if (num27 < Main.MaxTilesX / 3 && Main.Rand.Next(15) == 0 && (num22 == (int)EntityID.TileID.GRASS || num22 == (int)EntityID.TileID.HALLOWED_GRASS || num22 == (int)EntityID.TileID.SNOW))
 						{
-							NewNPC(x, y, (int)ID.BUNNY);
+							NewNPC(x, y, (int)EntityID.NPCID.BUNNY);
 						}
-						else if (num27 < Main.MaxTilesX / 3 && Main.Rand.Next(15) == 0 && (num22 == 2 || num22 == 109 || num22 == 147))
+						else if (num27 < Main.MaxTilesX / 3 && Main.Rand.Next(15) == 0 && (num22 == (int)EntityID.TileID.GRASS || num22 == (int)EntityID.TileID.HALLOWED_GRASS || num22 == (int)EntityID.TileID.SNOW))
 						{
-							NewNPC(x, y, (int)ID.BIRD);
+							NewNPC(x, y, (int)EntityID.NPCID.BIRD);
 						}
-						else if (num27 > Main.MaxTilesX / 3 && num22 == 2 && Main.Rand.Next(300) == 0 && !AnyNPCs((int)ID.KING_SLIME))
+						else if (num27 > Main.MaxTilesX / 3 && num22 == (int)EntityID.TileID.GRASS && Main.Rand.Next(300) == 0 && !AnyNPCs((int)EntityID.NPCID.KING_SLIME))
 						{
-							num23 = NewNPC(x, y, (int)ID.KING_SLIME);
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.KING_SLIME);
 						}
-						else if (num22 == 53 && Main.Rand.Next(5) == 0 && !InWater)
+						else if (num22 == (int)EntityID.TileID.SAND && Main.Rand.Next(5) == 0 && !InWater)
 						{
-							num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.ANTLION : (int)ID.ALBINO_ANTLION);
+							num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.ANTLION : (int)EntityID.NPCID.ALBINO_ANTLION);
 						}
-						else if (num22 == 53 && !InWater)
+						else if (num22 == (int)EntityID.TileID.SAND && !InWater)
 						{
-							num23 = NewNPC(x, y, (int)ID.VULTURE);
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.VULTURE);
 						}
 						else if (num27 > Main.MaxTilesX / 3 && Main.Rand.Next(15) == 0)
 						{
-							num23 = NewNPC(x, y, (int)ID.GOBLIN_SCOUT);
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.GOBLIN_SCOUT);
 						}
 						else
 						{
-							num23 = NewNPC(x, y, (int)ID.SLIME);
-							if (num22 == 60)
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.SLIME);
+							if (num22 == (int)EntityID.TileID.JUNGLE_GRASS)
 							{
 								Main.NPCSet[num23].SetDefaults("Jungle Slime");
 							}
@@ -16811,15 +17034,15 @@ namespace Terraria
 					else if (Main.Rand.Next(6) == 0 || (Main.GameTime.MoonPhase == 4 && Main.Rand.Next(2) == 0))
 					{
 #if VERSION_INITIAL
-						num23 = ((!Main.InHardMode || Main.Rand.Next(3) != 0) ? NewNPC(x, y, (int)NPC.ID.DEMON_EYE) : NewNPC(x, y, (int)NPC.ID.WANDERING_EYE));
+						num23 = ((!Main.InHardMode || Main.Rand.Next(3) != 0) ? NewNPC(x, y, (int)EntityID.NPCID.DEMON_EYE) : NewNPC(x, y, (int)EntityID.NPCID.WANDERING_EYE));
 #else
 						if (Main.InHardMode && Main.Rand.Next(3) == 0) // The decompiled chances are buggered, using PC spawn code
 						{
-							num23 = NewNPC(x, y, (int)ID.WANDERING_EYE);
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.WANDERING_EYE);
 						}
 						else if (Main.Rand.Next(2) == 0)
 						{
-							num23 = NewNPC(x, y, (int)ID.DEMON_EYE);
+							num23 = NewNPC(x, y, (int)EntityID.NPCID.DEMON_EYE);
 							if (Main.Rand.Next(4) == 0)
 							{
 								Main.NPCSet[num23].SetDefaults("Demon Eye 2");
@@ -16830,35 +17053,35 @@ namespace Terraria
 							switch (Main.Rand.Next(5))
 							{
 								case 0:
-									num23 = NewNPC(x, y, (int)ID.CATARACT_EYE);
+									num23 = NewNPC(x, y, (int)EntityID.NPCID.CATARACT_EYE);
 									if (Main.Rand.Next(3) == 0)
 									{
 										Main.NPCSet[num23].SetDefaults("Cataract Eye 2");
 									}
 									break;
 								case 1:
-									num23 = NewNPC(x, y, (int)ID.SLEEPY_EYE);
+									num23 = NewNPC(x, y, (int)EntityID.NPCID.SLEEPY_EYE);
 									if (Main.Rand.Next(3) == 0)
 									{
 										Main.NPCSet[num23].SetDefaults("Sleepy Eye 2");
 									}
 									break;
 								case 2:
-									num23 = NewNPC(x, y, (int)ID.DIALATED_EYE);
+									num23 = NewNPC(x, y, (int)EntityID.NPCID.DIALATED_EYE);
 									if (Main.Rand.Next(3) == 0)
 									{
 										Main.NPCSet[num23].SetDefaults("Dialated Eye 2");
 									}
 									break;
 								case 3:
-									num23 = NewNPC(x, y, (int)ID.GREEN_EYE);
+									num23 = NewNPC(x, y, (int)EntityID.NPCID.GREEN_EYE);
 									if (Main.Rand.Next(3) == 0)
 									{
 										Main.NPCSet[num23].SetDefaults("Green Eye 2");
 									}
 									break;
 								case 4:
-									num23 = NewNPC(x, y, (int)ID.PURPLE_EYE);
+									num23 = NewNPC(x, y, (int)EntityID.NPCID.PURPLE_EYE);
 									if (Main.Rand.Next(3) == 0)
 									{
 										Main.NPCSet[num23].SetDefaults("Purple Eye 2");
@@ -16868,30 +17091,30 @@ namespace Terraria
 						}
 #endif
 					}
-					else if (Main.InHardMode && Main.Rand.Next(50) == 0 && Main.GameTime.IsBloodMoon && !AnyNPCs((int)ID.CLOWN))
+					else if (Main.InHardMode && Main.Rand.Next(50) == 0 && Main.GameTime.IsBloodMoon && !AnyNPCs((int)EntityID.NPCID.CLOWN))
 					{
-						NewNPC(x, y, (int)ID.CLOWN);
+						NewNPC(x, y, (int)EntityID.NPCID.CLOWN);
 					}
 					else if (Main.Rand.Next(250) == 0 && Main.GameTime.IsBloodMoon)
 					{
-						NewNPC(x, y, (int)ID.THE_GROOM);
+						NewNPC(x, y, (int)EntityID.NPCID.THE_GROOM);
 					}
 					else if (Main.GameTime.MoonPhase == 0 && Main.InHardMode && Main.Rand.Next(3) != 0)
 					{
-						NewNPC(x, y, (int)ID.WEREWOLF);
+						NewNPC(x, y, (int)EntityID.NPCID.WEREWOLF);
 					}
 					else if (Main.InHardMode && Main.Rand.Next(3) == 0)
 					{
-						NewNPC(x, y, (int)ID.POSSESSED_ARMOR);
+						NewNPC(x, y, (int)EntityID.NPCID.POSSESSED_ARMOR);
 					}
 #if VERSION_INITIAL
 					else if (Main.Rand.Next(3) == 0)
 					{
-						NewNPC(x, y, (int)NPC.ID.BALD_ZOMBIE);
+						NewNPC(x, y, (int)EntityID.NPCID.BALD_ZOMBIE);
 					}
 					else
 					{
-						NewNPC(x, y, (int)NPC.ID.ZOMBIE);
+						NewNPC(x, y, (int)EntityID.NPCID.ZOMBIE);
 					}
 #else
 					else
@@ -16899,7 +17122,7 @@ namespace Terraria
 						switch (Main.Rand.Next(7))
 						{
 							case 0:
-								num23 = NewNPC(x, y, (int)ID.ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16913,7 +17136,7 @@ namespace Terraria
 								}
 								break;
 							case 1:
-								num23 = NewNPC(x, y, (int)ID.BALD_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.BALD_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16927,7 +17150,7 @@ namespace Terraria
 								}
 								break;
 							case 2:
-								num23 = NewNPC(x, y, (int)ID.PINCUSHION_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.PINCUSHION_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16941,7 +17164,7 @@ namespace Terraria
 								}
 								break;
 							case 3:
-								num23 = NewNPC(x, y, (int)ID.SLIMED_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.SLIMED_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16955,7 +17178,7 @@ namespace Terraria
 								}
 								break;
 							case 4:
-								num23 = NewNPC(x, y, (int)ID.SWAMP_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.SWAMP_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16969,7 +17192,7 @@ namespace Terraria
 								}
 								break;
 							case 5:
-								num23 = NewNPC(x, y, (int)ID.TWIGGY_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.TWIGGY_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -16983,7 +17206,7 @@ namespace Terraria
 								}
 								break;
 							case 6:
-								num23 = NewNPC(x, y, (int)ID.FEMALE_ZOMBIE);
+								num23 = NewNPC(x, y, (int)EntityID.NPCID.FEMALE_ZOMBIE);
 								if (Main.Rand.Next(3) == 0)
 								{
 									if (Main.Rand.Next(2) == 0)
@@ -17004,19 +17227,19 @@ namespace Terraria
 				{
 					if (!flag3 && Main.Rand.Next(50) == 0)
 					{
-						num23 = ((!Main.InHardMode) ? NewNPC(x, y, (int)ID.GIANT_WORM_HEAD, 1) : NewNPC(x, y, (int)ID.DIGGER_HEAD, 1));
+						num23 = ((!Main.InHardMode) ? NewNPC(x, y, (int)EntityID.NPCID.GIANT_WORM_HEAD, 1) : NewNPC(x, y, (int)EntityID.NPCID.DIGGER_HEAD, 1));
 					}
 					else if (Main.InHardMode && Main.Rand.Next(3) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.POSSESSED_ARMOR);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.POSSESSED_ARMOR);
 					}
 					else if (Main.InHardMode && Main.Rand.Next(4) != 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.TOXIC_SLUDGE);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.TOXIC_SLUDGE);
 					}
 					else
 					{
-						num23 = NewNPC(x, y, (int)ID.SLIME); // Interesting difference between versions is that PC adds a random chance below for the default to be a Blue slime...
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.SLIME); // Interesting difference between versions is that PC adds a random chance below for the default to be a Blue slime...
 						if (Main.Rand.Next(5) == 0)
 						{
 							Main.NPCSet[num23].SetDefaults("Yellow Slime");
@@ -17031,55 +17254,55 @@ namespace Terraria
 				}
 				else if (num2 > Main.MaxTilesY - 190)
 				{
-					int Type = (int)ID.HELLBAT;
+					int Type = (int)EntityID.NPCID.HELLBAT;
 					int start = 0;
-					if (Main.Rand.Next(40) == 0 && !AnyNPCs((int)ID.BONE_SERPENT_HEAD))
+					if (Main.Rand.Next(40) == 0 && !AnyNPCs((int)EntityID.NPCID.BONE_SERPENT_HEAD))
 					{
-						Type = (int)ID.BONE_SERPENT_HEAD;
+						Type = (int)EntityID.NPCID.BONE_SERPENT_HEAD;
 						start = 1;
 					}
 					else if (Main.Rand.Next(14) == 0)
 					{
-						Type = (int)ID.FIRE_IMP;
+						Type = (int)EntityID.NPCID.FIRE_IMP;
 					}
 					else if (Main.Rand.Next(8) == 0)
 					{
 						switch (Main.Rand.Next(7))
 						{
 							case 0:
-								Type = (int)ID.VOODOO_DEMON;
+								Type = (int)EntityID.NPCID.VOODOO_DEMON;
 								break;
 							case 1:
 							case 2:
 							case 3:
-								Type = (int)ID.DEMON;
+								Type = (int)EntityID.NPCID.DEMON;
 								break;
 							default:
-								Type = (int)ID.ARCH_DEMON;
+								Type = (int)EntityID.NPCID.ARCH_DEMON;
 								break;
 						}
 					}
 					else if (Main.Rand.Next(3) == 0)
 					{
-						Type = (int)ID.LAVA_SLIME;
+						Type = (int)EntityID.NPCID.LAVA_SLIME;
 					}
 					num23 = NewNPC(x, y, Type, start);
 				}
-				else if ((num22 == 116 || num22 == 117) && !flag3 && Main.Rand.Next(8) == 0)
+				else if ((num22 == (int)EntityID.TileID.PEARLSAND || num22 == (int)EntityID.TileID.PEARLSTONE) && !flag3 && Main.Rand.Next(8) == 0)
 				{
-					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)ID.CHAOS_ELEMENTAL : (int)ID.SPECTRAL_ELEMENTAL);
+					num23 = NewNPC(x, y, (Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.CHAOS_ELEMENTAL : (int)EntityID.NPCID.SPECTRAL_ELEMENTAL);
 				}
 				else if (!flag3 && Main.Rand.Next(75) == 0 && !Main.PlayerSet[PlayerIdx].zoneHoly)
 				{
-					num23 = NewNPC(x, y, Main.InHardMode ? (int)ID.DIGGER_HEAD : (int)ID.GIANT_WORM_HEAD, 1);
+					num23 = NewNPC(x, y, Main.InHardMode ? (int)EntityID.NPCID.DIGGER_HEAD : (int)EntityID.NPCID.GIANT_WORM_HEAD, 1);
 				}
 				else if (!Main.InHardMode && Main.Rand.Next(10) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.MOTHER_SLIME);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.MOTHER_SLIME);
 				}
 				else if (!Main.InHardMode && Main.Rand.Next(4) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.SLIME);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.SLIME);
 					if (Main.PlayerSet[PlayerIdx].ZoneJungle)
 					{
 						Main.NPCSet[num23].SetDefaults("Jungle Slime");
@@ -17091,17 +17314,17 @@ namespace Terraria
 				}
 				else if (Main.Rand.Next(2) != 0)
 				{
-					num23 = ((Main.InHardMode && (Main.PlayerSet[PlayerIdx].zoneHoly & (Main.Rand.Next(2) == 0))) ? NewNPC(x, y, (int)ID.ILLUMINANT_SLIME) : (Main.PlayerSet[PlayerIdx].ZoneJungle ? NewNPC(x, y, (int)ID.JUNGLE_BAT) : ((Main.InHardMode && Main.PlayerSet[PlayerIdx].zoneHoly) ? NewNPC(x, y, (int)ID.ILLUMINANT_BAT) : ((!Main.InHardMode || Main.Rand.Next(6) <= 0) ? NewNPC(x, y, (int)ID.CAVE_BAT) : NewNPC(x, y, (int)ID.GIANT_BAT)))));
+					num23 = ((Main.InHardMode && (Main.PlayerSet[PlayerIdx].zoneHoly & (Main.Rand.Next(2) == 0))) ? NewNPC(x, y, (int)EntityID.NPCID.ILLUMINANT_SLIME) : (Main.PlayerSet[PlayerIdx].ZoneJungle ? NewNPC(x, y, (int)EntityID.NPCID.JUNGLE_BAT) : ((Main.InHardMode && Main.PlayerSet[PlayerIdx].zoneHoly) ? NewNPC(x, y, (int)EntityID.NPCID.ILLUMINANT_BAT) : ((!Main.InHardMode || Main.Rand.Next(6) <= 0) ? NewNPC(x, y, (int)EntityID.NPCID.CAVE_BAT) : NewNPC(x, y, (int)EntityID.NPCID.GIANT_BAT)))));
 				}
 				else if (num2 > Main.RockLayer + Main.MaxTilesY >> 1 && Main.Rand.Next(700) == 0)
 				{
-					num23 = NewNPC(x, y, (int)ID.TIM);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.TIM);
 				}
 				else if (Main.InHardMode && Main.Rand.Next(10) != 0)
 				{
 					if (Main.Rand.Next(2) == 0)
 					{
-						num23 = NewNPC(x, y, (int)ID.ARMORED_SKELETON);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.ARMORED_SKELETON);
 						if (num2 > Main.RockLayer + Main.MaxTilesY >> 1 && Main.Rand.Next(5) == 0)
 						{
 							Main.NPCSet[num23].SetDefaults("Heavy Skeleton");
@@ -17109,21 +17332,21 @@ namespace Terraria
 					}
 					else
 					{
-						num23 = NewNPC(x, y, (int)ID.SKELETON_ARCHER);
+						num23 = NewNPC(x, y, (int)EntityID.NPCID.SKELETON_ARCHER);
 					}
 				}
 				else if (Main.Rand.Next(15) == 0)
 				{
-					int num29 = ((Main.Rand.Next(2) == 0) ? (int)ID.UNDEAD_MINER : (int)ID.VAMPIRE_MINER);
+					int num29 = ((Main.Rand.Next(2) == 0) ? (int)EntityID.NPCID.UNDEAD_MINER : (int)EntityID.NPCID.VAMPIRE_MINER);
 					num23 = NewNPC(x, y, num29);
 				}
 				else
 				{
-					num23 = NewNPC(x, y, (int)ID.SKELETON);
+					num23 = NewNPC(x, y, (int)EntityID.NPCID.SKELETON);
 				}
 				if (num23 < MaxNumNPCs)
 				{
-					if (Main.NPCSet[num23].Type == (int)ID.SLIME && Main.Rand.Next(250) == 0)
+					if (Main.NPCSet[num23].Type == (int)EntityID.NPCID.SLIME && Main.Rand.Next(250) == 0)
 					{
 						Main.NPCSet[num23].SetDefaults("Pinky");
 					}
@@ -17192,7 +17415,7 @@ namespace Terraria
 			{
 			}
 			num3 = num5 << 4;
-			int num7 = NewNPC(num2, num3, (int)ID.WALL_OF_FLESH); // The X calculations are different to PC in that Console will spawn the WoF closer to you or at the same position as PC, depending where you are.
+			int num7 = NewNPC(num2, num3, (int)EntityID.NPCID.WALL_OF_FLESH); // The X calculations are different to PC in that Console will spawn the WoF closer to you or at the same position as PC, depending where you are.
 			Main.NPCSet[num7].Direction = 1;
 			if (num > -1)
 			{
@@ -17346,15 +17569,15 @@ namespace Terraria
 				NetMessage.SendMessage();
 				switch (Type)
 				{
-					case (int)ID.RETINAZER:
+					case (int)EntityID.NPCID.RETINAZER:
 						NetMessage.SendText(34, 175, 75, 255, -1);
 						break;
 					default:
 						NetMessage.SendText(text, 16, 175, 75, 255, -1);
 						break;
-					case (int)ID.KING_SLIME:
-					case (int)ID.WRAITH:
-					case (int)ID.SPAZMATISM:
+					case (int)EntityID.NPCID.KING_SLIME:
+					case (int)EntityID.NPCID.WRAITH:
+					case (int)EntityID.NPCID.SPAZMATISM:
 						break;
 				}
 			}
@@ -17379,7 +17602,7 @@ namespace Terraria
 				Main.NPCSet[num].Active = 1;
 				Main.NPCSet[num].TimeLeft = NPCActiveTime;
 				Main.NPCSet[num].IsWet = Collision.WetCollision(ref Main.NPCSet[num].Position, Main.NPCSet[num].Width, Main.NPCSet[num].Height);
-				if (Type == (int)ID.KING_SLIME)
+				if (Type == (int)EntityID.NPCID.KING_SLIME)
 				{
 					NetMessage.SendText(Main.NPCSet[num].TypeName, 16, 175, 75, 255, -1);
 				}
@@ -17397,7 +17620,7 @@ namespace Terraria
 			TargetClosest();
 			Velocity = vector;
 			Position.Y -= Height;
-			if (newType == (int)ID.GOBLIN_TINKERER || newType == (int)ID.WIZARD)
+			if (newType == (int)EntityID.NPCID.GOBLIN_TINKERER || newType == (int)EntityID.NPCID.WIZARD)
 			{
 				HomeTileX = (short)((int)Position.X + (Width >> 1) >> 4);
 				HomeTileY = (short)((int)Position.Y + Height >> 4);
@@ -17446,7 +17669,7 @@ namespace Terraria
 					Direction = (sbyte)hitDirection;
 					ShouldNetUpdate = true;
 				}
-				if (AIStyle == 8 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+				if (AIStyle == (byte)EntityID.NPCStyleID.SORCERER && Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
 					AI0 = 400f;
 					TargetClosest();
@@ -17521,11 +17744,11 @@ namespace Terraria
 						Velocity.X = num2 * hitDirection * KnockBackResist;
 					}
 				}
-				if ((Type == (int)ID.WALL_OF_FLESH || Type == (int)ID.WALL_OF_FLESH_EYE) && Life <= 0)
+				if ((Type == (int)EntityID.NPCID.WALL_OF_FLESH || Type == (int)EntityID.NPCID.WALL_OF_FLESH_EYE) && Life <= 0)
 				{
 					for (int i = 0; i < MaxNumNPCs; i++)
 					{
-						if (Main.NPCSet[i].Active != 0 && (Main.NPCSet[i].Type == (int)ID.WALL_OF_FLESH || Main.NPCSet[i].Type == (int)ID.WALL_OF_FLESH_EYE))
+						if (Main.NPCSet[i].Active != 0 && (Main.NPCSet[i].Type == (int)EntityID.NPCID.WALL_OF_FLESH || Main.NPCSet[i].Type == (int)EntityID.NPCID.WALL_OF_FLESH_EYE))
 						{
 							Main.NPCSet[i].HitEffect(hitDirection, num);
 						}
@@ -17559,7 +17782,7 @@ namespace Terraria
 				return;
 			}
 			NoSpawnCycle = true;
-			if (IsTownNPC && Type != (int)ID.OLD_MAN && Main.NetMode != (byte)NetModeSetting.CLIENT)
+			if (IsTownNPC && Type != (int)EntityID.NPCID.OLD_MAN && Main.NetMode != (byte)NetModeSetting.CLIENT)
 			{
 				string prefix = DisplayName;
 				if (DisplayName.Length == 0)
@@ -17581,7 +17804,7 @@ namespace Terraria
 				Main.PlaySound(4, (int)Position.X, (int)Position.Y, SoundKilled);
 			}
 			NPCLoot();
-			if ((Type >= (int)ID.GOBLIN_PEON && Type <= (int)ID.GOBLIN_SORCERER) || Type == (int)ID.GOBLIN_ARCHER || (Type >= (int)ID.SNOWMAN_GANGSTA && Type <= (int)ID.SNOW_BALLA))
+			if ((Type >= (int)EntityID.NPCID.GOBLIN_PEON && Type <= (int)EntityID.NPCID.GOBLIN_SORCERER) || Type == (int)EntityID.NPCID.GOBLIN_ARCHER || (Type >= (int)EntityID.NPCID.SNOWMAN_GANGSTA && Type <= (int)EntityID.NPCID.SNOW_BALLA))
 			{
 				Main.InvasionSize--;
 			}
@@ -17590,25 +17813,25 @@ namespace Terraria
 
 		public unsafe void NPCLoot()
 		{
-			if (Main.InHardMode && LifeMax > 1 && Damage > 0 && !IsFriendly && XYWH.Y > Main.RockLayerPixels && Type != (int)ID.SLIMER && Value > 0f && Main.Rand.Next(7) == 0)
+			if (Main.InHardMode && LifeMax > 1 && Damage > 0 && !IsFriendly && XYWH.Y > Main.RockLayerPixels && Type != (int)EntityID.NPCID.SLIMER && Value > 0f && Main.Rand.Next(7) == 0)
 			{
 				Player player = Player.FindClosest(ref XYWH);
 				if (player.ZoneEvil)
 				{
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_NIGHT);
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_NIGHT);
 				}
 				if (player.zoneHoly)
 				{
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_LIGHT);
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_LIGHT);
 				}
 			}
-			if (Time.xMas && LifeMax > 1 && Damage > 0 && !IsFriendly && Type != (int)ID.SLIMER && Value > 0f && Main.Rand.Next(13) == 0)
+			if (Time.xMas && LifeMax > 1 && Damage > 0 && !IsFriendly && Type != (int)EntityID.NPCID.SLIMER && Value > 0f && Main.Rand.Next(13) == 0)
 			{
-				Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)Item.ID.BLUE_PRESENT, (int)Item.ID.YELLOW_PRESENT + 1));
+				Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)EntityID.ItemID.BLUE_PRESENT, (int)EntityID.ItemID.YELLOW_PRESENT + 1));
 			}
-			switch ((ID)Type)
+			switch ((EntityID.NPCID)Type)
 			{
-				case ID.CLOWN:
+				case EntityID.NPCID.CLOWN:
 					if (!HasDownedClown)
 					{
 						HasDownedClown = true;
@@ -17619,69 +17842,69 @@ namespace Terraria
 						}
 					}
 					break;
-				case ID.MIMIC:
+				case EntityID.NPCID.MIMIC:
 					if (Value > 0f)
 					{
 						switch (Main.Rand.Next(7))
 						{
 							case 0:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DUAL_HOOK, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DUAL_HOOK, 1, DoNotBroadcast: false, -1);
 								break;
 							case 1:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.MAGIC_DAGGER, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.MAGIC_DAGGER, 1, DoNotBroadcast: false, -1);
 								break;
 							case 2:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.PHILOSOPHERS_STONE, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.PHILOSOPHERS_STONE, 1, DoNotBroadcast: false, -1);
 								break;
 							case 3:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.TITAN_GLOVE, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.TITAN_GLOVE, 1, DoNotBroadcast: false, -1);
 								break;
 							case 4:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.STAR_CLOAK, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.STAR_CLOAK, 1, DoNotBroadcast: false, -1);
 								break;
 							case 5:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.COMPASS, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.COMPASS, 1, DoNotBroadcast: false, -1);
 								break;
 							default:
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.CROSS_NECKLACE, 1, DoNotBroadcast: false, -1);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.CROSS_NECKLACE, 1, DoNotBroadcast: false, -1);
 								break;
 						}
 					}
 					break;
-				case ID.WYVERN_HEAD:
-				case ID.ARCH_WYVERN_HEAD:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_FLIGHT, Main.Rand.Next(5, 11));
+				case EntityID.NPCID.WYVERN_HEAD:
+				case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_FLIGHT, Main.Rand.Next(5, 11));
 					break;
-				case ID.SNOWMAN_GANGSTA:
-				case ID.MISTER_STABBY:
-				case ID.SNOW_BALLA:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SNOW_BLOCK, Main.Rand.Next(5, 11));
+				case EntityID.NPCID.SNOWMAN_GANGSTA:
+				case EntityID.NPCID.MISTER_STABBY:
+				case EntityID.NPCID.SNOW_BALLA:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SNOW_BLOCK, Main.Rand.Next(5, 11));
 					break;
-				case ID.DARK_MUMMY:
+				case EntityID.NPCID.DARK_MUMMY:
 					if (Main.Rand.Next(10) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DARK_SHARD);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DARK_SHARD);
 					}
 					break;
-				case ID.LIGHT_MUMMY:
+				case EntityID.NPCID.LIGHT_MUMMY:
 					if (Main.Rand.Next(10) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.LIGHT_SHARD);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.LIGHT_SHARD);
 					}
 					break;
-				case ID.SEEKER_HEAD:
-				case ID.CLINGER:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.CURSED_FLAME, Main.Rand.Next(2, 6));
+				case EntityID.NPCID.SEEKER_HEAD:
+				case EntityID.NPCID.CLINGER:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.CURSED_FLAME, Main.Rand.Next(2, 6));
 					break;
-				case ID.UNICORN:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.UNICORN_HORN);
+				case EntityID.NPCID.UNICORN:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.UNICORN_HORN);
 					break;
-				case ID.WALL_OF_FLESH:
+				case EntityID.NPCID.WALL_OF_FLESH:
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.PWNHAMMER, 1, DoNotBroadcast: false, -1);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.PWNHAMMER, 1, DoNotBroadcast: false, -1);
 						if (Main.Rand.Next(2) == 0)
 						{
-							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)Item.ID.SORCERER_EMBLEM, (int)Item.ID.RANGER_EMBLEM + 1), 1, DoNotBroadcast: false, -1);
+							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)EntityID.ItemID.SORCERER_EMBLEM, (int)EntityID.ItemID.RANGER_EMBLEM + 1), 1, DoNotBroadcast: false, -1);
 						}
 						else
 						{
@@ -17689,13 +17912,13 @@ namespace Terraria
 							switch (Main.Rand.Next(3))
 							{
 								case 0:
-									num3 = (int)Item.ID.LASER_RIFLE;
+									num3 = (int)EntityID.ItemID.LASER_RIFLE;
 									break;
 								case 1:
-									num3 = (int)Item.ID.BREAKER_BLADE;
+									num3 = (int)EntityID.ItemID.BREAKER_BLADE;
 									break;
 								default:
-									num3 = (int)Item.ID.CLOCKWORK_ASSAULT_RIFLE;
+									num3 = (int)EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE;
 									break;
 							}
 							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, num3, 1, DoNotBroadcast: false, -1);
@@ -17717,7 +17940,7 @@ namespace Terraria
 									if ((i == num4 - num6 || i == num4 + num6 || j == num5 - num6 || j == num5 + num6) && ptr->IsActive == 0)
 									{
 										ptr->IsActive = 1;
-										ptr->Type = 140;
+										ptr->Type = (int)EntityID.TileID.DEMONITE_BRICK;
 										WorldGen.SquareTileFrame(i, j);
 										flag = true;
 									}
@@ -17737,331 +17960,331 @@ namespace Terraria
 						break;
 					}
 #if !VERSION_INITIAL
-				case ID.PINCUSHION_ZOMBIE:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.WOODEN_ARROW, Main.Rand.Next(1, 10));
+				case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.WOODEN_ARROW, Main.Rand.Next(1, 10));
 					break;
-				case ID.SLIMED_ZOMBIE:
+				case EntityID.NPCID.SLIMED_ZOMBIE:
 #endif
-				case ID.SLIME:
-				case ID.MOTHER_SLIME:
-				case ID.ILLUMINANT_SLIME:
-				case ID.TOXIC_SLUDGE:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GEL, Main.Rand.Next(1, 3));
+				case EntityID.NPCID.SLIME:
+				case EntityID.NPCID.MOTHER_SLIME:
+				case EntityID.NPCID.ILLUMINANT_SLIME:
+				case EntityID.NPCID.TOXIC_SLUDGE:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GEL, Main.Rand.Next(1, 3));
 					break;
-				case ID.CORRUPT_SLIME:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GEL, Main.Rand.Next(2, 5));
+				case EntityID.NPCID.CORRUPT_SLIME:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GEL, Main.Rand.Next(2, 5));
 					break;
-				case ID.GASTROPOD:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GEL, Main.Rand.Next(5, 11));
+				case EntityID.NPCID.GASTROPOD:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GEL, Main.Rand.Next(5, 11));
 					break;
-				case ID.DUNGEON_SLIME:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GOLDEN_KEY);
+				case EntityID.NPCID.DUNGEON_SLIME:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GOLDEN_KEY);
 					break;
-				case ID.PIXIE:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.PIXIE_DUST, Main.Rand.Next(1, 4));
+				case EntityID.NPCID.PIXIE:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.PIXIE_DUST, Main.Rand.Next(1, 4));
 					break;
-				case ID.DEMON_EYE:
+				case EntityID.NPCID.DEMON_EYE:
 					{
 						int num7 = Main.Rand.Next(150);
 						if (num7 < 50)
 						{
-							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (num7 == 38) ? (int)Item.ID.BLACK_LENS : (int)Item.ID.LENS);
+							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (num7 == 38) ? (int)EntityID.ItemID.BLACK_LENS : (int)EntityID.ItemID.LENS);
 						}
 						break;
 					}
-				case ID.WEREWOLF:
+				case EntityID.NPCID.WEREWOLF:
 					if (Main.Rand.Next(60) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.MOON_CHARM, 1, DoNotBroadcast: false, -1);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.MOON_CHARM, 1, DoNotBroadcast: false, -1);
 					}
 					break;
-				case ID.PIRANHA:
+				case EntityID.NPCID.PIRANHA:
 					{
 						int num2 = Main.Rand.Next(500);
 						if (num2 < 13)
 						{
-							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (num2 == 0) ? (int)Item.ID.ROBOT_HAT : (int)Item.ID.HOOK);
+							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (num2 == 0) ? (int)EntityID.ItemID.ROBOT_HAT : (int)EntityID.ItemID.HOOK);
 						}
 						break;
 					}
-				case ID.ANGLER_FISH:
+				case EntityID.NPCID.ANGLER_FISH:
 					if (Main.Rand.Next(500) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ROBOT_HAT);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ROBOT_HAT);
 					}
 					break;
-				case ID.ZOMBIE:
-				case ID.BALD_ZOMBIE:
+				case EntityID.NPCID.ZOMBIE:
+				case EntityID.NPCID.BALD_ZOMBIE:
 					if (Main.Rand.Next(50) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SHACKLE, 1, DoNotBroadcast: false, -1);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SHACKLE, 1, DoNotBroadcast: false, -1);
 					}
 					break;
-				case ID.DEMON:
+				case EntityID.NPCID.DEMON:
 					if (Main.Rand.Next(50) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMON_SCYTHE, 1, DoNotBroadcast: false, -1);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMON_SCYTHE, 1, DoNotBroadcast: false, -1);
 					}
 					break;
-				case ID.VOODOO_DEMON:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GUIDE_VOODOO_DOLL);
+				case EntityID.NPCID.VOODOO_DEMON:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GUIDE_VOODOO_DOLL);
 					break;
-				case ID.DOCTOR_BONES:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ARCHAEOLOGISTS_HAT);
+				case EntityID.NPCID.DOCTOR_BONES:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ARCHAEOLOGISTS_HAT);
 					break;
-				case ID.THE_GROOM:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.TOP_HAT);
+				case EntityID.NPCID.THE_GROOM:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.TOP_HAT);
 					break;
-				case ID.CLOTHIER:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.RED_HAT);
+				case EntityID.NPCID.CLOTHIER:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.RED_HAT);
 					break;
-				case ID.GOLDFISH:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GOLDFISH);
+				case EntityID.NPCID.GOLDFISH:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GOLDFISH);
 					break;
-				case ID.ANTLION:
-				case ID.ALBINO_ANTLION:
+				case EntityID.NPCID.ANTLION:
+				case EntityID.NPCID.ALBINO_ANTLION:
 					if (Main.Rand.Next(7) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ANTLION_MANDIBLE);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ANTLION_MANDIBLE);
 					}
 					break;
-				case ID.GOBLIN_SCOUT:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.TATTERED_CLOTH, Main.Rand.Next(1, 3));
+				case EntityID.NPCID.GOBLIN_SCOUT:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.TATTERED_CLOTH, Main.Rand.Next(1, 3));
 					break;
-				case ID.EYE_OF_CTHULHU:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.UNHOLY_ARROW, Main.Rand.Next(20, 50));
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(10, 30));
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(10, 30));
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(10, 30));
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.CORRUPT_SEEDS, Main.Rand.Next(1, 4));
+				case EntityID.NPCID.EYE_OF_CTHULHU:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.UNHOLY_ARROW, Main.Rand.Next(20, 50));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(10, 30));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(10, 30));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(10, 30));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.CORRUPT_SEEDS, Main.Rand.Next(1, 4));
 					break;
-				case ID.OCRAM:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ADAMANTITE_ORE, Main.Rand.Next(10, 30));
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_BLIGHT, Main.Rand.Next(5, 10));
+				case EntityID.NPCID.OCRAM:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ADAMANTITE_ORE, Main.Rand.Next(10, 30));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_BLIGHT, Main.Rand.Next(5, 10));
 					if (Main.Rand.Next(3) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DRAGON_MASK + Main.Rand.Next(9));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DRAGON_MASK + Main.Rand.Next(9));
 					}
 					break;
-				case ID.EATER_OF_SOULS:
-				case ID.CORRUPTOR:
+				case EntityID.NPCID.EATER_OF_SOULS:
+				case EntityID.NPCID.CORRUPTOR:
 					if (Main.Rand.Next(3) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ROTTEN_CHUNK);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ROTTEN_CHUNK);
 					}
 					break;
-				case ID.DEVOURER_HEAD:
-				case ID.DEVOURER_BODY:
-				case ID.DEVOURER_TAIL:
+				case EntityID.NPCID.DEVOURER_HEAD:
+				case EntityID.NPCID.DEVOURER_BODY:
+				case EntityID.NPCID.DEVOURER_TAIL:
 					if (Main.Rand.Next(3) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.ROTTEN_CHUNK, Main.Rand.Next(1, 3));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.ROTTEN_CHUNK, Main.Rand.Next(1, 3));
 					}
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.WORM_TOOTH, Main.Rand.Next(3, 9));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.WORM_TOOTH, Main.Rand.Next(3, 9));
 					break;
-				case ID.GIANT_WORM_HEAD:
-				case ID.GIANT_WORM_BODY:
-				case ID.GIANT_WORM_TAIL:
-				case ID.DIGGER_HEAD:
-				case ID.DIGGER_BODY:
-				case ID.DIGGER_TAIL:
+				case EntityID.NPCID.GIANT_WORM_HEAD:
+				case EntityID.NPCID.GIANT_WORM_BODY:
+				case EntityID.NPCID.GIANT_WORM_TAIL:
+				case EntityID.NPCID.DIGGER_HEAD:
+				case EntityID.NPCID.DIGGER_BODY:
+				case EntityID.NPCID.DIGGER_TAIL:
 					if (Main.Rand.Next(500) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.WHOOPIE_CUSHION);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.WHOOPIE_CUSHION);
 					}
 					break;
-				case ID.CORRUPT_BUNNY:
+				case EntityID.NPCID.CORRUPT_BUNNY:
 					if (Main.Rand.Next(75) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.BUNNY_HOOD);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.BUNNY_HOOD);
 					}
 					break;
-				case ID.EATER_OF_WORLDS_HEAD:
-				case ID.EATER_OF_WORLDS_BODY:
-				case ID.EATER_OF_WORLDS_TAIL:
+				case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+				case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+				case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 					if (Main.Rand.Next(2) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SHADOW_SCALE, Main.Rand.Next(1, 3));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SHADOW_SCALE, Main.Rand.Next(1, 3));
 					}
 					if (Main.Rand.Next(2) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(2, 6));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(2, 6));
 					}
 					if (IsBoss)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(10, 30));
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DEMONITE_ORE, Main.Rand.Next(10, 31));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(10, 30));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DEMONITE_ORE, Main.Rand.Next(10, 31));
 					}
 					if (Main.Rand.Next(3) == 0 && Player.FindClosest(ref XYWH).canHeal())
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HEART);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HEART);
 					}
 					break;
-				case ID.THE_HUNGRY_II:
-				case ID.LEECH_HEAD:
-				case ID.LEECH_BODY:
-				case ID.LEECH_TAIL:
-				case ID.PROBE:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HEART);
+				case EntityID.NPCID.THE_HUNGRY_II:
+				case EntityID.NPCID.LEECH_HEAD:
+				case EntityID.NPCID.LEECH_BODY:
+				case EntityID.NPCID.LEECH_TAIL:
+				case EntityID.NPCID.PROBE:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HEART);
 					break;
-				case ID.BLUE_JELLYFISH:
-				case ID.PINK_JELLYFISH:
-				case ID.GREEN_JELLYFISH:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GLOWSTICK, Main.Rand.Next(1, 5));
+				case EntityID.NPCID.BLUE_JELLYFISH:
+				case EntityID.NPCID.PINK_JELLYFISH:
+				case EntityID.NPCID.GREEN_JELLYFISH:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GLOWSTICK, Main.Rand.Next(1, 5));
 					break;
-				case ID.SKELETON:
-				case ID.UNDEAD_MINER:
-				case ID.VAMPIRE_MINER:
+				case EntityID.NPCID.SKELETON:
+				case EntityID.NPCID.UNDEAD_MINER:
+				case EntityID.NPCID.VAMPIRE_MINER:
 					if (Main.Rand.Next(25) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HOOK);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HOOK);
 					}
-					else if (Type != (int)ID.SKELETON)
+					else if (Type != (int)EntityID.NPCID.SKELETON)
 					{
 						if (Main.Rand.Next(20) == 0)
 						{
-							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)Item.ID.MINING_SHIRT, (int)Item.ID.MINING_PANTS + 1));
+							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)EntityID.ItemID.MINING_SHIRT, (int)EntityID.ItemID.MINING_PANTS + 1));
 						}
 						else
 						{
-							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.BOMB, Main.Rand.Next(1, 4));
+							Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.BOMB, Main.Rand.Next(1, 4));
 						}
 					}
 					break;
-				case ID.TIM:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.WIZARD_HAT);
+				case EntityID.NPCID.TIM:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.WIZARD_HAT);
 					break;
-				case ID.KING_SLIME:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)Item.ID.NINJA_HOOD, (int)Item.ID.NINJA_PANTS + 1));
+				case EntityID.NPCID.KING_SLIME:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, Main.Rand.Next((int)EntityID.ItemID.NINJA_HOOD, (int)EntityID.ItemID.NINJA_PANTS + 1));
 					break;
-				case ID.METEOR_HEAD:
+				case EntityID.NPCID.METEOR_HEAD:
 					if (Main.Rand.Next(50) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.METEORITE);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.METEORITE);
 					}
 					break;
-				case ID.FIRE_IMP:
+				case EntityID.NPCID.FIRE_IMP:
 					if (Main.Rand.Next(300) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.PLUMBERS_HAT);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.PLUMBERS_HAT);
 					}
 					break;
-				case ID.BONES:
-				case ID.DARK_CASTER:
-				case ID.CURSED_SKULL:
+				case EntityID.NPCID.BONES:
+				case EntityID.NPCID.DARK_CASTER:
+				case EntityID.NPCID.CURSED_SKULL:
 					if (Main.Rand.Next(65) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GOLDEN_KEY);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GOLDEN_KEY);
 					}
 					else
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.BONE, Main.Rand.Next(1, 4));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.BONE, Main.Rand.Next(1, 4));
 					}
 					break;
-				case ID.GOBLIN_PEON:
-				case ID.GOBLIN_THIEF:
-				case ID.GOBLIN_WARRIOR:
-				case ID.GOBLIN_SORCERER:
-				case ID.GOBLIN_ARCHER:
+				case EntityID.NPCID.GOBLIN_PEON:
+				case EntityID.NPCID.GOBLIN_THIEF:
+				case EntityID.NPCID.GOBLIN_WARRIOR:
+				case EntityID.NPCID.GOBLIN_SORCERER:
+				case EntityID.NPCID.GOBLIN_ARCHER:
 					{
 						int num = Main.Rand.Next(200);
 						if (num < 100)
 						{
 							if (num == 0)
 							{
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HARPOON);
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HARPOON);
 							}
 							else
 							{
-								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SPIKY_BALL, Main.Rand.Next(1, 6));
+								Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SPIKY_BALL, Main.Rand.Next(1, 6));
 							}
 						}
 						break;
 					}
-				case ID.HORNET:
+				case EntityID.NPCID.HORNET:
 					if (Main.Rand.Next(2) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.STINGER);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.STINGER);
 					}
 					break;
 #if VERSION_103 || VERSION_FINAL
-			case ID.DRAGON_HORNET:
+			case EntityID.NPCID.DRAGON_HORNET:
 				if (Main.Rand.Next(2) == 0)
 				{
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.STINGER, Main.Rand.Next(1, 4));
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.STINGER, Main.Rand.Next(1, 4));
 				}
 				break;
 #endif
-				case ID.MAN_EATER:
+				case EntityID.NPCID.MAN_EATER:
 					if (Main.Rand.Next(4) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.VINE);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.VINE);
 					}
 					break;
-				case ID.SHARK:
+				case EntityID.NPCID.SHARK:
 					if (Main.Rand.Next(50) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DIVING_HELMET);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DIVING_HELMET);
 					}
 					else
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SHARK_FIN);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SHARK_FIN);
 					}
 					break;
-				case ID.ORKA:
+				case EntityID.NPCID.ORKA:
 					if (Main.Rand.Next(25) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.DIVING_HELMET);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.DIVING_HELMET);
 					}
 					break;
-				case ID.HARPY:
+				case EntityID.NPCID.HARPY:
 					if (Main.Rand.Next(2) == 0)
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.FEATHER);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.FEATHER);
 					}
 					break;
-				case ID.RETINAZER:
-				case ID.SPAZMATISM:
-					if (!AnyNPCs((Type == (int)ID.RETINAZER) ? (int)ID.SPAZMATISM : (int)ID.RETINAZER))
+				case EntityID.NPCID.RETINAZER:
+				case EntityID.NPCID.SPAZMATISM:
+					if (!AnyNPCs((Type == (int)EntityID.NPCID.RETINAZER) ? (int)EntityID.NPCID.SPAZMATISM : (int)EntityID.NPCID.RETINAZER))
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_SIGHT, Main.Rand.Next(20, 31));
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_SIGHT, Main.Rand.Next(20, 31));
 						break;
 					}
 					Value = 0f;
 					IsBoss = false;
 					break;
-				case ID.SKELETRON_PRIME:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_FRIGHT, Main.Rand.Next(20, 31));
+				case EntityID.NPCID.SKELETRON_PRIME:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_FRIGHT, Main.Rand.Next(20, 31));
 					break;
-				case ID.THE_DESTROYER_HEAD:
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SOUL_OF_MIGHT, Main.Rand.Next(20, 31));
+				case EntityID.NPCID.THE_DESTROYER_HEAD:
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SOUL_OF_MIGHT, Main.Rand.Next(20, 31));
 					break;
 			}
 			if (IsBoss)
 			{
 				string prefix = DisplayName;
-				switch ((ID)Type)
+				switch ((EntityID.NPCID)Type)
 				{
-					case ID.EYE_OF_CTHULHU:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						HasDownedBoss1 = true;
 						break;
-					case ID.EATER_OF_WORLDS_HEAD:
-					case ID.EATER_OF_WORLDS_BODY:
-					case ID.EATER_OF_WORLDS_TAIL:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						HasDownedBoss2 = true;
 						break;
-					case ID.SKELETRON_HEAD:
+					case EntityID.NPCID.SKELETRON_HEAD:
 						HasDownedBoss3 = true;
 						break;
-					case ID.RETINAZER:
-					case ID.SPAZMATISM:
+					case EntityID.NPCID.RETINAZER:
+					case EntityID.NPCID.SPAZMATISM:
 						prefix = Lang.MiscText[20];
 						UI.SetTriggerStateForAll(Trigger.KilledTheTwins);
 						break;
-					case ID.SKELETRON_PRIME:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						UI.SetTriggerStateForAll(Trigger.KilledSkeletronPrime);
 						break;
-					case ID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
 						UI.SetTriggerStateForAll(Trigger.KilledDestroyer);
 						break;
 				}
@@ -18071,23 +18294,23 @@ namespace Terraria
 					num8 = Main.NPCSet[RealLife].NetID;
 				}
 				UI.IncreaseStatisticForAll(Statistics.GetBossStatisticEntryFromNetID(num8));
-				int num9 = (int)Item.ID.LESSER_HEALING_POTION;
-				if (Type == (int)ID.WALL_OF_FLESH)
+				int num9 = (int)EntityID.ItemID.LESSER_HEALING_POTION;
+				if (Type == (int)EntityID.NPCID.WALL_OF_FLESH)
 				{
-					num9 = (int)Item.ID.HEALING_POTION;
+					num9 = (int)EntityID.ItemID.HEALING_POTION;
 				}
-				else if (Type > (int)ID.WALL_OF_FLESH)
+				else if (Type > (int)EntityID.NPCID.WALL_OF_FLESH)
 				{
-					num9 = (int)Item.ID.GREATER_HEALING_POTION;
+					num9 = (int)EntityID.ItemID.GREATER_HEALING_POTION;
 				}
 				Item.NewItem(XYWH.X, XYWH.Y, Width, Height, num9, Main.Rand.Next(5, 16));
 				for (int num10 = Main.Rand.Next(5, 10); num10 > 0; num10--)
 				{
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HEART);
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HEART);
 				}
 				if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
-					if (Type == (int)ID.WALL_OF_FLESH)
+					if (Type == (int)EntityID.NPCID.WALL_OF_FLESH)
 					{
 						WorldGen.StartHardmode();
 					}
@@ -18103,16 +18326,16 @@ namespace Terraria
 				{
 					if (Main.Rand.Next(2) == 0 && player2.canUseMana())
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.STAR);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.STAR);
 					}
 					else if (Main.Rand.Next(2) == 0 && player2.canHeal())
 					{
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.HEART);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.HEART);
 					}
 				}
 				if (Main.Rand.Next(2) == 0 && player2.canUseMana())
 				{
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.STAR);
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.STAR);
 				}
 			}
 			float num11 = Value;
@@ -18150,7 +18373,7 @@ namespace Terraria
 					if (num13 > 0)
 					{
 						num12 -= 1000000 * num13;
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.PLATINUM_COIN, num13);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.PLATINUM_COIN, num13);
 					}
 				}
 				else if (num12 > 10000)
@@ -18167,7 +18390,7 @@ namespace Terraria
 					if (num14 > 0)
 					{
 						num12 -= 10000 * num14;
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.GOLD_COIN, num14);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.GOLD_COIN, num14);
 					}
 				}
 				else if (num12 > 100)
@@ -18184,7 +18407,7 @@ namespace Terraria
 					if (num15 > 0)
 					{
 						num12 -= 100 * num15;
-						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.SILVER_COIN, num15);
+						Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.SILVER_COIN, num15);
 					}
 				}
 				else if (num12 > 0)
@@ -18203,2136 +18426,2515 @@ namespace Terraria
 						num16 = 1;
 					}
 					num12 -= num16;
-					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)Item.ID.COPPER_COIN, num16);
+					Item.NewItem(XYWH.X, XYWH.Y, Width, Height, (int)EntityID.ItemID.COPPER_COIN, num16);
 				}
 			}
 		}
 
 		public unsafe void HitEffect(int hitDirection = 0, double dmg = 10.0)
 		{
-			if (Type == (int)ID.SLIME || Type == (int)ID.MOTHER_SLIME || Type == (int)ID.DUNGEON_SLIME)
+			switch ((EntityID.NPCID)Type)
 			{
-				if (Life > 0)
-				{
-					int num = (int)(dmg / LifeMax * 80.0);
-					while (num > 0 && null != Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, Alpha, Colour))
+				case EntityID.NPCID.SLIME:
+				case EntityID.NPCID.MOTHER_SLIME:
+				case EntityID.NPCID.DUNGEON_SLIME:
+					if (Life > 0)
 					{
-						num--;
+						int num = (int)(dmg / LifeMax * 80.0);
+						while (num > 0 && null != Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, Alpha, Colour))
+						{
+							num--;
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int i = 0; i < 48; i++)
-				{
-					if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, Alpha, Colour))
+
+					for (int i = 0; i < 48; i++)
 					{
-						break;
+						if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, Alpha, Colour))
+						{
+							break;
+						}
 					}
-				}
-				if (Type != (int)ID.MOTHER_SLIME || Main.NetMode == (byte)NetModeSetting.CLIENT)
-				{
-					return;
-				}
-				for (int num2 = Main.Rand.Next(1, 3); num2 >= 0; num2--)
-				{
-					int num3 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)ID.SLIME);
-					if (num3 < MaxNumNPCs)
+
+					if (Type != (int)EntityID.NPCID.MOTHER_SLIME || Main.NetMode == (byte)NetModeSetting.CLIENT)
 					{
-						Main.NPCSet[num3].SetDefaults("Baby Slime");
-						Main.NPCSet[num3].Velocity.X = Velocity.X * 2f;
-						Main.NPCSet[num3].Velocity.Y = Velocity.Y;
-						Main.NPCSet[num3].Velocity.X += Main.Rand.Next(-20, 20) * 0.1f + num2 * Direction * 0.3f;
-						Main.NPCSet[num3].Velocity.Y -= Main.Rand.Next(10) * 0.1f + num2;
-						Main.NPCSet[num3].AI1 = num2;
-						NetMessage.CreateMessage1(23, num3);
-						NetMessage.SendMessage();
+						return;
 					}
-				}
-			}
-			else if (Type == (int)ID.SNOWMAN_GANGSTA || Type == (int)ID.MISTER_STABBY || Type == (int)ID.SNOW_BALLA)
-			{
-				if (Life > 0)
-				{
-					for (int num4 = (int)(dmg / LifeMax * 80.0); num4 > 0; num4--)
+
+					for (int num2 = Main.Rand.Next(1, 3); num2 >= 0; num2--)
+					{
+						int num3 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)EntityID.NPCID.SLIME);
+						if (num3 < MaxNumNPCs)
+						{
+							Main.NPCSet[num3].SetDefaults("Baby Slime");
+							Main.NPCSet[num3].Velocity.X = Velocity.X * 2f;
+							Main.NPCSet[num3].Velocity.Y = Velocity.Y;
+							Main.NPCSet[num3].Velocity.X += Main.Rand.Next(-20, 20) * 0.1f + num2 * Direction * 0.3f;
+							Main.NPCSet[num3].Velocity.Y -= Main.Rand.Next(10) * 0.1f + num2;
+							Main.NPCSet[num3].AI1 = num2;
+							NetMessage.CreateMessage1(23, num3);
+							NetMessage.SendMessage();
+						}
+					}
+					break;
+
+				case EntityID.NPCID.SNOWMAN_GANGSTA:
+				case EntityID.NPCID.MISTER_STABBY:
+				case EntityID.NPCID.SNOW_BALLA:
+					if (Life > 0)
+					{
+						for (int num4 = (int)(dmg / LifeMax * 80.0); num4 > 0; num4--)
+						{
+							Dust* ptr = Main.DustSet.NewDust(76, ref XYWH, hitDirection, -1.0);
+							if (ptr == null)
+							{
+								break;
+							}
+
+							ptr->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int j = 0; j < 32; j++)
 					{
 						Dust* ptr = Main.DustSet.NewDust(76, ref XYWH, hitDirection, -1.0);
 						if (ptr == null)
 						{
 							break;
 						}
+
 						ptr->NoGravity = true;
+						ptr->Scale *= 1.2f;
 					}
-					return;
-				}
-				for (int j = 0; j < 32; j++)
-				{
-					Dust* ptr = Main.DustSet.NewDust(76, ref XYWH, hitDirection, -1.0);
-					if (ptr == null)
+					break;
+
+				case EntityID.NPCID.TOXIC_SLUDGE:
+					if (Life > 0)
 					{
-						break;
+						int num5 = (int)(dmg / LifeMax * 80.0);
+						while (num5 > 0 && null != Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, Alpha, new Color(210, 230, 140)))
+						{
+							num5--;
+						}
+
+						return;
 					}
-					ptr->NoGravity = true;
-					ptr->Scale *= 1.2f;
-				}
-			}
-			else if (Type == (int)ID.TOXIC_SLUDGE)
-			{
-				if (Life > 0)
-				{
-					int num5 = (int)(dmg / LifeMax * 80.0);
-					while (num5 > 0 && null != Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, Alpha, new Color(210, 230, 140)))
+
+					for (int k = 0; k < 40; k++)
 					{
-						num5--;
+						if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, Alpha, new Color(210, 230, 140)))
+						{
+							break;
+						}
 					}
-					return;
-				}
-				for (int k = 0; k < 40; k++)
-				{
-					if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, Alpha, new Color(210, 230, 140)))
+					break;
+
+				case EntityID.NPCID.VILE_SPIT:
+					for (int l = 0; l < 16; l++)
 					{
-						break;
+						Dust* ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + 2, Width, Height, 18, 0.0, 0.0, 100, default, 2.0);
+						if (ptr2 == null)
+						{
+							break;
+						}
+
+						if (Main.Rand.Next(2) == 0)
+						{
+							ptr2->Scale *= 0.6f;
+							continue;
+						}
+
+						ptr2->Velocity.X *= 1.4f;
+						ptr2->Velocity.Y *= 1.4f;
+						ptr2->NoGravity = true;
 					}
-				}
-			}
-			else if (Type == (int)ID.VILE_SPIT)
-			{
-				for (int l = 0; l < 16; l++)
-				{
-					Dust* ptr2 = Main.DustSet.NewDust(XYWH.X, XYWH.Y + 2, Width, Height, 18, 0.0, 0.0, 100, default, 2.0);
-					if (ptr2 == null)
+					break;
+
+				case EntityID.NPCID.CORRUPT_SLIME:
+				case EntityID.NPCID.SHADOW_SLIME:
+				case EntityID.NPCID.SLIMER:
+					if (Life > 0)
 					{
-						break;
+						int num6 = (int)(dmg / LifeMax * 80.0);
+						while (num6 > 0 && null != Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, Alpha, Colour))
+						{
+							num6--;
+						}
+
+						return;
 					}
-					if (Main.Rand.Next(2) == 0)
+
+					for (int m = 0; m < 42; m++)
 					{
-						ptr2->Scale *= 0.6f;
-						continue;
+						Dust* ptr3 = Main.DustSet.NewDust(14, ref XYWH, hitDirection, 0.0, Alpha, Colour);
+						if (ptr3 == null)
+						{
+							break;
+						}
+
+						ptr3->Velocity.X *= 2f;
+						ptr3->Velocity.Y *= 2f;
 					}
-					ptr2->Velocity.X *= 1.4f;
-					ptr2->Velocity.Y *= 1.4f;
-					ptr2->NoGravity = true;
-				}
-			}
-			else if (Type == (int)ID.CORRUPT_SLIME || Type == (int)ID.SHADOW_SLIME || Type == (int)ID.SLIMER)
-			{
-				if (Life > 0)
-				{
-					int num6 = (int)(dmg / LifeMax * 80.0);
-					while (num6 > 0 && null != Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, Alpha, Colour))
-					{
-						num6--;
-					}
-					return;
-				}
-				for (int m = 0; m < 42; m++)
-				{
-					Dust* ptr3 = Main.DustSet.NewDust(14, ref XYWH, hitDirection, 0.0, Alpha, Colour);
-					if (ptr3 == null)
-					{
-						break;
-					}
-					ptr3->Velocity.X *= 2f;
-					ptr3->Velocity.Y *= 2f;
-				}
-				if (Main.NetMode == (byte)NetModeSetting.CLIENT)
-				{
-					return;
-				}
-				if (Type == (int)ID.SLIMER)
-				{
-					int num7 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)ID.CORRUPT_SLIME);
-					if (num7 < MaxNumNPCs)
-					{
-						Main.NPCSet[num7].SetDefaults("Slimer2");
-						Main.NPCSet[num7].Velocity.X = Velocity.X;
-						Main.NPCSet[num7].Velocity.Y = Velocity.Y;
-						Gore.NewGore(Position, Velocity, 94, Scale);
-						NetMessage.CreateMessage1(23, num7);
-						NetMessage.SendMessage();
-					}
-				}
-				else
-				{
-					if (!(Scale >= 1f))
+
+					if (Main.NetMode == (byte)NetModeSetting.CLIENT)
 					{
 						return;
 					}
-					string defaults = ((Type == (int)ID.CORRUPT_SLIME) ? "Slimeling" : "Slimeling2");
-					for (int num8 = Main.Rand.Next(1, 3); num8 >= 0; num8--)
+
+					if (Type == (int)EntityID.NPCID.SLIMER)
 					{
-						int num9 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)ID.SLIME);
-						if (num9 >= MaxNumNPCs)
+						int num7 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)EntityID.NPCID.CORRUPT_SLIME);
+						if (num7 < MaxNumNPCs)
+						{
+							Main.NPCSet[num7].SetDefaults("Slimer2");
+							Main.NPCSet[num7].Velocity.X = Velocity.X;
+							Main.NPCSet[num7].Velocity.Y = Velocity.Y;
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DEMON_WING, Scale);
+							NetMessage.CreateMessage1(23, num7);
+							NetMessage.SendMessage();
+						}
+					}
+					else
+					{
+						if (!(Scale >= 1f))
+						{
+							return;
+						}
+
+						string defaults = ((Type == (int)EntityID.NPCID.CORRUPT_SLIME) ? "Slimeling" : "Slimeling2");
+						for (int num8 = Main.Rand.Next(1, 3); num8 >= 0; num8--)
+						{
+							int num9 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)EntityID.NPCID.SLIME);
+							if (num9 >= MaxNumNPCs)
+							{
+								break;
+							}
+
+							Main.NPCSet[num9].SetDefaults(defaults);
+							Main.NPCSet[num9].Velocity.X = Velocity.X * 3f;
+							Main.NPCSet[num9].Velocity.Y = Velocity.Y;
+							Main.NPCSet[num9].Velocity.X += Main.Rand.Next(-10, 10) * 0.1f + num8 * Direction * 0.3f;
+							Main.NPCSet[num9].Velocity.Y -= Main.Rand.Next(10) * 0.1f + num8;
+							Main.NPCSet[num9].AI1 = num8;
+							NetMessage.CreateMessage1(23, num9);
+							NetMessage.SendMessage();
+						}
+					}
+					break;
+
+				case EntityID.NPCID.CHAOS_ELEMENTAL:
+				case EntityID.NPCID.SPECTRAL_ELEMENTAL:
+				case EntityID.NPCID.ILLUMINANT_BAT:
+				case EntityID.NPCID.ILLUMINANT_SLIME:
+					if (Life > 0)
+					{
+						for (int n = 0; n < dmg / LifeMax * 50.0; n++)
+						{
+							Dust* ptr4 = Main.DustSet.NewDust(71, ref XYWH, 0.0, 0.0, 200);
+							if (ptr4 == null)
+							{
+								break;
+							}
+
+							ptr4->Velocity.X *= 1.5f;
+							ptr4->Velocity.Y *= 1.5f;
+						}
+
+						return;
+					}
+
+					for (int num10 = 0; num10 < 42; num10++)
+					{
+						Dust* ptr5 = Main.DustSet.NewDust(71, ref XYWH, hitDirection, 0.0, 200);
+						if (ptr5 == null)
 						{
 							break;
 						}
-						Main.NPCSet[num9].SetDefaults(defaults);
-						Main.NPCSet[num9].Velocity.X = Velocity.X * 3f;
-						Main.NPCSet[num9].Velocity.Y = Velocity.Y;
-						Main.NPCSet[num9].Velocity.X += Main.Rand.Next(-10, 10) * 0.1f + num8 * Direction * 0.3f;
-						Main.NPCSet[num9].Velocity.Y -= Main.Rand.Next(10) * 0.1f + num8;
-						Main.NPCSet[num9].AI1 = num8;
-						NetMessage.CreateMessage1(23, num9);
-						NetMessage.SendMessage();
+
+						ptr5->Velocity.X *= 1.5f;
+						ptr5->Velocity.Y *= 1.5f;
 					}
-				}
-			}
-			else if (Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.ILLUMINANT_BAT || Type == (int)ID.ILLUMINANT_SLIME)
-			{
-				if (Life > 0)
-				{
-					for (int n = 0; n < dmg / LifeMax * 50.0; n++)
+					break;
+
+				case EntityID.NPCID.GASTROPOD:
+				case EntityID.NPCID.SPECTRAL_GASTROPOD:
+					if (Life > 0)
 					{
-						Dust* ptr4 = Main.DustSet.NewDust(71, ref XYWH, 0.0, 0.0, 200);
-						if (ptr4 == null)
+						for (int num11 = 0; num11 < dmg / LifeMax * 50.0; num11++)
+						{
+							Dust* ptr6 = Main.DustSet.NewDust(72, ref XYWH, 0.0, 0.0, 200);
+							if (ptr6 == null)
+							{
+								break;
+							}
+
+							ptr6->Velocity.X *= 1.5f;
+							ptr6->Velocity.Y *= 1.5f;
+						}
+
+						return;
+					}
+
+					for (int num12 = 0; num12 < 42; num12++)
+					{
+						Dust* ptr7 = Main.DustSet.NewDust(72, ref XYWH, hitDirection, 0.0, 200);
+						if (ptr7 == null)
 						{
 							break;
 						}
-						ptr4->Velocity.X *= 1.5f;
-						ptr4->Velocity.Y *= 1.5f;
+
+						ptr7->Velocity.X *= 1.5f;
+						ptr7->Velocity.Y *= 1.5f;
 					}
-					return;
-				}
-				for (int num10 = 0; num10 < 42; num10++)
-				{
-					Dust* ptr5 = Main.DustSet.NewDust(71, ref XYWH, hitDirection, 0.0, 200);
-					if (ptr5 == null)
+					break;
+
+				case EntityID.NPCID.PIXIE:
+					if (Life > 0)
 					{
-						break;
+						for (int num13 = 0; num13 < dmg / LifeMax * 50.0; num13++)
+						{
+							if (null == Main.DustSet.NewDust(55, ref XYWH, 0.0, 0.0, 200, Colour))
+							{
+								break;
+							}
+						}
+
+						return;
 					}
-					ptr5->Velocity.X *= 1.5f;
-					ptr5->Velocity.Y *= 1.5f;
-				}
-			}
-			else if (Type == (int)ID.GASTROPOD || Type == (int)ID.SPECTRAL_GASTROPOD)
-			{
-				if (Life > 0)
-				{
-					for (int num11 = 0; num11 < dmg / LifeMax * 50.0; num11++)
+
+					for (int num14 = 0; num14 < 42; num14++)
 					{
-						Dust* ptr6 = Main.DustSet.NewDust(72, ref XYWH, 0.0, 0.0, 200);
-						if (ptr6 == null)
+						Dust* ptr8 = Main.DustSet.NewDust(55, ref XYWH, hitDirection, 0.0, 200, Colour);
+						if (ptr8 == null)
 						{
 							break;
 						}
-						ptr6->Velocity.X *= 1.5f;
-						ptr6->Velocity.Y *= 1.5f;
+
+						ptr8->Velocity.X *= 2f;
+						ptr8->Velocity.Y *= 2f;
 					}
-					return;
-				}
-				for (int num12 = 0; num12 < 42; num12++)
-				{
-					Dust* ptr7 = Main.DustSet.NewDust(72, ref XYWH, hitDirection, 0.0, 200);
-					if (ptr7 == null)
+					break;
+
+				case EntityID.NPCID.BLUE_JELLYFISH:
+				case EntityID.NPCID.PINK_JELLYFISH:
+				case EntityID.NPCID.GREEN_JELLYFISH:
+					Color newColor = new Color(50, 120, 255, 100);
+					if (Type == (int)EntityID.NPCID.PINK_JELLYFISH)
 					{
-						break;
+						newColor = new Color(225, 70, 140, 100);
 					}
-					ptr7->Velocity.X *= 1.5f;
-					ptr7->Velocity.Y *= 1.5f;
-				}
-			}
-			else if (Type == (int)ID.PIXIE)
-			{
-				if (Life > 0)
-				{
-					for (int num13 = 0; num13 < dmg / LifeMax * 50.0; num13++)
+					else if (Type == (int)EntityID.NPCID.GREEN_JELLYFISH)
 					{
-						if (null == Main.DustSet.NewDust(55, ref XYWH, 0.0, 0.0, 200, Colour))
+						newColor = new Color(70, 225, 140, 100);
+					}
+
+					if (Life > 0)
+					{
+						for (int num15 = 0; num15 < dmg / LifeMax * 50.0; num15++)
 						{
-							break;
+							if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, 0, newColor))
+							{
+								break;
+							}
 						}
+
+						return;
 					}
-					return;
-				}
-				for (int num14 = 0; num14 < 42; num14++)
-				{
-					Dust* ptr8 = Main.DustSet.NewDust(55, ref XYWH, hitDirection, 0.0, 200, Colour);
-					if (ptr8 == null)
+
+					for (int num16 = 0; num16 < 16; num16++)
 					{
-						break;
-					}
-					ptr8->Velocity.X *= 2f;
-					ptr8->Velocity.Y *= 2f;
-				}
-			}
-			else if (Type == (int)ID.BLUE_JELLYFISH || Type == (int)ID.PINK_JELLYFISH || Type == (int)ID.GREEN_JELLYFISH)
-			{
-				Color newColor = new Color(50, 120, 255, 100);
-				if (Type == (int)ID.PINK_JELLYFISH)
-				{
-					newColor = new Color(225, 70, 140, 100);
-				}
-				else if (Type == (int)ID.GREEN_JELLYFISH)
-				{
-					newColor = new Color(70, 225, 140, 100);
-				}
-				if (Life > 0)
-				{
-					for (int num15 = 0; num15 < dmg / LifeMax * 50.0; num15++)
-					{
-						if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, 0, newColor))
+						if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, 0, newColor))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num16 = 0; num16 < 16; num16++)
-				{
-					if (null == Main.DustSet.NewDust(4, ref XYWH, 2 * hitDirection, -2.0, 0, newColor))
+					break;
+
+				case EntityID.NPCID.LAVA_SLIME:
+				case EntityID.NPCID.HELLBAT:
+					if (Life > 0)
 					{
-						break;
+						for (int num17 = 0; num17 < dmg / LifeMax * 80.0; num17++)
+						{
+							if (null == Main.DustSet.NewDust(6, ref XYWH, hitDirection * 2, -1.0, Alpha, default, 1.5))
+							{
+								break;
+							}
+						}
+
+						return;
 					}
-				}
-			}
-			else if (Type == (int)ID.LAVA_SLIME || Type == (int)ID.HELLBAT)
-			{
-				if (Life > 0)
-				{
-					for (int num17 = 0; num17 < dmg / LifeMax * 80.0; num17++)
+
+					for (int num18 = 0; num18 < 32; num18++)
 					{
 						if (null == Main.DustSet.NewDust(6, ref XYWH, hitDirection * 2, -1.0, Alpha, default, 1.5))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num18 = 0; num18 < 32; num18++)
-				{
-					if (null == Main.DustSet.NewDust(6, ref XYWH, hitDirection * 2, -1.0, Alpha, default, 1.5))
+					break;
+
+				case EntityID.NPCID.KING_SLIME:
+					if (Life > 0)
 					{
-						break;
+						for (int num19 = 0; num19 < dmg / LifeMax * 300.0; num19++)
+						{
+							if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, 175, new Color(0, 80, 255, 100)))
+							{
+								break;
+							}
+						}
+
+						return;
 					}
-				}
-			}
-			else if (Type == (int)ID.KING_SLIME)
-			{
-				if (Life > 0)
-				{
-					for (int num19 = 0; num19 < dmg / LifeMax * 300.0; num19++)
+
+					for (int num20 = 0; num20 < 128; num20++)
 					{
-						if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection, -1.0, 175, new Color(0, 80, 255, 100)))
+						if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection << 1, -2.0, 175, new Color(0, 80, 255, 100)))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num20 = 0; num20 < 128; num20++)
-				{
-					if (null == Main.DustSet.NewDust(4, ref XYWH, hitDirection << 1, -2.0, 175, new Color(0, 80, 255, 100)))
+
+					if (Main.NetMode == (byte)NetModeSetting.CLIENT)
 					{
-						break;
+						return;
 					}
-				}
-				if (Main.NetMode == (byte)NetModeSetting.CLIENT)
-				{
-					return;
-				}
-				for (int num21 = Main.Rand.Next(3, 7); num21 >= 0; num21--)
-				{
-					int x = XYWH.X + Main.Rand.Next(Width - 32);
-					int y = XYWH.Y + Main.Rand.Next(Height - 32);
-					int num22 = NewNPC(x, y, (int)ID.SLIME);
-					if (num22 < MaxNumNPCs)
+
+					for (int num21 = Main.Rand.Next(3, 7); num21 >= 0; num21--)
 					{
-						Main.NPCSet[num22].SetDefaults((int)ID.SLIME);
-						Main.NPCSet[num22].Velocity.X = Main.Rand.Next(-15, 16) * 0.1f;
-						Main.NPCSet[num22].Velocity.Y = Main.Rand.Next(-30, 1) * 0.1f;
-						Main.NPCSet[num22].AI1 = Main.Rand.Next(3);
-						NetMessage.CreateMessage1(23, num22);
-						NetMessage.SendMessage();
+						int x = XYWH.X + Main.Rand.Next(Width - 32);
+						int y = XYWH.Y + Main.Rand.Next(Height - 32);
+						int num22 = NewNPC(x, y, (int)EntityID.NPCID.SLIME);
+						if (num22 < MaxNumNPCs)
+						{
+							Main.NPCSet[num22].SetDefaults((int)EntityID.NPCID.SLIME);
+							Main.NPCSet[num22].Velocity.X = Main.Rand.Next(-15, 16) * 0.1f;
+							Main.NPCSet[num22].Velocity.Y = Main.Rand.Next(-30, 1) * 0.1f;
+							Main.NPCSet[num22].AI1 = Main.Rand.Next(3);
+							NetMessage.CreateMessage1(23, num22);
+							NetMessage.SendMessage();
+						}
 					}
-				}
-			}
-			else if (Type == (int)ID.CAVE_BAT || Type == (int)ID.JUNGLE_BAT || Type == (int)ID.GIANT_BAT)
-			{
-				if (Life > 0)
-				{
-					for (int num23 = 0; num23 < dmg / LifeMax * 30.0; num23++)
+					break;
+
+				case EntityID.NPCID.CAVE_BAT:
+				case EntityID.NPCID.JUNGLE_BAT:
+				case EntityID.NPCID.GIANT_BAT:
+					if (Life > 0)
 					{
-						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						for (int num23 = 0; num23 < dmg / LifeMax * 30.0; num23++)
+						{
+							if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+							{
+								break;
+							}
+						}
+
+						return;
+					}
+
+					for (int num24 = 0; num24 < 12; num24++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num24 = 0; num24 < 12; num24++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+					if (Type == (int)EntityID.NPCID.JUNGLE_BAT)
 					{
-						break;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.JUNGLE_BAT);
 					}
-				}
-				if (Type == (int)ID.JUNGLE_BAT)
-				{
-					Gore.NewGore(Position, Velocity, 83);
-				}
-				else if (Type == (int)ID.GIANT_BAT)
-				{
-					Gore.NewGore(Position, Velocity, 107);
-				}
-				else
-				{
-					Gore.NewGore(Position, Velocity, 82);
-				}
-			}
-			else if (Type == (int)ID.BUNNY || Type == (int)ID.GOLDFISH || Type == (int)ID.CRAB || Type == (int)ID.BIRD || Type == (int)ID.ANGLER_FISH)
-			{
-				if (Life > 0)
-				{
-					for (int num25 = 0; num25 < dmg / LifeMax * 20.0; num25++)
+					else if (Type == (int)EntityID.NPCID.GIANT_BAT)
 					{
-						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.GIANT_BAT);
+					}
+					else
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CAVE_BAT);
+					}
+					break;
+
+				case EntityID.NPCID.BUNNY:
+				case EntityID.NPCID.GOLDFISH:
+				case EntityID.NPCID.CRAB:
+				case EntityID.NPCID.BIRD:
+				case EntityID.NPCID.ANGLER_FISH:
+					if (Life > 0)
+					{
+						for (int num25 = 0; num25 < dmg / LifeMax * 20.0; num25++)
+						{
+							if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+							{
+								break;
+							}
+						}
+
+						return;
+					}
+
+					for (int num26 = 0; num26 < 8; num26++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num26 = 0; num26 < 8; num26++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+					if (Type == (int)EntityID.NPCID.BUNNY)
 					{
-						break;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BUNNY1);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BUNNY2);
 					}
-				}
-				if (Type == (int)ID.BUNNY)
-				{
-					Gore.NewGore(Position, Velocity, 76);
-					Gore.NewGore(Position, Velocity, 77);
-				}
-				else if (Type == (int)ID.CRAB)
-				{
-					Gore.NewGore(Position, Velocity, 95);
-					Gore.NewGore(Position, Velocity, 95);
-					Gore.NewGore(Position, Velocity, 96);
-				}
-				else if (Type == (int)ID.BIRD)
-				{
-					Gore.NewGore(Position, Velocity, 100);
-				}
-				else if (Type == (int)ID.ANGLER_FISH)
-				{
-					Gore.NewGore(Position, Velocity, 116);
-				}
-			}
-			else if (Type == (int)ID.CORRUPT_BUNNY || Type == (int)ID.CORRUPT_GOLDFISH || Type == (int)ID.PIRANHA)
-			{
-				if (Life > 0)
-				{
-					for (int num27 = 0; num27 < dmg / LifeMax * 20.0; num27++)
+					else if (Type == (int)EntityID.NPCID.CRAB)
 					{
-						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CRAB1);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CRAB1);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CRAB2);
+					}
+					else if (Type == (int)EntityID.NPCID.BIRD)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BIRD_WHITE);
+					}
+					else if (Type == (int)EntityID.NPCID.ANGLER_FISH)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ANGLER_FISH);
+					}
+					break;
+
+				case EntityID.NPCID.CORRUPT_BUNNY:
+				case EntityID.NPCID.CORRUPT_GOLDFISH:
+				case EntityID.NPCID.PIRANHA:
+					if (Life > 0)
+					{
+						for (int num27 = 0; num27 < dmg / LifeMax * 20.0; num27++)
+						{
+							if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+							{
+								break;
+							}
+						}
+
+						return;
+					}
+
+					for (int num28 = 0; num28 < 8; num28++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num28 = 0; num28 < 8; num28++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+					if (Type == (int)EntityID.NPCID.CORRUPT_GOLDFISH)
 					{
-						break;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.GOLDFISH_CORRUPT);
+						return;
 					}
-				}
-				if (Type == (int)ID.CORRUPT_GOLDFISH)
-				{
-					Gore.NewGore(Position, Velocity, 84);
-					return;
-				}
-				if (Type == (int)ID.PIRANHA)
-				{
-					Gore.NewGore(Position, Velocity, 85);
-					return;
-				}
-				Gore.NewGore(Position, Velocity, 78);
-				Gore.NewGore(Position, Velocity, 79);
-			}
-			else if (Type == (int)ID.DEMON_EYE || Type == (int)ID.CATARACT_EYE || Type == (int)ID.SLEEPY_EYE || Type == (int)ID.DIALATED_EYE || Type == (int)ID.GREEN_EYE || Type == (int)ID.PURPLE_EYE)
-			{
-				if (Life > 0)
-				{
-					int num29 = (int)(dmg / LifeMax * 80.0);
-					while (num29 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+
+					if (Type == (int)EntityID.NPCID.PIRANHA)
 					{
-						num29--;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.PIRANHA);
+						return;
 					}
-					return;
-				}
-				for (int num30 = 0; num30 < 42; num30++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BUNNY_CORRUPT1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BUNNY_CORRUPT2);
+					break;
+
+				case EntityID.NPCID.DEMON_EYE:
+#if VERSION_101
+				case EntityID.NPCID.CATARACT_EYE:
+				case EntityID.NPCID.SLEEPY_EYE:
+				case EntityID.NPCID.DIALATED_EYE:
+				case EntityID.NPCID.GREEN_EYE:
+				case EntityID.NPCID.PURPLE_EYE:
+#endif
+					if (Life > 0)
 					{
-						break;
+						int num29 = (int)(dmg / LifeMax * 80.0);
+						while (num29 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num29--;
+						}
+
+						return;
 					}
-				}
-				if (Type == (int)ID.CATARACT_EYE)
-				{
-					Gore.NewGore(Position, Velocity, 175, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 2, Scale);
-				}
-				else if (Type == (int)ID.SLEEPY_EYE)
-				{
-					Gore.NewGore(Position, Velocity, 176, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 2, Scale);
-				}
-				else if (Type == (int)ID.DIALATED_EYE)
-				{
-					Gore.NewGore(Position, Velocity, 177, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 2, Scale);
-				}
-				else if (Type == (int)ID.GREEN_EYE)
-				{
-					Gore.NewGore(Position, Velocity, 178, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 179, Scale);
-				}
-				else if (Type == (int)ID.PURPLE_EYE)
-				{
-					Gore.NewGore(Position, Velocity, 180, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 181, Scale);
-				}
-				else
-				{
-					Gore.NewGore(Position, Velocity, 1, Scale);
-					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 2, Scale);
-				}
-			}
-			else if (Type == (int)ID.WANDERING_EYE)
-			{
-				if (Life > 0)
-				{
-					int num31 = (int)(dmg / LifeMax * 80.0);
-					while (num31 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+
+					for (int num30 = 0; num30 < 42; num30++)
 					{
-						num31--;
-					}
-					if (Life < LifeMax >> 1 && LocalAI0 == 0)
-					{
-						LocalAI0 = 1;
-						Gore.NewGore(Position, Velocity, 1);
-					}
-					return;
-				}
-				for (int num32 = 0; num32 < 48; num32++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
-					{
-						break;
-					}
-				}
-				Gore.NewGore(Position, Velocity, 155);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 14f), Velocity, 155);
-			}
-			else if (Type == (int)ID.ANTLION || Type == (int)ID.ALBINO_ANTLION)
-			{
-				if (Life > 0)
-				{
-					int num33 = (int)(dmg / LifeMax * 80.0);
-					while (num33 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
-					{
-						num33--;
-					}
-					return;
-				}
-				for (int num34 = 0; num34 < 42; num34++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
-					{
-						break;
-					}
-				}
-				int num35 = ((Type == (int)ID.ANTLION) ? 97 : 160);
-				Gore.NewGore(Position, Velocity, num35);
-				Gore.NewGore(Position, Velocity, ++num35);
-			}
-			else if (Type == (int)ID.VULTURE)
-			{
-				if (Life > 0)
-				{
-					int num36 = (int)(dmg / LifeMax * 80.0);
-					while (num36 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
-					{
-						num36--;
-					}
-					return;
-				}
-				for (int num37 = 0; num37 < 42; num37++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
-					{
-						break;
-					}
-				}
-				Gore.NewGore(Position, Velocity, 86);
-				Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 87);
-				Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, 88);
-			}
-			else if (Type == (int)ID.SHARK || Type == (int)ID.ORKA)
-			{
-				if (Life > 0)
-				{
-					for (int num38 = 0; num38 < dmg / LifeMax * 150.0; num38++)
-					{
-						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num39 = 0; num39 < 60; num39++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+#if VERSION_101
+					if (Type == (int)EntityID.NPCID.CATARACT_EYE)
 					{
-						break;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE7, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE2, Scale);
 					}
-				}
-				int num40 = ((Type == (int)ID.SHARK) ? 89 : 162);
-				Vector2 vector = Velocity;
-				vector.X *= 0.8f;
-				vector.Y *= 0.8f;
-				Gore.NewGore(Position, vector, num40);
-				Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
-				Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
-				Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
-			}
-			else if (Type == (int)ID.ZOMBIE || Type == (int)ID.DOCTOR_BONES || Type == (int)ID.THE_GROOM || Type == (int)ID.WEREWOLF || Type == (int)ID.CLOWN || Type == (int)ID.BALD_ZOMBIE || Type == (int)ID.PINCUSHION_ZOMBIE || Type == (int)ID.SLIMED_ZOMBIE || Type == (int)ID.SWAMP_ZOMBIE || Type == (int)ID.TWIGGY_ZOMBIE || Type == (int)ID.FEMALE_ZOMBIE)
-			{
-				if (Life > 0)
-				{
-					int num41 = (int)(dmg / LifeMax * 80.0);
-					while (num41 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+					else if (Type == (int)EntityID.NPCID.SLEEPY_EYE)
 					{
-						num41--;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE6, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE2, Scale);
 					}
-					if (Type == (int)ID.PINCUSHION_ZOMBIE && Main.Rand.Next(5) == 0)
+					else if (Type == (int)EntityID.NPCID.DIALATED_EYE)
 					{
-						Gore.NewGore(Position, Velocity, 183);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE5, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE2, Scale);
 					}
-					if (Type == (int)ID.SLIMED_ZOMBIE)
+					else if (Type == (int)EntityID.NPCID.GREEN_EYE)
 					{
-						Rectangle ZombieGore = XYWH;
-						ZombieGore.Height = 24;
-						for (int num160 = 0; num160 < dmg / LifeMax * 200.0; num160++)
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE10, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE11, Scale);
+					}
+					else if (Type == (int)EntityID.NPCID.PURPLE_EYE)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE8, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE9, Scale);
+					}
+					else
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE1, Scale);
+						Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE2, Scale);
+					}
+#else
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE1, Scale);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.EYE2, Scale);
+#endif
+					break;
+
+				case EntityID.NPCID.WANDERING_EYE:
+					if (Life > 0)
+					{
+						int num31 = (int)(dmg / LifeMax * 80.0);
+						while (num31 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
 						{
-							Main.DustSet.NewDust(4, ref ZombieGore, hitDirection, -1f, 125, new Color(0, 80, 255, 100));
+							num31--;
 						}
+
+						if (Life < LifeMax >> 1 && LocalAI0 == 0)
+						{
+							LocalAI0 = 1;
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE1);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num42 = 0; num42 < 42; num42++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5))
+
+					for (int num32 = 0; num32 < 48; num32++)
 					{
-						break;
-					}
-				}
-				if (Type == (int)ID.SLIMED_ZOMBIE)
-				{
-					Rectangle ZombieGore = XYWH;
-					ZombieGore.Height = 24;
-					for (int num160 = 0; num160 < 25; num160++)
-					{
-						Main.DustSet.NewDust(4, ref ZombieGore, hitDirection, -1f, 125, new Color(0, 80, 255, 100));
-					}
-				}
-				if (Type == (int)ID.WEREWOLF)
-				{
-					Gore.NewGore(Position, Velocity, 117, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 118, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 118, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 119, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 119, Scale);
-					return;
-				}
-				if (Type == (int)ID.CLOWN)
-				{
-					Gore.NewGore(Position, Velocity, 121, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 122, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 122, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 123, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 123, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 46f), Velocity, 120, Scale);
-					return;
-				}
-				if (Type == (int)ID.SWAMP_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 184, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 185, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 185, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 186, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 186, Scale);
-					return;
-				}
-				if (Type == (int)ID.FEMALE_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 187, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 188, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 188, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 189, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 189, Scale);
-					return;
-				}
-				if (Type == (int)ID.BALD_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 154);
-				}
-				else if (Type == (int)ID.PINCUSHION_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 182);
-				}
-				else if (Type == (int)ID.TWIGGY_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 190);
-				}
-				else if (Type != (int)ID.SLIMED_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 3);
-				}
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 4);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 4);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 5);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 5);
-				if (Type == (int)ID.PINCUSHION_ZOMBIE)
-				{
-					Gore.NewGore(Position, Velocity, 183);
-				}
-				if (Type == (int)ID.PINCUSHION_ZOMBIE && Main.Rand.Next(2) == 0)
-				{
-					Gore.NewGore(Position, Velocity, 183);
-				}
-			}
-			else if (Type == (int)ID.CURSED_HAMMER || Type == (int)ID.ENCHANTED_SWORD || Type == (int)ID.SHADOW_HAMMER)
-			{
-				if (Life > 0)
-				{
-					for (int num43 = 0; num43 < dmg / LifeMax * 50.0; num43++)
-					{
-						Dust* ptr9 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-						if (ptr9 == null)
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
 						{
 							break;
 						}
-						ptr9->NoGravity = true;
 					}
-					return;
-				}
-				for (int num44 = 0; num44 < 16; num44++)
-				{
-					Dust* ptr10 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-					if (ptr10 == null)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.WANDERING_EYE);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 14f), Velocity, (int)EntityID.GoreID.WANDERING_EYE);
+					break;
+
+				case EntityID.NPCID.ANTLION:
+				case EntityID.NPCID.ALBINO_ANTLION:
+					if (Life > 0)
 					{
-						break;
+						int num33 = (int)(dmg / LifeMax * 80.0);
+						while (num33 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num33--;
+						}
+
+						return;
 					}
-					ptr10->Velocity.X *= 2f;
-					ptr10->Velocity.Y *= 2f;
-					ptr10->NoGravity = true;
-				}
-				int num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), 61, Scale);
-				Main.GoreSet[num45].Velocity *= 0.5f;
-				num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), 61, Scale);
-				Main.GoreSet[num45].Velocity *= 0.5f;
-				num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), 61, Scale);
-				Main.GoreSet[num45].Velocity *= 0.5f;
-			}
-			else if (Type == (int)ID.EYE_OF_CTHULHU || Type == (int)ID.SPAZMATISM || Type == (int)ID.RETINAZER)
-			{
-				if (Life > 0)
-				{
-					int num46 = (int)(dmg / LifeMax * 80.0);
-					while (num46 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+
+					for (int num34 = 0; num34 < 42; num34++)
 					{
-						num46--;
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
 					}
-					return;
-				}
-				for (int num47 = 0; num47 < Dust.MaxNumLocalDust; num47++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+
+					int num35 = ((Type == (int)EntityID.NPCID.ANTLION) ? (int)EntityID.GoreID.ANTLION1 : (int)EntityID.GoreID.ALBINO_ANTLION1);
+					Gore.NewGore(Position, Velocity, num35);
+					Gore.NewGore(Position, Velocity, ++num35);
+					break;
+
+				case EntityID.NPCID.VULTURE:
+					if (Life > 0)
 					{
-						break;
+						int num36 = (int)(dmg / LifeMax * 80.0);
+						while (num36 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num36--;
+						}
+
+						return;
 					}
-				}
-				for (int num48 = 0; num48 < 2; num48++)
-				{
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 2);
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 7);
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 9);
-					if (Type == (int)ID.EYE_OF_CTHULHU)
+
+					for (int num37 = 0; num37 < 42; num37++)
 					{
-						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 10);
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.VULTURE1);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.VULTURE2);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), Velocity, (int)EntityID.GoreID.VULTURE3);
+					break;
+
+				case EntityID.NPCID.SHARK:
+				case EntityID.NPCID.ORKA:
+					if (Life > 0)
+					{
+						for (int num38 = 0; num38 < dmg / LifeMax * 150.0; num38++)
+						{
+							if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+							{
+								break;
+							}
+						}
+
+						return;
+					}
+
+					for (int num39 = 0; num39 < 60; num39++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
+					}
+
+					int num40 = ((Type == (int)EntityID.NPCID.SHARK) ? (int)EntityID.GoreID.SHARK1 : (int)EntityID.GoreID.ORCA1);
+					Vector2 vector = Velocity;
+					vector.X *= 0.8f;
+					vector.Y *= 0.8f;
+					Gore.NewGore(Position, vector, num40);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
+					Gore.NewGore(new Vector2(Position.X + 14f, Position.Y), vector, ++num40);
+					break;
+
+				case EntityID.NPCID.ZOMBIE:
+				case EntityID.NPCID.BALD_ZOMBIE:
+#if VERSION_101
+				case EntityID.NPCID.PINCUSHION_ZOMBIE:
+				case EntityID.NPCID.SLIMED_ZOMBIE:
+				case EntityID.NPCID.SWAMP_ZOMBIE:
+				case EntityID.NPCID.TWIGGY_ZOMBIE:
+				case EntityID.NPCID.FEMALE_ZOMBIE:
+#endif
+				case EntityID.NPCID.DOCTOR_BONES:
+				case EntityID.NPCID.THE_GROOM:
+				case EntityID.NPCID.WEREWOLF:
+				case EntityID.NPCID.CLOWN:
+					if (Life > 0)
+					{
+						int num41 = (int)(dmg / LifeMax * 80.0);
+						while (num41 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num41--;
+						}
+
+#if VERSION_101
+						if (Type == (int)EntityID.NPCID.PINCUSHION_ZOMBIE && Main.Rand.Next(5) == 0)
+						{
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARROW);
+						}
+
+						if (Type == (int)EntityID.NPCID.SLIMED_ZOMBIE)
+						{
+							Rectangle ZombieGore = XYWH;
+							ZombieGore.Height = 24;
+							for (int num160 = 0; num160 < dmg / LifeMax * 200.0; num160++)
+							{
+								Main.DustSet.NewDust(4, ref ZombieGore, hitDirection, -1f, 125, new Color(0, 80, 255, 100));
+							}
+						}
+#endif
+						return;
+					}
+
+					for (int num42 = 0; num42 < 42; num42++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5))
+						{
+							break;
+						}
+					}
+
+					switch ((EntityID.NPCID)Type)
+					{
+						case EntityID.NPCID.WEREWOLF:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.WEREWOLF1, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.WEREWOLF2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.WEREWOLF2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.WEREWOLF3, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.WEREWOLF3, Scale);
+							return;
+
+						case EntityID.NPCID.CLOWN:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN1, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN3, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN3, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 46f), Velocity, (int)EntityID.GoreID.ZOMBIE_CLOWN_BALL, Scale);
+							return;
+
+#if VERSION_101
+						case EntityID.NPCID.SLIMED_ZOMBIE:
+							Rectangle ZombieGore = XYWH;
+							ZombieGore.Height = 24;
+							for (int num160 = 0; num160 < 25; num160++)
+							{
+								Main.DustSet.NewDust(4, ref ZombieGore, hitDirection, -1f, 125, new Color(0, 80, 255, 100));
+							}
+
+							break;
+
+						case EntityID.NPCID.SWAMP_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SWAMP_ZOMBIE1, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.SWAMP_ZOMBIE2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.SWAMP_ZOMBIE2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.SWAMP_ZOMBIE3, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.SWAMP_ZOMBIE3, Scale);
+							return;
+
+						case EntityID.NPCID.FEMALE_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.FEMALE_ZOMBIE1, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.FEMALE_ZOMBIE2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.FEMALE_ZOMBIE2, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.FEMALE_ZOMBIE3, Scale);
+							Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.FEMALE_ZOMBIE3, Scale);
+							return;
+#endif
+					}
+
+					switch ((EntityID.NPCID)Type)
+					{
+						case EntityID.NPCID.BALD_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.BALD_ZOMBIE_HEAD);
+							break;
+#if VERSION_101
+						case EntityID.NPCID.PINCUSHION_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.PINCUSHION_ZOMBIE_HEAD);
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARROW);
+							if (Main.Rand.Next(2) == 0)
+							{
+								Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARROW);
+							}
+
+							break;
+
+						case EntityID.NPCID.TWIGGY_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.TWIGGY_ZOMBIE_HEAD);
+							break;
+
+						case EntityID.NPCID.SLIMED_ZOMBIE:
+							Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ZOMBIE1);
+							break;
+#endif
+					}
+
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ZOMBIE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ZOMBIE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ZOMBIE3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ZOMBIE3);
+					break;
+
+				case EntityID.NPCID.CURSED_HAMMER:
+				case EntityID.NPCID.ENCHANTED_SWORD:
+				case EntityID.NPCID.SHADOW_HAMMER:
+					if (Life > 0)
+					{
+						for (int num43 = 0; num43 < dmg / LifeMax * 50.0; num43++)
+						{
+							Dust* ptr9 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+							if (ptr9 == null)
+							{
+								break;
+							}
+
+							ptr9->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int num44 = 0; num44 < 16; num44++)
+					{
+						Dust* ptr10 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+						if (ptr10 == null)
+						{
+							break;
+						}
+
+						ptr10->Velocity.X *= 2f;
+						ptr10->Velocity.Y *= 2f;
+						ptr10->NoGravity = true;
+					}
+
+					int num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), (int)EntityID.GoreID.SMOKE_WHITE1, Scale);
+					Main.GoreSet[num45].Velocity *= 0.5f;
+					num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), (int)EntityID.GoreID.SMOKE_WHITE1, Scale);
+					Main.GoreSet[num45].Velocity *= 0.5f;
+					num45 = Gore.NewGore(new Vector2(Position.X, Position.Y + ((Height >> 1) - 10)), new Vector2(Main.Rand.Next(-2, 3), Main.Rand.Next(-2, 3)), (int)EntityID.GoreID.SMOKE_WHITE1, Scale);
+					Main.GoreSet[num45].Velocity *= 0.5f;
+					break;
+
+				case EntityID.NPCID.EYE_OF_CTHULHU:
+				case EntityID.NPCID.SPAZMATISM:
+				case EntityID.NPCID.RETINAZER:
+					if (Life > 0)
+					{
+						int num46 = (int)(dmg / LifeMax * 80.0);
+						while (num46 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num46--;
+						}
+
+						return;
+					}
+
+					for (int num47 = 0; num47 < Dust.MaxNumLocalDust; num47++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
+					}
+
+					for (int num48 = 0; num48 < 2; num48++)
+					{
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE2);
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE4);
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE_OF_CTHULHU2);
+						if (Type == (int)EntityID.NPCID.EYE_OF_CTHULHU)
+						{
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.EYE_OF_CTHULHU3);
+							Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
+						}
+						else if (Type == (int)EntityID.NPCID.RETINAZER)
+						{
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.RETINAZER_CHUNK);
+						}
+						else if (Type == (int)EntityID.NPCID.SPAZMATISM)
+						{
+							Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.SPAZMATISM_CHUNK);
+						}
+					}
+
+					if (Type != (int)EntityID.NPCID.RETINAZER && Type != (int)EntityID.NPCID.SPAZMATISM)
+					{
+						return;
+					}
+
+					for (int num49 = 0; num49 < 8; num49++)
+					{
+						Dust* ptr11 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr11 == null)
+						{
+							break;
+						}
+
+						ptr11->Velocity.X *= 1.4f;
+						ptr11->Velocity.Y *= 1.4f;
+					}
+
+					for (int num50 = 0; num50 < 4; num50++)
+					{
+						Dust* ptr12 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr12 == null)
+						{
+							break;
+						}
+
+						ptr12->NoGravity = true;
+						ptr12->Velocity.X *= 5f;
+						ptr12->Velocity.Y *= 5f;
+						ptr12 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr12 == null)
+						{
+							break;
+						}
+
+						ptr12->Velocity.X *= 3f;
+						ptr12->Velocity.Y *= 3f;
+					}
+
+					int num51 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num51].Velocity.X *= 0.4f;
+					Main.GoreSet[num51].Velocity.X += 1f;
+					Main.GoreSet[num51].Velocity.Y *= 0.4f;
+					Main.GoreSet[num51].Velocity.Y += 1f;
+					num51 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num51].Velocity.X *= 0.4f;
+					Main.GoreSet[num51].Velocity.X -= 1f;
+					Main.GoreSet[num51].Velocity.Y *= 0.4f;
+					Main.GoreSet[num51].Velocity.Y += 1f;
+					num51 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num51].Velocity.X *= 0.4f;
+					Main.GoreSet[num51].Velocity.X += 1f;
+					Main.GoreSet[num51].Velocity.Y *= 0.4f;
+					Main.GoreSet[num51].Velocity.Y -= 1f;
+					num51 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num51].Velocity.X *= 0.4f;
+					Main.GoreSet[num51].Velocity.X -= 1f;
+					Main.GoreSet[num51].Velocity.Y *= 0.4f;
+					Main.GoreSet[num51].Velocity.Y -= 1f;
+					break;
+
+				case EntityID.NPCID.OCRAM:
+					if (Life > 0)
+					{
+						int num52 = (int)(dmg / LifeMax * 80.0);
+						while (num52 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num52--;
+						}
+
+						return;
+					}
+
+					for (int num53 = 0; num53 < 128; num53++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
+					}
+
+					for (int num54 = 0; num54 < 2; num54++)
+					{
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM1);
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM2);
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM3);
+						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), (int)EntityID.GoreID.OCRAM1);
 						Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 					}
-					else if (Type == (int)ID.RETINAZER)
+					break;
+
+				case EntityID.NPCID.SERVANT_OF_CTHULHU:
+					if (Life > 0)
 					{
-						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 146);
+						for (int num55 = 0; num55 < dmg / LifeMax * 50.0; num55++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					else if (Type == (int)ID.SPAZMATISM)
-					{
-						Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 145);
-					}
-				}
-				if (Type != (int)ID.RETINAZER && Type != (int)ID.SPAZMATISM)
-				{
-					return;
-				}
-				for (int num49 = 0; num49 < 8; num49++)
-				{
-					Dust* ptr11 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr11 == null)
-					{
-						break;
-					}
-					ptr11->Velocity.X *= 1.4f;
-					ptr11->Velocity.Y *= 1.4f;
-				}
-				for (int num50 = 0; num50 < 4; num50++)
-				{
-					Dust* ptr12 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr12 == null)
-					{
-						break;
-					}
-					ptr12->NoGravity = true;
-					ptr12->Velocity.X *= 5f;
-					ptr12->Velocity.Y *= 5f;
-					ptr12 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr12 == null)
-					{
-						break;
-					}
-					ptr12->Velocity.X *= 3f;
-					ptr12->Velocity.Y *= 3f;
-				}
-				int num51 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num51].Velocity.X *= 0.4f;
-				Main.GoreSet[num51].Velocity.X += 1f;
-				Main.GoreSet[num51].Velocity.Y *= 0.4f;
-				Main.GoreSet[num51].Velocity.Y += 1f;
-				num51 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num51].Velocity.X *= 0.4f;
-				Main.GoreSet[num51].Velocity.X -= 1f;
-				Main.GoreSet[num51].Velocity.Y *= 0.4f;
-				Main.GoreSet[num51].Velocity.Y += 1f;
-				num51 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num51].Velocity.X *= 0.4f;
-				Main.GoreSet[num51].Velocity.X += 1f;
-				Main.GoreSet[num51].Velocity.Y *= 0.4f;
-				Main.GoreSet[num51].Velocity.Y -= 1f;
-				num51 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num51].Velocity.X *= 0.4f;
-				Main.GoreSet[num51].Velocity.X -= 1f;
-				Main.GoreSet[num51].Velocity.Y *= 0.4f;
-				Main.GoreSet[num51].Velocity.Y -= 1f;
-			}
-			else if (Type == (int)ID.OCRAM)
-			{
-				if (Life > 0)
-				{
-					int num52 = (int)(dmg / LifeMax * 80.0);
-					while (num52 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
-					{
-						num52--;
-					}
-					return;
-				}
-				for (int num53 = 0; num53 < 128; num53++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0))
-					{
-						break;
-					}
-				}
-				for (int num54 = 0; num54 < 2; num54++)
-				{
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 172);
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 173);
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 174);
-					Gore.NewGore(Position, new Vector2(Main.Rand.Next(-30, 31) * 0.2f, Main.Rand.Next(-30, 31) * 0.2f), 172);
-					Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
-				}
-			}
-			else if (Type == (int)ID.SERVANT_OF_CTHULHU)
-			{
-				if (Life > 0)
-				{
-					for (int num55 = 0; num55 < dmg / LifeMax * 50.0; num55++)
-					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
-					}
-					return;
-				}
-				for (int num56 = 0; num56 < 16; num56++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
-				}
-				Gore.NewGore(Position, Velocity, 6);
-				Gore.NewGore(Position, Velocity, 7);
-			}
-			else if (Type == (int)ID.SERVANT_OF_OCRAM)
-			{
-				if (Life > 0)
-				{
-					for (int num57 = 0; num57 < dmg / LifeMax * 50.0; num57++)
-					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
-					}
-				}
-				else
-				{
-					for (int num58 = 0; num58 < 16; num58++)
+
+					for (int num56 = 0; num56 < 16; num56++)
 					{
 						Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
 					}
-				}
-			}
-			else if (Type == (int)ID.WALL_OF_FLESH || Type == (int)ID.WALL_OF_FLESH_EYE)
-			{
-				if (Life > 0)
-				{
-					for (int num59 = 0; num59 < 16; num59++)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE3);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EYE4);
+					break;
+
+				case EntityID.NPCID.SERVANT_OF_OCRAM:
+					if (Life > 0)
+					{
+						for (int num57 = 0; num57 < dmg / LifeMax * 50.0; num57++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+					}
+					else
+					{
+						for (int num58 = 0; num58 < 16; num58++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
+						}
+					}
+					break;
+
+				case EntityID.NPCID.WALL_OF_FLESH:
+				case EntityID.NPCID.WALL_OF_FLESH_EYE:
+					if (Life > 0)
+					{
+						for (int num59 = 0; num59 < 16; num59++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num60 = 0; num60 < 42; num60++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -1.0);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.WALL_OF_FLESH1, Scale);
+					if (Type == (int)EntityID.NPCID.WALL_OF_FLESH_EYE)
+					{
+						Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1)), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH3, Scale);
+						Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH3, Scale);
+						Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y + (Height >> 1)), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH1, Scale);
+					}
+					else
+					{
+						Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1)), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH2, Scale);
+						Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH2, Scale);
+						Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y + (Height >> 1)), Velocity, (int)EntityID.GoreID.WALL_OF_FLESH1, Scale);
+					}
+					break;
+
+				case EntityID.NPCID.THE_HUNGRY:
+				case EntityID.NPCID.THE_HUNGRY_II:
+					if (Life > 0)
+					{
+						for (int num61 = 0; num61 < 4; num61++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					if (Type == (int)EntityID.NPCID.THE_HUNGRY && Main.NetMode != (byte)NetModeSetting.CLIENT)
+					{
+						NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)EntityID.NPCID.THE_HUNGRY_II);
+						for (int num62 = 0; num62 < 8; num62++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num63 = 0; num63 < 16; num63++)
 					{
 						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
 					}
-					return;
-				}
-				for (int num60 = 0; num60 < 42; num60++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -1.0);
-				}
-				Gore.NewGore(Position, Velocity, 137, Scale);
-				if (Type == (int)ID.WALL_OF_FLESH_EYE)
-				{
-					Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1)), Velocity, 139, Scale);
-					Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y), Velocity, 139, Scale);
-					Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y + (Height >> 1)), Velocity, 137, Scale);
-				}
-				else
-				{
-					Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1)), Velocity, 138, Scale);
-					Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y), Velocity, 138, Scale);
-					Gore.NewGore(new Vector2(Position.X + (Width >> 1), Position.Y + (Height >> 1)), Velocity, 137, Scale);
-				}
-			}
-			else if (Type == (int)ID.THE_HUNGRY || Type == (int)ID.THE_HUNGRY_II)
-			{
-				if (Life > 0)
-				{
-					for (int num61 = 0; num61 < 4; num61++)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.THE_HUNGRY1, Scale);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.THE_HUNGRY2, Scale);
+					break;
+
+				case EntityID.NPCID.LEECH_HEAD:
+				case EntityID.NPCID.LEECH_BODY:
+				case EntityID.NPCID.LEECH_TAIL:
+					if (Life > 0)
+					{
+						for (int num64 = 0; num64 < 4; num64++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num65 = 0; num65 < 8; num65++)
 					{
 						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
 					}
-					return;
-				}
-				if (Type == (int)ID.THE_HUNGRY && Main.NetMode != (byte)NetModeSetting.CLIENT)
-				{
-					NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)ID.THE_HUNGRY_II);
-					for (int num62 = 0; num62 < 8; num62++)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.LEECH_HEAD + Type - (int)EntityID.NPCID.LEECH_HEAD, Scale);
+					break;
+
+				case EntityID.NPCID.EATER_OF_SOULS:
+				case EntityID.NPCID.CORRUPTOR:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num66 = (int)(dmg / LifeMax * 80.0); num66 > 0; num66--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num63 = 0; num63 < 16; num63++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
-				}
-				Gore.NewGore(Position, Velocity, 132, Scale);
-				Gore.NewGore(Position, Velocity, 133, Scale);
-			}
-			else if (Type >= (int)ID.LEECH_HEAD && Type <= (int)ID.LEECH_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num64 = 0; num64 < 4; num64++)
+
+					for (int num67 = 0; num67 < 42; num67++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
 					}
-					return;
-				}
-				for (int num65 = 0; num65 < 8; num65++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
-				}
-				Gore.NewGore(Position, Velocity, 134 + Type - (int)ID.LEECH_HEAD, Scale);
-			}
-			else if (Type == (int)ID.EATER_OF_SOULS || Type == (int)ID.CORRUPTOR)
-			{
-				if (Life > 0)
-				{
-					for (int num66 = (int)(dmg / LifeMax * 80.0); num66 > 0; num66--)
+
+					if (Type == (int)EntityID.NPCID.CORRUPTOR)
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						int num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTOR1, Scale);
+						num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTOR1, Scale);
+						num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTOR2, Scale);
+						num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTION_CREATURE_EYE, Scale);
 					}
-					return;
-				}
-				for (int num67 = 0; num67 < 42; num67++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				if (Type == (int)ID.CORRUPTOR)
-				{
-					int num68 = Gore.NewGore(Position, Velocity, 108, Scale);
-					num68 = Gore.NewGore(Position, Velocity, 108, Scale);
-					num68 = Gore.NewGore(Position, Velocity, 109, Scale);
-					num68 = Gore.NewGore(Position, Velocity, 110, Scale);
-				}
-				else
-				{
-					int num68 = Gore.NewGore(Position, Velocity, 14, Scale);
-					Main.GoreSet[num68].Alpha = Alpha;
-					num68 = Gore.NewGore(Position, Velocity, 15, Scale);
-					Main.GoreSet[num68].Alpha = Alpha;
-				}
-			}
-			else if (Type == (int)ID.CLINGER)
-			{
-				if (Life > 0)
-				{
-					for (int num69 = (int)(dmg / LifeMax * 80.0); num69 > 0; num69--)
+					else
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						int num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_SOULS1, Scale);
+						Main.GoreSet[num68].Alpha = Alpha;
+						num68 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_SOULS2, Scale);
+						Main.GoreSet[num68].Alpha = Alpha;
 					}
-					return;
-				}
-				for (int num70 = 0; num70 < 42; num70++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				Gore.NewGore(Position, Velocity, 110, Scale);
-				Gore.NewGore(Position, Velocity, 114, Scale);
-				Gore.NewGore(Position, Velocity, 114, Scale);
-				Gore.NewGore(Position, Velocity, 115, Scale);
-			}
-			else if (Type >= (int)ID.DEVOURER_HEAD && Type <= (int)ID.DEVOURER_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num71 = (int)(dmg / LifeMax * 80.0); num71 > 0; num71--)
+					break;
+
+				case EntityID.NPCID.CLINGER:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						for (int num69 = (int)(dmg / LifeMax * 80.0); num69 > 0; num69--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num72 = 0; num72 < 42; num72++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				int num73 = Gore.NewGore(Position, Velocity, Type - (int)ID.DEVOURER_HEAD + 18);
-				Main.GoreSet[num73].Alpha = Alpha;
-			}
-			else if (Type >= (int)ID.SEEKER_HEAD && Type <= (int)ID.SEEKER_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num74 = (int)(dmg / LifeMax * 80.0); num74 > 0; num74--)
+
+					for (int num70 = 0; num70 < 42; num70++)
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
 					}
-					return;
-				}
-				for (int num75 = 0; num75 < 42; num75++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				int num76 = Gore.NewGore(Position, Velocity, 110);
-				Main.GoreSet[num76].Alpha = Alpha;
-			}
-			else if (Type >= (int)ID.GIANT_WORM_HEAD && Type <= (int)ID.GIANT_WORM_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num77 = 0; num77 < dmg / LifeMax * 50.0; num77++)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTION_CREATURE_EYE, Scale);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CLINGER1, Scale);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CLINGER1, Scale);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CLINGER2, Scale);
+					break;
+
+				case EntityID.NPCID.DEVOURER_HEAD:
+				case EntityID.NPCID.DEVOURER_BODY:
+				case EntityID.NPCID.DEVOURER_TAIL:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num71 = (int)(dmg / LifeMax * 80.0); num71 > 0; num71--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num78 = 0; num78 < 8; num78++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, Type - (int)ID.GIANT_WORM_HEAD + 21);
-			}
-			else if (Type >= (int)ID.DIGGER_HEAD && Type <= (int)ID.DIGGER_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num79 = 0; num79 < dmg / LifeMax * 50.0; num79++)
+
+					for (int num72 = 0; num72 < 42; num72++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
 					}
-					return;
-				}
-				for (int num80 = 0; num80 < 8; num80++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, Type - (int)ID.DIGGER_HEAD + 111);
-			}
-			else if (Type >= (int)ID.EATER_OF_WORLDS_HEAD && Type <= (int)ID.EATER_OF_WORLDS_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num81 = (int)(dmg / LifeMax * 80.0); num81 > 0; num81--)
+
+					int num73 = Gore.NewGore(Position, Velocity, Type - (int)EntityID.NPCID.DEVOURER_HEAD + (int)EntityID.GoreID.DEVOURER_HEAD);
+					Main.GoreSet[num73].Alpha = Alpha;
+					break;
+
+				case EntityID.NPCID.SEEKER_HEAD:
+				case EntityID.NPCID.SEEKER_BODY:
+				case EntityID.NPCID.SEEKER_TAIL:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						for (int num74 = (int)(dmg / LifeMax * 80.0); num74 > 0; num74--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num82 = 0; num82 < 42; num82++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				if (Type == (int)ID.EATER_OF_WORLDS_HEAD)
-				{
-					Gore.NewGore(Position, Velocity, 24);
-					Gore.NewGore(Position, Velocity, 25);
-				}
-				else if (Type == (int)ID.EATER_OF_WORLDS_BODY)
-				{
-					Gore.NewGore(Position, Velocity, 26);
-					Gore.NewGore(Position, Velocity, 27);
-				}
-				else
-				{
-					Gore.NewGore(Position, Velocity, 28);
-					Gore.NewGore(Position, Velocity, 29);
-				}
-			}
-			else if (Type == (int)ID.MERCHANT)
-			{
-				if (Life > 0)
-				{
-					for (int num83 = (int)(dmg / LifeMax * 80.0); num83 > 0; num83--)
+
+					for (int num75 = 0; num75 < 42; num75++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
 					}
-					return;
-				}
-				for (int num84 = 0; num84 < 42; num84++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 30);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 31);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 31);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 32);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 32);
-			}
-			else if (Type == (int)ID.UNICORN)
-			{
-				if (Life > 0)
-				{
-					for (int num85 = (int)(dmg / LifeMax * 80.0); num85 > 0; num85--)
+
+					int num76 = Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CORRUPTION_CREATURE_EYE);
+					Main.GoreSet[num76].Alpha = Alpha;
+					break;
+
+				case EntityID.NPCID.GIANT_WORM_HEAD:
+				case EntityID.NPCID.GIANT_WORM_BODY:
+				case EntityID.NPCID.GIANT_WORM_TAIL:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num77 = 0; num77 < dmg / LifeMax * 50.0; num77++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num86 = 0; num86 < 42; num86++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 101);
-				Gore.NewGore(Position, Velocity, 102);
-				Gore.NewGore(Position, Velocity, 103);
-				Gore.NewGore(Position, Velocity, 103);
-				Gore.NewGore(Position, Velocity, 104);
-				Gore.NewGore(Position, Velocity, 104);
-				Gore.NewGore(Position, Velocity, 105);
-			}
-			else if (Type >= (int)ID.BOUND_GOBLIN && Type <= (int)ID.WIZARD)
-			{
-				if (Life > 0)
-				{
-					for (int num87 = (int)(dmg / LifeMax * 80.0); num87 > 0; num87--)
+
+					for (int num78 = 0; num78 < 8; num78++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
 					}
-					return;
-				}
-				for (int num88 = 0; num88 < 42; num88++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				if (Type == (int)ID.BOUND_GOBLIN || Type == (int)ID.GOBLIN_TINKERER)
-				{
-					Gore.NewGore(Position, Velocity, 124);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 125);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 125);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 126);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 126);
-				}
-				else
-				{
-					Gore.NewGore(Position, Velocity, 127);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 128);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 128);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 129);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 129);
-				}
-			}
-			else if (Type == (int)ID.BOUND_MECHANIC || Type == (int)ID.MECHANIC)
-			{
-				if (Life > 0)
-				{
-					for (int num89 = (int)(dmg / LifeMax * 80.0); num89 > 0; num89--)
+
+					Gore.NewGore(Position, Velocity, Type - (int)EntityID.NPCID.GIANT_WORM_HEAD + (int)EntityID.GoreID.GIANT_WORM_HEAD);
+					break;
+
+				case EntityID.NPCID.DIGGER_HEAD:
+				case EntityID.NPCID.DIGGER_BODY:
+				case EntityID.NPCID.DIGGER_TAIL:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num79 = 0; num79 < dmg / LifeMax * 50.0; num79++)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num90 = 0; num90 < 42; num90++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 151);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 152);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 152);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 153);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 153);
-			}
-			else if (Type == (int)ID.GUIDE)
-			{
-				if (Life > 0)
-				{
-					for (int num91 = (int)(dmg / LifeMax * 80.0); num91 > 0; num91--)
+
+					for (int num80 = 0; num80 < 8; num80++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
 					}
-					return;
-				}
-				for (int num92 = 0; num92 < 42; num92++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 73);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 74);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 74);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 75);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 75);
-			}
-			else if (Type == (int)ID.SANTA_CLAUS)
-			{
-				if (Life > 0)
-				{
-					for (int num93 = (int)(dmg / LifeMax * 80.0); num93 > 0; num93--)
+
+					Gore.NewGore(Position, Velocity, Type - (int)EntityID.NPCID.DIGGER_HEAD + (int)EntityID.GoreID.DIGGER_HEAD);
+					break;
+
+				case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+				case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+				case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num81 = (int)(dmg / LifeMax * 80.0); num81 > 0; num81--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num94 = 0; num94 < 42; num94++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 157);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 158);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 158);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 159);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 159);
-			}
-			else if (Type == (int)ID.OLD_MAN || Type == (int)ID.CLOTHIER)
-			{
-				if (Life > 0)
-				{
-					for (int num95 = (int)(dmg / LifeMax * 80.0); num95 > 0; num95--)
+
+					for (int num82 = 0; num82 < 42; num82++)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
 					}
-					return;
-				}
-				for (int num96 = 0; num96 < 42; num96++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 58);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 59);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 59);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 60);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 60);
-			}
-			else if (Type == (int)ID.NURSE)
-			{
-				if (Life > 0)
-				{
-					for (int num97 = (int)(dmg / LifeMax * 80.0); num97 > 0; num97--)
+
+					if (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS1);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS2);
 					}
-					return;
-				}
-				for (int num98 = 0; num98 < 42; num98++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 33);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 34);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 34);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 35);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 35);
-			}
-			else if (Type == (int)ID.ARMS_DEALER)
-			{
-				if (Life > 0)
-				{
-					for (int num99 = (int)(dmg / LifeMax * 80.0); num99 > 0; num99--)
+					else if (Type == (int)EntityID.NPCID.EATER_OF_WORLDS_BODY)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS3);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS4);
 					}
-					return;
-				}
-				for (int num100 = 0; num100 < 42; num100++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 36);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 37);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 37);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 38);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 38);
-			}
-			else if (Type == (int)ID.DEMOLITIONIST)
-			{
-				if (Life > 0)
-				{
-					for (int num101 = (int)(dmg / LifeMax * 80.0); num101 > 0; num101--)
+					else
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS5);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.EATER_OF_WORLDS6);
 					}
-					return;
-				}
-				for (int num102 = 0; num102 < 42; num102++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 64);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 65);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 65);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 66);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 66);
-			}
-			else if (Type == (int)ID.DRYAD)
-			{
-				if (Life > 0)
-				{
-					for (int num103 = (int)(dmg / LifeMax * 80.0); num103 > 0; num103--)
+					break;
+
+				case EntityID.NPCID.MERCHANT:
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						for (int num83 = (int)(dmg / LifeMax * 80.0); num83 > 0; num83--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					return;
-				}
-				for (int num104 = 0; num104 < 42; num104++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, 39);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 40);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 40);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 41);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 41);
-			}
-			else if (Type == (int)ID.SKELETON || Type == (int)ID.BONES || Type == (int)ID.DARK_CASTER || Type == (int)ID.UNDEAD_MINER || Type == (int)ID.TIM || Type == (int)ID.ARMORED_SKELETON || Type == (int)ID.SKELETON_ARCHER || Type == (int)ID.VAMPIRE_MINER)
-			{
-				if (Life > 0)
-				{
-					for (int num105 = 0; num105 < dmg / LifeMax * 50.0; num105++)
+
+					for (int num84 = 0; num84 < 42; num84++)
 					{
-						Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
 					}
-					return;
-				}
-				for (int num106 = 0; num106 < 16; num106++)
-				{
-					Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				int num107 = ((Type == (int)ID.VAMPIRE_MINER) ? 166 : 42);
-				Gore.NewGore(Position, Velocity, num107, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, ++num107, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, num107, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, ++num107, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, num107, Scale);
-				if (Type == (int)ID.ARMORED_SKELETON)
-				{
-					Gore.NewGore(Position, Velocity, 106, Scale);
-				}
-				else if (Type == (int)ID.SKELETON_ARCHER)
-				{
-					Gore.NewGore(Position, Velocity, 130, Scale);
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 131, Scale);
-				}
-			}
-			else if (Type == (int)ID.MIMIC)
-			{
-				int num108 = 7;
-				if (AI3 == 2f)
-				{
-					num108 = 10;
-				}
-				else if (AI3 == 3f)
-				{
-					num108 = 37;
-				}
-				if (Life > 0)
-				{
-					for (int num109 = 0; num109 < dmg / LifeMax * 50.0; num109++)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.MERCHANT1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.MERCHANT2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.MERCHANT2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.MERCHANT3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.MERCHANT3);
+					break;
+
+				case EntityID.NPCID.UNICORN:
+					if (Life > 0)
+					{
+						for (int num85 = (int)(dmg / LifeMax * 80.0); num85 > 0; num85--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num86 = 0; num86 < 42; num86++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN2);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN3);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN3);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN4);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN4);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.UNICORN5);
+					break;
+
+				case EntityID.NPCID.BOUND_GOBLIN:
+				case EntityID.NPCID.BOUND_WIZARD:
+				case EntityID.NPCID.GOBLIN_TINKERER:
+				case EntityID.NPCID.WIZARD:
+					if (Life > 0)
+					{
+						for (int num87 = (int)(dmg / LifeMax * 80.0); num87 > 0; num87--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num88 = 0; num88 < 42; num88++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					if (Type == (int)EntityID.NPCID.BOUND_GOBLIN || Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.GOBLIN_TINKERER1);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GOBLIN_TINKERER2);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GOBLIN_TINKERER2);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GOBLIN_TINKERER3);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GOBLIN_TINKERER3);
+					}
+					else
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.WIZARD1);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.WIZARD2);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.WIZARD2);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.WIZARD3);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.WIZARD3);
+					}
+					break;
+
+				case EntityID.NPCID.BOUND_MECHANIC:
+				case EntityID.NPCID.MECHANIC:
+					if (Life > 0)
+					{
+						for (int num89 = (int)(dmg / LifeMax * 80.0); num89 > 0; num89--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num90 = 0; num90 < 42; num90++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.MECHANIC1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.MECHANIC1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.MECHANIC2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.MECHANIC3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.MECHANIC3);
+					break;
+
+				case EntityID.NPCID.GUIDE:
+					if (Life > 0)
+					{
+						for (int num91 = (int)(dmg / LifeMax * 80.0); num91 > 0; num91--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num92 = 0; num92 < 42; num92++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.GUIDE1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GUIDE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GUIDE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GUIDE3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GUIDE3);
+					break;
+
+				case EntityID.NPCID.SANTA_CLAUS:
+					if (Life > 0)
+					{
+						for (int num93 = (int)(dmg / LifeMax * 80.0); num93 > 0; num93--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num94 = 0; num94 < 42; num94++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SANTA1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.SANTA2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.SANTA2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.SANTA3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.SANTA3);
+					break;
+
+				case EntityID.NPCID.OLD_MAN:
+				case EntityID.NPCID.CLOTHIER:
+					if (Life > 0)
+					{
+						for (int num95 = (int)(dmg / LifeMax * 80.0); num95 > 0; num95--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num96 = 0; num96 < 42; num96++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.CLOTHIER1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.CLOTHIER2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.CLOTHIER2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.CLOTHIER3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.CLOTHIER3);
+					break;
+
+				case EntityID.NPCID.NURSE:
+					if (Life > 0)
+					{
+						for (int num97 = (int)(dmg / LifeMax * 80.0); num97 > 0; num97--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num98 = 0; num98 < 42; num98++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.NURSE1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.NURSE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.NURSE2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.NURSE3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.NURSE3);
+					break;
+
+				case EntityID.NPCID.ARMS_DEALER:
+					if (Life > 0)
+					{
+						for (int num99 = (int)(dmg / LifeMax * 80.0); num99 > 0; num99--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num100 = 0; num100 < 42; num100++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARMS_DEALER1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ARMS_DEALER2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.ARMS_DEALER2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ARMS_DEALER3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.ARMS_DEALER3);
+					break;
+
+				case EntityID.NPCID.DEMOLITIONIST:
+					if (Life > 0)
+					{
+						for (int num101 = (int)(dmg / LifeMax * 80.0); num101 > 0; num101--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num102 = 0; num102 < 42; num102++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DEMOLITIONIST1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.DEMOLITIONIST2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.DEMOLITIONIST2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.DEMOLITIONIST3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.DEMOLITIONIST3);
+					break;
+
+				case EntityID.NPCID.DRYAD:
+					if (Life > 0)
+					{
+						for (int num103 = (int)(dmg / LifeMax * 80.0); num103 > 0; num103--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num104 = 0; num104 < 42; num104++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DRYAD1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.DRYAD2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.DRYAD2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.DRYAD3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.DRYAD3);
+					break;
+
+				case EntityID.NPCID.SKELETON:
+				case EntityID.NPCID.BONES:
+				case EntityID.NPCID.DARK_CASTER:
+				case EntityID.NPCID.UNDEAD_MINER:
+				case EntityID.NPCID.TIM:
+				case EntityID.NPCID.ARMORED_SKELETON:
+				case EntityID.NPCID.SKELETON_ARCHER:
+				case EntityID.NPCID.VAMPIRE_MINER:
+					if (Life > 0)
+					{
+						for (int num105 = 0; num105 < dmg / LifeMax * 50.0; num105++)
+						{
+							Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num106 = 0; num106 < 16; num106++)
+					{
+						Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
+					}
+
+					int num107 = ((Type == (int)EntityID.NPCID.VAMPIRE_MINER) ? (int)EntityID.GoreID.VAMPIRE_MINER1 : (int)EntityID.GoreID.SKELETON_HEAD1);
+					Gore.NewGore(Position, Velocity, num107, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, ++num107, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, num107, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, ++num107, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, num107, Scale);
+					if (Type == (int)EntityID.NPCID.ARMORED_SKELETON)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARMORED_SKELETON_HELMET, Scale);
+					}
+					else if (Type == (int)EntityID.NPCID.SKELETON_ARCHER)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETON_ARCHER_HELMET, Scale);
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.BOW, Scale);
+					}
+					break;
+
+				case EntityID.NPCID.MIMIC:
+					int num108 = 7;
+					if (AI3 == 2f)
+					{
+						num108 = 10;
+					}
+					else if (AI3 == 3f)
+					{
+						num108 = 37;
+					}
+
+					if (Life > 0)
+					{
+						for (int num109 = 0; num109 < dmg / LifeMax * 50.0; num109++)
+						{
+							if (null == Main.DustSet.NewDust(num108, ref XYWH))
+							{
+								break;
+							}
+						}
+
+						return;
+					}
+
+					for (int num110 = 0; num110 < 16; num110++)
 					{
 						if (null == Main.DustSet.NewDust(num108, ref XYWH))
 						{
 							break;
 						}
 					}
-					return;
-				}
-				for (int num110 = 0; num110 < 16; num110++)
-				{
-					if (null == Main.DustSet.NewDust(num108, ref XYWH))
-					{
-						break;
-					}
-				}
-				int num111 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), 61, Scale);
-				Main.GoreSet[num111].Velocity *= 0.3f;
-				num111 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), 62, Scale);
-				Main.GoreSet[num111].Velocity *= 0.3f;
-				num111 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 10f), new Vector2(hitDirection, 0f), 63, Scale);
-				Main.GoreSet[num111].Velocity *= 0.3f;
-			}
-			else if ((Type >= (int)ID.WYVERN_HEAD && Type <= (int)ID.WYVERN_TAIL) || (Type >= (int)ID.ARCH_WYVERN_HEAD && Type <= (int)ID.ARCH_WYVERN_TAIL))
-			{
-				if (Life > 0)
-				{
-					for (int num112 = 0; num112 < dmg / LifeMax * 50.0; num112++)
-					{
-						Dust* ptr13 = Main.DustSet.NewDust(16, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-						if (ptr13 == null)
-						{
-							break;
-						}
-						ptr13->Velocity.X *= 1.5f;
-						ptr13->Velocity.Y *= 1.5f;
-						ptr13->NoGravity = true;
-					}
-					return;
-				}
-				for (int num113 = 0; num113 < 8; num113++)
-				{
-					Dust* ptr14 = Main.DustSet.NewDust(16, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-					if (ptr14 == null)
-					{
-						break;
-					}
-					ptr14->Velocity.X *= 2f;
-					ptr14->Velocity.Y *= 2f;
-					ptr14->NoGravity = true;
-				}
-				for (int num114 = Main.Rand.Next(1, 4); num114 > 0; num114--)
-				{
-					int num115 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), Main.Rand.Next(11, 14), Scale);
-					Main.GoreSet[num115].Velocity *= 0.8f;
-				}
-			}
-			else if (Type == (int)ID.MUMMY || Type == (int)ID.DARK_MUMMY || Type == (int)ID.LIGHT_MUMMY || Type == (int)ID.SHADOW_MUMMY || Type == (int)ID.SPECTRAL_MUMMY)
-			{
-				if (Life > 0)
-				{
-					for (int num116 = 0; num116 < dmg / LifeMax * 50.0; num116++)
-					{
-						Dust* ptr15 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-						if (ptr15 == null)
-						{
-							break;
-						}
-						ptr15->Velocity.X *= 2f;
-						ptr15->Velocity.Y *= 2f;
-						ptr15->NoGravity = true;
-					}
-					return;
-				}
-				for (int num117 = 0; num117 < 16; num117++)
-				{
-					Dust* ptr16 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-					if (ptr16 == null)
-					{
-						break;
-					}
-					ptr16->Velocity.X *= 2f;
-					ptr16->Velocity.Y *= 2f;
-					ptr16->NoGravity = true;
-				}
-				int num118 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), 61, Scale);
-				Main.GoreSet[num118].Velocity *= 0.3f;
-				num118 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), 62, Scale);
-				Main.GoreSet[num118].Velocity *= 0.3f;
-				num118 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 10f), new Vector2(hitDirection, 0f), 63, Scale);
-				Main.GoreSet[num118].Velocity *= 0.3f;
-			}
-			else if (Type == (int)ID.WRAITH)
-			{
-				if (Life > 0)
-				{
-					for (int num119 = 0; num119 < dmg / LifeMax * 50.0; num119++)
-					{
-						Dust* ptr17 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
-						if (ptr17 == null)
-						{
-							break;
-						}
-						ptr17->Velocity.X *= 2f;
-						ptr17->Velocity.Y *= 2f;
-						ptr17->NoGravity = true;
-					}
-					return;
-				}
-				for (int num120 = 0; num120 < 16; num120++)
-				{
-					Dust* ptr18 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
-					if (ptr18 == null)
-					{
-						break;
-					}
-					ptr18->Velocity.X *= 2f;
-					ptr18->Velocity.Y *= 2f;
-					ptr18->NoGravity = true;
-				}
-				int num121 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num121].Velocity *= 0.3f;
-				num121 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 15f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num121].Velocity *= 0.3f;
-				num121 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num121].Velocity *= 0.3f;
-			}
 
-			else if (Type == (int)ID.ZOMBIE_MUSHROOM || Type == (int)ID.ZOMBIE_MUSHROOM_HAT)
-			{
-				if (Life > 0)
-				{
-					for (int num347 = 0; num347 < dmg / LifeMax * 50.0; num347++)
+					int num111 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE1, Scale);
+					Main.GoreSet[num111].Velocity *= 0.3f;
+					num111 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE2, Scale);
+					Main.GoreSet[num111].Velocity *= 0.3f;
+					num111 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE3, Scale);
+					Main.GoreSet[num111].Velocity *= 0.3f;
+					break;
+
+				case EntityID.NPCID.WYVERN_HEAD:
+				case EntityID.NPCID.WYVERN_LEGS:
+				case EntityID.NPCID.WYVERN_BODY1:
+				case EntityID.NPCID.WYVERN_BODY2:
+				case EntityID.NPCID.WYVERN_BODY3:
+				case EntityID.NPCID.WYVERN_TAIL:
+				case EntityID.NPCID.ARCH_WYVERN_HEAD:
+				case EntityID.NPCID.ARCH_WYVERN_LEGS:
+				case EntityID.NPCID.ARCH_WYVERN_BODY1:
+				case EntityID.NPCID.ARCH_WYVERN_BODY2:
+				case EntityID.NPCID.ARCH_WYVERN_BODY3:
+				case EntityID.NPCID.ARCH_WYVERN_TAIL:
+					if (Life > 0)
 					{
-						Dust* ptr348 = Main.DustSet.NewDust(165, ref XYWH, 0, 0, 50, default, 1.5);
-						if (ptr348 == null)
+						for (int num112 = 0; num112 < dmg / LifeMax * 50.0; num112++)
+						{
+							Dust* ptr13 = Main.DustSet.NewDust(16, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+							if (ptr13 == null)
+							{
+								break;
+							}
+
+							ptr13->Velocity.X *= 1.5f;
+							ptr13->Velocity.Y *= 1.5f;
+							ptr13->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int num113 = 0; num113 < 8; num113++)
+					{
+						Dust* ptr14 = Main.DustSet.NewDust(16, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+						if (ptr14 == null)
 						{
 							break;
 						}
-						ptr348->Velocity.X *= 2f;
-						ptr348->Velocity.Y *= 2f;
-						ptr348->NoGravity = true;
+
+						ptr14->Velocity.X *= 2f;
+						ptr14->Velocity.Y *= 2f;
+						ptr14->NoGravity = true;
 					}
-					return;
-				}
-				for (int num349 = 0; num349 < 20; num349++)
-				{
-					Dust* ptr350 = Main.DustSet.NewDust(165, ref XYWH, 0, 0, 50, default, 1.5);
-					if (ptr350 == null)
+
+					for (int num114 = Main.Rand.Next(1, 4); num114 > 0; num114--)
 					{
-						break;
+						int num115 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), Main.Rand.Next((int)EntityID.GoreID.SMOKE_BLUE1, (int)EntityID.GoreID.SMOKE_BLUE3 + 1), Scale);
+						Main.GoreSet[num115].Velocity *= 0.8f;
 					}
-					ptr350->Velocity.X *= 2f;
-					ptr350->Velocity.Y *= 2f;
-					ptr350->NoGravity = true;
-				}
-				int num351 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), 191, Scale);
-				Main.GoreSet[num351].Velocity *= 0.3f;
-				num351 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height / 2) - 15f), new Vector2(hitDirection, 0f), 192, Scale);
-				Main.GoreSet[num351].Velocity *= 0.3f;
-				num351 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), 193, Scale);
-				Main.GoreSet[num351].Velocity *= 0.3f;
-			}
-			else if (Type == (int)ID.POSSESSED_ARMOR)
-			{
-				if (Life > 0)
-				{
-					return;
-				}
-				for (int num122 = 0; num122 < 16; num122++)
-				{
-					Dust* ptr19 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
-					if (ptr19 == null)
+					break;
+
+				case EntityID.NPCID.MUMMY:
+				case EntityID.NPCID.DARK_MUMMY:
+				case EntityID.NPCID.LIGHT_MUMMY:
+				case EntityID.NPCID.SHADOW_MUMMY:
+				case EntityID.NPCID.SPECTRAL_MUMMY:
+					if (Life > 0)
 					{
-						break;
+						for (int num116 = 0; num116 < dmg / LifeMax * 50.0; num116++)
+						{
+							Dust* ptr15 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+							if (ptr15 == null)
+							{
+								break;
+							}
+
+							ptr15->Velocity.X *= 2f;
+							ptr15->Velocity.Y *= 2f;
+							ptr15->NoGravity = true;
+						}
+
+						return;
 					}
-					ptr19->Velocity.X *= 2f;
-					ptr19->Velocity.Y *= 2f;
-					ptr19->NoGravity = true;
-				}
-				int num123 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num123].Velocity *= 0.3f;
-				num123 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 15f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num123].Velocity *= 0.3f;
-				num123 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), 99, Scale);
-				Main.GoreSet[num123].Velocity *= 0.3f;
-			}
-			else if (Type >= (int)ID.BONE_SERPENT_HEAD && Type <= (int)ID.BONE_SERPENT_TAIL)
-			{
-				if (Life > 0)
-				{
-					for (int num124 = 0; num124 < dmg / LifeMax * 50.0; num124++)
+
+					for (int num117 = 0; num117 < 16; num117++)
 					{
-						Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
-					}
-					return;
-				}
-				for (int num125 = 0; num125 < 16; num125++)
-				{
-					Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				Gore.NewGore(Position, Velocity, Type - (int)ID.BONE_SERPENT_HEAD + 67);
-			}
-			else if (Type == (int)ID.CURSED_SKULL || Type == (int)ID.DRAGON_SKULL)
-			{
-				if (Life > 0)
-				{
-					for (int num126 = 0; num126 < dmg / LifeMax * 30.0; num126++)
-					{
-						Dust* ptr20 = Main.DustSet.NewDust(15, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 1.8);
-						if (ptr20 == null)
+						Dust* ptr16 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+						if (ptr16 == null)
 						{
 							break;
 						}
-						ptr20->NoLight = true;
-						ptr20->NoGravity = true;
-						ptr20->Velocity.X *= 1.3f;
-						ptr20->Velocity.Y *= 1.3f;
-						ptr20 = Main.DustSet.NewDust(26, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 0, default, 0.9);
-						if (ptr20 == null)
+
+						ptr16->Velocity.X *= 2f;
+						ptr16->Velocity.Y *= 2f;
+						ptr16->NoGravity = true;
+					}
+
+					int num118 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE1, Scale);
+					Main.GoreSet[num118].Velocity *= 0.3f;
+					num118 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE2, Scale);
+					Main.GoreSet[num118].Velocity *= 0.3f;
+					num118 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_WHITE3, Scale);
+					Main.GoreSet[num118].Velocity *= 0.3f;
+					break;
+
+				case EntityID.NPCID.WRAITH:
+					if (Life > 0)
+					{
+						for (int num119 = 0; num119 < dmg / LifeMax * 50.0; num119++)
+						{
+							Dust* ptr17 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
+							if (ptr17 == null)
+							{
+								break;
+							}
+
+							ptr17->Velocity.X *= 2f;
+							ptr17->Velocity.Y *= 2f;
+							ptr17->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int num120 = 0; num120 < 16; num120++)
+					{
+						Dust* ptr18 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
+						if (ptr18 == null)
 						{
 							break;
 						}
-						ptr20->NoLight = true;
-						ptr20->Velocity.X *= 1.3f;
-						ptr20->Velocity.Y *= 1.3f;
+
+						ptr18->Velocity.X *= 2f;
+						ptr18->Velocity.Y *= 2f;
+						ptr18->NoGravity = true;
 					}
-					return;
-				}
-				for (int num127 = 0; num127 < 12; num127++)
-				{
-					Dust* ptr21 = Main.DustSet.NewDust(15, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 1.8);
-					if (ptr21 == null)
+
+					int num121 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num121].Velocity *= 0.3f;
+					num121 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 15f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num121].Velocity *= 0.3f;
+					num121 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num121].Velocity *= 0.3f;
+					break;
+
+#if VERSION_101
+				case EntityID.NPCID.ZOMBIE_MUSHROOM:
+				case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
+					if (Life > 0)
 					{
-						break;
+						for (int num347 = 0; num347 < dmg / LifeMax * 50.0; num347++)
+						{
+							Dust* ptr348 = Main.DustSet.NewDust(165, ref XYWH, 0, 0, 50, default, 1.5);
+							if (ptr348 == null)
+							{
+								break;
+							}
+
+							ptr348->Velocity.X *= 2f;
+							ptr348->Velocity.Y *= 2f;
+							ptr348->NoGravity = true;
+						}
+
+						return;
 					}
-					ptr21->NoLight = true;
-					ptr21->NoGravity = true;
-					ptr21->Velocity.X *= 1.3f;
-					ptr21->Velocity.Y *= 1.3f;
-					ptr21 = Main.DustSet.NewDust(26, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 0, default, 0.9);
-					if (ptr21 == null)
+
+					for (int num349 = 0; num349 < 20; num349++)
 					{
-						break;
-					}
-					ptr21->NoLight = true;
-					ptr21->Velocity.X *= 1.3f;
-					ptr21->Velocity.Y *= 1.3f;
-				}
-			}
-			else if (Type == (int)ID.SKELETRON_HEAD || Type == (int)ID.SKELETRON_HAND)
-			{
-				if (Life > 0)
-				{
-					for (int num128 = (int)(dmg / LifeMax * 80.0); num128 > 0; num128--)
-					{
-						Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
-					}
-					return;
-				}
-				for (int num129 = 0; num129 < 128; num129++)
-				{
-					Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
-				}
-				if (Type == (int)ID.SKELETRON_HEAD)
-				{
-					Gore.NewGore(Position, Velocity, 54);
-					Gore.NewGore(Position, Velocity, 55);
-					return;
-				}
-				Gore.NewGore(Position, Velocity, 56);
-				Gore.NewGore(Position, Velocity, 57);
-				Gore.NewGore(Position, Velocity, 57);
-				Gore.NewGore(Position, Velocity, 57);
-			}
-			else if (Type == (int)ID.PROBE)
-			{
-				if (Life > 0)
-				{
-					return;
-				}
-				for (int num130 = 0; num130 < 8; num130++)
-				{
-					Dust* ptr22 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr22 == null)
-					{
-						break;
-					}
-					ptr22->Velocity.X *= 1.4f;
-					ptr22->Velocity.Y *= 1.4f;
-				}
-				for (int num131 = 0; num131 < 4; num131++)
-				{
-					Dust* ptr23 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr23 == null)
-					{
-						break;
-					}
-					ptr23->NoGravity = true;
-					ptr23->Velocity.X *= 5f;
-					ptr23->Velocity.Y *= 5f;
-					ptr23 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr23 == null)
-					{
-						break;
-					}
-					ptr23->Velocity.X *= 3f;
-					ptr23->Velocity.Y *= 3f;
-				}
-				int num132 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num132].Velocity *= 0.4f;
-				Main.GoreSet[num132].Velocity.X += 1f;
-				Main.GoreSet[num132].Velocity.Y += 1f;
-				num132 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num132].Velocity *= 0.4f;
-				Main.GoreSet[num132].Velocity.X -= 1f;
-				Main.GoreSet[num132].Velocity.Y += 1f;
-				num132 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num132].Velocity *= 0.4f;
-				Main.GoreSet[num132].Velocity.X += 1f;
-				Main.GoreSet[num132].Velocity.Y -= 1f;
-				num132 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num132].Velocity *= 0.4f;
-				Main.GoreSet[num132].Velocity.X -= 1f;
-				Main.GoreSet[num132].Velocity.Y -= 1f;
-			}
-			else if (Type >= (int)ID.THE_DESTROYER_HEAD && Type <= (int)ID.THE_DESTROYER_TAIL)
-			{
-				if (Type == (int)ID.THE_DESTROYER_BODY && Life > 0 && Main.NetMode != (byte)NetModeSetting.CLIENT && AI2 == 0f && Main.Rand.Next(25) == 0)
-				{
-					AI2 = 1f;
-					int num133 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)ID.PROBE);
-					if (Main.NetMode == (byte)NetModeSetting.SERVER && num133 < MaxNumNPCs)
-					{
-						NetMessage.CreateMessage1(23, num133);
-						NetMessage.SendMessage();
-					}
-					ShouldNetUpdate = true;
-				}
-				if (Life > 0)
-				{
-					return;
-				}
-				Gore.NewGore(Position, Velocity, 156);
-				if (Main.Rand.Next(2) != 0)
-				{
-					return;
-				}
-				for (int num134 = 0; num134 < 8; num134++)
-				{
-					Dust* ptr24 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr24 == null)
-					{
-						break;
-					}
-					ptr24->Velocity.X *= 1.4f;
-					ptr24->Velocity.Y *= 1.4f;
-				}
-				for (int num135 = 0; num135 < 4; num135++)
-				{
-					Dust* ptr25 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr25 == null)
-					{
-						break;
-					}
-					ptr25->NoGravity = true;
-					ptr25->Velocity.X *= 5f;
-					ptr25->Velocity.Y *= 5f;
-					ptr25 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr25 == null)
-					{
-						break;
-					}
-					ptr25->Velocity.X *= 3f;
-					ptr25->Velocity.Y *= 3f;
-				}
-				int num136 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num136].Velocity.X *= 0.4f;
-				Main.GoreSet[num136].Velocity.X += 1f;
-				Main.GoreSet[num136].Velocity.Y *= 0.4f;
-				Main.GoreSet[num136].Velocity.Y += 1f;
-				num136 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num136].Velocity.X *= 0.4f;
-				Main.GoreSet[num136].Velocity.X -= 1f;
-				Main.GoreSet[num136].Velocity.Y *= 0.4f;
-				Main.GoreSet[num136].Velocity.Y += 1f;
-				num136 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num136].Velocity.X *= 0.4f;
-				Main.GoreSet[num136].Velocity.X += 1f;
-				Main.GoreSet[num136].Velocity.Y *= 0.4f;
-				Main.GoreSet[num136].Velocity.Y -= 1f;
-				num136 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num136].Velocity.X *= 0.4f;
-				Main.GoreSet[num136].Velocity.X -= 1f;
-				Main.GoreSet[num136].Velocity.Y *= 0.4f;
-				Main.GoreSet[num136].Velocity.Y -= 1f;
-			}
-			else if (Type == (int)ID.SKELETRON_PRIME)
-			{
-				if (Life > 0)
-				{
-					return;
-				}
-				Gore.NewGore(Position, Velocity, 149);
-				Gore.NewGore(Position, Velocity, 150);
-				for (int num137 = 0; num137 < 8; num137++)
-				{
-					Dust* ptr26 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr26 == null)
-					{
-						break;
-					}
-					ptr26->Velocity.X *= 1.4f;
-					ptr26->Velocity.Y *= 1.4f;
-				}
-				for (int num138 = 0; num138 < 4; num138++)
-				{
-					Dust* ptr27 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr27 == null)
-					{
-						break;
-					}
-					ptr27->NoGravity = true;
-					ptr27->Velocity.X *= 5f;
-					ptr27->Velocity.Y *= 5f;
-					ptr27 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr27 == null)
-					{
-						break;
-					}
-					ptr27->Velocity.X *= 3f;
-					ptr27->Velocity.Y *= 3f;
-				}
-				int num139 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num139].Velocity.X *= 0.4f;
-				Main.GoreSet[num139].Velocity.X += 1f;
-				Main.GoreSet[num139].Velocity.Y *= 0.4f;
-				Main.GoreSet[num139].Velocity.Y += 1f;
-				num139 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num139].Velocity.X *= 0.4f;
-				Main.GoreSet[num139].Velocity.X -= 1f;
-				Main.GoreSet[num139].Velocity.Y *= 0.4f;
-				Main.GoreSet[num139].Velocity.Y += 1f;
-				num139 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num139].Velocity.X *= 0.4f;
-				Main.GoreSet[num139].Velocity.X += 1f;
-				Main.GoreSet[num139].Velocity.Y *= 0.4f;
-				Main.GoreSet[num139].Velocity.Y -= 1f;
-				num139 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num139].Velocity.X *= 0.4f;
-				Main.GoreSet[num139].Velocity.X -= 1f;
-				Main.GoreSet[num139].Velocity.Y *= 0.4f;
-				Main.GoreSet[num139].Velocity.Y -= 1f;
-			}
-			else if (Type >= (int)ID.PRIME_CANNON && Type <= (int)ID.PRIME_LASER)
-			{
-				if (Life > 0)
-				{
-					return;
-				}
-				Gore.NewGore(Position, Velocity, 147);
-				Gore.NewGore(Position, Velocity, 148);
-				for (int num140 = 0; num140 < 8; num140++)
-				{
-					Dust* ptr28 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr28 == null)
-					{
-						break;
-					}
-					ptr28->Velocity.X *= 1.4f;
-					ptr28->Velocity.Y *= 1.4f;
-				}
-				for (int num141 = 0; num141 < 4; num141++)
-				{
-					Dust* ptr29 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr29 == null)
-					{
-						break;
-					}
-					ptr29->NoGravity = true;
-					ptr29->Velocity.X *= 5f;
-					ptr29->Velocity.Y *= 5f;
-					ptr29 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr29 == null)
-					{
-						break;
-					}
-					ptr29->Velocity.X *= 3f;
-					ptr29->Velocity.Y *= 3f;
-				}
-				int num142 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num142].Velocity.X *= 0.4f;
-				Main.GoreSet[num142].Velocity.X += 1f;
-				Main.GoreSet[num142].Velocity.Y *= 0.4f;
-				Main.GoreSet[num142].Velocity.Y += 1f;
-				num142 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num142].Velocity.X *= 0.4f;
-				Main.GoreSet[num142].Velocity.X -= 1f;
-				Main.GoreSet[num142].Velocity.Y *= 0.4f;
-				Main.GoreSet[num142].Velocity.Y += 1f;
-				num142 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num142].Velocity.X *= 0.4f;
-				Main.GoreSet[num142].Velocity.X += 1f;
-				Main.GoreSet[num142].Velocity.Y *= 0.4f;
-				Main.GoreSet[num142].Velocity.Y -= 1f;
-				num142 = Gore.NewGore(Position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num142].Velocity.X *= 0.4f;
-				Main.GoreSet[num142].Velocity.X -= 1f;
-				Main.GoreSet[num142].Velocity.Y *= 0.4f;
-				Main.GoreSet[num142].Velocity.Y -= 1f;
-			}
-			else if (Type == (int)ID.METEOR_HEAD)
-			{
-				if (Life > 0)
-				{
-					for (int num143 = (int)(dmg / LifeMax * 80.0); num143 > 0; num143--)
-					{
-						int num144 = ((Main.Rand.Next(2) == 0) ? 6 : 25);
-						Main.DustSet.NewDust(num144, ref XYWH, hitDirection, -1.0);
-						Dust* ptr30 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2, Velocity.Y * 0.2, 100, default, 2.0);
-						if (ptr30 == null)
+						Dust* ptr350 = Main.DustSet.NewDust(165, ref XYWH, 0, 0, 50, default, 1.5);
+						if (ptr350 == null)
 						{
 							break;
 						}
-						ptr30->NoGravity = true;
+
+						ptr350->Velocity.X *= 2f;
+						ptr350->Velocity.Y *= 2f;
+						ptr350->NoGravity = true;
 					}
-					return;
-				}
-				for (int num145 = 0; num145 < 42; num145++)
-				{
-					int num146 = ((Main.Rand.Next(2) == 0) ? 6 : 25);
-					if (null == Main.DustSet.NewDust(num146, ref XYWH, hitDirection << 1, -2.0))
+
+					int num351 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_PURPLE1, Scale);
+					Main.GoreSet[num351].Velocity *= 0.3f;
+					num351 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height / 2) - 15f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_PURPLE2, Scale);
+					Main.GoreSet[num351].Velocity *= 0.3f;
+					num351 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_PURPLE3, Scale);
+					Main.GoreSet[num351].Velocity *= 0.3f;
+					break;
+#endif
+
+				case EntityID.NPCID.POSSESSED_ARMOR:
+					if (Life > 0)
 					{
-						break;
+						return;
 					}
-				}
-				for (int num147 = 0; num147 < 42; num147++)
-				{
-					Dust* ptr31 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2, Velocity.Y * 0.2, 100, default, 2.5);
-					if (ptr31 == null)
+
+					for (int num122 = 0; num122 < 16; num122++)
 					{
-						break;
-					}
-					ptr31->Velocity.X *= 6f;
-					ptr31->Velocity.Y *= 6f;
-					ptr31->NoGravity = true;
-				}
-			}
-			else if (Type == (int)ID.FIRE_IMP)
-			{
-				if (Life > 0)
-				{
-					for (int num148 = (int)(dmg / LifeMax * 80.0); num148 > 0; num148--)
-					{
-						Dust* ptr32 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X, Velocity.Y, 100, default, 2.5);
-						if (ptr32 == null)
+						Dust* ptr19 = Main.DustSet.NewDust(54, ref XYWH, 0.0, 0.0, 50, default, 1.5);
+						if (ptr19 == null)
 						{
 							break;
 						}
-						ptr32->NoGravity = true;
+
+						ptr19->Velocity.X *= 2f;
+						ptr19->Velocity.Y *= 2f;
+						ptr19->NoGravity = true;
 					}
-					return;
-				}
-				for (int num149 = 0; num149 < 42; num149++)
-				{
-					Dust* ptr33 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X, Velocity.Y, 100, default, 2.5);
-					if (ptr33 == null)
+
+					int num123 = Gore.NewGore(new Vector2(Position.X, Position.Y - 10f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num123].Velocity *= 0.3f;
+					num123 = Gore.NewGore(new Vector2(Position.X, Position.Y + (Height >> 1) - 15f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num123].Velocity *= 0.3f;
+					num123 = Gore.NewGore(new Vector2(Position.X, Position.Y + Height - 20f), new Vector2(hitDirection, 0f), (int)EntityID.GoreID.SMOKE_BLACK, Scale);
+					Main.GoreSet[num123].Velocity *= 0.3f;
+					break;
+
+				case EntityID.NPCID.BONE_SERPENT_HEAD:
+				case EntityID.NPCID.BONE_SERPENT_BODY:
+				case EntityID.NPCID.BONE_SERPENT_TAIL:
+					if (Life > 0)
 					{
-						break;
+						for (int num124 = 0; num124 < dmg / LifeMax * 50.0; num124++)
+						{
+							Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					ptr33->NoGravity = true;
-					ptr33->Velocity.X *= 2f;
-					ptr33->Velocity.Y *= 2f;
-				}
-				Gore.NewGore(Position, Velocity, 45);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 46);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 46);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 47);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 47);
-			}
-			else if (Type == (int)ID.BURNING_SPHERE)
-			{
-				Main.PlaySound(2, XYWH.X, XYWH.Y, 10);
-				for (int num150 = 0; num150 < 16; num150++)
-				{
-					Dust* ptr34 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 2.0);
-					if (ptr34 == null)
+
+					for (int num125 = 0; num125 < 16; num125++)
 					{
-						break;
+						Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
 					}
-					ptr34->NoGravity = true;
-					ptr34->Velocity *= 2f;
-					ptr34 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100);
-					if (ptr34 == null)
+
+					Gore.NewGore(Position, Velocity, Type - (int)EntityID.NPCID.BONE_SERPENT_HEAD + (int)EntityID.GoreID.BONE_SERPENT_HEAD);
+					break;
+
+				case EntityID.NPCID.CURSED_SKULL:
+				case EntityID.NPCID.DRAGON_SKULL:
+					if (Life > 0)
 					{
-						break;
+						for (int num126 = 0; num126 < dmg / LifeMax * 30.0; num126++)
+						{
+							Dust* ptr20 = Main.DustSet.NewDust(15, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 1.8);
+							if (ptr20 == null)
+							{
+								break;
+							}
+
+							ptr20->NoLight = true;
+							ptr20->NoGravity = true;
+							ptr20->Velocity.X *= 1.3f;
+							ptr20->Velocity.Y *= 1.3f;
+							ptr20 = Main.DustSet.NewDust(26, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 0, default, 0.9);
+							if (ptr20 == null)
+							{
+								break;
+							}
+
+							ptr20->NoLight = true;
+							ptr20->Velocity.X *= 1.3f;
+							ptr20->Velocity.Y *= 1.3f;
+						}
+
+						return;
 					}
-					ptr34->Velocity.X *= 2f;
-					ptr34->Velocity.Y *= 2f;
-				}
-			}
-			else if (Type == (int)ID.WATER_SPHERE)
-			{
-				Main.PlaySound(2, XYWH.X, XYWH.Y, 10);
-				for (int num151 = 0; num151 < 16; num151++)
-				{
-					Dust* ptr35 = Main.DustSet.NewDust(29, ref XYWH, Velocity.X * -0.2f, Velocity.Y * -0.2, 100, default, 2.0);
-					if (ptr35 == null)
+
+					for (int num127 = 0; num127 < 12; num127++)
 					{
-						break;
+						Dust* ptr21 = Main.DustSet.NewDust(15, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 1.8);
+						if (ptr21 == null)
+						{
+							break;
+						}
+
+						ptr21->NoLight = true;
+						ptr21->NoGravity = true;
+						ptr21->Velocity.X *= 1.3f;
+						ptr21->Velocity.Y *= 1.3f;
+						ptr21 = Main.DustSet.NewDust(26, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 0, default, 0.9);
+						if (ptr21 == null)
+						{
+							break;
+						}
+
+						ptr21->NoLight = true;
+						ptr21->Velocity.X *= 1.3f;
+						ptr21->Velocity.Y *= 1.3f;
 					}
-					ptr35->NoGravity = true;
-					ptr35->Velocity.X *= 2f;
-					ptr35->Velocity.Y *= 2f;
-					ptr35 = Main.DustSet.NewDust(29, ref XYWH, Velocity.X * -0.2f, Velocity.Y * -0.2, 100);
-					if (ptr35 == null)
+					break;
+
+				case EntityID.NPCID.SKELETRON_HEAD:
+				case EntityID.NPCID.SKELETRON_HAND:
+					if (Life > 0)
 					{
-						break;
+						for (int num128 = (int)(dmg / LifeMax * 80.0); num128 > 0; num128--)
+						{
+							Main.DustSet.NewDust(26, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
 					}
-					ptr35->Velocity.X *= 2f;
-					ptr35->Velocity.Y *= 2f;
-				}
-			}
-			else if ((Type >= (int)ID.GOBLIN_PEON && Type <= (int)ID.GOBLIN_SORCERER) || Type == (int)ID.GOBLIN_SCOUT || Type == (int)ID.GOBLIN_ARCHER)
-			{
-				if (Life > 0)
-				{
-					int num152 = (int)(dmg / LifeMax * 80.0);
-					while (num152 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+
+					for (int num129 = 0; num129 < 128; num129++)
 					{
-						num152--;
+						Main.DustSet.NewDust(26, ref XYWH, 2.5 * hitDirection, -2.5);
 					}
-					return;
-				}
-				for (int num153 = 0; num153 < 42; num153++)
-				{
-					if (null == Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5))
+
+					if (Type == (int)EntityID.NPCID.SKELETRON_HEAD)
 					{
-						break;
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HEAD1);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HEAD2);
+						return;
 					}
-				}
-				Gore.NewGore(Position, Velocity, 48, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 49, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, 49, Scale);
-				if (Type == (int)ID.GOBLIN_ARCHER)
-				{
-					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 131, Scale);
-				}
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 50, Scale);
-				Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, 50, Scale);
-			}
-			else if (Type == (int)ID.CHAOS_BALL)
-			{
-				Main.PlaySound(2, (int)Position.X, (int)Position.Y, 10);
-				for (int num154 = 0; num154 < 15; num154++)
-				{
-					Dust* ptr36 = Main.DustSet.NewDust(27, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 2.0);
-					if (ptr36 == null)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HAND1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HAND2);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HAND2);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_HAND2);
+					break;
+
+				case EntityID.NPCID.PROBE:
+					if (Life > 0)
 					{
-						break;
+						return;
 					}
-					ptr36->NoGravity = true;
-					ptr36->Velocity.X *= 2f;
-					ptr36->Velocity.Y *= 2f;
-					ptr36 = Main.DustSet.NewDust(27, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100);
-					if (ptr36 == null)
+
+					for (int num130 = 0; num130 < 8; num130++)
 					{
-						break;
+						Dust* ptr22 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr22 == null)
+						{
+							break;
+						}
+
+						ptr22->Velocity.X *= 1.4f;
+						ptr22->Velocity.Y *= 1.4f;
 					}
-					ptr36->Velocity.X *= 2f;
-					ptr36->Velocity.Y *= 2f;
-				}
-			}
-			else if (Type == (int)ID.HORNET || Type == (int)ID.DRAGON_HORNET)
-			{
-				if (Life > 0)
-				{
-					for (int num155 = (int)(dmg / LifeMax * 80.0); num155 > 0; num155--)
+
+					for (int num131 = 0; num131 < 4; num131++)
 					{
-						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						Dust* ptr23 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr23 == null)
+						{
+							break;
+						}
+
+						ptr23->NoGravity = true;
+						ptr23->Velocity.X *= 5f;
+						ptr23->Velocity.Y *= 5f;
+						ptr23 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr23 == null)
+						{
+							break;
+						}
+
+						ptr23->Velocity.X *= 3f;
+						ptr23->Velocity.Y *= 3f;
 					}
-					return;
-				}
-				for (int num156 = 0; num156 < 42; num156++)
-				{
-					Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
-				}
-				int num157 = ((Type == (int)ID.HORNET) ? 70 : 169);
-				Gore.NewGore(Position, Velocity, num157, Scale);
-				Gore.NewGore(Position, Velocity, ++num157, Scale);
-			}
-			else if (Type == (int)ID.MAN_EATER || Type == (int)ID.SNATCHER || Type == (int)ID.DRAGON_SNATCHER)
-			{
-				if (Life > 0)
-				{
-					for (int num158 = (int)(dmg / LifeMax * 80.0); num158 > 0; num158--)
+
+					int num132 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num132].Velocity *= 0.4f;
+					Main.GoreSet[num132].Velocity.X += 1f;
+					Main.GoreSet[num132].Velocity.Y += 1f;
+					num132 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num132].Velocity *= 0.4f;
+					Main.GoreSet[num132].Velocity.X -= 1f;
+					Main.GoreSet[num132].Velocity.Y += 1f;
+					num132 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num132].Velocity *= 0.4f;
+					Main.GoreSet[num132].Velocity.X += 1f;
+					Main.GoreSet[num132].Velocity.Y -= 1f;
+					num132 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num132].Velocity *= 0.4f;
+					Main.GoreSet[num132].Velocity.X -= 1f;
+					Main.GoreSet[num132].Velocity.Y -= 1f;
+					break;
+
+				case EntityID.NPCID.THE_DESTROYER_HEAD:
+				case EntityID.NPCID.THE_DESTROYER_BODY:
+				case EntityID.NPCID.THE_DESTROYER_TAIL:
+					if (Type == (int)EntityID.NPCID.THE_DESTROYER_BODY && Life > 0 && Main.NetMode != (byte)NetModeSetting.CLIENT && AI2 == 0f && Main.Rand.Next(25) == 0)
 					{
-						Main.DustSet.NewDust(40, ref XYWH, hitDirection, -1.0, Alpha, Colour, 1.2);
+						AI2 = 1f;
+						int num133 = NewNPC(XYWH.X + (Width >> 1), XYWH.Y + Height, (int)EntityID.NPCID.PROBE);
+						if (Main.NetMode == (byte)NetModeSetting.SERVER && num133 < MaxNumNPCs)
+						{
+							NetMessage.CreateMessage1(23, num133);
+							NetMessage.SendMessage();
+						}
+
+						ShouldNetUpdate = true;
 					}
-					return;
-				}
-				for (int num159 = 0; num159 < 42; num159++)
-				{
-					Main.DustSet.NewDust(40, ref XYWH, hitDirection, -2.0, Alpha, Colour, 1.2);
-				}
-				Gore.NewGore(Position, Velocity, 72);
-				Gore.NewGore(Position, Velocity, 72);
-			}
-			else if (Type == (int)ID.HARPY)
-			{
-				if (Life > 0)
-				{
-					for (int num160 = (int)(dmg / LifeMax * 80.0); num160 > 0; num160--)
+
+					if (Life > 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						return;
 					}
-					return;
-				}
-				for (int num161 = 0; num161 < 42; num161++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
-				}
-				Gore.NewGore(Position, Velocity, 80);
-				Gore.NewGore(Position, Velocity, 81);
-			}
-			else
-			{
-				if (Type != (int)ID.DEMON && Type != (int)ID.ARCH_DEMON && Type != (int)ID.VOODOO_DEMON)
-				{
-					return;
-				}
-				if (Life > 0)
-				{
-					for (int num162 = (int)(dmg / LifeMax * 80.0); num162 > 0; num162--)
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DESTROYER_SEGMENT);
+					if (Main.Rand.Next(2) != 0)
 					{
-						Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						return;
 					}
-					return;
-				}
-				for (int num163 = 0; num163 < 42; num163++)
-				{
-					Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
-				}
-				if (Type == (int)ID.ARCH_DEMON)
-				{
-					Gore.NewGore(Position, Velocity, 171);
-					Gore.NewGore(Position, Velocity, 0);
-					Gore.NewGore(Position, Velocity, 0);
-				}
-				else
-				{
-					Gore.NewGore(Position, Velocity, 93);
-					Gore.NewGore(Position, Velocity, 94);
-					Gore.NewGore(Position, Velocity, 94);
-				}
+
+					for (int num134 = 0; num134 < 8; num134++)
+					{
+						Dust* ptr24 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr24 == null)
+						{
+							break;
+						}
+
+						ptr24->Velocity.X *= 1.4f;
+						ptr24->Velocity.Y *= 1.4f;
+					}
+
+					for (int num135 = 0; num135 < 4; num135++)
+					{
+						Dust* ptr25 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr25 == null)
+						{
+							break;
+						}
+
+						ptr25->NoGravity = true;
+						ptr25->Velocity.X *= 5f;
+						ptr25->Velocity.Y *= 5f;
+						ptr25 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr25 == null)
+						{
+							break;
+						}
+
+						ptr25->Velocity.X *= 3f;
+						ptr25->Velocity.Y *= 3f;
+					}
+
+					int num136 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num136].Velocity.X *= 0.4f;
+					Main.GoreSet[num136].Velocity.X += 1f;
+					Main.GoreSet[num136].Velocity.Y *= 0.4f;
+					Main.GoreSet[num136].Velocity.Y += 1f;
+					num136 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num136].Velocity.X *= 0.4f;
+					Main.GoreSet[num136].Velocity.X -= 1f;
+					Main.GoreSet[num136].Velocity.Y *= 0.4f;
+					Main.GoreSet[num136].Velocity.Y += 1f;
+					num136 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num136].Velocity.X *= 0.4f;
+					Main.GoreSet[num136].Velocity.X += 1f;
+					Main.GoreSet[num136].Velocity.Y *= 0.4f;
+					Main.GoreSet[num136].Velocity.Y -= 1f;
+					num136 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num136].Velocity.X *= 0.4f;
+					Main.GoreSet[num136].Velocity.X -= 1f;
+					Main.GoreSet[num136].Velocity.Y *= 0.4f;
+					Main.GoreSet[num136].Velocity.Y -= 1f;
+					break;
+
+				case EntityID.NPCID.SKELETRON_PRIME:
+					if (Life > 0)
+					{
+						return;
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_PRIME_HEAD1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_PRIME_HEAD2);
+					for (int num137 = 0; num137 < 8; num137++)
+					{
+						Dust* ptr26 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr26 == null)
+						{
+							break;
+						}
+
+						ptr26->Velocity.X *= 1.4f;
+						ptr26->Velocity.Y *= 1.4f;
+					}
+
+					for (int num138 = 0; num138 < 4; num138++)
+					{
+						Dust* ptr27 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr27 == null)
+						{
+							break;
+						}
+
+						ptr27->NoGravity = true;
+						ptr27->Velocity.X *= 5f;
+						ptr27->Velocity.Y *= 5f;
+						ptr27 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr27 == null)
+						{
+							break;
+						}
+
+						ptr27->Velocity.X *= 3f;
+						ptr27->Velocity.Y *= 3f;
+					}
+
+					int num139 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num139].Velocity.X *= 0.4f;
+					Main.GoreSet[num139].Velocity.X += 1f;
+					Main.GoreSet[num139].Velocity.Y *= 0.4f;
+					Main.GoreSet[num139].Velocity.Y += 1f;
+					num139 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num139].Velocity.X *= 0.4f;
+					Main.GoreSet[num139].Velocity.X -= 1f;
+					Main.GoreSet[num139].Velocity.Y *= 0.4f;
+					Main.GoreSet[num139].Velocity.Y += 1f;
+					num139 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num139].Velocity.X *= 0.4f;
+					Main.GoreSet[num139].Velocity.X += 1f;
+					Main.GoreSet[num139].Velocity.Y *= 0.4f;
+					Main.GoreSet[num139].Velocity.Y -= 1f;
+					num139 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num139].Velocity.X *= 0.4f;
+					Main.GoreSet[num139].Velocity.X -= 1f;
+					Main.GoreSet[num139].Velocity.Y *= 0.4f;
+					Main.GoreSet[num139].Velocity.Y -= 1f;
+					break;
+
+				case EntityID.NPCID.PRIME_CANNON:
+				case EntityID.NPCID.PRIME_SAW:
+				case EntityID.NPCID.PRIME_VICE:
+				case EntityID.NPCID.PRIME_LASER:
+					if (Life > 0)
+					{
+						return;
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_PRIME_HAND1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.SKELETRON_PRIME_HAND2);
+					for (int num140 = 0; num140 < 8; num140++)
+					{
+						Dust* ptr28 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr28 == null)
+						{
+							break;
+						}
+
+						ptr28->Velocity.X *= 1.4f;
+						ptr28->Velocity.Y *= 1.4f;
+					}
+
+					for (int num141 = 0; num141 < 4; num141++)
+					{
+						Dust* ptr29 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr29 == null)
+						{
+							break;
+						}
+
+						ptr29->NoGravity = true;
+						ptr29->Velocity.X *= 5f;
+						ptr29->Velocity.Y *= 5f;
+						ptr29 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr29 == null)
+						{
+							break;
+						}
+
+						ptr29->Velocity.X *= 3f;
+						ptr29->Velocity.Y *= 3f;
+					}
+
+					int num142 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num142].Velocity.X *= 0.4f;
+					Main.GoreSet[num142].Velocity.X += 1f;
+					Main.GoreSet[num142].Velocity.Y *= 0.4f;
+					Main.GoreSet[num142].Velocity.Y += 1f;
+					num142 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num142].Velocity.X *= 0.4f;
+					Main.GoreSet[num142].Velocity.X -= 1f;
+					Main.GoreSet[num142].Velocity.Y *= 0.4f;
+					Main.GoreSet[num142].Velocity.Y += 1f;
+					num142 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num142].Velocity.X *= 0.4f;
+					Main.GoreSet[num142].Velocity.X += 1f;
+					Main.GoreSet[num142].Velocity.Y *= 0.4f;
+					Main.GoreSet[num142].Velocity.Y -= 1f;
+					num142 = Gore.NewGore(Position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num142].Velocity.X *= 0.4f;
+					Main.GoreSet[num142].Velocity.X -= 1f;
+					Main.GoreSet[num142].Velocity.Y *= 0.4f;
+					Main.GoreSet[num142].Velocity.Y -= 1f;
+					break;
+
+				case EntityID.NPCID.METEOR_HEAD:
+					if (Life > 0)
+					{
+						for (int num143 = (int)(dmg / LifeMax * 80.0); num143 > 0; num143--)
+						{
+							int num144 = ((Main.Rand.Next(2) == 0) ? 6 : 25);
+							Main.DustSet.NewDust(num144, ref XYWH, hitDirection, -1.0);
+							Dust* ptr30 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2, Velocity.Y * 0.2, 100, default, 2.0);
+							if (ptr30 == null)
+							{
+								break;
+							}
+
+							ptr30->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int num145 = 0; num145 < 42; num145++)
+					{
+						int num146 = ((Main.Rand.Next(2) == 0) ? 6 : 25);
+						if (null == Main.DustSet.NewDust(num146, ref XYWH, hitDirection << 1, -2.0))
+						{
+							break;
+						}
+					}
+
+					for (int num147 = 0; num147 < 42; num147++)
+					{
+						Dust* ptr31 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * 0.2, Velocity.Y * 0.2, 100, default, 2.5);
+						if (ptr31 == null)
+						{
+							break;
+						}
+
+						ptr31->Velocity.X *= 6f;
+						ptr31->Velocity.Y *= 6f;
+						ptr31->NoGravity = true;
+					}
+					break;
+
+				case EntityID.NPCID.FIRE_IMP:
+					if (Life > 0)
+					{
+						for (int num148 = (int)(dmg / LifeMax * 80.0); num148 > 0; num148--)
+						{
+							Dust* ptr32 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X, Velocity.Y, 100, default, 2.5);
+							if (ptr32 == null)
+							{
+								break;
+							}
+
+							ptr32->NoGravity = true;
+						}
+
+						return;
+					}
+
+					for (int num149 = 0; num149 < 42; num149++)
+					{
+						Dust* ptr33 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X, Velocity.Y, 100, default, 2.5);
+						if (ptr33 == null)
+						{
+							break;
+						}
+
+						ptr33->NoGravity = true;
+						ptr33->Velocity.X *= 2f;
+						ptr33->Velocity.Y *= 2f;
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.FIRE_IMP1);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.FIRE_IMP2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.FIRE_IMP2);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.FIRE_IMP3);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.FIRE_IMP3);
+					break;
+
+				case EntityID.NPCID.BURNING_SPHERE:
+					Main.PlaySound(2, XYWH.X, XYWH.Y, 10);
+					for (int num150 = 0; num150 < 16; num150++)
+					{
+						Dust* ptr34 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 2.0);
+						if (ptr34 == null)
+						{
+							break;
+						}
+
+						ptr34->NoGravity = true;
+						ptr34->Velocity *= 2f;
+						ptr34 = Main.DustSet.NewDust(6, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100);
+						if (ptr34 == null)
+						{
+							break;
+						}
+
+						ptr34->Velocity.X *= 2f;
+						ptr34->Velocity.Y *= 2f;
+					}
+					break;
+
+				case EntityID.NPCID.WATER_SPHERE:
+					Main.PlaySound(2, XYWH.X, XYWH.Y, 10);
+					for (int num151 = 0; num151 < 16; num151++)
+					{
+						Dust* ptr35 = Main.DustSet.NewDust(29, ref XYWH, Velocity.X * -0.2f, Velocity.Y * -0.2, 100, default, 2.0);
+						if (ptr35 == null)
+						{
+							break;
+						}
+
+						ptr35->NoGravity = true;
+						ptr35->Velocity.X *= 2f;
+						ptr35->Velocity.Y *= 2f;
+						ptr35 = Main.DustSet.NewDust(29, ref XYWH, Velocity.X * -0.2f, Velocity.Y * -0.2, 100);
+						if (ptr35 == null)
+						{
+							break;
+						}
+
+						ptr35->Velocity.X *= 2f;
+						ptr35->Velocity.Y *= 2f;
+					}
+					break;
+
+				case EntityID.NPCID.GOBLIN_PEON:
+				case EntityID.NPCID.GOBLIN_THIEF:
+				case EntityID.NPCID.GOBLIN_WARRIOR:
+				case EntityID.NPCID.GOBLIN_SORCERER:
+				case EntityID.NPCID.GOBLIN_SCOUT:
+				case EntityID.NPCID.GOBLIN_ARCHER:
+					if (Life > 0)
+					{
+						int num152 = (int)(dmg / LifeMax * 80.0);
+						while (num152 > 0 && null != Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0))
+						{
+							num152--;
+						}
+
+						return;
+					}
+
+					for (int num153 = 0; num153 < 42; num153++)
+					{
+						if (null == Main.DustSet.NewDust(5, ref XYWH, 2.5 * hitDirection, -2.5))
+						{
+							break;
+						}
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.GOBLIN_SORCERER_HEAD, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GOBLIN_SORCERER_HAND, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 20f), Velocity, (int)EntityID.GoreID.GOBLIN_SORCERER_HAND, Scale);
+					if (Type == (int)EntityID.NPCID.GOBLIN_ARCHER)
+					{
+						Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.BOW, Scale);
+					}
+
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GOBLIN_SORCERER_LEG, Scale);
+					Gore.NewGore(new Vector2(Position.X, Position.Y + 34f), Velocity, (int)EntityID.GoreID.GOBLIN_SORCERER_LEG, Scale);
+					break;
+
+				case EntityID.NPCID.CHAOS_BALL:
+					Main.PlaySound(2, (int)Position.X, (int)Position.Y, 10);
+					for (int num154 = 0; num154 < 15; num154++)
+					{
+						Dust* ptr36 = Main.DustSet.NewDust(27, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100, default, 2.0);
+						if (ptr36 == null)
+						{
+							break;
+						}
+
+						ptr36->NoGravity = true;
+						ptr36->Velocity.X *= 2f;
+						ptr36->Velocity.Y *= 2f;
+						ptr36 = Main.DustSet.NewDust(27, ref XYWH, Velocity.X * -0.2, Velocity.Y * -0.2, 100);
+						if (ptr36 == null)
+						{
+							break;
+						}
+
+						ptr36->Velocity.X *= 2f;
+						ptr36->Velocity.Y *= 2f;
+					}
+					break;
+
+				case EntityID.NPCID.HORNET:
+				case EntityID.NPCID.DRAGON_HORNET:
+					if (Life > 0)
+					{
+						for (int num155 = (int)(dmg / LifeMax * 80.0); num155 > 0; num155--)
+						{
+							Main.DustSet.NewDust(18, ref XYWH, hitDirection, -1.0, Alpha, Colour, Scale);
+						}
+
+						return;
+					}
+
+					for (int num156 = 0; num156 < 42; num156++)
+					{
+						Main.DustSet.NewDust(18, ref XYWH, hitDirection, -2.0, Alpha, Colour, Scale);
+					}
+
+					int num157 = ((Type == (int)EntityID.NPCID.HORNET) ? (int)EntityID.GoreID.HORNET1 : (int)EntityID.GoreID.DRAGON_HORNET1);
+					Gore.NewGore(Position, Velocity, num157, Scale);
+					Gore.NewGore(Position, Velocity, ++num157, Scale);
+					break;
+
+				case EntityID.NPCID.MAN_EATER:
+				case EntityID.NPCID.SNATCHER:
+				case EntityID.NPCID.DRAGON_SNATCHER:
+					if (Life > 0)
+					{
+						for (int num158 = (int)(dmg / LifeMax * 80.0); num158 > 0; num158--)
+						{
+							Main.DustSet.NewDust(40, ref XYWH, hitDirection, -1.0, Alpha, Colour, 1.2);
+						}
+
+						return;
+					}
+
+					for (int num159 = 0; num159 < 42; num159++)
+					{
+						Main.DustSet.NewDust(40, ref XYWH, hitDirection, -2.0, Alpha, Colour, 1.2);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.MAN_EATER);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.MAN_EATER);
+					break;
+
+				case EntityID.NPCID.HARPY:
+					if (Life > 0)
+					{
+						for (int num160 = (int)(dmg / LifeMax * 80.0); num160 > 0; num160--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num161 = 0; num161 < 42; num161++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
+					}
+
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.HARPY_WING1);
+					Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.HARPY_WING2);
+					break;
+
+				default:
+					if (Type != (int)EntityID.NPCID.DEMON && Type != (int)EntityID.NPCID.ARCH_DEMON && Type != (int)EntityID.NPCID.VOODOO_DEMON)
+					{
+						return;
+					}
+
+					if (Life > 0)
+					{
+						for (int num162 = (int)(dmg / LifeMax * 80.0); num162 > 0; num162--)
+						{
+							Main.DustSet.NewDust(5, ref XYWH, hitDirection, -1.0);
+						}
+
+						return;
+					}
+
+					for (int num163 = 0; num163 < 42; num163++)
+					{
+						Main.DustSet.NewDust(5, ref XYWH, hitDirection << 1, -2.0);
+					}
+
+					if (Type == (int)EntityID.NPCID.ARCH_DEMON)
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.ARCH_DEMON);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.NONE);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.NONE);
+					}
+					else
+					{
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DEMON_HEAD);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DEMON_WING);
+						Gore.NewGore(Position, Velocity, (int)EntityID.GoreID.DEMON_WING);
+					}
+					break;
 			}
 		}
 
@@ -20367,11 +20969,11 @@ namespace Terraria
 			{
 				if (Main.NPCSet[i].Active != 0)
 				{
-					if (Main.NPCSet[i].Type == (int)ID.SKELETRON_HEAD)
+					if (Main.NPCSet[i].Type == (int)EntityID.NPCID.SKELETRON_HEAD)
 					{
 						return;
 					}
-					if (Main.NPCSet[i].Type == (int)ID.OLD_MAN)
+					if (Main.NPCSet[i].Type == (int)EntityID.NPCID.OLD_MAN)
 					{
 						num = i;
 						break;
@@ -20381,7 +20983,7 @@ namespace Terraria
 			if (num >= 0)
 			{
 				Main.NPCSet[num].AI3 = 1f;
-				int num2 = NewNPC(Main.NPCSet[num].XYWH.X + (Main.NPCSet[num].Width >> 1), Main.NPCSet[num].XYWH.Y + (Main.NPCSet[num].Height >> 1), (int)ID.SKELETRON_HEAD);
+				int num2 = NewNPC(Main.NPCSet[num].XYWH.X + (Main.NPCSet[num].Width >> 1), Main.NPCSet[num].XYWH.Y + (Main.NPCSet[num].Height >> 1), (int)EntityID.NPCID.SKELETRON_HEAD);
 				Main.NPCSet[num2].ShouldNetUpdate = true;
 				NetMessage.CreateMessage1((int)SendDataId.SERVER_WORLD_NPC, num);
 				NetMessage.SendMessage();
@@ -20394,7 +20996,7 @@ namespace Terraria
 			Rectangle rectangle = new Rectangle(x * 16 - 300, y * 16 - 300, 600, 600);
 			for (int i = 0; i < MaxNumNPCs; i++)
 			{
-				if (Main.NPCSet[i].AIStyle == 20 && Main.NPCSet[i].Active != 0)
+				if (Main.NPCSet[i].AIStyle == (byte)EntityID.NPCStyleID.SPIKE_BALL && Main.NPCSet[i].Active != 0)
 				{
 					Rectangle rectangle2 = new Rectangle((int)Main.NPCSet[i].AI1, (int)Main.NPCSet[i].AI2, 20, 20);
 					if (rectangle.Intersects(rectangle2))
@@ -20537,10 +21139,10 @@ namespace Terraria
 #endif
 					switch (ActiveBuffs[j].Type)
 					{
-						case (int)Buff.ID.CONFUSED:
+						case (int)EntityID.BuffID.CONFUSED:
 							IsConfused = true;
 							break;
-						case (int)Buff.ID.POISONED:
+						case (int)EntityID.BuffID.POISONED:
 							IsPoisoned = true;
 							if (num > -4)
 							{
@@ -20556,7 +21158,7 @@ namespace Terraria
 								}
 							}
 							break;
-						case (int)Buff.ID.ON_FIRE:
+						case (int)EntityID.BuffID.ON_FIRE:
 							flag = true;
 							if (num > -8)
 							{
@@ -20564,14 +21166,14 @@ namespace Terraria
 							}
 							FireEffect(6);
 							break;
-						case (int)Buff.ID.ON_FIRE_2:
+						case (int)EntityID.BuffID.ON_FIRE_2:
 							if (num > -12)
 							{
 								num = -12;
 							}
 							FireEffect(75);
 							break;
-						case (int)Buff.ID.BLEED:
+						case (int)EntityID.BuffID.BLEED:
 							if (num > -16)
 							{
 								num = -16;
@@ -20628,13 +21230,13 @@ namespace Terraria
 			}
 			if (Main.NetMode != (byte)NetModeSetting.CLIENT && Main.GameTime.IsBloodMoon)
 			{
-				if (Type == (int)ID.BUNNY)
+				if (Type == (int)EntityID.NPCID.BUNNY)
 				{
-					Transform((int)ID.CORRUPT_BUNNY);
+					Transform((int)EntityID.NPCID.CORRUPT_BUNNY);
 				}
-				else if (Type == (int)ID.GOLDFISH)
+				else if (Type == (int)EntityID.NPCID.GOLDFISH)
 				{
-					Transform((int)ID.CORRUPT_GOLDFISH);
+					Transform((int)EntityID.NPCID.CORRUPT_GOLDFISH);
 				}
 			}
 			float num3 = 10f;
@@ -20670,126 +21272,126 @@ namespace Terraria
 			OldDirectionY = DirectionY;
 			try
 			{
-				switch (AIStyle)
+				switch ((EntityID.NPCStyleID)AIStyle)
 				{
-					case 0:
+					case EntityID.NPCStyleID.BOUND:
 						BoundAI();
 						break;
-					case 1:
+					case EntityID.NPCStyleID.SLIME:
 						SlimeAI();
 						break;
-					case 2:
+					case EntityID.NPCStyleID.DEMON_EYE:
 						FloatingEyeballAI();
 						break;
-					case 3:
+					case EntityID.NPCStyleID.WALKER:
 						WalkAI();
 						break;
-					case 4:
+					case EntityID.NPCStyleID.EYE_OF_CTHULHU:
 						EyeOfCthulhuAI();
 						break;
-					case 5:
+					case EntityID.NPCStyleID.AGGRESSIVE_FLYER:
 						AggressiveFlyerAI();
 						break;
-					case 6:
+					case EntityID.NPCStyleID.WORM:
 						WormAI();
 						break;
-					case 7:
+					case EntityID.NPCStyleID.TOWNSFOLK:
 						TownsfolkAI();
 						break;
-					case 8:
+					case EntityID.NPCStyleID.SORCERER:
 						SorcererAI();
 						break;
-					case 9:
+					case EntityID.NPCStyleID.SPHERE:
 						SphereAI();
 						break;
-					case 10:
+					case EntityID.NPCStyleID.CURSED_SKULL:
 						SkullHeadAI();
 						break;
-					case 11:
+					case EntityID.NPCStyleID.SKELETRON_HEAD:
 						SkeletronAI();
 						break;
-					case 12:
+					case EntityID.NPCStyleID.SKELETRON_HAND:
 						SkeletronHandAI();
 						break;
-					case 13:
+					case EntityID.NPCStyleID.PLANT:
 						PlantAI();
 						break;
-					case 14:
+					case EntityID.NPCStyleID.FLYER:
 						FlyerAI();
 						break;
-					case 15:
+					case EntityID.NPCStyleID.KING_SLIME:
 						KingSlimeAI();
 						break;
-					case 16:
+					case EntityID.NPCStyleID.FISH:
 						FishAI();
 						break;
-					case 17:
+					case EntityID.NPCStyleID.VULTURE:
 						VultureAI();
 						break;
-					case 18:
+					case EntityID.NPCStyleID.JELLYFISH:
 						JellyfishAI();
 						break;
-					case 19:
+					case EntityID.NPCStyleID.ANTLION:
 						AntlionAI();
 						break;
-					case 20:
+					case EntityID.NPCStyleID.SPIKE_BALL:
 						SpinningSpikeballAI();
 						break;
-					case 21:
+					case EntityID.NPCStyleID.BLAZE_WHEEL:
 						GravityDiskAI();
 						break;
-					case 22:
+					case EntityID.NPCStyleID.HOVERING:
 						MoreFlyerAI();
 						break;
-					case 23:
+					case EntityID.NPCStyleID.ENCHANTED_WEAPON:
 						EnchantedWeaponAI();
 						break;
-					case 24:
+					case EntityID.NPCStyleID.BIRD:
 						BirdAI();
 						break;
-					case 25:
+					case EntityID.NPCStyleID.MIMIC:
 						MimicAI();
 						break;
-					case 26:
+					case EntityID.NPCStyleID.UNICORN:
 						UnicornAI();
 						break;
-					case 27:
+					case EntityID.NPCStyleID.WALL_OF_FLESH_MOUTH:
 						WallOfFleshMouthAI();
 						break;
-					case 28:
+					case EntityID.NPCStyleID.WALL_OF_FLESH_EYES:
 						WallOfFleshEyesAI();
 						break;
-					case 29:
+					case EntityID.NPCStyleID.WALL_OF_FLESH_TENTACLE:
 						WallOfFleshTentacleAI();
 						break;
-					case 30:
+					case EntityID.NPCStyleID.RETINAZER:
 						RetinazerAI();
 						break;
-					case 31:
+					case EntityID.NPCStyleID.SPAZMATISM:
 						SpazmatismAI();
 						break;
-					case 32:
+					case EntityID.NPCStyleID.SKELETRON_PRIME_HEAD:
 						SkeletronPrimeAI();
 						break;
-					case 33:
+					case EntityID.NPCStyleID.SKELETRON_PRIME_SAW:
 						SkeletronPrimeSawHand();
 						break;
-					case 34:
+					case EntityID.NPCStyleID.SKELETRON_PRIME_VICE:
 						SkeletronPrimeViceHand();
 						break;
-					case 35:
+					case EntityID.NPCStyleID.SKELETRON_PRIME_CANNON:
 						SkeletronPrimeCannonHand();
 						break;
-					case 36:
+					case EntityID.NPCStyleID.SKELETRON_PRIME_LASER:
 						SkeletronPrimeLaserHand();
 						break;
-					case 37:
+					case EntityID.NPCStyleID.DESTROYER:
 						DestroyerAI();
 						break;
-					case 38:
+					case EntityID.NPCStyleID.SNOWMAN:
 						SnowmanAI();
 						break;
-					case 39:
+					case EntityID.NPCStyleID.OCRAM:
 						OcramAI();
 						break;
 				}
@@ -20799,7 +21401,7 @@ namespace Terraria
 				Active = 0;
 				return;
 			}
-			if (Type == (int)ID.UNDEAD_MINER || Type == (int)ID.VAMPIRE_MINER)
+			if (Type == (int)EntityID.NPCID.UNDEAD_MINER || Type == (int)EntityID.NPCID.VAMPIRE_MINER)
 			{
 				Lighting.AddLight(XYWH.X + (Width >> 1) >> 4, XYWH.Y + 4 >> 4, new Vector3(0.9f, 0.75f, 0.5f));
 			}
@@ -20822,7 +21424,7 @@ namespace Terraria
 			{
 				Velocity.X = 0f;
 			}
-			if (Main.NetMode != (byte)NetModeSetting.CLIENT && Type != (int)ID.OLD_MAN && (IsFriendly || Type == (int)ID.BUNNY || Type == (int)ID.GOLDFISH || Type == (int)ID.BIRD))
+			if (Main.NetMode != (byte)NetModeSetting.CLIENT && Type != (int)EntityID.NPCID.OLD_MAN && (IsFriendly || Type == (int)EntityID.NPCID.BUNNY || Type == (int)EntityID.NPCID.GOLDFISH || Type == (int)EntityID.NPCID.BIRD))
 			{
 				if (Life < LifeMax)
 				{
@@ -20863,12 +21465,12 @@ namespace Terraria
 					LavaWet = true;
 					if (!IsLavaImmune && !DontTakeDamage && Main.NetMode != (byte)NetModeSetting.CLIENT && Immunities[Player.MaxNumPlayers] == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 420);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 420);
 						Immunities[Player.MaxNumPlayers] = 30;
 						StrikeNPC(50, 0f, 0);
 						NetMessage.SendNpcHurt(WhoAmI, 50, 0.0, 0);
 #if !USE_ORIGINAL_CODE
-						if (Type == (int)ID.GUIDE && Life <= 0)
+						if (Type == (int)EntityID.NPCID.GUIDE && Life <= 0)
 						{
 							UI.SetTriggerStateForAll(Trigger.OldFashioned);
 						}
@@ -20876,7 +21478,7 @@ namespace Terraria
 					}
 				}
 				bool flag3 = false;
-				if (Type == (int)ID.BLAZING_WHEEL)
+				if (Type == (int)EntityID.NPCID.BLAZING_WHEEL)
 				{
 					flag3 = false;
 					WetCount = 0;
@@ -20892,7 +21494,7 @@ namespace Terraria
 					{
 						for (int n = 0; n < MaxNumNPCBuffs; n++)
 						{
-							if (ActiveBuffs[n].Type == (int)Buff.ID.ON_FIRE)
+							if (ActiveBuffs[n].Type == (int)EntityID.BuffID.ON_FIRE)
 							{
 								DelBuff(n);
 								break;
@@ -20917,7 +21519,7 @@ namespace Terraria
 								ptr3->Alpha = 100;
 								ptr3->NoGravity = true;
 							}
-							if (Type != (int)ID.SLIME && Type != (int)ID.LAVA_SLIME && !HasNoGravity)
+							if (Type != (int)EntityID.NPCID.SLIME && Type != (int)EntityID.NPCID.LAVA_SLIME && !HasNoGravity)
 							{
 								Main.PlaySound(19, XYWH.X, XYWH.Y, 0);
 							}
@@ -20937,7 +21539,7 @@ namespace Terraria
 								ptr4->Alpha = 100;
 								ptr4->NoGravity = true;
 							}
-							if (Type != (int)ID.SLIME && Type != (int)ID.LAVA_SLIME && !HasNoGravity)
+							if (Type != (int)EntityID.NPCID.SLIME && Type != (int)EntityID.NPCID.LAVA_SLIME && !HasNoGravity)
 							{
 								Main.PlaySound(19, XYWH.X, XYWH.Y);
 							}
@@ -20967,7 +21569,7 @@ namespace Terraria
 								ptr5->Alpha = 100;
 								ptr5->NoGravity = true;
 							}
-							if (Type != (int)ID.SLIME && Type != (int)ID.LAVA_SLIME && !HasNoGravity)
+							if (Type != (int)EntityID.NPCID.SLIME && Type != (int)EntityID.NPCID.LAVA_SLIME && !HasNoGravity)
 							{
 								Main.PlaySound(19, XYWH.X, XYWH.Y, 0);
 							}
@@ -20987,7 +21589,7 @@ namespace Terraria
 								ptr6->Alpha = 100;
 								ptr6->NoGravity = true;
 							}
-							if (Type != (int)ID.SLIME && Type != (int)ID.LAVA_SLIME && !HasNoGravity)
+							if (Type != (int)EntityID.NPCID.SLIME && Type != (int)EntityID.NPCID.LAVA_SLIME && !HasNoGravity)
 							{
 								Main.PlaySound(19, XYWH.X, XYWH.Y);
 							}
@@ -21003,15 +21605,15 @@ namespace Terraria
 					WetCount--;
 				}
 				bool flag4 = false;
-				if (AIStyle == 10)
+				if (AIStyle == (byte)EntityID.NPCStyleID.CURSED_SKULL)
 				{
 					flag4 = true;
 				}
-				else if (AIStyle == 14)
+				else if (AIStyle == (byte)EntityID.NPCStyleID.FLYER)
 				{
 					flag4 = true;
 				}
-				else if (AIStyle == 3 && DirectionY == 1)
+				else if (AIStyle == (byte)EntityID.NPCStyleID.WALKER && DirectionY == 1)
 				{
 					flag4 = true;
 				}
@@ -21045,7 +21647,7 @@ namespace Terraria
 				}
 				else
 				{
-					if (Type == (int)ID.BLAZING_WHEEL)
+					if (Type == (int)EntityID.NPCID.BLAZING_WHEEL)
 					{
 						Vector2 NewPosition = new Vector2(Position.X + (Width >> 1), Position.Y + (Height >> 1));
 						int num13 = 12;
@@ -21083,7 +21685,7 @@ namespace Terraria
 			}
 			XYWH.X = (int)Position.X;
 			XYWH.Y = (int)Position.Y;
-			if (Main.NetMode != (byte)NetModeSetting.CLIENT && !HasNoTileCollide && LifeMax > 1 && Collision.SwitchTiles(Position, Width, Height, OldPosition) && Type == (int)ID.BUNNY)
+			if (Main.NetMode != (byte)NetModeSetting.CLIENT && !HasNoTileCollide && LifeMax > 1 && Collision.SwitchTiles(Position, Width, Height, OldPosition) && Type == (int)EntityID.NPCID.BUNNY)
 			{
 				AI0 = 1f;
 				AI1 = 400f;
@@ -21141,7 +21743,7 @@ namespace Terraria
 			CheckActive();
 			ShouldNetUpdate = false;
 			WasJustHit = false;
-			if (Type == (int)ID.CHAOS_ELEMENTAL || Type == (int)ID.SPECTRAL_ELEMENTAL || Type == (int)ID.ILLUMINANT_BAT || Type == (int)ID.ILLUMINANT_SLIME)
+			if (Type == (int)EntityID.NPCID.CHAOS_ELEMENTAL || Type == (int)EntityID.NPCID.SPECTRAL_ELEMENTAL || Type == (int)EntityID.NPCID.ILLUMINANT_BAT || Type == (int)EntityID.NPCID.ILLUMINANT_SLIME)
 			{
 				for (int num15 = OldPos.Length - 1; num15 > 0; num15--)
 				{
@@ -21152,7 +21754,7 @@ namespace Terraria
 				ref Vector2 reference2 = ref OldPos[0];
 				reference2 = Position;
 			}
-			else if (Type == (int)ID.CORRUPTOR || (Type >= (int)ID.RETINAZER && Type <= (int)ID.PRIME_LASER) || Type == (int)ID.PROBE || Type == (int)ID.POSSESSED_ARMOR)
+			else if (Type == (int)EntityID.NPCID.CORRUPTOR || (Type >= (int)EntityID.NPCID.RETINAZER && Type <= (int)EntityID.NPCID.PRIME_LASER) || Type == (int)EntityID.NPCID.PROBE || Type == (int)EntityID.NPCID.POSSESSED_ARMOR)
 			{
 				for (int num16 = OldPos.Length - 1; num16 > 0; num16--)
 				{
@@ -21171,17 +21773,17 @@ namespace Terraria
 			int num3 = (int)(newColor.G * num);
 			int num4 = (int)(newColor.B * num);
 			int num5 = newColor.A - Alpha;
-			if (Type == (int)ID.BURNING_SPHERE || Type == (int)ID.CHAOS_BALL || Type == (int)ID.WATER_SPHERE || Type == (int)ID.LAVA_SLIME || Type == (int)ID.HELLBAT)
+			if (Type == (int)EntityID.NPCID.BURNING_SPHERE || Type == (int)EntityID.NPCID.CHAOS_BALL || Type == (int)EntityID.NPCID.WATER_SPHERE || Type == (int)EntityID.NPCID.LAVA_SLIME || Type == (int)EntityID.NPCID.HELLBAT)
 			{
 				return new Color(200, 200, 200, 0);
 			}
-			if (Type == (int)ID.BLAZING_WHEEL)
+			if (Type == (int)EntityID.NPCID.BLAZING_WHEEL)
 			{
 				num2 = newColor.R;
 				num3 = newColor.G;
 				num4 = newColor.B;
 			}
-			else if (Type == (int)ID.PINK_JELLYFISH || Type == (int)ID.BLUE_JELLYFISH || Type == (int)ID.PIXIE || Type == (int)ID.GREEN_JELLYFISH)
+			else if (Type == (int)EntityID.NPCID.PINK_JELLYFISH || Type == (int)EntityID.NPCID.BLUE_JELLYFISH || Type == (int)EntityID.NPCID.PIXIE || Type == (int)EntityID.NPCID.GREEN_JELLYFISH)
 			{
 				num2 = (int)(newColor.R * 1.5);
 				num3 = (int)(newColor.G * 1.5);
@@ -21266,46 +21868,46 @@ namespace Terraria
 			{
 				if (Main.NPCSet[i].Active != 0)
 				{
-					if (Main.NPCSet[i].Type == (int)ID.MERCHANT)
+					if (Main.NPCSet[i].Type == (int)EntityID.NPCID.MERCHANT)
 					{
 						flag = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.NURSE)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.NURSE)
 					{
 						flag2 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.ARMS_DEALER)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.ARMS_DEALER)
 					{
 						flag3 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.DRYAD)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.DRYAD)
 					{
 						flag4 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.OLD_MAN)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.OLD_MAN)
 					{
 						flag5 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.DEMOLITIONIST)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.DEMOLITIONIST)
 					{
 						flag6 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.MECHANIC)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.MECHANIC)
 					{
 						flag7 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.GOBLIN_TINKERER)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 					{
 						flag8 = true;
 					}
-					else if (Main.NPCSet[i].Type == (int)ID.GUIDE)
+					else if (Main.NPCSet[i].Type == (int)EntityID.NPCID.GUIDE)
 					{
 						flag9 = true;
 					}
 				}
 			}
 			string result = "";
-			if (Type == (int)ID.MERCHANT)
+			if (Type == (int)EntityID.NPCID.MERCHANT)
 			{
 				if (!HasDownedBoss1 && Main.Rand.Next(3) == 0)
 				{
@@ -21408,7 +22010,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.NURSE)
+			else if (Type == (int)EntityID.NPCID.NURSE)
 			{
 				if (Main.GameTime.IsBloodMoon)
 				{
@@ -21529,7 +22131,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.ARMS_DEALER)
+			else if (Type == (int)EntityID.NPCID.ARMS_DEALER)
 			{
 				if (HasDownedBoss3 && !Main.InHardMode)
 				{
@@ -21575,7 +22177,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.DRYAD)
+			else if (Type == (int)EntityID.NPCID.DRYAD)
 			{
 				if (!HasDownedBoss2 && Main.Rand.Next(3) == 0)
 				{
@@ -21633,7 +22235,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.OLD_MAN)
+			else if (Type == (int)EntityID.NPCID.OLD_MAN)
 			{
 				if (Main.GameTime.DayTime)
 				{
@@ -21687,7 +22289,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.DEMOLITIONIST)
+			else if (Type == (int)EntityID.NPCID.DEMOLITIONIST)
 			{
 				if (!HasDownedBoss2 && Main.Rand.Next(3) == 0)
 				{
@@ -21764,7 +22366,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.CLOTHIER)
+			else if (Type == (int)EntityID.NPCID.CLOTHIER)
 			{
 				if (!flag7 && Main.Rand.Next(2) == 0)
 				{
@@ -21778,7 +22380,7 @@ namespace Terraria
 				{
 					result = Lang.NPCDialog(player, 112);
 				}
-				else if (player.head == 24)
+				else if (player.head == (short)EntityID.ArmorHeadID.HEAD_RED_HAT)
 				{
 					result = Lang.NPCDialog(player, 113);
 				}
@@ -21807,11 +22409,11 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.BOUND_GOBLIN)
+			else if (Type == (int)EntityID.NPCID.BOUND_GOBLIN)
 			{
 				result = Lang.NPCDialog(player, 120);
 			}
-			else if (Type == (int)ID.GOBLIN_TINKERER)
+			else if (Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 			{
 				if (IsHomeless)
 				{
@@ -21881,11 +22483,11 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.BOUND_WIZARD)
+			else if (Type == (int)EntityID.NPCID.BOUND_WIZARD)
 			{
 				result = Lang.NPCDialog(player, 137);
 			}
-			else if (Type == (int)ID.WIZARD)
+			else if (Type == (int)EntityID.NPCID.WIZARD)
 			{
 				if (IsHomeless)
 				{
@@ -21972,11 +22574,11 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.BOUND_MECHANIC)
+			else if (Type == (int)EntityID.NPCID.BOUND_MECHANIC)
 			{
 				result = Lang.NPCDialog(player, 156);
 			}
-			else if (Type == (int)ID.MECHANIC)
+			else if (Type == (int)EntityID.NPCID.MECHANIC)
 			{
 				if (IsHomeless)
 				{
@@ -22038,7 +22640,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.GUIDE)
+			else if (Type == (int)EntityID.NPCID.GUIDE)
 			{
 				if (Main.GameTime.IsBloodMoon)
 				{
@@ -22075,7 +22677,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.SANTA_CLAUS)
+			else if (Type == (int)EntityID.NPCID.SANTA_CLAUS)
 			{
 				switch (Main.Rand.Next(3))
 				{
@@ -22127,57 +22729,57 @@ namespace Terraria
 			{
 				if (Main.NPCSet[j].Active != 0 && Main.NPCSet[j].IsTownNPC)
 				{
-					if (Main.NPCSet[j].Type != (int)ID.OLD_MAN && !Main.NPCSet[j].IsHomeless)
+					if (Main.NPCSet[j].Type != (int)EntityID.NPCID.OLD_MAN && !Main.NPCSet[j].IsHomeless)
 					{
 						WorldGen.QuickFindHome(j);
 					}
 					bool flag2 = Main.NPCSet[j].IsHomeless;
-					if (Main.NPCSet[j].Type == (int)ID.OLD_MAN)
+					if (Main.NPCSet[j].Type == (int)EntityID.NPCID.OLD_MAN)
 					{
 						num7++;
 						flag2 = false;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.MERCHANT)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.MERCHANT)
 					{
 						num2++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.NURSE)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.NURSE)
 					{
 						num3++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.ARMS_DEALER)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.ARMS_DEALER)
 					{
 						num5++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.DRYAD)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.DRYAD)
 					{
 						num4++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.GUIDE)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.GUIDE)
 					{
 						num6++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.DEMOLITIONIST)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.DEMOLITIONIST)
 					{
 						num8++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.CLOTHIER)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.CLOTHIER)
 					{
 						num9++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.GOBLIN_TINKERER)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 					{
 						num11++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.WIZARD)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.WIZARD)
 					{
 						num10++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.MECHANIC)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.MECHANIC)
 					{
 						num12++;
 					}
-					else if (Main.NPCSet[j].Type == (int)ID.SANTA_CLAUS)
+					else if (Main.NPCSet[j].Type == (int)EntityID.NPCID.SANTA_CLAUS)
 					{
 						num13++;
 						flag2 = false;
@@ -22205,19 +22807,19 @@ namespace Terraria
 				{
 					if (Main.PlayerSet[k].Inventory[l].Type > 0 && Main.PlayerSet[k].Inventory[l].Stack > 0)
 					{
-						if (Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.COPPER_COIN)
+						if (Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.COPPER_COIN)
 						{
 							num15 += Main.PlayerSet[k].Inventory[l].Stack;
 						}
-						else if (Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.SILVER_COIN)
+						else if (Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.SILVER_COIN)
 						{
 							num15 += Main.PlayerSet[k].Inventory[l].Stack * 100;
 						}
-						else if (Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.GOLD_COIN)
+						else if (Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.GOLD_COIN)
 						{
 							num15 += Main.PlayerSet[k].Inventory[l].Stack * 10000;
 						}
-						else if (Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.PLATINUM_COIN)
+						else if (Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.PLATINUM_COIN)
 						{
 							num15 += Main.PlayerSet[k].Inventory[l].Stack * 1000000;
 						}
@@ -22225,7 +22827,7 @@ namespace Terraria
 						{
 							flag4 = true;
 						}
-						if (Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.BOMB || Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.DYNAMITE || Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.GRENADE || Main.PlayerSet[k].Inventory[l].Type == (int)Item.ID.STICKY_BOMB)
+						if (Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.BOMB || Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.DYNAMITE || Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.GRENADE || Main.PlayerSet[k].Inventory[l].Type == (int)EntityID.ItemID.STICKY_BOMB)
 						{
 							flag5 = true;
 						}
@@ -22240,157 +22842,157 @@ namespace Terraria
 			}
 			if (!HasDownedBoss3 && num7 == 0)
 			{
-				int num18 = NewNPC(Main.DungeonX * 16 + 8, Main.DungeonY * 16, (int)ID.OLD_MAN);
+				int num18 = NewNPC(Main.DungeonX * 16 + 8, Main.DungeonY * 16, (int)EntityID.NPCID.OLD_MAN);
 				Main.NPCSet[num18].IsHomeless = false;
 				Main.NPCSet[num18].HomeTileX = Main.DungeonX;
 				Main.NPCSet[num18].HomeTileY = Main.DungeonY;
 			}
 			if (num6 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.GUIDE;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.GUIDE;
 			}
 			else if (num15 > 5000.0 && num2 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.MERCHANT;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.MERCHANT;
 			}
 			else if (flag3 && num3 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.NURSE;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.NURSE;
 			}
 			else if (flag4 && num5 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.ARMS_DEALER;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.ARMS_DEALER;
 			}
 			else if ((HasDownedBoss1 || HasDownedBoss2 || HasDownedBoss3) && num4 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.DRYAD;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.DRYAD;
 			}
 			else if (flag5 && num2 > 0 && num8 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.DEMOLITIONIST;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.DEMOLITIONIST;
 			}
 			else if (HasDownedBoss3 && num9 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.CLOTHIER;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.CLOTHIER;
 			}
 			else if (HasSavedGoblin && num11 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.GOBLIN_TINKERER;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.GOBLIN_TINKERER;
 			}
 			else if (HasSavedWizard && num10 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.WIZARD;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.WIZARD;
 			}
 			else if (HasSavedMech && num12 < 1)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.MECHANIC;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.MECHANIC;
 			}
 			else if (HasDownedFrost && num13 < 1 && Time.xMas)
 			{
-				WorldGen.ToSpawnNPC = (int)ID.SANTA_CLAUS;
+				WorldGen.ToSpawnNPC = (int)EntityID.NPCID.SANTA_CLAUS;
 			}
 		}
 
 		public void ApplyProjectileBuff(int ProjType)
 		{
-			switch (ProjType)
+			switch ((EntityID.ProjectileID)ProjType)
 			{
-				case 2:
+				case EntityID.ProjectileID.FIRE_ARROW:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case 15:
+				case EntityID.ProjectileID.BALL_OF_FIRE:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 300);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 300);
 					}
 					break;
-				case 19:
+				case EntityID.ProjectileID.FLAMARANG:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case 33:
+				case EntityID.ProjectileID.THORN_CHAKRAM:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 420);
+						AddBuff((int)EntityID.BuffID.POISONED, 420);
 					}
 					break;
-				case 34:
+				case EntityID.ProjectileID.FLAMELASH:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 240);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 240);
 					}
 					break;
-				case 35:
+				case EntityID.ProjectileID.SUNFURY:
 					if (Main.Rand.Next(4) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case 54:
+				case EntityID.ProjectileID.POISONED_KNIFE:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 600);
+						AddBuff((int)EntityID.BuffID.POISONED, 600);
 					}
 					break;
-				case 63:
+				case EntityID.ProjectileID.THE_DAO_OF_POW:
 					if (Main.Rand.Next(3) != 0)
 					{
-						AddBuff((int)Buff.ID.CONFUSED, 120);
+						AddBuff((int)EntityID.BuffID.CONFUSED, 120);
 					}
 					break;
-				case 85:
-					AddBuff((int)Buff.ID.ON_FIRE, 1200);
+				case EntityID.ProjectileID.FLAMES:
+					AddBuff((int)EntityID.BuffID.ON_FIRE, 1200);
 					break;
-				case 95:
-				case 103:
-				case 104:
-				case 113:
-					AddBuff((int)Buff.ID.ON_FIRE_2, 420);
+				case EntityID.ProjectileID.CURSED_FLAME_FRIENDLY:
+				case EntityID.ProjectileID.CURSED_ARROW:
+				case EntityID.ProjectileID.CURSED_BULLET:
+				case EntityID.ProjectileID.SPECTRAL_ARROW:
+					AddBuff((int)EntityID.BuffID.ON_FIRE_2, 420);
 					break;
-				case 98:
-					AddBuff((int)Buff.ID.POISONED, 600);
+				case EntityID.ProjectileID.POISON_DART:
+					AddBuff((int)EntityID.BuffID.POISONED, 600);
 					break;
 			}
 		}
 
 		public void ApplyWeaponBuff(int WeaponType)
 		{
-			switch (WeaponType)
+			switch ((EntityID.ItemID)WeaponType)
 			{
-				case (int)Item.ID.FIERY_GREATSWORD:
+				case EntityID.ItemID.FIERY_GREATSWORD:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case (int)Item.ID.MOLTEN_PICKAXE:
+				case EntityID.ItemID.MOLTEN_PICKAXE:
 					if (Main.Rand.Next(10) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case (int)Item.ID.BLADE_OF_GRASS:
-				case (int)Item.ID.TONBOGIRI:
+				case EntityID.ItemID.BLADE_OF_GRASS:
+				case EntityID.ItemID.TONBOGIRI:
 					if (Main.Rand.Next(4) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 420);
+						AddBuff((int)EntityID.BuffID.POISONED, 420);
 					}
 					break;
-				case (int)Item.ID.MOLTEN_HAMAXE:
+				case EntityID.ItemID.MOLTEN_HAMAXE:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180);
 					}
 					break;
-				case (int)Item.ID.TIZONA:
+				case EntityID.ItemID.TIZONA:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.BLEED, 600);
+						AddBuff((int)EntityID.BuffID.BLEED, 600);
 					}
 					break;
 			}

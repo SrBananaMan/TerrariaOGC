@@ -469,7 +469,9 @@ namespace Terraria
 									ActiveDust->Rotation += 0.1f * ActiveDust->Scale;
 									if (DustScale > 0.048f)
 									{
-										RGB.X = (RGB.Y = (RGB.Z = DustScale * 1.01055562f));
+										RGB.X *= (DustScale * (1.07f / (1f / 255f))) / 270f;
+										RGB.Y *= (DustScale * (1.07f / (1f / 255f))) / 270f;
+										RGB.Z *= (DustScale * (1.07f / (1f / 255f))) / 270f;
 										Lighting.AddLight(DustX >> 4, DustY >> 4, RGB);
 										if (ActiveDust->Alpha < 255)
 										{

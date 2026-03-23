@@ -16,18 +16,20 @@ namespace Terraria.Achievements
 {
 	public class AchievementSystem
 	{
+#if USE_ORIGINAL_CODE
 		private class EarnedAchievementsData
 		{
 			public EarnedAchievementsCallback Callback;
 
 			public SignedInGamer Gamer;
 		}
+#endif
 
 		private const int MaxConcurrentSubmissions = 10;
 
 		private readonly IAsyncResult[] Submissions;
 
-		private int FirstFree;
+		private readonly int FirstFree;
 
 		public const int MaxAchievementCount = (int)Trigger.NumTriggers;
 
@@ -118,12 +120,12 @@ namespace Terraria.Achievements
 			public DateTime EarnedDate;
 			public byte GamerScore;
 
-			public TerrariaAchievement(string name, string description, bool earned, DateTime earnedDateTime)
+			public TerrariaAchievement(string name, string description)
 			{
 				Name = name;
 				Description = description;
-				IsEarned = earned;
-				EarnedDate = earnedDateTime;
+				IsEarned = false;
+				EarnedDate = DateTime.MinValue;
 				EarnedOnline = false; // Got these 2 just for the hell of it. Might do something with it later.
 				GamerScore = 0;
 			}

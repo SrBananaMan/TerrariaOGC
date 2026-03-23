@@ -40,7 +40,7 @@ namespace Terraria
 			}
 		}
 
-		public const int MaxNumProjTypes = 120;
+		public const int MaxNumProjTypes = (int)EntityID.ProjectileID.NUM_TYPES;
 
 		public const int MaxNumProjs = 512;
 
@@ -52,12 +52,12 @@ namespace Terraria
 
 		public static readonly byte[] petProj = new byte[6]
 		{
-			111,
-			115,
-			116,
-			117,
-			118,
-			119
+			(byte)EntityID.ProjectileID.PET_BUNNY,
+			(byte)EntityID.ProjectileID.PET_SLIME,
+			(byte)EntityID.ProjectileID.PET_TIPHIA,
+			(byte)EntityID.ProjectileID.PET_BAT,
+			(byte)EntityID.ProjectileID.PET_WEREWOLF,
+			(byte)EntityID.ProjectileID.PET_ZOMBIE,
 		};
 
 		private static readonly PetAnim[] petAnimIdle = new PetAnim[6]
@@ -112,12 +112,12 @@ namespace Terraria
 
 		public static readonly short[] petItem = new short[6]
 		{
-			603,
-			621,
-			622,
-			623,
-			624,
-			625
+			(short)EntityID.ItemID.PET_SPAWN_1,
+			(short)EntityID.ItemID.PET_SPAWN_2,
+			(short)EntityID.ItemID.PET_SPAWN_3,
+			(short)EntityID.ItemID.PET_SPAWN_4,
+			(short)EntityID.ItemID.PET_SPAWN_5,
+			(short)EntityID.ItemID.PET_SPAWN_6
 		};
 
 		private static uint lastProjectileIndex = 0;
@@ -228,16 +228,16 @@ namespace Terraria
 			{
 				projFrameH[i] = 0;
 			}
-			projFrameH[72] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_72].Height / 4);
-			projFrameH[86] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_86].Height / 4);
-			projFrameH[87] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_87].Height / 4);
-			projFrameH[102] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_102].Height / 2);
-			projFrameH[111] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_111].Height / 8);
-			projFrameH[115] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_115].Height / 2);
-			projFrameH[116] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_116].Height / 3);
-			projFrameH[117] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_117].Height / 5);
-			projFrameH[118] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_118].Height / 16);
-			projFrameH[119] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_119].Height / 3);
+			projFrameH[(int)EntityID.ProjectileID.BLUE_FAIRY] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_72].Height / 4);
+			projFrameH[(int)EntityID.ProjectileID.PINK_FAIRY] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_86].Height / 4);
+			projFrameH[(int)EntityID.ProjectileID.GREEN_FAIRY] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_87].Height / 4);
+			projFrameH[(int)EntityID.ProjectileID.BOMB_SKELETRON_PRIME] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_102].Height / 2);
+			projFrameH[(int)EntityID.ProjectileID.PET_BUNNY] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_111].Height / 8);
+			projFrameH[(int)EntityID.ProjectileID.PET_SLIME] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_115].Height / 2);
+			projFrameH[(int)EntityID.ProjectileID.PET_TIPHIA] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_116].Height / 3);
+			projFrameH[(int)EntityID.ProjectileID.PET_BAT] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_117].Height / 5);
+			projFrameH[(int)EntityID.ProjectileID.PET_WEREWOLF] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_118].Height / 16);
+			projFrameH[(int)EntityID.ProjectileID.PET_ZOMBIE] = (byte)(SpriteSheet<_sheetSprites>.Source[(int)_sheetSprites.ID.PROJECTILE_119].Height / 3);
 		}
 
 		public void Init()
@@ -300,1202 +300,1211 @@ namespace Terraria
 			friendly = true;
 			damage = 0;
 			knockBack = 0f;
-			if (type == 1)
+
+			switch ((EntityID.ProjectileID)type)
 			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				ranged = true;
-			}
-			else if (type == 2)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				light = 1f;
-				ranged = true;
-			}
-			else if (type == 3)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 2;
-				penetrate = 4;
-				ranged = true;
-			}
-			else if (type == 4)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				light = 0.35f;
-				penetrate = 5;
-				ranged = true;
-			}
-			else if (type == 5)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				light = 0.4f;
-				penetrate = -1;
-				timeLeft = 40;
-				alpha = 100;
-				ignoreWater = true;
-				ranged = true;
-			}
-			else if (type == 6)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 3;
-				penetrate = -1;
-				melee = true;
-				light = 0.4f;
-			}
-			else if (type == 7 || type == 8)
-			{
-				width = 28;
-				height = 28;
-				aiStyle = 4;
-				penetrate = -1;
-				tileCollide = false;
-				alpha = 255;
-				ignoreWater = true;
-				magic = true;
-			}
-			else if (type == 9)
-			{
-				width = 24;
-				height = 24;
-				aiStyle = 5;
-				penetrate = 2;
-				alpha = 50;
-				scale = 0.8f;
-				tileCollide = false;
-				magic = true;
-			}
-			else if (type == 10)
-			{
-				width = 64;
-				height = 64;
-				aiStyle = 6;
-				tileCollide = false;
-				penetrate = -1;
-				alpha = 255;
-				ignoreWater = true;
-			}
-			else if (type == 11)
-			{
-				width = 48;
-				height = 48;
-				aiStyle = 6;
-				tileCollide = false;
-				penetrate = -1;
-				alpha = 255;
-				ignoreWater = true;
-			}
-			else if (type == 12)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 5;
-				penetrate = -1;
-				alpha = 50;
-				light = 1f;
-			}
-			else if (type == 13)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 7;
-				penetrate = -1;
-				tileCollide = false;
-				timeLeft *= 10;
-			}
-			else if (type == 14)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				penetrate = 1;
-				light = 0.5f;
-				alpha = 255;
-				maxUpdates = 1;
-				scale = 1.2f;
-				timeLeft = 600;
-				ranged = true;
-			}
-			else if (type == 15)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 8;
-				light = 0.8f;
-				alpha = 100;
-				magic = true;
-			}
-			else if (type == 16)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 9;
-				light = 0.8f;
-				alpha = 100;
-				magic = true;
-			}
-			else if (type == 17)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-			}
-			else if (type == 18)
-			{
-				width = 32;
-				height = 32;
-				aiStyle = 11;
-				light = 0.45f;
-				alpha = 150;
-				tileCollide = false;
-				penetrate = -1;
-				timeLeft = 18000;
-				ignoreWater = true;
-				scale = 0.8f;
-			}
-			else if (type == 19)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 3;
-				penetrate = -1;
-				light = 1f;
-				melee = true;
-			}
-			else if (type == 20)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				penetrate = 3;
-				light = 0.75f;
-				alpha = 255;
-				maxUpdates = 2;
-				scale = 1.4f;
-				timeLeft = 600;
-				magic = true;
-			}
-			else if (type == 21)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 2;
-				scale = 1.2f;
-				ranged = true;
-			}
-			else if (type == 22)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 12;
-				alpha = 255;
-				penetrate = -1;
-				maxUpdates = 2;
-				ignoreWater = true;
-				magic = true;
-			}
-			else if (type == 23)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 13;
-				penetrate = -1;
-				alpha = 255;
-				ranged = true;
-			}
-			else if (type == 24)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 14;
-				penetrate = 6;
-				ranged = true;
-			}
-			else if (type == 25)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 15;
-				penetrate = -1;
-				melee = true;
-				scale = 0.8f;
-			}
-			else if (type == 26)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 15;
-				penetrate = -1;
-				melee = true;
-				scale = 0.8f;
-			}
-			else if (type == 27)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 8;
-				light = 0.8f;
-				alpha = 200;
-				timeLeft = 1800;
-				penetrate = 10;
-				magic = true;
-			}
-			else if (type == 28)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 16;
-				penetrate = -1;
-			}
-			else if (type == 29)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 16;
-				penetrate = -1;
-			}
-			else if (type == 30)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 16;
-				penetrate = -1;
-				ranged = true;
-			}
-			else if (type == 31)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 32)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 7;
-				penetrate = -1;
-				tileCollide = false;
-				timeLeft = 36000;
-			}
-			else if (type == 33)
-			{
-				width = 28;
-				height = 28;
-				aiStyle = 3;
-				scale = 0.9f;
-				penetrate = -1;
-				melee = true;
-			}
-			else if (type == 34)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 9;
-				light = 0.8f;
-				alpha = 100;
-				penetrate = 1;
-				magic = true;
-			}
-			else if (type == 35)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 15;
-				penetrate = -1;
-				melee = true;
-				scale = 0.8f;
-			}
-			else if (type == 36)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				penetrate = 2;
-				light = 0.6f;
-				alpha = 255;
-				maxUpdates = 1;
-				scale = 1.4f;
-				timeLeft = 600;
-				ranged = true;
-			}
-			else if (type == 37)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 16;
-				penetrate = -1;
-				tileCollide = false;
-			}
-			else if (type == 38)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 0;
-				hostile = true;
-				penetrate = -1;
-				aiStyle = 1;
-				tileCollide = true;
-				friendly = false;
-			}
-			else if (type == 39)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 40)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 41)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				penetrate = -1;
-				ranged = true;
-				light = 0.3f;
-			}
-			else if (type == 114)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				penetrate = -1;
-				ranged = true;
-				light = 0.4f;
-			}
-			else if (type == 42)
-			{
-				knockBack = 8f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				maxUpdates = 1;
-			}
-			else if (type == 43)
-			{
-				knockBack = 12f;
-				width = 24;
-				height = 24;
-				aiStyle = 17;
-				penetrate = -1;
-				friendly = false;
-			}
-			else if (type == 44)
-			{
-				width = 48;
-				height = 48;
-				alpha = 100;
-				light = 0.2f;
-				aiStyle = 18;
-				hostile = true;
-				penetrate = -1;
-				tileCollide = true;
-				scale = 0.9f;
-				friendly = false;
-			}
-			else if (type == 45)
-			{
-				width = 48;
-				height = 48;
-				alpha = 100;
-				light = 0.2f;
-				aiStyle = 18;
-				penetrate = 5;
-				tileCollide = true;
-				scale = 0.9f;
-				magic = true;
-			}
-			else if (type == 46)
-			{
-				width = 20;
-				height = 20;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.1f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 47)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.1f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 48)
-			{
-				width = 12;
-				height = 12;
-				aiStyle = 2;
-				penetrate = 2;
-				ranged = true;
-			}
-			else if (type == 49)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.2f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 50)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 14;
-				penetrate = -1;
-				alpha = 75;
-				light = 1f;
-				timeLeft = 18000;
-				friendly = false;
-			}
-			else if (type == 51)
-			{
-				width = 8;
-				height = 8;
-				aiStyle = 1;
-			}
-			else if (type == 52)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 3;
-				penetrate = -1;
-				melee = true;
-			}
-			else if (type == 53)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 14;
-				penetrate = -1;
-				alpha = 75;
-				light = 1f;
-				timeLeft = 18000;
-				tileCollide = false;
-				friendly = false;
-			}
-			else if (type == 54)
-			{
-				width = 12;
-				height = 12;
-				aiStyle = 2;
-				penetrate = 2;
-				ranged = true;
-			}
-			else if (type == 55)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 0;
-				hostile = true;
-				friendly = false;
-				penetrate = -1;
-				aiStyle = 1;
-				tileCollide = true;
-			}
-			else if (type == 56)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 57)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 58)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 1.08f;
-			}
-			else if (type == 59)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 0.9f;
-			}
-			else if (type == 60)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 0.9f;
-			}
-			else if (type == 61)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 1.16f;
-			}
-			else if (type == 62)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 0.9f;
-			}
-			else if (type == 63)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 15;
-				penetrate = -1;
-				melee = true;
-			}
-			else if (type == 64)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.25f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 65)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				penetrate = -1;
-				maxUpdates = 1;
-			}
-			else if (type == 66)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.27f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 67)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 68)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				penetrate = -1;
-				maxUpdates = 1;
-			}
-			else if (type == 69)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 2;
-				penetrate = 1;
-			}
-			else if (type == 70)
-			{
-				width = 14;
-				height = 14;
-				aiStyle = 2;
-				penetrate = 1;
-			}
-			else if (type == 71)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				penetrate = -1;
-			}
-			else if (type == 72)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 27;
-				light = 0.9f;
-				tileCollide = false;
-				penetrate = -1;
-				timeLeft = 18000;
-				ignoreWater = true;
-				scale = 0.8f;
-			}
-			else if (type == 73 || type == 74)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 7;
-				penetrate = -1;
-				tileCollide = false;
-				timeLeft = 36000;
-				light = 0.4f;
-			}
-			else if (type == 75)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 16;
-				hostile = true;
-				friendly = false;
-				penetrate = -1;
-			}
-			else if (type == 76 || type == 77 || type == 78)
-			{
-				if (type == 76)
-				{
+				case EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY:
 					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.FIRE_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					light = 1f;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.SHURIKEN:
+					width = 22;
 					height = 22;
-				}
-				else if (type == 77)
-				{
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 4;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.UNHOLY_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					light = 0.35f;
+					penetrate = 5;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.JESTERS_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					light = 0.4f;
+					penetrate = -1;
+					timeLeft = 40;
+					alpha = 100;
+					ignoreWater = true;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.ENCHANTED_BOOMERANG:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOOMERANG;
+					penetrate = -1;
+					melee = true;
+					light = 0.4f;
+					break;
+
+				case EntityID.ProjectileID.VILETHORN_BASE:
+				case EntityID.ProjectileID.VILETHORN_TIP:
+					width = 28;
+					height = 28;
+					aiStyle = (byte)EntityID.ProjStyleID.VILETHORN;
+					penetrate = -1;
+					tileCollide = false;
+					alpha = 255;
+					ignoreWater = true;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.STARFURY:
+					width = 24;
+					height = 24;
+					aiStyle = (byte)EntityID.ProjStyleID.STARFURY;
+					penetrate = 2;
+					alpha = 50;
+					scale = 0.8f;
+					tileCollide = false;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.PURIFICATION_POWDER:
+					width = 64;
+					height = 64;
+					aiStyle = (byte)EntityID.ProjStyleID.POWDERS;
+					tileCollide = false;
+					penetrate = -1;
+					alpha = 255;
+					ignoreWater = true;
+					break;
+
+				case EntityID.ProjectileID.VILE_POWDER:
+					width = 48;
+					height = 48;
+					aiStyle = (byte)EntityID.ProjStyleID.POWDERS;
+					tileCollide = false;
+					penetrate = -1;
+					alpha = 255;
+					ignoreWater = true;
+					break;
+
+				case EntityID.ProjectileID.FALLING_STAR:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.STARFURY;
+					penetrate = -1;
+					alpha = 50;
+					light = 1f;
+					break;
+
+				case EntityID.ProjectileID.HOOK:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.GRAPPLING_HOOK;
+					penetrate = -1;
+					tileCollide = false;
+					timeLeft *= 10;
+					break;
+
+				case EntityID.ProjectileID.BULLET:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 1;
+					light = 0.5f;
+					alpha = 255;
+					maxUpdates = 1;
+					scale = 1.2f;
+					timeLeft = 600;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.BALL_OF_FIRE:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.BALL_OF_FIRE;
+					light = 0.8f;
+					alpha = 100;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.MAGIC_MISSILE:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.MAGIC_MISSILE;
+					light = 0.8f;
+					alpha = 100;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.DIRT_BALL:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					break;
+
+				case EntityID.ProjectileID.SHADOW_ORB:
+					width = 32;
+					height = 32;
+					aiStyle = (byte)EntityID.ProjStyleID.SHADOW_ORB;
+					light = 0.45f;
+					alpha = 150;
+					tileCollide = false;
+					penetrate = -1;
+					timeLeft = 18000;
+					ignoreWater = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.FLAMARANG:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOOMERANG;
+					penetrate = -1;
+					light = 1f;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.GREEN_LASER:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 3;
+					light = 0.75f;
+					alpha = 255;
+					maxUpdates = 2;
+					scale = 1.4f;
+					timeLeft = 600;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.BONE:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					scale = 1.2f;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.WATER_STREAM:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.WATER_STREAM;
+					alpha = 255;
+					penetrate = -1;
+					maxUpdates = 2;
+					ignoreWater = true;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.HARPOON:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.HARPOON;
+					penetrate = -1;
+					alpha = 255;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.SPIKY_BALL:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.SPIKY_BALL;
+					penetrate = 6;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.BALL_O_HURT:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAIL;
+					penetrate = -1;
+					melee = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.BLUE_MOON:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAIL;
+					penetrate = -1;
+					melee = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.WATER_BOLT:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.BALL_OF_FIRE;
+					light = 0.8f;
+					alpha = 200;
+					timeLeft = 1800;
+					penetrate = 10;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.BOMB:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.DYNAMITE:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.GRENADE:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					penetrate = -1;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.SAND_BALL_FALLING:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.IVY_WHIP:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.GRAPPLING_HOOK;
+					penetrate = -1;
+					tileCollide = false;
+					timeLeft = 36000;
+					break;
+
+				case EntityID.ProjectileID.THORN_CHAKRAM:
+					width = 28;
+					height = 28;
+					aiStyle = (byte)EntityID.ProjStyleID.BOOMERANG;
+					scale = 0.9f;
+					penetrate = -1;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.FLAMELASH:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.MAGIC_MISSILE;
+					light = 0.8f;
+					alpha = 100;
+					penetrate = 1;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.SUNFURY:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAIL;
+					penetrate = -1;
+					melee = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.METEOR_SHOT:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 2;
+					light = 0.6f;
+					alpha = 255;
+					maxUpdates = 1;
+					scale = 1.4f;
+					timeLeft = 600;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.STICKY_BOMB:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					penetrate = -1;
+					tileCollide = false;
+					break;
+
+				case EntityID.ProjectileID.HARPY_FEATHER:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.NONE;
+					hostile = true;
+					penetrate = -1;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					tileCollide = true;
+					friendly = false;
+					break;
+
+				case EntityID.ProjectileID.MUD_BALL:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.ASH_BALL_FALLING:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.HELLFIRE_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = -1;
+					ranged = true;
+					light = 0.3f;
+					break;
+
+				case EntityID.ProjectileID.VULCAN_BOLT:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = -1;
+					ranged = true;
+					light = 0.4f;
+					break;
+
+				case EntityID.ProjectileID.SAND_BALL_GUN:
+					knockBack = 8f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					maxUpdates = 1;
+					break;
+
+				case EntityID.ProjectileID.TOMBSTONE:
+					knockBack = 12f;
+					width = 24;
+					height = 24;
+					aiStyle = (byte)EntityID.ProjStyleID.TOMBSTONE;
+					penetrate = -1;
+					friendly = false;
+					break;
+
+				case EntityID.ProjectileID.DEMON_SICKLE:
+					width = 48;
+					height = 48;
+					alpha = 100;
+					light = 0.2f;
+					aiStyle = (byte)EntityID.ProjStyleID.DEMON_SICKLE;
+					hostile = true;
+					penetrate = -1;
+					tileCollide = true;
+					scale = 0.9f;
+					friendly = false;
+					break;
+
+				case EntityID.ProjectileID.DEMON_SCYTHE:
+					width = 48;
+					height = 48;
+					alpha = 100;
+					light = 0.2f;
+					aiStyle = (byte)EntityID.ProjStyleID.DEMON_SICKLE;
+					penetrate = 5;
+					tileCollide = true;
+					scale = 0.9f;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.DARK_LANCE:
+					width = 20;
+					height = 20;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.1f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.TRIDENT:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.1f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.THROWING_KNIFE:
+					width = 12;
+					height = 12;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 2;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.SPEAR:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.2f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.GLOWSTICK:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.SPIKY_BALL;
+					penetrate = -1;
+					alpha = 75;
+					light = 1f;
+					timeLeft = 18000;
+					friendly = false;
+					break;
+
+				case EntityID.ProjectileID.SEED:
+					width = 8;
+					height = 8;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					break;
+
+				case EntityID.ProjectileID.WOODEN_BOOMERANG:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOOMERANG;
+					penetrate = -1;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.STICKY_GLOWSTICK:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.SPIKY_BALL;
+					penetrate = -1;
+					alpha = 75;
+					light = 1f;
+					timeLeft = 18000;
+					tileCollide = false;
+					friendly = false;
+					break;
+
+				case EntityID.ProjectileID.POISONED_KNIFE:
+					width = 12;
+					height = 12;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 2;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.STINGER:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.NONE;
+					hostile = true;
+					friendly = false;
+					penetrate = -1;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					tileCollide = true;
+					break;
+
+				case EntityID.ProjectileID.EBONSAND_BALL_FALLING:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.COBALT_CHAINSAW:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.MYTHRIL_CHAINSAW:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 1.08f;
+					break;
+
+				case EntityID.ProjectileID.COBALT_DRILL:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 0.9f;
+					break;
+
+				case EntityID.ProjectileID.MYTHRIL_DRILL:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 0.9f;
+					break;
+
+				case EntityID.ProjectileID.ADAMANTITE_CHAINSAW:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 1.16f;
+					break;
+
+				case EntityID.ProjectileID.ADAMANTITE_DRILL:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 0.9f;
+					break;
+
+				case EntityID.ProjectileID.THE_DAO_OF_POW:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAIL;
+					penetrate = -1;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.MYTHRIL_HALBERD:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.25f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.EBONSAND_BALL_GUN:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					penetrate = -1;
+					maxUpdates = 1;
+					break;
+
+				case EntityID.ProjectileID.ADAMANTITE_GLAIVE:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.27f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.PEARL_SAND_BALL_FALLING:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.PEARL_SAND_BALL_GUN:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					penetrate = -1;
+					maxUpdates = 1;
+					break;
+
+				case EntityID.ProjectileID.HOLY_WATER:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 1;
+					break;
+
+				case EntityID.ProjectileID.UNHOLY_WATER:
+					width = 14;
+					height = 14;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 1;
+					break;
+
+				case EntityID.ProjectileID.SILT_BALL:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.BLUE_FAIRY:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.FAIRY;
+					light = 0.9f;
+					tileCollide = false;
+					penetrate = -1;
+					timeLeft = 18000;
+					ignoreWater = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.DUAL_HOOK_BLUE:
+				case EntityID.ProjectileID.DUAL_HOOK_RED:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.GRAPPLING_HOOK;
+					penetrate = -1;
+					tileCollide = false;
+					timeLeft = 36000;
+					light = 0.4f;
+					break;
+
+				case EntityID.ProjectileID.HAPPY_BOMB:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					hostile = true;
+					friendly = false;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.QUARTER_NOTE:
+				case EntityID.ProjectileID.EIGHTH_NOTE:
+				case EntityID.ProjectileID.TIED_EIGHTH_NOTE:
+					if (type == (byte)EntityID.ProjectileID.QUARTER_NOTE)
+					{
+						width = 10;
+						height = 22;
+					}
+					else if (type == (byte)EntityID.ProjectileID.EIGHTH_NOTE)
+					{
+						width = 18;
+						height = 24;
+					}
+					else
+					{
+						width = 22;
+						height = 24;
+					}
+
+					aiStyle = (byte)EntityID.ProjStyleID.NOTE;
+					ranged = true;
+					alpha = 100;
+					light = 0.3f;
+					penetrate = -1;
+					timeLeft = 180;
+					break;
+
+				case EntityID.ProjectileID.RAINBOW_ROD_BULLET:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.MAGIC_MISSILE;
+					light = 0.8f;
+					alpha = 255;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.ICE_BLOCK:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.ICE_BLOCK;
+					magic = true;
+					tileCollide = false;
+					light = 0.5f;
+					break;
+
+				case EntityID.ProjectileID.WOODEN_ARROW_HOSTILE:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.FLAMING_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.EYE_LASER:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					penetrate = 3;
+					light = 0.75f;
+					alpha = 255;
+					maxUpdates = 2;
+					scale = 1.7f;
+					timeLeft = 600;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.PINK_LASER:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					penetrate = 3;
+					light = 0.75f;
+					alpha = 255;
+					maxUpdates = 2;
+					scale = 1.2f;
+					timeLeft = 600;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.FLAMES:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAMES;
+					alpha = 255;
+					penetrate = 3;
+					maxUpdates = 2;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.PINK_FAIRY:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.FAIRY;
+					light = 0.9f;
+					tileCollide = false;
+					penetrate = -1;
+					timeLeft = 18000;
+					ignoreWater = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.GREEN_FAIRY:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.FAIRY;
+					light = 0.9f;
+					tileCollide = false;
+					penetrate = -1;
+					timeLeft = 18000;
+					ignoreWater = true;
+					scale = 0.8f;
+					break;
+
+				case EntityID.ProjectileID.PURPLE_LASER:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 3;
+					light = 0.75f;
+					alpha = 255;
+					maxUpdates = 4;
+					scale = 1.4f;
+					timeLeft = 600;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.CRYSTAL_BULLET:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 1;
+					light = 0.5f;
+					alpha = 255;
+					maxUpdates = 1;
+					scale = 1.2f;
+					timeLeft = 600;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.CRYSTAL_SHARD:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.CRYSTAL_SHARD;
+					penetrate = 1;
+					light = 0.5f;
+					alpha = 50;
+					scale = 1.2f;
+					timeLeft = 600;
+					ranged = true;
+					tileCollide = false;
+					break;
+
+				case EntityID.ProjectileID.HOLY_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.HALLOW_STAR:
+					width = 24;
+					height = 24;
+					aiStyle = (byte)EntityID.ProjStyleID.STARFURY;
+					penetrate = 2;
+					alpha = 50;
+					scale = 0.8f;
+					tileCollide = false;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.MAGIC_DAGGER:
+					light = 0.15f;
+					width = 12;
+					height = 12;
+					aiStyle = (byte)EntityID.ProjStyleID.SHURIKEN;
+					penetrate = 2;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.CRYSTAL_STORM:
+					ignoreWater = true;
+					width = 8;
+					height = 8;
+					aiStyle = (byte)EntityID.ProjStyleID.CRYSTAL_SHARD;
+					light = 0.5f;
+					alpha = 50;
+					scale = 1.2f;
+					timeLeft = 600;
+					magic = true;
+					tileCollide = true;
+					penetrate = 1;
+					fixed (float* ptr2 = oldPos)
+					{
+						for (int num = 19; num >= 0; num--)
+						{
+							ptr2[num] = 0f;
+						}
+					}
+					break;
+
+				case EntityID.ProjectileID.CURSED_FLAME_FRIENDLY:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.BALL_OF_FIRE;
+					light = 0.8f;
+					alpha = 100;
+					magic = true;
+					penetrate = 2;
+					break;
+
+				case EntityID.ProjectileID.CURSED_FLAME_HOSTILE:
+					width = 16;
+					height = 16;
+					aiStyle = (byte)EntityID.ProjStyleID.BALL_OF_FIRE;
+					hostile = true;
+					friendly = false;
+					light = 0.8f;
+					alpha = 100;
+					magic = true;
+					penetrate = -1;
+					scale = 0.9f;
+					scale = 1.3f;
+					break;
+
+				case EntityID.ProjectileID.COBALT_NAGINATA:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.1f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.POISON_DART:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					ranged = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.BOULDER:
+					width = 31;
+					height = 31;
+					aiStyle = (byte)EntityID.ProjStyleID.BOULDER;
+					hostile = true;
+					ranged = true;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.DEATH_LASER:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					penetrate = 3;
+					light = 0.75f;
+					alpha = 255;
+					maxUpdates = 2;
+					scale = 1.8f;
+					timeLeft = 1200;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.EYE_FIRE:
+					width = 6;
+					height = 6;
+					aiStyle = (byte)EntityID.ProjStyleID.FLAMES;
+					hostile = true;
+					friendly = false;
+					alpha = 255;
+					penetrate = -1;
+					maxUpdates = 3;
+					magic = true;
+					break;
+
+				case EntityID.ProjectileID.BOMB_SKELETRON_PRIME:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					hostile = true;
+					friendly = false;
+					penetrate = -1;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.CURSED_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					light = 1f;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.SPECTRAL_ARROW:
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					light = 1f;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.CURSED_BULLET:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					penetrate = 1;
+					light = 0.5f;
+					alpha = 255;
+					maxUpdates = 1;
+					scale = 1.2f;
+					timeLeft = 600;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.GUNGNIR:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.3f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.TONBOGIRI:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.SPEAR;
+					penetrate = -1;
+					tileCollide = false;
+					scale = 1.3f;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					break;
+
+				case EntityID.ProjectileID.LIGHT_DISC:
+					width = 32;
+					height = 32;
+					aiStyle = (byte)EntityID.ProjStyleID.BOOMERANG;
+					penetrate = -1;
+					melee = true;
+					light = 0.4f;
+					break;
+
+				case EntityID.ProjectileID.HAMDRAX:
+					width = 22;
+					height = 22;
+					aiStyle = (byte)EntityID.ProjStyleID.CHAINSAW;
+					penetrate = -1;
+					tileCollide = false;
+					hide = true;
+					ownerHitCheck = true;
+					melee = true;
+					scale = 1.1f;
+					break;
+
+				case EntityID.ProjectileID.EXPLOSIVES:
+					width = 260;
+					height = 260;
+					aiStyle = (byte)EntityID.ProjStyleID.BOMB;
+					hostile = true;
+					penetrate = -1;
+					tileCollide = false;
+					alpha = 255;
+					timeLeft = 2;
+					break;
+
+				case EntityID.ProjectileID.SNOW_BALL_HOSTILE:
+					knockBack = 6f;
+					width = 10;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.DIRT_BALL;
+					hostile = true;
+					friendly = false;
+					scale = 0.9f;
+					penetrate = -1;
+					break;
+
+				case EntityID.ProjectileID.BULLET_SNOWMAN:
+					width = 4;
+					height = 4;
+					aiStyle = (byte)EntityID.ProjStyleID.ARROWS_BULLETS;
+					hostile = true;
+					friendly = false;
+					penetrate = -1;
+					light = 0.5f;
+					alpha = 255;
+					maxUpdates = 1;
+					scale = 1.2f;
+					timeLeft = 600;
+					ranged = true;
+					break;
+
+				case EntityID.ProjectileID.PET_BUNNY:
+					width = 18;
+					height = 18;
+					aiStyle = (byte)EntityID.ProjStyleID.PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					break;
+
+				case EntityID.ProjectileID.PET_SLIME:
+					width = 18;
+					height = 10;
+					aiStyle = (byte)EntityID.ProjStyleID.PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					localAI0 = 1;
+					break;
+
+				case EntityID.ProjectileID.PET_TIPHIA:
+					width = 12;
+					height = 72;
+					scale = 0.5f;
+					aiStyle = (byte)EntityID.ProjStyleID.FLYING_PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					damage = 2;
+					localAI0 = 2;
+					break;
+
+				case EntityID.ProjectileID.PET_BAT:
+					width = 16;
+					height = 48;
+					aiStyle = (byte)EntityID.ProjStyleID.FLYING_PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					damage = 4;
+					localAI0 = 3;
+					break;
+
+				case EntityID.ProjectileID.PET_WEREWOLF:
+					width = 18;
+					height = 26;
+					aiStyle = (byte)EntityID.ProjStyleID.PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					damage = 10;
+					localAI0 = 4;
+					break;
+
+				case EntityID.ProjectileID.PET_ZOMBIE:
 					width = 18;
 					height = 24;
-				}
-				else
-				{
-					width = 22;
-					height = 24;
-				}
-				aiStyle = 21;
-				ranged = true;
-				alpha = 100;
-				light = 0.3f;
-				penetrate = -1;
-				timeLeft = 180;
+					aiStyle = (byte)EntityID.ProjStyleID.PETS;
+					penetrate = -1;
+					timeLeft = 18000;
+					damage = 8;
+					localAI0 = 5;
+					break;
+
+				default:
+					active = 0;
+					break;
 			}
-			else if (type == 79)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 9;
-				light = 0.8f;
-				alpha = 255;
-				magic = true;
-			}
-			else if (type == 80)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 22;
-				magic = true;
-				tileCollide = false;
-				light = 0.5f;
-			}
-			else if (type == 81)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				ranged = true;
-			}
-			else if (type == 82)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				ranged = true;
-			}
-			else if (type == 83)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				penetrate = 3;
-				light = 0.75f;
-				alpha = 255;
-				maxUpdates = 2;
-				scale = 1.7f;
-				timeLeft = 600;
-				magic = true;
-			}
-			else if (type == 84)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				penetrate = 3;
-				light = 0.75f;
-				alpha = 255;
-				maxUpdates = 2;
-				scale = 1.2f;
-				timeLeft = 600;
-				magic = true;
-			}
-			else if (type == 85)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 23;
-				alpha = 255;
-				penetrate = 3;
-				maxUpdates = 2;
-				magic = true;
-			}
-			else if (type == 86)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 27;
-				light = 0.9f;
-				tileCollide = false;
-				penetrate = -1;
-				timeLeft = 18000;
-				ignoreWater = true;
-				scale = 0.8f;
-			}
-			else if (type == 87)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 27;
-				light = 0.9f;
-				tileCollide = false;
-				penetrate = -1;
-				timeLeft = 18000;
-				ignoreWater = true;
-				scale = 0.8f;
-			}
-			else if (type == 88)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 1;
-				penetrate = 3;
-				light = 0.75f;
-				alpha = 255;
-				maxUpdates = 4;
-				scale = 1.4f;
-				timeLeft = 600;
-				magic = true;
-			}
-			else if (type == 89)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				penetrate = 1;
-				light = 0.5f;
-				alpha = 255;
-				maxUpdates = 1;
-				scale = 1.2f;
-				timeLeft = 600;
-				ranged = true;
-			}
-			else if (type == 90)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 24;
-				penetrate = 1;
-				light = 0.5f;
-				alpha = 50;
-				scale = 1.2f;
-				timeLeft = 600;
-				ranged = true;
-				tileCollide = false;
-			}
-			else if (type == 91)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				ranged = true;
-			}
-			else if (type == 92)
-			{
-				width = 24;
-				height = 24;
-				aiStyle = 5;
-				penetrate = 2;
-				alpha = 50;
-				scale = 0.8f;
-				tileCollide = false;
-				magic = true;
-			}
-			else if (type == 93)
-			{
-				light = 0.15f;
-				width = 12;
-				height = 12;
-				aiStyle = 2;
-				penetrate = 2;
-				magic = true;
-			}
-			else if (type == 94)
-			{
-				ignoreWater = true;
-				width = 8;
-				height = 8;
-				aiStyle = 24;
-				light = 0.5f;
-				alpha = 50;
-				scale = 1.2f;
-				timeLeft = 600;
-				magic = true;
-				tileCollide = true;
-				penetrate = 1;
-				fixed (float* ptr2 = oldPos)
-				{
-					for (int num = 19; num >= 0; num--)
-					{
-						ptr2[num] = 0f;
-					}
-				}
-			}
-			else if (type == 95)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 8;
-				light = 0.8f;
-				alpha = 100;
-				magic = true;
-				penetrate = 2;
-			}
-			else if (type == 96)
-			{
-				width = 16;
-				height = 16;
-				aiStyle = 8;
-				hostile = true;
-				friendly = false;
-				light = 0.8f;
-				alpha = 100;
-				magic = true;
-				penetrate = -1;
-				scale = 0.9f;
-				scale = 1.3f;
-			}
-			else if (type == 97)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.1f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 98)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				hostile = true;
-				ranged = true;
-				penetrate = -1;
-			}
-			else if (type == 99)
-			{
-				width = 31;
-				height = 31;
-				aiStyle = 25;
-				hostile = true;
-				ranged = true;
-				penetrate = -1;
-			}
-			else if (type == 100)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				penetrate = 3;
-				light = 0.75f;
-				alpha = 255;
-				maxUpdates = 2;
-				scale = 1.8f;
-				timeLeft = 1200;
-				magic = true;
-			}
-			else if (type == 101)
-			{
-				width = 6;
-				height = 6;
-				aiStyle = 23;
-				hostile = true;
-				friendly = false;
-				alpha = 255;
-				penetrate = -1;
-				maxUpdates = 3;
-				magic = true;
-			}
-			else if (type == 102)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 16;
-				hostile = true;
-				friendly = false;
-				penetrate = -1;
-				ranged = true;
-			}
-			else if (type == 103)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				light = 1f;
-				ranged = true;
-			}
-			else if (type == 113)
-			{
-				width = 10;
-				height = 10;
-				aiStyle = 1;
-				light = 1f;
-				ranged = true;
-			}
-			else if (type == 104)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				penetrate = 1;
-				light = 0.5f;
-				alpha = 255;
-				maxUpdates = 1;
-				scale = 1.2f;
-				timeLeft = 600;
-				ranged = true;
-			}
-			else if (type == 105)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.3f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 112)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 19;
-				penetrate = -1;
-				tileCollide = false;
-				scale = 1.3f;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-			}
-			else if (type == 106)
-			{
-				width = 32;
-				height = 32;
-				aiStyle = 3;
-				penetrate = -1;
-				melee = true;
-				light = 0.4f;
-			}
-			else if (type == 107)
-			{
-				width = 22;
-				height = 22;
-				aiStyle = 20;
-				penetrate = -1;
-				tileCollide = false;
-				hide = true;
-				ownerHitCheck = true;
-				melee = true;
-				scale = 1.1f;
-			}
-			else if (type == 108)
-			{
-				width = 260;
-				height = 260;
-				aiStyle = 16;
-				hostile = true;
-				penetrate = -1;
-				tileCollide = false;
-				alpha = 255;
-				timeLeft = 2;
-			}
-			else if (type == 109)
-			{
-				knockBack = 6f;
-				width = 10;
-				height = 10;
-				aiStyle = 10;
-				hostile = true;
-				friendly = false;
-				scale = 0.9f;
-				penetrate = -1;
-			}
-			else if (type == 110)
-			{
-				width = 4;
-				height = 4;
-				aiStyle = 1;
-				hostile = true;
-				friendly = false;
-				penetrate = -1;
-				light = 0.5f;
-				alpha = 255;
-				maxUpdates = 1;
-				scale = 1.2f;
-				timeLeft = 600;
-				ranged = true;
-			}
-			else if (type == 111)
-			{
-				width = 18;
-				height = 18;
-				aiStyle = 26;
-				penetrate = -1;
-				timeLeft = 18000;
-			}
-			else if (type == 115)
-			{
-				width = 18;
-				height = 10;
-				aiStyle = 26;
-				penetrate = -1;
-				timeLeft = 18000;
-				localAI0 = 1;
-			}
-			else if (type == 116)
-			{
-				width = 12;
-				height = 72;
-				scale = 0.5f;
-				aiStyle = 28;
-				penetrate = -1;
-				timeLeft = 18000;
-				damage = 2;
-				localAI0 = 2;
-			}
-			else if (type == 117)
-			{
-				width = 16;
-				height = 48;
-				aiStyle = 28;
-				penetrate = -1;
-				timeLeft = 18000;
-				damage = 4;
-				localAI0 = 3;
-			}
-			else if (type == 118)
-			{
-				width = 18;
-				height = 26;
-				aiStyle = 26;
-				penetrate = -1;
-				timeLeft = 18000;
-				damage = 10;
-				localAI0 = 4;
-			}
-			else if (type == 119)
-			{
-				width = 18;
-				height = 24;
-				aiStyle = 26;
-				penetrate = -1;
-				timeLeft = 18000;
-				damage = 8;
-				localAI0 = 5;
-			}
-			else
-			{
-				active = 0;
-			}
+
 			width = (ushort)(width * scale);
 			height = (ushort)(height * scale);
 			XYWH.Width = width;
@@ -1530,15 +1539,15 @@ namespace Terraria
 					ptr->wet = Collision.WetCollision(ref ptr->position, ptr->width, ptr->height);
 					if (ptr->isLocal())
 					{
-						switch (Type)
+						switch ((EntityID.ProjectileID)Type)
 						{
-							case 29:
+							case EntityID.ProjectileID.DYNAMITE:
 								ptr->timeLeft = 300;
 								break;
-							case 28:
-							case 30:
-							case 37:
-							case 75:
+							case EntityID.ProjectileID.BOMB:
+							case EntityID.ProjectileID.GRENADE:
+							case EntityID.ProjectileID.STICKY_BOMB:
+							case EntityID.ProjectileID.HAPPY_BOMB:
 								ptr->timeLeft = 180;
 								break;
 						}
@@ -1576,15 +1585,15 @@ namespace Terraria
 					ptr->wet = wet;
 					if (ptr->isLocal())
 					{
-						switch (newType)
+						switch ((EntityID.ProjectileID)newType)
 						{
-							case 29:
+							case EntityID.ProjectileID.DYNAMITE:
 								ptr->timeLeft = 300;
 								break;
-							case 28:
-							case 30:
-							case 37:
-							case 75:
+							case EntityID.ProjectileID.BOMB:
+							case EntityID.ProjectileID.GRENADE:
+							case EntityID.ProjectileID.STICKY_BOMB:
+							case EntityID.ProjectileID.HAPPY_BOMB:
 								ptr->timeLeft = 180;
 								break;
 						}
@@ -1597,12 +1606,12 @@ namespace Terraria
 
 		public unsafe void Damage()
 		{
-			if (type == 18 || type == 72 || type == 86 || type == 87 || type == 111 || type == 115)
+			if (type == (byte)EntityID.ProjectileID.SHADOW_ORB || type == (byte)EntityID.ProjectileID.BLUE_FAIRY || type == (byte)EntityID.ProjectileID.PINK_FAIRY || type == (byte)EntityID.ProjectileID.GREEN_FAIRY || type == (byte)EntityID.ProjectileID.PET_BUNNY || type == (byte)EntityID.ProjectileID.PET_SLIME)
 			{
 				return;
 			}
 			Rectangle rectangle = XYWH;
-			if (type == 85 || type == 101)
+			if (type == (byte)EntityID.ProjectileID.FLAMES || type == (byte)EntityID.ProjectileID.EYE_FIRE)
 			{
 				rectangle.X -= 30;
 				rectangle.Y -= 30;
@@ -1611,7 +1620,7 @@ namespace Terraria
 			}
 			if (friendly && isLocal())
 			{
-				if ((aiStyle == 16 || type == 41 || type == 114) && (timeLeft <= 1 || type == 108))
+				if ((aiStyle == (byte)EntityID.ProjStyleID.BOMB || type == (byte)EntityID.ProjectileID.HELLFIRE_ARROW || type == (byte)EntityID.ProjectileID.VULCAN_BOLT) && (timeLeft <= 1 || type == (byte)EntityID.ProjectileID.EXPLOSIVES))
 				{
 					Player player = Main.PlayerSet[owner];
 					if (player.Active != 0 && !player.IsDead && !player.immune && rectangle.Intersects(player.XYWH))
@@ -1630,7 +1639,7 @@ namespace Terraria
 						NetMessage.SendPlayerHurt(player.WhoAmI, direction, dmg, pvp: true, critical: false, Lang.DeathMsgPtr(owner, 0, type));
 					}
 				}
-				if (type < 116 && type != 69 && type != 70 && type != 10 && type != 11)
+				if (type < (byte)EntityID.ProjectileID.PET_TIPHIA && type != (byte)EntityID.ProjectileID.HOLY_WATER && type != (byte)EntityID.ProjectileID.UNHOLY_WATER && type != (byte)EntityID.ProjectileID.PURIFICATION_POWDER && type != (byte)EntityID.ProjectileID.VILE_POWDER)
 				{
 					int num = XYWH.X >> 4;
 					int num2 = (XYWH.X + width >> 4) + 1;
@@ -1656,7 +1665,7 @@ namespace Terraria
 					{
 						for (int j = num3; j < num4; j++)
 						{
-							if (Main.TileCut[Main.TileSet[i, j].Type] && Main.TileSet[i, j + 1].Type != 78)
+							if (Main.TileCut[Main.TileSet[i, j].Type] && Main.TileSet[i, j + 1].Type != (int)EntityID.TileID.CLAY_POT)
 							{
 								WorldGen.KillTile(i, j);
 								NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, i, j, 0);
@@ -1674,11 +1683,11 @@ namespace Terraria
 					for (int k = 0; k < NPC.MaxNumNPCs; k++)
 					{
 						NPC nPC = Main.NPCSet[k];
-						if (nPC.Active == 0 || nPC.DontTakeDamage || ((!friendly || (nPC.IsFriendly && (nPC.Type != (int)NPC.ID.GUIDE || !player2.killGuide))) && (!nPC.IsFriendly || !hostile)) || nPC.Immunities[owner] != 0 || (type == 11 && (nPC.Type == (int)NPC.ID.CORRUPT_BUNNY || nPC.Type == (int)NPC.ID.CORRUPT_GOLDFISH)) || (type == 31 && nPC.Type == (int)NPC.ID.ANTLION) || (!nPC.HasNoTileCollide && ownerHitCheck && !Collision.CanHit(ref player2.XYWH, ref nPC.XYWH)) || !rectangle.Intersects(nPC.XYWH))
+						if (nPC.Active == 0 || nPC.DontTakeDamage || ((!friendly || (nPC.IsFriendly && (nPC.Type != (int)EntityID.NPCID.GUIDE || !player2.killGuide))) && (!nPC.IsFriendly || !hostile)) || nPC.Immunities[owner] != 0 || (type == (byte)EntityID.ProjectileID.VILE_POWDER && (nPC.Type == (int)EntityID.NPCID.CORRUPT_BUNNY || nPC.Type == (int)EntityID.NPCID.CORRUPT_GOLDFISH)) || (type == (byte)EntityID.ProjectileID.SAND_BALL_FALLING && nPC.Type == (int)EntityID.NPCID.ANTLION) || (!nPC.HasNoTileCollide && ownerHitCheck && !Collision.CanHit(ref player2.XYWH, ref nPC.XYWH)) || !rectangle.Intersects(nPC.XYWH))
 						{
 							continue;
 						}
-						if (aiStyle == 3)
+						if (aiStyle == (byte)EntityID.ProjStyleID.BOOMERANG)
 						{
 							if (ai0 == 0f)
 							{
@@ -1688,7 +1697,7 @@ namespace Terraria
 							}
 							ai0 = 1f;
 						}
-						else if (aiStyle == 16)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.BOMB)
 						{
 							if (timeLeft > 3)
 							{
@@ -1703,7 +1712,7 @@ namespace Terraria
 								direction = 1;
 							}
 						}
-						if ((type == 41 || type == 114) && timeLeft > 1)
+						if ((type == (byte)EntityID.ProjectileID.HELLFIRE_ARROW || type == (byte)EntityID.ProjectileID.VULCAN_BOLT) && timeLeft > 1)
 						{
 							timeLeft = 1;
 						}
@@ -1737,13 +1746,13 @@ namespace Terraria
 						{
 							break;
 						}
-						if (aiStyle == 7)
+						if (aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 						{
 							ai0 = 1f;
 							damage = 0;
 							netUpdate = true;
 						}
-						else if (aiStyle == 13)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.HARPOON)
 						{
 							ai0 = 1f;
 							netUpdate = true;
@@ -1772,7 +1781,7 @@ namespace Terraria
 										{
 											continue;
 										}
-										if (type == 11 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+										if (type == (byte)EntityID.ProjectileID.VILE_POWDER && Main.NetMode != (byte)NetModeSetting.CLIENT)
 										{
 											for (int m = 0; m < NPC.MaxNumNPCs; m++)
 											{
@@ -1780,16 +1789,16 @@ namespace Terraria
 												{
 													continue;
 												}
-												if (Main.NPCSet[m].Type == (int)NPC.ID.BUNNY)
+												if (Main.NPCSet[m].Type == (int)EntityID.NPCID.BUNNY)
 												{
 													if (rectangle.Intersects(Main.NPCSet[m].XYWH))
 													{
-														Main.NPCSet[m].Transform((int)NPC.ID.CORRUPT_BUNNY);
+														Main.NPCSet[m].Transform((int)EntityID.NPCID.CORRUPT_BUNNY);
 													}
 												}
-												else if (Main.NPCSet[m].Type == (int)NPC.ID.GOLDFISH && rectangle.Intersects(Main.NPCSet[m].XYWH))
+												else if (Main.NPCSet[m].Type == (int)EntityID.NPCID.GOLDFISH && rectangle.Intersects(Main.NPCSet[m].XYWH))
 												{
-													Main.NPCSet[m].Transform((int)NPC.ID.CORRUPT_GOLDFISH);
+													Main.NPCSet[m].Transform((int)EntityID.NPCID.CORRUPT_GOLDFISH);
 												}
 											}
 										}
@@ -1827,7 +1836,7 @@ namespace Terraria
 							{
 								continue;
 							}
-							if (aiStyle == 3)
+							if (aiStyle == (byte)EntityID.ProjStyleID.BOOMERANG)
 							{
 								if (ai0 == 0f)
 								{
@@ -1837,7 +1846,7 @@ namespace Terraria
 								}
 								ai0 = 1f;
 							}
-							else if (aiStyle == 16)
+							else if (aiStyle == (byte)EntityID.ProjStyleID.BOMB)
 							{
 								if (timeLeft > 3)
 								{
@@ -1852,7 +1861,7 @@ namespace Terraria
 									direction = 1;
 								}
 							}
-							if ((type == 41 || type == 114) && timeLeft > 1)
+							if ((type == (byte)EntityID.ProjectileID.HELLFIRE_ARROW || type == (byte)EntityID.ProjectileID.VULCAN_BOLT) && timeLeft > 1)
 							{
 								timeLeft = 1;
 							}
@@ -1876,13 +1885,13 @@ namespace Terraria
 							{
 								break;
 							}
-							if (aiStyle == 7)
+							if (aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 							{
 								ai0 = 1f;
 								damage = 0;
 								netUpdate = true;
 							}
-							else if (aiStyle == 13)
+							else if (aiStyle == (byte)EntityID.ProjStyleID.HARPOON)
 							{
 								ai0 = 1f;
 								netUpdate = true;
@@ -1891,7 +1900,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (type == 11 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+			if (type == (byte)EntityID.ProjectileID.VILE_POWDER && Main.NetMode != (byte)NetModeSetting.CLIENT)
 			{
 				for (int m = 0; m < NPC.MaxNumNPCs; m++)
 				{
@@ -1899,16 +1908,16 @@ namespace Terraria
 					{
 						continue;
 					}
-					if (Main.NPCSet[m].Type == (int)NPC.ID.BUNNY)
+					if (Main.NPCSet[m].Type == (int)EntityID.NPCID.BUNNY)
 					{
 						if (rectangle.Intersects(Main.NPCSet[m].XYWH))
 						{
-							Main.NPCSet[m].Transform((int)NPC.ID.CORRUPT_BUNNY);
+							Main.NPCSet[m].Transform((int)EntityID.NPCID.CORRUPT_BUNNY);
 						}
 					}
-					else if (Main.NPCSet[m].Type == (int)NPC.ID.GOLDFISH && rectangle.Intersects(Main.NPCSet[m].XYWH))
+					else if (Main.NPCSet[m].Type == (int)EntityID.NPCID.GOLDFISH && rectangle.Intersects(Main.NPCSet[m].XYWH))
 					{
-						Main.NPCSet[m].Transform((int)NPC.ID.CORRUPT_GOLDFISH);
+						Main.NPCSet[m].Transform((int)EntityID.NPCID.CORRUPT_GOLDFISH);
 					}
 				}
 			}
@@ -1963,90 +1972,90 @@ namespace Terraria
 						}
 					}
 				}
-				switch (aiStyle)
+				switch ((EntityID.ProjStyleID)aiStyle)
 				{
-					case 1:
+					case EntityID.ProjStyleID.ARROWS_BULLETS:
 						ArrowAI();
 						break;
-					case 2:
+					case EntityID.ProjStyleID.SHURIKEN:
 						ShurikenAI();
 						break;
-					case 3:
+					case EntityID.ProjStyleID.BOOMERANG:
 						BoomerangAI();
 						break;
-					case 4:
+					case EntityID.ProjStyleID.VILETHORN:
 						VilethornAI();
 						break;
-					case 5:
+					case EntityID.ProjStyleID.STARFURY:
 						StarfuryAI();
 						break;
-					case 6:
+					case EntityID.ProjStyleID.POWDERS:
 						PowderAI();
 						break;
-					case 7:
+					case EntityID.ProjStyleID.GRAPPLING_HOOK:
 						GrapplingAI();
 						break;
-					case 8:
+					case EntityID.ProjStyleID.BALL_OF_FIRE:
 						BallOfFireAI();
 						break;
-					case 9:
+					case EntityID.ProjStyleID.MAGIC_MISSILE:
 						MagicMissileAI();
 						break;
-					case 10:
+					case EntityID.ProjStyleID.DIRT_BALL:
 						DirtBallAI();
 						break;
-					case 11:
+					case EntityID.ProjStyleID.SHADOW_ORB:
 						OrbOfLightAI();
 						break;
-					case 12:
+					case EntityID.ProjStyleID.WATER_STREAM:
 						BlueFlameAI();
 						break;
-					case 13:
+					case EntityID.ProjStyleID.HARPOON:
 						HarpoonAI();
 						break;
-					case 14:
+					case EntityID.ProjStyleID.SPIKY_BALL:
 						SpikyBallAI();
 						break;
-					case 15:
+					case EntityID.ProjStyleID.FLAIL:
 						FlailAI();
 						break;
-					case 16:
+					case EntityID.ProjStyleID.BOMB:
 						BombAI();
 						break;
-					case 17:
+					case EntityID.ProjStyleID.TOMBSTONE:
 						TombstoneAI();
 						break;
-					case 18:
+					case EntityID.ProjStyleID.DEMON_SICKLE:
 						DemonSickleAI();
 						break;
-					case 19:
+					case EntityID.ProjStyleID.SPEAR:
 						SpearAI();
 						break;
-					case 20:
+					case EntityID.ProjStyleID.CHAINSAW:
 						ChainsawAI();
 						break;
-					case 21:
+					case EntityID.ProjStyleID.NOTE:
 						NoteAI();
 						break;
-					case 22:
+					case EntityID.ProjStyleID.ICE_BLOCK:
 						IceBlockAI();
 						break;
-					case 23:
+					case EntityID.ProjStyleID.FLAMES:
 						FlameAI();
 						break;
-					case 24:
+					case EntityID.ProjStyleID.CRYSTAL_SHARD:
 						CrystalShardAI();
 						break;
-					case 25:
+					case EntityID.ProjStyleID.BOULDER:
 						BoulderAI();
 						break;
-					case 26:
+					case EntityID.ProjStyleID.PETS:
 						PetAI();
 						break;
-					case 27:
+					case EntityID.ProjStyleID.FAIRY:
 						FairyAI();
 						break;
-					case 28:
+					case EntityID.ProjStyleID.FLYING_PETS:
 						FlyingPetAI();
 						break;
 				}
@@ -2074,17 +2083,17 @@ namespace Terraria
 					}
 					if (wet && !lavaWet)
 					{
-						if (type == 85 || type == 15 || type == 34)
+						if (type == (byte)EntityID.ProjectileID.FLAMES || type == (byte)EntityID.ProjectileID.BALL_OF_FIRE || type == (byte)EntityID.ProjectileID.FLAMELASH)
 						{
 							Kill();
 						}
-						else if (type == 2 || type == 82)
+						else if (type == (byte)EntityID.ProjectileID.FIRE_ARROW || type == (byte)EntityID.ProjectileID.FLAMING_ARROW)
 						{
 							type--;
 							light = 0f;
 						}
 					}
-					if (type == 80)
+					if (type == (byte)EntityID.ProjectileID.ICE_BLOCK)
 					{
 						flag2 = false;
 						wet = false;
@@ -2192,10 +2201,10 @@ namespace Terraria
 				if (tileCollide)
 				{
 					Vector2 value = velocity;
-					bool flag3 = type != 9 && type != 12 && type != 15 && type != 13 && type != 31 && type != 39 && type != 40 && aiStyle != 26;
-					if (aiStyle == 10)
+					bool flag3 = type != (byte)EntityID.ProjectileID.STARFURY && type != (byte)EntityID.ProjectileID.FALLING_STAR && type != (byte)EntityID.ProjectileID.BALL_OF_FIRE && type != (byte)EntityID.ProjectileID.HOOK && type != (byte)EntityID.ProjectileID.SAND_BALL_FALLING && type != (byte)EntityID.ProjectileID.MUD_BALL && type != (byte)EntityID.ProjectileID.ASH_BALL_FALLING && aiStyle != (byte)EntityID.ProjStyleID.PETS;
+					if (aiStyle == (byte)EntityID.ProjStyleID.DIRT_BALL)
 					{
-						if (type == 42 || type == 65 || type == 68 || (type == 31 && ai0 == 2f))
+						if (type == (byte)EntityID.ProjectileID.SAND_BALL_GUN || type == (byte)EntityID.ProjectileID.EBONSAND_BALL_GUN || type == (byte)EntityID.ProjectileID.PEARL_SAND_BALL_GUN || (type == (byte)EntityID.ProjectileID.SAND_BALL_FALLING && ai0 == 2f))
 						{
 							Collision.TileCollision(ref position, ref velocity, width, height, flag3, flag3);
 						}
@@ -2204,7 +2213,7 @@ namespace Terraria
 							Collision.AnyCollision(ref position, ref velocity, width, height);
 						}
 					}
-					else if (aiStyle == 18)
+					else if (aiStyle == (byte)EntityID.ProjStyleID.DEMON_SICKLE)
 					{
 						int num = width - 36;
 						int num2 = height - 36;
@@ -2233,7 +2242,7 @@ namespace Terraria
 					}
 					if (value != velocity)
 					{
-						if (type == 94)
+						if (type == (byte)EntityID.ProjectileID.CRYSTAL_STORM)
 						{
 							if (velocity.X != value.X)
 							{
@@ -2244,7 +2253,7 @@ namespace Terraria
 								velocity.Y = 0f - value.Y;
 							}
 						}
-						else if (type == 99)
+						else if (type == (byte)EntityID.ProjectileID.BOULDER)
 						{
 							if (velocity.Y != value.Y && value.Y > 5f)
 							{
@@ -2257,7 +2266,7 @@ namespace Terraria
 								Kill();
 							}
 						}
-						else if (type == 36)
+						else if (type == (byte)EntityID.ProjectileID.METEOR_SHOT)
 						{
 							if (penetrate > 1)
 							{
@@ -2278,7 +2287,7 @@ namespace Terraria
 								Kill();
 							}
 						}
-						else if (aiStyle == 21)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.NOTE)
 						{
 							if (velocity.X != value.X)
 							{
@@ -2289,7 +2298,7 @@ namespace Terraria
 								velocity.Y = 0f - value.Y;
 							}
 						}
-						else if (aiStyle == 17)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.TOMBSTONE)
 						{
 							if (velocity.X != value.X)
 							{
@@ -2300,7 +2309,7 @@ namespace Terraria
 								velocity.Y = value.Y * -0.7f;
 							}
 						}
-						else if (aiStyle == 15)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.FLAIL)
 						{
 							bool flag4 = false;
 							if (value.X != velocity.X)
@@ -2329,10 +2338,10 @@ namespace Terraria
 								Main.PlaySound(0, XYWH.X, XYWH.Y);
 							}
 						}
-						else if (aiStyle == 3 || aiStyle == 13)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.BOOMERANG || aiStyle == (byte)EntityID.ProjStyleID.HARPOON)
 						{
 							Collision.HitTiles(position, velocity, width, height);
-							if (type == 33 || type == 106)
+							if (type == (byte)EntityID.ProjectileID.THORN_CHAKRAM || type == (byte)EntityID.ProjectileID.LIGHT_DISC)
 							{
 								if (velocity.X != value.X)
 								{
@@ -2346,7 +2355,7 @@ namespace Terraria
 							else
 							{
 								ai0 = 1f;
-								if (aiStyle == 3)
+								if (aiStyle == (byte)EntityID.ProjStyleID.BOOMERANG)
 								{
 									velocity.X = 0f - value.X;
 									velocity.Y = 0f - value.Y;
@@ -2355,7 +2364,7 @@ namespace Terraria
 							netUpdate = true;
 							Main.PlaySound(0, XYWH.X, XYWH.Y);
 						}
-						else if (aiStyle == 8 && type != 96)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.BALL_OF_FIRE && type != (byte)EntityID.ProjectileID.CURSED_FLAME_HOSTILE)
 						{
 							Main.PlaySound(2, XYWH.X, XYWH.Y, 10);
 							ai0 += 1f;
@@ -2367,7 +2376,7 @@ namespace Terraria
 							}
 							else
 							{
-								if (type == 15 && velocity.Y > 4f)
+								if (type == (byte)EntityID.ProjectileID.BALL_OF_FIRE && velocity.Y > 4f)
 								{
 									if (velocity.Y != value.Y)
 									{
@@ -2384,9 +2393,9 @@ namespace Terraria
 								}
 							}
 						}
-						else if (aiStyle == 14)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.SPIKY_BALL)
 						{
-							if (type == 50)
+							if (type == (byte)EntityID.ProjectileID.GLOWSTICK)
 							{
 								if (velocity.X != value.X)
 								{
@@ -2409,26 +2418,26 @@ namespace Terraria
 								}
 							}
 						}
-						else if (aiStyle == 16)
+						else if (aiStyle == (byte)EntityID.ProjStyleID.BOMB)
 						{
 							if (velocity.X != value.X)
 							{
 								velocity.X = value.X * -0.4f;
-								if (type == 29)
+								if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 								{
 									velocity.X *= 0.8f;
 								}
 							}
-							if (velocity.Y != value.Y && value.Y > 0.7 && type != 102)
+							if (velocity.Y != value.Y && value.Y > 0.7 && type != (byte)EntityID.ProjectileID.BOMB_SKELETRON_PRIME)
 							{
 								velocity.Y = value.Y * -0.4f;
-								if (type == 29)
+								if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 								{
 									velocity.Y *= 0.8f;
 								}
 							}
 						}
-						else if ((aiStyle != 9 || isLocal()) && type != 111 && (type < 115 || type > 119))
+						else if ((aiStyle != (byte)EntityID.ProjStyleID.MAGIC_MISSILE || isLocal()) && type != (byte)EntityID.ProjectileID.PET_BUNNY && (type < (byte)EntityID.ProjectileID.PET_SLIME || type > (byte)EntityID.ProjectileID.PET_ZOMBIE))
 						{
 							position.X += velocity.X;
 							position.Y += velocity.Y;
@@ -2436,7 +2445,7 @@ namespace Terraria
 						}
 					}
 				}
-				if (type != 7 && type != 8)
+				if (type != (byte)EntityID.ProjectileID.VILETHORN_BASE && type != (byte)EntityID.ProjectileID.VILETHORN_TIP)
 				{
 					if (wet)
 					{
@@ -2451,7 +2460,7 @@ namespace Terraria
 					XYWH.X = (int)position.X;
 					XYWH.Y = (int)position.Y;
 				}
-				if ((aiStyle != 3 || ai0 != 1f) && (aiStyle != 7 || ai0 != 1f) && (aiStyle != 13 || ai0 != 1f) && (aiStyle != 15 || ai0 != 1f) && aiStyle != 15 && aiStyle != 26)
+				if ((aiStyle != (byte)EntityID.ProjStyleID.BOOMERANG || ai0 != 1f) && (aiStyle != (byte)EntityID.ProjStyleID.GRAPPLING_HOOK || ai0 != 1f) && (aiStyle != (byte)EntityID.ProjStyleID.HARPOON || ai0 != 1f) && (aiStyle != (byte)EntityID.ProjStyleID.FLAIL || ai0 != 1f) && aiStyle != (byte)EntityID.ProjStyleID.FLAIL && aiStyle != (byte)EntityID.ProjStyleID.PETS)
 				{
 					direction = (sbyte)((!(velocity.X < 0f)) ? 1 : (-1));
 				}
@@ -2464,214 +2473,227 @@ namespace Terraria
 					float num3 = light;
 					float num4 = light;
 					float num5 = light;
-					if (type == 2 || type == 82)
+					switch ((EntityID.ProjectileID)type)
 					{
-						num4 *= 0.75f;
-						num5 *= 0.55f;
-					}
-					else if (type == 94)
-					{
-						num3 *= 0.5f;
-						num4 = 0f;
-					}
-					else if (type == 95 || type == 96 || type == 103 || type == 104)
-					{
-						num3 *= 0.35f;
-						num5 = 0f;
-					}
-					else if (type == 4)
-					{
-						num4 *= 0.1f;
-						num3 *= 0.5f;
-					}
-					else if (type == 9)
-					{
-						num4 *= 0.1f;
-						num5 *= 0.6f;
-					}
-					else if (type == 92)
-					{
-						num4 *= 0.6f;
-						num3 *= 0.8f;
-					}
-					else if (type == 93)
-					{
-						num4 *= 1f;
-						num3 *= 1f;
-						num5 *= 0.01f;
-					}
-					else if (type == 12)
-					{
-						num3 *= 0.9f;
-						num4 *= 0.8f;
-						num5 *= 0.1f;
-					}
-					else if (type == 14 || type == 110)
-					{
-						num4 *= 0.7f;
-						num5 *= 0.1f;
-					}
-					else if (type == 15)
-					{
-						num4 *= 0.4f;
-						num5 *= 0.1f;
-						num3 = 1f;
-					}
-					else if (type == 16)
-					{
-						num3 *= 0.1f;
-						num4 *= 0.4f;
-						num5 = 1f;
-					}
-					else if (type == 113)
-					{
-						num3 *= 0.1f;
-						num5 = 1f;
-					}
-					else if (type == 18)
-					{
-						num4 *= 0.7f;
-						num5 *= 0.3f;
-					}
-					else if (type == 19)
-					{
-						num4 *= 0.5f;
-						num5 *= 0.1f;
-					}
-					else if (type == 20)
-					{
-						num3 *= 0.1f;
-						num5 *= 0.3f;
-					}
-					else if (type == 22)
-					{
-						num3 = 0f;
-						num4 = 0f;
-					}
-					else if (type == 27)
-					{
-						num3 = 0f;
-						num4 *= 0.3f;
-						num5 = 1f;
-					}
-					else if (type == 34)
-					{
-						num4 *= 0.1f;
-						num5 *= 0.1f;
-					}
-					else if (type == 36)
-					{
-						num3 = 0.8f;
-						num4 *= 0.2f;
-						num5 *= 0.6f;
-					}
-					else if (type == 41)
-					{
-						num4 *= 0.8f;
-						num5 *= 0.6f;
-					}
-					else if (type == 114)
-					{
-						num3 = 1f;
-						num4 = 1f;
-						num5 *= 0.25f;
-					}
-					else if (type == 44 || type == 45)
-					{
-						num5 = 1f;
-						num3 *= 0.6f;
-						num4 *= 0.1f;
-					}
-					else if (type == 50)
-					{
-						num3 *= 0.7f;
-						num5 *= 0.8f;
-					}
-					else if (type == 53)
-					{
-						num3 *= 0.7f;
-						num4 *= 0.8f;
-					}
-					else if (type == 72)
-					{
-						num3 *= 0.45f;
-						num4 *= 0.75f;
-						num5 = 1f;
-					}
-					else if (type == 86)
-					{
-						num4 *= 0.45f;
-						num5 = 0.75f;
-					}
-					else if (type == 87)
-					{
-						num3 *= 0.45f;
-						num4 = 1f;
-						num5 *= 0.75f;
-					}
-					else if (type == 73)
-					{
-						num3 *= 0.4f;
-						num4 *= 0.6f;
-					}
-					else if (type == 74)
-					{
-						num4 *= 0.4f;
-						num5 *= 0.6f;
-					}
-					else if (type == 76 || type == 77 || type == 78)
-					{
-						num4 *= 0.3f;
-						num5 *= 0.6f;
-					}
-					else if (type == 79)
-					{
-						num3 = Main.DiscoRGB.X;
-						num4 = Main.DiscoRGB.Y;
-						num5 = Main.DiscoRGB.Z;
-					}
-					else if (type == 80)
-					{
-						num3 = 0f;
-						num4 *= 0.8f;
-						num5 *= 1f;
-					}
-					else if (type == 83 || type == 88)
-					{
-						num3 *= 0.7f;
-						num4 = 0f;
-						num5 *= 1f;
-					}
-					else if (type == 100)
-					{
-						num4 *= 0.5f;
-						num5 = 0f;
-					}
-					else if (type == 84)
-					{
-						num3 *= 0.8f;
-						num4 = 0f;
-						num5 *= 0.5f;
-					}
-					else if (type == 89 || type == 90)
-					{
-						num4 *= 0.2f;
-						num3 *= 0.05f;
-					}
-					else if (type == 106)
-					{
-						num3 = 0f;
-						num4 *= 0.5f;
+						case EntityID.ProjectileID.FIRE_ARROW:
+						case EntityID.ProjectileID.FLAMING_ARROW:
+							num4 *= 0.75f;
+							num5 *= 0.55f;
+							break;
+
+						case EntityID.ProjectileID.CRYSTAL_STORM:
+							num3 *= 0.5f;
+							num4 = 0f;
+							break;
+
+						case EntityID.ProjectileID.CURSED_FLAME_FRIENDLY:
+						case EntityID.ProjectileID.CURSED_FLAME_HOSTILE:
+						case EntityID.ProjectileID.CURSED_ARROW:
+						case EntityID.ProjectileID.CURSED_BULLET:
+							num3 *= 0.35f;
+							num5 = 0f;
+							break;
+
+						case EntityID.ProjectileID.UNHOLY_ARROW:
+							num4 *= 0.1f;
+							num3 *= 0.5f;
+							break;
+
+						case EntityID.ProjectileID.STARFURY:
+							num4 *= 0.1f;
+							num5 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.HALLOW_STAR:
+							num4 *= 0.6f;
+							num3 *= 0.8f;
+							break;
+
+						case EntityID.ProjectileID.MAGIC_DAGGER:
+							num4 *= 1f;
+							num3 *= 1f;
+							num5 *= 0.01f;
+							break;
+
+						case EntityID.ProjectileID.FALLING_STAR:
+							num3 *= 0.9f;
+							num4 *= 0.8f;
+							num5 *= 0.1f;
+							break;
+
+						case EntityID.ProjectileID.BULLET:
+						case EntityID.ProjectileID.BULLET_SNOWMAN:
+							num4 *= 0.7f;
+							num5 *= 0.1f;
+							break;
+
+						case EntityID.ProjectileID.BALL_OF_FIRE:
+							num4 *= 0.4f;
+							num5 *= 0.1f;
+							num3 = 1f;
+							break;
+
+						case EntityID.ProjectileID.MAGIC_MISSILE:
+							num3 *= 0.1f;
+							num4 *= 0.4f;
+							num5 = 1f;
+							break;
+
+						case EntityID.ProjectileID.SPECTRAL_ARROW:
+							num3 *= 0.1f;
+							num5 = 1f;
+							break;
+
+						case EntityID.ProjectileID.SHADOW_ORB:
+							num4 *= 0.7f;
+							num5 *= 0.3f;
+							break;
+
+						case EntityID.ProjectileID.FLAMARANG:
+							num4 *= 0.5f;
+							num5 *= 0.1f;
+							break;
+
+						case EntityID.ProjectileID.GREEN_LASER:
+							num3 *= 0.1f;
+							num5 *= 0.3f;
+							break;
+
+						case EntityID.ProjectileID.WATER_STREAM:
+							num3 = 0f;
+							num4 = 0f;
+							break;
+
+						case EntityID.ProjectileID.WATER_BOLT:
+							num3 = 0f;
+							num4 *= 0.3f;
+							num5 = 1f;
+							break;
+
+						case EntityID.ProjectileID.FLAMELASH:
+							num4 *= 0.1f;
+							num5 *= 0.1f;
+							break;
+
+						case EntityID.ProjectileID.METEOR_SHOT:
+							num3 = 0.8f;
+							num4 *= 0.2f;
+							num5 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.HELLFIRE_ARROW:
+							num4 *= 0.8f;
+							num5 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.VULCAN_BOLT:
+							num3 = 1f;
+							num4 = 1f;
+							num5 *= 0.25f;
+							break;
+
+						case EntityID.ProjectileID.DEMON_SICKLE:
+						case EntityID.ProjectileID.DEMON_SCYTHE:
+							num5 = 1f;
+							num3 *= 0.6f;
+							num4 *= 0.1f;
+							break;
+
+						case EntityID.ProjectileID.GLOWSTICK:
+							num3 *= 0.7f;
+							num5 *= 0.8f;
+							break;
+
+						case EntityID.ProjectileID.STICKY_GLOWSTICK:
+							num3 *= 0.7f;
+							num4 *= 0.8f;
+							break;
+
+						case EntityID.ProjectileID.BLUE_FAIRY:
+							num3 *= 0.45f;
+							num4 *= 0.75f;
+							num5 = 1f;
+							break;
+
+						case EntityID.ProjectileID.PINK_FAIRY:
+							num4 *= 0.45f;
+							num5 = 0.75f;
+							break;
+
+						case EntityID.ProjectileID.GREEN_FAIRY:
+							num3 *= 0.45f;
+							num4 = 1f;
+							num5 *= 0.75f;
+							break;
+
+						case EntityID.ProjectileID.DUAL_HOOK_BLUE:
+							num3 *= 0.4f;
+							num4 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.DUAL_HOOK_RED:
+							num4 *= 0.4f;
+							num5 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.QUARTER_NOTE:
+						case EntityID.ProjectileID.EIGHTH_NOTE:
+						case EntityID.ProjectileID.TIED_EIGHTH_NOTE:
+							num4 *= 0.3f;
+							num5 *= 0.6f;
+							break;
+
+						case EntityID.ProjectileID.RAINBOW_ROD_BULLET:
+							num3 = Main.DiscoRGB.X;
+							num4 = Main.DiscoRGB.Y;
+							num5 = Main.DiscoRGB.Z;
+							break;
+
+						case EntityID.ProjectileID.ICE_BLOCK:
+							num3 = 0f;
+							num4 *= 0.8f;
+							num5 *= 1f;
+							break;
+
+						case EntityID.ProjectileID.EYE_LASER:
+						case EntityID.ProjectileID.PURPLE_LASER:
+							num3 *= 0.7f;
+							num4 = 0f;
+							num5 *= 1f;
+							break;
+
+						case EntityID.ProjectileID.DEATH_LASER:
+							num4 *= 0.5f;
+							num5 = 0f;
+							break;
+
+						case EntityID.ProjectileID.PINK_LASER:
+							num3 *= 0.8f;
+							num4 = 0f;
+							num5 *= 0.5f;
+							break;
+
+						case EntityID.ProjectileID.CRYSTAL_BULLET:
+						case EntityID.ProjectileID.CRYSTAL_SHARD:
+							num4 *= 0.2f;
+							num3 *= 0.05f;
+							break;
+
+						case EntityID.ProjectileID.LIGHT_DISC:
+							num3 = 0f;
+							num4 *= 0.5f;
+							break;
+
 					}
 					Lighting.AddLight(XYWH.X + (width >> 1) >> 4, XYWH.Y + (height >> 1) >> 4, new Vector3(num3, num4, num5));
 				}
 				if ((Main.FrameCounter & 1) == 1)
 				{
-					if (type == 2 || type == 82)
+					if (type == (byte)EntityID.ProjectileID.FIRE_ARROW || type == (byte)EntityID.ProjectileID.FLAMING_ARROW)
 					{
 						Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100);
 					}
-					else if (type == 103)
+					else if (type == (byte)EntityID.ProjectileID.CURSED_ARROW)
 					{
 						Dust* ptr6 = Main.DustSet.NewDust(75, ref XYWH, 0.0, 0.0, 100);
 						if (Main.Rand.Next(2) == 0 && ptr6 != null)
@@ -2680,14 +2702,14 @@ namespace Terraria
 							ptr6->Scale *= 2f;
 						}
 					}
-					else if (type == 4)
+					else if (type == (byte)EntityID.ProjectileID.UNHOLY_ARROW)
 					{
 						if (Main.Rand.Next(3) == 0)
 						{
 							Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, 150, default, 1.1f);
 						}
 					}
-					else if (type == 5)
+					else if (type == (byte)EntityID.ProjectileID.JESTERS_ARROW)
 					{
 						int num6 = Main.Rand.Next(3);
 						num6 = ((num6 != 0) ? (num6 + 56) : 15);
@@ -2695,14 +2717,14 @@ namespace Terraria
 					}
 				}
 				Damage();
-				if (type == 99)
+				if (type == (byte)EntityID.ProjectileID.BOULDER)
 				{
 					if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 					{
 						Collision.SwitchTiles(position, width, height, lastPosition);
 					}
 				}
-				else if (type == 94)
+				else if (type == (byte)EntityID.ProjectileID.CRYSTAL_STORM)
 				{
 					fixed (float* ptr7 = oldPos)
 					{
@@ -2860,7 +2882,7 @@ namespace Terraria
 				{
 					spriteDirection = 1;
 				}
-				if (type < 116)
+				if (type < (byte)EntityID.ProjectileID.PET_TIPHIA)
 				{
 					if (spriteDirection == -1)
 					{
@@ -3100,104 +3122,109 @@ namespace Terraria
 			if (ai1 == 0)
 			{
 				ai1 = 1;
-				if (type == 83 || type == 100)
+				if (type == (byte)EntityID.ProjectileID.EYE_LASER || type == (byte)EntityID.ProjectileID.DEATH_LASER)
 				{
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 33);
 				}
-				else if (type == 110)
+				else if (type == (byte)EntityID.ProjectileID.BULLET_SNOWMAN)
 				{
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 11);
 				}
-				else if (type == 84)
+				else if (type == (byte)EntityID.ProjectileID.PINK_LASER)
 				{
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 12);
 				}
-				else if (type == 98)
+				else if (type == (byte)EntityID.ProjectileID.POISON_DART)
 				{
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 17);
 				}
-				else if (type == 81 || type == 82)
+				else if (type == (byte)EntityID.ProjectileID.WOODEN_ARROW_HOSTILE || type == (byte)EntityID.ProjectileID.FLAMING_ARROW)
 				{
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 5);
 				}
 			}
-			if (type == 41)
+			switch ((EntityID.ProjectileID)type)
 			{
-				Dust* ptr = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.6f);
-				if (ptr != null)
-				{
-					ptr->NoGravity = true;
-					ptr = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+				case EntityID.ProjectileID.HELLFIRE_ARROW:
+					Dust* ptr = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.6f);
 					if (ptr != null)
 					{
 						ptr->NoGravity = true;
+						ptr = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+						if (ptr != null)
+						{
+							ptr->NoGravity = true;
+						}
 					}
-				}
-			}
-			else if (type == 114)
-			{
-				Dust* ptr2 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.6f);
-				if (ptr2 != null)
-				{
-					ptr2->NoGravity = true;
-					ptr2 = Main.DustSet.NewDust(64, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+					break;
+				case EntityID.ProjectileID.VULCAN_BOLT:
+					Dust* ptr2 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.6f);
 					if (ptr2 != null)
 					{
 						ptr2->NoGravity = true;
+						ptr2 = Main.DustSet.NewDust(64, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+						if (ptr2 != null)
+						{
+							ptr2->NoGravity = true;
+						}
 					}
-				}
-			}
-			else if (type == 55)
-			{
-				Dust* ptr3 = Main.DustSet.NewDust(18, ref XYWH, 0.0, 0.0, 0, default, 0.9f);
-				if (ptr3 != null)
-				{
-					ptr3->NoGravity = true;
-				}
-			}
-			else if (type == 91)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					int num = ((Main.Rand.Next(2) != 0) ? 58 : 15);
-					Dust* ptr4 = Main.DustSet.NewDust(num, ref XYWH, velocity.X * 0.25f, velocity.Y * 0.25f, 150, default, 0.9f);
-					if (ptr4 != null)
+					break;
+				case EntityID.ProjectileID.STINGER:
+					Dust* ptr3 = Main.DustSet.NewDust(18, ref XYWH, 0.0, 0.0, 0, default, 0.9f);
+					if (ptr3 != null)
 					{
-						ptr4->Velocity.X *= 0.25f;
-						ptr4->Velocity.Y *= 0.25f;
+						ptr3->NoGravity = true;
 					}
-				}
-			}
-			else if (type == 88)
-			{
-				if (alpha > 10)
-				{
-					alpha -= 10;
-				}
-				else
-				{
-					alpha = 0;
-				}
-			}
-			else if (type == 20 || type == 14 || type == 36 || type == 83 || type == 84 || type == 89 || type == 100 || type == 104 || type == 110)
-			{
-				if (alpha > 15)
-				{
-					alpha -= 15;
-				}
-				else
-				{
-					alpha = 0;
-				}
+					break;
+				case EntityID.ProjectileID.HOLY_ARROW:
+					if (Main.Rand.Next(3) == 0)
+					{
+						int num = ((Main.Rand.Next(2) != 0) ? 58 : 15);
+						Dust* ptr4 = Main.DustSet.NewDust(num, ref XYWH, velocity.X * 0.25f, velocity.Y * 0.25f, 150, default, 0.9f);
+						if (ptr4 != null)
+						{
+							ptr4->Velocity.X *= 0.25f;
+							ptr4->Velocity.Y *= 0.25f;
+						}
+					}
+					break;
+				case EntityID.ProjectileID.PURPLE_LASER:
+					if (alpha > 10)
+					{
+						alpha -= 10;
+					}
+					else
+					{
+						alpha = 0;
+					}
+					break;
+				case EntityID.ProjectileID.GREEN_LASER:
+				case EntityID.ProjectileID.BULLET:
+				case EntityID.ProjectileID.METEOR_SHOT:
+				case EntityID.ProjectileID.EYE_LASER:
+				case EntityID.ProjectileID.PINK_LASER:
+				case EntityID.ProjectileID.CRYSTAL_BULLET:
+				case EntityID.ProjectileID.DEATH_LASER:
+				case EntityID.ProjectileID.CURSED_BULLET:
+				case EntityID.ProjectileID.BULLET_SNOWMAN:
+					if (alpha > 15)
+					{
+						alpha -= 15;
+					}
+					else
+					{
+						alpha = 0;
+					}
+					break;
 			}
 			rotation = (float)(Math.Atan2(velocity.Y, velocity.X) + 1.57);
-			if (type != 5 && type != 14 && type != 20 && type != 36 && type != 38 && type != 55 && type != 83 && type != 84 && type != 88 && type != 89 && type != 98 && type != 100 && type != 104 && type != 110)
+			if (type != (byte)EntityID.ProjectileID.JESTERS_ARROW && type != (byte)EntityID.ProjectileID.BULLET && type != (byte)EntityID.ProjectileID.GREEN_LASER && type != (byte)EntityID.ProjectileID.METEOR_SHOT && type != (byte)EntityID.ProjectileID.HARPY_FEATHER && type != (byte)EntityID.ProjectileID.STINGER && type != (byte)EntityID.ProjectileID.EYE_LASER && type != (byte)EntityID.ProjectileID.PINK_LASER && type != (byte)EntityID.ProjectileID.PURPLE_LASER && type != (byte)EntityID.ProjectileID.CRYSTAL_BULLET && type != (byte)EntityID.ProjectileID.POISON_DART && type != (byte)EntityID.ProjectileID.DEATH_LASER && type != (byte)EntityID.ProjectileID.CURSED_BULLET && type != (byte)EntityID.ProjectileID.BULLET_SNOWMAN)
 			{
 				if ((ai0 += 1f) == 9f)
 				{
-					if (type == 114 && isLocal() && Main.Rand.Next(4) == 0)
+					if (type == (byte)EntityID.ProjectileID.VULCAN_BOLT && isLocal() && Main.Rand.Next(4) == 0)
 					{
-						int num2 = NewClonedProjectile(114);
+						int num2 = NewClonedProjectile((int)EntityID.ProjectileID.VULCAN_BOLT);
 						if (num2 >= 0)
 						{
 							double num3 = velocity.Length();
@@ -3223,7 +3250,7 @@ namespace Terraria
 				}
 				else if (ai0 >= 15f)
 				{
-					if (type == 81 || type == 91)
+					if (type == (byte)EntityID.ProjectileID.WOODEN_ARROW_HOSTILE || type == (byte)EntityID.ProjectileID.HOLY_ARROW)
 					{
 						if (ai0 >= 20f)
 						{
@@ -3249,7 +3276,7 @@ namespace Terraria
 				soundDelay = 8;
 				Main.PlaySound(2, XYWH.X, XYWH.Y, 7);
 			}
-			if (type == 19)
+			if (type == (byte)EntityID.ProjectileID.FLAMARANG)
 			{
 				for (int i = 0; i < 2; i++)
 				{
@@ -3263,7 +3290,7 @@ namespace Terraria
 					ptr->Velocity.Y *= 0.3f;
 				}
 			}
-			else if (type == 33)
+			else if (type == (byte)EntityID.ProjectileID.THORN_CHAKRAM)
 			{
 				if (Main.Rand.Next(2) == 0)
 				{
@@ -3274,7 +3301,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (type == 6 && Main.Rand.Next(6) == 0)
+			else if (type == (byte)EntityID.ProjectileID.ENCHANTED_BOOMERANG && Main.Rand.Next(6) == 0)
 			{
 				int num;
 				switch (Main.Rand.Next(3))
@@ -3294,7 +3321,7 @@ namespace Terraria
 			if (ai0 == 0f)
 			{
 				ai1++;
-				if (type == 106)
+				if (type == (byte)EntityID.ProjectileID.LIGHT_DISC)
 				{
 					if (ai1 >= 45)
 					{
@@ -3315,17 +3342,17 @@ namespace Terraria
 				tileCollide = false;
 				float num2 = 9f;
 				float num3 = 0.4f;
-				if (type == 19)
+				if (type == (byte)EntityID.ProjectileID.FLAMARANG)
 				{
 					num2 = 13f;
 					num3 = 0.6f;
 				}
-				else if (type == 33)
+				else if (type == (byte)EntityID.ProjectileID.THORN_CHAKRAM)
 				{
 					num2 = 15f;
 					num3 = 0.8f;
 				}
-				else if (type == 106)
+				else if (type == (byte)EntityID.ProjectileID.LIGHT_DISC)
 				{
 					num2 = 16f;
 					num3 = 1.2f;
@@ -3378,7 +3405,7 @@ namespace Terraria
 					Kill();
 				}
 			}
-			if (type == 106)
+			if (type == (byte)EntityID.ProjectileID.LIGHT_DISC)
 			{
 				rotation += 0.3f * direction;
 			}
@@ -3390,7 +3417,7 @@ namespace Terraria
 
 		private unsafe void ShurikenAI()
 		{
-			if (type == 93 && Main.Rand.Next(5) == 0)
+			if (type == (byte)EntityID.ProjectileID.MAGIC_DAGGER && Main.Rand.Next(5) == 0)
 			{
 				Dust* ptr = Main.DustSet.NewDust(57, ref XYWH, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, 100, default, 0.3f);
 				if (ptr != null)
@@ -3400,7 +3427,7 @@ namespace Terraria
 			}
 			rotation += (Math.Abs(velocity.X) + Math.Abs(velocity.Y)) * 0.03f * direction;
 			ai0 += 1f;
-			if (type == 69 || type == 70)
+			if (type == (byte)EntityID.ProjectileID.HOLY_WATER || type == (byte)EntityID.ProjectileID.UNHOLY_WATER)
 			{
 				if (ai0 >= 10f)
 				{
@@ -3413,7 +3440,7 @@ namespace Terraria
 				velocity.Y += 0.4f;
 				velocity.X *= 0.97f;
 			}
-			else if (type == 48 || type == 54 || type == 93)
+			else if (type == (byte)EntityID.ProjectileID.THROWING_KNIFE || type == (byte)EntityID.ProjectileID.POISONED_KNIFE || type == (byte)EntityID.ProjectileID.MAGIC_DAGGER)
 			{
 				rotation = (float)Math.Atan2(velocity.Y, velocity.X) + 1.57f;
 			}
@@ -3421,7 +3448,7 @@ namespace Terraria
 			{
 				velocity.Y = 16f;
 			}
-			if (type == 54 && Main.Rand.Next(20) == 0)
+			if (type == (byte)EntityID.ProjectileID.POISONED_KNIFE && Main.Rand.Next(20) == 0)
 			{
 				Main.DustSet.NewDust(40, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 0, default, 0.75);
 			}
@@ -3447,9 +3474,9 @@ namespace Terraria
 					XYWH.X = (int)position.X;
 					XYWH.Y = (int)position.Y;
 				}
-				if (type == 7 && isLocal())
+				if (type == (byte)EntityID.ProjectileID.VILETHORN_BASE && isLocal())
 				{
-					int num = NewClonedProjectile((ai1 >= 6) ? 8 : 7);
+					int num = NewClonedProjectile((ai1 >= 6) ? (int)EntityID.ProjectileID.VILETHORN_TIP : (int)EntityID.ProjectileID.VILETHORN_BASE);
 					if (num >= 0)
 					{
 						Main.ProjectileSet[num].position.X += velocity.X;
@@ -3479,7 +3506,7 @@ namespace Terraria
 
 		private unsafe void StarfuryAI()
 		{
-			if (type == 92)
+			if (type == (byte)EntityID.ProjectileID.HALLOW_STAR)
 			{
 				if (XYWH.Y > ai1)
 				{
@@ -3523,7 +3550,7 @@ namespace Terraria
 				alpha = (byte)num;
 			}
 			rotation += (Math.Abs(velocity.X) + Math.Abs(velocity.Y)) * 0.01f * direction;
-			if (ai1 == 1 || type == 92)
+			if (ai1 == 1 || type == (byte)EntityID.ProjectileID.HALLOW_STAR)
 			{
 				light = 0.9f;
 				if (Main.Rand.Next(12) == 0)
@@ -3532,7 +3559,7 @@ namespace Terraria
 				}
 				if (Main.Rand.Next(24) == 0)
 				{
-					Gore.NewGore(position, new Vector2(velocity.X * 0.2f, velocity.Y * 0.2f), Main.Rand.Next(16, 18));
+					Gore.NewGore(position, new Vector2(velocity.X * 0.2f, velocity.Y * 0.2f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
 				}
 			}
 		}
@@ -3551,7 +3578,7 @@ namespace Terraria
 				ai1 = 1;
 				for (int i = 0; i < 24; i++)
 				{
-					Main.DustSet.NewDust(10 + type, ref XYWH, velocity.X, velocity.Y, 50);
+					Main.DustSet.NewDust((byte)EntityID.ProjectileID.PURIFICATION_POWDER + type, ref XYWH, velocity.X, velocity.Y, 50);
 				}
 			}
 			if (!isLocal())
@@ -3590,22 +3617,22 @@ namespace Terraria
 						continue;
 					}
 					int num5 = Main.TileSet[j, k].Type;
-					if (type == 10)
+					if (type == (byte)EntityID.ProjectileID.PURIFICATION_POWDER)
 					{
-						switch (num5)
+						switch ((EntityID.TileID)num5)
 						{
-							case 23:
-								Main.TileSet[j, k].Type = 2;
+							case EntityID.TileID.CORRUPT_GRASS:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.GRASS;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
-							case 25:
-								Main.TileSet[j, k].Type = 1;
+							case EntityID.TileID.EBONSTONE:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.STONE;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
-							case 112:
-								Main.TileSet[j, k].Type = 53;
+							case EntityID.TileID.EBONSAND:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.SAND;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
@@ -3613,20 +3640,20 @@ namespace Terraria
 					}
 					else
 					{
-						switch (num5)
+						switch ((EntityID.TileID)num5)
 						{
-							case 109:
-								Main.TileSet[j, k].Type = 2;
+							case EntityID.TileID.HALLOWED_GRASS:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.GRASS;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
-							case 116:
-								Main.TileSet[j, k].Type = 53;
+							case EntityID.TileID.PEARLSAND:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.SAND;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
-							case 117:
-								Main.TileSet[j, k].Type = 1;
+							case EntityID.TileID.PEARLSTONE:
+								Main.TileSet[j, k].Type = (byte)EntityID.TileID.STONE;
 								WorldGen.SquareTileFrame(j, k);
 								NetMessage.SendTile(j, k);
 								break;
@@ -3650,7 +3677,7 @@ namespace Terraria
 			rotation = (float)Math.Atan2(num2, num) - 1.57f;
 			if (ai0 == 0f)
 			{
-				if ((num3 > 300f && type == 13) || (num3 > 400f && type == 32) || (num3 > 440f && type == 73) || (num3 > 440f && type == 74))
+				if ((num3 > 300f && type == (byte)EntityID.ProjectileID.HOOK) || (num3 > 400f && type == (byte)EntityID.ProjectileID.IVY_WHIP) || (num3 > 440f && type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE) || (num3 > 440f && type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED))
 				{
 					ai0 = 1f;
 				}
@@ -3695,11 +3722,11 @@ namespace Terraria
 							int num8 = 0;
 							int num9 = -1;
 							int num10 = 100000;
-							if (type == 73 || type == 74)
+							if (type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE || type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED)
 							{
 								for (int k = 0; k < MaxNumProjs; k++)
 								{
-									if (k != whoAmI && Main.ProjectileSet[k].active != 0 && Main.ProjectileSet[k].owner == owner && Main.ProjectileSet[k].aiStyle == 7 && Main.ProjectileSet[k].ai0 == 2f)
+									if (k != whoAmI && Main.ProjectileSet[k].active != 0 && Main.ProjectileSet[k].owner == owner && Main.ProjectileSet[k].aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK && Main.ProjectileSet[k].ai0 == 2f)
 									{
 										Main.ProjectileSet[k].Kill();
 									}
@@ -3709,7 +3736,7 @@ namespace Terraria
 							{
 								for (int l = 0; l < MaxNumProjs; l++)
 								{
-									if (Main.ProjectileSet[l].active != 0 && Main.ProjectileSet[l].owner == owner && Main.ProjectileSet[l].aiStyle == 7)
+									if (Main.ProjectileSet[l].active != 0 && Main.ProjectileSet[l].owner == owner && Main.ProjectileSet[l].aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 									{
 										if (Main.ProjectileSet[l].timeLeft < num10)
 										{
@@ -3750,11 +3777,11 @@ namespace Terraria
 			else if (ai0 == 1f)
 			{
 				float num11 = 11f;
-				if (type == 32)
+				if (type == (byte)EntityID.ProjectileID.IVY_WHIP)
 				{
 					num11 = 15f;
 				}
-				if (type == 73 || type == 74)
+				if (type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE || type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED)
 				{
 					num11 = 17f;
 				}
@@ -3822,12 +3849,12 @@ namespace Terraria
 
 		private unsafe void BallOfFireAI()
 		{
-			if (type == 96 && localAI0 == 0)
+			if (type == (byte)EntityID.ProjectileID.CURSED_FLAME_HOSTILE && localAI0 == 0)
 			{
 				localAI0 = 1;
 				Main.PlaySound(2, XYWH.X, XYWH.Y, 20);
 			}
-			if (type == 27)
+			if (type == (byte)EntityID.ProjectileID.WATER_BOLT)
 			{
 				Dust* ptr = Main.DustSet.NewDust((int)(position.X + velocity.X), (int)(position.Y + velocity.Y), width, height, 29, velocity.X, velocity.Y, 100, default, 3.0);
 				if (ptr != null)
@@ -3839,7 +3866,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (type == 95 || type == 96)
+			else if (type == (byte)EntityID.ProjectileID.CURSED_FLAME_FRIENDLY || type == (byte)EntityID.ProjectileID.CURSED_FLAME_HOSTILE)
 			{
 				Dust* ptr2 = Main.DustSet.NewDust((int)(position.X + velocity.X), (int)(position.Y + velocity.Y), width, height, 75, velocity.X, velocity.Y, 100, default, 3f * scale);
 				if (ptr2 != null)
@@ -3861,7 +3888,7 @@ namespace Terraria
 					ptr3->Velocity.Y *= 0.3f;
 				}
 			}
-			if (type != 27 && type != 96 && ++ai1 >= 20)
+			if (type != (byte)EntityID.ProjectileID.WATER_BOLT && type != (byte)EntityID.ProjectileID.CURSED_FLAME_HOSTILE && ++ai1 >= 20)
 			{
 				velocity.Y += 0.2f;
 			}
@@ -3874,7 +3901,7 @@ namespace Terraria
 
 		private unsafe void MagicMissileAI()
 		{
-			if (type == 34)
+			if (type == (byte)EntityID.ProjectileID.FLAMELASH)
 			{
 				Dust* ptr = Main.DustSet.NewDust(6, ref XYWH, velocity.X * 0.2f, velocity.Y * 0.2f, 100, default, 3.5);
 				if (ptr != null)
@@ -3885,7 +3912,7 @@ namespace Terraria
 					Main.DustSet.NewDust(6, ref XYWH, velocity.X * 0.2f, velocity.Y * 0.2f, 100, default, 1.5);
 				}
 			}
-			else if (type == 79)
+			else if (type == (byte)EntityID.ProjectileID.RAINBOW_ROD_BULLET)
 			{
 				if (soundDelay == 0 && Math.Abs(velocity.X) + Math.Abs(velocity.Y) > 2f)
 				{
@@ -3927,7 +3954,7 @@ namespace Terraria
 #if VERSION_INITIAL && !IS_PATCHED
 				if (player.isLocal() && player.channel)
 				{
-					float num = ((type == 16) ? 15 : 12);
+					float num = ((type == (byte)EntityID.ProjectileID.MAGIC_MISSILE) ? 15 : 12);
 					Vector2 vector = new Vector2(position.X + (float)(int)width * 0.5f, position.Y + (float)(int)height * 0.5f);
 					float num2 = (float)(player.ui.MouseX + player.CurrentView.ScreenPosition.X) - vector.X;
 					float num3 = (float)(player.ui.MouseY + player.CurrentView.ScreenPosition.Y) - vector.Y;
@@ -3980,7 +4007,7 @@ namespace Terraria
 				{
 					if (player.channel)
 					{
-						float num = ((type == 16) ? 15 : 12);
+						float num = ((type == (byte)EntityID.ProjectileID.MAGIC_MISSILE) ? 15 : 12);
 						Vector2 vector = new Vector2(position.X + (float)(int)width * 0.5f, position.Y + (float)(int)height * 0.5f);
 						float num2 = (float)(player.ui.MouseX + player.CurrentView.ScreenPosition.X) - vector.X;
 						float num3 = (float)(player.ui.MouseY + player.CurrentView.ScreenPosition.Y) - vector.Y;
@@ -4031,7 +4058,7 @@ namespace Terraria
 #endif
 			}
 
-			if (type == 34)
+			if (type == (byte)EntityID.ProjectileID.FLAMELASH)
 			{
 				Projectile projectile = this;
 				projectile.rotation += 0.3f * direction;
@@ -4048,7 +4075,7 @@ namespace Terraria
 
 		private unsafe void DirtBallAI()
 		{
-			if (type == 31 && ai0 != 2f)
+			if (type == (byte)EntityID.ProjectileID.SAND_BALL_FALLING && ai0 != 2f)
 			{
 				if (Main.Rand.Next(3) == 0)
 				{
@@ -4059,76 +4086,82 @@ namespace Terraria
 					}
 				}
 			}
-			else if (type == 39)
+			else
 			{
-				if (Main.Rand.Next(3) == 0)
+				switch ((EntityID.ProjectileID)type)
 				{
-					Dust* ptr2 = Main.DustSet.NewDust(38, ref XYWH, 0.0, velocity.Y * 0.5f);
-					if (ptr2 != null)
-					{
-						ptr2->Velocity.X *= 0.4f;
-					}
+					case EntityID.ProjectileID.MUD_BALL:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr2 = Main.DustSet.NewDust(38, ref XYWH, 0.0, velocity.Y * 0.5f);
+							if (ptr2 != null)
+							{
+								ptr2->Velocity.X *= 0.4f;
+							}
+						}
+						break;
+					case EntityID.ProjectileID.ASH_BALL_FALLING:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr3 = Main.DustSet.NewDust(36, ref XYWH, 0.0, velocity.Y * 0.5f);
+							if (ptr3 != null)
+							{
+								ptr3->Velocity.X *= 0.4f;
+								ptr3->Velocity.Y *= 0.4f;
+							}
+						}
+						break;
+					case EntityID.ProjectileID.SAND_BALL_GUN:
+					case EntityID.ProjectileID.SAND_BALL_FALLING:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr4 = Main.DustSet.NewDust(32, ref XYWH);
+							if (ptr4 != null)
+							{
+								ptr4->Velocity.X *= 0.4f;
+							}
+						}
+						break;
+					case EntityID.ProjectileID.EBONSAND_BALL_FALLING:
+					case EntityID.ProjectileID.EBONSAND_BALL_GUN:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr5 = Main.DustSet.NewDust(14, ref XYWH);
+							if (ptr5 != null)
+							{
+								ptr5->Velocity.X *= 0.4f;
+							}
+						}
+						break;
+					case EntityID.ProjectileID.PEARL_SAND_BALL_FALLING:
+					case EntityID.ProjectileID.PEARL_SAND_BALL_GUN:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr6 = Main.DustSet.NewDust(51, ref XYWH);
+							if (ptr6 != null)
+							{
+								ptr6->Velocity.X *= 0.4f;
+							}
+						}
+						break;
+					case EntityID.ProjectileID.SILT_BALL:
+						if (Main.Rand.Next(3) == 0)
+						{
+							Dust* ptr7 = Main.DustSet.NewDust(53, ref XYWH);
+							if (ptr7 != null)
+							{
+								ptr7->Velocity.X *= 0.4f;
+							}
+						}
+						break;
+					default:
+						if (type != (byte)EntityID.ProjectileID.SNOW_BALL_HOSTILE && Main.Rand.Next(24) == 0)
+						{
+							Main.DustSet.NewDust(0, ref XYWH);
+						}
+						break;
+
 				}
-			}
-			else if (type == 40)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					Dust* ptr3 = Main.DustSet.NewDust(36, ref XYWH, 0.0, velocity.Y * 0.5f);
-					if (ptr3 != null)
-					{
-						ptr3->Velocity.X *= 0.4f;
-						ptr3->Velocity.Y *= 0.4f;
-					}
-				}
-			}
-			else if (type == 42 || type == 31)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					Dust* ptr4 = Main.DustSet.NewDust(32, ref XYWH);
-					if (ptr4 != null)
-					{
-						ptr4->Velocity.X *= 0.4f;
-					}
-				}
-			}
-			else if (type == 56 || type == 65)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					Dust* ptr5 = Main.DustSet.NewDust(14, ref XYWH);
-					if (ptr5 != null)
-					{
-						ptr5->Velocity.X *= 0.4f;
-					}
-				}
-			}
-			else if (type == 67 || type == 68)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					Dust* ptr6 = Main.DustSet.NewDust(51, ref XYWH);
-					if (ptr6 != null)
-					{
-						ptr6->Velocity.X *= 0.4f;
-					}
-				}
-			}
-			else if (type == 71)
-			{
-				if (Main.Rand.Next(3) == 0)
-				{
-					Dust* ptr7 = Main.DustSet.NewDust(53, ref XYWH);
-					if (ptr7 != null)
-					{
-						ptr7->Velocity.X *= 0.4f;
-					}
-				}
-			}
-			else if (type != 109 && Main.Rand.Next(24) == 0)
-			{
-				Main.DustSet.NewDust(0, ref XYWH);
 			}
 			if (ai0 == 0f)
 			{
@@ -4160,11 +4193,11 @@ namespace Terraria
 					netUpdate = true;
 				}
 			}
-			if (type != 109)
+			if (type != (byte)EntityID.ProjectileID.SNOW_BALL_HOSTILE)
 			{
 				if (ai0 == 1f)
 				{
-					if (type == 42 || type == 65 || type == 68)
+					if (type == (byte)EntityID.ProjectileID.SAND_BALL_GUN || type == (byte)EntityID.ProjectileID.EBONSAND_BALL_GUN || type == (byte)EntityID.ProjectileID.PEARL_SAND_BALL_GUN)
 					{
 						if (++ai1 >= 60)
 						{
@@ -4258,11 +4291,11 @@ namespace Terraria
 			if (Main.Rand.Next(6) == 0)
 			{
 				int num = 56;
-				if (type == 86)
+				if (type == (byte)EntityID.ProjectileID.PINK_FAIRY)
 				{
 					num = 73;
 				}
-				else if (type == 87)
+				else if (type == (byte)EntityID.ProjectileID.GREEN_FAIRY)
 				{
 					num = 74;
 				}
@@ -4389,7 +4422,7 @@ namespace Terraria
 
 		private void SpikyBallAI()
 		{
-			if (type == 53)
+			if (type == (byte)EntityID.ProjectileID.STICKY_GLOWSTICK)
 			{
 				int num = (XYWH.X >> 4) - 1;
 				int num2 = (XYWH.X + width >> 4) + 2;
@@ -4453,14 +4486,14 @@ namespace Terraria
 
 		private unsafe void FlailAI()
 		{
-			if (type == 25)
+			if (type == (byte)EntityID.ProjectileID.BALL_O_HURT)
 			{
 				if (Main.Rand.Next(16) == 0)
 				{
 					Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, 150, default, 1.3f);
 				}
 			}
-			else if (type == 26)
+			else if (type == (byte)EntityID.ProjectileID.BLUE_MOON)
 			{
 				Dust* ptr = Main.DustSet.NewDust(29, ref XYWH, velocity.X * 0.4f, velocity.Y * 0.4f, 100, default, 2.5);
 				if (ptr != null)
@@ -4470,7 +4503,7 @@ namespace Terraria
 					ptr->Velocity.Y *= 0.5f;
 				}
 			}
-			else if (type == 35)
+			else if (type == (byte)EntityID.ProjectileID.SUNFURY)
 			{
 				Dust* ptr2 = Main.DustSet.NewDust(6, ref XYWH, velocity.X * 0.4f, velocity.Y * 0.4f, 100, default, 3.0);
 				if (ptr2 != null)
@@ -4504,7 +4537,7 @@ namespace Terraria
 			if (ai0 == 0f)
 			{
 				float num4 = 160f;
-				if (type == 63)
+				if (type == (byte)EntityID.ProjectileID.THE_DAO_OF_POW)
 				{
 					num4 *= 1.5f;
 				}
@@ -4529,7 +4562,7 @@ namespace Terraria
 				float num5 = 14f / Main.PlayerSet[owner].meleeSpeed;
 				float num6 = 0.9f / Main.PlayerSet[owner].meleeSpeed;
 				float num7 = 300f;
-				if (type == 63)
+				if (type == (byte)EntityID.ProjectileID.THE_DAO_OF_POW)
 				{
 					num7 *= 1.5f;
 					num5 *= 1.5f;
@@ -4593,7 +4626,7 @@ namespace Terraria
 
 		private unsafe void BombAI()
 		{
-			if (type == 108)
+			if (type == (byte)EntityID.ProjectileID.EXPLOSIVES)
 			{
 				ai0 += 1f;
 				if (ai0 > 3f)
@@ -4601,7 +4634,7 @@ namespace Terraria
 					Kill();
 				}
 			}
-			if (type == 37)
+			if (type == (byte)EntityID.ProjectileID.STICKY_BOMB)
 			{
 				int num = (XYWH.X >> 4) - 1;
 				int num2 = (XYWH.X + width >> 4) + 2;
@@ -4641,7 +4674,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (type == 102)
+			if (type == (byte)EntityID.ProjectileID.BOMB_SKELETRON_PRIME)
 			{
 				if (velocity.Y > 10f)
 				{
@@ -4677,7 +4710,7 @@ namespace Terraria
 			{
 				ai1 = 0;
 				alpha = 255;
-				if (type == 28 || type == 37 || type == 75)
+				if (type == (byte)EntityID.ProjectileID.BOMB || type == (byte)EntityID.ProjectileID.STICKY_BOMB || type == (byte)EntityID.ProjectileID.HAPPY_BOMB)
 				{
 					if (width != 128)
 					{
@@ -4693,7 +4726,7 @@ namespace Terraria
 						knockBack = 8f;
 					}
 				}
-				else if (type == 29)
+				else if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 				{
 					if (width != 250)
 					{
@@ -4709,7 +4742,7 @@ namespace Terraria
 						knockBack = 10f;
 					}
 				}
-				else if (type == 30 && width != 128)
+				else if (type == (byte)EntityID.ProjectileID.GRENADE && width != 128)
 				{
 					position.X += width >> 1;
 					position.Y += height >> 1;
@@ -4722,9 +4755,9 @@ namespace Terraria
 					knockBack = 8f;
 				}
 			}
-			else if (type != 30)
+			else if (type != (byte)EntityID.ProjectileID.GRENADE)
 			{
-				if (type != 108)
+				if (type != (byte)EntityID.ProjectileID.EXPLOSIVES)
 				{
 					damage = 0;
 				}
@@ -4734,12 +4767,12 @@ namespace Terraria
 				}
 			}
 			ai0 += 1f;
-			if ((type == 30 && ai0 > 10f) || (type != 30 && ai0 > 5f))
+			if ((type == (byte)EntityID.ProjectileID.GRENADE && ai0 > 10f) || (type != (byte)EntityID.ProjectileID.GRENADE && ai0 > 5f))
 			{
 				if (velocity.Y == 0f && velocity.X != 0f)
 				{
 					velocity.X *= 0.97f;
-					if (type == 29)
+					if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 					{
 						velocity.X *= 0.99f;
 					}
@@ -4768,9 +4801,9 @@ namespace Terraria
 			}
 			int num = XYWH.X + (width >> 1) >> 4;
 			int num2 = XYWH.Y + height - 4 >> 4;
-			if (Main.TileSet[num, num2].IsActive == 0 && WorldGen.PlaceTile(num, num2, 85))
+			if (Main.TileSet[num, num2].IsActive == 0 && WorldGen.PlaceTile(num, num2, (int)EntityID.TileID.TOMBSTONE))
 			{
-				NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 1, num, num2, 85);
+				NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 1, num, num2, (int)EntityID.TileID.TOMBSTONE);
 				NetMessage.SendMessage();
 				int num3 = Sign.ReadSign(num, num2);
 				if (num3 >= 0)
@@ -4783,7 +4816,7 @@ namespace Terraria
 
 		private unsafe void DemonSickleAI()
 		{
-			if (ai1 == 0 && type == 44)
+			if (ai1 == 0 && type == (byte)EntityID.ProjectileID.DEMON_SICKLE)
 			{
 				ai1 = 1;
 				Main.PlaySound(2, XYWH.X, XYWH.Y, 8);
@@ -4819,136 +4852,129 @@ namespace Terraria
 			Main.PlayerSet[owner].itemTime = (byte)Main.PlayerSet[owner].itemAnimation;
 			position.X = Main.PlayerSet[owner].Position.X + (20 - width >> 1);
 			position.Y = Main.PlayerSet[owner].Position.Y + (42 - height >> 1);
-			if (type == 46)
+			switch ((EntityID.ProjectileID)type)
 			{
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 1.6f;
-				}
-				else
-				{
-					ai0 += 1.4f;
-				}
-			}
-			else if (type == 105)
-			{
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 2.4f;
-				}
-				else
-				{
-					ai0 += 2.1f;
-				}
-			}
-			else if (type == 112)
-			{
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 2.4f;
-				}
-				else
-				{
-					ai0 += 2.1f;
-				}
-			}
-			else if (type == 47)
-			{
-				if (ai0 == 0f)
-				{
-					ai0 = 4f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 1.2f;
-				}
-				else
-				{
-					ai0 += 0.9f;
-				}
-			}
-			else if (type == 49)
-			{
-				if (ai0 == 0f)
-				{
-					ai0 = 4f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 1.1f;
-				}
-				else
-				{
-					ai0 += 0.85f;
-				}
-			}
-			else if (type == 64)
-			{
-				spriteDirection = (sbyte)(-direction);
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 1.9f;
-				}
-				else
-				{
-					ai0 += 1.7f;
-				}
-			}
-			else if (type == 66 || type == 97)
-			{
-				spriteDirection = (sbyte)(-direction);
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 2.1f;
-				}
-				else
-				{
-					ai0 += 1.9f;
-				}
-			}
-			else if (type == 97)
-			{
-				spriteDirection = (sbyte)(-direction);
-				if (ai0 == 0f)
-				{
-					ai0 = 3f;
-					netUpdate = true;
-				}
-				if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
-				{
-					ai0 -= 1.6f;
-				}
-				else
-				{
-					ai0 += 1.4f;
-				}
+				case EntityID.ProjectileID.DARK_LANCE:
+					if (ai0 == 0f)
+					{
+						ai0 = 3f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 1.6f;
+					}
+					else
+					{
+						ai0 += 1.4f;
+					}
+					break;
+				case EntityID.ProjectileID.GUNGNIR:
+				case EntityID.ProjectileID.TONBOGIRI:
+					if (ai0 == 0f)
+					{
+						ai0 = 3f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 2.4f;
+					}
+					else
+					{
+						ai0 += 2.1f;
+					}
+					break;
+				case EntityID.ProjectileID.TRIDENT:
+					if (ai0 == 0f)
+					{
+						ai0 = 4f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 1.2f;
+					}
+					else
+					{
+						ai0 += 0.9f;
+					}
+					break;
+				case EntityID.ProjectileID.SPEAR:
+					if (ai0 == 0f)
+					{
+						ai0 = 4f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 1.1f;
+					}
+					else
+					{
+						ai0 += 0.85f;
+					}
+					break;
+				case EntityID.ProjectileID.MYTHRIL_HALBERD:
+					spriteDirection = (sbyte)(-direction);
+					if (ai0 == 0f)
+					{
+						ai0 = 3f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 1.9f;
+					}
+					else
+					{
+						ai0 += 1.7f;
+					}
+					break;
+				case EntityID.ProjectileID.ADAMANTITE_GLAIVE:
+				case EntityID.ProjectileID.COBALT_NAGINATA:
+					spriteDirection = (sbyte)(-direction);
+					if (ai0 == 0f)
+					{
+						ai0 = 3f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 2.1f;
+					}
+					else
+					{
+						ai0 += 1.9f;
+					}
+					break;
+				/*
+				case EntityID.ProjectileID.COBALT_NAGINATA:
+					// Prior to switch-case conversion, this was an if-else-if section, and this segment was included, but the problem is this case is already handled above.
+					// I have no idea what this is for, so it may be an error.
+					spriteDirection = (sbyte)(-direction);
+					if (ai0 == 0f)
+					{
+						ai0 = 3f;
+						netUpdate = true;
+					}
+
+					if (Main.PlayerSet[owner].itemAnimation < Main.PlayerSet[owner].itemAnimationMax / 3)
+					{
+						ai0 -= 1.6f;
+					}
+					else
+					{
+						ai0 += 1.4f;
+					}
+					break;
+				*/
 			}
 			position.X += velocity.X * ai0;
 			position.Y += velocity.Y * ai0;
@@ -4963,7 +4989,7 @@ namespace Terraria
 			{
 				rotation -= 1.57f;
 			}
-			if (type == 46)
+			if (type == (byte)EntityID.ProjectileID.DARK_LANCE)
 			{
 				if (Main.Rand.Next(6) == 0)
 				{
@@ -4983,7 +5009,7 @@ namespace Terraria
 					}
 				}
 			}
-			else if (type == 105)
+			else if (type == (byte)EntityID.ProjectileID.GUNGNIR)
 			{
 				if (Main.Rand.Next(4) == 0)
 				{
@@ -5010,7 +5036,7 @@ namespace Terraria
 			}
 			else
 			{
-				if (type != 112)
+				if (type != (byte)EntityID.ProjectileID.TONBOGIRI)
 				{
 					return;
 				}
@@ -5178,7 +5204,7 @@ namespace Terraria
 							continue;
 						}
 						int num7 = Main.TileSet[i, j].Type;
-						if (num7 != 127 && Main.TileSolidNotSolidTop[num7])
+						if (num7 != (int)EntityID.TileID.ICE && Main.TileSolidNotSolidTop[num7])
 						{
 							vector.X = i * 16;
 							vector.Y = j * 16;
@@ -5229,7 +5255,7 @@ namespace Terraria
 				{
 					Kill();
 				}
-				if ((ai0 -= 1f) <= -300f && isLocal() && Main.TileSet[num8, num9].Type == 127 && Main.TileSet[num8, num9].IsActive != 0)
+				if ((ai0 -= 1f) <= -300f && isLocal() && Main.TileSet[num8, num9].Type == (int)EntityID.TileID.ICE && Main.TileSet[num8, num9].IsActive != 0)
 				{
 					WorldGen.KillTile(num8, num9);
 					NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, num8, num9, 0);
@@ -5265,7 +5291,7 @@ namespace Terraria
 			{
 				for (int m = num12; m < num13; m++)
 				{
-					if (Main.TileSet[l, m].IsActive != 0 && Main.TileSet[l, m].Type != 127 && Main.TileSolidNotSolidTop[Main.TileSet[l, m].Type])
+					if (Main.TileSet[l, m].IsActive != 0 && Main.TileSet[l, m].Type != (int)EntityID.TileID.ICE && Main.TileSolidNotSolidTop[Main.TileSet[l, m].Type])
 					{
 						vector2.X = l * 16;
 						vector2.Y = m * 16;
@@ -5309,9 +5335,9 @@ namespace Terraria
 			int num19 = XYWH.Y + (height >> 1) >> 4;
 			if ((num18 == num16 && num19 == num17) || (((velocity.X <= 0f && num18 <= num16) || (velocity.X >= 0f && num18 >= num16)) && ((velocity.Y <= 0f && num19 <= num17) || (velocity.Y >= 0f && num19 >= num17))))
 			{
-				if (WorldGen.PlaceTile(num16, num17, 127, ToMute: false, IsForced: false, owner))
+				if (WorldGen.PlaceTile(num16, num17, (int)EntityID.TileID.ICE, ToMute: false, IsForced: false, owner))
 				{
-					NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 1, (int)ai0, ai1, 127);
+					NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 1, (int)ai0, ai1, (int)EntityID.TileID.ICE);
 					NetMessage.SendMessage();
 					damage = 0;
 					ai0 = -1f;
@@ -5351,7 +5377,7 @@ namespace Terraria
 					num = 0.75f;
 				}
 				ai0 += 1f;
-				int num2 = ((type == 101) ? 75 : 6);
+				int num2 = ((type == (byte)EntityID.ProjectileID.EYE_FIRE) ? 75 : 6);
 				if (num2 == 6 || Main.Rand.Next(3) == 0)
 				{
 					Dust* ptr = Main.DustSet.NewDust(num2, ref XYWH, velocity.X * 0.2f, velocity.Y * 0.2f, 100);
@@ -5392,7 +5418,7 @@ namespace Terraria
 			light = scale * 0.5f;
 			rotation += velocity.X * 0.2f;
 			ai1++;
-			if (type == 94)
+			if (type == (byte)EntityID.ProjectileID.CRYSTAL_STORM)
 			{
 				if (Main.Rand.Next(4) == 0)
 				{
@@ -5507,690 +5533,736 @@ namespace Terraria
 			timeLeft = 0;
 			int num = (XYWH.X = (int)position.X);
 			int num2 = (XYWH.Y = (int)position.Y);
-			if (type == 1 || type == 81 || type == 98)
+			switch ((EntityID.ProjectileID)type)
 			{
-				Main.PlaySound(0, num, num2);
-				for (int i = 0; i < 8; i++)
-				{
-					Main.DustSet.NewDust(7, ref XYWH);
-				}
-			}
-			else if (type == 93)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int j = 0; j < 8; j++)
-				{
-					Dust* ptr = Main.DustSet.NewDust(57, ref XYWH, 0.0, 0.0, 100, default, 0.5);
-					if (ptr == null)
+				case EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY:
+				case EntityID.ProjectileID.WOODEN_ARROW_HOSTILE:
+				case EntityID.ProjectileID.POISON_DART:
+					Main.PlaySound(0, num, num2);
+					for (int i = 0; i < 8; i++)
 					{
-						break;
+						Main.DustSet.NewDust(7, ref XYWH);
 					}
-					ptr->Velocity *= 2f;
-				}
-			}
-			else if (type == 99)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int k = 0; k < 24; k++)
-				{
-					Dust* ptr2 = Main.DustSet.NewDust(1, ref XYWH);
-					if (ptr2 == null)
+					break;
+				case EntityID.ProjectileID.MAGIC_DAGGER:
+					Main.PlaySound(0, num, num2);
+					for (int j = 0; j < 8; j++)
 					{
-						break;
-					}
-					if (Main.Rand.Next(2) == 0)
-					{
-						ptr2->Scale *= 1.4f;
-					}
-					velocity.X *= 1.9f;
-					velocity.Y *= 1.9f;
-				}
-			}
-			else if (type == 91 || type == 92)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int l = 0; l < 8; l++)
-				{
-					Main.DustSet.NewDust(58, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2f);
-				}
-				for (int m = 0; m < 3; m++)
-				{
-					Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next(16, 18));
-				}
-#if (!IS_PATCHED && VERSION_INITIAL) // I know it is Star-related, but why was this here???
-				if (type == 12 && damage < 500)
-				{
-					for (int n = 0; n < 8; n++)
-					{
-						Main.DustSet.NewDust(57, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default(Color), 1.2f);
-					}
-					for (int num3 = 0; num3 < 3; num3++)
-					{
-						Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next(16, 18));
-					}
-				}
-#endif
-				if ((type == 91 || (type == 92 && ai0 > 0f)) && isLocal())
-				{
-					int num4 = NewClonedProjectile(92);
-					if (num4 >= 0)
-					{
-						float num5 = Main.Rand.Next(-400, 400);
-						float num6 = -Main.Rand.Next(600, 900);
-						Main.ProjectileSet[num4].position.X += num5;
-						Main.ProjectileSet[num4].position.Y += num6;
-						float num7 = (float)Math.Sqrt(num5 * num5 + num6 * num6);
-						num7 = 22f / num7;
-						num5 *= num7;
-						num6 *= num7;
-						Main.ProjectileSet[num4].velocity.X = num5;
-						Main.ProjectileSet[num4].velocity.Y = num6;
-						if (type == 91)
+						Dust* ptr = Main.DustSet.NewDust(57, ref XYWH, 0.0, 0.0, 100, default, 0.5);
+						if (ptr == null)
 						{
-							Main.ProjectileSet[num4].damage >>= 1;
-							Main.ProjectileSet[num4].ai0 = 1f;
+							break;
 						}
-						Main.ProjectileSet[num4].ai1 = num2;
-						NetMessage.SendProjectile(num4);
+
+						ptr->Velocity *= 2f;
 					}
-				}
-			}
-			else if (type == 89)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num8 = 0; num8 < 3; num8++)
-				{
-					Dust* ptr3 = Main.DustSet.NewDust(68, ref XYWH);
-					if (ptr3 == null)
+					break;
+				case EntityID.ProjectileID.BOULDER:
+					Main.PlaySound(0, num, num2);
+					for (int k = 0; k < 24; k++)
 					{
-						break;
-					}
-					ptr3->NoGravity = true;
-					ptr3->Velocity.X *= 1.5f;
-					ptr3->Velocity.Y *= 1.5f;
-					ptr3->Scale *= 0.9f;
-				}
-				if (isLocal())
-				{
-					for (int num9 = 0; num9 < 3; num9++)
-					{
-						float num10 = (0f - velocity.X) * Main.Rand.Next(40, 70) * 0.01f + Main.Rand.Next(-20, 21) * 0.4f;
-						float num11 = (0f - velocity.Y) * Main.Rand.Next(40, 70) * 0.01f + Main.Rand.Next(-20, 21) * 0.4f;
-						NewProjectile(position.X + num10, position.Y + num11, num10, num11, 90, (int)(damage * 0.6), 0f, owner);
-					}
-				}
-			}
-			else if (type == 80)
-			{
-				if (ai0 >= 0f)
-				{
-					Main.PlaySound(2, num, num2, 27);
-					for (int num12 = 0; num12 < 8; num12++)
-					{
-						Main.DustSet.NewDust(67, ref XYWH);
-					}
-				}
-				int num13 = num >> 4;
-				int num14 = num2 >> 4;
-				if (Main.TileSet[num13, num14].Type == 127 && Main.TileSet[num13, num14].IsActive != 0)
-				{
-					WorldGen.KillTile(num13, num14);
-				}
-			}
-			else if (type == 76 || type == 77 || type == 78)
-			{
-				for (int num15 = 0; num15 < 4; num15++)
-				{
-					Dust* ptr4 = Main.DustSet.NewDust(27, ref XYWH, 0.0, 0.0, 80, default, 1.5);
-					if (ptr4 == null)
-					{
-						break;
-					}
-					ptr4->NoGravity = true;
-				}
-			}
-			else if (type == 55)
-			{
-				for (int num16 = 0; num16 < 4; num16++)
-				{
-					Dust* ptr5 = Main.DustSet.NewDust(18, ref XYWH, 0.0, 0.0, 0, default, 1.5);
-					if (ptr5 == null)
-					{
-						break;
-					}
-					ptr5->NoGravity = true;
-				}
-			}
-			else if (type == 51)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num17 = 0; num17 < 4; num17++)
-				{
-					Main.DustSet.NewDust(0, ref XYWH, 0.0, 0.0, 0, default, 0.7f);
-				}
-			}
-			else if (type == 2 || type == 82)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num18 = 0; num18 < 16; num18++)
-				{
-					Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100);
-				}
-			}
-			else if (type == 103)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num19 = 0; num19 < 14; num19++)
-				{
-					Dust* ptr6 = Main.DustSet.NewDust(75, ref XYWH, 0.0, 0.0, 100);
-					if (ptr6 == null)
-					{
-						break;
-					}
-					if (Main.Rand.Next(2) == 0)
-					{
-						ptr6->Scale *= 2.5f;
-						ptr6->NoGravity = true;
-						ptr6->Velocity.X *= 5f;
-						ptr6->Velocity.Y *= 5f;
-					}
-				}
-			}
-			else if (type == 3 || type == 48 || type == 54)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num20 = 0; num20 < 7; num20++)
-				{
-					Main.DustSet.NewDust(1, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 0, default, 0.75);
-				}
-			}
-			else if (type == 4)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num21 = 0; num21 < 7; num21++)
-				{
-					Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, 150, default, 1.1f);
-				}
-			}
-			else if (type == 5)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num22 = 0; num22 < 48; num22++)
-				{
-					int num23;
-					switch (Main.Rand.Next(3))
-					{
-						case 0:
-							num23 = 15;
+						Dust* ptr2 = Main.DustSet.NewDust(1, ref XYWH);
+						if (ptr2 == null)
+						{
 							break;
-						case 1:
-							num23 = 57;
+						}
+
+						if (Main.Rand.Next(2) == 0)
+						{
+							ptr2->Scale *= 1.4f;
+						}
+
+						velocity.X *= 1.9f;
+						velocity.Y *= 1.9f;
+					}
+					break;
+				case EntityID.ProjectileID.HOLY_ARROW:
+				case EntityID.ProjectileID.HALLOW_STAR:
+					Main.PlaySound(2, num, num2, 10);
+					for (int l = 0; l < 8; l++)
+					{
+						Main.DustSet.NewDust(58, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2f);
+					}
+
+					for (int m = 0; m < 3; m++)
+					{
+						Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
+					}
+
+#if (!IS_PATCHED && VERSION_INITIAL) // I know it is Star-related, but why was this here???
+					if (type == (byte)EntityID.ProjectileID.FALLING_STAR && damage < 500)
+					{
+						for (int n = 0; n < 8; n++)
+						{
+							Main.DustSet.NewDust(57, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default(Color), 1.2f);
+						}
+						for (int num3 = 0; num3 < 3; num3++)
+						{
+							Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
+						}
+					}
+#endif
+					if ((type == (byte)EntityID.ProjectileID.HOLY_ARROW || (type == (byte)EntityID.ProjectileID.HALLOW_STAR && ai0 > 0f)) && isLocal())
+					{
+						int num4 = NewClonedProjectile((byte)EntityID.ProjectileID.HALLOW_STAR);
+						if (num4 >= 0)
+						{
+							float num5 = Main.Rand.Next(-400, 400);
+							float num6 = -Main.Rand.Next(600, 900);
+							Main.ProjectileSet[num4].position.X += num5;
+							Main.ProjectileSet[num4].position.Y += num6;
+							float num7 = (float)Math.Sqrt(num5 * num5 + num6 * num6);
+							num7 = 22f / num7;
+							num5 *= num7;
+							num6 *= num7;
+							Main.ProjectileSet[num4].velocity.X = num5;
+							Main.ProjectileSet[num4].velocity.Y = num6;
+							if (type == (byte)EntityID.ProjectileID.HOLY_ARROW)
+							{
+								Main.ProjectileSet[num4].damage >>= 1;
+								Main.ProjectileSet[num4].ai0 = 1f;
+							}
+
+							Main.ProjectileSet[num4].ai1 = num2;
+							NetMessage.SendProjectile(num4);
+						}
+					}
+					break;
+				case EntityID.ProjectileID.CRYSTAL_BULLET:
+					Main.PlaySound(0, num, num2);
+					for (int num8 = 0; num8 < 3; num8++)
+					{
+						Dust* ptr3 = Main.DustSet.NewDust(68, ref XYWH);
+						if (ptr3 == null)
+						{
 							break;
-						default:
-							num23 = 58;
+						}
+
+						ptr3->NoGravity = true;
+						ptr3->Velocity.X *= 1.5f;
+						ptr3->Velocity.Y *= 1.5f;
+						ptr3->Scale *= 0.9f;
+					}
+
+					if (isLocal())
+					{
+						for (int num9 = 0; num9 < 3; num9++)
+						{
+							float num10 = (0f - velocity.X) * Main.Rand.Next(40, 70) * 0.01f + Main.Rand.Next(-20, 21) * 0.4f;
+							float num11 = (0f - velocity.Y) * Main.Rand.Next(40, 70) * 0.01f + Main.Rand.Next(-20, 21) * 0.4f;
+							NewProjectile(position.X + num10, position.Y + num11, num10, num11, (byte)EntityID.ProjectileID.CRYSTAL_SHARD, (int)(damage * 0.6), 0f, owner);
+						}
+					}
+					break;
+				case EntityID.ProjectileID.ICE_BLOCK:
+					if (ai0 >= 0f)
+					{
+						Main.PlaySound(2, num, num2, 27);
+						for (int num12 = 0; num12 < 8; num12++)
+						{
+							Main.DustSet.NewDust(67, ref XYWH);
+						}
+					}
+
+					int num13 = num >> 4;
+					int num14 = num2 >> 4;
+					if (Main.TileSet[num13, num14].Type == (byte)EntityID.TileID.ICE && Main.TileSet[num13, num14].IsActive != 0)
+					{
+						WorldGen.KillTile(num13, num14);
+					}
+					break;
+				case EntityID.ProjectileID.QUARTER_NOTE:
+				case EntityID.ProjectileID.EIGHTH_NOTE:
+				case EntityID.ProjectileID.TIED_EIGHTH_NOTE:
+					for (int num15 = 0; num15 < 4; num15++)
+					{
+						Dust* ptr4 = Main.DustSet.NewDust(27, ref XYWH, 0.0, 0.0, 80, default, 1.5);
+						if (ptr4 == null)
+						{
 							break;
+						}
+
+						ptr4->NoGravity = true;
 					}
-					Main.DustSet.NewDust(num23, ref XYWH, velocity.X * 0.5f, velocity.Y * 0.5f, 150, default, 1.5);
-				}
-			}
-			else if (type == 9 || type == 12)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num24 = 0; num24 < 8; num24++)
-				{
-					Main.DustSet.NewDust(58, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2);
-				}
-				for (int num25 = 0; num25 < 3; num25++)
-				{
-					Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next(16, 18));
-				}
-				if (type == 12 && damage < 100)
-				{
-					for (int num26 = 0; num26 < 8; num26++)
+					break;
+				case EntityID.ProjectileID.STINGER:
+					for (int num16 = 0; num16 < 4; num16++)
 					{
-						Main.DustSet.NewDust(57, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2);
+						Dust* ptr5 = Main.DustSet.NewDust(18, ref XYWH, 0.0, 0.0, 0, default, 1.5);
+						if (ptr5 == null)
+						{
+							break;
+						}
+
+						ptr5->NoGravity = true;
 					}
-					for (int num27 = 0; num27 < 3; num27++)
+					break;
+				case EntityID.ProjectileID.SEED:
+					Main.PlaySound(0, num, num2);
+					for (int num17 = 0; num17 < 4; num17++)
 					{
-						Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next(16, 18));
+						Main.DustSet.NewDust(0, ref XYWH, 0.0, 0.0, 0, default, 0.7f);
 					}
-				}
-			}
-			else if (type == 14 || type == 20 || type == 36 || type == 83 || type == 84 || type == 100 || type == 110)
-			{
-				Collision.HitTiles(position, velocity, width, height);
-				Main.PlaySound(2, num, num2, 10);
-			}
-			else if (type == 15 || type == 34)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num28 = 0; num28 < 16; num28++)
-				{
-					Dust* ptr7 = Main.DustSet.NewDust(6, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 2.0);
-					if (ptr7 == null)
+					break;
+				case EntityID.ProjectileID.FIRE_ARROW:
+				case EntityID.ProjectileID.FLAMING_ARROW:
+					Main.PlaySound(0, num, num2);
+					for (int num18 = 0; num18 < 16; num18++)
 					{
-						break;
+						Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100);
 					}
-					ptr7->NoGravity = true;
-					ptr7->Velocity.X *= 2f;
-					ptr7->Velocity.Y *= 2f;
-					ptr7 = Main.DustSet.NewDust(6, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100);
-					if (ptr7 == null)
+					break;
+				case EntityID.ProjectileID.CURSED_ARROW:
+					Main.PlaySound(0, num, num2);
+					for (int num19 = 0; num19 < 14; num19++)
 					{
-						break;
+						Dust* ptr6 = Main.DustSet.NewDust(75, ref XYWH, 0.0, 0.0, 100);
+						if (ptr6 == null)
+						{
+							break;
+						}
+
+						if (Main.Rand.Next(2) == 0)
+						{
+							ptr6->Scale *= 2.5f;
+							ptr6->NoGravity = true;
+							ptr6->Velocity.X *= 5f;
+							ptr6->Velocity.Y *= 5f;
+						}
 					}
-					ptr7->Velocity.X *= 2f;
-					ptr7->Velocity.Y *= 2f;
-				}
-			}
-			else if (type == 95 || type == 96)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num29 = 0; num29 < 16; num29++)
-				{
-					Dust* ptr8 = Main.DustSet.NewDust(75, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 2f * scale);
-					if (ptr8 == null)
+					break;
+				case EntityID.ProjectileID.SHURIKEN:
+				case EntityID.ProjectileID.THROWING_KNIFE:
+				case EntityID.ProjectileID.POISONED_KNIFE:
+					Main.PlaySound(0, num, num2);
+					for (int num20 = 0; num20 < 7; num20++)
 					{
-						break;
+						Main.DustSet.NewDust(1, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 0, default, 0.75);
 					}
-					ptr8->NoGravity = true;
-					ptr8->Velocity.X *= 2f;
-					ptr8->Velocity.Y *= 2f;
-					ptr8 = Main.DustSet.NewDust(75, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 1f * scale);
-					if (ptr8 == null)
+					break;
+				case EntityID.ProjectileID.UNHOLY_ARROW:
+					Main.PlaySound(0, num, num2);
+					for (int num21 = 0; num21 < 7; num21++)
 					{
-						break;
+						Main.DustSet.NewDust(14, ref XYWH, 0.0, 0.0, 150, default, 1.1f);
 					}
-					ptr8->Velocity.X *= 2f;
-					ptr8->Velocity.Y *= 2f;
-				}
-			}
-			else if (type == 79)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num30 = 0; num30 < 12; num30++)
-				{
-					Dust* ptr9 = Main.DustSet.NewDust(66, ref XYWH, 0.0, 0.0, 100, new Color(Main.DiscoRGB), 2.0);
-					if (ptr9 == null)
+					break;
+				case EntityID.ProjectileID.JESTERS_ARROW:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num22 = 0; num22 < 48; num22++)
 					{
-						break;
+						int num23;
+						switch (Main.Rand.Next(3))
+						{
+							case 0:
+								num23 = 15;
+								break;
+							case 1:
+								num23 = 57;
+								break;
+							default:
+								num23 = 58;
+								break;
+						}
+
+						Main.DustSet.NewDust(num23, ref XYWH, velocity.X * 0.5f, velocity.Y * 0.5f, 150, default, 1.5);
 					}
-					ptr9->NoGravity = true;
-					ptr9->Velocity.X *= 4f;
-					ptr9->Velocity.Y *= 4f;
-				}
-			}
-			else if (type == 16)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num31 = 0; num31 < 12; num31++)
-				{
-					Dust* ptr10 = Main.DustSet.NewDust((int)(position.X - velocity.X), (int)(position.Y - velocity.Y), width, height, 15, 0.0, 0.0, 100, default, 2.0);
-					if (ptr10 == null)
+					break;
+				case EntityID.ProjectileID.STARFURY:
+				case EntityID.ProjectileID.FALLING_STAR:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num24 = 0; num24 < 8; num24++)
 					{
-						break;
+						Main.DustSet.NewDust(58, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2);
 					}
-					ptr10->NoGravity = true;
-					ptr10->Velocity.X *= 2f;
-					ptr10->Velocity.Y *= 2f;
-					Main.DustSet.NewDust((int)(position.X - velocity.X), (int)(position.Y - velocity.Y), width, height, 15, 0.0, 0.0, 100);
-				}
-			}
-			else if (type == 17)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num32 = 0; num32 < 2; num32++)
-				{
-					Main.DustSet.NewDust(0, ref XYWH);
-				}
-			}
-			else if (type == 31 || type == 42)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num33 = 0; num33 < 2; num33++)
-				{
-					Dust* ptr11 = Main.DustSet.NewDust(32, ref XYWH);
-					if (ptr11 == null)
+
+					for (int num25 = 0; num25 < 3; num25++)
 					{
-						break;
+						Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
 					}
-					ptr11->Velocity.X *= 0.6f;
-					ptr11->Velocity.Y *= 0.6f;
-				}
-			}
-			else if (type == 109)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num34 = 0; num34 < 3; num34++)
-				{
-					Dust* ptr12 = Main.DustSet.NewDust(51, ref XYWH, 0.0, 0.0, 0, default, 0.6);
-					if (ptr12 == null)
+
+					if (type == (byte)EntityID.ProjectileID.FALLING_STAR && damage < 100)
 					{
-						break;
+						for (int num26 = 0; num26 < 8; num26++)
+						{
+							Main.DustSet.NewDust(57, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 150, default, 1.2);
+						}
+
+						for (int num27 = 0; num27 < 3; num27++)
+						{
+							Gore.NewGore(position, new Vector2(velocity.X * 0.05f, velocity.Y * 0.05f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
+						}
 					}
-					ptr12->Velocity.X *= 0.6f;
-					ptr12->Velocity.Y *= 0.6f;
-				}
-			}
-			else if (type == 39)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num35 = 0; num35 < 3; num35++)
-				{
-					Dust* ptr13 = Main.DustSet.NewDust(38, ref XYWH);
-					if (ptr13 == null)
+					break;
+				case EntityID.ProjectileID.BULLET:
+				case EntityID.ProjectileID.GREEN_LASER:
+				case EntityID.ProjectileID.METEOR_SHOT:
+				case EntityID.ProjectileID.EYE_LASER:
+				case EntityID.ProjectileID.PINK_LASER:
+				case EntityID.ProjectileID.DEATH_LASER:
+				case EntityID.ProjectileID.BULLET_SNOWMAN:
+					Collision.HitTiles(position, velocity, width, height);
+					Main.PlaySound(2, num, num2, 10);
+					break;
+				case EntityID.ProjectileID.BALL_OF_FIRE:
+				case EntityID.ProjectileID.FLAMELASH:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num28 = 0; num28 < 16; num28++)
 					{
-						break;
+						Dust* ptr7 = Main.DustSet.NewDust(6, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 2.0);
+						if (ptr7 == null)
+						{
+							break;
+						}
+
+						ptr7->NoGravity = true;
+						ptr7->Velocity.X *= 2f;
+						ptr7->Velocity.Y *= 2f;
+						ptr7 = Main.DustSet.NewDust(6, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100);
+						if (ptr7 == null)
+						{
+							break;
+						}
+
+						ptr7->Velocity.X *= 2f;
+						ptr7->Velocity.Y *= 2f;
 					}
-					ptr13->Velocity.X *= 0.6f;
-					ptr13->Velocity.Y *= 0.6f;
-				}
-			}
-			else if (type == 71)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num36 = 0; num36 < 3; num36++)
-				{
-					Dust* ptr14 = Main.DustSet.NewDust(53, ref XYWH);
-					if (ptr14 == null)
+					break;
+				case EntityID.ProjectileID.CURSED_FLAME_FRIENDLY:
+				case EntityID.ProjectileID.CURSED_FLAME_HOSTILE:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num29 = 0; num29 < 16; num29++)
 					{
-						break;
+						Dust* ptr8 = Main.DustSet.NewDust(75, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 2f * scale);
+						if (ptr8 == null)
+						{
+							break;
+						}
+
+						ptr8->NoGravity = true;
+						ptr8->Velocity.X *= 2f;
+						ptr8->Velocity.Y *= 2f;
+						ptr8 = Main.DustSet.NewDust(75, ref XYWH, velocity.X * -0.2f, velocity.Y * -0.2f, 100, default, 1f * scale);
+						if (ptr8 == null)
+						{
+							break;
+						}
+
+						ptr8->Velocity.X *= 2f;
+						ptr8->Velocity.Y *= 2f;
 					}
-					ptr14->Velocity.X *= 0.6f;
-					ptr14->Velocity.Y *= 0.6f;
-				}
-			}
-			else if (type == 40)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num37 = 0; num37 < 3; num37++)
-				{
-					Dust* ptr15 = Main.DustSet.NewDust(36, ref XYWH);
-					if (ptr15 == null)
+					break;
+				case EntityID.ProjectileID.RAINBOW_ROD_BULLET:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num30 = 0; num30 < 12; num30++)
 					{
-						break;
+						Dust* ptr9 = Main.DustSet.NewDust(66, ref XYWH, 0.0, 0.0, 100, new Color(Main.DiscoRGB), 2.0);
+						if (ptr9 == null)
+						{
+							break;
+						}
+
+						ptr9->NoGravity = true;
+						ptr9->Velocity.X *= 4f;
+						ptr9->Velocity.Y *= 4f;
 					}
-					ptr15->Velocity.X *= 0.6f;
-					ptr15->Velocity.Y *= 0.6f;
-				}
-			}
-			else if (type == 21)
-			{
-				Main.PlaySound(0, num, num2);
-				for (int num38 = 0; num38 < 8; num38++)
-				{
-					Main.DustSet.NewDust(26, ref XYWH, 0.0, 0.0, 0, default, 0.8);
-				}
-			}
-			else if (type == 24)
-			{
-				for (int num39 = 0; num39 < 6; num39++)
-				{
-					Main.DustSet.NewDust(1, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 0, default, 0.75);
-				}
-			}
-			else if (type == 27)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num40 = 0; num40 < 20; num40++)
-				{
-					Dust* ptr16 = Main.DustSet.NewDust(29, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 100, default, 3.0);
-					if (ptr16 == null)
+					break;
+				case EntityID.ProjectileID.MAGIC_MISSILE:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num31 = 0; num31 < 12; num31++)
 					{
-						break;
+						Dust* ptr10 = Main.DustSet.NewDust((int)(position.X - velocity.X), (int)(position.Y - velocity.Y), width, height, 15, 0.0, 0.0, 100, default, 2.0);
+						if (ptr10 == null)
+						{
+							break;
+						}
+
+						ptr10->NoGravity = true;
+						ptr10->Velocity.X *= 2f;
+						ptr10->Velocity.Y *= 2f;
+						Main.DustSet.NewDust((int)(position.X - velocity.X), (int)(position.Y - velocity.Y), width, height, 15, 0.0, 0.0, 100);
 					}
-					ptr16->NoGravity = true;
-					Main.DustSet.NewDust(29, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 100, default, 2.0);
-				}
-			}
-			else if (type == 38)
-			{
-				for (int num41 = 0; num41 < 6; num41++)
-				{
-					Main.DustSet.NewDust(42, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f);
-				}
-			}
-			else if (type == 44 || type == 45)
-			{
-				Main.PlaySound(2, num, num2, 10);
-				for (int num42 = 0; num42 < 18; num42++)
-				{
-					Dust* ptr17 = Main.DustSet.NewDust(27, ref XYWH, velocity.X, velocity.Y, 100, default, 1.7);
-					if (ptr17 == null)
+					break;
+				case EntityID.ProjectileID.DIRT_BALL:
+					Main.PlaySound(0, num, num2);
+					for (int num32 = 0; num32 < 2; num32++)
 					{
-						break;
+						Main.DustSet.NewDust(0, ref XYWH);
 					}
-					ptr17->NoGravity = true;
-					Main.DustSet.NewDust(27, ref XYWH, velocity.X, velocity.Y, 100);
-				}
-			}
-			else if (type == 41 || type == 114) // While there is an entry for a Vulcan bolt, there is not one for a Spectral arrow.
-			{
-				Main.PlaySound(2, num, num2, 14);
-				for (int num43 = 0; num43 < 6; num43++)
-				{
-					Dust* ptr18 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr18 == null)
+					break;
+				case EntityID.ProjectileID.SAND_BALL_FALLING:
+				case EntityID.ProjectileID.SAND_BALL_GUN:
+					Main.PlaySound(0, num, num2);
+					for (int num33 = 0; num33 < 2; num33++)
 					{
-						break;
+						Dust* ptr11 = Main.DustSet.NewDust(32, ref XYWH);
+						if (ptr11 == null)
+						{
+							break;
+						}
+
+						ptr11->Velocity.X *= 0.6f;
+						ptr11->Velocity.Y *= 0.6f;
 					}
-				}
-				int num44 = ((type == 114) ? 64 : 6);
-				for (int num45 = 0; num45 < 3; num45++)
-				{
-					Dust* ptr18 = Main.DustSet.NewDust(num44, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr18 == null)
+					break;
+				case EntityID.ProjectileID.SNOW_BALL_HOSTILE:
+					Main.PlaySound(0, num, num2);
+					for (int num34 = 0; num34 < 3; num34++)
 					{
-						break;
+						Dust* ptr12 = Main.DustSet.NewDust(51, ref XYWH, 0.0, 0.0, 0, default, 0.6);
+						if (ptr12 == null)
+						{
+							break;
+						}
+
+						ptr12->Velocity.X *= 0.6f;
+						ptr12->Velocity.Y *= 0.6f;
 					}
-					ptr18->NoGravity = true;
-					ptr18->Velocity.X *= 3f;
-					ptr18->Velocity.Y *= 3f;
-					ptr18 = Main.DustSet.NewDust(num44, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr18 == null)
+					break;
+				case EntityID.ProjectileID.MUD_BALL:
+					Main.PlaySound(0, num, num2);
+					for (int num35 = 0; num35 < 3; num35++)
 					{
-						break;
+						Dust* ptr13 = Main.DustSet.NewDust(38, ref XYWH);
+						if (ptr13 == null)
+						{
+							break;
+						}
+
+						ptr13->Velocity.X *= 0.6f;
+						ptr13->Velocity.Y *= 0.6f;
 					}
-					ptr18->Velocity.X *= 2f;
-					ptr18->Velocity.Y *= 2f;
-				}
-				int num46 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num46].Velocity *= 0.4f;
-				Main.GoreSet[num46].Velocity.X += Main.Rand.Next(-10, 11) * 0.1f;
-				Main.GoreSet[num46].Velocity.Y += Main.Rand.Next(-10, 11) * 0.1f;
-				num46 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num46].Velocity *= 0.4f;
-				Main.GoreSet[num46].Velocity.X += Main.Rand.Next(-10, 11) * 0.1f;
-				Main.GoreSet[num46].Velocity.Y += Main.Rand.Next(-10, 11) * 0.1f;
-				if (isLocal())
-				{
-					penetrate = -1;
+					break;
+				case EntityID.ProjectileID.SILT_BALL:
+					Main.PlaySound(0, num, num2);
+					for (int num36 = 0; num36 < 3; num36++)
+					{
+						Dust* ptr14 = Main.DustSet.NewDust(53, ref XYWH);
+						if (ptr14 == null)
+						{
+							break;
+						}
+
+						ptr14->Velocity.X *= 0.6f;
+						ptr14->Velocity.Y *= 0.6f;
+					}
+					break;
+				case EntityID.ProjectileID.ASH_BALL_FALLING:
+					Main.PlaySound(0, num, num2);
+					for (int num37 = 0; num37 < 3; num37++)
+					{
+						Dust* ptr15 = Main.DustSet.NewDust(36, ref XYWH);
+						if (ptr15 == null)
+						{
+							break;
+						}
+
+						ptr15->Velocity.X *= 0.6f;
+						ptr15->Velocity.Y *= 0.6f;
+					}
+					break;
+				case EntityID.ProjectileID.BONE:
+					Main.PlaySound(0, num, num2);
+					for (int num38 = 0; num38 < 8; num38++)
+					{
+						Main.DustSet.NewDust(26, ref XYWH, 0.0, 0.0, 0, default, 0.8);
+					}
+					break;
+				case EntityID.ProjectileID.SPIKY_BALL:
+					for (int num39 = 0; num39 < 6; num39++)
+					{
+						Main.DustSet.NewDust(1, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 0, default, 0.75);
+					}
+					break;
+				case EntityID.ProjectileID.WATER_BOLT:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num40 = 0; num40 < 20; num40++)
+					{
+						Dust* ptr16 = Main.DustSet.NewDust(29, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 100, default, 3.0);
+						if (ptr16 == null)
+						{
+							break;
+						}
+
+						ptr16->NoGravity = true;
+						Main.DustSet.NewDust(29, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f, 100, default, 2.0);
+					}
+					break;
+				case EntityID.ProjectileID.HARPY_FEATHER:
+					for (int num41 = 0; num41 < 6; num41++)
+					{
+						Main.DustSet.NewDust(42, ref XYWH, velocity.X * 0.1f, velocity.Y * 0.1f);
+					}
+					break;
+				case EntityID.ProjectileID.DEMON_SICKLE:
+				case EntityID.ProjectileID.DEMON_SCYTHE:
+					Main.PlaySound(2, num, num2, 10);
+					for (int num42 = 0; num42 < 18; num42++)
+					{
+						Dust* ptr17 = Main.DustSet.NewDust(27, ref XYWH, velocity.X, velocity.Y, 100, default, 1.7);
+						if (ptr17 == null)
+						{
+							break;
+						}
+
+						ptr17->NoGravity = true;
+						Main.DustSet.NewDust(27, ref XYWH, velocity.X, velocity.Y, 100);
+					}
+					break;
+				case EntityID.ProjectileID.HELLFIRE_ARROW:
+				case EntityID.ProjectileID.VULCAN_BOLT:
+					// While there is an entry for a Vulcan bolt, there is not one for a Spectral arrow.
+					Main.PlaySound(2, num, num2, 14);
+					for (int num43 = 0; num43 < 6; num43++)
+					{
+						Dust* ptr18 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr18 == null)
+						{
+							break;
+						}
+					}
+
+					int num44 = ((type == (byte)EntityID.ProjectileID.VULCAN_BOLT) ? 64 : 6);
+					for (int num45 = 0; num45 < 3; num45++)
+					{
+						Dust* ptr18 = Main.DustSet.NewDust(num44, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr18 == null)
+						{
+							break;
+						}
+
+						ptr18->NoGravity = true;
+						ptr18->Velocity.X *= 3f;
+						ptr18->Velocity.Y *= 3f;
+						ptr18 = Main.DustSet.NewDust(num44, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr18 == null)
+						{
+							break;
+						}
+
+						ptr18->Velocity.X *= 2f;
+						ptr18->Velocity.Y *= 2f;
+					}
+
+					int num46 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num46].Velocity *= 0.4f;
+					Main.GoreSet[num46].Velocity.X += Main.Rand.Next(-10, 11) * 0.1f;
+					Main.GoreSet[num46].Velocity.Y += Main.Rand.Next(-10, 11) * 0.1f;
+					num46 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num46].Velocity *= 0.4f;
+					Main.GoreSet[num46].Velocity.X += Main.Rand.Next(-10, 11) * 0.1f;
+					Main.GoreSet[num46].Velocity.Y += Main.Rand.Next(-10, 11) * 0.1f;
+					if (isLocal())
+					{
+						penetrate = -1;
+						position.X += width >> 1;
+						position.Y += height >> 1;
+						XYWH.Width = (width = 64);
+						XYWH.Height = (height = 64);
+						position.X -= width >> 1;
+						position.Y -= height >> 1;
+						num = (XYWH.X = (int)position.X);
+						num2 = (XYWH.Y = (int)position.Y);
+						Damage();
+					}
+					break;
+				case EntityID.ProjectileID.BOMB:
+				case EntityID.ProjectileID.GRENADE:
+				case EntityID.ProjectileID.STICKY_BOMB:
+				case EntityID.ProjectileID.HAPPY_BOMB:
+				case EntityID.ProjectileID.BOMB_SKELETRON_PRIME:
+					Main.PlaySound(2, num, num2, 14);
 					position.X += width >> 1;
 					position.Y += height >> 1;
-					XYWH.Width = (width = 64);
-					XYWH.Height = (height = 64);
+					XYWH.Width = (width = 22);
+					XYWH.Height = (height = 22);
 					position.X -= width >> 1;
 					position.Y -= height >> 1;
 					num = (XYWH.X = (int)position.X);
 					num2 = (XYWH.Y = (int)position.Y);
-					Damage();
-				}
-			}
-			else if (type == 28 || type == 30 || type == 37 || type == 75 || type == 102)
-			{
-				Main.PlaySound(2, num, num2, 14);
-				position.X += width >> 1;
-				position.Y += height >> 1;
-				XYWH.Width = (width = 22);
-				XYWH.Height = (height = 22);
-				position.X -= width >> 1;
-				position.Y -= height >> 1;
-				num = (XYWH.X = (int)position.X);
-				num2 = (XYWH.Y = (int)position.Y);
-				for (int num47 = 0; num47 < 16; num47++)
-				{
-					Dust* ptr19 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr19 == null)
+					for (int num47 = 0; num47 < 16; num47++)
 					{
-						break;
+						Dust* ptr19 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr19 == null)
+						{
+							break;
+						}
+
+						ptr19->Velocity.X *= 1.4f;
+						ptr19->Velocity.Y *= 1.4f;
 					}
-					ptr19->Velocity.X *= 1.4f;
-					ptr19->Velocity.Y *= 1.4f;
-				}
-				for (int num48 = 0; num48 < 7; num48++)
-				{
-					Dust* ptr20 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
-					if (ptr20 == null)
+
+					for (int num48 = 0; num48 < 7; num48++)
 					{
-						break;
+						Dust* ptr20 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.5);
+						if (ptr20 == null)
+						{
+							break;
+						}
+
+						ptr20->NoGravity = true;
+						ptr20->Velocity.X *= 5f;
+						ptr20->Velocity.Y *= 5f;
+						ptr20 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
+						if (ptr20 == null)
+						{
+							break;
+						}
+
+						ptr20->Velocity.X *= 3f;
+						ptr20->Velocity.Y *= 3f;
 					}
-					ptr20->NoGravity = true;
-					ptr20->Velocity.X *= 5f;
-					ptr20->Velocity.Y *= 5f;
-					ptr20 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 1.5);
-					if (ptr20 == null)
+
+					int num49 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num49].Velocity *= 0.4f;
+					Main.GoreSet[num49].Velocity.X += 1f;
+					Main.GoreSet[num49].Velocity.Y += 1f;
+					num49 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num49].Velocity *= 0.4f;
+					Main.GoreSet[num49].Velocity.X -= 1f;
+					Main.GoreSet[num49].Velocity.Y += 1f;
+					num49 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num49].Velocity *= 0.4f;
+					Main.GoreSet[num49].Velocity.X += 1f;
+					Main.GoreSet[num49].Velocity.Y -= 1f;
+					num49 = Gore.NewGore(position, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+					Main.GoreSet[num49].Velocity *= 0.4f;
+					Main.GoreSet[num49].Velocity.X -= 1f;
+					Main.GoreSet[num49].Velocity.Y -= 1f;
+					break;
+				case EntityID.ProjectileID.DYNAMITE:
+				case EntityID.ProjectileID.EXPLOSIVES:
+					Main.PlaySound(2, num, num2, 14);
+					if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 					{
-						break;
+						position.X += (width >> 1) - 100;
+						position.Y += (height >> 1) - 100;
+						num = (XYWH.X = (int)position.X);
+						num2 = (XYWH.Y = (int)position.Y);
+						XYWH.Width = (width = 200);
+						XYWH.Height = (height = 200);
 					}
-					ptr20->Velocity.X *= 3f;
-					ptr20->Velocity.Y *= 3f;
-				}
-				int num49 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num49].Velocity *= 0.4f;
-				Main.GoreSet[num49].Velocity.X += 1f;
-				Main.GoreSet[num49].Velocity.Y += 1f;
-				num49 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num49].Velocity *= 0.4f;
-				Main.GoreSet[num49].Velocity.X -= 1f;
-				Main.GoreSet[num49].Velocity.Y += 1f;
-				num49 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num49].Velocity *= 0.4f;
-				Main.GoreSet[num49].Velocity.X += 1f;
-				Main.GoreSet[num49].Velocity.Y -= 1f;
-				num49 = Gore.NewGore(position, default, Main.Rand.Next(61, 64));
-				Main.GoreSet[num49].Velocity *= 0.4f;
-				Main.GoreSet[num49].Velocity.X -= 1f;
-				Main.GoreSet[num49].Velocity.Y -= 1f;
-			}
-			else if (type == 29 || type == 108)
-			{
-				Main.PlaySound(2, num, num2, 14);
-				if (type == 29)
-				{
-					position.X += (width >> 1) - 100;
-					position.Y += (height >> 1) - 100;
+
+					for (int num50 = 0; num50 < 40; num50++)
+					{
+						Dust* ptr21 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+						if (ptr21 == null)
+						{
+							break;
+						}
+
+						ptr21->Velocity.X *= 1.4f;
+						ptr21->Velocity.Y *= 1.4f;
+					}
+
+					for (int num51 = 0; num51 < 64; num51++)
+					{
+						Dust* ptr22 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 3.0);
+						if (ptr22 == null)
+						{
+							break;
+						}
+
+						ptr22->NoGravity = true;
+						ptr22->Velocity.X *= 5f;
+						ptr22->Velocity.Y *= 5f;
+						ptr22 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.0);
+						if (ptr22 == null)
+						{
+							break;
+						}
+
+						ptr22->Velocity.X *= 3f;
+						ptr22->Velocity.Y *= 3f;
+					}
+
+					for (int num52 = 0; num52 < 2; num52++)
+					{
+						int num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+						Main.GoreSet[num53].Scale = 1.5f;
+						Main.GoreSet[num53].Velocity.X += 1.5f;
+						Main.GoreSet[num53].Velocity.Y += 1.5f;
+						num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+						Main.GoreSet[num53].Scale = 1.5f;
+						Main.GoreSet[num53].Velocity.X -= 1.5f;
+						Main.GoreSet[num53].Velocity.Y += 1.5f;
+						num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+						Main.GoreSet[num53].Scale = 1.5f;
+						Main.GoreSet[num53].Velocity.X += 1.5f;
+						Main.GoreSet[num53].Velocity.Y -= 1.5f;
+						num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_WHITE1, (int)EntityID.GoreID.SMOKE_WHITE3 + 1));
+						Main.GoreSet[num53].Scale = 1.5f;
+						Main.GoreSet[num53].Velocity.X -= 1.5f;
+						Main.GoreSet[num53].Velocity.Y -= 1.5f;
+					}
+
+					position.X += (width >> 1) - 5;
+					position.Y += (height >> 1) - 5;
 					num = (XYWH.X = (int)position.X);
 					num2 = (XYWH.Y = (int)position.Y);
-					XYWH.Width = (width = 200);
-					XYWH.Height = (height = 200);
-				}
-				for (int num50 = 0; num50 < 40; num50++)
-				{
-					Dust* ptr21 = Main.DustSet.NewDust(31, ref XYWH, 0.0, 0.0, 100, default, 2.0);
-					if (ptr21 == null)
+					XYWH.Width = (width = 10);
+					XYWH.Height = (height = 10);
+					break;
+				case EntityID.ProjectileID.HOLY_WATER:
+					Main.PlaySound(13, num, num2);
+					for (int num54 = 0; num54 < 3; num54++)
 					{
-						break;
+						Main.DustSet.NewDust(num, num2, width, height, 13);
 					}
-					ptr21->Velocity.X *= 1.4f;
-					ptr21->Velocity.Y *= 1.4f;
-				}
-				for (int num51 = 0; num51 < 64; num51++)
-				{
-					Dust* ptr22 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 3.0);
-					if (ptr22 == null)
+
+					for (int num55 = 0; num55 < 20; num55++)
 					{
-						break;
+						Dust* ptr23 = Main.DustSet.NewDust(num, num2, width, height, 33, 0.0, -2.0, 0, default, 1.1);
+						if (ptr23 == null)
+						{
+							break;
+						}
+
+						ptr23->Alpha = 100;
+						ptr23->Velocity.X *= 4.5f;
+						ptr23->Velocity.Y *= 3f;
 					}
-					ptr22->NoGravity = true;
-					ptr22->Velocity.X *= 5f;
-					ptr22->Velocity.Y *= 5f;
-					ptr22 = Main.DustSet.NewDust(6, ref XYWH, 0.0, 0.0, 100, default, 2.0);
-					if (ptr22 == null)
+					break;
+				case EntityID.ProjectileID.UNHOLY_WATER:
+					Main.PlaySound(13, num, num2);
+					for (int num56 = 0; num56 < 3; num56++)
 					{
-						break;
+						Main.DustSet.NewDust(num, num2, width, height, 13);
 					}
-					ptr22->Velocity.X *= 3f;
-					ptr22->Velocity.Y *= 3f;
-				}
-				for (int num52 = 0; num52 < 2; num52++)
-				{
-					int num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next(61, 64));
-					Main.GoreSet[num53].Scale = 1.5f;
-					Main.GoreSet[num53].Velocity.X += 1.5f;
-					Main.GoreSet[num53].Velocity.Y += 1.5f;
-					num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next(61, 64));
-					Main.GoreSet[num53].Scale = 1.5f;
-					Main.GoreSet[num53].Velocity.X -= 1.5f;
-					Main.GoreSet[num53].Velocity.Y += 1.5f;
-					num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next(61, 64));
-					Main.GoreSet[num53].Scale = 1.5f;
-					Main.GoreSet[num53].Velocity.X += 1.5f;
-					Main.GoreSet[num53].Velocity.Y -= 1.5f;
-					num53 = Gore.NewGore(num + (width >> 1) - 24, num2 + (height >> 1) - 24, default, Main.Rand.Next(61, 64));
-					Main.GoreSet[num53].Scale = 1.5f;
-					Main.GoreSet[num53].Velocity.X -= 1.5f;
-					Main.GoreSet[num53].Velocity.Y -= 1.5f;
-				}
-				position.X += (width >> 1) - 5;
-				position.Y += (height >> 1) - 5;
-				num = (XYWH.X = (int)position.X);
-				num2 = (XYWH.Y = (int)position.Y);
-				XYWH.Width = (width = 10);
-				XYWH.Height = (height = 10);
-			}
-			else if (type == 69)
-			{
-				Main.PlaySound(13, num, num2);
-				for (int num54 = 0; num54 < 3; num54++)
-				{
-					Main.DustSet.NewDust(num, num2, width, height, 13);
-				}
-				for (int num55 = 0; num55 < 20; num55++)
-				{
-					Dust* ptr23 = Main.DustSet.NewDust(num, num2, width, height, 33, 0.0, -2.0, 0, default, 1.1);
-					if (ptr23 == null)
+
+					for (int num57 = 0; num57 < 20; num57++)
 					{
-						break;
+						Dust* ptr24 = Main.DustSet.NewDust(num, num2, width, height, 52, 0.0, -2.0, 0, default, 1.1);
+						if (ptr24 == null)
+						{
+							break;
+						}
+
+						ptr24->Alpha = 100;
+						ptr24->Velocity.X *= 4.5f;
+						ptr24->Velocity.Y *= 3f;
 					}
-					ptr23->Alpha = 100;
-					ptr23->Velocity.X *= 4.5f;
-					ptr23->Velocity.Y *= 3f;
-				}
-			}
-			else if (type == 70)
-			{
-				Main.PlaySound(13, num, num2);
-				for (int num56 = 0; num56 < 3; num56++)
-				{
-					Main.DustSet.NewDust(num, num2, width, height, 13);
-				}
-				for (int num57 = 0; num57 < 20; num57++)
-				{
-					Dust* ptr24 = Main.DustSet.NewDust(num, num2, width, height, 52, 0.0, -2.0, 0, default, 1.1);
-					if (ptr24 == null)
-					{
-						break;
-					}
-					ptr24->Alpha = 100;
-					ptr24->Velocity.X *= 4.5f;
-					ptr24->Velocity.Y *= 3f;
-				}
-			}
-			else if (type == 111 || (type >= 115 && type <= 119))
-			{
-				int num58 = Gore.NewGore(new Vector2(num - (width >> 1), num2 - (height >> 1)), default, Main.Rand.Next(11, 14), scale);
-				Main.GoreSet[num58].Velocity *= 0.1f;
+					break;
+				case EntityID.ProjectileID.PET_BUNNY:
+				case EntityID.ProjectileID.PET_SLIME:
+				case EntityID.ProjectileID.PET_TIPHIA:
+				case EntityID.ProjectileID.PET_BAT:
+				case EntityID.ProjectileID.PET_WEREWOLF:
+				case EntityID.ProjectileID.PET_ZOMBIE:
+					int num58 = Gore.NewGore(new Vector2(num - (width >> 1), num2 - (height >> 1)), default, Main.Rand.Next((int)EntityID.GoreID.SMOKE_BLUE1, (int)EntityID.GoreID.SMOKE_BLUE3 + 1), scale);
+					Main.GoreSet[num58].Velocity *= 0.1f;
+					break;
 			}
 			if (isLocal())
 			{
-				if (type == 28 || type == 29 || type == 37 || type == 75 || type == 108)
+				if (type == (byte)EntityID.ProjectileID.BOMB || type == (byte)EntityID.ProjectileID.DYNAMITE || type == (byte)EntityID.ProjectileID.STICKY_BOMB || type == (byte)EntityID.ProjectileID.HAPPY_BOMB || type == (byte)EntityID.ProjectileID.EXPLOSIVES)
 				{
 					int num59 = 3;
-					if (type == 29)
+					if (type == (byte)EntityID.ProjectileID.DYNAMITE)
 					{
 						num59 = 7;
 					}
-					else if (type == 108)
+					else if (type == (byte)EntityID.ProjectileID.EXPLOSIVES)
 					{
 						num59 = 10;
 					}
@@ -6224,7 +6296,7 @@ namespace Terraria
 							int num68 = Math.Abs(num66 - num60);
 							int num69 = Math.Abs(num67 - num61);
 							int num70 = num68 * num68 + num69 * num69;
-							if (num70 < num59 * num59 && Main.TileSet[num66, num67].WallType == 0)
+							if (num70 < num59 * num59 && Main.TileSet[num66, num67].WallType == (byte)EntityID.WallID.NONE)
 							{
 								flag = true;
 								break;
@@ -6246,11 +6318,11 @@ namespace Terraria
 							if (Main.TileSet[num71, num72].IsActive != 0)
 							{
 								int num76 = Main.TileSet[num71, num72].Type;
-								if (num76 == 21 || num76 == 26 || num76 == 107 || num76 == 108 || num76 == 111 || Main.TileDungeon[num76])
+								if (num76 == (byte)EntityID.TileID.CHEST || num76 == (byte)EntityID.TileID.DEMON_ALTAR || num76 == (byte)EntityID.TileID.COBALT_ORE || num76 == (byte)EntityID.TileID.MYTHRIL_ORE || num76 == (byte)EntityID.TileID.ADAMANTITE_ORE || Main.TileDungeon[num76])
 								{
 									flag2 = false;
 								}
-								else if (num76 == 58 && !Main.InHardMode)
+								else if (num76 == (byte)EntityID.TileID.HELLSTONE && !Main.InHardMode)
 								{
 									flag2 = false;
 								}
@@ -6271,7 +6343,7 @@ namespace Terraria
 									if (Main.TileSet[num77, num78].WallType > 0)
 									{
 										WorldGen.KillWall(num77, num78);
-										if (Main.TileSet[num77, num78].WallType == 0)
+										if (Main.TileSet[num77, num78].WallType == (byte)EntityID.WallID.NONE)
 										{
 											NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 2, num77, num78, 0);
 											NetMessage.SendMessage();
@@ -6285,42 +6357,43 @@ namespace Terraria
 				NetMessage.CreateMessage2(29, identity, owner);
 				NetMessage.SendMessage();
 				int num79 = -1;
-				if (aiStyle == 10)
+				if (aiStyle == (byte)EntityID.ProjStyleID.DIRT_BALL)
 				{
 					int num80 = 0;
 					int num81 = 0;
-					switch (type)
+					switch ((EntityID.ProjectileID)type)
 					{
-						case 31:
-						case 42:
-							num80 = 53;
+						case EntityID.ProjectileID.SAND_BALL_FALLING:
+						case EntityID.ProjectileID.SAND_BALL_GUN:
+							num80 = (byte)EntityID.TileID.SAND;
 							break;
-						case 39:
-							num80 = 59;
-							num81 = (int)Item.ID.MUD_BLOCK;
+						case EntityID.ProjectileID.MUD_BALL:
+							num80 = (byte)EntityID.TileID.MUD;
+							num81 = (int)EntityID.ItemID.MUD_BLOCK;
 							break;
-						case 40:
-							num80 = 57;
-							num81 = (int)Item.ID.ASH_BLOCK;
+						case EntityID.ProjectileID.ASH_BALL_FALLING:
+							num80 = (byte)EntityID.TileID.ASH;
+							num81 = (int)EntityID.ItemID.ASH_BLOCK;
 							break;
-						case 56:
-						case 65:
-							num80 = 112;
+						case EntityID.ProjectileID.EBONSAND_BALL_FALLING:
+						case EntityID.ProjectileID.EBONSAND_BALL_GUN:
+							num80 = (byte)EntityID.TileID.EBONSAND;
 							break;
-						case 67:
-						case 68:
-							num80 = 116;
+						case EntityID.ProjectileID.PEARL_SAND_BALL_FALLING:
+						case EntityID.ProjectileID.PEARL_SAND_BALL_GUN:
+							num80 = (byte)EntityID.TileID.PEARLSAND;
 							break;
-						case 71:
-							num80 = 123;
+						case EntityID.ProjectileID.SILT_BALL:
+							num80 = (byte)EntityID.TileID.SILT;
 							break;
-						case 109:
-							num80 = 147;
+						case EntityID.ProjectileID.SNOW_BALL_HOSTILE:
+							num80 = (byte)EntityID.TileID.SNOW;
 							break;
 						default:
-							num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.DIRT_BLOCK);
+							num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.DIRT_BLOCK);
 							break;
 					}
+
 					if (num80 > 0)
 					{
 						int num82 = num + (width >> 1) >> 4;
@@ -6336,67 +6409,69 @@ namespace Terraria
 						}
 					}
 				}
-				if (type == 1)
+				if (type == (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY)
 				{
 					if (Main.Rand.Next(3) == 0)
 					{
-						num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.WOODEN_ARROW);
+						num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.WOODEN_ARROW);
 					}
 				}
-				else if (type == 2)
+				else if (type == (byte)EntityID.ProjectileID.FIRE_ARROW)
 				{
 					if (Main.Rand.Next(3) == 0)
 					{
-						num79 = ((Main.Rand.Next(3) != 0) ? Item.NewItem(num, num2, width, height, (int)Item.ID.WOODEN_ARROW) : Item.NewItem(num, num2, width, height, (int)Item.ID.FLAMING_ARROW));
+						num79 = ((Main.Rand.Next(3) != 0) ? Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.WOODEN_ARROW) : Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.FLAMING_ARROW));
 					}
 				}
-				else if (type == 103)
+				else if (type == (byte)EntityID.ProjectileID.CURSED_ARROW)
 				{
 					if (Main.Rand.Next(6) == 0)
 					{
-						num79 = ((Main.Rand.Next(3) != 0) ? Item.NewItem(num, num2, width, height, (int)Item.ID.WOODEN_ARROW) : Item.NewItem(num, num2, width, height, (int)Item.ID.CURSED_ARROW));
+						num79 = ((Main.Rand.Next(3) != 0) ? Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.WOODEN_ARROW) : Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.CURSED_ARROW));
 					}
 				}
-				else if (type == 113)
+				else if (type == (byte)EntityID.ProjectileID.SPECTRAL_ARROW)
 				{
 					if (Main.Rand.Next(4) == 0)
 					{
-						num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.SPECTRAL_ARROW);
+						num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.SPECTRAL_ARROW);
 					}
 				}
-				else if (type == 91 && Main.Rand.Next(6) == 0)
+				else if (type == (byte)EntityID.ProjectileID.HOLY_ARROW && Main.Rand.Next(6) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.HOLY_ARROW);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.HOLY_ARROW);
 				}
-				else if (type == 50 && Main.Rand.Next(3) == 0)
+				else if (type == (byte)EntityID.ProjectileID.GLOWSTICK && Main.Rand.Next(3) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.GLOWSTICK);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.GLOWSTICK);
 				}
-				else if (type == 53 && Main.Rand.Next(3) == 0)
+				else if (type == (byte)EntityID.ProjectileID.STICKY_GLOWSTICK && Main.Rand.Next(3) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.STICKY_GLOWSTICK);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.STICKY_GLOWSTICK);
 				}
-				else if (type == 48 && Main.Rand.Next(2) == 0)
+				else if (type == (byte)EntityID.ProjectileID.THROWING_KNIFE && Main.Rand.Next(2) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.THROWING_KNIFE);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.THROWING_KNIFE);
 				}
-				else if (type == 54 && Main.Rand.Next(2) == 0)
+				else if (type == (byte)EntityID.ProjectileID.POISONED_KNIFE && Main.Rand.Next(2) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.POISONED_KNIFE);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.POISONED_KNIFE);
 				}
-				else if (type == 3 && Main.Rand.Next(2) == 0)
+				else if (type == (byte)EntityID.ProjectileID.SHURIKEN && Main.Rand.Next(2) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.SHURIKEN);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.SHURIKEN);
 				}
-				else if (type == 4 && Main.Rand.Next(4) == 0)
+				else if (type == (byte)EntityID.ProjectileID.UNHOLY_ARROW && Main.Rand.Next(4) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.UNHOLY_ARROW);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.UNHOLY_ARROW);
 				}
-				else if (type == 12 && damage > 100)
+				else if (type == (byte)EntityID.ProjectileID.FALLING_STAR && damage > 100)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.FALLEN_STAR);
+					// BUG: If you can manage to increase the Star Cannon's power to beyond 100, fired stars will be reusable at night. This bug is present in all Pre-1.3 versions, despite PC 1.2 fixing it.
+					// This will functionally provide the user with limitless ammo, as it will always drop a star upon firing and occasionally never use a star, due to the >=100 damage condition almost always requiring a loadout with an ammo-saving chance. 
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.FALLEN_STAR);
 				}
-				else if (type == 69 || type == 70)
+				else if (type == (byte)EntityID.ProjectileID.HOLY_WATER || type == (byte)EntityID.ProjectileID.UNHOLY_WATER)
 				{
 					int num84 = num + (width >> 1) >> 4;
 					int num85 = num2 + (height >> 1) >> 4;
@@ -6410,39 +6485,39 @@ namespace Terraria
 							}
 							int num88 = Main.TileSet[num86, num87].Type;
 							int num89 = 0;
-							if (type == 69)
+							if (type == (byte)EntityID.ProjectileID.HOLY_WATER)
 							{
-								switch (num88)
+								switch ((EntityID.TileID)num88)
 								{
-									case 2:
-									case 23:
-										num89 = 109;
+									case EntityID.TileID.GRASS:
+									case EntityID.TileID.CORRUPT_GRASS:
+										num89 = (int)EntityID.TileID.HALLOWED_GRASS;
 										break;
-									case 1:
-									case 25:
-										num89 = 117;
+									case EntityID.TileID.STONE:
+									case EntityID.TileID.EBONSTONE:
+										num89 = (int)EntityID.TileID.PEARLSTONE;
 										break;
-									case 53:
-									case 112:
-										num89 = 116;
+									case EntityID.TileID.SAND:
+									case EntityID.TileID.EBONSAND:
+										num89 = (int)EntityID.TileID.PEARLSAND;
 										break;
 								}
 							}
 							else
 							{
-								switch (num88)
+								switch ((EntityID.TileID)num88)
 								{
-									case 2:
-									case 109:
-										num89 = 23;
+									case EntityID.TileID.GRASS:
+									case EntityID.TileID.HALLOWED_GRASS:
+										num89 = (int)EntityID.TileID.CORRUPT_GRASS;
 										break;
-									case 1:
-									case 117:
-										num89 = 25;
+									case EntityID.TileID.STONE:
+									case EntityID.TileID.PEARLSTONE:
+										num89 = (int)EntityID.TileID.EBONSTONE;
 										break;
-									case 53:
-									case 116:
-										num89 = 112;
+									case EntityID.TileID.SAND:
+									case EntityID.TileID.PEARLSAND:
+										num89 = (int)EntityID.TileID.EBONSAND;
 										break;
 								}
 							}
@@ -6455,9 +6530,9 @@ namespace Terraria
 						}
 					}
 				}
-				else if (type == 21 && Main.Rand.Next(2) == 0)
+				else if (type == (byte)EntityID.ProjectileID.BONE && Main.Rand.Next(2) == 0)
 				{
-					num79 = Item.NewItem(num, num2, width, height, (int)Item.ID.BONE);
+					num79 = Item.NewItem(num, num2, width, height, (int)EntityID.ItemID.BONE);
 				}
 				if (num79 >= 0)
 				{
@@ -6470,11 +6545,11 @@ namespace Terraria
 
 		public Color GetAlpha(Color newColor)
 		{
-			if (type == 34 || type == 15 || type == 93 || type == 94 || type == 95 || type == 96 || (type == 102 && alpha < 255))
+			if (type == (byte)EntityID.ProjectileID.FLAMELASH || type == (byte)EntityID.ProjectileID.BALL_OF_FIRE || type == (byte)EntityID.ProjectileID.MAGIC_DAGGER || type == (byte)EntityID.ProjectileID.CRYSTAL_STORM || type == (byte)EntityID.ProjectileID.CURSED_FLAME_FRIENDLY || type == (byte)EntityID.ProjectileID.CURSED_FLAME_HOSTILE || (type == (byte)EntityID.ProjectileID.BOMB_SKELETRON_PRIME && alpha < 255))
 			{
 				return new Color(200, 200, 200, 25);
 			}
-			if (type == 83 || type == 88 || type == 89 || type == 90 || type == 100 || type == 104)
+			if (type == (byte)EntityID.ProjectileID.EYE_LASER || type == (byte)EntityID.ProjectileID.PURPLE_LASER || type == (byte)EntityID.ProjectileID.CRYSTAL_BULLET || type == (byte)EntityID.ProjectileID.CRYSTAL_SHARD || type == (byte)EntityID.ProjectileID.DEATH_LASER || type == (byte)EntityID.ProjectileID.CURSED_BULLET)
 			{
 				if (alpha < 200)
 				{
@@ -6482,24 +6557,24 @@ namespace Terraria
 				}
 				return default;
 			}
-			if (type == 34 || type == 35 || type == 15 || type == 19 || type == 44 || type == 45)
+			if (type == (byte)EntityID.ProjectileID.FLAMELASH || type == (byte)EntityID.ProjectileID.SUNFURY || type == (byte)EntityID.ProjectileID.BALL_OF_FIRE || type == (byte)EntityID.ProjectileID.FLAMARANG || type == (byte)EntityID.ProjectileID.DEMON_SICKLE || type == (byte)EntityID.ProjectileID.DEMON_SCYTHE)
 			{
 				return Color.White;
 			}
-			if (type == 79)
+			if (type == (byte)EntityID.ProjectileID.RAINBOW_ROD_BULLET)
 			{
 				return default;
 			}
 			int r;
 			int g;
 			int b;
-			if (type == 9 || type == 15 || type == 34 || type == 50 || type == 53 || type == 76 || type == 77 || type == 78 || type == 92 || type == 91)
+			if (type == (byte)EntityID.ProjectileID.STARFURY || type == (byte)EntityID.ProjectileID.BALL_OF_FIRE || type == (byte)EntityID.ProjectileID.FLAMELASH || type == (byte)EntityID.ProjectileID.GLOWSTICK || type == (byte)EntityID.ProjectileID.STICKY_GLOWSTICK || type == (byte)EntityID.ProjectileID.QUARTER_NOTE || type == (byte)EntityID.ProjectileID.EIGHTH_NOTE || type == (byte)EntityID.ProjectileID.TIED_EIGHTH_NOTE || type == (byte)EntityID.ProjectileID.HALLOW_STAR || type == (byte)EntityID.ProjectileID.HOLY_ARROW)
 			{
 				r = newColor.R - alpha / 3;
 				g = newColor.G - alpha / 3;
 				b = newColor.B - alpha / 3;
 			}
-			else if (type == 16 || type == 18 || type == 44 || type == 45)
+			else if (type == (byte)EntityID.ProjectileID.MAGIC_MISSILE || type == (byte)EntityID.ProjectileID.SHADOW_ORB || type == (byte)EntityID.ProjectileID.DEMON_SICKLE || type == (byte)EntityID.ProjectileID.DEMON_SCYTHE)
 			{
 				r = newColor.R;
 				g = newColor.G;
@@ -6507,7 +6582,7 @@ namespace Terraria
 			}
 			else
 			{
-				if (type == 12 || type == 72 || type == 86 || type == 87)
+				if (type == (byte)EntityID.ProjectileID.FALLING_STAR || type == (byte)EntityID.ProjectileID.BLUE_FAIRY || type == (byte)EntityID.ProjectileID.PINK_FAIRY || type == (byte)EntityID.ProjectileID.GREEN_FAIRY)
 				{
 					return new Color(255, 255, 255, newColor.A - alpha);
 				}
@@ -6531,7 +6606,7 @@ namespace Terraria
 		{
 			Player player = Main.PlayerSet[owner];
 			Vector2 pos;
-			if (type == 32)
+			if (type == (byte)EntityID.ProjectileID.IVY_WHIP)
 			{
 				Vector2 vector = new Vector2(position.X + width * 0.5f, position.Y + height * 0.5f);
 				float num = player.Position.X + 10f - vector.X;
@@ -6574,7 +6649,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.CHAIN5, ref pos, view.Lighting.GetColor((int)vector.X >> 4, (int)vector.Y >> 4), rotCenter);
 				}
 			}
-			else if (type == 73)
+			else if (type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 			{
 				Vector2 vector2 = new Vector2(position.X + width * 0.5f, position.Y + height * 0.5f);
 				float num6 = player.Position.X + 10f - vector2.X;
@@ -6602,7 +6677,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.CHAIN8, ref pos, view.Lighting.GetColor((int)vector2.X >> 4, (int)vector2.Y >> 4), rotCenter2);
 				}
 			}
-			else if (type == 74)
+			else if (type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED)
 			{
 				Vector2 vector3 = new Vector2(position.X + width * 0.5f, position.Y + height * 0.5f);
 				float num10 = player.Position.X + 10f - vector3.X;
@@ -6630,7 +6705,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.CHAIN9, ref pos, view.Lighting.GetColor((int)vector3.X >> 4, (int)vector3.Y >> 4), rotCenter3);
 				}
 			}
-			else if (aiStyle == 7)
+			else if (aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 			{
 				Vector2 vector4 = new Vector2(position.X + width * 0.5f, position.Y + height * 0.5f);
 				float num14 = player.Position.X + 10f - vector4.X;
@@ -6658,7 +6733,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.CHAIN, ref pos, view.Lighting.GetColor((int)vector4.X >> 4, (int)vector4.Y >> 4), rotCenter4);
 				}
 			}
-			else if (aiStyle == 13)
+			else if (aiStyle == (byte)EntityID.ProjStyleID.HARPOON)
 			{
 				float num18 = position.X + 8f;
 				float num19 = position.Y + 2f;
@@ -6709,7 +6784,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.CHAIN, ref pos, view.Lighting.GetColor((int)vector5.X >> 4, (int)vector5.Y >> 4), rotCenter5);
 				}
 			}
-			else if (aiStyle == 15)
+			else if (aiStyle == (byte)EntityID.ProjStyleID.FLAIL)
 			{
 				Vector2 vector6 = new Vector2(position.X + (width >> 1), position.Y + (height >> 1));
 				float num23 = player.Position.X + 10f - vector6.X;
@@ -6744,15 +6819,15 @@ namespace Terraria
 					pos.X -= view.ScreenPosition.X;
 					pos.Y -= view.ScreenPosition.Y;
 					int id = (int)_sheetSprites.ID.CHAIN3;
-					if (type == 25)
+					if (type == (byte)EntityID.ProjectileID.BALL_O_HURT)
 					{
 						id = (int)_sheetSprites.ID.CHAIN2;
 					}
-					else if (type == 35)
+					else if (type == (byte)EntityID.ProjectileID.SUNFURY)
 					{
 						id = (int)_sheetSprites.ID.CHAIN6;
 					}
-					else if (type == 63)
+					else if (type == (byte)EntityID.ProjectileID.THE_DAO_OF_POW)
 					{
 						id = (int)_sheetSprites.ID.CHAIN7;
 					}
@@ -6760,63 +6835,70 @@ namespace Terraria
 				}
 				while (flag5);
 			}
-			Color newColor = ((type == 14) ? Color.White : ((!hide) ? view.Lighting.GetColor(XYWH.X + (width >> 1) >> 4, XYWH.Y + (height >> 1) >> 4) : view.Lighting.GetColor(player.XYWH.X + 10 >> 4, player.XYWH.Y + 21 >> 4)));
+			Color newColor = ((type == (byte)EntityID.ProjectileID.BULLET) ? Color.White : ((!hide) ? view.Lighting.GetColor(XYWH.X + (width >> 1) >> 4, XYWH.Y + (height >> 1) >> 4) : view.Lighting.GetColor(player.XYWH.X + 10 >> 4, player.XYWH.Y + 21 >> 4)));
 			int num27 = (int)_sheetSprites.ID.PROBE + type;
 			int num28 = SpriteSheet<_sheetSprites>.Source[num27].Width >> 1;
 			int num29 = num28;
 			int num30 = 0;
-			if (type == 16)
+			switch ((EntityID.ProjectileID)type)
 			{
-				num30 = 6;
+				case EntityID.ProjectileID.MAGIC_MISSILE:
+					num30 = 6;
+					break;
+				case EntityID.ProjectileID.DIRT_BALL:
+				case EntityID.ProjectileID.SAND_BALL_FALLING:
+					num30 = 2;
+					break;
+				case EntityID.ProjectileID.BALL_O_HURT:
+				case EntityID.ProjectileID.BLUE_MOON:
+				case EntityID.ProjectileID.SUNFURY:
+				case EntityID.ProjectileID.THE_DAO_OF_POW:
+					num30 = 6;
+					num29 -= 6;
+					break;
+				case EntityID.ProjectileID.BOMB:
+				case EntityID.ProjectileID.STICKY_BOMB:
+				case EntityID.ProjectileID.HAPPY_BOMB:
+					num30 = 8;
+					break;
+				case EntityID.ProjectileID.DYNAMITE:
+					num30 = 11;
+					break;
+				case EntityID.ProjectileID.TOMBSTONE:
+					num30 = 4;
+					break;
+				case EntityID.ProjectileID.HOLY_WATER:
+				case EntityID.ProjectileID.UNHOLY_WATER:
+					num30 = 4;
+					num29 += 4;
+					break;
+				case EntityID.ProjectileID.GLOWSTICK:
+				case EntityID.ProjectileID.STICKY_GLOWSTICK:
+					num29 -= 8;
+					break;
+				case EntityID.ProjectileID.BLUE_FAIRY:
+				case EntityID.ProjectileID.PINK_FAIRY:
+				case EntityID.ProjectileID.GREEN_FAIRY:
+					num29 -= 16;
+					num30 = 8;
+					break;
+				case EntityID.ProjectileID.DUAL_HOOK_RED:
+					num29 -= 6;
+					break;
+				case EntityID.ProjectileID.BOULDER:
+					num30 = 1;
+					break;
+				case EntityID.ProjectileID.PET_BUNNY:
+				case EntityID.ProjectileID.PET_SLIME:
+				case EntityID.ProjectileID.PET_TIPHIA:
+				case EntityID.ProjectileID.PET_BAT:
+				case EntityID.ProjectileID.PET_WEREWOLF:
+				case EntityID.ProjectileID.PET_ZOMBIE:
+					num30 = (projFrameH[type] >> 1) - 2;
+					num29 -= 16;
+					break;
 			}
-			else if (type == 17 || type == 31)
-			{
-				num30 = 2;
-			}
-			else if (type == 25 || type == 26 || type == 35 || type == 63)
-			{
-				num30 = 6;
-				num29 -= 6;
-			}
-			else if (type == 28 || type == 37 || type == 75)
-			{
-				num30 = 8;
-			}
-			else if (type == 29)
-			{
-				num30 = 11;
-			}
-			else if (type == 43)
-			{
-				num30 = 4;
-			}
-			else if (type == 69 || type == 70)
-			{
-				num30 = 4;
-				num29 += 4;
-			}
-			else if (type == 50 || type == 53)
-			{
-				num29 -= 8;
-			}
-			else if (type == 72 || type == 86 || type == 87)
-			{
-				num29 -= 16;
-				num30 = 8;
-			}
-			else if (type == 74)
-			{
-				num29 -= 6;
-			}
-			else if (type == 99)
-			{
-				num30 = 1;
-			}
-			else if (type == 111 || (type >= 115 && type <= 119))
-			{
-				num30 = (projFrameH[type] >> 1) - 2;
-				num29 -= 16;
-			}
+
 			SpriteEffects e = ((spriteDirection == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 			pos = new Vector2(position.X - view.ScreenPosition.X + num29, position.Y - view.ScreenPosition.Y + (height >> 1));
 			Vector2 pivot = new Vector2(num28, (height >> 1) + num30);
@@ -6828,7 +6910,7 @@ namespace Terraria
 				SpriteSheet<_sheetSprites>.Draw(num27, ref pos, sy, num31, color, rotation, ref pivot, scale, e);
 				return;
 			}
-			if (aiStyle == 19)
+			if (aiStyle == (byte)EntityID.ProjStyleID.SPEAR)
 			{
 				pos.X -= pivot.X;
 				pos.X += width >> 1;
@@ -6844,7 +6926,7 @@ namespace Terraria
 				SpriteSheet<_sheetSprites>.Draw(num27, ref pos, color, rotation, ref pivot, scale, e);
 				return;
 			}
-			if (type == 94 && ai1 > 6)
+			if (type == (byte)EntityID.ProjectileID.CRYSTAL_STORM && ai1 > 6)
 			{
 				fixed (float* ptr = oldPos)
 				{
@@ -6862,7 +6944,7 @@ namespace Terraria
 				}
 			}
 			SpriteSheet<_sheetSprites>.Draw(num27, ref pos, color, rotation, ref pivot, scale, e);
-			if (type == 106)
+			if (type == (byte)EntityID.ProjectileID.LIGHT_DISC)
 			{
 				color.R = 200;
 				color.G = 200;

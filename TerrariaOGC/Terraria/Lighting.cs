@@ -292,11 +292,11 @@ namespace Terraria
 				{
 					for (int CurrentTile = FirstToLightX; CurrentTile < OffScreenX; CurrentTile++)
 					{
-						Tile* ToLightTile = TileSet + (CurrentTile * 1440 + FirstToLightY);
+						Tile* ToLightTile = TileSet + (CurrentTile * Main.LargeWorldH + FirstToLightY);
 
 						for (int ToLightIdx = FirstToLightY; ToLightIdx < LeftToLight; ToLightIdx++)
 						{
-							if ((ToLightTile->IsActive == 0 || !Main.TileNoSunLight[ToLightTile->Type]) && (ToLightTile->WallType == 0 || ToLightTile->WallType == 21) && ToLightTile->Liquid < 200)
+							if ((ToLightTile->IsActive == 0 || !Main.TileNoSunLight[ToLightTile->Type]) && (ToLightTile->WallType == (int)EntityID.WallID.NONE || ToLightTile->WallType == (int)EntityID.WallID.GLASS) && ToLightTile->Liquid < 200)
 							{
 								fixed (Vector3* ActiveLight = &Colour[CurrentTile - FirstToLightX, ToLightIdx - FirstToLightY])
 								{
@@ -436,11 +436,11 @@ namespace Terraria
 			{
 				for (int X = FTLX; X < OffX; X++)
 				{
-					Tile* ActiveTile = CurrentTile + (X * 1440 + FTLY);
+					Tile* ActiveTile = CurrentTile + (X * Main.LargeWorldH + FTLY);
 					for (int Y = FTLY; Y < Limit; Y++)
 					{
 						int WallID = ActiveTile->WallType;
-						if ((WallID == 0 || WallID == 21) && ActiveTile->Liquid < 200 && (ActiveTile->IsActive == 0 || !Main.TileNoSunLight[ActiveTile->Type]))
+						if ((WallID == (int)EntityID.WallID.NONE || WallID == (int)EntityID.WallID.GLASS) && ActiveTile->Liquid < 200 && (ActiveTile->IsActive == 0 || !Main.TileNoSunLight[ActiveTile->Type]))
 						{
 							fixed (Vector3* ActiveColour = &Colour2[X - FirstToLightX, Y - FirstToLightY])
 							{
@@ -497,7 +497,7 @@ namespace Terraria
 #if VERSION_101
 				for (int X = FTLX; X < OffX; X++)
 				{
-					Tile* ActiveTile = CurrentTile + (X * 1440 + FTLY);
+					Tile* ActiveTile = CurrentTile + (X * Main.LargeWorldH + FTLY);
 
 					for (int Y = FTLY; Y < OffY; Y++)
 					{
@@ -505,12 +505,12 @@ namespace Terraria
 						int ColourY = Y - FirstToLightY;
 						fixed (Vector3* ActiveColour = &Colour2[ColourX, ColourY])
 						{
-							if ((ActiveTile->IsActive == 0 || !Main.TileNoSunLight[ActiveTile->Type]) && ActiveTile->WallType >= 32 && ActiveTile->WallType <= 37 && Y < Main.WorldSurface && ActiveTile->Liquid < 255)
+							if ((ActiveTile->IsActive == 0 || !Main.TileNoSunLight[ActiveTile->Type]) && ActiveTile->WallType >= (int)EntityID.WallID.PURPLE_STAINED_GLASS && ActiveTile->WallType <= (int)EntityID.WallID.RAINBOW_STAINED_GLASS && Y < Main.WorldSurface && ActiveTile->Liquid < 255)
 							{
 								float num42 = CurrentView.WorldTime.TileColorFore.X;
 								float num43 = CurrentView.WorldTime.TileColorFore.Y;
 								float num44 = CurrentView.WorldTime.TileColorFore.Z;
-								switch (ActiveTile->WallType - 32)
+								switch (ActiveTile->WallType - (int)EntityID.WallID.PURPLE_STAINED_GLASS)
 								{
 									case 0:
 										num42 *= 0.9f;
@@ -565,7 +565,7 @@ namespace Terraria
 #endif
 				for (int X = FTLX; X < OffX; X++)
 				{
-					Tile* ActiveTile = CurrentTile + (X * 1440 + FTLY);
+					Tile* ActiveTile = CurrentTile + (X * Main.LargeWorldH + FTLY);
 
 					for (int Y = FTLY; Y < OffY; Y++)
 					{
@@ -584,65 +584,67 @@ namespace Terraria
 								int YOffset = OffY - FTLY - Main.ZoneY >> 1;
 								if (X > FTLX + XOffset && X < OffX - XOffset && Y > FTLY + YOffset && Y < OffY - YOffset)
 								{
-									switch (TileID)
+									switch ((EntityID.TileID)TileID)
 									{
-										case 23:
-										case 24:
-										case 25:
-										case 32:
+										case EntityID.TileID.CORRUPT_GRASS:
+										case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+										case EntityID.TileID.EBONSTONE:
+										case EntityID.TileID.CORRUPTION_THORN:
 											CurrentView.EvilTiles++;
 											break;
-										case 112:
+										case EntityID.TileID.EBONSAND:
 											CurrentView.SandTiles++;
 											CurrentView.EvilTiles++;
 											break;
-										case 109:
-										case 110:
-										case 113:
-										case 117:
+										case EntityID.TileID.HALLOWED_GRASS:
+										case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+										// From the code, we can infer that Jungles are meant to count both styles of plants (see bug note below) and vines, and similarly, the Corruption is to count plants and thorns.
+										// Interestingly, the Hallow does not account for vines, in any version, only the plants.
+										case EntityID.TileID.TALL_HALLOWED_PLANTS:
+										case EntityID.TileID.PEARLSTONE:
 											CurrentView.HolyTiles++;
 											break;
-										case 116:
+										case EntityID.TileID.PEARLSAND:
 											CurrentView.SandTiles++;
 											CurrentView.HolyTiles++;
 											break;
-										case 27:
+										case EntityID.TileID.SUNFLOWER:
 											CurrentView.EvilTiles -= 5;
 											break;
-										case 37:
+										case EntityID.TileID.METEORITE:
 											CurrentView.MeteorTiles++;
 											break;
-										case 41:
-										case 43:
-										case 44:
+										case EntityID.TileID.BLUE_BRICK:
+										case EntityID.TileID.GREEN_BRICK:
+										case EntityID.TileID.PINK_BRICK:
 											CurrentView.DungeonTiles++;
 											break;
-										case 60:
-										case 61:
-										case 62:
-										case 84:
+										case EntityID.TileID.JUNGLE_GRASS:
+										case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+										case EntityID.TileID.JUNGLE_VINE:
+										case EntityID.TileID.DAYBLOOM_BLOOMING: // BUG: Dayblooms are not meant to be counted towards Jungle tiles, as it is a typo for Tile 74 (Tall Jungle Plants), and enough Dayblooms will make a Jungle biome. This is fixed in v1.09.
 											CurrentView.JungleTiles++;
 											break;
-										case 53:
+										case EntityID.TileID.SAND:
 											CurrentView.SandTiles++;
 											break;
-										case 147:
-										case 148:
+										case EntityID.TileID.SNOW:
+										case EntityID.TileID.SNOW_BRICK:
 											CurrentView.SnowTiles++;
 											break;
 #if !USE_ORIGINAL_CODE
 										// This was made for the Floating Island achievement, and due to how it is done, you can fabricate it by building into space and just placing over 98 in total of these bricks.
 #if VERSION_103 || VERSION_FINAL
-										case 202: // Skyplate
+										case EntityID.TileID.SUNPLATE:
 #else
-										case 45: // Gold Brick
-										case 46: // Silver Brick
-										case 47: // Copper Brick
+										case EntityID.TileID.GOLD_BRICK:
+										case EntityID.TileID.SILVER_BRICK:
+										case EntityID.TileID.COPPER_BRICK:
 #endif
 											CurrentView.SkyTiles++;
 											break;
 #endif
-										case 139:
+										case EntityID.TileID.MUSIC_BOX:
 											if (ActiveTile->FrameX >= 36)
 											{
 												CurrentView.MusicBox = ActiveTile->FrameY / 36;
@@ -656,10 +658,10 @@ namespace Terraria
 								}
 								if (Main.TileLighted[TileID])
 								{
-									switch (TileID)
+									switch ((EntityID.TileID)TileID)
 									{
 #if VERSION_101
-										case 150:
+										case EntityID.TileID.CAMPFIRE:
 											float Flicker = Main.Rand.Next(28, 42) * 0.005f;
 											Flicker += (270 - UI.MouseTextBrightness) / 700f;
 											if (ActiveTile->FrameY <= 18 && ActiveTile->FrameX == 0)
@@ -682,7 +684,7 @@ namespace Terraria
 											}
 											break;
 #endif
-										case 92:
+										case EntityID.TileID.LAMP_POST:
 											if (ActiveTile->FrameY <= 18 && ActiveTile->FrameX == 0)
 											{
 												float R = 1f;
@@ -702,7 +704,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 93:
+										case EntityID.TileID.TIKI_TORCH:
 											if (ActiveTile->FrameY == 0 && ActiveTile->FrameX == 0)
 											{
 												float R = 1f;
@@ -722,7 +724,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 98:
+										case EntityID.TileID.SKULL_LANTERN:
 											if (ActiveTile->FrameY == 0)
 											{
 												float R = 1f;
@@ -742,7 +744,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 4:
+										case EntityID.TileID.TORCH:
 											if (ActiveTile->FrameX < 66)
 											{
 												float R;
@@ -810,7 +812,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 33:
+										case EntityID.TileID.CANDLE:
 											if (ActiveTile->FrameX == 0)
 											{
 												float R = 1f;
@@ -830,7 +832,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 36:
+										case EntityID.TileID.PRESENT:
 											if (ActiveTile->FrameX < 54)
 											{
 												float R = 1f;
@@ -850,7 +852,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 100:
+										case EntityID.TileID.CANDELABRA:
 											if (ActiveTile->FrameX < 36)
 											{
 												float R = 1f;
@@ -870,8 +872,8 @@ namespace Terraria
 												}
 											}
 											break;
-										case 34:
-										case 35:
+										case EntityID.TileID.CHANDELIER:
+										case EntityID.TileID.JACK_O_LANTERN:
 											if (ActiveTile->FrameX < 54)
 											{
 												float R = 1f;
@@ -891,7 +893,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 95:
+										case EntityID.TileID.CHINESE_LANTERN:
 											if (ActiveTile->FrameX < 36)
 											{
 												float R = 1f;
@@ -911,8 +913,8 @@ namespace Terraria
 												}
 											}
 											break;
-										case 17:
-										case 133:
+										case EntityID.TileID.FURNACE:
+										case EntityID.TileID.ADAMANTITE_FORGE:
 											{
 												float R = 0.83f;
 												float G = 0.6f;
@@ -931,7 +933,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 77:
+										case EntityID.TileID.HELLFORGE:
 											{
 												float R = 0.75f;
 												float G = 0.45f;
@@ -950,7 +952,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 37:
+										case EntityID.TileID.METEORITE:
 											{
 												float R = 0.56f;
 												float G = 0.43f;
@@ -969,8 +971,8 @@ namespace Terraria
 												}
 												break;
 											}
-										case 22:
-										case 140:
+										case EntityID.TileID.DEMONITE_ORE:
+										case EntityID.TileID.DEMONITE_BRICK:
 											{
 												float R = 0.12f;
 												float G = 0.07f;
@@ -989,7 +991,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 42:
+										case EntityID.TileID.CHAIN_LANTERN:
 											if (ActiveTile->FrameX == 0)
 											{
 												float R = 0.65f;
@@ -1009,7 +1011,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 49:
+										case EntityID.TileID.WATER_CANDLE:
 											{
 												float R = 0.3f;
 												float G = 0.3f;
@@ -1028,9 +1030,9 @@ namespace Terraria
 												}
 												break;
 											}
-										case 70:
-										case 71:
-										case 72:
+										case EntityID.TileID.MUSHROOM_GRASS:
+										case EntityID.TileID.GLOWING_MUSHROOM:
+										case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 											{
 												float A = Main.Rand.Next(28, 42) * 0.005f;
 												A += (270 - UI.MouseTextBrightness) * 0.002f;
@@ -1051,8 +1053,8 @@ namespace Terraria
 												}
 												break;
 											}
-										case 61:
-											if (ActiveTile->FrameX == 144)
+										case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+											if (ActiveTile->FrameX == 144)  // Jungle Spores
 											{
 												float R = 0.42f;
 												float G = 0.81f;
@@ -1071,8 +1073,8 @@ namespace Terraria
 												}
 											}
 											break;
-										case 26:
-										case 31:
+										case EntityID.TileID.DEMON_ALTAR:
+										case EntityID.TileID.SHADOW_ORB:
 											{
 												float A = Main.Rand.Next(-5, 6) * 0.0025f;
 												float R = 0.31f + A;
@@ -1092,7 +1094,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 84:
+										case EntityID.TileID.DAYBLOOM_BLOOMING:
 											switch (ActiveTile->FrameX / 18)
 											{
 												case 2:
@@ -1126,8 +1128,8 @@ namespace Terraria
 												case 5:
 													{
 														float R = 0.9f;
-														float G = 0.71999997f;
-														float B = 0.17999999f;
+														float G = 0.72f;
+														float B = 0.18f;
 														if (R > ActiveColour->X)
 														{
 															ActiveColour->X = R;
@@ -1144,7 +1146,7 @@ namespace Terraria
 													}
 											}
 											break;
-										case 83:
+										case EntityID.TileID.DAYBLOOM_MATURE:
 											if (ActiveTile->FrameX == 18 && !CurrentView.WorldTime.DayTime)
 											{
 												float R = 0.1f;
@@ -1164,7 +1166,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 126:
+										case EntityID.TileID.DISCO_BALL:
 											if (ActiveTile->FrameX < 36)
 											{
 												if (Main.DiscoRGB.X > ActiveColour->X)
@@ -1181,7 +1183,7 @@ namespace Terraria
 												}
 											}
 											break;
-										case 125:
+										case EntityID.TileID.CRYSTAL_BALL:
 											{
 												float A = Main.Rand.Next(28, 42) * 0.01f;
 												A += (270 - UI.MouseTextBrightness) * 0.00125f;
@@ -1195,7 +1197,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 129:
+										case EntityID.TileID.CRYSTAL_SHARD:
 											{
 												float R;
 												float G;
@@ -1232,7 +1234,7 @@ namespace Terraria
 												}
 												break;
 											}
-										case 149:
+										case EntityID.TileID.XMAS_LIGHT:
 											if (ActiveTile->FrameX <= 36)
 											{
 												float R;
@@ -1278,7 +1280,7 @@ namespace Terraria
 								if (ActiveTile->Lava != 0)
 								{
 									float A = 0.55f;
-									A += (270 - UI.MouseTextBrightness) * 0.0011111111f;
+									A += (270 - UI.MouseTextBrightness) / 900f;
 									if (ActiveColour->X < A)
 									{
 										ActiveColour->X = A;

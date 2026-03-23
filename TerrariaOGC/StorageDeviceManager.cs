@@ -89,13 +89,13 @@ public class StorageDeviceManager : GameComponent
 		Device = StorageDevice.EndShowSelector(Result);
 		if (Device != null)
 		{
-            DeviceSelected?.Invoke(this, null);
-            WasDeviceConnected = true;
+			DeviceSelected?.Invoke(this, null);
+			WasDeviceConnected = true;
 		}
 		else
 		{
-            DeviceSelectorCanceled?.Invoke(this, null);
-            ShowDeviceSelector = false;
+			DeviceSelectorCanceled?.Invoke(this, null);
+			ShowDeviceSelector = false;
 		}
 		IsDone = true;
 	}
@@ -103,7 +103,7 @@ public class StorageDeviceManager : GameComponent
 	private void FireDeviceDisconnectedEvent()
 	{
 		Device = null;
-        DeviceDisconnected?.Invoke(this, null);
-        ShowDeviceSelector = false;
+		DeviceDisconnected?.Invoke(this, null);
+		ShowDeviceSelector = false;
 	}
 }

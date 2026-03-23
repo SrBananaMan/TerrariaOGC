@@ -76,7 +76,7 @@ namespace Terraria
 			if (!IsVerified && AsyncResult == null && Main.NetMode > (byte)NetModeSetting.LOCAL)
 			{
 				AsyncResult = StringChecker.BeginCheckString(UserText, OnCheckStringDone, null);
-            }
+			}
 #endif
 			if (AsyncResult != null)
 			{

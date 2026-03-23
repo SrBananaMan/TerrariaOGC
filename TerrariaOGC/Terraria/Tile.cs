@@ -181,7 +181,7 @@ namespace Terraria
 
 		public bool isFullTile()
 		{
-			if (IsActive != 0 && Type != 10 && Type != 54 && Type != 138 && Main.TileSolidNotSolidTop[Type])
+			if (IsActive != 0 && Type != (byte)EntityID.TileID.DOOR_CLOSED && Type != (byte)EntityID.TileID.GLASS && Type != (byte)EntityID.TileID.BOULDER && Main.TileSolidNotSolidTop[Type])
 			{
 				int num = FrameY;
 				if (num == 18)

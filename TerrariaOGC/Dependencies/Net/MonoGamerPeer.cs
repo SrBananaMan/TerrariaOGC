@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Framework.Net
                                             peer.Connect(endPoint);
                                         }
                                     }
-                                    catch (Exception exc)
+                                    catch (Exception) // No need for exception catching during non-debug builds.
                                     {
                                     }
 

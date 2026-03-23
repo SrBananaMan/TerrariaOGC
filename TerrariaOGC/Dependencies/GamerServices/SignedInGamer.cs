@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.GamerServices
 		#region Private Variables
 
 		private GamerAction statStoreAction;
-		private GamerAction statReceiveAction;
+		// private GamerAction statReceiveAction; Unused here
 		private AchievementCollection gamerAchievements;
 
 		#endregion

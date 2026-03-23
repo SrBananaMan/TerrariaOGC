@@ -186,7 +186,7 @@ namespace Terraria
 		{
 			if (ServerState == 10)
 			{
-				if (NetProj.type == 12)
+				if (NetProj.type == (byte)EntityID.ProjectileID.FALLING_STAR)
 				{
 					return true;
 				}

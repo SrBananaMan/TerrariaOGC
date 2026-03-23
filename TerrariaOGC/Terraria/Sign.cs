@@ -38,7 +38,7 @@ namespace Terraria
 			int YOffset = Main.TileSet[X, Y].FrameY / 18;
 			int SignX = X - XOffset;
 			int SignY = Y - YOffset;
-			if (Main.TileSet[SignX, SignY].Type != 55 && Main.TileSet[SignX, SignY].Type != 85)
+			if (Main.TileSet[SignX, SignY].Type != (byte)EntityID.TileID.SIGN && Main.TileSet[SignX, SignY].Type != (byte)EntityID.TileID.TOMBSTONE)
 			{
 				KillSign(SignX, SignY);
 				return -1;
@@ -72,7 +72,7 @@ namespace Terraria
 		{
 			fixed (Tile* SignTile = &Main.TileSet[SignX, SignY])
 			{
-				if (SignTile->IsActive == 0 || (SignTile->Type != 55 && SignTile->Type != 85))
+				if (SignTile->IsActive == 0 || (SignTile->Type != (byte)EntityID.TileID.SIGN && SignTile->Type != (byte)EntityID.TileID.TOMBSTONE))
 				{
 					Init();
 					return false;
@@ -100,7 +100,7 @@ namespace Terraria
 		{
 			if (FileIO.ReadBoolean())
 			{
-				if (Release >= Main.NewWorldDataVersion)
+				if (Release >= (int)EntityID.WorldID.INITIAL)
 				{
 					SignX = FileIO.ReadInt16();
 					SignY = FileIO.ReadInt16();

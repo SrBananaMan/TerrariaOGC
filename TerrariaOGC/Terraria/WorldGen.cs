@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection.Emit;
 using System.Threading;
 using Terraria.Achievements;
 using static Terraria.Tile;
@@ -204,7 +206,7 @@ namespace Terraria
 
 		public static bool canSpawn;
 
-		public static bool[] HouseTile = new bool[150];
+		public static bool[] HouseTile = new bool[(short)EntityID.TileID.NUM_TILESETS];
 
 		public static int bestX = 0;
 
@@ -321,19 +323,19 @@ namespace Terraria
 					{
 						ptr->IsActive = 0;
 						int type;
-						switch (ptr->Type)
+						switch ((EntityID.TileID)ptr->Type)
 						{
-							case 112:
-								type = 56;
+							case EntityID.TileID.EBONSAND:
+								type = (int)EntityID.ProjectileID.EBONSAND_BALL_FALLING;
 								break;
-							case 116:
-								type = 67;
+							case EntityID.TileID.PEARLSAND:
+								type = (int)EntityID.ProjectileID.PEARL_SAND_BALL_FALLING;
 								break;
-							case 123:
-								type = 71;
+							case EntityID.TileID.SILT:
+								type = (int)EntityID.ProjectileID.SILT_BALL;
 								break;
 							default:
-								type = 31;
+								type = (int)EntityID.ProjectileID.SAND_BALL_FALLING;
 								break;
 						}
 						int num2 = Projectile.NewProjectile(x * 16 + 8, y * 16 + 8, 0f, 2.5f, type, 10, 0f);
@@ -439,7 +441,7 @@ namespace Terraria
 
 		public static void moveRoom(int x, int y, int n)
 		{
-			if (Main.NetMode >= 1)
+			if (Main.NetMode >= (int)NetModeSetting.CLIENT)
 			{
 				NetMessage.CreateMessage4(60, n, x, y, 1);
 				NetMessage.SendMessage();
@@ -454,7 +456,7 @@ namespace Terraria
 
 		public static void kickOut(int n)
 		{
-			if (Main.NetMode >= 1)
+			if (Main.NetMode >= (int)NetModeSetting.CLIENT)
 			{
 				NetMessage.CreateMessage4(60, n, 0, 0, 0);
 				NetMessage.SendMessage();
@@ -600,7 +602,7 @@ namespace Terraria
 			}
 			if (!Main.IsTutorial())
 			{
-				if (ToSpawnNPC == (int)NPC.ID.GUIDE)
+				if (ToSpawnNPC == (int)EntityID.NPCID.GUIDE)
 				{
 					UI.SetTriggerStateForAll(Trigger.HouseGuide);
 				}
@@ -616,13 +618,13 @@ namespace Terraria
 			for (int i = 0; i < NPC.MaxNumNPCs; i++)
 			{
 				NPC nPC = Main.NPCSet[i];
-				if (nPC.Active != 0 && nPC.IsTownNPC && nPC.Type != (int)NPC.ID.OLD_MAN && nPC.Type != (int)NPC.ID.SANTA_CLAUS)
+				if (nPC.Active != 0 && nPC.IsTownNPC && nPC.Type != (int)EntityID.NPCID.OLD_MAN && nPC.Type != (int)EntityID.NPCID.SANTA_CLAUS)
 				{
 					flag = flag && !nPC.IsHomeless;
 					num++;
 				}
 			}
-			if (flag && num == 10)
+			if (flag && num == NPC.MaxNumTownNPCs)
 			{
 				UI.SetTriggerStateForAll(Trigger.HousedAllNPCs);
 			}
@@ -630,26 +632,11 @@ namespace Terraria
 
 		public static bool RoomNeeds()
 		{
-			roomChair = false;
-			roomDoor = false;
-			roomTable = false;
-			roomTorch = false;
-			if (HouseTile[15] || HouseTile[79] || HouseTile[89] || HouseTile[102])
-			{
-				roomChair = true;
-			}
-			if (HouseTile[14] || HouseTile[18] || HouseTile[87] || HouseTile[88] || HouseTile[90] || HouseTile[101])
-			{
-				roomTable = true;
-			}
-			if (HouseTile[4] || HouseTile[33] || HouseTile[34] || HouseTile[35] || HouseTile[36] || HouseTile[42] || HouseTile[49] || HouseTile[93] || HouseTile[95] || HouseTile[98] || HouseTile[100] || HouseTile[149])
-			{
-				roomTorch = true;
-			}
-			if (HouseTile[10] || HouseTile[11] || HouseTile[19])
-			{
-				roomDoor = true;
-			}
+			roomChair = EntityID.RoomChairs.Any(i => HouseTile[(int)i]);
+			roomDoor = EntityID.RoomDoors.Any(i => HouseTile[(int)i]);
+			roomTable = EntityID.RoomTables.Any(i => HouseTile[(int)i]);
+			roomTorch = EntityID.RoomTorches.Any(i => HouseTile[(int)i]);
+
 			if (roomChair && roomTable && roomDoor && roomTorch)
 			{
 				canSpawn = true;
@@ -750,19 +737,15 @@ namespace Terraria
 			int num = 0;
 			int num2 = 0;
 			int num3 = 0;
-			int num4 = roomX1 - 3 - 1 - Lighting.OffScreenTiles;
-			int num5 = roomX2 + 3 + 1 + Lighting.OffScreenTiles;
-			int num6 = roomY1 - 2 - 1 - Lighting.OffScreenTiles;
-			int num7 = roomY2 + 2 + 1 + Lighting.OffScreenTiles;
+			int num4 = roomX1 - (Main.ZoneX / 2 / 16) - 1 - Lighting.OffScreenTiles;
+			int num5 = roomX2 + (Main.ZoneX / 2 / 16) + 1 + Lighting.OffScreenTiles;
+			int num6 = roomY1 - (Main.ZoneY / 2 / 16) - 1 - Lighting.OffScreenTiles;
+			int num7 = roomY2 + (Main.ZoneY / 2 / 16) + 1 + Lighting.OffScreenTiles;
 			if (num4 < 0)
 			{
 				num4 = 0;
 			}
-#if (!IS_PATCHED && VERSION_INITIAL)
-            if (num5 >= Main.MaxTilesX) // For some reason, this is listed in the patch as > MaxTilesX - 1... which is the same thing as this
-#else
-			if (num5 > Main.MaxTilesX - 1)
-#endif
+			if (num5 >= Main.MaxTilesX)
 			{
 				num5 = Main.MaxTilesX - 1;
 			}
@@ -770,34 +753,36 @@ namespace Terraria
 			{
 				num6 = 0;
 			}
-#if (!IS_PATCHED && VERSION_INITIAL)
-            if (num7 > Main.MaxTilesX)
-            {
-                num7 = Main.MaxTilesX;
-            }
-#else
-			if (num7 > Main.MaxTilesY - 2)
+			if (num7 > Main.MaxTilesX)
 			{
-				num7 = Main.MaxTilesY - 2;
+				num7 = Main.MaxTilesX;
 			}
-#endif
 			for (int l = num4 + 1; l < num5; l++)
 			{
 				for (int m = num6 + 2; m < num7 + 2; m++)
 				{
 					if (Main.TileSet[l, m].IsActive != 0)
 					{
-						if (Main.TileSet[l, m].Type == 23 || Main.TileSet[l, m].Type == 24 || Main.TileSet[l, m].Type == 25 || Main.TileSet[l, m].Type == 32 || Main.TileSet[l, m].Type == 112)
+						switch ((EntityID.TileID)Main.TileSet[l, m].Type)
 						{
-							num3++;
-						}
-						else if (Main.TileSet[l, m].Type == 27)
-						{
-							num3 -= 5;
-						}
-						else if (Main.TileSet[l, m].Type == 109 || Main.TileSet[l, m].Type == 110 || Main.TileSet[l, m].Type == 113 || Main.TileSet[l, m].Type == 116)
-						{
-							num3--;
+							case EntityID.TileID.CORRUPT_GRASS:
+							case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							case EntityID.TileID.EBONSTONE:
+							case EntityID.TileID.CORRUPTION_THORN:
+							case EntityID.TileID.EBONSAND:
+								num3++;
+								break;
+
+							case EntityID.TileID.SUNFLOWER:
+								num3 -= 5;
+								break;
+
+							case EntityID.TileID.HALLOWED_GRASS:
+							case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+							case EntityID.TileID.TALL_HALLOWED_PLANTS:
+							case EntityID.TileID.PEARLSAND:
+								num3--;
+								break;
 						}
 					}
 				}
@@ -836,7 +821,7 @@ namespace Terraria
 						{
 							if (Main.TileSet[num9, num10].IsActive != 0)
 							{
-								num = ((num9 != n) ? ((Main.TileSet[num9, num10].Type != 10 && Main.TileSet[num9, num10].Type != 11) ? ((!Main.TileSolid[Main.TileSet[num9, num10].Type]) ? (num + 5) : (num - 5)) : (num - 20)) : (num - 15));
+								num = ((num9 != n) ? ((Main.TileSet[num9, num10].Type != (byte)EntityID.TileID.DOOR_CLOSED && Main.TileSet[num9, num10].Type != (byte)EntityID.TileID.DOOR_OPEN) ? ((!Main.TileSolid[Main.TileSet[num9, num10].Type]) ? (num + 5) : (num - 5)) : (num - 20)) : (num - 15));
 							}
 						}
 					}
@@ -870,7 +855,7 @@ namespace Terraria
 			roomY1 = y;
 			roomY2 = y;
 			numRoomTiles = 0;
-			for (int i = 0; i < 150; i++)
+			for (int i = 0; i < Main.MaxNumTilesets; i++)
 			{
 				HouseTile[i] = false;
 			}
@@ -920,7 +905,7 @@ namespace Terraria
 			if (Main.TileSet[x, y].IsActive != 0)
 			{
 				HouseTile[Main.TileSet[x, y].Type] = true;
-				if (Main.TileSolid[Main.TileSet[x, y].Type] || Main.TileSet[x, y].Type == 11)
+				if (Main.TileSolid[Main.TileSet[x, y].Type] || Main.TileSet[x, y].Type == (byte)EntityID.TileID.DOOR_OPEN)
 				{
 					checkRoomDepth--;
 					return;
@@ -949,7 +934,7 @@ namespace Terraria
 				{
 					num |= 1;
 				}
-				else if (Main.TileSet[x + j, y].IsActive != 0 && (Main.TileSolid[Main.TileSet[x + j, y].Type] || Main.TileSet[x + j, y].Type == 11))
+				else if (Main.TileSet[x + j, y].IsActive != 0 && (Main.TileSolid[Main.TileSet[x + j, y].Type] || Main.TileSet[x + j, y].Type == (byte)EntityID.TileID.DOOR_OPEN))
 				{
 					num |= 1;
 				}
@@ -957,7 +942,7 @@ namespace Terraria
 				{
 					num |= 2;
 				}
-				else if (Main.TileSet[x, y + j].IsActive != 0 && (Main.TileSolid[Main.TileSet[x, y + j].Type] || Main.TileSet[x, y + j].Type == 11))
+				else if (Main.TileSet[x, y + j].IsActive != 0 && (Main.TileSolid[Main.TileSet[x, y + j].Type] || Main.TileSet[x, y + j].Type == (byte)EntityID.TileID.DOOR_OPEN))
 				{
 					num |= 2;
 				}
@@ -967,51 +952,34 @@ namespace Terraria
 				canSpawn = false;
 				return;
 			}
-			CheckRoom(x, y - 1);
-			if (!canSpawn)
+			for (int dx = -1; dx < 2; dx++)
 			{
-				return;
-			}
-			CheckRoom(x, y + 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckRoom(x - 1, y - 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckRoom(x - 1, y);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckRoom(x - 1, y + 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckRoom(x + 1, y - 1);
-			if (canSpawn)
-			{
-				CheckRoom(x + 1, y);
-				if (canSpawn)
+				for (int dy = -1; dy < 2; dy++)
 				{
-					CheckRoom(x + 1, y + 1);
-					checkRoomDepth--;
+					if (dx == 0 && dy == 0)
+						continue;
+
+					if (canSpawn)
+					{
+						CheckRoom(x + dx, y + dy);
+						if (dx == 1 && dy == 1 && canSpawn)
+						{
+							checkRoomDepth--;
+						}
+					}
 				}
 			}
 		}
 
 		public static bool StartSpaceCheck(int x, int y)
 		{
+			// Why the hell does the Tutorial need this function? StartRoomCheck() is the damn same.
 			roomX1 = x;
 			roomX2 = x;
 			roomY1 = y;
 			roomY2 = y;
 			numRoomTiles = 0;
-			for (int i = 0; i < 150; i++)
+			for (int i = 0; i < Main.MaxNumTilesets; i++)
 			{
 				HouseTile[i] = false;
 			}
@@ -1061,7 +1029,7 @@ namespace Terraria
 			if (Main.TileSet[x, y].IsActive != 0)
 			{
 				HouseTile[Main.TileSet[x, y].Type] = true;
-				if (Main.TileSolid[Main.TileSet[x, y].Type] || Main.TileSet[x, y].Type == 11)
+				if (Main.TileSolid[Main.TileSet[x, y].Type] || Main.TileSet[x, y].Type == (byte)EntityID.TileID.DOOR_OPEN)
 				{
 					checkRoomDepth--;
 					return;
@@ -1083,39 +1051,21 @@ namespace Terraria
 			{
 				roomY2 = y;
 			}
-			CheckSpace(x, y - 1);
-			if (!canSpawn)
+			for (int dx = -1; dx < 2; dx++)
 			{
-				return;
-			}
-			CheckSpace(x, y + 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckSpace(x - 1, y - 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckSpace(x - 1, y);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckSpace(x - 1, y + 1);
-			if (!canSpawn)
-			{
-				return;
-			}
-			CheckSpace(x + 1, y - 1);
-			if (canSpawn)
-			{
-				CheckSpace(x + 1, y);
-				if (canSpawn)
+				for (int dy = -1; dy < 2; dy++)
 				{
-					CheckSpace(x + 1, y + 1);
-					checkRoomDepth--;
+					if (dx == 0 && dy == 0)
+						continue;
+
+					if (canSpawn)
+					{
+						CheckSpace(x + dx, y + dy);
+						if (dx == 1 && dy == 1 && canSpawn)
+						{
+							checkRoomDepth--;
+						}
+					}
 				}
 			}
 		}
@@ -1128,7 +1078,7 @@ namespace Terraria
 			{
 				return;
 			}
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < Player.MaxNumPlayers; i++)
 			{
 				if (Main.PlayerSet[i].Active != 0)
 				{
@@ -1143,7 +1093,7 @@ namespace Terraria
 			{
 				for (int k = 5; k < Main.WorldSurface; k++)
 				{
-					if (Main.TileSet[j, k].IsActive != 0 && Main.TileSet[j, k].Type == 37)
+					if (Main.TileSet[j, k].IsActive != 0 && Main.TileSet[j, k].Type == (byte)EntityID.TileID.METEORITE)
 					{
 						num2++;
 						if (num2 > num4)
@@ -1188,7 +1138,7 @@ namespace Terraria
 				return false;
 			}
 			Rectangle rectangle = new Rectangle((i - 25) * 16, (j - 25) * 16, 800, 800);
-			for (int k = 0; k < 8; k++)
+			for (int k = 0; k < Player.MaxNumPlayers; k++)
 			{
 				if (Main.PlayerSet[k].Active != 0)
 				{
@@ -1210,7 +1160,7 @@ namespace Terraria
 			{
 				for (int n = j - 25; n < j + 25; n++)
 				{
-					if (Main.TileSet[m, n].Type == 21 && Main.TileSet[m, n].IsActive != 0)
+					if (Main.TileSet[m, n].Type == (byte)EntityID.TileID.CHEST && Main.TileSet[m, n].IsActive != 0)
 					{
 						return false;
 					}
@@ -1227,7 +1177,7 @@ namespace Terraria
 						{
 							Main.TileSet[num, num2].IsActive = 0;
 						}
-						Main.TileSet[num, num2].Type = 37;
+						Main.TileSet[num, num2].Type = (byte)EntityID.TileID.METEORITE;
 					}
 				}
 			}
@@ -1246,7 +1196,7 @@ namespace Terraria
 				for (int num6 = j - 16; num6 < j + 16; num6++)
 				{
 					int type = Main.TileSet[num5, num6].Type;
-					if (type == 5 || type == 32)
+					if (type == (byte)EntityID.TileID.TREE || type == (byte)EntityID.TileID.CORRUPTION_THORN)
 					{
 						KillTile(num5, num6);
 					}
@@ -1260,11 +1210,11 @@ namespace Terraria
 				{
 					if (Main.TileSet[num7, num8].IsActive != 0 && Main.Rand.Next(10) == 0 && Math.Abs(i - num7) + Math.Abs(j - num8) < 29.9f)
 					{
-						if (Main.TileSet[num7, num8].Type == 5 || Main.TileSet[num7, num8].Type == 32)
+						if (Main.TileSet[num7, num8].Type == (byte)EntityID.TileID.TREE || Main.TileSet[num7, num8].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							KillTile(num7, num8);
 						}
-						Main.TileSet[num7, num8].Type = 37;
+						Main.TileSet[num7, num8].Type = (byte)EntityID.TileID.METEORITE;
 						SquareTileFrame(num7, num8);
 					}
 				}
@@ -1337,7 +1287,7 @@ namespace Terraria
 #if (!IS_PATCHED && VERSION_INITIAL)
 			int NetMode = Main.NetMode;
 			Netplay.PlayDisconnect = true;
-            if (NetMode != (byte)NetModeSetting.CLIENT && UI.MainUI.HasPlayerStorage())
+			if (NetMode != (byte)NetModeSetting.CLIENT && UI.MainUI.HasPlayerStorage())
 #else
 			Netplay.PlayDisconnect = true;
 			if (WorldSelect.isLocalWorld && UI.MainUI.HasPlayerStorage())
@@ -1353,7 +1303,7 @@ namespace Terraria
 				}
 				saveNewWorld();
 			}
-			for (int k = 0; k < 4; k++)
+			for (int k = 0; k < Main.UIInstance.Length; k++)
 			{
 				UI uI3 = Main.UIInstance[k];
 				if (!uI3.isStopping)
@@ -1467,10 +1417,10 @@ namespace Terraria
 				4
 			});
 #endif
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < Main.UIInstance.Length; i++)
 			{
 				UI uI = Main.UIInstance[i];
-				if (uI.CurMenuType != 0)
+				if (uI.CurMenuType != MenuType.MAIN)
 				{
 					uI.ActivePlayer.Save(uI.playerPathName);
 					uI.SaveSettings();
@@ -1493,17 +1443,17 @@ namespace Terraria
 			});
 #endif
 #if (!IS_PATCHED && VERSION_INITIAL)
-            if (Main.NetMode != (byte)NetModeSetting.CLIENT && UI.MainUI.HasPlayerStorage())
+			if (Main.NetMode != (byte)NetModeSetting.CLIENT && UI.MainUI.HasPlayerStorage())
 #else
 			if (WorldSelect.isLocalWorld && UI.MainUI.HasPlayerStorage())
 #endif
 			{
 				saveNewWorld();
 			}
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < Main.UIInstance.Length; i++)
 			{
 				UI uI = Main.UIInstance[i];
-				if (uI.CurMenuType != 0)
+				if (uI.CurMenuType != MenuType.MAIN)
 				{
 					uI.ActivePlayer.Save(uI.playerPathName);
 					uI.SaveSettings();
@@ -1646,7 +1596,6 @@ namespace Terraria
 						{
 							throw new InvalidOperationException("Invalid version");
 						}
-#if USE_ORIGINAL_CODE
 						if (num <= Main.OldWorldDataVersion)
 						{
 							loadOldWorld(binaryReader, num);
@@ -1655,16 +1604,6 @@ namespace Terraria
 						{
 							loadNewWorld(binaryReader, num, memoryStream);
 						}
-#else
-						if (num < Main.NewWorldDataVersion)
-						{
-							loadOldWorld(binaryReader, num, memoryStream);
-						}
-						else
-						{
-							loadNewWorld(binaryReader, num, memoryStream);
-						}
-#endif
 						Gen = true;
 						UI.MainUI.NextProgressStep(Lang.WorldGenText[52]);
 						for (int i = 0; i < Main.MaxTilesX; i++)
@@ -1719,7 +1658,8 @@ namespace Terraria
 			}
 		}
 
-#if USE_ORIGINAL_CODE
+		// Turns out I was wrong about this function. It legit is just a prototype world loader used prior to when they developed the new 'console-formatted' worlds.
+		// It still has some differences than PC 1.1.2, but the similarities are still here, like RightWorld and BottomWorld being read twice.
 		private unsafe static void loadOldWorld(BinaryReader fileIO, int release)
 		{
 			string b = fileIO.ReadString();
@@ -1730,12 +1670,7 @@ namespace Terraria
 			Main.BottomWorld = fileIO.ReadInt32();
 			Main.MaxTilesY = (short)fileIO.ReadInt32();
 			Main.MaxTilesX = (short)fileIO.ReadInt32();
-
-#if (!VERSION_INITIAL || IS_PATCHED)
-            setWorldSize();
-#endif
-
-            clearWorld();
+			clearWorld();
 			Main.WorldID = worldID;
 			UI.MainUI.FirstProgressStep(4, Lang.WorldGenText[51]);
 			Main.SpawnTileX = (short)fileIO.ReadInt32();
@@ -1787,7 +1722,7 @@ namespace Terraria
 						if (ptr2->IsActive != 0)
 						{
 							ptr2->Type = fileIO.ReadByte();
-							if (ptr2->Type == 127)
+							if (ptr2->Type == (byte)EntityID.TileID.ICE)
 							{
 								ptr2->IsActive = 0;
 							}
@@ -1795,7 +1730,7 @@ namespace Terraria
 							{
 								ptr2->FrameX = fileIO.ReadInt16();
 								ptr2->FrameY = fileIO.ReadInt16();
-								if (ptr2->Type == 144)
+								if (ptr2->Type == (byte)EntityID.TileID.TIMER)
 								{
 									ptr2->FrameY = 0;
 								}
@@ -1818,7 +1753,7 @@ namespace Terraria
 								ptr2->Lava = 32;
 							}
 						}
-						if (release < Main.OldWorldDataVersion)
+						if (release < Main.OldWorldDataVersion) // Here we can see how Engine was sorting out wiring before they settled with flags and eventually in the 1.0 patch, WireCheck.
 						{
 							if (fileIO.ReadBoolean())
 							{
@@ -1872,7 +1807,7 @@ namespace Terraria
 					string s = fileIO.ReadString();
 					int num3 = fileIO.ReadInt32();
 					int num4 = fileIO.ReadInt32();
-					if (Main.TileSet[num3, num4].IsActive != 0 && (Main.TileSet[num3, num4].Type == 55 || Main.TileSet[num3, num4].Type == 85))
+					if (Main.TileSet[num3, num4].IsActive != 0 && (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SIGN || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.TOMBSTONE))
 					{
 						Main.SignSet[l].SignX = (short)num3;
 						Main.SignSet[l].SignY = (short)num4;
@@ -1903,16 +1838,16 @@ namespace Terraria
 				}
 				flag = fileIO.ReadBoolean();
 			}
-			NPC.TypeNames[(int)NPC.ID.MERCHANT] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.NURSE] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.ARMS_DEALER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.DRYAD] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.GUIDE] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.CLOTHIER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.WIZARD] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.MECHANIC] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.MERCHANT] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.NURSE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DRYAD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GUIDE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.CLOTHIER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.WIZARD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.MECHANIC] = fileIO.ReadString();
 			bool flag2 = fileIO.ReadBoolean();
 			string a = fileIO.ReadString();
 			int num6 = fileIO.ReadInt32();
@@ -1920,386 +1855,11 @@ namespace Terraria
 			{
 				throw new InvalidOperationException("Invalid footer");
 			}
-#else
-		private unsafe static void loadOldWorld(BinaryReader fileIO, int release, MemoryStream stream) // The 1.0 stuff here is actually prototype, as 1.0 world versions were 49, not 46.
-		{
-			if (release <= Main.OldWorldDataVersion)
-			{
-				string b = fileIO.ReadString();
-				int worldID = fileIO.ReadInt32(); // Also no CRC.
-				Main.RightWorld = fileIO.ReadInt32();
-				Main.RightWorld = fileIO.ReadInt32();
-				Main.BottomWorld = fileIO.ReadInt32();
-				Main.BottomWorld = fileIO.ReadInt32();
-				Main.MaxTilesY = (short)fileIO.ReadInt32();
-				Main.MaxTilesX = (short)fileIO.ReadInt32();
-
-#if (!VERSION_INITIAL || IS_PATCHED)
-				setWorldSize();
-#endif
-
-				clearWorld();
-				Main.WorldID = worldID;
-				UI.MainUI.FirstProgressStep(4, Lang.WorldGenText[51]);
-				Main.SpawnTileX = (short)fileIO.ReadInt32();
-				Main.SpawnTileY = (short)fileIO.ReadInt32();
-				Main.WorldSurface = (int)fileIO.ReadDouble();
-				Main.WorldSurfacePixels = Main.WorldSurface << 4;
-				Main.RockLayer = (int)fileIO.ReadDouble();
-				Main.RockLayerPixels = Main.RockLayer << 4;
-				UpdateMagmaLayerPos();
-				tempTime.DayRate = 1f;
-				tempTime.WorldTime = (float)fileIO.ReadDouble();
-				tempTime.DayTime = fileIO.ReadBoolean();
-				tempTime.MoonPhase = (byte)fileIO.ReadInt32();
-				tempTime.IsBloodMoon = fileIO.ReadBoolean();
-				Main.DungeonX = (short)fileIO.ReadInt32();
-				Main.DungeonY = (short)fileIO.ReadInt32();
-				NPC.HasDownedBoss1 = fileIO.ReadBoolean();
-				NPC.HasDownedBoss2 = fileIO.ReadBoolean();
-				NPC.HasDownedBoss3 = fileIO.ReadBoolean();
-				NPC.HasSavedGoblin = fileIO.ReadBoolean();
-				NPC.HasSavedWizard = fileIO.ReadBoolean();
-				NPC.HasSavedMech = fileIO.ReadBoolean();
-				NPC.HasDownedGoblins = fileIO.ReadBoolean();
-				NPC.HasDownedClown = fileIO.ReadBoolean();
-				NPC.HasDownedFrost = fileIO.ReadBoolean();
-				HasShadowOrbSmashed = fileIO.ReadBoolean();
-				ToSpawnMeteor = fileIO.ReadBoolean();
-				shadowOrbCount = fileIO.ReadByte();
-				altarCount = fileIO.ReadInt32();
-				Main.InHardMode = fileIO.ReadBoolean();
-				Main.InvasionDelay = fileIO.ReadInt32();
-				Main.InvasionSize = fileIO.ReadInt32();
-				Main.InvasionType = fileIO.ReadInt32();
-				Main.InvasionX = (float)fileIO.ReadDouble();
-				for (int i = 0; i < Main.MaxTilesX; i++)
-				{
-					if ((i & 0x1F) == 0)
-					{
-						UI.MainUI.Progress = i / (float)Main.MaxTilesX;
-					}
-					fixed (Tile* ptr = &Main.TileSet[i, 0])
-					{
-						Tile* ptr2 = ptr;
-						int num = 0;
-						while (num < Main.MaxTilesY)
-						{
-							ptr2->CurrentFlags = ~(Flags.WALLFRAME_MASK | Flags.HIGHLIGHT_MASK | Flags.VISITED | Flags.WIRE | Flags.CHECKING_LIQUID | Flags.SKIP_LIQUID);
-							ptr2->IsActive = fileIO.ReadByte();
-							if (ptr2->IsActive != 0)
-							{
-								ptr2->Type = fileIO.ReadByte();
-								if (ptr2->Type == 127)
-								{
-									ptr2->IsActive = 0;
-								}
-								if (Main.TileFrameImportant[ptr2->Type])
-								{
-									ptr2->FrameX = fileIO.ReadInt16();
-									ptr2->FrameY = fileIO.ReadInt16();
-									if (ptr2->Type == 144)
-									{
-										ptr2->FrameY = 0;
-									}
-								}
-								else
-								{
-									ptr2->FrameX = -1;
-									ptr2->FrameY = -1;
-								}
-							}
-							if (fileIO.ReadBoolean())
-							{
-								ptr2->WallType = fileIO.ReadByte();
-							}
-							if (fileIO.ReadBoolean())
-							{
-								ptr2->Liquid = fileIO.ReadByte();
-								if (fileIO.ReadBoolean())
-								{
-									ptr2->Lava = 32;
-								}
-							}
-							if (release < Main.OldWorldDataVersion) // Here we can see how Engine was sorting out wiring before they settled with flags and eventually in the 1.0 patch, WireCheck.
-							{
-								if (fileIO.ReadBoolean())
-								{
-									ptr2->wire = 16;
-								}
-							}
-							else
-							{
-								ptr2->CurrentFlags |= (Flags)fileIO.ReadByte();
-								if (Main.IsTutorial())
-								{
-									ptr2->CurrentFlags &= ~Flags.VISITED;
-								}
-							}
-							int num2 = fileIO.ReadInt16();
-							num += num2;
-							while (num2 > 0)
-							{
-								ptr2[1] = *ptr2;
-								ptr2++;
-								num2--;
-							}
-							num++;
-							ptr2++;
-						}
-					}
-				}
-				for (int j = 0; j < Main.MaxNumChests; j++)
-				{
-					if (!fileIO.ReadBoolean())
-					{
-						continue;
-					}
-					Main.ChestSet[j] = new Chest();
-					Main.ChestSet[j].XPos = (short)fileIO.ReadInt32();
-					Main.ChestSet[j].YPos = (short)fileIO.ReadInt32();
-					for (int k = 0; k < Chest.MaxNumItems; k++)
-					{
-						byte b2 = fileIO.ReadByte();
-						if (b2 > 0)
-						{
-							Main.ChestSet[j].ItemSet[k].NetDefaults(fileIO.ReadInt32(), b2);
-							Main.ChestSet[j].ItemSet[k].SetPrefix(fileIO.ReadByte());
-						}
-					}
-				}
-				for (int l = 0; l < Sign.MaxNumSigns; l++)
-				{
-					if (fileIO.ReadBoolean())
-					{
-						string s = fileIO.ReadString();
-						int num3 = fileIO.ReadInt32();
-						int num4 = fileIO.ReadInt32();
-						if (Main.TileSet[num3, num4].IsActive != 0 && (Main.TileSet[num3, num4].Type == 55 || Main.TileSet[num3, num4].Type == 85))
-						{
-							Main.SignSet[l].SignX = (short)num3;
-							Main.SignSet[l].SignY = (short)num4;
-							Main.SignSet[l].SignString = s;
-						}
-					}
-				}
-				bool flag = fileIO.ReadBoolean();
-				int num5 = 0;
-				while (flag)
-				{
-					try
-					{
-						string value = fileIO.ReadString();
-						Main.NPCSet[num5].SetDefaults(Convert.ToUInt16(value));
-						Main.NPCSet[num5].Position.X = fileIO.ReadSingle();
-						Main.NPCSet[num5].Position.Y = fileIO.ReadSingle();
-						Main.NPCSet[num5].XYWH.X = (int)Main.NPCSet[num5].Position.X;
-						Main.NPCSet[num5].XYWH.Y = (int)Main.NPCSet[num5].Position.Y;
-						Main.NPCSet[num5].IsHomeless = fileIO.ReadBoolean();
-						Main.NPCSet[num5].HomeTileX = (short)fileIO.ReadInt32();
-						Main.NPCSet[num5].HomeTileY = (short)fileIO.ReadInt32();
-						num5++;
-					}
-					catch (FormatException)
-					{
-						fileIO.ReadBytes(17);
-					}
-					flag = fileIO.ReadBoolean();
-				}
-				NPC.TypeNames[(int)NPC.ID.MERCHANT] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.NURSE] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.ARMS_DEALER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.DRYAD] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.GUIDE] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.CLOTHIER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.WIZARD] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.MECHANIC] = fileIO.ReadString();
-				bool flag2 = fileIO.ReadBoolean();
-				string a = fileIO.ReadString();
-				int num6 = fileIO.ReadInt32();
-				if (!flag2 || a != b || num6 != Main.WorldID)
-				{
-					throw new InvalidOperationException("Invalid footer");
-				}
-			}
-			else
-			{
-				CRC32 cRC = new CRC32();
-				cRC.Update(stream.GetBuffer(), 8, (int)stream.Length - 8);
-				if (cRC.GetValue() != fileIO.ReadUInt32())
-				{
-					throw new InvalidOperationException("Invalid CRC32");
-				}
-				fileIO.ReadString();
-				int worldID = fileIO.ReadInt32();
-				int worldTimestamp = ((release >= Main.NewWorldDataVersion - 1) ? fileIO.ReadInt32() : 0);
-				Main.RightWorld = fileIO.ReadInt32();
-				Main.BottomWorld = fileIO.ReadInt16();
-				Main.MaxTilesY = fileIO.ReadInt16();
-				Main.MaxTilesX = fileIO.ReadInt16();
-
-#if (!VERSION_INITIAL || IS_PATCHED)
-				setWorldSize();
-#endif
-
-				clearWorld();
-				Main.WorldID = worldID;
-				Main.WorldTimestamp = worldTimestamp;
-				UI.MainUI.FirstProgressStep(4, Lang.WorldGenText[51]);
-				Main.SpawnTileX = fileIO.ReadInt16();
-				Main.SpawnTileY = fileIO.ReadInt16();
-				Main.WorldSurface = fileIO.ReadInt16();
-				Main.WorldSurfacePixels = Main.WorldSurface << 4;
-				Main.RockLayer = fileIO.ReadInt16();
-				Main.RockLayerPixels = Main.RockLayer << 4;
-				UpdateMagmaLayerPos();
-				tempTime.DayRate = 1f;
-				tempTime.WorldTime = fileIO.ReadSingle();
-				tempTime.DayTime = fileIO.ReadBoolean();
-				tempTime.MoonPhase = fileIO.ReadByte();
-				tempTime.IsBloodMoon = fileIO.ReadBoolean();
-				Main.DungeonX = fileIO.ReadInt16();
-				Main.DungeonY = fileIO.ReadInt16();
-				NPC.HasDownedBoss1 = fileIO.ReadBoolean();
-				NPC.HasDownedBoss2 = fileIO.ReadBoolean();
-				NPC.HasDownedBoss3 = fileIO.ReadBoolean();
-				NPC.HasSavedGoblin = fileIO.ReadBoolean();
-				NPC.HasSavedWizard = fileIO.ReadBoolean();
-				NPC.HasSavedMech = fileIO.ReadBoolean();
-				NPC.HasDownedGoblins = fileIO.ReadBoolean();
-				NPC.HasDownedClown = fileIO.ReadBoolean();
-				NPC.HasDownedFrost = fileIO.ReadBoolean();
-				HasShadowOrbSmashed = fileIO.ReadBoolean();
-				ToSpawnMeteor = fileIO.ReadBoolean();
-				shadowOrbCount = fileIO.ReadByte();
-				altarCount = fileIO.ReadInt32();
-				Main.InHardMode = fileIO.ReadBoolean();
-				Main.InvasionDelay = fileIO.ReadByte();
-				Main.InvasionSize = fileIO.ReadInt16();
-				Main.InvasionType = fileIO.ReadByte();
-				Main.InvasionX = fileIO.ReadSingle();
-				for (int i = 0; i < Main.MaxTilesX; i++)
-				{
-					if ((i & 0x1F) == 0)
-					{
-						UI.MainUI.Progress = i / (float)Main.MaxTilesX;
-					}
-					fixed (Tile* ptr = &Main.TileSet[i, 0])
-					{
-						Tile* ptr2 = ptr;
-						int num = 0;
-						while (num < Main.MaxTilesY)
-						{
-							ptr2->CurrentFlags = ~(Flags.WALLFRAME_MASK | Flags.HIGHLIGHT_MASK | Flags.VISITED | Flags.WIRE | Flags.CHECKING_LIQUID | Flags.SKIP_LIQUID);
-							ptr2->IsActive = fileIO.ReadByte();
-							if (ptr2->IsActive != 0)
-							{
-								ptr2->Type = fileIO.ReadByte();
-								if (ptr2->Type == 127)
-								{
-									ptr2->IsActive = 0;
-								}
-								if (Main.TileFrameImportant[ptr2->Type])
-								{
-									ptr2->FrameX = fileIO.ReadInt16();
-									ptr2->FrameY = fileIO.ReadInt16();
-									if (ptr2->Type == 144)
-									{
-										ptr2->FrameY = 0;
-									}
-								}
-								else
-								{
-									ptr2->FrameX = -1;
-									ptr2->FrameY = -1;
-								}
-							}
-							ptr2->WallType = fileIO.ReadByte();
-							ptr2->Liquid = fileIO.ReadByte();
-							if (ptr2->Liquid > 0 && fileIO.ReadBoolean())
-							{
-								ptr2->Lava = 32;
-							}
-							ptr2->CurrentFlags |= (Flags)fileIO.ReadByte();
-							if (Main.IsTutorial())
-							{
-								ptr2->CurrentFlags &= ~Flags.VISITED;
-							}
-							int num2 = fileIO.ReadByte();
-							if (((uint)num2 & 0x80u) != 0)
-							{
-								num2 &= 0x7F;
-								num2 |= fileIO.ReadByte() << 7;
-							}
-							num += num2;
-							while (num2 > 0)
-							{
-								ptr2[1] = *ptr2;
-								ptr2++;
-								num2--;
-							}
-							num++;
-							ptr2++;
-						}
-					}
-				}
-				for (int j = 0; j < Main.MaxNumChests; j++)
-				{
-					if (!fileIO.ReadBoolean())
-					{
-						continue;
-					}
-					Main.ChestSet[j] = new Chest();
-					Main.ChestSet[j].XPos = fileIO.ReadInt16();
-					Main.ChestSet[j].YPos = fileIO.ReadInt16();
-					for (int k = 0; k < Chest.MaxNumItems; k++)
-					{
-						byte b = fileIO.ReadByte();
-						if (b > 0)
-						{
-							Main.ChestSet[j].ItemSet[k].NetDefaults(fileIO.ReadInt16(), b);
-							Main.ChestSet[j].ItemSet[k].SetPrefix(fileIO.ReadByte());
-						}
-					}
-				}
-				for (int l = 0; l < Sign.MaxNumSigns; l++)
-				{
-					Main.SignSet[l].Read(fileIO, release);
-				}
-				bool flag = fileIO.ReadBoolean();
-				int num3 = 0;
-				while (flag)
-				{
-					int type = fileIO.ReadByte();
-					Main.NPCSet[num3].SetDefaults(type);
-					Main.NPCSet[num3].Position.X = fileIO.ReadSingle();
-					Main.NPCSet[num3].Position.Y = fileIO.ReadSingle();
-					Main.NPCSet[num3].XYWH.X = (int)Main.NPCSet[num3].Position.X;
-					Main.NPCSet[num3].XYWH.Y = (int)Main.NPCSet[num3].Position.Y;
-					Main.NPCSet[num3].IsHomeless = fileIO.ReadBoolean();
-					Main.NPCSet[num3].HomeTileX = fileIO.ReadInt16();
-					Main.NPCSet[num3].HomeTileY = fileIO.ReadInt16();
-					num3++;
-					flag = fileIO.ReadBoolean();
-				}
-				NPC.TypeNames[(int)NPC.ID.MERCHANT] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.NURSE] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.ARMS_DEALER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.DRYAD] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.GUIDE] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.CLOTHIER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.WIZARD] = fileIO.ReadString();
-				NPC.TypeNames[(int)NPC.ID.MECHANIC] = fileIO.ReadString();
-			}
-#endif
 		}
 
 		private unsafe static void loadNewWorld(BinaryReader fileIO, int release, MemoryStream stream)
 		{
+#if USE_ORIGINAL_CODE
 			CRC32 cRC = new CRC32();
 			cRC.Update(stream.GetBuffer(), 8, (int)stream.Length - 8);
 			if (cRC.GetValue() != fileIO.ReadUInt32())
@@ -2309,6 +1869,178 @@ namespace Terraria
 			fileIO.ReadString();
 			int worldID = fileIO.ReadInt32();
 			int worldTimestamp = ((release >= Main.NewWorldDataVersion - 1) ? fileIO.ReadInt32() : 0);
+			Main.RightWorld = fileIO.ReadInt32();
+			Main.BottomWorld = fileIO.ReadInt16();
+			Main.MaxTilesY = fileIO.ReadInt16();
+			Main.MaxTilesX = fileIO.ReadInt16();
+			clearWorld();
+			Main.WorldID = worldID;
+			Main.WorldTimestamp = worldTimestamp;
+			UI.MainUI.FirstProgressStep(4, Lang.WorldGenText[51]);
+			Main.SpawnTileX = fileIO.ReadInt16();
+			Main.SpawnTileY = fileIO.ReadInt16();
+			Main.WorldSurface = fileIO.ReadInt16();
+			Main.WorldSurfacePixels = Main.WorldSurface << 4;
+			Main.RockLayer = fileIO.ReadInt16();
+			Main.RockLayerPixels = Main.RockLayer << 4;
+			UpdateMagmaLayerPos();
+			tempTime.DayRate = 1f;
+			tempTime.WorldTime = fileIO.ReadSingle();
+			tempTime.DayTime = fileIO.ReadBoolean();
+			tempTime.MoonPhase = fileIO.ReadByte();
+			tempTime.IsBloodMoon = fileIO.ReadBoolean();
+			Main.DungeonX = fileIO.ReadInt16();
+			Main.DungeonY = fileIO.ReadInt16();
+			NPC.HasDownedBoss1 = fileIO.ReadBoolean();
+			NPC.HasDownedBoss2 = fileIO.ReadBoolean();
+			NPC.HasDownedBoss3 = fileIO.ReadBoolean();
+			NPC.HasSavedGoblin = fileIO.ReadBoolean();
+			NPC.HasSavedWizard = fileIO.ReadBoolean();
+			NPC.HasSavedMech = fileIO.ReadBoolean();
+			NPC.HasDownedGoblins = fileIO.ReadBoolean();
+			NPC.HasDownedClown = fileIO.ReadBoolean();
+			NPC.HasDownedFrost = fileIO.ReadBoolean();
+			HasShadowOrbSmashed = fileIO.ReadBoolean();
+			ToSpawnMeteor = fileIO.ReadBoolean();
+			shadowOrbCount = fileIO.ReadByte();
+			altarCount = fileIO.ReadInt32();
+			Main.InHardMode = fileIO.ReadBoolean();
+			Main.InvasionDelay = fileIO.ReadByte();
+			Main.InvasionSize = fileIO.ReadInt16();
+			Main.InvasionType = fileIO.ReadByte();
+			Main.InvasionX = fileIO.ReadSingle();
+			for (int i = 0; i < Main.MaxTilesX; i++)
+			{
+				if ((i & 0x1F) == 0)
+				{
+					UI.MainUI.Progress = i / (float)Main.MaxTilesX;
+				}
+				fixed (Tile* ptr = &Main.TileSet[i, 0])
+				{
+					Tile* ptr2 = ptr;
+					int num = 0;
+					while (num < Main.MaxTilesY)
+					{
+						ptr2->CurrentFlags = ~(Flags.WALLFRAME_MASK | Flags.HIGHLIGHT_MASK | Flags.VISITED | Flags.WIRE | Flags.CHECKING_LIQUID | Flags.SKIP_LIQUID);
+						ptr2->IsActive = fileIO.ReadByte();
+						if (ptr2->IsActive != 0)
+						{
+							ptr2->Type = fileIO.ReadByte();
+							if (ptr2->Type == (byte)EntityID.TileID.ICE)
+							{
+								ptr2->IsActive = 0;
+							}
+							if (Main.TileFrameImportant[ptr2->Type])
+							{
+								ptr2->FrameX = fileIO.ReadInt16();
+								ptr2->FrameY = fileIO.ReadInt16();
+								if (ptr2->Type == (byte)EntityID.TileID.TIMER)
+								{
+									ptr2->FrameY = 0;
+								}
+							}
+							else
+							{
+								ptr2->FrameX = -1;
+								ptr2->FrameY = -1;
+							}
+						}
+						ptr2->WallType = fileIO.ReadByte();
+						ptr2->Liquid = fileIO.ReadByte();
+						if (ptr2->Liquid > 0 && fileIO.ReadBoolean())
+						{
+							ptr2->Lava = 32;
+						}
+						ptr2->CurrentFlags |= (Flags)fileIO.ReadByte();
+						if (Main.IsTutorial())
+						{
+							ptr2->CurrentFlags &= ~Flags.VISITED;
+						}
+						int num2 = fileIO.ReadByte();
+						if (((uint)num2 & 0x80u) != 0)
+						{
+							num2 &= 0x7F;
+							num2 |= fileIO.ReadByte() << 7;
+						}
+						num += num2;
+						while (num2 > 0)
+						{
+							ptr2[1] = *ptr2;
+							ptr2++;
+							num2--;
+						}
+						num++;
+						ptr2++;
+					}
+				}
+			}
+			for (int j = 0; j < Main.MaxNumChests; j++)
+			{
+				if (!fileIO.ReadBoolean())
+				{
+					continue;
+				}
+				Main.ChestSet[j] = new Chest();
+				Main.ChestSet[j].XPos = fileIO.ReadInt16();
+				Main.ChestSet[j].YPos = fileIO.ReadInt16();
+				for (int k = 0; k < Chest.MaxNumItems; k++)
+				{
+					byte b = fileIO.ReadByte();
+					if (b > 0)
+					{
+						Main.ChestSet[j].ItemSet[k].NetDefaults(fileIO.ReadInt16(), b);
+						Main.ChestSet[j].ItemSet[k].SetPrefix(fileIO.ReadByte());
+					}
+				}
+			}
+			for (int l = 0; l < Sign.MaxNumSigns; l++)
+			{
+				Main.SignSet[l].Read(fileIO, release);
+			}
+			bool flag = fileIO.ReadBoolean();
+			int num3 = 0;
+			while (flag)
+			{
+				int type = fileIO.ReadByte();
+				Main.NPCSet[num3].SetDefaults(type);
+				Main.NPCSet[num3].Position.X = fileIO.ReadSingle();
+				Main.NPCSet[num3].Position.Y = fileIO.ReadSingle();
+				Main.NPCSet[num3].XYWH.X = (int)Main.NPCSet[num3].Position.X;
+				Main.NPCSet[num3].XYWH.Y = (int)Main.NPCSet[num3].Position.Y;
+				Main.NPCSet[num3].IsHomeless = fileIO.ReadBoolean();
+				Main.NPCSet[num3].HomeTileX = fileIO.ReadInt16();
+				Main.NPCSet[num3].HomeTileY = fileIO.ReadInt16();
+				num3++;
+				flag = fileIO.ReadBoolean();
+			}
+			NPC.TypeNames[(int)EntityID.NPCID.MERCHANT] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.NURSE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DRYAD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GUIDE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.CLOTHIER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.WIZARD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.MECHANIC] = fileIO.ReadString();
+#else
+
+			if (release < (int)EntityID.WorldID.V101)
+			{
+				CRC32 cRC = new CRC32();
+				cRC.Update(stream.GetBuffer(), 8, (int)stream.Length - 8);
+				if (cRC.GetValue() != fileIO.ReadUInt32())
+				{
+					throw new InvalidOperationException("Invalid CRC32");
+				}
+			}
+			else
+			{
+				fileIO.ReadUInt32();
+			}
+			fileIO.ReadString();
+			int worldID = fileIO.ReadInt32();
+			int worldTimestamp = ((release >= (int)EntityID.WorldID.INITIAL - 1) ? fileIO.ReadInt32() : 0);
 			Main.RightWorld = fileIO.ReadInt32();
 			Main.BottomWorld = fileIO.ReadInt16();
 			Main.MaxTilesY = fileIO.ReadInt16();
@@ -2371,7 +2103,7 @@ namespace Terraria
 						if (ptr2->IsActive != 0)
 						{
 							ptr2->Type = fileIO.ReadByte();
-							if (ptr2->Type == 127)
+							if (ptr2->Type == (byte)EntityID.TileID.ICE)
 							{
 								ptr2->IsActive = 0;
 							}
@@ -2379,7 +2111,7 @@ namespace Terraria
 							{
 								ptr2->FrameX = fileIO.ReadInt16();
 								ptr2->FrameY = fileIO.ReadInt16();
-								if (ptr2->Type == 144)
+								if (ptr2->Type == (byte)EntityID.TileID.TIMER)
 								{
 									ptr2->FrameY = 0;
 								}
@@ -2430,11 +2162,17 @@ namespace Terraria
 				Main.ChestSet[j].YPos = fileIO.ReadInt16();
 				for (int k = 0; k < Chest.MaxNumItems; k++)
 				{
-#if VERSION_INITIAL
-					byte b = fileIO.ReadByte();
-#else
-					short b = fileIO.ReadInt16();
-#endif
+					int b = 0;
+
+					if (release > (int)EntityID.WorldID.INITIAL)
+					{
+						b = fileIO.ReadInt16();
+					}
+					else
+					{
+						b = fileIO.ReadByte();
+					}
+
 					if (b > 0)
 					{
 						Main.ChestSet[j].ItemSet[k].NetDefaults(fileIO.ReadInt16(), b);
@@ -2462,16 +2200,17 @@ namespace Terraria
 				num3++;
 				flag = fileIO.ReadBoolean();
 			}
-			NPC.TypeNames[(int)NPC.ID.MERCHANT] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.NURSE] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.ARMS_DEALER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.DRYAD] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.GUIDE] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.CLOTHIER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.WIZARD] = fileIO.ReadString();
-			NPC.TypeNames[(int)NPC.ID.MECHANIC] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.MERCHANT] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.NURSE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DRYAD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GUIDE] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.CLOTHIER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.WIZARD] = fileIO.ReadString();
+			NPC.TypeNames[(int)EntityID.NPCID.MECHANIC] = fileIO.ReadString();
+#endif
 		}
 
 		public static void saveNewWorld()
@@ -2505,6 +2244,7 @@ namespace Terraria
 				{
 					using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
 					{
+#if USE_ORIGINAL_CODE
 						binaryWriter.Write(Main.NewWorldDataVersion);
 						binaryWriter.Write(0u);
 						binaryWriter.Write(Main.WorldName);
@@ -2552,7 +2292,7 @@ namespace Terraria
 							for (num = 0; num < Main.MaxTilesY; num++)
 							{
 								Tile tile = Main.TileSet[i, num];
-								if (tile.Type == 127)
+								if (tile.Type == (byte)EntityID.TileID.ICE)
 								{
 									tile.IsActive = 0;
 								}
@@ -2612,11 +2352,7 @@ namespace Terraria
 								{
 									chest.ItemSet[l].Stack = 0;
 								}
-#if VERSION_INITIAL
 								binaryWriter.Write((byte)chest.ItemSet[l].Stack);
-#else
-								binaryWriter.Write(chest.ItemSet[l].Stack); // Stacks can now go up to 999, meaning no more 255 (FF) limits, bytes begone.
-#endif
 								if (chest.ItemSet[l].Stack > 0)
 								{
 									binaryWriter.Write(chest.ItemSet[l].NetID);
@@ -2645,20 +2381,184 @@ namespace Terraria
 							}
 						}
 						binaryWriter.Write(value: false);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.MERCHANT]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.NURSE]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.ARMS_DEALER]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.DRYAD]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.GUIDE]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.CLOTHIER]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.WIZARD]);
-						binaryWriter.Write(NPC.TypeNames[(int)NPC.ID.MECHANIC]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.MERCHANT]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.NURSE]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.DRYAD]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.GUIDE]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.CLOTHIER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.WIZARD]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.MECHANIC]);
 						CRC32 cRC = new CRC32();
 						cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
 						binaryWriter.Seek(4, SeekOrigin.Begin);
 						binaryWriter.Write(cRC.GetValue());
+#else
+						binaryWriter.Write(Main.NewWorldDataVersion);
+						binaryWriter.Write(0u);
+						binaryWriter.Write(Main.WorldName);
+						binaryWriter.Write(Main.WorldID);
+						binaryWriter.Write(Main.WorldTimestamp);
+						binaryWriter.Write(Main.RightWorld);
+						binaryWriter.Write((short)Main.BottomWorld);
+						binaryWriter.Write(Main.MaxTilesY);
+						binaryWriter.Write(Main.MaxTilesX);
+						binaryWriter.Write(Main.SpawnTileX);
+						binaryWriter.Write(Main.SpawnTileY);
+						binaryWriter.Write((short)Main.WorldSurface);
+						binaryWriter.Write((short)Main.RockLayer);
+						binaryWriter.Write(tempTime.WorldTime);
+						binaryWriter.Write(tempTime.DayTime);
+						binaryWriter.Write(tempTime.MoonPhase);
+						binaryWriter.Write(tempTime.IsBloodMoon);
+						binaryWriter.Write(Main.DungeonX);
+						binaryWriter.Write(Main.DungeonY);
+						binaryWriter.Write(NPC.HasDownedBoss1);
+						binaryWriter.Write(NPC.HasDownedBoss2);
+						binaryWriter.Write(NPC.HasDownedBoss3);
+						binaryWriter.Write(NPC.HasSavedGoblin);
+						binaryWriter.Write(NPC.HasSavedWizard);
+						binaryWriter.Write(NPC.HasSavedMech);
+						binaryWriter.Write(NPC.HasDownedGoblins);
+						binaryWriter.Write(NPC.HasDownedClown);
+						binaryWriter.Write(NPC.HasDownedFrost);
+						binaryWriter.Write(HasShadowOrbSmashed);
+						binaryWriter.Write(ToSpawnMeteor);
+						binaryWriter.Write((byte)shadowOrbCount);
+						binaryWriter.Write(altarCount);
+						binaryWriter.Write(Main.InHardMode);
+						binaryWriter.Write((byte)Main.InvasionDelay);
+						binaryWriter.Write((short)Main.InvasionSize);
+						binaryWriter.Write((byte)Main.InvasionType);
+						binaryWriter.Write(Main.InvasionX);
+						for (int i = 0; i < Main.MaxTilesX; i++)
+						{
+							if ((i & 0x1F) == 0)
+							{
+								UI.MainUI.Progress = i / (float)Main.MaxTilesX;
+							}
+							int num;
+							for (num = 0; num < Main.MaxTilesY; num++)
+							{
+								Tile tile = Main.TileSet[i, num];
+								if (tile.Type == (byte)EntityID.TileID.ICE)
+								{
+									tile.IsActive = 0;
+								}
+								if (tile.IsActive != 0)
+								{
+									binaryWriter.Write(value: true);
+									binaryWriter.Write(tile.Type);
+									if (Main.TileFrameImportant[tile.Type])
+									{
+										binaryWriter.Write(tile.FrameX);
+										binaryWriter.Write(tile.FrameY);
+									}
+								}
+								else
+								{
+									binaryWriter.Write(value: false);
+								}
+								binaryWriter.Write(tile.WallType);
+								binaryWriter.Write(tile.Liquid);
+								if (tile.Liquid > 0)
+								{
+									binaryWriter.Write(tile.Lava != 0);
+								}
+								binaryWriter.Write((byte)(tile.CurrentFlags & (Flags.VISITED | Flags.WIRE)));
+								int j;
+								for (j = 1; num + j < Main.MaxTilesY && tile.isTheSameAs(ref Main.TileSet[i, num + j]); j++)
+								{
+								}
+								j--;
+								num += j;
+								if (j < 128)
+								{
+									binaryWriter.Write((byte)j);
+								}
+								else
+								{
+									int num2 = (j & 0x7F) | 0x80;
+									j >>= 7;
+									binaryWriter.Write((ushort)(num2 | (j << 8)));
+								}
+							}
+						}
+						for (int k = 0; k < Main.MaxNumChests; k++)
+						{
+							if (Main.ChestSet[k] == null)
+							{
+								binaryWriter.Write(value: false);
+								continue;
+							}
+							Chest chest = Main.ChestSet[k];
+							binaryWriter.Write(value: true);
+							binaryWriter.Write(chest.XPos);
+							binaryWriter.Write(chest.YPos);
+							for (int l = 0; l < Chest.MaxNumItems; l++)
+							{
+								if (chest.ItemSet[l].Type == 0)
+								{
+									chest.ItemSet[l].Stack = 0;
+								}
+
+								if (Main.NewWorldDataVersion >= (int)EntityID.WorldID.V101)
+								{
+									binaryWriter.Write(chest.ItemSet[l].Stack); // Stacks can now go up to 999, meaning no more 255 (FF) limits, bytes begone.
+								}
+								else
+								{
+									binaryWriter.Write((byte)chest.ItemSet[l].Stack);
+								}
+								if (chest.ItemSet[l].Stack > 0)
+								{
+									binaryWriter.Write(chest.ItemSet[l].NetID);
+									binaryWriter.Write(chest.ItemSet[l].PrefixType);
+								}
+							}
+						}
+						for (int m = 0; m < Sign.MaxNumSigns; m++)
+						{
+							Sign sign = Main.SignSet[m];
+							sign.Write(binaryWriter);
+						}
+						for (int n = 0; n < NPC.MaxNumNPCs; n++)
+						{
+							NPC nPC = Main.NPCSet[n];
+							if (nPC.IsTownNPC && nPC.Active != 0)
+							{
+								nPC = (NPC)nPC.Clone();
+								binaryWriter.Write(value: true);
+								binaryWriter.Write(nPC.Type);
+								binaryWriter.Write(nPC.Position.X);
+								binaryWriter.Write(nPC.Position.Y);
+								binaryWriter.Write(nPC.IsHomeless);
+								binaryWriter.Write(nPC.HomeTileX);
+								binaryWriter.Write(nPC.HomeTileY);
+							}
+						}
+						binaryWriter.Write(value: false);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.MERCHANT]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.NURSE]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.DRYAD]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.GUIDE]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.CLOTHIER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.WIZARD]);
+						binaryWriter.Write(NPC.TypeNames[(int)EntityID.NPCID.MECHANIC]);
+
+						if (Main.NewWorldDataVersion <= (int)EntityID.WorldID.INITIAL)
+						{
+							CRC32 cRC = new CRC32();
+							cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
+							binaryWriter.Seek(4, SeekOrigin.Begin);
+							binaryWriter.Write(cRC.GetValue());
+						}
+#endif
 						Main.ShowSaveIcon();
 						try
 						{
@@ -2754,7 +2654,7 @@ namespace Terraria
 			{
 				return false;
 			}
-			if (Main.TileSet[x2, num + 1].Type == 48)
+			if (Main.TileSet[x2, num + 1].Type == (byte)EntityID.TileID.SPIKE)
 			{
 				return false;
 			}
@@ -2790,7 +2690,7 @@ namespace Terraria
 						{
 							flag = false;
 						}
-						else if (flag && (Main.TileSet[num9, num8].Type == 10 || Main.TileSet[num9, num8].Type == 48 || Main.TileSet[num9, num8 + 1].Type == 10 || Main.TileSet[num9, num8 + 1].Type == 48))
+						else if (flag && (Main.TileSet[num9, num8].Type == (byte)EntityID.TileID.DOOR_CLOSED || Main.TileSet[num9, num8].Type == (byte)EntityID.TileID.SPIKE || Main.TileSet[num9, num8 + 1].Type == (byte)EntityID.TileID.DOOR_CLOSED || Main.TileSet[num9, num8 + 1].Type == (byte)EntityID.TileID.SPIKE))
 						{
 							flag = false;
 						}
@@ -2798,7 +2698,7 @@ namespace Terraria
 						{
 							flag2 = false;
 						}
-						else if (flag2 && (Main.TileSet[num10, num8].Type == 10 || Main.TileSet[num10, num8].Type == 48 || Main.TileSet[num10, num8 + 1].Type == 10 || Main.TileSet[num10, num8 + 1].Type == 48))
+						else if (flag2 && (Main.TileSet[num10, num8].Type == (byte)EntityID.TileID.DOOR_CLOSED || Main.TileSet[num10, num8].Type == (byte)EntityID.TileID.SPIKE || Main.TileSet[num10, num8 + 1].Type == (byte)EntityID.TileID.DOOR_CLOSED || Main.TileSet[num10, num8 + 1].Type == (byte)EntityID.TileID.SPIKE))
 						{
 							flag2 = false;
 						}
@@ -2827,9 +2727,9 @@ namespace Terraria
 							num7 = num9;
 							num13 = 1;
 						}
-						PlaceTile(x2, num, 135, ToMute: true, IsForced: true, -1, (Main.TileSet[x2, num].WallType > 0) ? 2 : genRand.Next(2, 4));
+						PlaceTile(x2, num, (byte)EntityID.TileID.PRESSURE_PLATE, ToMute: true, IsForced: true, -1, (Main.TileSet[x2, num].WallType > 0) ? 2 : genRand.Next(2, 4));
 						KillTile(num7, num8);
-						PlaceTile(num7, num8, 137, ToMute: true, IsForced: true, -1, num13);
+						PlaceTile(num7, num8, (byte)EntityID.TileID.TRAP, ToMute: true, IsForced: true, -1, num13);
 						int num14 = x2;
 						int num15 = num;
 						while (num14 != num7 || num15 != num8)
@@ -2874,7 +2774,7 @@ namespace Terraria
 									{
 										flag4 = false;
 									}
-									if (Main.TileSet[l, m].IsActive != 0 && (Main.TileSet[l, m].Type == 0 || Main.TileSet[l, m].Type == 1 || Main.TileSet[l, m].Type == 59))
+									if (Main.TileSet[l, m].IsActive != 0 && (Main.TileSet[l, m].Type == 0 || Main.TileSet[l, m].Type == (byte)EntityID.TileID.STONE || Main.TileSet[l, m].Type == (byte)EntityID.TileID.MUD))
 									{
 										num18++;
 									}
@@ -2910,24 +2810,24 @@ namespace Terraria
 							{
 								if (SolidTileUnsafe(num20, num21))
 								{
-									Main.TileSet[num20, num21].Type = 1;
+									Main.TileSet[num20, num21].Type = (byte)EntityID.TileID.STONE;
 								}
 							}
 						}
-						PlaceTile(x2, num, 135, ToMute: true, IsForced: true, -1, genRand.Next(2, 4));
-						PlaceTile(num16, num17 + 2, 130, ToMute: true);
-						PlaceTile(num16 + 1, num17 + 2, 130, ToMute: true);
-						PlaceTile(num16 + 1, num17 + 1, 138, ToMute: true);
+						PlaceTile(x2, num, (byte)EntityID.TileID.PRESSURE_PLATE, ToMute: true, IsForced: true, -1, genRand.Next(2, 4));
+						PlaceTile(num16, num17 + 2, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
+						PlaceTile(num16 + 1, num17 + 2, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
+						PlaceTile(num16 + 1, num17 + 1, (byte)EntityID.TileID.BOULDER, ToMute: true);
 						num17 += 2;
 						Main.TileSet[num16, num17].wire = 16;
 						Main.TileSet[num16 + 1, num17].wire = 16;
 						num17++;
-						PlaceTile(num16, num17, 130, ToMute: true);
-						PlaceTile(num16 + 1, num17, 130, ToMute: true);
+						PlaceTile(num16, num17, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
+						PlaceTile(num16 + 1, num17, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
 						Main.TileSet[num16, num17].wire = 16;
 						Main.TileSet[num16 + 1, num17].wire = 16;
-						PlaceTile(num16, num17 + 1, 130, ToMute: true);
-						PlaceTile(num16 + 1, num17 + 1, 130, ToMute: true);
+						PlaceTile(num16, num17 + 1, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
+						PlaceTile(num16 + 1, num17 + 1, (byte)EntityID.TileID.ACTIVE_STONE, ToMute: true);
 						Main.TileSet[num16, num17 + 1].wire = 16;
 						Main.TileSet[num16 + 1, num17 + 1].wire = 16;
 						int num22 = x2;
@@ -2982,10 +2882,10 @@ namespace Terraria
 						}
 						KillTile(num3, num4);
 						Main.TileSet[num3, num4].IsActive = 1;
-						Main.TileSet[num3, num4].Type = 141;
+						Main.TileSet[num3, num4].Type = (byte)EntityID.TileID.EXPLOSIVES;
 						Main.TileSet[num3, num4].FrameX = 0;
 						Main.TileSet[num3, num4].FrameY = (short)(18 * Main.Rand.Next(2));
-						PlaceTile(x2, num, 135, ToMute: true, IsForced: true, -1, genRand.Next(2, 4));
+						PlaceTile(x2, num, (byte)EntityID.TileID.PRESSURE_PLATE, ToMute: true, IsForced: true, -1, genRand.Next(2, 4));
 						int num5 = x2;
 						int num6 = num;
 						while (num5 != num3 || num6 != num4)
@@ -3155,7 +3055,7 @@ namespace Terraria
 						do
 						{
 							ptr2->IsActive = 1;
-							ptr2->Type = (byte)((num11 >= (int)num4) ? 1u : 0u);
+							ptr2->Type = (byte)((num11 >= (int)num4) ? (byte)EntityID.TileID.STONE : (byte)EntityID.TileID.DIRT);
 							ptr2->FrameX = -1;
 							ptr2->FrameY = -1;
 							ptr2--;
@@ -3172,7 +3072,7 @@ namespace Terraria
 					}
 					Main.WorldSurface = (int)num6 + 25;
 					Main.WorldSurfacePixels = Main.WorldSurface << 4;
-					int num12 = (int)((num8 - num6 + 25f) * (355f / (678f * (float)Math.PI))) * 6;
+					int num12 = (int)((num8 - Main.WorldSurface) * (355f / (678f * (float)Math.PI))) * 6;
 					Main.RockLayer = Main.WorldSurface + num12;
 					Main.RockLayerPixels = Main.RockLayer << 4;
 					UpdateMagmaLayerPos();
@@ -3196,8 +3096,8 @@ namespace Terraria
 						}
 						for (int m = 0; m < 10; m++)
 						{
-							TileRunner(array[m].X, array[m].Y, genRand.Next(5, 8), genRand.Next(6, 9), 0, addTile: true, new Vector2(-2f, -0.3f));
-							TileRunner(array[m].X, array[m].Y, genRand.Next(5, 8), genRand.Next(6, 9), 0, addTile: true, new Vector2(2f, -0.3f));
+							TileRunner(array[m].X, array[m].Y, genRand.Next(5, 8), genRand.Next(6, 9), (byte)EntityID.TileID.DIRT, addTile: true, new Vector2(-2f, -0.3f));
+							TileRunner(array[m].X, array[m].Y, genRand.Next(5, 8), genRand.Next(6, 9), (byte)EntityID.TileID.DIRT, addTile: true, new Vector2(2f, -0.3f));
 						}
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[1]);
@@ -3296,7 +3196,7 @@ namespace Terraria
 								{
 									if (num22 > num19 + genRand.Next(5) && num22 < num20 - genRand.Next(5))
 									{
-										Main.TileSet[num22, num25].Type = 53;
+										Main.TileSet[num22, num25].Type = (byte)EntityID.TileID.SAND;
 									}
 								}
 								break;
@@ -3305,7 +3205,7 @@ namespace Terraria
 					}
 					for (int num26 = (int)(Main.MaxTilesX * Main.MaxTilesY * 8E-06f); num26 > 0; num26--)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next(Main.WorldSurface, Main.RockLayer), genRand.Next(15, 70), genRand.Next(20, 130), 53);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next(Main.WorldSurface, Main.RockLayer), genRand.Next(15, 70), genRand.Next(20, 130), (byte)EntityID.TileID.SAND);
 					}
 					numMCaves = 0;
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[2]);
@@ -3413,7 +3313,7 @@ namespace Terraria
 								{
 									if (num38 > num35 + genRand.Next(5) && num38 < num36 - genRand.Next(5))
 									{
-										Main.TileSet[num38, num41].Type = 147;
+										Main.TileSet[num38, num41].Type = (byte)EntityID.TileID.SNOW;
 									}
 								}
 								break;
@@ -3438,7 +3338,7 @@ namespace Terraria
 						{
 							if (flag4)
 							{
-								Main.TileSet[num42, num43].WallType = 2;
+								Main.TileSet[num42, num43].WallType = (byte)EntityID.WallID.DIRT_UNSAFE;
 							}
 							if (Main.TileSet[num42, num43].IsActive != 0 && Main.TileSet[num42 - 1, num43].IsActive != 0 && Main.TileSet[num42 + 1, num43].IsActive != 0 && Main.TileSet[num42, num43 + 1].IsActive != 0 && Main.TileSet[num42 - 1, num43 + 1].IsActive != 0 && Main.TileSet[num42 + 1, num43 + 1].IsActive != 0)
 							{
@@ -3449,33 +3349,33 @@ namespace Terraria
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[4]);
 					for (int num44 = 0; num44 < (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0002f); num44++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5 + 1), genRand.Next(4, 15), genRand.Next(5, 40), 1);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5 + 1), genRand.Next(4, 15), genRand.Next(5, 40), (byte)EntityID.TileID.STONE);
 					}
 					for (int num45 = 0; num45 < (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0002f); num45++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6 + 1), genRand.Next(4, 10), genRand.Next(5, 30), 1);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6 + 1), genRand.Next(4, 10), genRand.Next(5, 30), (byte)EntityID.TileID.STONE);
 					}
 					for (int num46 = 0; num46 < (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0045f); num46++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8 + 1), genRand.Next(2, 7), genRand.Next(2, 23), 1);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8 + 1), genRand.Next(2, 7), genRand.Next(2, 23), (byte)EntityID.TileID.STONE);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[5]);
 					for (int num47 = 0; num47 < (int)(Main.MaxTilesX * Main.MaxTilesY * 0.005f); num47++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 6), genRand.Next(2, 40), 0);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 6), genRand.Next(2, 40), (byte)EntityID.TileID.DIRT);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[6]);
 					for (int num48 = 0; num48 < (int)(Main.MaxTilesX * Main.MaxTilesY * 2E-05f); num48++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5), genRand.Next(4, 14), genRand.Next(10, 50), 40);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5), genRand.Next(4, 14), genRand.Next(10, 50), (byte)EntityID.TileID.CLAY);
 					}
 					for (int num49 = 0; num49 < (int)(Main.MaxTilesX * Main.MaxTilesY * 5E-05f); num49++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6 + 1), genRand.Next(8, 14), genRand.Next(15, 45), 40);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6 + 1), genRand.Next(8, 14), genRand.Next(15, 45), (byte)EntityID.TileID.CLAY);
 					}
 					for (int num50 = 0; num50 < (int)(Main.MaxTilesX * Main.MaxTilesY * 2E-05f); num50++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8 + 1), genRand.Next(8, 15), genRand.Next(5, 50), 40);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8 + 1), genRand.Next(8, 15), genRand.Next(5, 50), (byte)EntityID.TileID.CLAY);
 					}
 					for (int num51 = 5; num51 < Main.MaxTilesX - 5; num51++)
 					{
@@ -3487,9 +3387,9 @@ namespace Terraria
 							}
 							for (int num53 = num52; num53 < num52 + 5; num53++)
 							{
-								if (Main.TileSet[num51, num53].Type == 40)
+								if (Main.TileSet[num51, num53].Type == (byte)EntityID.TileID.CLAY)
 								{
-									Main.TileSet[num51, num53].Type = 0;
+									Main.TileSet[num51, num53].Type = (byte)EntityID.TileID.DIRT;
 								}
 							}
 							break;
@@ -3501,10 +3401,10 @@ namespace Terraria
 					for (int num56 = 0; num56 < num55; num56++)
 					{
 						UI.MainUI.Progress = num56 / (float)num55;
-						int type = -1;
+						int type = (int)EntityID.TileID.NONE;
 						if (genRand.Next(5) == 0)
 						{
-							type = -2;
+							type = (int)EntityID.TileID.LIQUID;
 						}
 						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, Main.MaxTilesY), genRand.Next(2, 5), genRand.Next(2, 20), type);
 						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, Main.MaxTilesY), genRand.Next(8, 15), genRand.Next(7, 30), type);
@@ -3516,10 +3416,10 @@ namespace Terraria
 						for (int num57 = 0; num57 < num55; num57++)
 						{
 							UI.MainUI.Progress = num57 / (float)num55;
-							int type2 = -1;
+							int type2 = (int)EntityID.TileID.NONE;
 							if (genRand.Next(6) == 0)
 							{
-								type2 = -2;
+								type2 = (int)EntityID.TileID.LIQUID;
 							}
 							TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num8 + 1), genRand.Next(5, 15), genRand.Next(30, 200), type2);
 						}
@@ -3531,10 +3431,10 @@ namespace Terraria
 						for (int num58 = 0; num58 < num55; num58++)
 						{
 							UI.MainUI.Progress = num58 / (float)num55;
-							int type3 = -1;
+							int type3 = (int)EntityID.TileID.NONE;
 							if (genRand.Next(10) == 0)
 							{
-								type3 = -2;
+								type3 = (int)EntityID.TileID.LIQUID;
 							}
 							TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num8, Main.MaxTilesY), genRand.Next(6, 20), genRand.Next(50, 300), type3);
 						}
@@ -3548,7 +3448,7 @@ namespace Terraria
 						{
 							if (Main.TileSet[num54, num60].IsActive != 0)
 							{
-								TileRunner(num54, num60, genRand.Next(3, 6), genRand.Next(5, 50), -1, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 1f));
+								TileRunner(num54, num60, genRand.Next(3, 6), genRand.Next(5, 50), (int)EntityID.TileID.NONE, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 1f));
 								break;
 							}
 						}
@@ -3561,7 +3461,7 @@ namespace Terraria
 						{
 							if (Main.TileSet[num54, num62].IsActive != 0)
 							{
-								TileRunner(num54, num62, genRand.Next(10, 15), genRand.Next(50, 130), -1, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
+								TileRunner(num54, num62, genRand.Next(10, 15), genRand.Next(50, 130), (int)EntityID.TileID.NONE, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
 								break;
 							}
 						}
@@ -3574,9 +3474,9 @@ namespace Terraria
 						{
 							if (Main.TileSet[num54, num64].IsActive != 0)
 							{
-								TileRunner(num54, num64, genRand.Next(12, 25), genRand.Next(150, 500), -1, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 4f));
-								TileRunner(num54, num64, genRand.Next(8, 17), genRand.Next(60, 200), -1, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
-								TileRunner(num54, num64, genRand.Next(5, 13), genRand.Next(40, 170), -1, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
+								TileRunner(num54, num64, genRand.Next(12, 25), genRand.Next(150, 500), (int)EntityID.TileID.NONE, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 4f));
+								TileRunner(num54, num64, genRand.Next(8, 17), genRand.Next(60, 200), (int)EntityID.TileID.NONE, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
+								TileRunner(num54, num64, genRand.Next(5, 13), genRand.Next(40, 170), (int)EntityID.TileID.NONE, addTile: false, new Vector2(genRand.Next(-10, 11) * 0.1f, 2f));
 								break;
 							}
 						}
@@ -3589,7 +3489,7 @@ namespace Terraria
 						{
 							if (Main.TileSet[num54, num66].IsActive != 0)
 							{
-								TileRunner(num54, num66, genRand.Next(7, 12), genRand.Next(150, 250), -1, addTile: false, new Vector2(0f, 1f), noYChange: true);
+								TileRunner(num54, num66, genRand.Next(7, 12), genRand.Next(150, 250), (int)EntityID.TileID.NONE, addTile: false, new Vector2(0f, 1f), noYChange: true);
 								break;
 							}
 						}
@@ -3608,10 +3508,10 @@ namespace Terraria
 						{
 							num70 = Main.MaxTilesY - 2;
 						}
-						if (Main.TileSet[num69 - 1, num70].IsActive != 0 && Main.TileSet[num69 - 1, num70].Type == 0 && Main.TileSet[num69 + 1, num70].IsActive != 0 && Main.TileSet[num69 + 1, num70].Type == 0 && Main.TileSet[num69, num70 - 1].IsActive != 0 && Main.TileSet[num69, num70 - 1].Type == 0 && Main.TileSet[num69, num70 + 1].IsActive != 0 && Main.TileSet[num69, num70 + 1].Type == 0)
+						if (Main.TileSet[num69 - 1, num70].IsActive != 0 && Main.TileSet[num69 - 1, num70].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69 + 1, num70].IsActive != 0 && Main.TileSet[num69 + 1, num70].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69, num70 - 1].IsActive != 0 && Main.TileSet[num69, num70 - 1].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69, num70 + 1].IsActive != 0 && Main.TileSet[num69, num70 + 1].Type == (byte)EntityID.TileID.DIRT)
 						{
 							Main.TileSet[num69, num70].IsActive = 1;
-							Main.TileSet[num69, num70].Type = 2;
+							Main.TileSet[num69, num70].Type = (byte)EntityID.TileID.GRASS;
 						}
 						num69 = genRand.Next(1, Main.MaxTilesX - 1);
 						num70 = genRand.Next((int)num5);
@@ -3619,10 +3519,10 @@ namespace Terraria
 						{
 							num70 = Main.MaxTilesY - 2;
 						}
-						if (Main.TileSet[num69 - 1, num70].IsActive != 0 && Main.TileSet[num69 - 1, num70].Type == 0 && Main.TileSet[num69 + 1, num70].IsActive != 0 && Main.TileSet[num69 + 1, num70].Type == 0 && Main.TileSet[num69, num70 - 1].IsActive != 0 && Main.TileSet[num69, num70 - 1].Type == 0 && Main.TileSet[num69, num70 + 1].IsActive != 0 && Main.TileSet[num69, num70 + 1].Type == 0)
+						if (Main.TileSet[num69 - 1, num70].IsActive != 0 && Main.TileSet[num69 - 1, num70].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69 + 1, num70].IsActive != 0 && Main.TileSet[num69 + 1, num70].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69, num70 - 1].IsActive != 0 && Main.TileSet[num69, num70 - 1].Type == (byte)EntityID.TileID.DIRT && Main.TileSet[num69, num70 + 1].IsActive != 0 && Main.TileSet[num69, num70 + 1].Type == (byte)EntityID.TileID.DIRT)
 						{
 							Main.TileSet[num69, num70].IsActive = 1;
-							Main.TileSet[num69, num70].Type = 2;
+							Main.TileSet[num69, num70].Type = (byte)EntityID.TileID.GRASS;
 						}
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[11]);
@@ -3639,10 +3539,10 @@ namespace Terraria
 					num73 += genRand.Next((int)(-100f * num74), (int)(101f * num74));
 					int num75 = num71;
 					int num76 = num73;
-					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), 59, addTile: false, new Vector2(num9 * 3, 0f));
+					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), (byte)EntityID.TileID.MUD, addTile: false, new Vector2(num9 * 3, 0f));
 					for (int num77 = (int)(6f * num74); num77 > 0; num77--)
 					{
-						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next(63, 65));
+						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next((byte)EntityID.TileID.SAPPHIRE, (byte)EntityID.TileID.EMERALD));
 					}
 					UI.MainUI.Progress = 0.15f;
 					num71 += genRand.Next((int)(-250f * num74), (int)(251f * num74));
@@ -3652,11 +3552,11 @@ namespace Terraria
 					int num80 = num71;
 					int num81 = num73;
 					mudWall = true;
-					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), 59);
+					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), (byte)EntityID.TileID.MUD);
 					mudWall = false;
 					for (int num82 = (int)(6f * num74); num82 > 0; num82--)
 					{
-						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next(65, 67));
+						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next((byte)EntityID.TileID.EMERALD, (byte)EntityID.TileID.AMETHYST));
 					}
 					mudWall = true;
 					UI.MainUI.Progress = 0.3f;
@@ -3664,17 +3564,17 @@ namespace Terraria
 					num73 += genRand.Next((int)(-150f * num74), (int)(151f * num74));
 					int num83 = num71;
 					int num84 = num73;
-					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), 59, addTile: false, new Vector2(num9 * -3, 0f));
+					TileRunner(num71, num73, genRand.Next((int)(250f * num74), (int)(500f * num74)), genRand.Next(50, 150), (byte)EntityID.TileID.MUD, addTile: false, new Vector2(num9 * -3, 0f));
 					mudWall = false;
 					for (int num85 = (int)(6f * num74); num85 > 0; num85--)
 					{
-						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next(67, 69));
+						TileRunner(num71 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), num73 + genRand.Next(-(int)(125f * num74), (int)(125f * num74)), genRand.Next(3, 7), genRand.Next(3, 8), genRand.Next((byte)EntityID.TileID.AMETHYST, (byte)EntityID.TileID.DIAMOND + 1));
 					}
 					mudWall = true;
 					UI.MainUI.Progress = 0.45f;
 					num71 = (num75 + num78 + num83) / 3;
 					num73 = (num76 + num79 + num84) / 3;
-					TileRunner(num71, num73, genRand.Next((int)(400f * num74), (int)(600f * num74)), 10000, 59, addTile: false, new Vector2(0f, -20f), noYChange: true);
+					TileRunner(num71, num73, genRand.Next((int)(400f * num74), (int)(600f * num74)), 10000, (byte)EntityID.TileID.MUD, addTile: false, new Vector2(0f, -20f), noYChange: true);
 					JungleRunner(num71, num73);
 					UI.MainUI.Progress = 0.6f;
 					mudWall = false;
@@ -3684,7 +3584,7 @@ namespace Terraria
 					{
 						for (int num88 = Main.RockLayer; num88 < Main.MaxTilesY - 200; num88++)
 						{
-							if (Main.TileSet[num87, num88].WallType == 15)
+							if (Main.TileSet[num87, num88].WallType == (byte)EntityID.WallID.MUD_UNSAFE)
 							{
 								list.Add((uint)((num71 << 16) | num73));
 								num86++;
@@ -3709,7 +3609,7 @@ namespace Terraria
 						UI.MainUI.Progress = 0.6f + 0.2f * (num90 / (float)num55);
 						num71 += genRand.Next((int)(-5f * num74), (int)(6f * num74));
 						num73 += genRand.Next((int)(-5f * num74), (int)(6f * num74));
-						TileRunner(num71, num73, genRand.Next(40, 100), genRand.Next(300, 500), 59);
+						TileRunner(num71, num73, genRand.Next(40, 100), genRand.Next(300, 500), (byte)EntityID.TileID.MUD);
 					}
 					num55 = (int)(10f * num74);
 					for (int num91 = 0; num91 <= num55; num91++)
@@ -3717,7 +3617,7 @@ namespace Terraria
 						UI.MainUI.Progress = 0.8f + 0.2f * (num91 / (float)num55);
 						num71 = num80 + genRand.Next((int)(-600f * num74), (int)(600f * num74));
 						num73 = num81 + genRand.Next((int)(-200f * num74), (int)(200f * num74));
-						while (num71 < 1 || num71 >= Main.MaxTilesX - 1 || num73 < 1 || num73 >= Main.MaxTilesY - 1 || Main.TileSet[num71, num73].Type != 59)
+						while (num71 < 1 || num71 >= Main.MaxTilesX - 1 || num73 < 1 || num73 >= Main.MaxTilesY - 1 || Main.TileSet[num71, num73].Type != (byte)EntityID.TileID.MUD)
 						{
 							num71 = num80 + genRand.Next((int)(-600f * num74), (int)(600f * num74));
 							num73 = num81 + genRand.Next((int)(-200f * num74), (int)(200f * num74));
@@ -3726,10 +3626,10 @@ namespace Terraria
 						{
 							num71 += genRand.Next(-30, 31);
 							num73 += genRand.Next(-30, 31);
-							int type4 = -1;
+							int type4 = (int)EntityID.TileID.NONE;
 							if (genRand.Next(7) == 0)
 							{
-								type4 = -2;
+								type4 = (int)EntityID.TileID.LIQUID;
 							}
 							TileRunner(num71, num73, genRand.Next(10, 20), genRand.Next(30, 70), type4);
 						}
@@ -3738,15 +3638,15 @@ namespace Terraria
 					{
 						num71 = num80 + genRand.Next((int)(-600f * num74), (int)(600f * num74));
 						num73 = num81 + genRand.Next((int)(-200f * num74), (int)(200f * num74));
-						while (num71 < 1 || num71 >= Main.MaxTilesX - 1 || num73 < 1 || num73 >= Main.MaxTilesY - 1 || Main.TileSet[num71, num73].Type != 59)
+						while (num71 < 1 || num71 >= Main.MaxTilesX - 1 || num73 < 1 || num73 >= Main.MaxTilesY - 1 || Main.TileSet[num71, num73].Type != (byte)EntityID.TileID.MUD)
 						{
 							num71 = num80 + genRand.Next((int)(-600f * num74), (int)(600f * num74));
 							num73 = num81 + genRand.Next((int)(-200f * num74), (int)(200f * num74));
 						}
-						TileRunner(num71, num73, genRand.Next(4, 10), genRand.Next(5, 30), 1);
+						TileRunner(num71, num73, genRand.Next(4, 10), genRand.Next(5, 30), (byte)EntityID.TileID.STONE);
 						if (genRand.Next(4) == 0)
 						{
-							int type5 = genRand.Next(63, 69);
+							int type5 = genRand.Next((int)EntityID.TileID.SAPPHIRE, (int)EntityID.TileID.DIAMOND + 1);
 							TileRunner(num71 + genRand.Next(-1, 2), num73 + genRand.Next(-1, 2), genRand.Next(3, 7), genRand.Next(4, 8), type5);
 						}
 					}
@@ -3758,7 +3658,7 @@ namespace Terraria
 							num71 = genRand.Next(20, Main.MaxTilesX - 20);
 							num73 = genRand.Next(Main.WorldSurface + Main.RockLayer >> 1, Main.MaxTilesY - 300);
 						}
-						while (Main.TileSet[num71, num73].Type != 59);
+						while (Main.TileSet[num71, num73].Type != (byte)EntityID.TileID.MUD);
 						int num96 = genRand.Next(2, 4);
 						int num97 = genRand.Next(2, 4);
 						for (int num98 = num71 - num96 - 1; num98 <= num71 + num96 + 1; num98++)
@@ -3766,7 +3666,7 @@ namespace Terraria
 							for (int num99 = num73 - num97 - 1; num99 <= num73 + num97 + 1; num99++)
 							{
 								Main.TileSet[num98, num99].IsActive = 1;
-								Main.TileSet[num98, num99].Type = 45;
+								Main.TileSet[num98, num99].Type = (byte)EntityID.TileID.GOLD_BRICK;
 								Main.TileSet[num98, num99].Liquid = 0;
 								Main.TileSet[num98, num99].Lava = 0;
 							}
@@ -3786,7 +3686,7 @@ namespace Terraria
 							i2 = genRand.Next(num71 - num96, num71 + num96 + 1);
 							j2 = genRand.Next(num73 - num97, num73 + num97 - 2);
 						}
-						while (!PlaceTile(i2, j2, 4, ToMute: true) && ++num102 < 100);
+						while (!PlaceTile(i2, j2, (int)EntityID.TileID.TORCH, ToMute: true) && ++num102 < 100);
 						for (int num103 = num73 + num97 - 2; num103 <= num73 + num97 - 1; num103++)
 						{
 							for (int num104 = num71 - num96 - 1; num104 <= num71 + num96 + 1; num104++)
@@ -3801,7 +3701,7 @@ namespace Terraria
 							while (Main.TileSet[num105, num107].IsActive == 0 && num107 < Main.MaxTilesY && num106 > 0)
 							{
 								Main.TileSet[num105, num107].IsActive = 1;
-								Main.TileSet[num105, num107].Type = 59;
+								Main.TileSet[num105, num107].Type = (byte)EntityID.TileID.MUD;
 								num107++;
 								num106--;
 							}
@@ -3813,7 +3713,7 @@ namespace Terraria
 							for (int num109 = num71 - num96 - 1; num109 <= num71 + num96 + 1; num109++)
 							{
 								Main.TileSet[num109, num108].IsActive = 1;
-								Main.TileSet[num109, num108].Type = 45;
+								Main.TileSet[num109, num108].Type = (byte)EntityID.TileID.GOLD_BRICK;
 							}
 							num96 -= genRand.Next(1, 3);
 							num108--;
@@ -3831,12 +3731,12 @@ namespace Terraria
 								try
 								{
 									grassSpread = 0;
-									SpreadGrass(num111, num110, 59, 60);
+									SpreadGrass(num111, num110, (int)EntityID.TileID.MUD, (int)EntityID.TileID.JUNGLE_GRASS);
 								}
 								catch
 								{
 									grassSpread = 0;
-									SpreadGrass(num111, num110, 59, 60, repeat: false);
+									SpreadGrass(num111, num110, (int)EntityID.TileID.MUD, (int)EntityID.TileID.JUNGLE_GRASS, repeat: false);
 								}
 							}
 						}
@@ -3910,7 +3810,7 @@ namespace Terraria
 							if (Main.TileSet[num120, num121].IsActive != 0)
 							{
 								grassSpread = 0;
-								SpreadGrass(num120, num121, 59, 70, repeat: false);
+								SpreadGrass(num120, num121, (int)EntityID.TileID.MUD, (int)EntityID.TileID.MUSHROOM_GRASS, repeat: false);
 							}
 						}
 					}
@@ -3918,75 +3818,75 @@ namespace Terraria
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.001f);
 					for (int num122 = 0; num122 < num55; num122++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 6), genRand.Next(2, 40), 59);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 6), genRand.Next(2, 40), (byte)EntityID.TileID.MUD);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[15]);
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0001f);
 					for (int num123 = 0; num123 < num55; num123++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num8, Main.MaxTilesY), genRand.Next(5, 12), genRand.Next(15, 50), 123);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num8, Main.MaxTilesY), genRand.Next(5, 12), genRand.Next(15, 50), (byte)EntityID.TileID.SILT);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0005f);
 					for (int num124 = 0; num124 < num55; num124++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num8, Main.MaxTilesY), genRand.Next(2, 5), genRand.Next(2, 5), 123);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num8, Main.MaxTilesY), genRand.Next(2, 5), genRand.Next(2, 5), (byte)EntityID.TileID.SILT);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[16]);
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 6E-05f);
 					for (int num125 = 0; num125 < num55; num125++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6), genRand.Next(3, 6), genRand.Next(2, 6), 7);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6), genRand.Next(3, 6), genRand.Next(2, 6), (byte)EntityID.TileID.COPPER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 8E-05f);
 					for (int num126 = 0; num126 < num55; num126++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 7), genRand.Next(3, 7), 7);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 7), genRand.Next(3, 7), (byte)EntityID.TileID.COPPER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0002f);
 					for (int num127 = 0; num127 < num55; num127++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), 7);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), (byte)EntityID.TileID.COPPER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 3E-05f);
 					for (int num128 = 0; num128 < num55; num128++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6), genRand.Next(3, 7), genRand.Next(2, 5), 6);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5, (int)num6), genRand.Next(3, 7), genRand.Next(2, 5), (byte)EntityID.TileID.IRON_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 8E-05f);
 					for (int num129 = 0; num129 < num55; num129++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 6), genRand.Next(3, 6), 6);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 6), genRand.Next(3, 6), (byte)EntityID.TileID.IRON_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0002f);
 					for (int num130 = 0; num130 < num55; num130++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), 6);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), (byte)EntityID.TileID.IRON_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 2.6E-05f);
 					for (int num131 = 0; num131 < num55; num131++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 6), genRand.Next(3, 6), 9);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num6, (int)num8), genRand.Next(3, 6), genRand.Next(3, 6), (byte)EntityID.TileID.SILVER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.00015f);
 					for (int num132 = 0; num132 < num55; num132++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), 9);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 9), genRand.Next(4, 8), (byte)EntityID.TileID.SILVER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.00017f);
 					for (int num133 = 0; num133 < num55; num133++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5), genRand.Next(4, 9), genRand.Next(4, 8), 9);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5), genRand.Next(4, 9), genRand.Next(4, 8), (byte)EntityID.TileID.SILVER_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.00012f);
 					for (int num134 = 0; num134 < num55; num134++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 8), genRand.Next(4, 8), 8);
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5 - 20), genRand.Next(4, 8), genRand.Next(4, 8), 8);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(4, 8), genRand.Next(4, 8), (byte)EntityID.TileID.GOLD_ORE);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num5 - 20), genRand.Next(4, 8), genRand.Next(4, 8), (byte)EntityID.TileID.GOLD_ORE);
 					}
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 2E-05f);
 					for (int num135 = 0; num135 < num55; num135++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 4), genRand.Next(3, 6), 22);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next((int)num7, Main.MaxTilesY), genRand.Next(2, 4), genRand.Next(3, 6), (byte)EntityID.TileID.DEMONITE_ORE);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[17]);
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0006f);
@@ -3999,7 +3899,7 @@ namespace Terraria
 							num137 = mCave[num136].X;
 							num138 = mCave[num136].Y;
 						}
-						if (Main.TileSet[num137, num138].IsActive == 0 && (num138 > Main.WorldSurface || Main.TileSet[num137, num138].WallType > 0))
+						if (Main.TileSet[num137, num138].IsActive == 0 && (num138 > Main.WorldSurface || Main.TileSet[num137, num138].WallType > (byte)EntityID.WallID.NONE))
 						{
 							while (Main.TileSet[num137, num138].IsActive == 0 && num138 > (int)num5)
 							{
@@ -4017,7 +3917,7 @@ namespace Terraria
 							num137 -= num139;
 							if (num138 > Main.WorldSurface || Main.TileSet[num137, num138].WallType > 0)
 							{
-								TileRunner(num137, num138, genRand.Next(4, 11), genRand.Next(2, 4), 51, addTile: true, new Vector2(num139, -1f), noYChange: false, overRide: false);
+								TileRunner(num137, num138, genRand.Next(4, 11), genRand.Next(2, 4), (byte)EntityID.TileID.COBWEB, addTile: true, new Vector2(num139, -1f), noYChange: false, overRide: false);
 							}
 						}
 					}
@@ -4047,7 +3947,7 @@ namespace Terraria
 							}
 							else
 							{
-								ptr3->Type = 57;
+								ptr3->Type = (byte)EntityID.TileID.ASH;
 							}
 							ptr3++;
 						}
@@ -4086,7 +3986,7 @@ namespace Terraria
 							{
 								num147--;
 							}
-							TileRunner(genRand.Next(Main.MaxTilesX), num147 + genRand.Next(20, 50), genRand.Next(15, 20), 1000, 57, addTile: true, new Vector2(0f, genRand.Next(1, 3)), noYChange: true);
+							TileRunner(genRand.Next(Main.MaxTilesX), num147 + genRand.Next(20, 50), genRand.Next(15, 20), 1000, (byte)EntityID.TileID.ASH, addTile: true, new Vector2(0f, genRand.Next(1, 3)), noYChange: true);
 							UI.MainUI.Progress = 0.2f + num146 * 0.05f / Main.MaxTilesX;
 						}
 					}
@@ -4100,7 +4000,7 @@ namespace Terraria
 							{
 								num149--;
 							}
-							TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 30), 1000, 57, addTile: true, new Vector2(0f, genRand.Next(1, 3)), noYChange: true);
+							TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 30), 1000, (byte)EntityID.TileID.ASH, addTile: true, new Vector2(0f, genRand.Next(1, 3)), noYChange: true);
 							int num150 = genRand.Next(1, 3);
 							if (genRand.Next(3) == 0)
 							{
@@ -4108,21 +4008,21 @@ namespace Terraria
 							}
 							if (genRand.Next(2) == 0)
 							{
-								TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 15) * num150, genRand.Next(10, 15) * num150, 57, addTile: true, new Vector2(1f, 0.3f));
+								TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 15) * num150, genRand.Next(10, 15) * num150, (byte)EntityID.TileID.ASH, addTile: true, new Vector2(1f, 0.3f));
 							}
 							if (genRand.Next(2) == 0)
 							{
 								num150 = genRand.Next(1, 3);
-								TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 15) * num150, genRand.Next(10, 15) * num150, 57, addTile: true, new Vector2(-1f, 0.3f));
+								TileRunner(num148, num149 - genRand.Next(2, 5), genRand.Next(5, 15) * num150, genRand.Next(10, 15) * num150, (byte)EntityID.TileID.ASH, addTile: true, new Vector2(-1f, 0.3f));
 							}
-							TileRunner(num148 + genRand.Next(-10, 10), num149 + genRand.Next(-10, 10), genRand.Next(5, 15), genRand.Next(5, 10), -2, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
+							TileRunner(num148 + genRand.Next(-10, 10), num149 + genRand.Next(-10, 10), genRand.Next(5, 15), genRand.Next(5, 10), (int)EntityID.TileID.LIQUID, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
 							if (genRand.Next(3) == 0)
 							{
-								TileRunner(num148 + genRand.Next(-10, 10), num149 + genRand.Next(-10, 10), genRand.Next(10, 30), genRand.Next(10, 20), -2, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
+								TileRunner(num148 + genRand.Next(-10, 10), num149 + genRand.Next(-10, 10), genRand.Next(10, 30), genRand.Next(10, 20), (int)EntityID.TileID.LIQUID, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
 							}
 							if (genRand.Next(5) == 0)
 							{
-								TileRunner(num148 + genRand.Next(-15, 15), num149 + genRand.Next(-15, 10), genRand.Next(15, 30), genRand.Next(5, 20), -2, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
+								TileRunner(num148 + genRand.Next(-15, 15), num149 + genRand.Next(-15, 10), genRand.Next(15, 30), genRand.Next(5, 20), (int)EntityID.TileID.LIQUID, addTile: false, new Vector2(genRand.Next(-1, 3), genRand.Next(-1, 3)));
 							}
 							UI.MainUI.Progress = 0.5f + num148 * 0.4f / Main.MaxTilesX;
 						}
@@ -4130,7 +4030,7 @@ namespace Terraria
 					UI.MainUI.Progress = 0.9f;
 					for (int num151 = 0; num151 < Main.MaxTilesX; num151++)
 					{
-						TileRunner(genRand.Next(20, Main.MaxTilesX - 20), genRand.Next(Main.MaxTilesY - 180, Main.MaxTilesY - 10), genRand.Next(2, 7), genRand.Next(2, 7), -2);
+						TileRunner(genRand.Next(20, Main.MaxTilesX - 20), genRand.Next(Main.MaxTilesY - 180, Main.MaxTilesY - 10), genRand.Next(2, 7), genRand.Next(2, 7), (int)EntityID.TileID.LIQUID);
 					}
 					for (int num152 = 0; num152 < Main.MaxTilesX; num152++)
 					{
@@ -4149,7 +4049,7 @@ namespace Terraria
 					num55 = (int)(Main.MaxTilesX * Main.MaxTilesY * 0.0008f);
 					for (int num153 = 0; num153 < num55; num153++)
 					{
-						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next(Main.MaxTilesY - 140, Main.MaxTilesY), genRand.Next(2, 7), genRand.Next(3, 7), 58);
+						TileRunner(genRand.Next(Main.MaxTilesX), genRand.Next(Main.MaxTilesY - 140, Main.MaxTilesY), genRand.Next(2, 7), genRand.Next(3, 7), (byte)EntityID.TileID.HELLSTONE);
 					}
 					UI.MainUI.Progress = 0.98f;
 					AddHellHouses();
@@ -4255,7 +4155,7 @@ namespace Terraria
 							{
 								for (int num169 = (int)num5; num169 < Main.WorldSurface - 1; num169++)
 								{
-									if (Main.TileSet[num168, num169].IsActive != 0 || Main.TileSet[num168, num169].WallType > 0)
+									if (Main.TileSet[num168, num169].IsActive != 0 || Main.TileSet[num168, num169].WallType > (byte)EntityID.WallID.NONE)
 									{
 										if (num168 == num159)
 										{
@@ -4265,8 +4165,7 @@ namespace Terraria
 										else if (genRand.Next(35) == 0 && num167 == 0)
 										{
 											num167 = 30;
-											bool makeOrb = true;
-											ChasmRunner(num168, num169, genRand.Next(50) + 50, makeOrb);
+											ChasmRunner(num168, num169, genRand.Next(50) + 50, makeOrb: true);
 										}
 										break;
 									}
@@ -4281,9 +4180,9 @@ namespace Terraria
 								int num171 = num170 + genRand.Next(10, 14);
 								for (int num172 = num170; num172 < num171; num172++)
 								{
-									if ((Main.TileSet[num168, num172].Type == 59 || Main.TileSet[num168, num172].Type == 60) && num168 >= num160 + genRand.Next(5) && num168 < num161 - genRand.Next(5))
+									if ((Main.TileSet[num168, num172].Type == (byte)EntityID.TileID.MUD || Main.TileSet[num168, num172].Type == (byte)EntityID.TileID.JUNGLE_GRASS) && num168 >= num160 + genRand.Next(5) && num168 < num161 - genRand.Next(5))
 									{
-										Main.TileSet[num168, num172].Type = 0;
+										Main.TileSet[num168, num172].Type = (byte)EntityID.TileID.DIRT;
 									}
 								}
 								break;
@@ -4307,23 +4206,23 @@ namespace Terraria
 							{
 								if (Main.TileSet[num54, num175].IsActive != 0)
 								{
-									if (Main.TileSet[num54, num175].Type == 53 && num54 >= num160 + genRand.Next(5) && num54 <= num161 - genRand.Next(5))
+									if (Main.TileSet[num54, num175].Type == (byte)EntityID.TileID.SAND && num54 >= num160 + genRand.Next(5) && num54 <= num161 - genRand.Next(5))
 									{
-										Main.TileSet[num54, num175].Type = 0;
+										Main.TileSet[num54, num175].Type = (byte)EntityID.TileID.DIRT;
 									}
-									if (Main.TileSet[num54, num175].Type == 0 && num175 < Main.WorldSurface - 1 && !flag8)
+									if (Main.TileSet[num54, num175].Type == (byte)EntityID.TileID.DIRT && num175 < Main.WorldSurface - 1 && !flag8)
 									{
 										grassSpread = 0;
-										SpreadGrass(num54, num175, 0, 23);
+										SpreadGrass(num54, num175, (int)EntityID.TileID.DIRT, (int)EntityID.TileID.CORRUPT_GRASS);
 									}
 									flag8 = true;
-									if (Main.TileSet[num54, num175].Type == 1 && num54 >= num160 + genRand.Next(5) && num54 <= num161 - genRand.Next(5))
+									if (Main.TileSet[num54, num175].Type == (byte)EntityID.TileID.STONE && num54 >= num160 + genRand.Next(5) && num54 <= num161 - genRand.Next(5))
 									{
-										Main.TileSet[num54, num175].Type = 25;
+										Main.TileSet[num54, num175].Type = (byte)EntityID.TileID.EBONSTONE;
 									}
-									if (Main.TileSet[num54, num175].Type == 2)
+									if (Main.TileSet[num54, num175].Type == (byte)EntityID.TileID.GRASS)
 									{
-										Main.TileSet[num54, num175].Type = 23;
+										Main.TileSet[num54, num175].Type = (byte)EntityID.TileID.CORRUPT_GRASS;
 									}
 								}
 							}
@@ -4332,7 +4231,7 @@ namespace Terraria
 						{
 							for (int num177 = 0; num177 < Main.MaxTilesY - 50; num177++)
 							{
-								if (Main.TileSet[num176, num177].IsActive == 0 || Main.TileSet[num176, num177].Type != 31)
+								if (Main.TileSet[num176, num177].IsActive == 0 || Main.TileSet[num176, num177].Type != (byte)EntityID.TileID.SHADOW_ORB)
 								{
 									continue;
 								}
@@ -4348,16 +4247,16 @@ namespace Terraria
 									}
 									for (int num183 = num180; num183 < num181; num183++)
 									{
-										if (genRand.Next(3) != 0 && Math.Abs(num182 - num176) + Math.Abs(num183 - num177) < 9 + genRand.Next(11) && Main.TileSet[num182, num183].Type != 31)
+										if (genRand.Next(3) != 0 && Math.Abs(num182 - num176) + Math.Abs(num183 - num177) < 9 + genRand.Next(11) && Main.TileSet[num182, num183].Type != (byte)EntityID.TileID.SHADOW_ORB)
 										{
 											Main.TileSet[num182, num183].IsActive = 1;
-											Main.TileSet[num182, num183].Type = 25;
+											Main.TileSet[num182, num183].Type = (byte)EntityID.TileID.EBONSTONE;
 											if (Math.Abs(num182 - num176) <= 1 && Math.Abs(num183 - num177) <= 1)
 											{
 												Main.TileSet[num182, num183].IsActive = 0;
 											}
 										}
-										if (Main.TileSet[num182, num183].Type != 31 && Math.Abs(num182 - num176) <= 2 + genRand.Next(3) && Math.Abs(num183 - num177) <= 2 + genRand.Next(3))
+										if (Main.TileSet[num182, num183].Type != (byte)EntityID.TileID.SHADOW_ORB && Math.Abs(num182 - num176) <= 2 + genRand.Next(3) && Math.Abs(num183 - num177) <= 2 + genRand.Next(3))
 										{
 											Main.TileSet[num182, num183].IsActive = 0;
 										}
@@ -4469,9 +4368,6 @@ namespace Terraria
 								if (num192 == 235)
 								{
 									num188 = num195;
-								}
-								if (num192 == 235)
-								{
 									num187 = num195;
 								}
 								int num196 = genRand.Next(15, 20);
@@ -4491,10 +4387,10 @@ namespace Terraria
 									}
 									else if (num197 > num194)
 									{
-										Main.TileSet[num195, num197].Type = 53;
+										Main.TileSet[num195, num197].Type = (byte)EntityID.TileID.SAND;
 										Main.TileSet[num195, num197].IsActive = 1;
 									}
-									Main.TileSet[num195, num197].WallType = 0;
+									Main.TileSet[num195, num197].WallType = (byte)EntityID.WallID.NONE;
 								}
 							}
 							continue;
@@ -4601,10 +4497,10 @@ namespace Terraria
 								}
 								else if (num203 > num200)
 								{
-									Main.TileSet[num201, num203].Type = 53;
+									Main.TileSet[num201, num203].Type = (byte)EntityID.TileID.SAND;
 									Main.TileSet[num201, num203].IsActive = 1;
 								}
-								Main.TileSet[num201, num203].WallType = 0;
+								Main.TileSet[num201, num203].WallType = (byte)EntityID.WallID.NONE;
 							}
 						}
 					}
@@ -4617,27 +4513,27 @@ namespace Terraria
 					}
 					num186++;
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[23]);
-					for (int num204 = 63; num204 <= 68; num204++)
+					for (int num204 = (int)EntityID.TileID.SAPPHIRE; num204 <= (int)EntityID.TileID.DIAMOND; num204++)
 					{
 						float num205 = 0f;
 						switch (num204)
 						{
-							case 67:
+							case (int)EntityID.TileID.AMETHYST:
 								num205 = Main.MaxTilesX * 0.5f;
 								break;
-							case 66:
+							case (int)EntityID.TileID.TOPAZ:
 								num205 = Main.MaxTilesX * 0.45f;
 								break;
-							case 63:
+							case (int)EntityID.TileID.SAPPHIRE:
 								num205 = Main.MaxTilesX * 0.3f;
 								break;
-							case 65:
+							case (int)EntityID.TileID.EMERALD:
 								num205 = Main.MaxTilesX * 0.25f;
 								break;
-							case 64:
+							case (int)EntityID.TileID.RUBY:
 								num205 = Main.MaxTilesX * 0.1f;
 								break;
-							case 68:
+							case (int)EntityID.TileID.DIAMOND:
 								num205 = Main.MaxTilesX * 0.05f;
 								break;
 						}
@@ -4646,7 +4542,7 @@ namespace Terraria
 						{
 							int num207 = genRand.Next(Main.MaxTilesX);
 							int num208 = genRand.Next(Main.WorldSurface, Main.MaxTilesY);
-							while (Main.TileSet[num207, num208].Type != 1)
+							while (Main.TileSet[num207, num208].Type != (byte)EntityID.TileID.STONE)
 							{
 								num207 = genRand.Next(Main.MaxTilesX);
 								num208 = genRand.Next(Main.WorldSurface, Main.MaxTilesY);
@@ -4669,7 +4565,7 @@ namespace Terraria
 						{
 							for (int num214 = 10; num214 < Main.MaxTilesY - 10; num214++)
 							{
-								if (Main.TileSet[num213, num214].IsActive == 0 || Main.TileSet[num213, num214].Type != 53 || Main.TileSet[num213, num214 + 1].IsActive == 0 || Main.TileSet[num213, num214 + 1].Type != 53)
+								if (Main.TileSet[num213, num214].IsActive == 0 || Main.TileSet[num213, num214].Type != (byte)EntityID.TileID.SAND || Main.TileSet[num213, num214 + 1].IsActive == 0 || Main.TileSet[num213, num214 + 1].Type != (byte)EntityID.TileID.SAND)
 								{
 									continue;
 								}
@@ -4683,7 +4579,7 @@ namespace Terraria
 									num216--;
 									Main.TileSet[num213, num214].IsActive = 0;
 									Main.TileSet[num215, num216].IsActive = 1;
-									Main.TileSet[num215, num216].Type = 53;
+									Main.TileSet[num215, num216].Type = (byte)EntityID.TileID.SAND;
 								}
 							}
 						}
@@ -4696,20 +4592,20 @@ namespace Terraria
 						{
 							if (Main.TileSet[num217, num218].IsActive != 0)
 							{
-								if (Main.TileSet[num217, num218].Type == 53)
+								if (Main.TileSet[num217, num218].Type == (byte)EntityID.TileID.SAND)
 								{
 									for (int num219 = num218; Main.TileSet[num217, num219 + 1].IsActive == 0 && num219 < Main.MaxTilesY - 5; num219++)
 									{
 										Main.TileSet[num217, num219 + 1].IsActive = 1;
-										Main.TileSet[num217, num219 + 1].Type = 53;
+										Main.TileSet[num217, num219 + 1].Type = (byte)EntityID.TileID.SAND;
 									}
 								}
-								else if (Main.TileSet[num217, num218].Type == 123)
+								else if (Main.TileSet[num217, num218].Type == (byte)EntityID.TileID.SILT)
 								{
 									for (int num220 = num218; Main.TileSet[num217, num220 + 1].IsActive == 0 && num220 < Main.MaxTilesY - 5; num220++)
 									{
 										Main.TileSet[num217, num220 + 1].IsActive = 1;
-										Main.TileSet[num217, num220 + 1].Type = 123;
+										Main.TileSet[num217, num220 + 1].Type = (byte)EntityID.TileID.SILT;
 										Main.TileSet[num217, num220].IsActive = 0;
 									}
 								}
@@ -4725,35 +4621,35 @@ namespace Terraria
 						{
 							if (flag9)
 							{
-								if (Main.TileSet[num221, num222].WallType == 2)
+								if (Main.TileSet[num221, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE)
 								{
-									Main.TileSet[num221, num222].WallType = 0;
+									Main.TileSet[num221, num222].WallType = (byte)EntityID.WallID.NONE;
 								}
-								if (Main.TileSet[num221, num222].Type != 53)
+								if (Main.TileSet[num221, num222].Type != (byte)EntityID.TileID.SAND)
 								{
-									if (Main.TileSet[num221 - 1, num222].WallType == 2)
+									if (Main.TileSet[num221 - 1, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE)
 									{
-										Main.TileSet[num221 - 1, num222].WallType = 0;
+										Main.TileSet[num221 - 1, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
-									if (Main.TileSet[num221 - 2, num222].WallType == 2 && genRand.Next(2) == 0)
+									if (Main.TileSet[num221 - 2, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE && genRand.Next(2) == 0)
 									{
-										Main.TileSet[num221 - 2, num222].WallType = 0;
+										Main.TileSet[num221 - 2, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
-									if (Main.TileSet[num221 - 3, num222].WallType == 2 && genRand.Next(2) == 0)
+									if (Main.TileSet[num221 - 3, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE && genRand.Next(2) == 0)
 									{
-										Main.TileSet[num221 - 3, num222].WallType = 0;
+										Main.TileSet[num221 - 3, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
-									if (Main.TileSet[num221 + 1, num222].WallType == 2)
+									if (Main.TileSet[num221 + 1, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE)
 									{
-										Main.TileSet[num221 + 1, num222].WallType = 0;
+										Main.TileSet[num221 + 1, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
-									if (Main.TileSet[num221 + 2, num222].WallType == 2 && genRand.Next(2) == 0)
+									if (Main.TileSet[num221 + 2, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE && genRand.Next(2) == 0)
 									{
-										Main.TileSet[num221 + 2, num222].WallType = 0;
+										Main.TileSet[num221 + 2, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
-									if (Main.TileSet[num221 + 3, num222].WallType == 2 && genRand.Next(2) == 0)
+									if (Main.TileSet[num221 + 3, num222].WallType == (byte)EntityID.WallID.DIRT_UNSAFE && genRand.Next(2) == 0)
 									{
-										Main.TileSet[num221 + 3, num222].WallType = 0;
+										Main.TileSet[num221 + 3, num222].WallType = (byte)EntityID.WallID.NONE;
 									}
 									if (Main.TileSet[num221, num222].IsActive != 0)
 									{
@@ -4761,7 +4657,7 @@ namespace Terraria
 									}
 								}
 							}
-							else if (Main.TileSet[num221, num222].WallType == 0 && Main.TileSet[num221, num222 + 1].WallType == 0 && Main.TileSet[num221, num222 + 2].WallType == 0 && Main.TileSet[num221, num222 + 3].WallType == 0 && Main.TileSet[num221, num222 + 4].WallType == 0 && Main.TileSet[num221 - 1, num222].WallType == 0 && Main.TileSet[num221 + 1, num222].WallType == 0 && Main.TileSet[num221 - 2, num222].WallType == 0 && Main.TileSet[num221 + 2, num222].WallType == 0 && Main.TileSet[num221, num222].IsActive == 0 && Main.TileSet[num221, num222 + 1].IsActive == 0 && Main.TileSet[num221, num222 + 2].IsActive == 0 && Main.TileSet[num221, num222 + 3].IsActive == 0)
+							else if (Main.TileSet[num221, num222].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221, num222 + 1].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221, num222 + 2].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221, num222 + 3].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221, num222 + 4].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221 - 1, num222].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221 + 1, num222].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221 - 2, num222].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221 + 2, num222].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num221, num222].IsActive == 0 && Main.TileSet[num221, num222 + 1].IsActive == 0 && Main.TileSet[num221, num222 + 2].IsActive == 0 && Main.TileSet[num221, num222 + 3].IsActive == 0)
 							{
 								flag9 = true;
 							}
@@ -4776,7 +4672,7 @@ namespace Terraria
 						for (int num224 = 0; num224 < 4096; num224++)
 						{
 							int x2 = genRand.Next(5, Main.MaxTilesX - 5);
-							if (Place3x2(x2, y3, 26))
+							if (Place3x2(x2, y3, (int)EntityID.TileID.DEMON_ALTAR))
 							{
 								break;
 							}
@@ -4791,7 +4687,7 @@ namespace Terraria
 						{
 							if (ptr5->IsActive != 0)
 							{
-								if (ptr5->Type == 60)
+								if (ptr5->Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 								{
 									ptr5[-1].Liquid = byte.MaxValue;
 									ptr5[-2].Liquid = byte.MaxValue;
@@ -4810,7 +4706,7 @@ namespace Terraria
 						{
 							if (ptr6->IsActive != 0)
 							{
-								if (ptr6->Type != 53)
+								if (ptr6->Type != (byte)EntityID.TileID.SAND)
 								{
 									break;
 								}
@@ -4900,7 +4796,7 @@ namespace Terraria
 							{
 							}
 							num241--;
-							if (PlaceTile(num240, num241, 105, ToMute: true, IsForced: true, -1, num237))
+							if (PlaceTile(num240, num241, (int)EntityID.TileID.STATUE, ToMute: true, IsForced: true, -1, num237))
 							{
 								num237++;
 								break;
@@ -4919,7 +4815,7 @@ namespace Terraria
 							int num244 = genRand.Next(1, Main.MaxTilesX);
 							int num245 = ((num242 <= 3) ? genRand.Next(Main.MaxTilesY - 200, Main.MaxTilesY - 50) : genRand.Next((int)(num6 + 20f), Main.MaxTilesY - 230));
 							int wall = Main.TileSet[num244, num245].WallType;
-							if (wall >= 7 && wall <= 9)
+							if (wall >= (byte)EntityID.WallID.BLUE_DUNGEON_UNSAFE && wall <= (byte)EntityID.WallID.PINK_DUNGEON_UNSAFE)
 							{
 								continue;
 							}
@@ -4928,7 +4824,7 @@ namespace Terraria
 								if (genRand.Next(2) == 0)
 								{
 									int num246;
-									for (num246 = num245; Main.TileSet[num244, num246].Type != 21 && num246 < Main.MaxTilesY - 300; num246++)
+									for (num246 = num245; Main.TileSet[num244, num246].Type != (byte)EntityID.TileID.CHEST && num246 < Main.MaxTilesY - 300; num246++)
 									{
 									}
 									if (num245 < Main.MaxTilesY - 300)
@@ -4957,21 +4853,21 @@ namespace Terraria
 							num249 = genRand.Next(300, Main.MaxTilesX - 300);
 							num250 = genRand.Next((int)num5, Main.WorldSurface);
 						}
-						while ((Main.TileSet[num249, num250].WallType != 2 || Main.TileSet[num249, num250].IsActive != 0 || !AddBuriedChest(num249, num250, 0, notNearOtherChests: true)) && ++num248 < 2000);
+						while ((Main.TileSet[num249, num250].WallType != (byte)EntityID.WallID.DIRT_UNSAFE || Main.TileSet[num249, num250].IsActive != 0 || !AddBuriedChest(num249, num250, 0, notNearOtherChests: true)) && ++num248 < 2000);
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[32]);
 					int num251 = 0;
 					for (int num252 = 0; num252 < numJChests; num252++)
 					{
 						UI.MainUI.Progress = num252 / (float)numJChests;
-						int contain = (int)Item.ID.FERAL_CLAWS;
+						int contain = (int)EntityID.ItemID.FERAL_CLAWS;
 						switch (++num251)
 						{
 							case 2:
-								contain = (int)Item.ID.ANKLET_OF_THE_WIND;
+								contain = (int)EntityID.ItemID.ANKLET_OF_THE_WIND;
 								break;
 							case 3:
-								contain = (int)Item.ID.STAFF_OF_REGROWTH;
+								contain = (int)EntityID.ItemID.STAFF_OF_REGROWTH;
 								break;
 							default:
 								if (Main.Rand.Next(2) == 0)
@@ -4982,7 +4878,7 @@ namespace Terraria
 									// It looks like they may have aimed to make each world only have one anklet, feral claws, and staff, and then have the remaining shrine chests be a 50/50 between pet item or feral claws.
 
 									// To make the Honeycomb, Wolf Fang, and by extension, the Pet Hoarder achievement naturally obtainable: Change the 'num251' in the below variable to 'contain'.
-									num251 = ((Main.Rand.Next(6) != 0) ? (int)Item.ID.PET_SPAWN_3 : (int)Item.ID.PET_SPAWN_5);
+									num251 = ((Main.Rand.Next(6) != 0) ? (int)EntityID.ItemID.PET_SPAWN_3 : (int)EntityID.ItemID.PET_SPAWN_5);
 
 									// If they wanted the pet items to be a potential secondary item, they need to be added in AddBuriedChest, which occurred in 1.02, alongside making there be a chance for more than 1 staff or anklet.
 								}
@@ -5005,14 +4901,14 @@ namespace Terraria
 					for (int num254 = 0; num254 < num55; num254++)
 					{
 						UI.MainUI.Progress = num254 / (float)num55;
-						int contain2 = (int)Item.ID.FLIPPER;
+						int contain2 = (int)EntityID.ItemID.FLIPPER;
 						if (++num253 == 1)
 						{
-							contain2 = (int)Item.ID.BREATHING_REED;
+							contain2 = (int)EntityID.ItemID.BREATHING_REED;
 						}
 						else if (num253 == 2)
 						{
-							contain2 = (int)Item.ID.TRIDENT;
+							contain2 = (int)EntityID.ItemID.TRIDENT;
 						}
 						else
 						{
@@ -5044,7 +4940,7 @@ namespace Terraria
 						{
 							int num260 = Main.Rand.Next(200, Main.MaxTilesX - 200);
 							int num261 = Main.Rand.Next(Main.WorldSurface, Main.MaxTilesY - 300);
-							if (Main.TileSet[num260, num261].WallType == 0 && placeTrap(num260, num261))
+							if (Main.TileSet[num260, num261].WallType == (byte)EntityID.WallID.NONE && placeTrap(num260, num261))
 							{
 								break;
 							}
@@ -5110,31 +5006,19 @@ namespace Terraria
 #else
 							int num271 = genRand.Next(Main.MaxTilesY - 250, Main.MaxTilesY - 5);
 #endif
-							try
+							do
 							{
-								if (Main.TileSet[num270, num271].WallType != 13 && Main.TileSet[num270, num271].WallType != 14)
+								if (Main.TileSet[num270, num271].IsActive != 0 || Main.TileSet[num270, num271].WallType == (int)EntityID.WallID.HELLSTONE_BRICK_UNSAFE || Main.TileSet[num270, num271].WallType == (int)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE)
 								{
-									continue;
-								}
-								for (; Main.TileSet[num270, num271].IsActive == 0; num271++)
-								{
-								}
-
-								num271--;
-								PlaceTile(num270, num271, 77);
-								if (Main.TileSet[num270, num271].Type == 77)
-								{
-									flag = true;
-									continue;
-								}
-								if (++num269 >= 10000)
-								{
-									flag = true;
+									num271--;
+									if (WorldGen.PlaceTile(num270, num271, (int)EntityID.TileID.HELLFORGE) || ++num269 >= 10000)
+									{
+										flag = true;
+									}
+									break;
 								}
 							}
-							catch
-							{
-							}
+							while (++num271 != Main.MaxTilesY);
 						}
 					}
 					UI.MainUI.NextProgressStep(Lang.WorldGenText[37]);
@@ -5146,7 +5030,7 @@ namespace Terraria
 						{
 							if (Main.TileSet[num54, num273].IsActive != 0)
 							{
-								if (flag13 && Main.TileSet[num54, num273].Type == 0)
+								if (flag13 && Main.TileSet[num54, num273].Type == (byte)EntityID.TileID.DIRT)
 								{
 									try
 									{
@@ -5156,7 +5040,7 @@ namespace Terraria
 									catch
 									{
 										grassSpread = 0;
-										SpreadGrass(num54, num273, 0, 2, repeat: false);
+										SpreadGrass(num54, num273, repeat: false);
 									}
 								}
 								if (num273 > num6)
@@ -5165,7 +5049,7 @@ namespace Terraria
 								}
 								flag13 = false;
 							}
-							else if (Main.TileSet[num54, num273].WallType == 0)
+							else if (Main.TileSet[num54, num273].WallType == (byte)EntityID.WallID.NONE)
 							{
 								flag13 = true;
 							}
@@ -5182,10 +5066,10 @@ namespace Terraria
 						int num275 = 5;
 						do
 						{
-							if (ptr8->Type == 53 && ptr8->IsActive != 0)
+							if (ptr8->Type == (byte)EntityID.TileID.SAND && ptr8->IsActive != 0)
 							{
 								ptr8--;
-								if (ptr8->IsActive == 0 && ptr8->WallType == 0)
+								if (ptr8->IsActive == 0 && ptr8->WallType == (byte)EntityID.WallID.NONE)
 								{
 									if (num274 < 250 || num274 > Main.MaxTilesX - 250)
 									{
@@ -5198,7 +5082,7 @@ namespace Terraria
 												ptr8--;
 												if (ptr8->Liquid == byte.MaxValue)
 												{
-													PlaceTile(num274, num275 - 1, 81, ToMute: true);
+													PlaceTile(num274, num275 - 1, (int)EntityID.TileID.CORAL, ToMute: true);
 												}
 												ptr8++;
 											}
@@ -5236,7 +5120,7 @@ namespace Terraria
 						}
 						num276++;
 					}
-					int num279 = NPC.NewNPC(Main.SpawnTileX * 16, Main.SpawnTileY * 16, (int)NPC.ID.GUIDE);
+					int num279 = NPC.NewNPC(Main.SpawnTileX * 16, Main.SpawnTileY * 16, (int)EntityID.NPCID.GUIDE);
 					Main.NPCSet[num279].HomeTileX = Main.SpawnTileX;
 					Main.NPCSet[num279].HomeTileY = Main.SpawnTileY;
 					Main.NPCSet[num279].Direction = 1;
@@ -5263,9 +5147,9 @@ namespace Terraria
 						{
 							for (int num285 = 5; num285 < Main.WorldSurface - 1; num285++)
 							{
-								if (Main.TileSet[num284, num285].Type == 2 && Main.TileSet[num284, num285].IsActive != 0 && Main.TileSet[num284, num285 - 1].IsActive == 0)
+								if (Main.TileSet[num284, num285].Type == (byte)EntityID.TileID.GRASS && Main.TileSet[num284, num285].IsActive != 0 && Main.TileSet[num284, num285 - 1].IsActive == 0)
 								{
-									PlaceTile(num284, num285 - 1, 27, ToMute: true);
+									PlaceTile(num284, num285 - 1, (int)EntityID.TileID.SUNFLOWER, ToMute: true);
 								}
 								if (Main.TileSet[num284, num285].IsActive != 0)
 								{
@@ -5304,17 +5188,17 @@ namespace Terraria
 							{
 								continue;
 							}
-							if (num293 >= Main.WorldSurface && Main.TileSet[num292, num293].Type == 70 && Main.TileSet[num292, num293 - 1].IsActive == 0)
+							if (num293 >= Main.WorldSurface && Main.TileSet[num292, num293].Type == (byte)EntityID.TileID.MUSHROOM_GRASS && Main.TileSet[num292, num293 - 1].IsActive == 0)
 							{
 								GrowShroom(num292, num293);
 								if (Main.TileSet[num292, num293 - 1].IsActive == 0)
 								{
-									PlaceTile(num292, num293 - 1, 71, ToMute: true);
+									PlaceTile(num292, num293 - 1, (int)EntityID.TileID.GLOWING_MUSHROOM, ToMute: true);
 								}
 							}
-							if (Main.TileSet[num292, num293].Type == 60 && Main.TileSet[num292, num293 - 1].IsActive == 0)
+							if (Main.TileSet[num292, num293].Type == (byte)EntityID.TileID.JUNGLE_GRASS && Main.TileSet[num292, num293 - 1].IsActive == 0)
 							{
-								PlaceTile(num292, num293 - 1, 61, ToMute: true);
+								PlaceTile(num292, num293 - 1, (int)EntityID.TileID.SHORT_JUNGLE_PLANTS, ToMute: true);
 							}
 						}
 					}
@@ -5327,14 +5211,14 @@ namespace Terraria
 							if (num295 > 0 && Main.TileSet[num294, num296].IsActive == 0)
 							{
 								Main.TileSet[num294, num296].IsActive = 1;
-								Main.TileSet[num294, num296].Type = 52;
+								Main.TileSet[num294, num296].Type = (byte)EntityID.TileID.VINE;
 								num295--;
 							}
 							else
 							{
 								num295 = 0;
 							}
-							if (Main.TileSet[num294, num296].IsActive != 0 && Main.TileSet[num294, num296].Type == 2 && genRand.Next(5) < 3)
+							if (Main.TileSet[num294, num296].IsActive != 0 && Main.TileSet[num294, num296].Type == (byte)EntityID.TileID.GRASS && genRand.Next(5) < 3)
 							{
 								num295 = genRand.Next(1, 10);
 							}
@@ -5345,14 +5229,14 @@ namespace Terraria
 							if (num295 > 0 && Main.TileSet[num294, num297].IsActive == 0)
 							{
 								Main.TileSet[num294, num297].IsActive = 1;
-								Main.TileSet[num294, num297].Type = 62;
+								Main.TileSet[num294, num297].Type = (byte)EntityID.TileID.JUNGLE_VINE;
 								num295--;
 							}
 							else
 							{
 								num295 = 0;
 							}
-							if (Main.TileSet[num294, num297].IsActive != 0 && Main.TileSet[num294, num297].Type == 60 && genRand.Next(5) < 3)
+							if (Main.TileSet[num294, num297].IsActive != 0 && Main.TileSet[num294, num297].Type == (byte)EntityID.TileID.JUNGLE_GRASS && genRand.Next(5) < 3)
 							{
 								num295 = genRand.Next(1, 10);
 							}
@@ -5374,7 +5258,7 @@ namespace Terraria
 							{
 								for (int num304 = num302 - num301; num304 < num302 + num301; num304++)
 								{
-									if (Main.TileSet[num303, num304].Type == 3 || Main.TileSet[num303, num304].Type == 24)
+									if (Main.TileSet[num303, num304].Type == (byte)EntityID.TileID.SHORT_GRASS_PLANTS || Main.TileSet[num303, num304].Type == (byte)EntityID.TileID.SHORT_CORRUPT_PLANTS)
 									{
 										Main.TileSet[num303, num304].FrameX = (short)(genRand.Next(6, 8) * 18);
 									}
@@ -5399,7 +5283,7 @@ namespace Terraria
 							{
 								for (int num311 = num309 - num308; num311 < num309 + num308; num311++)
 								{
-									if (Main.TileSet[num310, num311].Type == 3 || Main.TileSet[num310, num311].Type == 24)
+									if (Main.TileSet[num310, num311].Type == (byte)EntityID.TileID.SHORT_GRASS_PLANTS || Main.TileSet[num310, num311].Type == (byte)EntityID.TileID.SHORT_CORRUPT_PLANTS)
 									{
 										Main.TileSet[num310, num311].FrameX = 144;
 									}
@@ -5419,13 +5303,31 @@ namespace Terraria
 		public static void GrowEpicTree(int i, int y)
 		{
 			int j;
-			for (j = y; Main.TileSet[i, j].Type == 20; j++)
+			for (j = y; Main.TileSet[i, j].Type == (byte)EntityID.TileID.SAPLING; j++)
 			{
 			}
-			if (Main.TileSet[i, j].IsActive == 0 || Main.TileSet[i, j].Type != 2 || Main.TileSet[i, j - 1].WallType != 0 || Main.TileSet[i, j - 1].Liquid != 0 || ((Main.TileSet[i - 1, j].IsActive == 0 || (Main.TileSet[i - 1, j].Type != 2 && Main.TileSet[i - 1, j].Type != 23 && Main.TileSet[i - 1, j].Type != 60 && Main.TileSet[i - 1, j].Type != 109)) && (Main.TileSet[i + 1, j].IsActive == 0 || (Main.TileSet[i + 1, j].Type != 2 && Main.TileSet[i + 1, j].Type != 23 && Main.TileSet[i + 1, j].Type != 60 && Main.TileSet[i + 1, j].Type != 109))))
+
+			bool IsGrassType(int TileType) => 
+				TileType == (byte)EntityID.TileID.GRASS || 
+				TileType == (byte)EntityID.TileID.CORRUPT_GRASS || 
+				TileType == (byte)EntityID.TileID.JUNGLE_GRASS || 
+				TileType == (byte)EntityID.TileID.HALLOWED_GRASS;
+
+			var TileU = Main.TileSet[i, j - 1];
+			var TileL = Main.TileSet[i - 1, j];
+			var TileR = Main.TileSet[i + 1, j];
+
+			bool InvalidTile = Main.TileSet[i, j].IsActive == 0 || Main.TileSet[i, j].Type != (byte)EntityID.TileID.GRASS;
+			bool InvalidAbove = (TileU.WallType != (byte)EntityID.WallID.NONE) || (TileU.Liquid != 0);
+			bool InvalidNeighbours =
+				(TileL.IsActive == 0 || !IsGrassType(TileL.Type)) &&
+				(TileR.IsActive == 0 || !IsGrassType(TileR.Type));
+
+			if (InvalidTile || InvalidAbove || InvalidNeighbours)
 			{
 				return;
 			}
+
 			int num = 1;
 			if (!EmptyTileCheckTree(i - num, i + num, j - 55, j - 1))
 			{
@@ -5438,7 +5340,7 @@ namespace Terraria
 			{
 				Main.TileSet[i, k].frameNumber = (byte)genRand.Next(3);
 				Main.TileSet[i, k].IsActive = 1;
-				Main.TileSet[i, k].Type = 5;
+				Main.TileSet[i, k].Type = (byte)EntityID.TileID.TREE;
 				num4 = genRand.Next(3);
 				if (k == j - 1 || k == j - num3)
 				{
@@ -5484,7 +5386,7 @@ namespace Terraria
 				if (flag)
 				{
 					Main.TileSet[i - 1, k].IsActive = 1;
-					Main.TileSet[i - 1, k].Type = 5;
+					Main.TileSet[i - 1, k].Type = (byte)EntityID.TileID.TREE;
 					num4 = genRand.Next(3);
 					if (genRand.Next(3) < 2)
 					{
@@ -5500,7 +5402,7 @@ namespace Terraria
 				if (flag2)
 				{
 					Main.TileSet[i + 1, k].IsActive = 1;
-					Main.TileSet[i + 1, k].Type = 5;
+					Main.TileSet[i + 1, k].Type = (byte)EntityID.TileID.TREE;
 					num4 = genRand.Next(3);
 					if (genRand.Next(3) < 2)
 					{
@@ -5522,11 +5424,11 @@ namespace Terraria
 			int num5 = genRand.Next(3);
 			bool flag3 = false;
 			bool flag4 = false;
-			if (Main.TileSet[i - 1, j].IsActive != 0 && (Main.TileSet[i - 1, j].Type == 2 || Main.TileSet[i - 1, j].Type == 23 || Main.TileSet[i - 1, j].Type == 60 || Main.TileSet[i - 1, j].Type == 109))
+			if (Main.TileSet[i - 1, j].IsActive != 0 && (Main.TileSet[i - 1, j].Type == (byte)EntityID.TileID.GRASS || Main.TileSet[i - 1, j].Type == (byte)EntityID.TileID.CORRUPT_GRASS || Main.TileSet[i - 1, j].Type == (byte)EntityID.TileID.JUNGLE_GRASS || Main.TileSet[i - 1, j].Type == (byte)EntityID.TileID.HALLOWED_GRASS))
 			{
 				flag3 = true;
 			}
-			if (Main.TileSet[i + 1, j].IsActive != 0 && (Main.TileSet[i + 1, j].Type == 2 || Main.TileSet[i + 1, j].Type == 23 || Main.TileSet[i + 1, j].Type == 60 || Main.TileSet[i + 1, j].Type == 109))
+			if (Main.TileSet[i + 1, j].IsActive != 0 && (Main.TileSet[i + 1, j].Type == (byte)EntityID.TileID.GRASS || Main.TileSet[i + 1, j].Type == (byte)EntityID.TileID.CORRUPT_GRASS || Main.TileSet[i + 1, j].Type == (byte)EntityID.TileID.JUNGLE_GRASS || Main.TileSet[i + 1, j].Type == (byte)EntityID.TileID.HALLOWED_GRASS))
 			{
 				flag4 = true;
 			}
@@ -5563,137 +5465,46 @@ namespace Terraria
 			if (num5 == 0 || num5 == 1)
 			{
 				Main.TileSet[i + 1, j - 1].IsActive = 1;
-				Main.TileSet[i + 1, j - 1].Type = 5;
+				Main.TileSet[i + 1, j - 1].Type = (byte)EntityID.TileID.TREE;
 				num4 = genRand.Next(3);
-				if (num4 == 0)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 132;
-				}
-				if (num4 == 1)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 154;
-				}
-				if (num4 == 2)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 176;
-				}
+				Main.TileSet[i + 1, j - 1].FrameX = 22;
+				Main.TileSet[i + 1, j - 1].FrameY = (short)(132 + 22 * num4);
 			}
 			if (num5 == 0 || num5 == 2)
 			{
 				Main.TileSet[i - 1, j - 1].IsActive = 1;
-				Main.TileSet[i - 1, j - 1].Type = 5;
+				Main.TileSet[i - 1, j - 1].Type = (byte)EntityID.TileID.TREE;
 				num4 = genRand.Next(3);
-				if (num4 == 0)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 132;
-				}
-				if (num4 == 1)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 154;
-				}
-				if (num4 == 2)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 176;
-				}
+				Main.TileSet[i - 1, j - 1].FrameX = 44;
+				Main.TileSet[i - 1, j - 1].FrameY = (short)(132 + 22 * num4);
 			}
 			num4 = genRand.Next(3);
 			switch (num5)
 			{
 				case 0:
-					if (num4 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num4 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num4 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 88;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num4);
 					break;
 				case 1:
-					if (num4 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num4 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num4 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 0;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num4);
 					break;
 				case 2:
-					if (num4 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num4 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num4 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 66;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num4);
 					break;
 			}
+			num4 = genRand.Next(3);
 			if (genRand.Next(3) < 2)
 			{
-				num4 = genRand.Next(3);
-				if (num4 == 0)
-				{
-					Main.TileSet[i, j - num3].FrameX = 22;
-					Main.TileSet[i, j - num3].FrameY = 198;
-				}
-				if (num4 == 1)
-				{
-					Main.TileSet[i, j - num3].FrameX = 22;
-					Main.TileSet[i, j - num3].FrameY = 220;
-				}
-				if (num4 == 2)
-				{
-					Main.TileSet[i, j - num3].FrameX = 22;
-					Main.TileSet[i, j - num3].FrameY = 242;
-				}
+				
+				Main.TileSet[i, j - num3].FrameX = 22;
+				Main.TileSet[i, j - num3].FrameY = (short)(198 + 22 * num4);
 			}
 			else
 			{
-				num4 = genRand.Next(3);
-				if (num4 == 0)
-				{
-					Main.TileSet[i, j - num3].FrameX = 0;
-					Main.TileSet[i, j - num3].FrameY = 198;
-				}
-				if (num4 == 1)
-				{
-					Main.TileSet[i, j - num3].FrameX = 0;
-					Main.TileSet[i, j - num3].FrameY = 220;
-				}
-				if (num4 == 2)
-				{
-					Main.TileSet[i, j - num3].FrameX = 0;
-					Main.TileSet[i, j - num3].FrameY = 242;
-				}
+				Main.TileSet[i, j - num3].FrameX = 0;
+				Main.TileSet[i, j - num3].FrameY = (short)(198 + 22 * num4);
 			}
 			RangeFrame(i - 2, j - num3 - 1, i + 2, j + 1);
 			if (Main.NetMode == (byte)NetModeSetting.SERVER)
@@ -5705,16 +5516,40 @@ namespace Terraria
 		public unsafe static void GrowTree(int i, int y)
 		{
 			int j;
-			for (j = y; Main.TileSet[i, j].Type == 20; j++)
+			for (j = y; Main.TileSet[i, j].Type == (byte)EntityID.TileID.SAPLING; j++)
 			{
 			}
-			if (((Main.TileSet[i - 1, j - 1].Liquid != 0 || Main.TileSet[i - 1, j - 1].Liquid != 0 || Main.TileSet[i + 1, j - 1].Liquid != 0) && Main.TileSet[i, j].Type != 60) || Main.TileSet[i, j].IsActive == 0 || (Main.TileSet[i, j].Type != 2 && Main.TileSet[i, j].Type != 23 && Main.TileSet[i, j].Type != 60 && Main.TileSet[i, j].Type != 109 && Main.TileSet[i, j].Type != 147) || Main.TileSet[i, j - 1].WallType != 0 || ((Main.TileSet[i - 1, j].IsActive == 0 || (Main.TileSet[i - 1, j].Type != 2 && Main.TileSet[i - 1, j].Type != 23 && Main.TileSet[i - 1, j].Type != 60 && Main.TileSet[i - 1, j].Type != 109 && Main.TileSet[i - 1, j].Type != 147)) && (Main.TileSet[i + 1, j].IsActive == 0 || (Main.TileSet[i + 1, j].Type != 2 && Main.TileSet[i + 1, j].Type != 23 && Main.TileSet[i + 1, j].Type != 60 && Main.TileSet[i + 1, j].Type != 109 && Main.TileSet[i + 1, j].Type != 147))))
+
+			bool IsValidGrass(int TileType) =>
+				TileType == (byte)EntityID.TileID.GRASS ||
+				TileType == (byte)EntityID.TileID.CORRUPT_GRASS ||
+				TileType == (byte)EntityID.TileID.JUNGLE_GRASS ||
+				TileType == (byte)EntityID.TileID.HALLOWED_GRASS ||
+				TileType == (byte)EntityID.TileID.SNOW;
+
+			var TileL = Main.TileSet[i - 1, j];
+			var TileR = Main.TileSet[i + 1, j];
+			var TileLU = Main.TileSet[i - 1, j - 1];
+			var TileRU = Main.TileSet[i + 1, j - 1];
+
+			bool HasLiquid = (TileLU.Liquid != 0) || (TileRU.Liquid != 0);
+
+			bool InvalidNeighbours =
+				(TileL.IsActive == 0 || !IsValidGrass(TileL.Type)) &&
+				(TileR.IsActive == 0 || !IsValidGrass(TileR.Type));
+
+			if ((HasLiquid && Main.TileSet[i, j].Type != (byte)EntityID.TileID.JUNGLE_GRASS) ||
+				Main.TileSet[i, j].IsActive == 0 ||
+				!IsValidGrass(Main.TileSet[i, j].Type) ||
+				Main.TileSet[i, j - 1].WallType != (byte)EntityID.WallID.NONE ||
+				InvalidNeighbours)
 			{
 				return;
 			}
+
 			int num = 1;
 			int num2 = 16;
-			if (Main.TileSet[i, j].Type == 60)
+			if (Main.TileSet[i, j].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 			{
 				num2 += 5;
 			}
@@ -5729,7 +5564,7 @@ namespace Terraria
 			{
 				Main.TileSet[i, k].frameNumber = (byte)genRand.Next(3);
 				Main.TileSet[i, k].IsActive = 1;
-				Main.TileSet[i, k].Type = 5;
+				Main.TileSet[i, k].Type = (byte)EntityID.TileID.TREE;
 				num5 = genRand.Next(3);
 				if (k == j - 1 || k == j - num4)
 				{
@@ -5775,7 +5610,7 @@ namespace Terraria
 				if (flag)
 				{
 					Main.TileSet[i - 1, k].IsActive = 1;
-					Main.TileSet[i - 1, k].Type = 5;
+					Main.TileSet[i - 1, k].Type = (byte)EntityID.TileID.TREE;
 					num5 = genRand.Next(3);
 					if (genRand.Next(3) < 2)
 					{
@@ -5791,7 +5626,7 @@ namespace Terraria
 				if (flag2)
 				{
 					Main.TileSet[i + 1, k].IsActive = 1;
-					Main.TileSet[i + 1, k].Type = 5;
+					Main.TileSet[i + 1, k].Type = (byte)EntityID.TileID.TREE;
 					num5 = genRand.Next(3);
 					if (genRand.Next(3) < 2)
 					{
@@ -5817,13 +5652,13 @@ namespace Terraria
 			{
 				if (ptr->IsActive != 0)
 				{
-					switch (ptr->Type)
+					switch ((EntityID.TileID)ptr->Type)
 					{
-						case 2:
-						case 23:
-						case 60:
-						case 109:
-						case 147:
+						case EntityID.TileID.GRASS:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.HALLOWED_GRASS:
+						case EntityID.TileID.SNOW:
 							flag3 = true;
 							break;
 					}
@@ -5833,13 +5668,13 @@ namespace Terraria
 			{
 				if (ptr2->IsActive != 0)
 				{
-					switch (ptr2->Type)
+					switch ((EntityID.TileID)ptr2->Type)
 					{
-						case 2:
-						case 23:
-						case 60:
-						case 109:
-						case 147:
+						case EntityID.TileID.GRASS:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.HALLOWED_GRASS:
+						case EntityID.TileID.SNOW:
 							flag4 = true;
 							break;
 					}
@@ -5878,137 +5713,45 @@ namespace Terraria
 			if (num6 == 0 || num6 == 1)
 			{
 				Main.TileSet[i + 1, j - 1].IsActive = 1;
-				Main.TileSet[i + 1, j - 1].Type = 5;
+				Main.TileSet[i + 1, j - 1].Type = (byte)EntityID.TileID.TREE;
 				num5 = genRand.Next(3);
-				if (num5 == 0)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 132;
-				}
-				if (num5 == 1)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 154;
-				}
-				if (num5 == 2)
-				{
-					Main.TileSet[i + 1, j - 1].FrameX = 22;
-					Main.TileSet[i + 1, j - 1].FrameY = 176;
-				}
+				Main.TileSet[i + 1, j - 1].FrameX = 22;
+				Main.TileSet[i + 1, j - 1].FrameY = (short)(132 + 22 * num5);
 			}
 			if (num6 == 0 || num6 == 2)
 			{
 				Main.TileSet[i - 1, j - 1].IsActive = 1;
-				Main.TileSet[i - 1, j - 1].Type = 5;
+				Main.TileSet[i - 1, j - 1].Type = (byte)EntityID.TileID.TREE;
 				num5 = genRand.Next(3);
-				if (num5 == 0)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 132;
-				}
-				if (num5 == 1)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 154;
-				}
-				if (num5 == 2)
-				{
-					Main.TileSet[i - 1, j - 1].FrameX = 44;
-					Main.TileSet[i - 1, j - 1].FrameY = 176;
-				}
+				Main.TileSet[i - 1, j - 1].FrameX = 44;
+				Main.TileSet[i - 1, j - 1].FrameY = (short)(132 + 22 * num5);
 			}
 			num5 = genRand.Next(3);
 			switch (num6)
 			{
 				case 0:
-					if (num5 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num5 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num5 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 88;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 88;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num5);
 					break;
 				case 1:
-					if (num5 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num5 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num5 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 0;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 0;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num5);
 					break;
 				case 2:
-					if (num5 == 0)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 132;
-					}
-					if (num5 == 1)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 154;
-					}
-					if (num5 == 2)
-					{
-						Main.TileSet[i, j - 1].FrameX = 66;
-						Main.TileSet[i, j - 1].FrameY = 176;
-					}
+					Main.TileSet[i, j - 1].FrameX = 66;
+					Main.TileSet[i, j - 1].FrameY = (short)(132 + 22 * num5);
 					break;
 			}
+			num5 = genRand.Next(3);
 			if (genRand.Next(4) < 3)
 			{
-				num5 = genRand.Next(3);
-				if (num5 == 0)
-				{
-					Main.TileSet[i, j - num4].FrameX = 22;
-					Main.TileSet[i, j - num4].FrameY = 198;
-				}
-				if (num5 == 1)
-				{
-					Main.TileSet[i, j - num4].FrameX = 22;
-					Main.TileSet[i, j - num4].FrameY = 220;
-				}
-				if (num5 == 2)
-				{
-					Main.TileSet[i, j - num4].FrameX = 22;
-					Main.TileSet[i, j - num4].FrameY = 242;
-				}
+				Main.TileSet[i, j - num4].FrameX = 22;
+				Main.TileSet[i, j - num4].FrameY = (short)(198 + 22 * num5);
 			}
 			else
 			{
-				num5 = genRand.Next(3);
-				if (num5 == 0)
-				{
-					Main.TileSet[i, j - num4].FrameX = 0;
-					Main.TileSet[i, j - num4].FrameY = 198;
-				}
-				if (num5 == 1)
-				{
-					Main.TileSet[i, j - num4].FrameX = 0;
-					Main.TileSet[i, j - num4].FrameY = 220;
-				}
-				if (num5 == 2)
-				{
-					Main.TileSet[i, j - num4].FrameX = 0;
-					Main.TileSet[i, j - num4].FrameY = 242;
-				}
+				Main.TileSet[i, j - num4].FrameX = 0;
+				Main.TileSet[i, j - num4].FrameY = (short)(198 + 22 * num5);
 			}
 			RangeFrame(i - 2, j - num4 - 1, i + 2, j + 1);
 			if (Main.NetMode == (byte)NetModeSetting.SERVER)
@@ -6019,50 +5762,36 @@ namespace Terraria
 
 		public static void GrowShroom(int i, int y)
 		{
-			if (Main.TileSet[i - 1, y - 1].Lava != 0 || Main.TileSet[i - 1, y - 1].Lava != 0 || Main.TileSet[i + 1, y - 1].Lava != 0 || Main.TileSet[i, y].IsActive == 0 || Main.TileSet[i, y].Type != 70 || Main.TileSet[i, y - 1].WallType != 0 || Main.TileSet[i - 1, y].IsActive == 0 || Main.TileSet[i - 1, y].Type != 70 || Main.TileSet[i + 1, y].IsActive == 0 || Main.TileSet[i + 1, y].Type != 70 || !EmptyTileCheckShroom(i - 2, i + 2, y - 13, y - 1))
+			var TileL = Main.TileSet[i - 1, y];
+			var TileR = Main.TileSet[i + 1, y];
+
+			bool HasLava = (Main.TileSet[i - 1, y - 1].Lava != 0) || (Main.TileSet[i + 1, y - 1].Lava != 0);
+			bool InvalidTile = (Main.TileSet[i, y].IsActive == 0) || (Main.TileSet[i, y].Type != (byte)EntityID.TileID.MUSHROOM_GRASS);
+			bool InvalidNeighbours =
+				TileL.IsActive == 0 || TileL.Type != (byte)EntityID.TileID.MUSHROOM_GRASS ||
+				TileR.IsActive == 0 || TileR.Type != (byte)EntityID.TileID.MUSHROOM_GRASS;
+
+			if (HasLava || InvalidTile || InvalidNeighbours ||
+				Main.TileSet[i, y - 1].WallType != (byte)EntityID.WallID.NONE ||
+				!EmptyTileCheckShroom(i - 2, i + 2, y - 13, y - 1))
 			{
 				return;
 			}
+
 			int num = genRand.Next(4, 11);
 			int num2;
 			for (int j = y - num; j < y; j++)
 			{
 				Main.TileSet[i, j].frameNumber = (byte)genRand.Next(3);
 				Main.TileSet[i, j].IsActive = 1;
-				Main.TileSet[i, j].Type = 72;
+				Main.TileSet[i, j].Type = (byte)EntityID.TileID.GIANT_GLOWING_MUSHROOM;
 				num2 = genRand.Next(3);
-				if (num2 == 0)
-				{
-					Main.TileSet[i, j].FrameX = 0;
-					Main.TileSet[i, j].FrameY = 0;
-				}
-				if (num2 == 1)
-				{
-					Main.TileSet[i, j].FrameX = 0;
-					Main.TileSet[i, j].FrameY = 18;
-				}
-				if (num2 == 2)
-				{
-					Main.TileSet[i, j].FrameX = 0;
-					Main.TileSet[i, j].FrameY = 36;
-				}
+				Main.TileSet[i, j].FrameX = 0;
+				Main.TileSet[i, j].FrameY = (short)(0 + 18 * num2);
 			}
 			num2 = genRand.Next(3);
-			if (num2 == 0)
-			{
-				Main.TileSet[i, y - num].FrameX = 36;
-				Main.TileSet[i, y - num].FrameY = 0;
-			}
-			if (num2 == 1)
-			{
-				Main.TileSet[i, y - num].FrameX = 36;
-				Main.TileSet[i, y - num].FrameY = 18;
-			}
-			if (num2 == 2)
-			{
-				Main.TileSet[i, y - num].FrameX = 36;
-				Main.TileSet[i, y - num].FrameY = 36;
-			}
+			Main.TileSet[i, y - num].FrameX = 36;
+			Main.TileSet[i, y - num].FrameY = (short)(0 + (18 * num2));
 			RangeFrame(i - 2, y - num - 1, i + 2, y + 1);
 			if (Main.NetMode == (byte)NetModeSetting.SERVER)
 			{
@@ -6157,10 +5886,22 @@ namespace Terraria
 					{
 						if (ptr2->IsActive != 0)
 						{
-							int type = ptr2->Type;
-							if (type != 20 && type != 3 && type != 24 && type != 61 && type != 32 && type != 69 && type != 73 && type != 74 && type != 110 && type != 113)
+							switch ((EntityID.TileID)ptr2->Type)
 							{
-								return false;
+								case EntityID.TileID.SHORT_GRASS_PLANTS:
+								case EntityID.TileID.SAPLING:
+								case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+								case EntityID.TileID.CORRUPTION_THORN:
+								case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+								case EntityID.TileID.JUNGLE_THORN:
+								case EntityID.TileID.TALL_GRASS_PLANTS:
+								case EntityID.TileID.TALL_JUNGLE_PLANTS:
+								case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+								case EntityID.TileID.TALL_HALLOWED_PLANTS:
+									break;
+
+								default:
+									return false;
 							}
 						}
 						ptr2++;
@@ -6198,7 +5939,7 @@ namespace Terraria
 					Tile* ptr2 = ptr + (startX * (Main.LargeWorldH) + num);
 					do
 					{
-						if (ptr2->IsActive != 0 && ptr2->Type != 71)
+						if (ptr2->IsActive != 0 && ptr2->Type != (byte)EntityID.TileID.GLOWING_MUSHROOM)
 						{
 							return false;
 						}
@@ -6271,15 +6012,15 @@ namespace Terraria
 					if (ptr[-2].IsActive != 0 && Main.TileSolid[ptr[-2].Type] && ptr[2].IsActive != 0 && Main.TileSolid[ptr[2].Type])
 					{
 						ptr[-1].IsActive = 1;
-						ptr[-1].Type = 10;
+						ptr[-1].Type = (byte)EntityID.TileID.DOOR_CLOSED;
 						ptr[-1].FrameY = 0;
 						ptr[-1].FrameX = (short)(genRand.Next(3) * 18);
 						ptr->IsActive = 1;
-						ptr->Type = 10;
+						ptr->Type = (byte)EntityID.TileID.DOOR_CLOSED;
 						ptr->FrameY = 18;
 						ptr->FrameX = (short)(genRand.Next(3) * 18);
 						ptr[1].IsActive = 1;
-						ptr[1].Type = 10;
+						ptr[1].Type = (byte)EntityID.TileID.DOOR_CLOSED;
 						ptr[1].FrameY = 36;
 						ptr[1].FrameX = (short)(genRand.Next(3) * 18);
 						return true;
@@ -6346,7 +6087,7 @@ namespace Terraria
 				{
 					if (k == num2)
 					{
-						Main.TileSet[k, l].Type = 10;
+						Main.TileSet[k, l].Type = (byte)EntityID.TileID.DOOR_CLOSED;
 						Main.TileSet[k, l].FrameX = (short)(genRand.Next(3) * 18);
 					}
 					else
@@ -6359,7 +6100,7 @@ namespace Terraria
 			{
 				for (int m = 0; m < 3; m++)
 				{
-					if (numNoWire < 999)
+					if (numNoWire < MaxNumWire - 1)
 					{
 						noWire[numNoWire].X = (short)num2;
 						noWire[numNoWire].Y = (short)(num3 + m);
@@ -6404,19 +6145,19 @@ namespace Terraria
 							return false;
 						}
 						ptr2[-(Main.LargeWorldH + 2)].IsActive = 1;
-						ptr2[-(Main.LargeWorldH + 2)].Type = 12;
+						ptr2[-(Main.LargeWorldH + 2)].Type = (byte)EntityID.TileID.LIFE_CRYSTAL;
 						ptr2[-(Main.LargeWorldH + 2)].FrameX = 0;
 						ptr2[-(Main.LargeWorldH + 2)].FrameY = 0;
 						ptr2[-(Main.LargeWorldH + 1)].IsActive = 1;
-						ptr2[-(Main.LargeWorldH + 1)].Type = 12;
+						ptr2[-(Main.LargeWorldH + 1)].Type = (byte)EntityID.TileID.LIFE_CRYSTAL;
 						ptr2[-(Main.LargeWorldH + 1)].FrameX = 0;
 						ptr2[-(Main.LargeWorldH + 1)].FrameY = 18;
 						ptr2[-2].IsActive = 1;
-						ptr2[-2].Type = 12;
+						ptr2[-2].Type = (byte)EntityID.TileID.LIFE_CRYSTAL;
 						ptr2[-2].FrameX = 18;
 						ptr2[-2].FrameY = 0;
 						ptr2[-1].IsActive = 1;
-						ptr2[-1].Type = 12;
+						ptr2[-1].Type = (byte)EntityID.TileID.LIFE_CRYSTAL;
 						ptr2[-1].FrameX = 18;
 						ptr2[-1].FrameY = 18;
 						return true;
@@ -6438,26 +6179,26 @@ namespace Terraria
 			{
 				for (int j = y - 1; j < y + 1; j++)
 				{
-					if (Main.TileSet[i, j].IsActive != 0 && Main.TileSet[i, j].Type == 31)
+					if (Main.TileSet[i, j].IsActive != 0 && Main.TileSet[i, j].Type == (byte)EntityID.TileID.SHADOW_ORB)
 					{
 						return;
 					}
 				}
 			}
 			Main.TileSet[x - 1, y - 1].IsActive = 1;
-			Main.TileSet[x - 1, y - 1].Type = 31;
+			Main.TileSet[x - 1, y - 1].Type = (byte)EntityID.TileID.SHADOW_ORB;
 			Main.TileSet[x - 1, y - 1].FrameX = 0;
 			Main.TileSet[x - 1, y - 1].FrameY = 0;
 			Main.TileSet[x, y - 1].IsActive = 1;
-			Main.TileSet[x, y - 1].Type = 31;
+			Main.TileSet[x, y - 1].Type = (byte)EntityID.TileID.SHADOW_ORB;
 			Main.TileSet[x, y - 1].FrameX = 18;
 			Main.TileSet[x, y - 1].FrameY = 0;
 			Main.TileSet[x - 1, y].IsActive = 1;
-			Main.TileSet[x - 1, y].Type = 31;
+			Main.TileSet[x - 1, y].Type = (byte)EntityID.TileID.SHADOW_ORB;
 			Main.TileSet[x - 1, y].FrameX = 0;
 			Main.TileSet[x - 1, y].FrameY = 18;
 			Main.TileSet[x, y].IsActive = 1;
-			Main.TileSet[x, y].Type = 31;
+			Main.TileSet[x, y].Type = (byte)EntityID.TileID.SHADOW_ORB;
 			Main.TileSet[x, y].FrameX = 18;
 			Main.TileSet[x, y].FrameY = 18;
 		}
@@ -6478,13 +6219,13 @@ namespace Terraria
 					int wall;
 					if (genRand.Next(10) == 0)
 					{
-						type = 76;
-						wall = 13;
+						type = (byte)EntityID.TileID.HELLSTONE_BRICK;
+						wall = (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE;
 					}
 					else
 					{
-						type = 75;
-						wall = 14;
+						type = (byte)EntityID.TileID.OBSIDIAN_BRICK;
+						wall = (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE;
 					}
 					HellHouse(i, num2, type, wall);
 					i += genRand.Next(15, 80);
@@ -6500,14 +6241,14 @@ namespace Terraria
 					num4++;
 					int num5 = genRand.Next((int)(Main.MaxTilesX * 0.2), (int)(Main.MaxTilesX * 0.8));
 					int num6 = genRand.Next(Main.MaxTilesY - 300, Main.MaxTilesY - 20);
-					if (Main.TileSet[num5, num6].IsActive != 0 && (Main.TileSet[num5, num6].Type == 75 || Main.TileSet[num5, num6].Type == 76))
+					if (Main.TileSet[num5, num6].IsActive != 0 && (Main.TileSet[num5, num6].Type == (byte)EntityID.TileID.OBSIDIAN_BRICK || Main.TileSet[num5, num6].Type == (byte)EntityID.TileID.HELLSTONE_BRICK))
 					{
 						int num7 = 0;
-						if (Main.TileSet[num5 - 1, num6].WallType > 0)
+						if (Main.TileSet[num5 - 1, num6].WallType > (byte)EntityID.WallID.NONE)
 						{
 							num7 = -1;
 						}
-						else if (Main.TileSet[num5 + 1, num6].WallType > 0)
+						else if (Main.TileSet[num5 + 1, num6].WallType > (byte)EntityID.WallID.NONE)
 						{
 							num7 = 1;
 						}
@@ -6518,7 +6259,7 @@ namespace Terraria
 							{
 								for (int l = num6 - 8; l < num6 + 8; l++)
 								{
-									if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == 4)
+									if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == (byte)EntityID.TileID.TORCH)
 									{
 										flag2 = true;
 										break;
@@ -6527,7 +6268,7 @@ namespace Terraria
 							}
 							if (!flag2)
 							{
-								PlaceTile(num5 + num7, num6, 4, ToMute: true, IsForced: true, -1, 7);
+								PlaceTile(num5 + num7, num6, (byte)EntityID.TileID.TORCH, ToMute: true, IsForced: true, -1, 7);
 								flag = true;
 							}
 						}
@@ -6561,7 +6302,7 @@ namespace Terraria
 			}
 			for (int m = i - (num >> 1); m <= i + (num >> 1); m++)
 			{
-				for (num4 = j; num4 < Main.MaxTilesY && ((Main.TileSet[m, num4].IsActive != 0 && (Main.TileSet[m, num4].Type == 76 || Main.TileSet[m, num4].Type == 75)) || Main.TileSet[i, num4].WallType == 13 || Main.TileSet[i, num4].WallType == 14); num4++)
+				for (num4 = j; num4 < Main.MaxTilesY && ((Main.TileSet[m, num4].IsActive != 0 && (Main.TileSet[m, num4].Type == (byte)EntityID.TileID.HELLSTONE_BRICK || Main.TileSet[m, num4].Type == (byte)EntityID.TileID.OBSIDIAN_BRICK)) || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE); num4++)
 				{
 				}
 				int num7 = 6 + genRand.Next(3);
@@ -6569,7 +6310,7 @@ namespace Terraria
 				{
 					num7--;
 					Main.TileSet[m, num4].IsActive = 1;
-					Main.TileSet[m, num4].Type = 57;
+					Main.TileSet[m, num4].Type = (byte)EntityID.TileID.ASH;
 					num4++;
 					if (num7 <= 0)
 					{
@@ -6579,15 +6320,15 @@ namespace Terraria
 			}
 			int num8 = 0;
 			int num9 = 0;
-			for (num4 = j; num4 < Main.MaxTilesY && ((Main.TileSet[i, num4].IsActive != 0 && (Main.TileSet[i, num4].Type == 76 || Main.TileSet[i, num4].Type == 75)) || Main.TileSet[i, num4].WallType == 13 || Main.TileSet[i, num4].WallType == 14); num4++)
+			for (num4 = j; num4 < Main.MaxTilesY && ((Main.TileSet[i, num4].IsActive != 0 && (Main.TileSet[i, num4].Type == (byte)EntityID.TileID.HELLSTONE_BRICK || Main.TileSet[i, num4].Type == (byte)EntityID.TileID.OBSIDIAN_BRICK)) || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE); num4++)
 			{
 			}
 			num4--;
 			num9 = num4;
-			while ((Main.TileSet[i, num4].IsActive != 0 && (Main.TileSet[i, num4].Type == 76 || Main.TileSet[i, num4].Type == 75)) || Main.TileSet[i, num4].WallType == 13 || Main.TileSet[i, num4].WallType == 14)
+			while ((Main.TileSet[i, num4].IsActive != 0 && (Main.TileSet[i, num4].Type == (byte)EntityID.TileID.HELLSTONE_BRICK || Main.TileSet[i, num4].Type == (byte)EntityID.TileID.OBSIDIAN_BRICK)) || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE || Main.TileSet[i, num4].WallType == (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE)
 			{
 				num4--;
-				if (Main.TileSet[i, num4].IsActive == 0 || (Main.TileSet[i, num4].Type != 76 && Main.TileSet[i, num4].Type != 75))
+				if (Main.TileSet[i, num4].IsActive == 0 || (Main.TileSet[i, num4].Type != (byte)EntityID.TileID.HELLSTONE_BRICK && Main.TileSet[i, num4].Type != (byte)EntityID.TileID.OBSIDIAN_BRICK))
 				{
 					continue;
 				}
@@ -6612,15 +6353,15 @@ namespace Terraria
 				}
 				for (int n = num10; n <= num11; n++)
 				{
-					if (Main.TileSet[n, num4 - 1].WallType == 13)
+					if (Main.TileSet[n, num4 - 1].WallType == (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE)
 					{
-						Main.TileSet[n, num4].WallType = 13;
+						Main.TileSet[n, num4].WallType = (byte)EntityID.WallID.HELLSTONE_BRICK_UNSAFE;
 					}
-					if (Main.TileSet[n, num4 - 1].WallType == 14)
+					if (Main.TileSet[n, num4 - 1].WallType == (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE)
 					{
-						Main.TileSet[n, num4].WallType = 14;
+						Main.TileSet[n, num4].WallType = (byte)EntityID.WallID.OBSIDIAN_BRICK_UNSAFE;
 					}
-					Main.TileSet[n, num4].Type = 19;
+					Main.TileSet[n, num4].Type = (byte)EntityID.TileID.PLATFORM;
 					Main.TileSet[n, num4].IsActive = 1;
 				}
 				num4--;
@@ -6649,11 +6390,11 @@ namespace Terraria
 						}
 						try
 						{
-							if (Main.TileSet[num20, num22].Type == 76 || Main.TileSet[num20, num22].Type == 19)
+							if (Main.TileSet[num20, num22].Type == (byte)EntityID.TileID.HELLSTONE_BRICK || Main.TileSet[num20, num22].Type == (byte)EntityID.TileID.PLATFORM)
 							{
 								Main.TileSet[num20, num22].IsActive = 0;
 							}
-							Main.TileSet[num20, num22].WallType = 0;
+							Main.TileSet[num20, num22].WallType = (byte)EntityID.WallID.NONE;
 						}
 						catch
 						{
@@ -6704,26 +6445,26 @@ namespace Terraria
 			}
 		}
 
-		public static void MakeDungeon(int x, int y, int tileType = 41, int wallType = 7)
+		public static void MakeDungeon(int x, int y, int tileType = (byte)EntityID.TileID.BLUE_BRICK, int wallType = (byte)EntityID.WallID.BLUE_DUNGEON_UNSAFE)
 		{
 			int num = genRand.Next(3);
 			int num2 = genRand.Next(3);
 			switch (num)
 			{
 				case 1:
-					tileType = 43;
+					tileType = (byte)EntityID.TileID.GREEN_BRICK;
 					break;
 				case 2:
-					tileType = 44;
+					tileType = (byte)EntityID.TileID.PINK_BRICK;
 					break;
 			}
 			switch (num2)
 			{
 				case 1:
-					wallType = 8;
+					wallType = (byte)EntityID.WallID.GREEN_DUNGEON_UNSAFE;
 					break;
 				case 2:
-					wallType = 9;
+					wallType = (byte)EntityID.WallID.PINK_DUNGEON_UNSAFE;
 					break;
 			}
 			numDDoors = 0;
@@ -6901,10 +6642,10 @@ namespace Terraria
 						int num21 = genRand.Next(5, 13);
 						while (Main.TileSet[num17 - 1, num18].IsActive != 0 && Main.TileSet[num17, num18 + num20].IsActive != 0 && Main.TileSet[num17, num18].IsActive != 0 && Main.TileSet[num17, num18 - num20].IsActive == 0 && num21 > 0)
 						{
-							Main.TileSet[num17, num18].Type = 48;
+							Main.TileSet[num17, num18].Type = (byte)EntityID.TileID.SPIKE;
 							if (Main.TileSet[num17 - 1, num18 - num20].IsActive == 0 && Main.TileSet[num17 + 1, num18 - num20].IsActive == 0)
 							{
-								Main.TileSet[num17, num18 - num20].Type = 48;
+								Main.TileSet[num17, num18 - num20].Type = (byte)EntityID.TileID.SPIKE;
 								Main.TileSet[num17, num18 - num20].IsActive = 1;
 							}
 							num17--;
@@ -6914,10 +6655,10 @@ namespace Terraria
 						num17 = num19 + 1;
 						while (Main.TileSet[num17 + 1, num18].IsActive != 0 && Main.TileSet[num17, num18 + num20].IsActive != 0 && Main.TileSet[num17, num18].IsActive != 0 && Main.TileSet[num17, num18 - num20].IsActive == 0 && num21 > 0)
 						{
-							Main.TileSet[num17, num18].Type = 48;
+							Main.TileSet[num17, num18].Type = (byte)EntityID.TileID.SPIKE;
 							if (Main.TileSet[num17 - 1, num18 - num20].IsActive == 0 && Main.TileSet[num17 + 1, num18 - num20].IsActive == 0)
 							{
-								Main.TileSet[num17, num18 - num20].Type = 48;
+								Main.TileSet[num17, num18 - num20].Type = (byte)EntityID.TileID.SPIKE;
 								Main.TileSet[num17, num18 - num20].IsActive = 1;
 							}
 							num17++;
@@ -6957,10 +6698,10 @@ namespace Terraria
 						int num26 = genRand.Next(5, 13);
 						while (Main.TileSet[num22, num23 - 1].IsActive != 0 && Main.TileSet[num22 + num25, num23].IsActive != 0 && Main.TileSet[num22, num23].IsActive != 0 && Main.TileSet[num22 - num25, num23].IsActive == 0 && num26 > 0)
 						{
-							Main.TileSet[num22, num23].Type = 48;
+							Main.TileSet[num22, num23].Type = (byte)EntityID.TileID.SPIKE;
 							if (Main.TileSet[num22 - num25, num23 - 1].IsActive == 0 && Main.TileSet[num22 - num25, num23 + 1].IsActive == 0)
 							{
-								Main.TileSet[num22 - num25, num23].Type = 48;
+								Main.TileSet[num22 - num25, num23].Type = (byte)EntityID.TileID.SPIKE;
 								Main.TileSet[num22 - num25, num23].IsActive = 1;
 							}
 							num23--;
@@ -6970,10 +6711,10 @@ namespace Terraria
 						num23 = num24 + 1;
 						while (Main.TileSet[num22, num23 + 1].IsActive != 0 && Main.TileSet[num22 + num25, num23].IsActive != 0 && Main.TileSet[num22, num23].IsActive != 0 && Main.TileSet[num22 - num25, num23].IsActive == 0 && num26 > 0)
 						{
-							Main.TileSet[num22, num23].Type = 48;
+							Main.TileSet[num22, num23].Type = (byte)EntityID.TileID.SPIKE;
 							if (Main.TileSet[num22 - num25, num23 - 1].IsActive == 0 && Main.TileSet[num22 - num25, num23 + 1].IsActive == 0)
 							{
-								Main.TileSet[num22 - num25, num23].Type = 48;
+								Main.TileSet[num22 - num25, num23].Type = (byte)EntityID.TileID.SPIKE;
 								Main.TileSet[num22 - num25, num23].IsActive = 1;
 							}
 							num23++;
@@ -7029,7 +6770,7 @@ namespace Terraria
 					{
 						for (int num41 = num38; num41 < num39; num41++)
 						{
-							if (Main.TileSet[num40, num41].IsActive != 0 && Main.TileSet[num40, num41].Type == 10)
+							if (Main.TileSet[num40, num41].IsActive != 0 && Main.TileSet[num40, num41].Type == (byte)EntityID.TileID.DOOR_CLOSED)
 							{
 								flag = false;
 								break;
@@ -7078,7 +6819,7 @@ namespace Terraria
 					Main.TileSet[num44, num47].IsActive = 1;
 					Main.TileSet[num44, num47].Type = (byte)tileType;
 				}
-				PlaceTile(num44, num45, 10, ToMute: true);
+				PlaceTile(num44, num45, (byte)EntityID.TileID.DOOR_CLOSED, ToMute: true);
 				num44--;
 				int num48 = num45 - 3;
 				while (Main.TileSet[num44, num48].IsActive == 0)
@@ -7162,7 +6903,7 @@ namespace Terraria
 					{
 						for (int num62 = num59; num62 <= num60; num62++)
 						{
-							if (Main.TileSet[num61, num62].IsActive != 0 && Main.TileSet[num61, num62].Type == 19)
+							if (Main.TileSet[num61, num62].IsActive != 0 && Main.TileSet[num61, num62].Type == (byte)EntityID.TileID.PLATFORM)
 							{
 								flag3 = false;
 								break;
@@ -7191,13 +6932,13 @@ namespace Terraria
 					while (Main.TileSet[num64, num65].IsActive == 0)
 					{
 						Main.TileSet[num64, num65].IsActive = 1;
-						Main.TileSet[num64, num65].Type = 19;
+						Main.TileSet[num64, num65].Type = (byte)EntityID.TileID.PLATFORM;
 						num64--;
 					}
 					for (; Main.TileSet[num66, num65].IsActive == 0; num66++)
 					{
 						Main.TileSet[num66, num65].IsActive = 1;
-						Main.TileSet[num66, num65].Type = 19;
+						Main.TileSet[num66, num65].Type = (byte)EntityID.TileID.PLATFORM;
 					}
 				}
 			}
@@ -7237,7 +6978,7 @@ namespace Terraria
 						{
 							for (int num71 = num68 - 3; num71 <= num68 + 3; num71++)
 							{
-								if (Main.TileSet[num70, num71].IsActive != 0 && Main.TileSet[num70, num71].Type == 19)
+								if (Main.TileSet[num70, num71].IsActive != 0 && Main.TileSet[num70, num71].Type == (byte)EntityID.TileID.PLATFORM)
 								{
 									flag4 = false;
 									break;
@@ -7262,11 +7003,11 @@ namespace Terraria
 								for (int num74 = genRand.Next(1, 4); num74 > 0; num74--)
 								{
 									Main.TileSet[num67, num68].IsActive = 1;
-									Main.TileSet[num67, num68].Type = 19;
+									Main.TileSet[num67, num68].Type = (byte)EntityID.TileID.PLATFORM;
 									if (flag5)
 									{
-										PlaceTile(num67, num68 - 1, 50, ToMute: true);
-										if (genRand.Next(50) == 0 && Main.TileSet[num67, num68 - 1].Type == 50)
+										PlaceTile(num67, num68 - 1, (byte)EntityID.TileID.BOOK, ToMute: true);
+										if (genRand.Next(50) == 0 && Main.TileSet[num67, num68 - 1].Type == (byte)EntityID.TileID.BOOK)
 										{
 											Main.TileSet[num67, num68 - 1].FrameX = 90;
 										}
@@ -7287,14 +7028,14 @@ namespace Terraria
 									switch (num75)
 									{
 										case 0:
-											num75 = 13;
+											num75 = (byte)EntityID.TileID.BOTTLE;
 											break;
 										case 1:
-											num75 = 49;
+											num75 = (byte)EntityID.TileID.WATER_CANDLE;
 											break;
 									}
 									PlaceTile(num67, num68, num75, ToMute: true);
-									if (Main.TileSet[num67, num68].Type == 13)
+									if (Main.TileSet[num67, num68].Type == (byte)EntityID.TileID.BOTTLE)
 									{
 										if (genRand.Next(2) == 0)
 										{
@@ -7332,35 +7073,35 @@ namespace Terraria
 					switch (num76)
 					{
 						case 1:
-							num81 = (int)Item.ID.SHADOW_KEY;
+							num81 = (int)EntityID.ItemID.SHADOW_KEY;
 							break;
 						case 2:
-							num81 = (int)Item.ID.MURAMASA;
+							num81 = (int)EntityID.ItemID.MURAMASA;
 							break;
 						case 3:
-							num81 = (int)Item.ID.COBALT_SHIELD;
+							num81 = (int)EntityID.ItemID.COBALT_SHIELD;
 							break;
 						case 4:
-							num81 = (int)Item.ID.AQUA_SCEPTER;
+							num81 = (int)EntityID.ItemID.AQUA_SCEPTER;
 							break;
 						case 5:
-							num81 = (int)Item.ID.BLUE_MOON;
+							num81 = (int)EntityID.ItemID.BLUE_MOON;
 							break;
 						case 6:
-							num81 = (int)Item.ID.MAGIC_MISSILE;
+							num81 = (int)EntityID.ItemID.MAGIC_MISSILE;
 							break;
 						case 7:
-							num81 = (int)Item.ID.GOLDEN_KEY;
+							num81 = (int)EntityID.ItemID.GOLDEN_KEY;
 							style = 0;
 							break;
 						default:
-							num81 = (int)Item.ID.HANDGUN;
+							num81 = (int)EntityID.ItemID.HANDGUN;
 							num76 = 0;
 							break;
 					}
 					if (num80 < Main.WorldSurface + 50)
 					{
-						num81 = (int)Item.ID.GOLDEN_KEY;
+						num81 = (int)EntityID.ItemID.GOLDEN_KEY;
 						style = 0;
 					}
 					if (num81 == 0 && genRand.Next(2) == 0)
@@ -7414,7 +7155,7 @@ namespace Terraria
 							{
 								for (int num86 = num84 - 15; num86 < num84 + 15; num86++)
 								{
-									if (num85 > 0 && num85 < Main.MaxTilesX && num86 > 0 && num86 < Main.MaxTilesY && Main.TileSet[num85, num86].Type == 42)
+									if (num85 > 0 && num85 < Main.MaxTilesX && num86 > 0 && num86 < Main.MaxTilesY && Main.TileSet[num85, num86].Type == (byte)EntityID.TileID.CHAIN_LANTERN)
 									{
 										flag6 = true;
 										break;
@@ -7425,7 +7166,7 @@ namespace Terraria
 							{
 								flag6 = true;
 							}
-							if (flag6 || !Place1x2Top(num82, num84, 42))
+							if (flag6 || !Place1x2Top(num82, num84, (byte)EntityID.TileID.CHAIN_LANTERN))
 							{
 								break;
 							}
@@ -7441,7 +7182,7 @@ namespace Terraria
 							{
 								int num88 = num82 + genRand.Next(-12, 13);
 								int num89 = num84 + genRand.Next(3, 21);
-								if (Main.TileSet[num88, num89].IsActive != 0 || Main.TileSet[num88, num89 + 1].IsActive != 0 || Main.TileSet[num88 - 1, num89].Type == 48 || Main.TileSet[num88 + 1, num89].Type == 48)
+								if (Main.TileSet[num88, num89].IsActive != 0 || Main.TileSet[num88, num89 + 1].IsActive != 0 || Main.TileSet[num88 - 1, num89].Type == (byte)EntityID.TileID.SPIKE || Main.TileSet[num88 + 1, num89].Type == (byte)EntityID.TileID.SPIKE)
 								{
 									continue;
 								}
@@ -7451,7 +7192,7 @@ namespace Terraria
 								{
 									continue;
 								}
-								PlaceTile(num88, num89, 136, ToMute: true);
+								PlaceTile(num88, num89, (byte)EntityID.TileID.SWITCH, ToMute: true);
 								if (Main.TileSet[num88, num89].IsActive == 0)
 								{
 									continue;
@@ -7574,10 +7315,10 @@ namespace Terraria
 				int num9 = (int)(vector.X + dxStrength1 * 0.6 * num8 + dxStrength2 * num8);
 				double num10 = Math.Floor(dyStrength2 * 0.5);
 				int num11 = (int)(vector.Y - num + num10);
-				if (vector.Y < Main.WorldSurface - 5 && Main.TileSet[num9, num11 - 6].WallType == 0 && Main.TileSet[num9, num11 - 7].WallType == 0 && Main.TileSet[num9, num11 - 8].WallType == 0)
+				if (vector.Y < Main.WorldSurface - 5 && Main.TileSet[num9, num11 - 6].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num9, num11 - 7].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num9, num11 - 8].WallType == (byte)EntityID.WallID.NONE)
 				{
 					dSurface = true;
-					TileRunner(num9, (int)(vector.Y - num - 6.0 + num10), genRand.Next(25, 35), genRand.Next(10, 20), -1, addTile: false, new Vector2(0f, -1f));
+					TileRunner(num9, (int)(vector.Y - num - 6.0 + num10), genRand.Next(25, 35), genRand.Next(10, 20), (int)EntityID.TileID.NONE, addTile: false, new Vector2(0f, -1f));
 				}
 				for (int k = num4; k < num5; k++)
 				{
@@ -7586,7 +7327,7 @@ namespace Terraria
 						Main.TileSet[k, l].Liquid = 0;
 						if (Main.TileSet[k, l].WallType != wallType)
 						{
-							Main.TileSet[k, l].WallType = 0;
+							Main.TileSet[k, l].WallType = (byte)EntityID.WallID.NONE;
 							Main.TileSet[k, l].IsActive = 1;
 							Main.TileSet[k, l].Type = (byte)tileType;
 						}
@@ -7596,7 +7337,7 @@ namespace Terraria
 				{
 					for (int n = num6 + 1; n < num7 - 1; n++)
 					{
-						if (Main.TileSet[m, n].WallType == 0)
+						if (Main.TileSet[m, n].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[m, n].WallType = (byte)wallType;
 						}
@@ -7632,7 +7373,7 @@ namespace Terraria
 					for (int num14 = num6; num14 < num7; num14++)
 					{
 						Main.TileSet[num13, num14].IsActive = 0;
-						if (Main.TileSet[num13, num14].WallType == 0)
+						if (Main.TileSet[num13, num14].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[num13, num14].WallType = (byte)wallType;
 						}
@@ -7895,7 +7636,7 @@ namespace Terraria
 					for (int l = num6; l < num7; l++)
 					{
 						Main.TileSet[k, l].Liquid = 0;
-						if (Main.TileSet[k, l].WallType == 0)
+						if (Main.TileSet[k, l].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[k, l].IsActive = 1;
 							Main.TileSet[k, l].Type = (byte)tileType;
@@ -7906,7 +7647,7 @@ namespace Terraria
 				{
 					for (int n = num6 + 1; n < num7 - 1; n++)
 					{
-						if (Main.TileSet[m, n].WallType == 0)
+						if (Main.TileSet[m, n].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[m, n].WallType = (byte)wallType;
 						}
@@ -8015,7 +7756,7 @@ namespace Terraria
 					for (int l = num9; l < num10; l++)
 					{
 						Main.TileSet[k, l].Liquid = 0;
-						if (Main.TileSet[k, l].WallType == 0)
+						if (Main.TileSet[k, l].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[k, l].IsActive = 1;
 							Main.TileSet[k, l].Type = (byte)tileType;
@@ -8026,7 +7767,7 @@ namespace Terraria
 				{
 					for (int n = num9 + 1; n < num10 - 1; n++)
 					{
-						if (Main.TileSet[m, n].WallType == 0)
+						if (Main.TileSet[m, n].WallType == (byte)EntityID.WallID.NONE)
 						{
 							Main.TileSet[m, n].WallType = (byte)wallType;
 						}
@@ -8129,10 +7870,10 @@ namespace Terraria
 			{
 				num4 = -1;
 			}
-			int num5 = (int)(vector.X - num2 * 0.60000002384185791 - genRand.Next(2, 5));
-			int num6 = (int)(vector.X + num2 * 0.60000002384185791 + genRand.Next(2, 5));
-			int num7 = (int)(vector.Y - num3 * 0.60000002384185791 - genRand.Next(2, 5));
-			int num8 = (int)(vector.Y + num3 * 0.60000002384185791 + genRand.Next(8, 16));
+			int num5 = (int)(vector.X - num2 * 0.6f - genRand.Next(2, 5));
+			int num6 = (int)(vector.X + num2 * 0.6f + genRand.Next(2, 5));
+			int num7 = (int)(vector.Y - num3 * 0.6f - genRand.Next(2, 5));
+			int num8 = (int)(vector.Y + num3 * 0.6f + genRand.Next(8, 16));
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8156,7 +7897,7 @@ namespace Terraria
 					Main.TileSet[m, n].Liquid = 0;
 					if (Main.TileSet[m, n].WallType != wallType)
 					{
-						Main.TileSet[m, n].WallType = 0;
+						Main.TileSet[m, n].WallType = (byte)EntityID.WallID.NONE;
 						if (m > num5 + 1 && m < num6 - 2 && n > num7 + 1 && n < num8 - 2)
 						{
 							Main.TileSet[m, n].WallType = (byte)wallType;
@@ -8220,16 +7961,16 @@ namespace Terraria
 			{
 				for (int num23 = num8; num23 < num8 + 100; num23++)
 				{
-					if (Main.TileSet[num22, num23].WallType == 0)
+					if (Main.TileSet[num22, num23].WallType == (byte)EntityID.WallID.NONE)
 					{
-						Main.TileSet[num22, num23].WallType = 2;
+						Main.TileSet[num22, num23].WallType = (byte)EntityID.WallID.DIRT_UNSAFE;
 					}
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.60000002384185791);
-			num6 = (int)(vector.X + num2 * 0.60000002384185791);
-			num7 = (int)(vector.Y - num3 * 0.60000002384185791);
-			num8 = (int)(vector.Y + num3 * 0.60000002384185791);
+			num5 = (int)(vector.X - num2 * 0.6f);
+			num6 = (int)(vector.X + num2 * 0.6f);
+			num7 = (int)(vector.Y - num3 * 0.6f);
+			num8 = (int)(vector.Y + num3 * 0.6f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8250,16 +7991,16 @@ namespace Terraria
 			{
 				for (int num25 = num7; num25 < num8; num25++)
 				{
-					if (Main.TileSet[num24, num25].WallType == 0)
+					if (Main.TileSet[num24, num25].WallType == (byte)EntityID.WallID.NONE)
 					{
 						Main.TileSet[num24, num25].WallType = (byte)wallType;
 					}
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.6 - 1.0);
-			num6 = (int)(vector.X + num2 * 0.6 + 1.0);
-			num7 = (int)(vector.Y - num3 * 0.6 - 1.0);
-			num8 = (int)(vector.Y + num3 * 0.6 + 1.0);
+			num5 = (int)(vector.X - num2 * 0.6f - 1f);
+			num6 = (int)(vector.X + num2 * 0.6f + 1f);
+			num7 = (int)(vector.Y - num3 * 0.6f - 1f);
+			num8 = (int)(vector.Y + num3 * 0.6f + 1f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8283,10 +8024,10 @@ namespace Terraria
 					Main.TileSet[num26, num27].WallType = (byte)wallType;
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.5);
-			num6 = (int)(vector.X + num2 * 0.5);
-			num7 = (int)(vector.Y - num3 * 0.5);
-			num8 = (int)(vector.Y + num3 * 0.5);
+			num5 = (int)(vector.X - num2 * 0.5f);
+			num6 = (int)(vector.X + num2 * 0.5f);
+			num7 = (int)(vector.Y - num3 * 0.5f);
+			num8 = (int)(vector.Y + num3 * 0.5f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8320,10 +8061,10 @@ namespace Terraria
 			num3 = dyStrength2;
 			vector.X += (float)num2 * 0.55f * num4;
 			vector.Y -= (float)num3 * 0.5f;
-			num5 = (int)(vector.X - num2 * 0.60000002384185791 - genRand.Next(1, 3));
-			num6 = (int)(vector.X + num2 * 0.60000002384185791 + genRand.Next(1, 3));
-			num7 = (int)(vector.Y - num3 * 0.60000002384185791 - genRand.Next(1, 3));
-			num8 = (int)(vector.Y + num3 * 0.60000002384185791 + genRand.Next(6, 16));
+			num5 = (int)(vector.X - num2 * 0.6f - genRand.Next(1, 3));
+			num6 = (int)(vector.X + num2 * 0.6f + genRand.Next(1, 3));
+			num7 = (int)(vector.Y - num3 * 0.6f - genRand.Next(1, 3));
+			num8 = (int)(vector.Y + num3 * 0.6f + genRand.Next(6, 16));
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8351,18 +8092,18 @@ namespace Terraria
 					bool flag = true;
 					if (num4 < 0)
 					{
-						if (num30 < vector.X - num2 * 0.5)
+						if (num30 < vector.X - num2 * 0.5f)
 						{
 							flag = false;
 						}
 					}
-					else if (num30 > vector.X + num2 * 0.5 - 1.0)
+					else if (num30 > vector.X + num2 * 0.5f - 1f)
 					{
 						flag = false;
 					}
 					if (flag)
 					{
-						Main.TileSet[num30, num31].WallType = 0;
+						Main.TileSet[num30, num31].WallType = (byte)EntityID.WallID.NONE;
 						Main.TileSet[num30, num31].IsActive = 1;
 						Main.TileSet[num30, num31].Type = (byte)tileType;
 					}
@@ -8372,14 +8113,14 @@ namespace Terraria
 			{
 				for (int num33 = num8; num33 < num8 + 100; num33++)
 				{
-					if (Main.TileSet[num32, num33].WallType == 0)
+					if (Main.TileSet[num32, num33].WallType == (byte)EntityID.WallID.NONE)
 					{
 						Main.TileSet[num32, num33].WallType = 2;
 					}
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.5);
-			num6 = (int)(vector.X + num2 * 0.5);
+			num5 = (int)(vector.X - num2 * 0.5f);
+			num6 = (int)(vector.X + num2 * 0.5f);
 			num9 = num5;
 			if (num4 < 0)
 			{
@@ -8438,10 +8179,10 @@ namespace Terraria
 					num19 = 0;
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.6);
-			num6 = (int)(vector.X + num2 * 0.6);
-			num7 = (int)(vector.Y - num3 * 0.6);
-			num8 = (int)(vector.Y + num3 * 0.6);
+			num5 = (int)(vector.X - num2 * 0.6f);
+			num6 = (int)(vector.X + num2 * 0.6f);
+			num7 = (int)(vector.Y - num3 * 0.6f);
+			num8 = (int)(vector.Y + num3 * 0.6f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8462,13 +8203,13 @@ namespace Terraria
 			{
 				for (int num41 = num7; num41 < num8; num41++)
 				{
-					Main.TileSet[num40, num41].WallType = 0;
+					Main.TileSet[num40, num41].WallType = (byte)EntityID.WallID.NONE;
 				}
 			}
-			num5 = (int)(vector.X - num2 * 0.5);
-			num6 = (int)(vector.X + num2 * 0.5);
-			num7 = (int)(vector.Y - num3 * 0.5);
-			num8 = (int)(vector.Y + num3 * 0.5);
+			num5 = (int)(vector.X - num2 * 0.5f);
+			num6 = (int)(vector.X + num2 * 0.5f);
+			num7 = (int)(vector.Y - num3 * 0.5f);
+			num8 = (int)(vector.Y + num3 * 0.5f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8490,7 +8231,7 @@ namespace Terraria
 				for (int num43 = num7; num43 < num8; num43++)
 				{
 					Main.TileSet[num42, num43].IsActive = 0;
-					Main.TileSet[num42, num43].WallType = 0;
+					Main.TileSet[num42, num43].WallType = (byte)EntityID.WallID.NONE;
 				}
 			}
 			for (int num44 = num5; num44 < num6; num44++)
@@ -8498,12 +8239,12 @@ namespace Terraria
 				if (Main.TileSet[num44, num8].IsActive == 0)
 				{
 					Main.TileSet[num44, num8].IsActive = 1;
-					Main.TileSet[num44, num8].Type = 19;
+					Main.TileSet[num44, num8].Type = (byte)EntityID.TileID.PLATFORM;
 				}
 			}
 			Main.DungeonX = (short)vector.X;
 			Main.DungeonY = (short)num8;
-			int num45 = NPC.NewNPC(Main.DungeonX * 16 + 8, Main.DungeonY * 16, (int)NPC.ID.OLD_MAN);
+			int num45 = NPC.NewNPC(Main.DungeonX * 16 + 8, Main.DungeonY * 16, (int)EntityID.NPCID.OLD_MAN);
 			Main.NPCSet[num45].IsHomeless = false;
 			Main.NPCSet[num45].HomeTileX = Main.DungeonX;
 			Main.NPCSet[num45].HomeTileY = Main.DungeonY;
@@ -8536,15 +8277,15 @@ namespace Terraria
 			num17 = 1 + genRand.Next(2);
 			num18 = 2 + genRand.Next(4);
 			num19 = 0;
-			num5 = (int)(vector.X - num2 * 0.5);
-			num6 = (int)(vector.X + num2 * 0.5);
+			num5 = (int)(vector.X - num2 * 0.5f);
+			num6 = (int)(vector.X + num2 * 0.5f);
 			num5 += 2;
 			num6 -= 2;
 			for (int num52 = num5; num52 < num6; num52++)
 			{
 				for (int num53 = num7; num53 < num8; num53++)
 				{
-					if (Main.TileSet[num52, num53].WallType == 0)
+					if (Main.TileSet[num52, num53].WallType == (byte)EntityID.WallID.NONE)
 					{
 						Main.TileSet[num52, num53].WallType = (byte)wallType;
 					}
@@ -8557,13 +8298,13 @@ namespace Terraria
 			}
 			vector.X -= (float)num2 * 0.6f * num4;
 			vector.Y += (float)num3 * 0.5f;
-			num2 = 15.0;
-			num3 = 3.0;
+			num2 = 15.0f;
+			num3 = 3.0f;
 			vector.Y -= (float)num3 * 0.5f;
-			num5 = (int)(vector.X - num2 * 0.5);
-			num6 = (int)(vector.X + num2 * 0.5);
-			num7 = (int)(vector.Y - num3 * 0.5);
-			num8 = (int)(vector.Y + num3 * 0.5);
+			num5 = (int)(vector.X - num2 * 0.5f);
+			num6 = (int)(vector.X + num2 * 0.5f);
+			num7 = (int)(vector.Y - num3 * 0.5f);
+			num8 = (int)(vector.Y + num3 * 0.5f);
 			if (num5 < 0)
 			{
 				num5 = 0;
@@ -8591,7 +8332,7 @@ namespace Terraria
 			{
 				vector.X -= 1f;
 			}
-			PlaceTile((int)vector.X, (int)vector.Y + 1, 10);
+			PlaceTile((int)vector.X, (int)vector.Y + 1, (byte)EntityID.TileID.DOOR_CLOSED);
 		}
 
 		public static bool AddBuriedChest(int i, int j, int contain = 0, bool notNearOtherChests = false, int Style = -1)
@@ -8618,25 +8359,25 @@ namespace Terraria
 				{
 					if (hellChest == 0)
 					{
-						contain = (int)Item.ID.DARK_LANCE;
+						contain = (int)EntityID.ItemID.DARK_LANCE;
 						style = 4;
 						flag = true;
 					}
 					else if (hellChest == 1)
 					{
-						contain = (int)Item.ID.SUNFURY;
+						contain = (int)EntityID.ItemID.SUNFURY;
 						style = 4;
 						flag = true;
 					}
 					else if (hellChest == 2)
 					{
-						contain = (int)Item.ID.FLOWER_OF_FIRE;
+						contain = (int)EntityID.ItemID.FLOWER_OF_FIRE;
 						style = 4;
 						flag = true;
 					}
 					else if (hellChest == 3)
 					{
-						contain = (int)Item.ID.FLAMELASH;
+						contain = (int)EntityID.ItemID.FLAMELASH;
 						style = 4;
 						flag = true;
 						hellChest = 0;
@@ -8664,30 +8405,30 @@ namespace Terraria
 								switch (genRand.Next(7))
 								{
 									case 0:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SPEAR);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SPEAR);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 1:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BLOWPIPE);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BLOWPIPE);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 2:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.WOODEN_BOOMERANG);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.WOODEN_BOOMERANG);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 3:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GLOWSTICK, genRand.Next(50, 75));
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GLOWSTICK, genRand.Next(50, 75));
 										break;
 									case 4:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.THROWING_KNIFE, genRand.Next(25, 50));
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.THROWING_KNIFE, genRand.Next(25, 50));
 										break;
 									default:
 										if (genRand.Next(32) == 0)
 										{
-											Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.PET_SPAWN_1);
+											Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_1);
 											break;
 										}
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.AGLET);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.AGLET);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 								}
@@ -8695,22 +8436,22 @@ namespace Terraria
 							num3++;
 							if (genRand.Next(3) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GRENADE, genRand.Next(3, 6));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GRENADE, genRand.Next(3, 6));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)Item.ID.COPPER_BAR : (int)Item.ID.IRON_BAR, genRand.Next(3, 11));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)EntityID.ItemID.COPPER_BAR : (int)EntityID.ItemID.IRON_BAR, genRand.Next(3, 11));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)Item.ID.WOODEN_ARROW : (int)Item.ID.SHURIKEN, genRand.Next(25, 51));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)EntityID.ItemID.WOODEN_ARROW : (int)EntityID.ItemID.SHURIKEN, genRand.Next(25, 51));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.LESSER_HEALING_POTION, genRand.Next(3, 6));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.LESSER_HEALING_POTION, genRand.Next(3, 6));
 								num3++;
 							}
 							if (genRand.Next(3) > 0)
@@ -8720,16 +8461,16 @@ namespace Terraria
 								switch (num4)
 								{
 									case 0:
-										num4 = (int)Item.ID.IRONSKIN_POTION;
+										num4 = (int)EntityID.ItemID.IRONSKIN_POTION;
 										break;
 									case 1:
-										num4 = (int)Item.ID.SHINE_POTION;
+										num4 = (int)EntityID.ItemID.SHINE_POTION;
 										break;
 									case 2:
-										num4 = (int)Item.ID.NIGHT_OWL_POTION;
+										num4 = (int)EntityID.ItemID.NIGHT_OWL_POTION;
 										break;
 									default:
-										num4 = (int)Item.ID.SWIFTNESS_POTION;
+										num4 = (int)EntityID.ItemID.SWIFTNESS_POTION;
 										break;
 								}
 								Main.ChestSet[num2].ItemSet[num3].SetDefaults(num4, genRand.Next(1, 3));
@@ -8737,12 +8478,12 @@ namespace Terraria
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)Item.ID.TORCH : (int)Item.ID.BOTTLE, genRand.Next(10, 21));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((genRand.Next(2) == 0) ? (int)EntityID.ItemID.TORCH : (int)EntityID.ItemID.BOTTLE, genRand.Next(10, 21));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SILVER_COIN, genRand.Next(10, 30));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SILVER_COIN, genRand.Next(10, 30));
 								num3++;
 							}
 							continue;
@@ -8760,36 +8501,36 @@ namespace Terraria
 								int num5 = genRand.Next(7);
 								if (num5 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BAND_OF_REGENERATION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BAND_OF_REGENERATION);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 								}
 								if (num5 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.MAGIC_MIRROR);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.MAGIC_MIRROR);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 								}
 								if (num5 == 2)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.ANGEL_STATUE);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.ANGEL_STATUE);
 								}
 								if (num5 == 3)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.CLOUD_IN_A_BOTTLE);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.CLOUD_IN_A_BOTTLE);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 								}
 								if (num5 == 4)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HERMES_BOOTS);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HERMES_BOOTS);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 								}
 								if (num5 == 5)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.ENCHANTED_BOOMERANG);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.ENCHANTED_BOOMERANG);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 								}
 								if (num5 == 6)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.JESTERS_ARROW, (genRand.Next(26) + 25));
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.JESTERS_ARROW, (genRand.Next(26) + 25));
 								}
 								num3++;
 								if (genRand.Next(40) == 0) // BUG: Dragon armour in chests? Ah yes, right here officer.
@@ -8798,21 +8539,21 @@ namespace Terraria
 									// You needed to find a stray gold chest, not one generated in a ruined house...
 									// Then, you needed to hit a 1/40 chance for the extra item to spawn, along with a coin flip for the item to be the Dragon mask.
 #if VERSION_INITIAL && !IS_PATCHED
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults(genRand.Next(2) + (int)Item.ID.PET_SPAWN_1);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults(genRand.Next(2) + (int)EntityID.ItemID.PET_SPAWN_1);
 #else
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.PET_SPAWN_1);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_1);
 #endif
-									num3++; // Seriously, why the fuck is this here?
+									num3++;
 								}
 							}
 							if (genRand.Next(3) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BOMB, genRand.Next(10, 20));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BOMB, genRand.Next(10, 20));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								int type = genRand.Next((int)Item.ID.SILVER_BAR, (int)Item.ID.IRON_BAR);
+								int type = genRand.Next((int)EntityID.ItemID.SILVER_BAR, (int)EntityID.ItemID.IRON_BAR);
 								Main.ChestSet[num2].ItemSet[num3].SetDefaults(type, genRand.Next(5, 15));
 								num3++;
 							}
@@ -8822,17 +8563,17 @@ namespace Terraria
 								int stack = genRand.Next(25, 50);
 								if (num6 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.WOODEN_ARROW, stack);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.WOODEN_ARROW, stack);
 								}
 								else
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SHURIKEN, stack);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SHURIKEN, stack);
 								}
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.LESSER_HEALING_POTION, genRand.Next(3, 6));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.LESSER_HEALING_POTION, genRand.Next(3, 6));
 								num3++;
 							}
 							if (genRand.Next(3) > 0)
@@ -8841,25 +8582,25 @@ namespace Terraria
 								switch (genRand.Next(7))
 								{
 									case 0:
-										type2 = (int)Item.ID.REGENERATION_POTION;
+										type2 = (int)EntityID.ItemID.REGENERATION_POTION;
 										break;
 									case 1:
-										type2 = (int)Item.ID.SHINE_POTION;
+										type2 = (int)EntityID.ItemID.SHINE_POTION;
 										break;
 									case 2:
-										type2 = (int)Item.ID.NIGHT_OWL_POTION;
+										type2 = (int)EntityID.ItemID.NIGHT_OWL_POTION;
 										break;
 									case 3:
-										type2 = (int)Item.ID.SWIFTNESS_POTION;
+										type2 = (int)EntityID.ItemID.SWIFTNESS_POTION;
 										break;
 									case 4:
-										type2 = (int)Item.ID.ARCHERY_POTION;
+										type2 = (int)EntityID.ItemID.ARCHERY_POTION;
 										break;
 									case 5:
-										type2 = (int)Item.ID.GILLS_POTION;
+										type2 = (int)EntityID.ItemID.GILLS_POTION;
 										break;
 									default:
-										type2 = (int)Item.ID.HUNTER_POTION;
+										type2 = (int)EntityID.ItemID.HUNTER_POTION;
 										break;
 								}
 								Main.ChestSet[num2].ItemSet[num3].SetDefaults(type2, genRand.Next(1, 3));
@@ -8867,12 +8608,12 @@ namespace Terraria
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.TORCH, genRand.Next(10, 21));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.TORCH, genRand.Next(10, 21));
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SILVER_COIN, genRand.Next(50, 90));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SILVER_COIN, genRand.Next(50, 90));
 								num3++;
 							}
 							continue;
@@ -8895,43 +8636,43 @@ namespace Terraria
 								switch (num7)
 								{
 									case 0:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BAND_OF_REGENERATION);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BAND_OF_REGENERATION);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 1:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.MAGIC_MIRROR);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.MAGIC_MIRROR);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 2:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.ANGEL_STATUE);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.ANGEL_STATUE);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 3:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.CLOUD_IN_A_BOTTLE);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.CLOUD_IN_A_BOTTLE);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 4:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HERMES_BOOTS);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HERMES_BOOTS);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									case 5:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.ENCHANTED_BOOMERANG);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.ENCHANTED_BOOMERANG);
 										Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 										break;
 									default:
-										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.JESTERS_ARROW, genRand.Next(26) + 25);
+										Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.JESTERS_ARROW, genRand.Next(26) + 25);
 										break;
 								}
 								num3++;
 							}
 							if (genRand.Next(5) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SUSPICIOUS_LOOKING_EYE);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SUSPICIOUS_LOOKING_EYE);
 								num3++;
 							}
 							if (genRand.Next(3) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.DYNAMITE);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.DYNAMITE);
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
@@ -8940,11 +8681,11 @@ namespace Terraria
 								int num9 = genRand.Next(8) + 3;
 								if (num8 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GOLD_BAR);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GOLD_BAR);
 								}
 								if (num8 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SILVER_BAR);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SILVER_BAR);
 								}
 								Main.ChestSet[num2].ItemSet[num3].Stack = (short)num9;
 								num3++;
@@ -8955,11 +8696,11 @@ namespace Terraria
 								int num11 = genRand.Next(26) + 25;
 								if (num10 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.FLAMING_ARROW);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.FLAMING_ARROW);
 								}
 								if (num10 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.THROWING_KNIFE);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.THROWING_KNIFE);
 								}
 								Main.ChestSet[num2].ItemSet[num3].Stack = (short)num11;
 								num3++;
@@ -8970,7 +8711,7 @@ namespace Terraria
 								int num13 = genRand.Next(3) + 3;
 								if (num12 == 0) // Doing an RNG check for no reason; #EngineMoment
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HEALING_POTION, num13);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HEALING_POTION, num13);
 								}
 								num3++;
 							}
@@ -8980,27 +8721,27 @@ namespace Terraria
 								int num15 = genRand.Next(1, 3);
 								if (num14 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SPELUNKER_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SPELUNKER_POTION);
 								}
 								if (num14 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.FEATHERFALL_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.FEATHERFALL_POTION);
 								}
 								if (num14 == 2)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.NIGHT_OWL_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.NIGHT_OWL_POTION);
 								}
 								if (num14 == 3)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.WATER_WALKING_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.WATER_WALKING_POTION);
 								}
 								if (num14 == 4)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.ARCHERY_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.ARCHERY_POTION);
 								}
 								if (num14 == 5)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GRAVITATION_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GRAVITATION_POTION);
 								}
 								Main.ChestSet[num2].ItemSet[num3].Stack = (short)num15;
 								num3++;
@@ -9011,19 +8752,19 @@ namespace Terraria
 								int num17 = genRand.Next(1, 3);
 								if (num16 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.THORNS_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.THORNS_POTION);
 								}
 								if (num16 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.WATER_WALKING_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.WATER_WALKING_POTION);
 								}
 								if (num16 == 2)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.INVISIBILITY_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.INVISIBILITY_POTION);
 								}
 								if (num16 == 3)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HUNTER_POTION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HUNTER_POTION);
 								}
 								Main.ChestSet[num2].ItemSet[num3].Stack = (short)num17;
 								num3++;
@@ -9034,27 +8775,27 @@ namespace Terraria
 								int num19 = genRand.Next(15) + 15;
 								if (num18 == 0)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.TORCH);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.TORCH);
 								}
 								if (num18 == 1)
 								{
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GLOWSTICK);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GLOWSTICK);
 								}
 								Main.ChestSet[num2].ItemSet[num3].Stack = (short)num19;
 								num3++;
 							}
 							if (genRand.Next(2) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GOLD_COIN, genRand.Next(1, 3));
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GOLD_COIN, genRand.Next(1, 3));
 								num3++;
 							}
 							if (genRand.Next(32) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.PET_SPAWN_2);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_2);
 							}
 							else if (genRand.Next(48) == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.PET_SPAWN_4);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_4);
 							}
 							continue;
 						}
@@ -9069,19 +8810,19 @@ namespace Terraria
 							switch (genRand.Next(4))
 							{
 								case 0:
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BAND_OF_REGENERATION);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BAND_OF_REGENERATION);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 									break;
 								case 1:
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.MAGIC_MIRROR);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.MAGIC_MIRROR);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 									break;
 								case 2:
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.CLOUD_IN_A_BOTTLE);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.CLOUD_IN_A_BOTTLE);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 									break;
 								default:
-									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HERMES_BOOTS);
+									Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HERMES_BOOTS);
 									Main.ChestSet[num2].ItemSet[num3].SetPrefix(-1);
 									break;
 							}
@@ -9089,7 +8830,7 @@ namespace Terraria
 						}
 						if (genRand.Next(3) == 0)
 						{
-							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.DYNAMITE);
+							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.DYNAMITE);
 							num3++;
 						}
 						if (genRand.Next(2) == 0)
@@ -9098,11 +8839,11 @@ namespace Terraria
 							int num21 = genRand.Next(15) + 15;
 							if (num20 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.METEORITE_BAR);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.METEORITE_BAR);
 							}
 							if (num20 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GOLD_BAR);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GOLD_BAR);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num21;
 							num3++;
@@ -9113,11 +8854,11 @@ namespace Terraria
 							int num23 = genRand.Next(25) + 50;
 							if (num22 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HELLFIRE_ARROW);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HELLFIRE_ARROW);
 							}
 							if (num22 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SILVER_BULLET);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SILVER_BULLET);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num23;
 							num3++;
@@ -9128,11 +8869,11 @@ namespace Terraria
 							int num25 = genRand.Next(15) + 15;
 							if (num24 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.LESSER_RESTORATION_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.LESSER_RESTORATION_POTION);
 							}
 							if (num24 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.RESTORATION_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.RESTORATION_POTION);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num25;
 							num3++;
@@ -9143,31 +8884,31 @@ namespace Terraria
 							int num27 = genRand.Next(1, 3);
 							if (num26 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.SPELUNKER_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.SPELUNKER_POTION);
 							}
 							if (num26 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.FEATHERFALL_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.FEATHERFALL_POTION);
 							}
 							if (num26 == 2)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.MANA_REGENERATION_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.MANA_REGENERATION_POTION);
 							}
 							if (num26 == 3)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.OBSIDIAN_SKIN_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.OBSIDIAN_SKIN_POTION);
 							}
 							if (num26 == 4)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.MAGIC_POWER_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.MAGIC_POWER_POTION);
 							}
 							if (num26 == 5)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.INVISIBILITY_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.INVISIBILITY_POTION);
 							}
 							if (num26 == 6)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.HUNTER_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.HUNTER_POTION);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num27;
 							num3++;
@@ -9178,23 +8919,23 @@ namespace Terraria
 							int num29 = genRand.Next(1, 3);
 							if (num28 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GRAVITATION_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GRAVITATION_POTION);
 							}
 							if (num28 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.THORNS_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.THORNS_POTION);
 							}
 							if (num28 == 2)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.WATER_WALKING_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.WATER_WALKING_POTION);
 							}
 							if (num28 == 3)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.OBSIDIAN_SKIN_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.OBSIDIAN_SKIN_POTION);
 							}
 							if (num28 == 4)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.BATTLE_POTION);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.BATTLE_POTION);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num29;
 							num3++;
@@ -9205,23 +8946,23 @@ namespace Terraria
 							int num31 = genRand.Next(15) + 15;
 							if (num30 == 0)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.TORCH);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.TORCH);
 							}
 							if (num30 == 1)
 							{
-								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GLOWSTICK);
+								Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GLOWSTICK);
 							}
 							Main.ChestSet[num2].ItemSet[num3].Stack = (short)num31;
 							num3++;
 						}
 						else if (genRand.Next(48) == 0)
 						{
-							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.PET_SPAWN_6);
+							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_6);
 							num3++;
 						}
 						if (genRand.Next(2) == 0)
 						{
-							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)Item.ID.GOLD_COIN, genRand.Next(2, 5));
+							Main.ChestSet[num2].ItemSet[num3].SetDefaults((int)EntityID.ItemID.GOLD_COIN, genRand.Next(2, 5));
 							num3++;
 						}
 					}
@@ -9276,9 +9017,36 @@ namespace Terraria
 				if (Main.TileSet[i, k].IsActive != 0)
 				{
 					int type = Main.TileSet[i, k].Type;
-					if (!Main.TileCut[type] && type != 3 && type != 24 && type != 52 && type != 61 && type != 62 && type != 69 && type != 71 && type != 73 && type != 74 && type != 110 && type != 113 && type != 115)
+
+					// Can anyone see a problem here? That's right, everything listed in the switch/case, is already in TileCut[].
+					// This code runs a bunch of checks that are not needed in the slightest due to prior confirmation in TileCut[].
+					// #EngineMoment
+
+					if (!Main.TileCut[type])
 					{
+#if VERSION_103 || VERSION_FINAL
 						return false;
+#else
+						switch ((EntityID.TileID)type)
+						{
+							case EntityID.TileID.SHORT_GRASS_PLANTS:
+							case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							case EntityID.TileID.VINE:
+							case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+							case EntityID.TileID.JUNGLE_VINE:
+							case EntityID.TileID.JUNGLE_THORN:
+							case EntityID.TileID.GLOWING_MUSHROOM:
+							case EntityID.TileID.TALL_GRASS_PLANTS:
+							case EntityID.TileID.TALL_JUNGLE_PLANTS:
+							case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+							case EntityID.TileID.TALL_HALLOWED_PLANTS:
+							case EntityID.TileID.HALLOWED_VINE:
+								break;
+
+							default:
+								return false;
+						}
+#endif
 					}
 				}
 			}
@@ -9320,10 +9088,39 @@ namespace Terraria
 				if (Main.TileSet[num3, k].IsActive != 0)
 				{
 					int type = Main.TileSet[num3, k].Type;
-					if (!Main.TileCut[type] && type != 3 && type != 24 && type != 52 && type != 61 && type != 62 && type != 69 && type != 71 && type != 73 && type != 74 && type != 110 && type != 113 && type != 115)
+
+					if (!Main.TileCut[type])
 					{
+#if VERSION_103 || VERSION_FINAL
 						flag = false;
 						break;
+#else
+						switch ((EntityID.TileID)type)
+						{
+							case EntityID.TileID.SHORT_GRASS_PLANTS:
+							case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							case EntityID.TileID.VINE:
+							case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+							case EntityID.TileID.JUNGLE_VINE:
+							case EntityID.TileID.JUNGLE_THORN:
+							case EntityID.TileID.GLOWING_MUSHROOM:
+							case EntityID.TileID.TALL_GRASS_PLANTS:
+							case EntityID.TileID.TALL_JUNGLE_PLANTS:
+							case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+							case EntityID.TileID.TALL_HALLOWED_PLANTS:
+							case EntityID.TileID.HALLOWED_VINE:
+								break;
+
+							default:
+								flag = false;
+								break;
+						}
+
+						if (!flag)
+						{
+							break;
+						}
+#endif
 					}
 					KillTile(num3, k);
 				}
@@ -9347,27 +9144,27 @@ namespace Terraria
 				}
 				Main.PlaySound(8, i * 16, j * 16);
 				Main.TileSet[num2, num].IsActive = 1;
-				Main.TileSet[num2, num].Type = 11;
+				Main.TileSet[num2, num].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2, num].FrameY = 0;
 				Main.TileSet[num2, num].FrameX = (short)num4;
 				Main.TileSet[num2 + 1, num].IsActive = 1;
-				Main.TileSet[num2 + 1, num].Type = 11;
+				Main.TileSet[num2 + 1, num].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2 + 1, num].FrameY = 0;
 				Main.TileSet[num2 + 1, num].FrameX = (short)(num4 + 18);
 				Main.TileSet[num2, num + 1].IsActive = 1;
-				Main.TileSet[num2, num + 1].Type = 11;
+				Main.TileSet[num2, num + 1].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2, num + 1].FrameY = 18;
 				Main.TileSet[num2, num + 1].FrameX = (short)num4;
 				Main.TileSet[num2 + 1, num + 1].IsActive = 1;
-				Main.TileSet[num2 + 1, num + 1].Type = 11;
+				Main.TileSet[num2 + 1, num + 1].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2 + 1, num + 1].FrameY = 18;
 				Main.TileSet[num2 + 1, num + 1].FrameX = (short)(num4 + 18);
 				Main.TileSet[num2, num + 2].IsActive = 1;
-				Main.TileSet[num2, num + 2].Type = 11;
+				Main.TileSet[num2, num + 2].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2, num + 2].FrameY = 36;
 				Main.TileSet[num2, num + 2].FrameX = (short)num4;
 				Main.TileSet[num2 + 1, num + 2].IsActive = 1;
-				Main.TileSet[num2 + 1, num + 2].Type = 11;
+				Main.TileSet[num2 + 1, num + 2].Type = (byte)EntityID.TileID.DOOR_OPEN;
 				Main.TileSet[num2 + 1, num + 2].FrameY = 36;
 				Main.TileSet[num2 + 1, num + 2].FrameX = (short)(num4 + 18);
 				bool flag2 = tileFrameRecursion;
@@ -9393,7 +9190,7 @@ namespace Terraria
 			int num = j - Main.TileSet[x, j].FrameY / 18;
 			int frameX = Main.TileSet[x, j].FrameX;
 			int num2 = 3;
-			if (type == 92)
+			if (type == (byte)EntityID.TileID.LAMP_POST)
 			{
 				num2 = 6;
 			}
@@ -9425,13 +9222,13 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 92:
-						Item.NewItem(x * 16, j * 16, 32, 32, (int)Item.ID.LAMP_POST);
+					case EntityID.TileID.LAMP_POST:
+						Item.NewItem(x * 16, j * 16, 32, 32, (int)EntityID.ItemID.LAMP_POST);
 						break;
-					case 93:
-						Item.NewItem(x * 16, j * 16, 32, 32, (int)Item.ID.TIKI_TORCH);
+					case EntityID.TileID.TIKI_TORCH:
+						Item.NewItem(x * 16, j * 16, 32, 32, (int)EntityID.ItemID.TIKI_TORCH);
 						break;
 				}
 			}
@@ -9453,7 +9250,7 @@ namespace Terraria
 			int num3 = j - Main.TileSet[num, j].FrameY / 18;
 			int frameX = Main.TileSet[num, j].FrameX;
 			int num4 = 3;
-			if (type == 104)
+			if (type == (byte)EntityID.TileID.GRANDFATHERS_CLOCK)
 			{
 				num4 = 5;
 			}
@@ -9489,24 +9286,24 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 104:
-						Item.NewItem(num * 16, j * 16, 32, 32, (int)Item.ID.GRANDFATHER_CLOCK);
+					case EntityID.TileID.GRANDFATHERS_CLOCK:
+						Item.NewItem(num * 16, j * 16, 32, 32, (int)EntityID.ItemID.GRANDFATHER_CLOCK);
 						break;
-					case 105:
+					case EntityID.TileID.STATUE:
 						{
 							int num6 = frameX / 36;
 							switch (num6)
 							{
 								case 0:
-									num6 = (int)Item.ID.STATUE;
+									num6 = (int)EntityID.ItemID.STATUE;
 									break;
 								case 1:
-									num6 = (int)Item.ID.ANGEL_STATUE;
+									num6 = (int)EntityID.ItemID.ANGEL_STATUE;
 									break;
 								default:
-									num6 = (int)Item.ID.STAR_STATUE + num6 - 2;
+									num6 = (int)EntityID.ItemID.STAR_STATUE + num6 - 2;
 									break;
 							}
 							Item.NewItem(num * 16, j * 16, 32, 32, num6);
@@ -9521,13 +9318,13 @@ namespace Terraria
 		{
 			int num = style * 18;
 			int num2 = 3;
-			if (type == 92)
+			if (type == (byte)EntityID.TileID.LAMP_POST)
 			{
 				num2 = 6;
 			}
 			for (int i = y - num2 + 1; i < y + 1; i++)
 			{
-				if (Main.TileSet[x, i].IsActive != 0 || (type == 93 && Main.TileSet[x, i].Liquid > 0))
+				if (Main.TileSet[x, i].IsActive != 0 || (type == (byte)EntityID.TileID.TIKI_TORCH && Main.TileSet[x, i].Liquid > 0))
 				{
 					return false;
 				}
@@ -9550,7 +9347,7 @@ namespace Terraria
 		{
 			int num = style * 36;
 			int num2 = 3;
-			if (type == 104)
+			if (type == (byte)EntityID.TileID.GRANDFATHERS_CLOCK)
 			{
 				num2 = 5;
 			}
@@ -9602,7 +9399,7 @@ namespace Terraria
 			{
 				flag = true;
 			}
-			if (Main.TileSet[x, num + 2].Type != 2 && Main.TileSet[x, num + 2].Type != 109 && Main.TileSet[x, num + 2].Type != 147 && Main.TileSet[x, num].Type == 20)
+			if (Main.TileSet[x, num + 2].Type != (byte)EntityID.TileID.GRASS && Main.TileSet[x, num + 2].Type != (byte)EntityID.TileID.HALLOWED_GRASS && Main.TileSet[x, num + 2].Type != (byte)EntityID.TileID.SNOW && Main.TileSet[x, num].Type == (byte)EntityID.TileID.SAPLING)
 			{
 				flag = true;
 			}
@@ -9621,20 +9418,20 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 15:
+					case EntityID.TileID.CHAIR:
 						if (num2 == 1)
 						{
-							Item.NewItem(x * 16, num * 16, 32, 32, (int)Item.ID.TOILET);
+							Item.NewItem(x * 16, num * 16, 32, 32, (int)EntityID.ItemID.TOILET);
 						}
 						else
 						{
-							Item.NewItem(x * 16, num * 16, 32, 32, (int)Item.ID.WOODEN_CHAIR);
+							Item.NewItem(x * 16, num * 16, 32, 32, (int)EntityID.ItemID.WOODEN_CHAIR);
 						}
 						break;
-					case 134:
-						Item.NewItem(x * 16, num * 16, 32, 32, (int)Item.ID.MYTHRIL_ANVIL);
+					case EntityID.TileID.MYTHRIL_ANVIL:
+						Item.NewItem(x * 16, num * 16, 32, 32, (int)EntityID.ItemID.MYTHRIL_ANVIL);
 						break;
 				}
 			}
@@ -9703,7 +9500,7 @@ namespace Terraria
 			}
 			if (!flag)
 			{
-				if (type == 85)
+				if (type == (byte)EntityID.TileID.TOMBSTONE)
 				{
 					if (Main.TileSet[num7, num8 + 2].IsActive != 0 && Main.TileSolid[Main.TileSet[num7, num8 + 2].Type] && Main.TileSet[num7 + 1, num8 + 2].IsActive != 0 && Main.TileSolid[Main.TileSet[num7 + 1, num8 + 2].Type])
 					{
@@ -9751,13 +9548,14 @@ namespace Terraria
 				Sign.KillSign(num7, num8);
 				if (!Gen)
 				{
-					if (type == 85)
+					switch ((EntityID.TileID)type)
 					{
-						Item.NewItem(x * 16, y * 16, 32, 32, (int)Item.ID.TOMBSTONE);
-					}
-					else
-					{
-						Item.NewItem(x * 16, y * 16, 32, 32, (int)Item.ID.SIGN);
+						case EntityID.TileID.TOMBSTONE:
+							Item.NewItem(x * 16, y * 16, 32, 32, (int)EntityID.ItemID.TOMBSTONE);
+							break;
+						case EntityID.TileID.SIGN:
+							Item.NewItem(x * 16, y * 16, 32, 32, (int)EntityID.ItemID.SIGN);
+							break;
 					}
 				}
 				ToDestroyObject = false;
@@ -9801,9 +9599,9 @@ namespace Terraria
 			int num5 = x;
 			int num6 = y;
 			int num7 = 0;
-			switch (type)
+			switch ((EntityID.TileID)type)
 			{
-				case 55:
+				case EntityID.TileID.SIGN:
 					if (Main.TileSet[x, y + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[x, y + 1].Type] && Main.TileSet[x + 1, y + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[x + 1, y + 1].Type])
 					{
 						num6--;
@@ -9827,7 +9625,7 @@ namespace Terraria
 						break;
 					}
 					return false;
-				case 85:
+				case EntityID.TileID.TOMBSTONE:
 					if (Main.TileSet[x, y + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[x, y + 1].Type] && Main.TileSet[x + 1, y + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[x + 1, y + 1].Type])
 					{
 						num6--;
@@ -9860,7 +9658,7 @@ namespace Terraria
 			{
 				Main.TileSet[x, y].IsActive = 1;
 				Main.TileSet[x, y].Type = (byte)type;
-				if (type == 144)
+				if (type == (byte)EntityID.TileID.TIMER)
 				{
 					Main.TileSet[x, y].FrameX = (short)(style * 18);
 					Main.TileSet[x, y].FrameY = 0;
@@ -9884,35 +9682,16 @@ namespace Terraria
 
 		public static bool PlaceOnTable1x1(int x, int y, int type, int style = 0)
 		{
-#if (!IS_PATCHED && VERSION_INITIAL)
-            if (Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x, y + 1].IsActive == 0 || !Main.TileTable[Main.TileSet[x, y + 1].Type])
-			{
-				return false;
-			}
-			if (type == 78 && (Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x, y + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[x, y + 1].Type]))
-			{
-				return false;
-			}
-			Main.TileSet[x, y].IsActive = 1;
-			Main.TileSet[x, y].FrameX = (short)(style * 18);
-			Main.TileSet[x, y].FrameY = 0;
-			Main.TileSet[x, y].Type = (byte)type;
-			if (type == 50)
-			{
-				Main.TileSet[x, y].FrameX = (short)(18 * genRand.Next(5));
-			}
-			return true;
-#else
 			if (Main.TileSet[x, y].IsActive == 0 && Main.TileSet[x, y + 1].IsActive != 0)
 			{
 				int type2 = Main.TileSet[x, y + 1].Type;
-				if (Main.TileTable[type2] || (type == 78 && Main.TileSolid[type2]))
+				if (Main.TileTable[type2] || (type == (byte)EntityID.TileID.CLAY_POT && Main.TileSolid[type2]))
 				{
 					Main.TileSet[x, y].IsActive = 1;
 					Main.TileSet[x, y].FrameX = (short)(style * 18);
 					Main.TileSet[x, y].FrameY = 0;
 					Main.TileSet[x, y].Type = (byte)type;
-					if (type == 50)
+					if (type == (byte)EntityID.TileID.BOOK)
 					{
 						Main.TileSet[x, y].FrameX = (short)(18 * genRand.Next(5));
 					}
@@ -9920,7 +9699,6 @@ namespace Terraria
 				}
 			}
 			return false;
-#endif
 		}
 
 		public static bool PlaceAlch(int x, int y, int style)
@@ -9930,8 +9708,8 @@ namespace Terraria
 				bool flag = false;
 				switch (style)
 				{
-					case 0:
-						if (Main.TileSet[x, y + 1].Type != 2 && Main.TileSet[x, y + 1].Type != 78 && Main.TileSet[x, y + 1].Type != 109)
+					case 0: // Daybloom
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.GRASS && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.HALLOWED_GRASS)
 						{
 							flag = true;
 						}
@@ -9940,8 +9718,8 @@ namespace Terraria
 							flag = true;
 						}
 						break;
-					case 1:
-						if (Main.TileSet[x, y + 1].Type != 60 && Main.TileSet[x, y + 1].Type != 78)
+					case 1: // Moonglow
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.JUNGLE_GRASS && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -9950,8 +9728,8 @@ namespace Terraria
 							flag = true;
 						}
 						break;
-					case 2:
-						if (Main.TileSet[x, y + 1].Type != 0 && Main.TileSet[x, y + 1].Type != 59 && Main.TileSet[x, y + 1].Type != 78)
+					case 2: // Blinkroot
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.DIRT && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.MUD && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -9960,8 +9738,8 @@ namespace Terraria
 							flag = true;
 						}
 						break;
-					case 3:
-						if (Main.TileSet[x, y + 1].Type != 23 && Main.TileSet[x, y + 1].Type != 25 && Main.TileSet[x, y + 1].Type != 78)
+					case 3: // Deathweed
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.EBONSTONE && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -9970,8 +9748,8 @@ namespace Terraria
 							flag = true;
 						}
 						break;
-					case 4:
-						if (Main.TileSet[x, y + 1].Type != 53 && Main.TileSet[x, y + 1].Type != 78 && Main.TileSet[x, y + 1].Type != 116)
+					case 4:	// Waterleaf
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.SAND && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.PEARLSAND)
 						{
 							flag = true;
 						}
@@ -9980,8 +9758,8 @@ namespace Terraria
 							flag = true;
 						}
 						break;
-					case 5:
-						if (Main.TileSet[x, y + 1].Type != 57 && Main.TileSet[x, y + 1].Type != 78)
+					case 5:	// Fireblossom
+						if (Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.ASH && Main.TileSet[x, y + 1].Type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -9994,7 +9772,7 @@ namespace Terraria
 				if (!flag)
 				{
 					Main.TileSet[x, y].IsActive = 1;
-					Main.TileSet[x, y].Type = 82;
+					Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_GROWING;
 					Main.TileSet[x, y].FrameX = (short)(18 * style);
 					Main.TileSet[x, y].FrameY = 0;
 					return true;
@@ -10009,9 +9787,9 @@ namespace Terraria
 			{
 				return;
 			}
-			if (Main.TileSet[x, y].Type == 82 && genRand.Next(50) == 0)
+			if (Main.TileSet[x, y].Type == (byte)EntityID.TileID.DAYBLOOM_GROWING && genRand.Next(50) == 0)
 			{
-				Main.TileSet[x, y].Type = 83;
+				Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_MATURE;
 				SquareTileFrame(x, y);
 				if (Main.NetMode == (byte)NetModeSetting.SERVER)
 				{
@@ -10020,13 +9798,13 @@ namespace Terraria
 			}
 			else if (Main.TileSet[x, y].FrameX == 36)
 			{
-				if (Main.TileSet[x, y].Type == 83)
+				if (Main.TileSet[x, y].Type == (byte)EntityID.TileID.DAYBLOOM_MATURE)
 				{
-					Main.TileSet[x, y].Type = 84;
+					Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_BLOOMING;
 				}
 				else
 				{
-					Main.TileSet[x, y].Type = 83;
+					Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_MATURE;
 				}
 				if (Main.NetMode == (byte)NetModeSetting.SERVER)
 				{
@@ -10060,28 +9838,28 @@ namespace Terraria
 			if (Main.TileSet[num, i].IsActive != 0 && Main.TileSet[num, i - 1].IsActive == 0 && Main.TileSet[num, i - 1].Liquid == 0)
 			{
 				int num2 = -1;
-				switch (Main.TileSet[num, i].Type)
+				switch ((EntityID.TileID)Main.TileSet[num, i].Type)
 				{
-					case 2:
-					case 109:
+					case EntityID.TileID.GRASS:
+					case EntityID.TileID.HALLOWED_GRASS:
 						num2 = 0;
 						break;
-					case 60:
+					case EntityID.TileID.JUNGLE_GRASS:
 						num2 = 1;
 						break;
-					case 0:
-					case 59:
+					case EntityID.TileID.DIRT:
+					case EntityID.TileID.MUD:
 						num2 = 2;
 						break;
-					case 23:
-					case 25:
+					case EntityID.TileID.CORRUPT_GRASS:
+					case EntityID.TileID.EBONSTONE:
 						num2 = 3;
 						break;
-					case 53:
-					case 116:
+					case EntityID.TileID.SAND:
+					case EntityID.TileID.PEARLSAND:
 						num2 = 4;
 						break;
-					case 57:
+					case EntityID.TileID.ASH:
 						num2 = 5;
 						break;
 				}
@@ -10103,7 +9881,7 @@ namespace Terraria
 				switch (num)
 				{
 					case 0:
-						if (type != 109 && type != 2 && type != 78)
+						if (type != (byte)EntityID.TileID.HALLOWED_GRASS && type != (byte)EntityID.TileID.GRASS && type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -10113,7 +9891,7 @@ namespace Terraria
 						}
 						break;
 					case 1:
-						if (type != 60 && type != 78)
+						if (type != (byte)EntityID.TileID.JUNGLE_GRASS && type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -10123,7 +9901,7 @@ namespace Terraria
 						}
 						break;
 					case 2:
-						if (type != 0 && type != 59 && type != 78)
+						if (type != (byte)EntityID.TileID.DIRT && type != (byte)EntityID.TileID.MUD && type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -10133,7 +9911,7 @@ namespace Terraria
 						}
 						break;
 					case 3:
-						if (type != 23 && type != 25 && type != 78)
+						if (type != (byte)EntityID.TileID.CORRUPT_GRASS && type != (byte)EntityID.TileID.EBONSTONE && type != (byte)EntityID.TileID.CLAY_POT)
 						{
 							flag = true;
 						}
@@ -10148,7 +9926,7 @@ namespace Terraria
 							switch (num)
 							{
 								case 4:
-									if (type != 53 && type != 78 && type != 116)
+									if (type != (byte)EntityID.TileID.SAND && type != (byte)EntityID.TileID.CLAY_POT && type != (byte)EntityID.TileID.PEARLSAND)
 									{
 										flag = true;
 									}
@@ -10156,24 +9934,24 @@ namespace Terraria
 									{
 										flag = true;
 									}
-									if (type2 == 82 || Main.TileSet[x, y].Lava != 0 || Main.NetMode == (byte)NetModeSetting.CLIENT)
+									if (type2 == (byte)EntityID.TileID.DAYBLOOM_GROWING || Main.TileSet[x, y].Lava != 0 || Main.NetMode == (byte)NetModeSetting.CLIENT)
 									{
 										break;
 									}
 									if (Main.TileSet[x, y].Liquid > 16)
 									{
-										if (type2 == 83)
+										if (type2 == (byte)EntityID.TileID.DAYBLOOM_MATURE)
 										{
-											Main.TileSet[x, y].Type = 84;
+											Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_BLOOMING;
 											if (Main.NetMode == (byte)NetModeSetting.SERVER)
 											{
 												NetMessage.SendTile(x, y);
 											}
 										}
 									}
-									else if (type2 == 84)
+									else if (type2 == (byte)EntityID.TileID.DAYBLOOM_BLOOMING)
 									{
-										Main.TileSet[x, y].Type = 83;
+										Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_MATURE;
 										if (Main.NetMode == (byte)NetModeSetting.SERVER)
 										{
 											NetMessage.SendTile(x, y);
@@ -10181,7 +9959,7 @@ namespace Terraria
 									}
 									break;
 								case 5:
-									if (type != 57 && type != 78)
+									if (type != (byte)EntityID.TileID.ASH && type != (byte)EntityID.TileID.CLAY_POT)
 									{
 										flag = true;
 									}
@@ -10189,24 +9967,24 @@ namespace Terraria
 									{
 										flag = true;
 									}
-									if (Main.NetMode == (byte)NetModeSetting.CLIENT || type2 == 82 || Main.TileSet[x, y].Lava == 0)
+									if (Main.NetMode == (byte)NetModeSetting.CLIENT || type2 == (byte)EntityID.TileID.DAYBLOOM_GROWING || Main.TileSet[x, y].Lava == 0)
 									{
 										break;
 									}
 									if (Main.TileSet[x, y].Liquid > 16)
 									{
-										if (type2 == 83)
+										if (type2 == (byte)EntityID.TileID.DAYBLOOM_MATURE)
 										{
-											Main.TileSet[x, y].Type = 84;
+											Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_BLOOMING;
 											if (Main.NetMode == (byte)NetModeSetting.SERVER)
 											{
 												NetMessage.SendTile(x, y);
 											}
 										}
 									}
-									else if (type2 == 84)
+									else if (type2 == (byte)EntityID.TileID.DAYBLOOM_BLOOMING)
 									{
-										Main.TileSet[x, y].Type = 83;
+										Main.TileSet[x, y].Type = (byte)EntityID.TileID.DAYBLOOM_MATURE;
 										if (Main.NetMode == (byte)NetModeSetting.SERVER)
 										{
 											NetMessage.SendTile(x, y);
@@ -10240,7 +10018,7 @@ namespace Terraria
 					flag = true;
 					break;
 				}
-				if (Main.TileSet[x, num + i].Type != 91)
+				if (Main.TileSet[x, num + i].Type != (byte)EntityID.TileID.BANNER)
 				{
 					flag = true;
 					break;
@@ -10267,14 +10045,14 @@ namespace Terraria
 			ToDestroyObject = true;
 			for (int k = 0; k < 3; k++)
 			{
-				if (Main.TileSet[x, num + k].Type == 91)
+				if (Main.TileSet[x, num + k].Type == (byte)EntityID.TileID.BANNER)
 				{
 					KillTile(x, num + k);
 				}
 			}
 			if (!Gen)
 			{
-				Item.NewItem(x * 16, (num + 1) * 16, 32, 32, (int)Item.ID.RED_BANNER + frameX / 18);
+				Item.NewItem(x * 16, (num + 1) * 16, 32, 32, (int)EntityID.ItemID.RED_BANNER + frameX / 18);
 			}
 			ToDestroyObject = false;
 		}
@@ -10321,27 +10099,27 @@ namespace Terraria
 			Main.TileSet[i, j - 2].IsActive = 1;
 			Main.TileSet[i, j - 2].FrameY = 0;
 			Main.TileSet[i, j - 2].FrameX = (byte)num;
-			Main.TileSet[i, j - 2].Type = 128;
+			Main.TileSet[i, j - 2].Type = (byte)EntityID.TileID.MANNEQUIN;
 			Main.TileSet[i, j - 1].IsActive = 1;
 			Main.TileSet[i, j - 1].FrameY = 18;
 			Main.TileSet[i, j - 1].FrameX = (byte)num;
-			Main.TileSet[i, j - 1].Type = 128;
+			Main.TileSet[i, j - 1].Type = (byte)EntityID.TileID.MANNEQUIN;
 			Main.TileSet[i, j].IsActive = 1;
 			Main.TileSet[i, j].FrameY = 36;
 			Main.TileSet[i, j].FrameX = (byte)num;
-			Main.TileSet[i, j].Type = 128;
+			Main.TileSet[i, j].Type = (byte)EntityID.TileID.MANNEQUIN;
 			Main.TileSet[i + 1, j - 2].IsActive = 1;
 			Main.TileSet[i + 1, j - 2].FrameY = 0;
 			Main.TileSet[i + 1, j - 2].FrameX = (byte)(18 + num);
-			Main.TileSet[i + 1, j - 2].Type = 128;
+			Main.TileSet[i + 1, j - 2].Type = (byte)EntityID.TileID.MANNEQUIN;
 			Main.TileSet[i + 1, j - 1].IsActive = 1;
 			Main.TileSet[i + 1, j - 1].FrameY = 18;
 			Main.TileSet[i + 1, j - 1].FrameX = (byte)(18 + num);
-			Main.TileSet[i + 1, j - 1].Type = 128;
+			Main.TileSet[i + 1, j - 1].Type = (byte)EntityID.TileID.MANNEQUIN;
 			Main.TileSet[i + 1, j].IsActive = 1;
 			Main.TileSet[i + 1, j].FrameY = 36;
 			Main.TileSet[i + 1, j].FrameX = (byte)(18 + num);
-			Main.TileSet[i + 1, j].Type = 128;
+			Main.TileSet[i + 1, j].Type = (byte)EntityID.TileID.MANNEQUIN;
 			return true;
 		}
 
@@ -10367,7 +10145,7 @@ namespace Terraria
 					{
 						num6 -= 36;
 					}
-					if (Main.TileSet[num4, num5].IsActive == 0 || Main.TileSet[num4, num5].Type != 128 || Main.TileSet[num4, num5].FrameY != l * 18 || num6 != k * 18)
+					if (Main.TileSet[num4, num5].IsActive == 0 || Main.TileSet[num4, num5].Type != (byte)EntityID.TileID.MANNEQUIN || Main.TileSet[num4, num5].FrameY != l * 18 || num6 != k * 18)
 					{
 						flag = true;
 						break;
@@ -10385,7 +10163,7 @@ namespace Terraria
 				{
 					int num7 = num + m;
 					int num8 = num2 + n;
-					if (Main.TileSet[num7, num8].IsActive != 0 && Main.TileSet[num7, num8].Type == 128)
+					if (Main.TileSet[num7, num8].IsActive != 0 && Main.TileSet[num7, num8].Type == (byte)EntityID.TileID.MANNEQUIN)
 					{
 						KillTile(num7, num8);
 					}
@@ -10393,7 +10171,7 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MANNEQUIN);
+				Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MANNEQUIN);
 			}
 			ToDestroyObject = false;
 		}
@@ -10402,7 +10180,7 @@ namespace Terraria
 		{
 			if (Main.TileSet[x, y + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[x, y + 1].Type] && Main.TileSet[x, y - 1].IsActive == 0)
 			{
-				int num = ((type == 20) ? (genRand.Next(3) * 18) : 0);
+				int num = ((type == (byte)EntityID.TileID.SAPLING) ? (genRand.Next(3) * 18) : 0);
 				int num2 = style * 40;
 				Main.TileSet[x, y - 1].IsActive = 1;
 				Main.TileSet[x, y - 1].FrameY = (short)num2;
@@ -10445,20 +10223,20 @@ namespace Terraria
 			{
 				num--;
 			}
-			if (Main.TileSet[x, num].FrameY != 0 || Main.TileSet[x, num + 1].FrameY != 18 || Main.TileSet[x, num].Type != 42 || Main.TileSet[x, num + 1].Type != 42 || Main.TileSet[x, num - 1].IsActive == 0 || !Main.TileSolidNotSolidTop[Main.TileSet[x, num - 1].Type])
+			if (Main.TileSet[x, num].FrameY != 0 || Main.TileSet[x, num + 1].FrameY != 18 || Main.TileSet[x, num].Type != (byte)EntityID.TileID.CHAIN_LANTERN || Main.TileSet[x, num + 1].Type != (byte)EntityID.TileID.CHAIN_LANTERN || Main.TileSet[x, num - 1].IsActive == 0 || !Main.TileSolidNotSolidTop[Main.TileSet[x, num - 1].Type])
 			{
 				ToDestroyObject = true;
-				if (Main.TileSet[x, num].Type == 42)
+				if (Main.TileSet[x, num].Type == (byte)EntityID.TileID.CHAIN_LANTERN)
 				{
 					KillTile(x, num);
 				}
-				if (Main.TileSet[x, num + 1].Type == 42)
+				if (Main.TileSet[x, num + 1].Type == (byte)EntityID.TileID.CHAIN_LANTERN)
 				{
 					KillTile(x, num + 1);
 				}
 				if (!Gen)
 				{
-					Item.NewItem(x * 16, num * 16, 32, 32, (int)Item.ID.CHAIN_LANTERN);
+					Item.NewItem(x * 16, num * 16, 32, 32, (int)EntityID.ItemID.CHAIN_LANTERN);
 				}
 				ToDestroyObject = false;
 			}
@@ -10477,7 +10255,7 @@ namespace Terraria
 			}
 			if (Main.TileSet[num, y].FrameX == 0 && Main.TileSet[num + 1, y].FrameX == 18 && Main.TileSet[num, y].Type == type && Main.TileSet[num + 1, y].Type == type)
 			{
-				if (type == 29 || type == 103)
+				if (type == (byte)EntityID.TileID.PIGGYBANK || type == (byte)EntityID.TileID.BOWL)
 				{
 					if (Main.TileSet[num, y + 1].IsActive != 0 && Main.TileTable[Main.TileSet[num, y + 1].Type] && Main.TileSet[num + 1, y + 1].IsActive != 0 && Main.TileTable[Main.TileSet[num + 1, y + 1].Type])
 					{
@@ -10500,24 +10278,24 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 16:
-						Item.NewItem(num * 16, y * 16, 32, 32, (int)Item.ID.IRON_ANVIL);
+					case EntityID.TileID.ANVIL:
+						Item.NewItem(num * 16, y * 16, 32, 32, (int)EntityID.ItemID.IRON_ANVIL);
 						break;
-					case 18:
-						Item.NewItem(num * 16, y * 16, 32, 32, (int)Item.ID.WORK_BENCH);
+					case EntityID.TileID.WORK_BENCH:
+						Item.NewItem(num * 16, y * 16, 32, 32, (int)EntityID.ItemID.WORK_BENCH);
 						break;
-					case 29:
-						Item.NewItem(num * 16, y * 16, 32, 32, (int)Item.ID.PIGGY_BANK);
+					case EntityID.TileID.PIGGYBANK:
+						Item.NewItem(num * 16, y * 16, 32, 32, (int)EntityID.ItemID.PIGGY_BANK);
 						Main.PlaySound(13, i * 16, y * 16);
 						break;
-					case 103:
-						Item.NewItem(num * 16, y * 16, 32, 32, (int)Item.ID.BOWL);
+					case EntityID.TileID.BOWL:
+						Item.NewItem(num * 16, y * 16, 32, 32, (int)EntityID.ItemID.BOWL);
 						Main.PlaySound(13, i * 16, y * 16);
 						break;
-					case 134:
-						Item.NewItem(num * 16, y * 16, 32, 32, (int)Item.ID.MYTHRIL_ANVIL);
+					case EntityID.TileID.MYTHRIL_ANVIL:
+						Item.NewItem(num * 16, y * 16, 32, 32, (int)EntityID.ItemID.MYTHRIL_ANVIL);
 						break;
 				}
 			}
@@ -10528,7 +10306,7 @@ namespace Terraria
 
 		public static bool Place2x1(int x, int y, int type)
 		{
-			if ((type == 29 || type == 103 || Main.TileSet[x, y + 1].IsActive == 0 || Main.TileSet[x + 1, y + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[x, y + 1].Type] || !Main.TileSolid[Main.TileSet[x + 1, y + 1].Type] || Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x + 1, y].IsActive != 0) && ((type != 29 && type != 103) || Main.TileSet[x, y + 1].IsActive == 0 || Main.TileSet[x + 1, y + 1].IsActive == 0 || !Main.TileTable[Main.TileSet[x, y + 1].Type] || !Main.TileTable[Main.TileSet[x + 1, y + 1].Type] || Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x + 1, y].IsActive != 0))
+			if ((type == (byte)EntityID.TileID.PIGGYBANK || type == (byte)EntityID.TileID.BOWL || Main.TileSet[x, y + 1].IsActive == 0 || Main.TileSet[x + 1, y + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[x, y + 1].Type] || !Main.TileSolid[Main.TileSet[x + 1, y + 1].Type] || Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x + 1, y].IsActive != 0) && ((type != 29 && type != 103) || Main.TileSet[x, y + 1].IsActive == 0 || Main.TileSet[x + 1, y + 1].IsActive == 0 || !Main.TileTable[Main.TileSet[x, y + 1].Type] || !Main.TileTable[Main.TileSet[x + 1, y + 1].Type] || Main.TileSet[x, y].IsActive != 0 || Main.TileSet[x + 1, y].IsActive != 0))
 			{
 				return false;
 			}
@@ -10558,13 +10336,13 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 79:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.BED);
+					case EntityID.TileID.BED:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.BED);
 						break;
-					case 90:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.BATHTUB);
+					case EntityID.TileID.BATHTUB:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.BATHTUB);
 						break;
 				}
 			}
@@ -10590,7 +10368,7 @@ namespace Terraria
 			int num = i;
 			int num2 = j;
 			num -= Main.TileSet[i, j].FrameX / 18;
-			if ((type == 79 || type == 90) && Main.TileSet[i, j].FrameX >= 72)
+			if ((type == (byte)EntityID.TileID.BED || type == (byte)EntityID.TileID.BATHTUB) && Main.TileSet[i, j].FrameX >= 72)
 			{
 				num += 4;
 			}
@@ -10600,7 +10378,7 @@ namespace Terraria
 				for (int l = num2; l < num2 + 2; l++)
 				{
 					int num3 = (k - num) * 18;
-					if ((type == 79 || type == 90) && Main.TileSet[i, j].FrameX >= 72)
+					if ((type == (byte)EntityID.TileID.BED || type == (byte)EntityID.TileID.BATHTUB) && Main.TileSet[i, j].FrameX >= 72)
 					{
 						num3 = (k - num + 4) * 18;
 					}
@@ -10633,48 +10411,48 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 85:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.TOMBSTONE);
+					case EntityID.TileID.TOMBSTONE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.TOMBSTONE);
 						break;
-					case 94:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.KEG);
+					case EntityID.TileID.KEG:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.KEG);
 						break;
-					case 95:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.CHINESE_LANTERN);
+					case EntityID.TileID.CHINESE_LANTERN:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.CHINESE_LANTERN);
 						break;
-					case 96:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.COOKING_POT);
+					case EntityID.TileID.COOKING_POT:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.COOKING_POT);
 						break;
-					case 97:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.SAFE);
+					case EntityID.TileID.SAFE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.SAFE);
 						break;
-					case 98:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.SKULL_LANTERN);
+					case EntityID.TileID.SKULL_LANTERN:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.SKULL_LANTERN);
 						break;
-					case 99:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.TRASH_CAN);
+					case EntityID.TileID.TRASH_CAN:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.TRASH_CAN);
 						break;
-					case 100:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.CANDELABRA);
+					case EntityID.TileID.CANDELABRA:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.CANDELABRA);
 						break;
-					case 125:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.CRYSTAL_BALL);
+					case EntityID.TileID.CRYSTAL_BALL:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.CRYSTAL_BALL);
 						break;
-					case 126:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.DISCO_BALL);
+					case EntityID.TileID.DISCO_BALL:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.DISCO_BALL);
 						break;
-					case 132:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.LEVER);
+					case EntityID.TileID.LEVER:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.LEVER);
 						break;
-					case 142:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.INLET_PUMP);
+					case EntityID.TileID.PUMP_IN:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.INLET_PUMP);
 						break;
-					case 143:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.OUTLET_PUMP);
+					case EntityID.TileID.PUMP_OUT:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.OUTLET_PUMP);
 						break;
-					case 138:
+					case EntityID.TileID.BOULDER:
 						if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
 							Projectile.NewProjectile(x2 * 16 + 15.5f, y2 * 16 + 16, 0f, 0f, 99, 70, 10f);
@@ -10723,10 +10501,10 @@ namespace Terraria
 						return;
 					}
 				}
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 95:
-					case 126:
+					case EntityID.TileID.CHINESE_LANTERN:
+					case EntityID.TileID.DISCO_BALL:
 						if (Main.TileSet[k, num2 - 1].IsActive == 0 || !Main.TileSolidNotSolidTop[Main.TileSet[k, num2 - 1].Type])
 						{
 							Destroy2x2(i, j, num, num2, type);
@@ -10740,11 +10518,11 @@ namespace Terraria
 							return;
 						}
 						break;
-					case 138:
+					case EntityID.TileID.BOULDER:
 						break;
 				}
 			}
-			if (type == 138 && !SolidTileUnsafe(num, num2 + 2) && !SolidTileUnsafe(num + 1, num2 + 2))
+			if (type == (byte)EntityID.TileID.BOULDER && !SolidTileUnsafe(num, num2 + 2) && !SolidTileUnsafe(num + 1, num2 + 2))
 			{
 				Destroy2x2(i, j, num, num2, type);
 			}
@@ -10762,7 +10540,7 @@ namespace Terraria
 			vector2.Y = genRand.Next(-10, 11) * 0.1f;
 			while (num > 0.0 && num2 > 0f)
 			{
-				if (vector.Y < 0f && num2 > 0f && type == 59)
+				if (vector.Y < 0f && num2 > 0f && type == (int)EntityID.TileID.MUD)
 				{
 					num2 = 0f;
 				}
@@ -10792,7 +10570,7 @@ namespace Terraria
 				{
 					for (int l = num5; l < num6; l++)
 					{
-						if ((double)(Math.Abs(k - vector.X) + Math.Abs(l - vector.Y)) < strength * 0.5 * (double)(1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].IsActive != 0 && (Main.TileSet[k, l].Type == 0 || Main.TileSet[k, l].Type == 1 || Main.TileSet[k, l].Type == 23 || Main.TileSet[k, l].Type == 25 || Main.TileSet[k, l].Type == 40 || Main.TileSet[k, l].Type == 53 || Main.TileSet[k, l].Type == 57 || Main.TileSet[k, l].Type == 59 || Main.TileSet[k, l].Type == 60 || Main.TileSet[k, l].Type == 70 || Main.TileSet[k, l].Type == 109 || Main.TileSet[k, l].Type == 112 || Main.TileSet[k, l].Type == 116 || Main.TileSet[k, l].Type == 117))
+						if ((double)(Math.Abs(k - vector.X) + Math.Abs(l - vector.Y)) < strength * 0.5 * (double)(1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].IsActive != 0 && EntityID.ReplaceableGrounds.Contains((EntityID.TileID)Main.TileSet[k, l].Type))
 						{
 							Main.TileSet[k, l].Type = (byte)type;
 							SquareTileFrame(k, l);
@@ -10834,14 +10612,14 @@ namespace Terraria
 			switch (num)
 			{
 				case 0:
-					num = 107;
+					num = (byte)EntityID.TileID.COBALT_ORE;
 					num3 *= 1.05f;
 					break;
 				case 1:
-					num = 108;
+					num = (byte)EntityID.TileID.MYTHRIL_ORE;
 					break;
 				default:
-					num = 111;
+					num = (byte)EntityID.TileID.ADAMANTITE_ORE;
 					break;
 			}
 			for (int k = 0; k < num3; k++)
@@ -10850,10 +10628,10 @@ namespace Terraria
 				int lowerBound = Main.WorldSurface;
 				switch (num)
 				{
-					case 108:
+					case (byte)EntityID.TileID.MYTHRIL_ORE:
 						lowerBound = Main.RockLayer;
 						break;
-					case 111:
+					case (byte)EntityID.TileID.ADAMANTITE_ORE:
 						lowerBound = (Main.RockLayer + Main.RockLayer + Main.MaxTilesY) / 3;
 						break;
 				}
@@ -10865,15 +10643,15 @@ namespace Terraria
 			{
 				int num6 = genRand.Next(100, Main.MaxTilesX - 100);
 				int num7 = genRand.Next(Main.RockLayer + 50, Main.MaxTilesY - 300);
-				if (Main.TileSet[num6, num7].IsActive != 0 && Main.TileSet[num6, num7].Type == 1)
+				if (Main.TileSet[num6, num7].IsActive != 0 && Main.TileSet[num6, num7].Type == (byte)EntityID.TileID.STONE)
 				{
 					if (num5 == 0)
 					{
-						Main.TileSet[num6, num7].Type = 25;
+						Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.EBONSTONE;
 					}
 					else
 					{
-						Main.TileSet[num6, num7].Type = 117;
+						Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.PEARLSTONE;
 					}
 					if (Main.NetMode == (byte)NetModeSetting.SERVER)
 					{
@@ -10891,7 +10669,7 @@ namespace Terraria
 				rect.Width = (rect.Height = 16);
 				for (int l = 0; l < num8; l++)
 				{
-					NPC.SpawnOnPlayer(Player.FindClosest(ref rect), (int)NPC.ID.WRAITH);
+					NPC.SpawnOnPlayer(Player.FindClosest(ref rect), (int)EntityID.NPCID.WRAITH);
 				}
 			}
 			altarCount++;
@@ -10910,25 +10688,26 @@ namespace Terraria
 			int num3 = num;
 			while (true)
 			{
-				if (num3 >= num + 3)
-				{
-					return;
-				}
+				if (num3 >= num + 3) return;
+
 				if (Main.TileSet[num3, num2 + 2].IsActive == 0 || !Main.TileSolid[Main.TileSet[num3, num2 + 2].Type])
 				{
 					break;
 				}
+
+				bool invalid = false;
 				for (int k = num2; k < num2 + 2; k++)
 				{
 					if (Main.TileSet[num3, k].IsActive == 0 || Main.TileSet[num3, k].Type != type || Main.TileSet[num3, k].FrameX != (num3 - num) * 18 || Main.TileSet[num3, k].FrameY != (k - num2) * 18)
 					{
-						goto end_IL_00df;
+						invalid = true;
+						break;
 					}
 				}
+
+				if (invalid) break;
+
 				num3++;
-				continue;
-			end_IL_00df:
-				break;
 			}
 			ToDestroyObject = true;
 			for (int l = num; l < num + 3; l++)
@@ -10943,41 +10722,41 @@ namespace Terraria
 			}
 			if (!Gen)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 14:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.WOODEN_TABLE);
+					case EntityID.TileID.TABLE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.WOODEN_TABLE);
 						break;
-					case 114:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.TINKERERS_WORKSHOP);
+					case EntityID.TileID.TINKERERS_WORKSHOP:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.TINKERERS_WORKSHOP);
 						break;
-					case 26:
+					case EntityID.TileID.DEMON_ALTAR:
 						SmashAltar(i, j);
 						break;
-					case 17:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.FURNACE);
+					case EntityID.TileID.FURNACE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.FURNACE);
 						break;
-					case 77:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.HELLFORGE);
+					case EntityID.TileID.HELLFORGE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.HELLFORGE);
 						break;
-					case 86:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.LOOM);
+					case EntityID.TileID.LOOM:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.LOOM);
 						break;
-					case 87:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.PIANO);
+					case EntityID.TileID.PIANO:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.PIANO);
 						break;
-					case 88:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.DRESSER);
+					case EntityID.TileID.DRESSER:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.DRESSER);
 						break;
-					case 89:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.BENCH);
+					case EntityID.TileID.BENCH:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.BENCH);
 						break;
-					case 133:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.ADAMANTITE_FORGE);
+					case EntityID.TileID.ADAMANTITE_FORGE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.ADAMANTITE_FORGE);
 						break;
 #if VERSION_101
-					case 150:
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.CAMPFIRE);
+					case EntityID.TileID.CAMPFIRE:
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.CAMPFIRE);
 						break;
 #endif
 				}
@@ -11048,13 +10827,13 @@ namespace Terraria
 					}
 					if (!Gen)
 					{
-						switch (type)
+						switch ((EntityID.TileID)type)
 						{
-							case 101:
-								Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.BOOKCASE);
+							case EntityID.TileID.BOOKCASE:
+								Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.BOOKCASE);
 								break;
-							case 102:
-								Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.THRONE);
+							case EntityID.TileID.THRONE:
+								Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.THRONE);
 								break;
 						}
 					}
@@ -11146,7 +10925,7 @@ namespace Terraria
 			{
 				for (int l = num2; l < num2 + 2; l++)
 				{
-					if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == 139)
+					if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == (byte)EntityID.TileID.MUSIC_BOX)
 					{
 						if (Main.TileSet[k, l].FrameX < 36)
 						{
@@ -11192,7 +10971,7 @@ namespace Terraria
 				{
 					if (num7 < num2 + 2)
 					{
-						if (Main.TileSet[k, num7].IsActive != 0 && Main.TileSet[k, num7].Type == 139 && Main.TileSet[k, num7].FrameX == (k - num) * 18 + num6 * 36 && Main.TileSet[k, num7].FrameY == (num7 - num2) * 18 + num4 * 36)
+						if (Main.TileSet[k, num7].IsActive != 0 && Main.TileSet[k, num7].Type == (byte)EntityID.TileID.MUSIC_BOX && Main.TileSet[k, num7].FrameX == (k - num) * 18 + num6 * 36 && Main.TileSet[k, num7].FrameY == (num7 - num2) * 18 + num4 * 36)
 						{
 							num7++;
 							continue;
@@ -11207,7 +10986,7 @@ namespace Terraria
 					{
 						for (int m = num2; m < num2 + 3; m++)
 						{
-							if (Main.TileSet[l, m].Type == 139 && Main.TileSet[l, m].IsActive != 0)
+							if (Main.TileSet[l, m].Type == (byte)EntityID.TileID.MUSIC_BOX && Main.TileSet[l, m].IsActive != 0)
 							{
 								KillTile(l, m);
 							}
@@ -11221,26 +11000,26 @@ namespace Terraria
 					// Now this is what it should look like so all music boxes drop the correct items, which should of happened in the 1.01 update but...
 					if (num4 > 12)
 					{
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MUSIC_BOX_DESERT - 13 + num4);
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MUSIC_BOX_DESERT - 13 + num4);
 					}
 					else 
 					{
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MUSIC_BOX_OVERWORLD_DAY + num4);
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY + num4);
 					}
 #elif VERSION_101
 					// They fucked up and forgot to subtract the difference, which led to the space music box (the first of the exclusive ones) to give a campfire. Basically, no one at Engine did QA for this fix.
 					if (num4 > 12)
 					{
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MUSIC_BOX_DESERT + num4);
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MUSIC_BOX_DESERT + num4);
 					}
 					else
 					{
-						Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MUSIC_BOX_OVERWORLD_DAY + num4);
+						Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY + num4);
 					}
 #else
 					// It was even more broken in the initial versions, since they didn't even account for the difference between music boxes, so you could get items 575-580 by breaking the exclusive ones.
 					// This means Old-Gen Mobile wasn't the only one that had an easy way to get the best drill; An empty music box and an ocean visit = 1 free Hamdrax. 
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.MUSIC_BOX_OVERWORLD_DAY + num4);
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY + num4);
 #endif
 					bool flag = tileFrameRecursion;
 					tileFrameRecursion = false;
@@ -11300,7 +11079,7 @@ namespace Terraria
 
 		public static bool Place2x2(int x, int y, int type)
 		{
-			if (type == 95 || type == 126)
+			if (type == (int)EntityID.TileID.CHINESE_LANTERN || type == (int)EntityID.TileID.DISCO_BALL)
 			{
 				y++;
 			}
@@ -11310,7 +11089,7 @@ namespace Terraria
 			}
 			for (int i = x - 1; i < x + 1; i++)
 			{
-				if (type == 95 || type == 126)
+				if (type == (int)EntityID.TileID.CHINESE_LANTERN || type == (int)EntityID.TileID.DISCO_BALL)
 				{
 					if (Main.TileSet[i, y - 2].IsActive == 0 || !Main.TileSolidNotSolidTop[Main.TileSet[i, y - 2].Type])
 					{
@@ -11323,7 +11102,7 @@ namespace Terraria
 				}
 				for (int j = y - 1; j < y + 1; j++)
 				{
-					if (Main.TileSet[i, j].IsActive != 0 || (type == 98 && Main.TileSet[i, j].Liquid > 0))
+					if (Main.TileSet[i, j].IsActive != 0 || (type == (int)EntityID.TileID.SKULL_LANTERN && Main.TileSet[i, j].Liquid > 0))
 					{
 						return false;
 					}
@@ -11462,7 +11241,7 @@ namespace Terraria
 					}
 				}
 			}
-			if (type == 106)
+			if (type == (int)EntityID.TileID.SAWMILL)
 			{
 				for (int m = num; m < num + 3; m++)
 				{
@@ -11496,19 +11275,19 @@ namespace Terraria
 					}
 				}
 			}
-			switch (type)
+			switch ((EntityID.TileID)type)
 			{
-				case 34:
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.COPPER_CHANDELIER);
+				case EntityID.TileID.CHANDELIER:
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.COPPER_CHANDELIER);
 					break;
-				case 35:
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.SILVER_CHANDELIER);
+				case EntityID.TileID.JACK_O_LANTERN:
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.SILVER_CHANDELIER);
 					break;
-				case 36:
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.GOLD_CHANDELIER);
+				case EntityID.TileID.PRESENT:
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.GOLD_CHANDELIER);
 					break;
-				case 106:
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.SAWMILL);
+				case EntityID.TileID.SAWMILL:
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.SAWMILL);
 					break;
 			}
 			ToDestroyObject = false;
@@ -11527,7 +11306,7 @@ namespace Terraria
 		public static bool Place3x3(int x, int y, int type)
 		{
 			int num = 0;
-			if (type == 106)
+			if (type == (int)EntityID.TileID.SAWMILL)
 			{
 				num = -2;
 				for (int i = x - 1; i < x + 2; i++)
@@ -11614,12 +11393,12 @@ namespace Terraria
 			{
 				for (int j = y - 3; j < y + 1; j++)
 				{
-					if (Main.TileSet[i, j].IsActive != 0 || Main.TileSet[i, j].WallType > 0)
+					if (Main.TileSet[i, j].IsActive != 0 || Main.TileSet[i, j].WallType > (byte)EntityID.WallID.NONE)
 					{
 						return false;
 					}
 				}
-				if (Main.TileSet[i, y + 1].IsActive == 0 || (Main.TileSet[i, y + 1].Type != 2 && Main.TileSet[i, y + 1].Type != 109))
+				if (Main.TileSet[i, y + 1].IsActive == 0 || (Main.TileSet[i, y + 1].Type != (byte)EntityID.TileID.GRASS && Main.TileSet[i, y + 1].Type != (byte)EntityID.TileID.HALLOWED_GRASS))
 				{
 					return false;
 				}
@@ -11633,7 +11412,7 @@ namespace Terraria
 					Main.TileSet[x + k, y + l].IsActive = 1;
 					Main.TileSet[x + k, y + l].FrameX = (short)num;
 					Main.TileSet[x + k, y + l].FrameY = (short)num2;
-					Main.TileSet[x + k, y + l].Type = 27;
+					Main.TileSet[x + k, y + l].Type = (byte)EntityID.TileID.SUNFLOWER;
 				}
 			}
 			return true;
@@ -11660,13 +11439,13 @@ namespace Terraria
 					if (num3 < num2 + 4)
 					{
 						int num4 = (Main.TileSet[k, num3].FrameX / 18) & 1;
-						if (Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == 27 && num4 == k - num && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
+						if (Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == (byte)EntityID.TileID.SUNFLOWER && num4 == k - num && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
 						{
 							num3++;
 							continue;
 						}
 					}
-					else if (Main.TileSet[k, num2 + 4].IsActive != 0 && (Main.TileSet[k, num2 + 4].Type == 2 || Main.TileSet[k, num2 + 4].Type == 109))
+					else if (Main.TileSet[k, num2 + 4].IsActive != 0 && (Main.TileSet[k, num2 + 4].Type == (byte)EntityID.TileID.GRASS || Main.TileSet[k, num2 + 4].Type == (byte)EntityID.TileID.HALLOWED_GRASS))
 					{
 						break;
 					}
@@ -11675,13 +11454,13 @@ namespace Terraria
 					{
 						for (int m = num2; m < num2 + 4; m++)
 						{
-							if (Main.TileSet[l, m].Type == 27 && Main.TileSet[l, m].IsActive != 0)
+							if (Main.TileSet[l, m].Type == (byte)EntityID.TileID.SUNFLOWER && Main.TileSet[l, m].IsActive != 0)
 							{
 								KillTile(l, m);
 							}
 						}
 					}
-					Item.NewItem(i * 16, j * 16, 32, 32, (int)Item.ID.SUNFLOWER);
+					Item.NewItem(i * 16, j * 16, 32, 32, (int)EntityID.ItemID.SUNFLOWER);
 					ToDestroyObject = false;
 					return;
 				}
@@ -11711,7 +11490,7 @@ namespace Terraria
 					Main.TileSet[x + k, y + l].IsActive = 1;
 					Main.TileSet[x + k, y + l].FrameX = (short)(k * 18 + genRand.Next(3) * 36);
 					Main.TileSet[x + k, y + l].FrameY = (short)((l + 1) * 18);
-					Main.TileSet[x + k, y + l].Type = 28;
+					Main.TileSet[x + k, y + l].Type = (byte)EntityID.TileID.POT;
 				}
 			}
 			return true;
@@ -11721,35 +11500,35 @@ namespace Terraria
 		{
 			int num = j;
 			int num2 = i;
-			while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == 80)
+			while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == (byte)EntityID.TileID.CACTUS)
 			{
 				num++;
-				if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != 80)
+				if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != (byte)EntityID.TileID.CACTUS)
 				{
-					if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == 80 && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == 80 && num2 >= i)
+					if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 >= i)
 					{
 						num2--;
 					}
-					if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == 80 && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == 80 && num2 <= i)
+					if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 <= i)
 					{
 						num2++;
 					}
 				}
 			}
-			if (Main.TileSet[num2, num].IsActive == 0 || (Main.TileSet[num2, num].Type != 53 && Main.TileSet[num2, num].Type != 112 && Main.TileSet[num2, num].Type != 116))
+			if (Main.TileSet[num2, num].IsActive == 0 || (Main.TileSet[num2, num].Type != (byte)EntityID.TileID.SAND && Main.TileSet[num2, num].Type != (byte)EntityID.TileID.EBONSAND && Main.TileSet[num2, num].Type != (byte)EntityID.TileID.PEARLSAND))
 			{
 				KillTile(i, j);
 				return true;
 			}
 			if (i != num2)
 			{
-				if ((Main.TileSet[i, j + 1].IsActive == 0 || Main.TileSet[i, j + 1].Type != 80) && (Main.TileSet[i - 1, j].IsActive == 0 || Main.TileSet[i - 1, j].Type != 80) && (Main.TileSet[i + 1, j].IsActive == 0 || Main.TileSet[i + 1, j].Type != 80))
+				if ((Main.TileSet[i, j + 1].IsActive == 0 || Main.TileSet[i, j + 1].Type != (byte)EntityID.TileID.CACTUS) && (Main.TileSet[i - 1, j].IsActive == 0 || Main.TileSet[i - 1, j].Type != (byte)EntityID.TileID.CACTUS) && (Main.TileSet[i + 1, j].IsActive == 0 || Main.TileSet[i + 1, j].Type != (byte)EntityID.TileID.CACTUS))
 				{
 					KillTile(i, j);
 					return true;
 				}
 			}
-			else if (i == num2 && (Main.TileSet[i, j + 1].IsActive == 0 || (Main.TileSet[i, j + 1].Type != 80 && Main.TileSet[i, j + 1].Type != 53 && Main.TileSet[i, j + 1].Type != 112 && Main.TileSet[i, j + 1].Type != 116)))
+			else if (i == num2 && (Main.TileSet[i, j + 1].IsActive == 0 || (Main.TileSet[i, j + 1].Type != (byte)EntityID.TileID.CACTUS && Main.TileSet[i, j + 1].Type != (byte)EntityID.TileID.SAND && Main.TileSet[i, j + 1].Type != (byte)EntityID.TileID.EBONSAND && Main.TileSet[i, j + 1].Type != (byte)EntityID.TileID.PEARLSAND)))
 			{
 				KillTile(i, j);
 				return true;
@@ -11804,12 +11583,12 @@ namespace Terraria
 				Main.PlaySound(13, i * 16, j * 16);
 				if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
-					switch (type)
+					switch ((EntityID.TileID)type)
 					{
-						case 12:
-							Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.LIFE_CRYSTAL);
+						case EntityID.TileID.LIFE_CRYSTAL:
+							Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.LIFE_CRYSTAL);
 							break;
-						case 31:
+						case EntityID.TileID.SHADOW_ORB:
 							{
 								if (genRand.Next(2) == 0)
 								{
@@ -11824,21 +11603,21 @@ namespace Terraria
 								{
 									case 0:
 										{
-											Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.MUSKET, 1, DoNotBroadcast: false, -1);
-											Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.MUSKET_BALL, genRand.Next(25, 51));
+											Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.MUSKET, 1, DoNotBroadcast: false, -1);
+											Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.MUSKET_BALL, genRand.Next(25, 51));
 											break;
 										}
 									case 1:
-										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.VILETHORN, 1, DoNotBroadcast: false, -1);
+										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.VILETHORN, 1, DoNotBroadcast: false, -1);
 										break;
 									case 2:
-										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.BALL_O_HURT, 1, DoNotBroadcast: false, -1);
+										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.BALL_O_HURT, 1, DoNotBroadcast: false, -1);
 										break;
 									case 3:
-										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.ORB_OF_LIGHT, 1, DoNotBroadcast: false, -1);
+										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.SHADOW_ORB, 1, DoNotBroadcast: false, -1);
 										break;
 									case 4:
-										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)Item.ID.BAND_OF_STARPOWER, 1, DoNotBroadcast: false, -1);
+										Item.NewItem(num * 16, num2 * 16, 32, 32, (int)EntityID.ItemID.BAND_OF_STARPOWER, 1, DoNotBroadcast: false, -1);
 										break;
 								}
 								HasShadowOrbSmashed = true;
@@ -11850,7 +11629,7 @@ namespace Terraria
 									rect.X = num << 4;
 									rect.Y = num2 << 4;
 									rect.Width = (rect.Height = 0);
-									NPC.SpawnOnPlayer(Player.FindClosest(ref rect), (int)NPC.ID.EATER_OF_WORLDS_HEAD);
+									NPC.SpawnOnPlayer(Player.FindClosest(ref rect), (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD);
 								}
 								else
 								{
@@ -11893,32 +11672,32 @@ namespace Terraria
 			}
 			if (num2 >= 0 && Main.TileStone[num2])
 			{
-				num2 = 1;
+				num2 = (int)EntityID.TileID.STONE;
 			}
 			if (num3 >= 0 && Main.TileStone[num3])
 			{
-				num3 = 1;
+				num3 = (int)EntityID.TileID.STONE;
 			}
 			if (num >= 0 && Main.TileStone[num])
 			{
-				num = 1;
+				num = (int)EntityID.TileID.STONE;
 			}
 			if (num4 >= 0 && Main.TileStone[num4])
 			{
-				num4 = 1;
+				num4 = (int)EntityID.TileID.STONE;
 			}
-			switch (num4)
+			switch ((EntityID.TileID)num4)
 			{
-				case 23:
+				case EntityID.TileID.CORRUPT_GRASS:
 					num4 = 2;
 					break;
-				case 60:
+				case EntityID.TileID.JUNGLE_GRASS:
 					num4 = 2;
 					break;
-				case 109:
+				case EntityID.TileID.HALLOWED_GRASS:
 					num4 = 2;
 					break;
-				case 147:
+				case EntityID.TileID.SNOW:
 					num4 = 2;
 					break;
 			}
@@ -12008,7 +11787,7 @@ namespace Terraria
 					KillTile(i, j);
 				}
 			}
-			else if (num4 == -1 || num4 == 23)
+			else if (num4 == (int)EntityID.TileID.NONE || num4 == (int)EntityID.TileID.CORRUPT_GRASS)
 			{
 				KillTile(i, j);
 			}
@@ -12075,16 +11854,16 @@ namespace Terraria
 				{
 					return;
 				}
-				while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == 80)
+				while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == (byte)EntityID.TileID.CACTUS)
 				{
 					num++;
-					if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != 80)
+					if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != (byte)EntityID.TileID.CACTUS)
 					{
-						if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == 80 && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == 80 && num2 >= i)
+						if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 >= i)
 						{
 							num2--;
 						}
-						if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == 80 && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == 80 && num2 <= i)
+						if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 <= i)
 						{
 							num2++;
 						}
@@ -12103,27 +11882,27 @@ namespace Terraria
 				int num9 = Main.TileSet[i + 1, j + 1].Type;
 				if (Main.TileSet[i - 1, j].IsActive == 0)
 				{
-					num4 = -1;
+					num4 = (int)EntityID.TileID.NONE;
 				}
 				if (Main.TileSet[i + 1, j].IsActive == 0)
 				{
-					num5 = -1;
+					num5 = (int)EntityID.TileID.NONE;
 				}
 				if (Main.TileSet[i, j - 1].IsActive == 0)
 				{
-					num6 = -1;
+					num6 = (int)EntityID.TileID.NONE;
 				}
 				if (Main.TileSet[i, j + 1].IsActive == 0)
 				{
-					num7 = -1;
+					num7 = (int)EntityID.TileID.NONE;
 				}
 				if (Main.TileSet[i - 1, j + 1].IsActive == 0)
 				{
-					num8 = -1;
+					num8 = (int)EntityID.TileID.NONE;
 				}
 				if (Main.TileSet[i + 1, j + 1].IsActive == 0)
 				{
-					num9 = -1;
+					num9 = (int)EntityID.TileID.NONE;
 				}
 				short num10 = Main.TileSet[i, j].FrameX;
 				short num11 = Main.TileSet[i, j].FrameY;
@@ -12268,11 +12047,11 @@ namespace Terraria
 		{
 			int num = j;
 			int num2 = i;
-			if (Main.TileSet[i, j].IsActive == 0 || Main.TileSet[i, j - 1].Liquid > 0 || (Main.TileSet[i, j].Type != 53 && Main.TileSet[i, j].Type != 80 && Main.TileSet[i, j].Type != 112 && Main.TileSet[i, j].Type != 116))
+			if (Main.TileSet[i, j].IsActive == 0 || Main.TileSet[i, j - 1].Liquid > 0 || (Main.TileSet[i, j].Type != (byte)EntityID.TileID.SAND && Main.TileSet[i, j].Type != (byte)EntityID.TileID.CACTUS && Main.TileSet[i, j].Type != (byte)EntityID.TileID.EBONSAND && Main.TileSet[i, j].Type != (byte)EntityID.TileID.PEARLSAND))
 			{
 				return;
 			}
-			if (Main.TileSet[i, j].Type == 53 || Main.TileSet[i, j].Type == 112 || Main.TileSet[i, j].Type == 116)
+			if (Main.TileSet[i, j].Type == (byte)EntityID.TileID.SAND || Main.TileSet[i, j].Type == (byte)EntityID.TileID.EBONSAND || Main.TileSet[i, j].Type == (byte)EntityID.TileID.PEARLSAND)
 			{
 				if (Main.TileSet[i, j - 1].IsActive != 0 || Main.TileSet[i - 1, j - 1].IsActive != 0 || Main.TileSet[i + 1, j - 1].IsActive != 0)
 				{
@@ -12290,7 +12069,7 @@ namespace Terraria
 							{
 								continue;
 							}
-							if (Main.TileSet[k, l].Type == 80)
+							if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.CACTUS)
 							{
 								num3++;
 								if (num3 >= 4)
@@ -12298,7 +12077,7 @@ namespace Terraria
 									return;
 								}
 							}
-							if (Main.TileSet[k, l].Type == 53 || Main.TileSet[k, l].Type == 112 || Main.TileSet[k, l].Type == 116)
+							if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.SAND || Main.TileSet[k, l].Type == (byte)EntityID.TileID.EBONSAND || Main.TileSet[k, l].Type == (byte)EntityID.TileID.PEARLSAND)
 							{
 								num4++;
 							}
@@ -12311,7 +12090,7 @@ namespace Terraria
 				if (num4 > 10)
 				{
 					Main.TileSet[i, j - 1].IsActive = 1;
-					Main.TileSet[i, j - 1].Type = 80;
+					Main.TileSet[i, j - 1].Type = (byte)EntityID.TileID.CACTUS;
 					SquareTileFrame(num2, num - 1);
 					if (Main.NetMode == (byte)NetModeSetting.SERVER)
 					{
@@ -12321,20 +12100,20 @@ namespace Terraria
 			}
 			else
 			{
-				if (Main.TileSet[i, j].Type != 80)
+				if (Main.TileSet[i, j].Type != (byte)EntityID.TileID.CACTUS)
 				{
 					return;
 				}
-				while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == 80)
+				while (Main.TileSet[num2, num].IsActive != 0 && Main.TileSet[num2, num].Type == (byte)EntityID.TileID.CACTUS)
 				{
 					num++;
-					if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != 80)
+					if (Main.TileSet[num2, num].IsActive == 0 || Main.TileSet[num2, num].Type != (byte)EntityID.TileID.CACTUS)
 					{
-						if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == 80 && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == 80 && num2 >= i)
+						if (Main.TileSet[num2 - 1, num].IsActive != 0 && Main.TileSet[num2 - 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 - 1, num - 1].IsActive != 0 && Main.TileSet[num2 - 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 >= i)
 						{
 							num2--;
 						}
-						if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == 80 && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == 80 && num2 <= i)
+						if (Main.TileSet[num2 + 1, num].IsActive != 0 && Main.TileSet[num2 + 1, num].Type == (byte)EntityID.TileID.CACTUS && Main.TileSet[num2 + 1, num - 1].IsActive != 0 && Main.TileSet[num2 + 1, num - 1].Type == (byte)EntityID.TileID.CACTUS && num2 <= i)
 						{
 							num2++;
 						}
@@ -12351,7 +12130,7 @@ namespace Terraria
 				{
 					for (int n = num - num7; n <= num + num5; n++)
 					{
-						if (Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].Type == 80)
+						if (Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].Type == (byte)EntityID.TileID.CACTUS)
 						{
 							num8++;
 						}
@@ -12370,7 +12149,7 @@ namespace Terraria
 						if (Main.TileSet[num2, num - 1].IsActive == 0)
 						{
 							Main.TileSet[num2, num - 1].IsActive = 1;
-							Main.TileSet[num2, num - 1].Type = 80;
+							Main.TileSet[num2, num - 1].Type = (byte)EntityID.TileID.CACTUS;
 							SquareTileFrame(num2, num - 1);
 							if (Main.NetMode == (byte)NetModeSetting.SERVER)
 							{
@@ -12381,7 +12160,7 @@ namespace Terraria
 					}
 					bool flag = false;
 					bool flag2 = false;
-					if (Main.TileSet[num2, num - 1].IsActive != 0 && Main.TileSet[num2, num - 1].Type == 80)
+					if (Main.TileSet[num2, num - 1].IsActive != 0 && Main.TileSet[num2, num - 1].Type == (byte)EntityID.TileID.CACTUS)
 					{
 						if (Main.TileSet[num2 - 1, num].IsActive == 0 && Main.TileSet[num2 - 2, num + 1].IsActive == 0 && Main.TileSet[num2 - 1, num - 1].IsActive == 0 && Main.TileSet[num2 - 1, num + 1].IsActive == 0 && Main.TileSet[num2 - 2, num].IsActive == 0)
 						{
@@ -12396,7 +12175,7 @@ namespace Terraria
 					if (num9 == 0 && flag)
 					{
 						Main.TileSet[num2 - 1, num].IsActive = 1;
-						Main.TileSet[num2 - 1, num].Type = 80;
+						Main.TileSet[num2 - 1, num].Type = (byte)EntityID.TileID.CACTUS;
 						SquareTileFrame(num2 - 1, num);
 						if (Main.NetMode == (byte)NetModeSetting.SERVER)
 						{
@@ -12406,7 +12185,7 @@ namespace Terraria
 					else if (num9 == 1 && flag2)
 					{
 						Main.TileSet[num2 + 1, num].IsActive = 1;
-						Main.TileSet[num2 + 1, num].Type = 80;
+						Main.TileSet[num2 + 1, num].Type = (byte)EntityID.TileID.CACTUS;
 						SquareTileFrame(num2 + 1, num);
 						if (Main.NetMode == (byte)NetModeSetting.SERVER)
 						{
@@ -12422,7 +12201,7 @@ namespace Terraria
 						if ((Main.TileSet[num2 + 1, num - 1].IsActive == 0 || Main.TileSet[num2 + 1, num - 1].Type != 80) && Main.TileSet[num2, num - 1].IsActive == 0)
 						{
 							Main.TileSet[num2, num - 1].IsActive = 1;
-							Main.TileSet[num2, num - 1].Type = 80;
+							Main.TileSet[num2, num - 1].Type = (byte)EntityID.TileID.CACTUS;
 							SquareTileFrame(num2, num - 1);
 							if (Main.NetMode == (byte)NetModeSetting.SERVER)
 							{
@@ -12431,10 +12210,10 @@ namespace Terraria
 						}
 					}
 				}
-				else if (Main.TileSet[num2, num - 1].IsActive == 0 && Main.TileSet[num2, num - 2].IsActive == 0 && Main.TileSet[num2 + num6, num - 1].IsActive == 0 && Main.TileSet[num2 - num6, num - 1].IsActive != 0 && Main.TileSet[num2 - num6, num - 1].Type == 80)
+				else if (Main.TileSet[num2, num - 1].IsActive == 0 && Main.TileSet[num2, num - 2].IsActive == 0 && Main.TileSet[num2 + num6, num - 1].IsActive == 0 && Main.TileSet[num2 - num6, num - 1].IsActive != 0 && Main.TileSet[num2 - num6, num - 1].Type == (byte)EntityID.TileID.CACTUS)
 				{
 					Main.TileSet[num2, num - 1].IsActive = 1;
-					Main.TileSet[num2, num - 1].Type = 80;
+					Main.TileSet[num2, num - 1].Type = (byte)EntityID.TileID.CACTUS;
 					SquareTileFrame(num2, num - 1);
 					if (Main.NetMode == (byte)NetModeSetting.SERVER)
 					{
@@ -12465,7 +12244,7 @@ namespace Terraria
 					if (num3 < num2 + 2)
 					{
 						int num4 = (Main.TileSet[k, num3].FrameX / 18) & 1;
-						if (num4 == k - num && Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == 28 && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
+						if (num4 == k - num && Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == (byte)EntityID.TileID.POT && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
 						{
 							num3++;
 							continue;
@@ -12493,12 +12272,12 @@ namespace Terraria
 						rect.Y = j << 4;
 						rect.Width = (rect.Height = 16);
 						Main.PlaySound(13, rect.X, rect.Y);
-						Gore.NewGore(new Vector2(rect.X, rect.Y), default, 51);
-						Gore.NewGore(new Vector2(rect.X, rect.Y), default, 52);
-						Gore.NewGore(new Vector2(rect.X, rect.Y), default, 53);
-						if (genRand.Next(40) == 0 && (Main.TileSet[num, num2].WallType == 7 || Main.TileSet[num, num2].WallType == 8 || Main.TileSet[num, num2].WallType == 9))
+						Gore.NewGore(new Vector2(rect.X, rect.Y), default, (int)EntityID.GoreID.LIGHT_BROWN_POT1);
+						Gore.NewGore(new Vector2(rect.X, rect.Y), default, (int)EntityID.GoreID.LIGHT_BROWN_POT2);
+						Gore.NewGore(new Vector2(rect.X, rect.Y), default, (int)EntityID.GoreID.LIGHT_BROWN_POT3);
+						if (genRand.Next(40) == 0 && (Main.TileSet[num, num2].WallType == (byte)EntityID.WallID.BLUE_DUNGEON_UNSAFE || Main.TileSet[num, num2].WallType == (byte)EntityID.WallID.GREEN_DUNGEON_UNSAFE || Main.TileSet[num, num2].WallType == (byte)EntityID.WallID.PINK_DUNGEON_UNSAFE))
 						{
-							Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GOLDEN_KEY);
+							Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GOLDEN_KEY);
 						}
 						else if (genRand.Next(45) == 0)
 						{
@@ -12507,19 +12286,19 @@ namespace Terraria
 								int num5 = genRand.Next(4);
 								if (num5 == 0)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.IRONSKIN_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.IRONSKIN_POTION);
 								}
 								if (num5 == 1)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SHINE_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SHINE_POTION);
 								}
 								if (num5 == 2)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.NIGHT_OWL_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.NIGHT_OWL_POTION);
 								}
 								if (num5 == 3)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SWIFTNESS_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SWIFTNESS_POTION);
 								}
 							}
 							else if (j < Main.RockLayer)
@@ -12527,31 +12306,31 @@ namespace Terraria
 								int num6 = genRand.Next(7);
 								if (num6 == 0)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.REGENERATION_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.REGENERATION_POTION);
 								}
 								if (num6 == 1)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SHINE_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SHINE_POTION);
 								}
 								if (num6 == 2)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.NIGHT_OWL_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.NIGHT_OWL_POTION);
 								}
 								if (num6 == 3)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SWIFTNESS_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SWIFTNESS_POTION);
 								}
 								if (num6 == 4)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.ARCHERY_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.ARCHERY_POTION);
 								}
 								if (num6 == 5)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GILLS_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GILLS_POTION);
 								}
 								if (num6 == 6)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.HUNTER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.HUNTER_POTION);
 								}
 							}
 							else if (j < Main.MaxTilesY - 200)
@@ -12559,43 +12338,43 @@ namespace Terraria
 								int num7 = genRand.Next(10);
 								if (num7 == 0)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SPELUNKER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SPELUNKER_POTION);
 								}
 								if (num7 == 1)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.FEATHERFALL_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.FEATHERFALL_POTION);
 								}
 								if (num7 == 2)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.NIGHT_OWL_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.NIGHT_OWL_POTION);
 								}
 								if (num7 == 3)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.WATER_WALKING_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.WATER_WALKING_POTION);
 								}
 								if (num7 == 4)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.ARCHERY_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.ARCHERY_POTION);
 								}
 								if (num7 == 5)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GRAVITATION_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GRAVITATION_POTION);
 								}
 								if (num7 == 6)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.THORNS_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.THORNS_POTION);
 								}
 								if (num7 == 7)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.WATER_WALKING_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.WATER_WALKING_POTION);
 								}
 								if (num7 == 8)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.INVISIBILITY_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.INVISIBILITY_POTION);
 								}
 								if (num7 == 9)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.HUNTER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.HUNTER_POTION);
 								}
 							}
 							else
@@ -12603,51 +12382,51 @@ namespace Terraria
 								int num8 = genRand.Next(12);
 								if (num8 == 0)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SPELUNKER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SPELUNKER_POTION);
 								}
 								if (num8 == 1)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.FEATHERFALL_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.FEATHERFALL_POTION);
 								}
 								if (num8 == 2)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.MANA_REGENERATION_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.MANA_REGENERATION_POTION);
 								}
 								if (num8 == 3)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.OBSIDIAN_SKIN_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.OBSIDIAN_SKIN_POTION);
 								}
 								if (num8 == 4)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.MAGIC_POWER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.MAGIC_POWER_POTION);
 								}
 								if (num8 == 5)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.INVISIBILITY_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.INVISIBILITY_POTION);
 								}
 								if (num8 == 6)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.HUNTER_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.HUNTER_POTION);
 								}
 								if (num8 == 7)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GRAVITATION_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GRAVITATION_POTION);
 								}
 								if (num8 == 8)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.THORNS_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.THORNS_POTION);
 								}
 								if (num8 == 9)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.WATER_WALKING_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.WATER_WALKING_POTION);
 								}
 								if (num8 == 10)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.OBSIDIAN_SKIN_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.OBSIDIAN_SKIN_POTION);
 								}
 								if (num8 == 11)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.BATTLE_POTION);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.BATTLE_POTION);
 								}
 							}
 						}
@@ -12659,7 +12438,7 @@ namespace Terraria
 								Player player = Player.FindClosest(ref rect);
 								if (player.statLife < player.StatLifeMax)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.HEART);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.HEART);
 								}
 							}
 							else if (num9 == 1)
@@ -12667,7 +12446,7 @@ namespace Terraria
 								Player player2 = Player.FindClosest(ref rect);
 								if (player2.statMana < player2.statManaMax)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.STAR);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.STAR);
 								}
 							}
 							else if (num9 == 2)
@@ -12675,42 +12454,42 @@ namespace Terraria
 								int stack = Main.Rand.Next(1, 6);
 								if (Main.TileSet[i, j].Liquid > 0)
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GLOWSTICK, stack);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GLOWSTICK, stack);
 								}
 								else
 								{
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.TORCH, stack);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.TORCH, stack);
 								}
 							}
 							else if (num9 == 3)
 							{
-								int type = (int)Item.ID.WOODEN_ARROW;
+								int type = (int)EntityID.ItemID.WOODEN_ARROW;
 								if (j < Main.RockLayer && genRand.Next(2) == 0)
 								{
-									type = ((!Main.InHardMode) ? (int)Item.ID.SHURIKEN : (int)Item.ID.GRENADE);
+									type = ((!Main.InHardMode) ? (int)EntityID.ItemID.SHURIKEN : (int)EntityID.ItemID.GRENADE);
 								}
 								if (j > Main.MaxTilesY - 200)
 								{
-									type = (int)Item.ID.HELLFIRE_ARROW;
+									type = (int)EntityID.ItemID.HELLFIRE_ARROW;
 								}
 								else if (Main.InHardMode)
 								{
-									type = ((Main.Rand.Next(2) != 0) ? (int)Item.ID.UNHOLY_ARROW : (int)Item.ID.SILVER_BULLET);
+									type = ((Main.Rand.Next(2) != 0) ? (int)EntityID.ItemID.UNHOLY_ARROW : (int)EntityID.ItemID.SILVER_BULLET);
 								}
 								Item.NewItem(rect.X, rect.Y, 16, 16, type, Main.Rand.Next(8) + 3);
 							}
 							else if (num9 == 4)
 							{
-								int type2 = (int)Item.ID.LESSER_HEALING_POTION;
+								int type2 = (int)EntityID.ItemID.LESSER_HEALING_POTION;
 								if (j > Main.MaxTilesY - 200 || Main.InHardMode)
 								{
-									type2 = (int)Item.ID.HEALING_POTION;
+									type2 = (int)EntityID.ItemID.HEALING_POTION;
 								}
 								Item.NewItem(rect.X, rect.Y, 16, 16, type2);
 							}
 							else if (num9 == 5 && j > Main.RockLayer)
 							{
-								Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.BOMB, Main.Rand.Next(4) + 1);
+								Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.BOMB, Main.Rand.Next(4) + 1);
 							}
 							else
 							{
@@ -12764,7 +12543,7 @@ namespace Terraria
 										if (num11 > 0)
 										{
 											num10 -= 1000000 * num11;
-											Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.PLATINUM_COIN, num11);
+											Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.PLATINUM_COIN, num11);
 										}
 										continue;
 									}
@@ -12782,7 +12561,7 @@ namespace Terraria
 										if (num12 > 0)
 										{
 											num10 -= 10000 * num12;
-											Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.GOLD_COIN, num12);
+											Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.GOLD_COIN, num12);
 										}
 										continue;
 									}
@@ -12800,7 +12579,7 @@ namespace Terraria
 										if (num13 > 0)
 										{
 											num10 -= 100 * num13;
-											Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.SILVER_COIN, num13);
+											Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.SILVER_COIN, num13);
 										}
 										continue;
 									}
@@ -12818,7 +12597,7 @@ namespace Terraria
 										num14 = 1;
 									}
 									num10 -= num14;
-									Item.NewItem(rect.X, rect.Y, 16, 16, (int)Item.ID.COPPER_COIN, num14);
+									Item.NewItem(rect.X, rect.Y, 16, 16, (int)EntityID.ItemID.COPPER_COIN, num14);
 								}
 							}
 						}
@@ -12857,7 +12636,7 @@ namespace Terraria
 					{
 						try
 						{
-							if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == 21)
+							if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == (byte)EntityID.TileID.CHEST)
 							{
 								return -1;
 							}
@@ -12874,19 +12653,19 @@ namespace Terraria
 				Main.TileSet[x, y - 1].IsActive = 1;
 				Main.TileSet[x, y - 1].FrameY = 0;
 				Main.TileSet[x, y - 1].FrameX = (short)(36 * style);
-				Main.TileSet[x, y - 1].Type = 21;
+				Main.TileSet[x, y - 1].Type = (byte)EntityID.TileID.CHEST;
 				Main.TileSet[x + 1, y - 1].IsActive = 1;
 				Main.TileSet[x + 1, y - 1].FrameY = 0;
 				Main.TileSet[x + 1, y - 1].FrameX = (short)(18 + 36 * style);
-				Main.TileSet[x + 1, y - 1].Type = 21;
+				Main.TileSet[x + 1, y - 1].Type = (byte)EntityID.TileID.CHEST;
 				Main.TileSet[x, y].IsActive = 1;
 				Main.TileSet[x, y].FrameY = 18;
 				Main.TileSet[x, y].FrameX = (short)(36 * style);
-				Main.TileSet[x, y].Type = 21;
+				Main.TileSet[x, y].Type = (byte)EntityID.TileID.CHEST;
 				Main.TileSet[x + 1, y].IsActive = 1;
 				Main.TileSet[x + 1, y].FrameY = 18;
 				Main.TileSet[x + 1, y].FrameX = (short)(18 + 36 * style);
-				Main.TileSet[x + 1, y].Type = 21;
+				Main.TileSet[x + 1, y].Type = (byte)EntityID.TileID.CHEST;
 			}
 			return num;
 		}
@@ -12912,7 +12691,7 @@ namespace Terraria
 					if (num3 < num2 + 2)
 					{
 						int num4 = (Main.TileSet[k, num3].FrameX / 18) & 1;
-						if (Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == 21 && num4 == k - num && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
+						if (Main.TileSet[k, num3].IsActive != 0 && Main.TileSet[k, num3].Type == (byte)EntityID.TileID.CHEST && num4 == k - num && Main.TileSet[k, num3].FrameY == (num3 - num2) * 18)
 						{
 							num3++;
 							continue;
@@ -12922,29 +12701,29 @@ namespace Terraria
 					{
 						break;
 					}
-					int type = (int)Item.ID.CHEST;
+					int type = (int)EntityID.ItemID.CHEST;
 					if (Main.TileSet[i, j].FrameX >= 216)
 					{
-						type = (int)Item.ID.TRASH_CAN;
+						type = (int)EntityID.ItemID.TRASH_CAN;
 					}
 					else if (Main.TileSet[i, j].FrameX >= 180)
 					{
-						type = (int)Item.ID.BARREL;
+						type = (int)EntityID.ItemID.BARREL;
 					}
 					else if (Main.TileSet[i, j].FrameX >= 108)
 					{
-						type = (int)Item.ID.SHADOW_CHEST;
+						type = (int)EntityID.ItemID.SHADOW_CHEST;
 					}
 					else if (Main.TileSet[i, j].FrameX >= 36)
 					{
-						type = (int)Item.ID.GOLD_CHEST;
+						type = (int)EntityID.ItemID.GOLD_CHEST;
 					}
 					ToDestroyObject = true;
 					for (int l = num; l < num + 2; l++)
 					{
 						for (int m = num2; m < num2 + 3; m++)
 						{
-							if (Main.TileSet[l, m].Type == 21 && Main.TileSet[l, m].IsActive != 0)
+							if (Main.TileSet[l, m].Type == (byte)EntityID.TileID.CHEST && Main.TileSet[l, m].IsActive != 0)
 							{
 								Chest.DestroyChest(l, m);
 								KillTile(l, m);
@@ -12982,7 +12761,7 @@ namespace Terraria
 				Main.PlaySound(0, i, j);
 				if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
-					Item.NewItem(i, j, 16, 16, (int)Item.ID.WIRE);
+					Item.NewItem(i, j, 16, 16, (int)EntityID.ItemID.WIRE);
 				}
 				for (int k = 0; k < 3; k++)
 				{
@@ -13004,18 +12783,46 @@ namespace Terraria
 				{
 					return false;
 				}
-				switch (type)
+
+				var leftTile = Main.TileSet[i - 1, j];
+				var rightTile = Main.TileSet[i + 1, j];
+				var belowTile = Main.TileSet[i, j + 1];
+				switch ((EntityID.TileID)type)
 				{
-					case 3:
-					case 24:
-					case 27:
-					case 32:
-					case 51:
-					case 69:
-					case 72:
+					case EntityID.TileID.SHORT_GRASS_PLANTS:
+					case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+					case EntityID.TileID.SUNFLOWER:
+					case EntityID.TileID.CORRUPTION_THORN:
+					case EntityID.TileID.COBWEB:
+					case EntityID.TileID.JUNGLE_THORN:
+					case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 						return Main.TileSet[i, j].Liquid == 0;
-					case 4:
-						if ((Main.TileSet[i - 1, j].IsActive != 0 && (Main.TileSolid[Main.TileSet[i - 1, j].Type] || Main.TileSet[i - 1, j].Type == 124 || (Main.TileSet[i - 1, j].Type == 5 && Main.TileSet[i - 1, j - 1].Type == 5 && Main.TileSet[i - 1, j + 1].Type == 5))) || (Main.TileSet[i + 1, j].IsActive != 0 && (Main.TileSolid[Main.TileSet[i + 1, j].Type] || Main.TileSet[i + 1, j].Type == 124 || (Main.TileSet[i + 1, j].Type == 5 && Main.TileSet[i + 1, j - 1].Type == 5 && Main.TileSet[i + 1, j + 1].Type == 5))) || (Main.TileSet[i, j + 1].IsActive != 0 && Main.TileSolid[Main.TileSet[i, j + 1].Type]))
+					case EntityID.TileID.TORCH:
+						bool leftObstructed =
+							leftTile.IsActive != 0 &&
+							(
+								Main.TileSolid[leftTile.Type] ||
+								leftTile.Type == (byte)EntityID.TileID.WOODEN_BEAM ||
+								(
+									leftTile.Type == (byte)EntityID.TileID.TREE &&
+									Main.TileSet[i - 1, j - 1].Type == (byte)EntityID.TileID.TREE &&
+									Main.TileSet[i - 1, j + 1].Type == (byte)EntityID.TileID.TREE
+								)
+							);
+
+						bool rightObstructed =
+							rightTile.IsActive != 0 &&
+							(
+								Main.TileSolid[rightTile.Type] ||
+								rightTile.Type == (byte)EntityID.TileID.WOODEN_BEAM ||
+								(
+									rightTile.Type == (byte)EntityID.TileID.TREE &&
+									Main.TileSet[i + 1, j - 1].Type == (byte)EntityID.TileID.TREE &&
+									Main.TileSet[i + 1, j + 1].Type == (byte)EntityID.TileID.TREE
+								)
+							);
+
+						if (leftObstructed || rightObstructed || (belowTile.IsActive != 0 && Main.TileSolid[belowTile.Type]))
 						{
 							if (style != 8)
 							{
@@ -13024,7 +12831,7 @@ namespace Terraria
 							return true;
 						}
 						return false;
-					case 10:
+					case EntityID.TileID.DOOR_CLOSED:
 						if (Main.TileSet[i, j - 1].IsActive == 0 && Main.TileSet[i, j - 2].IsActive == 0 && Main.TileSet[i, j - 3].IsActive != 0 && Main.TileSolid[Main.TileSet[i, j - 3].Type])
 						{
 							j--;
@@ -13036,56 +12843,80 @@ namespace Terraria
 							return true;
 						}
 						return false;
-					case 20:
-						if (Main.TileSet[i, j + 1].IsActive != 0 && (Main.TileSet[i, j + 1].Type == 2 || Main.TileSet[i, j + 1].Type == 109 || Main.TileSet[i, j + 1].Type == 147))
+					case EntityID.TileID.SAPLING:
+						if (belowTile.IsActive != 0 && (belowTile.Type == (byte)EntityID.TileID.GRASS || belowTile.Type == (byte)EntityID.TileID.HALLOWED_GRASS || belowTile.Type == (byte)EntityID.TileID.SNOW))
 						{
 							return Main.TileSet[i, j].Liquid == 0;
 						}
 						return false;
-					case 2:
-					case 23:
-					case 109:
+					case EntityID.TileID.GRASS:
+					case EntityID.TileID.CORRUPT_GRASS:
+					case EntityID.TileID.HALLOWED_GRASS:
 						if (Main.TileSet[i, j].Type == 0)
 						{
 							return Main.TileSet[i, j].IsActive != 0;
 						}
 						return false;
-					case 60:
-					case 70:
-						if (Main.TileSet[i, j].Type == 59)
+					case EntityID.TileID.JUNGLE_GRASS:
+					case EntityID.TileID.MUSHROOM_GRASS:
+						if (Main.TileSet[i, j].Type == (byte)EntityID.TileID.MUD)
 						{
 							return Main.TileSet[i, j].IsActive != 0;
 						}
 						return false;
-					case 61:
-					case 71:
-						if (j + 1 < Main.MaxTilesY && Main.TileSet[i, j + 1].IsActive != 0)
+					case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+					case EntityID.TileID.GLOWING_MUSHROOM:
+						if (j + 1 < Main.MaxTilesY && belowTile.IsActive != 0)
 						{
-							return Main.TileSet[i, j + 1].Type == type - 1;
+							return belowTile.Type == type - 1;
 						}
 						return false;
-					case 81:
-						if (Main.TileSet[i - 1, j].IsActive != 0 || Main.TileSet[i + 1, j].IsActive != 0 || Main.TileSet[i, j - 1].IsActive != 0)
+					case EntityID.TileID.CORAL:
+						if (leftTile.IsActive != 0 || rightTile.IsActive != 0 || Main.TileSet[i, j - 1].IsActive != 0)
 						{
 							return false;
 						}
-						if (Main.TileSet[i, j + 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, j + 1].Type])
+						if (belowTile.IsActive == 0 || !Main.TileSolid[belowTile.Type])
 						{
 							return false;
 						}
 						break;
-					case 136:
-						if ((Main.TileSet[i - 1, j].IsActive == 0 || (!Main.TileSolid[Main.TileSet[i - 1, j].Type] && Main.TileSet[i - 1, j].Type != 124 && (Main.TileSet[i - 1, j].Type != 5 || Main.TileSet[i - 1, j - 1].Type != 5 || Main.TileSet[i - 1, j + 1].Type != 5))) && (Main.TileSet[i + 1, j].IsActive == 0 || (!Main.TileSolid[Main.TileSet[i + 1, j].Type] && Main.TileSet[i + 1, j].Type != 124 && (Main.TileSet[i + 1, j].Type != 5 || Main.TileSet[i + 1, j - 1].Type != 5 || Main.TileSet[i + 1, j + 1].Type != 5))))
+					case EntityID.TileID.SWITCH:
+						bool leftUnobstructed =
+							leftTile.IsActive == 0 ||
+							(
+								!Main.TileSolid[leftTile.Type] &&
+								leftTile.Type != (byte)EntityID.TileID.WOODEN_BEAM &&
+								(
+									leftTile.Type != (byte)EntityID.TileID.TREE ||
+									Main.TileSet[i - 1, j - 1].Type != (byte)EntityID.TileID.TREE ||
+									Main.TileSet[i - 1, j + 1].Type != (byte)EntityID.TileID.TREE
+								)
+							);
+
+						bool rightUnobstructed =
+							rightTile.IsActive == 0 ||
+							(
+								!Main.TileSolid[rightTile.Type] &&
+								rightTile.Type != (byte)EntityID.TileID.WOODEN_BEAM &&
+								(
+									rightTile.Type != (byte)EntityID.TileID.TREE ||
+									Main.TileSet[i + 1, j - 1].Type != (byte)EntityID.TileID.TREE ||
+									Main.TileSet[i + 1, j + 1].Type != (byte)EntityID.TileID.TREE
+								)
+							);
+
+						if (leftUnobstructed && rightUnobstructed)
 						{
-							if (Main.TileSet[i, j + 1].IsActive != 0)
+							if (belowTile.IsActive != 0)
 							{
-								return Main.TileSolid[Main.TileSet[i, j + 1].Type];
+								return Main.TileSolid[belowTile.Type];
 							}
 							return false;
 						}
 						return true;
-					case 129:
-					case 149:
+					case EntityID.TileID.CRYSTAL_SHARD:
+					case EntityID.TileID.XMAS_LIGHT:
 						if (!SolidTileUnsafe(i - 1, j) && !SolidTileUnsafe(i + 1, j) && !SolidTileUnsafe(i, j - 1))
 						{
 							return SolidTileUnsafe(i, j + 1);
@@ -13106,28 +12937,31 @@ namespace Terraria
 				{
 					ptr->FrameX = 0;
 					ptr->FrameY = 0;
-					switch (type)
+					switch ((EntityID.TileID)type)
 					{
-						case 3:
-						case 24:
-						case 110:
-							if (j + 1 >= Main.MaxTilesY || ptr[1].IsActive == 0 || ((type != 3 || ptr[1].Type != 2) && (type != 24 || ptr[1].Type != 23) && (type != 3 || ptr[1].Type != 78) && (type != 110 || ptr[1].Type != 109)))
+						case EntityID.TileID.SHORT_GRASS_PLANTS:
+						case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+						case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+							if (j + 1 >= Main.MaxTilesY || ptr[1].IsActive == 0 || 
+								(
+									(type != (int)EntityID.TileID.SHORT_GRASS_PLANTS || ptr[1].Type != (byte)EntityID.TileID.GRASS) && 
+									(type != (int)EntityID.TileID.SHORT_CORRUPT_PLANTS || ptr[1].Type != (byte)EntityID.TileID.CORRUPT_GRASS) && 
+									(type != (int)EntityID.TileID.SHORT_GRASS_PLANTS || ptr[1].Type != (byte)EntityID.TileID.CLAY_POT) && 
+									(type != (int)EntityID.TileID.SHORT_HALLOWED_PLANTS || ptr[1].Type != (byte)EntityID.TileID.HALLOWED_GRASS)
+								)) { break; }
+							if (type == (int)EntityID.TileID.SHORT_CORRUPT_PLANTS && genRand.Next(13) == 0)
 							{
-								break;
-							}
-							if (type == 24 && genRand.Next(13) == 0)
-							{
-								type = 32;
+								type = (int)EntityID.TileID.CORRUPTION_THORN;
 								flag = true;
 							}
-							else if (ptr[1].Type == 78)
+							else if (ptr[1].Type == (byte)EntityID.TileID.CLAY_POT)
 							{
 								ptr->FrameX = (short)(genRand.Next(2) * 18 + 108);
 								flag = true;
 							}
-							else if (ptr->WallType == 0 && ptr[1].WallType == 0)
+							else if (ptr->WallType == 0 && ptr[1].WallType == (byte)EntityID.WallID.NONE)
 							{
-								if (genRand.Next(50) == 0 || (type == 24 && genRand.Next(40) == 0))
+								if (genRand.Next(50) == 0 || (type == (int)EntityID.TileID.SHORT_CORRUPT_PLANTS && genRand.Next(40) == 0))
 								{
 									ptr->FrameX = 144;
 								}
@@ -13147,11 +12981,11 @@ namespace Terraria
 								ptr->Type = (byte)type;
 							}
 							break;
-						case 61:
+						case EntityID.TileID.SHORT_JUNGLE_PLANTS:
 							ptr->IsActive = 1;
 							if (genRand.Next(16) == 0 && j > Main.WorldSurface)
 							{
-								ptr->Type = 69;
+								ptr->Type = (byte)EntityID.TileID.JUNGLE_THORN;
 							}
 							else
 							{
@@ -13175,179 +13009,174 @@ namespace Terraria
 							}
 							flag = true;
 							break;
-						case 71:
+						case EntityID.TileID.GLOWING_MUSHROOM:
 							ptr->IsActive = 1;
 							ptr->Type = (byte)type;
 							ptr->FrameX = (short)(genRand.Next(5) * 18);
 							flag = true;
 							break;
-						case 129:
+						case EntityID.TileID.CRYSTAL_SHARD:
 							ptr->IsActive = 1;
 							ptr->Type = (byte)type;
 							ptr->FrameX = (short)(genRand.Next(8) * 18);
 							flag = true;
 							break;
-						case 136:
+						case EntityID.TileID.SWITCH:
 							ptr->IsActive = 1;
 							ptr->Type = (byte)type;
 							flag = true;
 							break;
-						case 4:
+						case EntityID.TileID.TORCH:
 							ptr->IsActive = 1;
 							ptr->Type = (byte)type;
 							ptr->FrameY = (short)(22 * style);
 							flag = true;
 							break;
-						case 10:
+						case EntityID.TileID.DOOR_CLOSED:
 							flag = PlaceDoor(i, j, type);
 							break;
-						case 128:
+						case EntityID.TileID.MANNEQUIN:
 							flag = PlaceMan(i, j, style);
 							break;
-						case 149:
+						case EntityID.TileID.XMAS_LIGHT:
 							ptr->IsActive = 1;
 							ptr->Type = (byte)type;
 							ptr->FrameX = (short)(18 * style);
 							flag = true;
 							break;
-						case 139:
+						case EntityID.TileID.MUSIC_BOX:
 							flag = PlaceMB(i, j, type, style);
 							break;
-						case 34:
-						case 35:
-						case 36:
-						case 106:
+						case EntityID.TileID.CHANDELIER:
+						case EntityID.TileID.JACK_O_LANTERN:
+						case EntityID.TileID.PRESENT:
+						case EntityID.TileID.SAWMILL:
 							flag = Place3x3(i, j, type);
 							break;
-						case 13:
-						case 33:
-						case 49:
-						case 50:
-						case 78:
+						case EntityID.TileID.BOTTLE:
+						case EntityID.TileID.CANDLE:
+						case EntityID.TileID.WATER_CANDLE:
+						case EntityID.TileID.BOOK:
+						case EntityID.TileID.CLAY_POT:
 							flag = PlaceOnTable1x1(i, j, type, style);
 							break;
-						case 14:
-						case 26:
-						case 86:
-						case 87:
-						case 88:
-						case 89:
-						case 114:
+						case EntityID.TileID.TABLE:
+						case EntityID.TileID.DEMON_ALTAR:
+						case EntityID.TileID.LOOM:
+						case EntityID.TileID.PIANO:
+						case EntityID.TileID.DRESSER:
+						case EntityID.TileID.BENCH:
+						case EntityID.TileID.TINKERERS_WORKSHOP:
 #if VERSION_101
-						case 150:
+						case EntityID.TileID.CAMPFIRE:
 #endif
 							flag = Place3x2(i, j, type);
 							break;
-						case 15:
-						case 20:
+						case EntityID.TileID.CHAIR:
+						case EntityID.TileID.SAPLING:
 							flag = Place1x2(i, j, type, style);
 							break;
-						case 16:
-						case 18:
-						case 29:
-						case 103:
-						case 134:
+						case EntityID.TileID.ANVIL:
+						case EntityID.TileID.WORK_BENCH:
+						case EntityID.TileID.PIGGYBANK:
+						case EntityID.TileID.BOWL:
+						case EntityID.TileID.MYTHRIL_ANVIL:
 							flag = Place2x1(i, j, type);
 							break;
-						case 92:
-						case 93:
+						case EntityID.TileID.LAMP_POST:
+						case EntityID.TileID.TIKI_TORCH:
 							flag = Place1xX(i, j, type);
 							break;
-						case 104:
-						case 105:
+						case EntityID.TileID.GRANDFATHERS_CLOCK:
+						case EntityID.TileID.STATUE:
 							flag = Place2xX(i, j, type, style);
 							break;
-						case 17:
-						case 77:
-						case 133:
+						case EntityID.TileID.FURNACE:
+						case EntityID.TileID.HELLFORGE:
+						case EntityID.TileID.ADAMANTITE_FORGE:
 							flag = Place3x2(i, j, type);
 							break;
-						case 21:
+						case EntityID.TileID.BED:
+						case EntityID.TileID.BATHTUB:
+							flag = Place4x2(i, j, type, (plr < 0) ? 1 : Main.PlayerSet[plr].direction);
+							break;
+						case EntityID.TileID.CHEST:
 							flag = PlaceChest(i, j, notNearOtherChests: false, style) >= 0;
 							break;
-						case 91:
+						case EntityID.TileID.BANNER:
 							flag = PlaceBanner(i, j, type, style);
 							break;
-						case 135:
-						case 141:
-						case 144:
+						case EntityID.TileID.PRESSURE_PLATE:
+						case EntityID.TileID.EXPLOSIVES:
+						case EntityID.TileID.TIMER:
 							flag = Place1x1(i, j, type, style);
 							break;
-						case 101:
-						case 102:
+						case EntityID.TileID.BOOKCASE:
+						case EntityID.TileID.THRONE:
 							flag = Place3x4(i, j, type);
 							break;
-						case 27:
+						case EntityID.TileID.SUNFLOWER:
 							flag = PlaceSunflower(i, j);
 							break;
-						case 28:
+						case EntityID.TileID.POT:
 							flag = PlacePot(i, j);
 							break;
-						case 42:
+						case EntityID.TileID.CHAIN_LANTERN:
 							flag = Place1x2Top(i, j, type);
 							break;
-						case 55:
-						case 85:
+						case EntityID.TileID.SIGN:
+						case EntityID.TileID.TOMBSTONE:
 							flag = PlaceSign(i, j, type);
 							break;
-						case 82:
-						case 83:
-						case 84:
+						case EntityID.TileID.DAYBLOOM_GROWING:
+						case EntityID.TileID.DAYBLOOM_MATURE:
+						case EntityID.TileID.DAYBLOOM_BLOOMING:
 							flag = PlaceAlch(i, j, style);
 							break;
+						case EntityID.TileID.KEG:
+						case EntityID.TileID.CHINESE_LANTERN:
+						case EntityID.TileID.COOKING_POT:
+						case EntityID.TileID.SAFE:
+						case EntityID.TileID.SKULL_LANTERN:
+						case EntityID.TileID.TRASH_CAN:
+						case EntityID.TileID.CANDELABRA:
+						case EntityID.TileID.CRYSTAL_BALL:
+						case EntityID.TileID.DISCO_BALL:
+						case EntityID.TileID.LEVER:
+						case EntityID.TileID.BOULDER:
+						case EntityID.TileID.PUMP_IN:
+						case EntityID.TileID.PUMP_OUT:
+							flag = Place2x2(i, j, type);
+							break;
 						default:
-							switch (type)
+							ptr->IsActive = 1;
+							ptr->Type = (byte)type;
+							switch ((EntityID.TileID)type)
 							{
-								case 94:
-								case 95:
-								case 96:
-								case 97:
-								case 98:
-								case 99:
-								case 100:
-								case 125:
-								case 126:
-								case 132:
-								case 138:
-								case 142:
-								case 143:
-									flag = Place2x2(i, j, type);
+								case EntityID.TileID.CORAL:
+									ptr->FrameX = (short)(26 * genRand.Next(6));
 									break;
-								case 79:
-								case 90:
-									flag = Place4x2(i, j, type, (plr < 0) ? 1 : Main.PlayerSet[plr].direction);
-									break;
-								default:
-									ptr->IsActive = 1;
-									ptr->Type = (byte)type;
-									switch (type)
+								case EntityID.TileID.TRAP:
+									if (style == 1)
 									{
-										case 81:
-											ptr->FrameX = (short)(26 * genRand.Next(6));
-											break;
-										case 137:
-											if (style == 1)
-											{
-												ptr->FrameX = 18;
-											}
-											break;
+										ptr->FrameX = 18;
 									}
-									flag = true;
 									break;
 							}
+							flag = true;
 							break;
 					}
 					if (flag && !ToMute && !Gen)
 					{
 						SquareTileFrame(i, j);
-						if (type == 127)
+						if (type == (int)EntityID.TileID.ICE)
 						{
 							Main.PlaySound(2, i * 16, j * 16, 30);
 						}
 						else
 						{
 							Main.PlaySound(0, i * 16, j * 16);
-							if (type == 22 || type == 140)
+							if (type == (int)EntityID.TileID.DEMONITE_ORE || type == (int)EntityID.TileID.DEMONITE_BRICK)
 							{
 								Main.DustSet.NewDust(i * 16, j * 16, 16, 16, 14);
 								Main.DustSet.NewDust(i * 16, j * 16, 16, 16, 14);
@@ -13364,7 +13193,7 @@ namespace Terraria
 			for (int num = numMechs - 1; num >= 0; num--)
 			{
 				mech[num].Time--;
-				if (Main.TileSet[mech[num].X, mech[num].Y].IsActive != 0 && Main.TileSet[mech[num].X, mech[num].Y].Type == 144)
+				if (Main.TileSet[mech[num].X, mech[num].Y].IsActive != 0 && Main.TileSet[mech[num].X, mech[num].Y].Type == (byte)EntityID.TileID.TIMER)
 				{
 					if (Main.TileSet[mech[num].X, mech[num].Y].FrameY == 0)
 					{
@@ -13398,7 +13227,7 @@ namespace Terraria
 				}
 				if (mech[num].Time <= 0)
 				{
-					if (Main.TileSet[mech[num].X, mech[num].Y].IsActive != 0 && Main.TileSet[mech[num].X, mech[num].Y].Type == 144)
+					if (Main.TileSet[mech[num].X, mech[num].Y].IsActive != 0 && Main.TileSet[mech[num].X, mech[num].Y].Type == (byte)EntityID.TileID.TIMER)
 					{
 						Main.TileSet[mech[num].X, mech[num].Y].FrameY = 0;
 						NetMessage.SendTile(mech[num].X, mech[num].Y);
@@ -13435,13 +13264,13 @@ namespace Terraria
 
 		public static void HitSwitch(int i, int j)
 		{
-			switch (Main.TileSet[i, j].Type)
+			switch ((EntityID.TileID)Main.TileSet[i, j].Type)
 			{
-				case 135:
+				case EntityID.TileID.PRESSURE_PLATE:
 					Main.PlaySound(28, i * 16, j * 16, 0);
 					TripWire(i, j);
 					break;
-				case 136:
+				case EntityID.TileID.SWITCH:
 					if (Main.TileSet[i, j].FrameY == 0)
 					{
 						Main.TileSet[i, j].FrameY = 18;
@@ -13453,7 +13282,7 @@ namespace Terraria
 					Main.PlaySound(28, i * 16, j * 16, 0);
 					TripWire(i, j);
 					break;
-				case 144:
+				case EntityID.TileID.TIMER:
 					if (Main.TileSet[i, j].FrameY == 0)
 					{
 						Main.TileSet[i, j].FrameY = 18;
@@ -13468,7 +13297,7 @@ namespace Terraria
 					}
 					Main.PlaySound(28, i * 16, j * 16, 0);
 					break;
-				case 132:
+				case EntityID.TileID.LEVER:
 					{
 						int num = i;
 						int num2 = j;
@@ -13486,7 +13315,7 @@ namespace Terraria
 						{
 							for (int l = num2; l < num2 + 2; l++)
 							{
-								if (Main.TileSet[k, l].Type == 132)
+								if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.LEVER)
 								{
 									Main.TileSet[k, l].FrameX += num3;
 								}
@@ -13498,7 +13327,7 @@ namespace Terraria
 						{
 							for (int n = num2; n < num2 + 2; n++)
 							{
-								if (Main.TileSet[m, n].Type == 132 && Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].wire != 0)
+								if (Main.TileSet[m, n].Type == (byte)EntityID.TileID.LEVER && Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].wire != 0)
 								{
 									TripWire(m, n);
 									return;
@@ -13550,7 +13379,7 @@ namespace Terraria
 					int x2 = outPump[j].X;
 					int y2 = outPump[j].Y;
 					int liquid2 = Main.TileSet[x2, y2].Liquid;
-					if (liquid2 >= 255)
+					if (liquid2 >= byte.MaxValue)
 					{
 						continue;
 					}
@@ -13562,9 +13391,9 @@ namespace Terraria
 					if (lava == num)
 					{
 						int num2 = liquid;
-						if (num2 + liquid2 > 255)
+						if (num2 + liquid2 > byte.MaxValue)
 						{
-							num2 = 255 - liquid2;
+							num2 = byte.MaxValue - liquid2;
 						}
 						Main.TileSet[x2, y2].Liquid += (byte)num2;
 						Main.TileSet[x, y].Liquid -= (byte)num2;
@@ -13621,29 +13450,29 @@ namespace Terraria
 			}
 			if (flag && Main.TileSet[i, j].IsActive != 0)
 			{
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-				case 144:
+				case EntityID.TileID.TIMER:
 					HitSwitch(i, j);
 					SquareTileFrame(i, j);
 					NetMessage.SendTile(i, j);
 					break;
-				case 130:
-					Main.TileSet[i, j].Type = 131;
+				case EntityID.TileID.ACTIVE_STONE:
+					Main.TileSet[i, j].Type = (byte)EntityID.TileID.INACTIVE_STONE;
 					SquareTileFrame(i, j);
 					NetMessage.SendTile(i, j);
 					break;
-				case 131:
-					Main.TileSet[i, j].Type = 130;
+				case EntityID.TileID.INACTIVE_STONE:
+					Main.TileSet[i, j].Type = (byte)EntityID.TileID.ACTIVE_STONE;
 					SquareTileFrame(i, j);
 					NetMessage.SendTile(i, j);
 					break;
-				case 11:
+				case EntityID.TileID.DOOR_OPEN:
 					CloseDoor(i, j, forced: true);
 					NetMessage.CreateMessage2(24, i, j);
 					NetMessage.SendMessage();
 					break;
-				case 10:
+				case EntityID.TileID.DOOR_CLOSED:
 				{
 					int direction = (Main.Rand.Next(2) << 1) - 1;
 					direction = OpenDoor(i, j, direction);
@@ -13654,7 +13483,7 @@ namespace Terraria
 					}
 					break;
 				}
-				case 4:
+				case EntityID.TileID.TORCH:
 					if (Main.TileSet[i, j].FrameX < 66)
 					{
 						Main.TileSet[i, j].FrameX += 66;
@@ -13665,7 +13494,7 @@ namespace Terraria
 					}
 					NetMessage.SendTile(i, j);
 					break;
-				case 149:
+				case EntityID.TileID.XMAS_LIGHT:
 					if (Main.TileSet[i, j].FrameX < 54)
 					{
 						Main.TileSet[i, j].FrameX += 54;
@@ -13676,7 +13505,7 @@ namespace Terraria
 					}
 					NetMessage.SendTile(i, j);
 					break;
-				case 42:
+				case EntityID.TileID.CHAIN_LANTERN:
 				{
 					int num31 = j - Main.TileSet[i, j].FrameY / 18;
 					short num32 = 18;
@@ -13691,7 +13520,7 @@ namespace Terraria
 					NetMessage.SendTileSquare(i, j, 2);
 					break;
 				}
-				case 93:
+				case EntityID.TileID.TIKI_TORCH:
 				{
 					int num28 = j - Main.TileSet[i, j].FrameY / 18;
 					short num29 = 18;
@@ -13708,9 +13537,9 @@ namespace Terraria
 					NetMessage.SendTileSquare(i, num28 + 1, 3);
 					break;
 				}
-				case 95:
-				case 100:
-				case 126:
+				case EntityID.TileID.CHINESE_LANTERN:
+				case EntityID.TileID.CANDELABRA:
+				case EntityID.TileID.DISCO_BALL:
 				{
 					int num11 = j - Main.TileSet[i, j].FrameY / 18;
 					int num12 = Main.TileSet[i, j].FrameX / 18;
@@ -13735,9 +13564,9 @@ namespace Terraria
 					NetMessage.SendTileSquare(num12, num11, 3);
 					break;
 				}
-				case 34:
-				case 35:
-				case 36:
+				case EntityID.TileID.CHANDELIER:
+				case EntityID.TileID.JACK_O_LANTERN:
+				case EntityID.TileID.PRESENT:
 				{
 					int num23 = j - Main.TileSet[i, j].FrameY / 18;
 					int num24 = Main.TileSet[i, j].FrameX / 18;
@@ -13762,7 +13591,7 @@ namespace Terraria
 					NetMessage.SendTileSquare(num24 + 1, num23 + 1, 3);
 					break;
 				}
-				case 33:
+				case EntityID.TileID.CANDLE:
 				{
 					short num14 = 18;
 					if (Main.TileSet[i, j].FrameX > 0)
@@ -13773,7 +13602,7 @@ namespace Terraria
 					NetMessage.SendTileSquare(i, j, 3);
 					break;
 				}
-				case 92:
+				case EntityID.TileID.LAMP_POST:
 				{
 					int num33 = j - Main.TileSet[i, j].FrameY / 18;
 					short num34 = 18;
@@ -13796,7 +13625,7 @@ namespace Terraria
 					NetMessage.SendTileSquare(i, num33 + 3, 7);
 					break;
 				}
-				case 137:
+				case EntityID.TileID.TRAP:
 					if (checkMech(i, j, 180))
 					{
 						int num30 = -1;
@@ -13805,24 +13634,22 @@ namespace Terraria
 							num30 = 1;
 						}
 						float speedX = 12 * num30;
-						int damage = 20;
-						int type2 = 98;
 						Vector2 vector = new Vector2(i * 16 + 8, j * 16 + 7);
 						vector.X += 10 * num30;
 						vector.Y += 2f;
-						Projectile.NewProjectile((int)vector.X, (int)vector.Y, speedX, 0f, type2, damage, 2f);
+						Projectile.NewProjectile((int)vector.X, (int)vector.Y, speedX, 0f, (int)EntityID.ProjectileID.POISON_DART, 20, 2f);
 					}
 					break;
-				case 139:
+				case EntityID.TileID.MUSIC_BOX:
 					SwitchMB(i, j);
 					break;
-				case 141:
+				case EntityID.TileID.EXPLOSIVES:
 					KillTile(i, j, KillToFail: false, EffectOnly: false, noItem: true);
 					NetMessage.SendTile(i, j);
-					Projectile.NewProjectile(i * 16 + 8, j * 16 + 8, 0f, 0f, 108, 250, 10f);
+					Projectile.NewProjectile(i * 16 + 8, j * 16 + 8, 0f, 0f, (int)EntityID.ProjectileID.EXPLOSIVES, 250, 10f);
 					break;
-				case 142:
-				case 143:
+				case EntityID.TileID.PUMP_IN:
+				case EntityID.TileID.PUMP_OUT:
 				{
 					int num15 = j - Main.TileSet[i, j].FrameY / 18;
 					int num16 = Main.TileSet[i, j].FrameX / 18;
@@ -13835,7 +13662,7 @@ namespace Terraria
 					NoWire(num16, num15 + 1);
 					NoWire(num16 + 1, num15);
 					NoWire(num16 + 1, num15 + 1);
-					if (type == 142)
+					if (type == (int)EntityID.TileID.PUMP_IN)
 					{
 						int num17 = num16;
 						int num18 = num15;
@@ -13903,7 +13730,7 @@ namespace Terraria
 					}
 					break;
 				}
-				case 105:
+				case EntityID.TileID.STATUE:
 				{
 					int num = j - Main.TileSet[i, j].FrameY / 18;
 					int num2 = Main.TileSet[i, j].FrameX / 18;
@@ -13921,81 +13748,81 @@ namespace Terraria
 					switch (num3)
 					{
 					case 4:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.SLIME))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.SLIME))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.SLIME);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.SLIME);
 						}
 						break;
 					case 7:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.CAVE_BAT))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.CAVE_BAT))
 						{
-							num6 = NPC.NewNPC(num4 - 4, num5 - 6, (int)NPC.ID.CAVE_BAT);
+							num6 = NPC.NewNPC(num4 - 4, num5 - 6, (int)EntityID.NPCID.CAVE_BAT);
 						}
 						break;
 					case 8:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.GOLDFISH))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.GOLDFISH))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.GOLDFISH);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.GOLDFISH);
 						}
 						break;
 					case 9:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.BUNNY))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.BUNNY))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.BUNNY);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.BUNNY);
 						}
 						break;
 					case 10:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.SKELETON))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.SKELETON))
 						{
-							num6 = NPC.NewNPC(num4, num5, (int)NPC.ID.SKELETON);
+							num6 = NPC.NewNPC(num4, num5, (int)EntityID.NPCID.SKELETON);
 						}
 						break;
 					case 18:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.CRAB))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.CRAB))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.CRAB);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.CRAB);
 						}
 						break;
 					case 23:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.BLUE_JELLYFISH))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.BLUE_JELLYFISH))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.BLUE_JELLYFISH);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.BLUE_JELLYFISH);
 						}
 						break;
 					case 27:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.MIMIC))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.MIMIC))
 						{
-							num6 = NPC.NewNPC(num4 - 9, num5, (int)NPC.ID.MIMIC);
+							num6 = NPC.NewNPC(num4 - 9, num5, (int)EntityID.NPCID.MIMIC);
 						}
 						break;
 					case 28:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.BIRD))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.BIRD))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.BIRD);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.BIRD);
 						}
 						break;
 					case 42:
-						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)NPC.ID.PIRANHA))
+						if (checkMech(i, j, 30) && NPC.MechSpawn(num4, num5, (int)EntityID.NPCID.PIRANHA))
 						{
-							num6 = NPC.NewNPC(num4, num5 - 12, (int)NPC.ID.PIRANHA);
+							num6 = NPC.NewNPC(num4, num5 - 12, (int)EntityID.NPCID.PIRANHA);
 						}
 						break;
 					case 37:
-						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)Item.ID.HEART))
+						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)EntityID.ItemID.HEART))
 						{
-							Item.NewItem(num4, num5 - 16, 0, 0, (int)Item.ID.HEART);
+							Item.NewItem(num4, num5 - 16, 0, 0, (int)EntityID.ItemID.HEART);
 						}
 						break;
 					case 2:
-						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)Item.ID.STAR))
+						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)EntityID.ItemID.STAR))
 						{
-							Item.NewItem(num4, num5 - 16, 0, 0, (int)Item.ID.STAR);
+							Item.NewItem(num4, num5 - 16, 0, 0, (int)EntityID.ItemID.STAR);
 						}
 						break;
 					case 17:
-						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)Item.ID.BOMB))
+						if (checkMech(i, j, 600) && Item.MechSpawn(num4, num5, (int)EntityID.ItemID.BOMB))
 						{
-							Item.NewItem(num4, num5 - 20, 0, 0, (int)Item.ID.BOMB);
+							Item.NewItem(num4, num5 - 20, 0, 0, (int)EntityID.ItemID.BOMB);
 						}
 						break;
 					case 40:
@@ -14008,7 +13835,7 @@ namespace Terraria
 						int num9 = 0;
 						for (int n = 0; n < NPC.MaxNumNPCs; n++) // The 'if' statement below is why the King statue does not affect Santa.
 						{
-							if (Main.NPCSet[n].Active != 0 && (Main.NPCSet[n].Type == (int)NPC.ID.MERCHANT || Main.NPCSet[n].Type == (int)NPC.ID.ARMS_DEALER || Main.NPCSet[n].Type == (int)NPC.ID.GUIDE || Main.NPCSet[n].Type == (int)NPC.ID.DEMOLITIONIST || Main.NPCSet[n].Type == (int)NPC.ID.CLOTHIER || Main.NPCSet[n].Type == (int)NPC.ID.GOBLIN_TINKERER || Main.NPCSet[n].Type == (int)NPC.ID.WIZARD))
+							if (Main.NPCSet[n].Active != 0 && (Main.NPCSet[n].Type == (int)EntityID.NPCID.MERCHANT || Main.NPCSet[n].Type == (int)EntityID.NPCID.ARMS_DEALER || Main.NPCSet[n].Type == (int)EntityID.NPCID.GUIDE || Main.NPCSet[n].Type == (int)EntityID.NPCID.DEMOLITIONIST || Main.NPCSet[n].Type == (int)EntityID.NPCID.CLOTHIER || Main.NPCSet[n].Type == (int)EntityID.NPCID.GOBLIN_TINKERER || Main.NPCSet[n].Type == (int)EntityID.NPCID.WIZARD))
 							{
 								array2[num9] = n;
 								num9++;
@@ -14040,7 +13867,7 @@ namespace Terraria
 						int num7 = 0;
 						for (int m = 0; m < NPC.MaxNumNPCs; m++)
 						{
-							if (Main.NPCSet[m].Active != 0 && (Main.NPCSet[m].Type == (int)NPC.ID.NURSE || Main.NPCSet[m].Type == (int)NPC.ID.DRYAD || Main.NPCSet[m].Type == (int)NPC.ID.MECHANIC))
+							if (Main.NPCSet[m].Active != 0 && (Main.NPCSet[m].Type == (int)EntityID.NPCID.NURSE || Main.NPCSet[m].Type == (int)EntityID.NPCID.DRYAD || Main.NPCSet[m].Type == (int)EntityID.NPCID.MECHANIC))
 							{
 								array[num7] = m;
 								num7++;
@@ -14107,517 +13934,500 @@ namespace Terraria
 						break;
 				}
 				wiresChecked[num].DirsChecked |= (byte)dir;
-				fixed (Tile* ptr = &Main.TileSet[i, j])
+				if (Main.TileSet[i, j].wire > 0)
 				{
-					if (ptr->wire > 0)
+					int num3 = num2 - 1;
+					flag = false;
+					while (true)
 					{
-						int num3 = num2 - 1;
-						flag = false;
-						while (true)
+						if (num3 < 0)
 						{
-							if (num3 < 0)
+							if (num2 == MaxNumWire)
 							{
-								if (num2 == MaxNumWire)
+								return;
+							}
+							wire[num2].X = (short)i;
+							wire[num2].Y = (short)j;
+							num2++;
+							num++;
+							wiresChecked[num].X = (short)i;
+							wiresChecked[num].Y = (short)j;
+							switch (dir)
+							{
+								case Dir.LEFT:
+								case Dir.RIGHT:
+									wiresChecked[num].DirsChecked = (byte)(dir ^ Dir.LEFT_RIGHT);
+									break;
+								case Dir.UP:
+								case Dir.DOWN:
+									wiresChecked[num].DirsChecked = (byte)(dir ^ Dir.UP_DOWN);
+									dir = Dir.LEFT;
+									break;
+							}
+							if (Main.TileSet[i, j].IsActive == 0)
+							{
+								break;
+							}
+							for (int num4 = numNoWire - 1; num4 >= 0; num4--)
+							{
+								if (noWire[num4].X == i && noWire[num4].Y == j)
 								{
 									return;
 								}
-								wire[num2].X = (short)i;
-								wire[num2].Y = (short)j;
-								num2++;
-								num++;
-								wiresChecked[num].X = (short)i;
-								wiresChecked[num].Y = (short)j;
-								switch (dir)
-								{
-									case Dir.LEFT:
-									case Dir.RIGHT:
-										wiresChecked[num].DirsChecked = (byte)(dir ^ Dir.LEFT_RIGHT);
-										break;
-									case Dir.UP:
-									case Dir.DOWN:
-										wiresChecked[num].DirsChecked = (byte)(dir ^ Dir.UP_DOWN);
-										dir = Dir.LEFT;
-										break;
-								}
-								if (ptr->IsActive == 0)
-								{
+							}
+							int type = Main.TileSet[i, j].Type;
+							switch ((EntityID.TileID)type)
+							{
+								case EntityID.TileID.TIMER:
+									HitSwitch(i, j);
+									SquareTileFrame(i, j);
+									NetMessage.SendTile(i, j);
 									break;
-								}
-								for (int num4 = numNoWire - 1; num4 >= 0; num4--)
-								{
-									if (noWire[num4].X == i && noWire[num4].Y == j)
+								case EntityID.TileID.ACTIVE_STONE:
+									Main.TileSet[i, j].Type = (byte)EntityID.TileID.INACTIVE_STONE;
+									SquareTileFrame(i, j);
+									NetMessage.SendTile(i, j);
+									break;
+								case EntityID.TileID.INACTIVE_STONE:
+									Main.TileSet[i, j].Type = (byte)EntityID.TileID.ACTIVE_STONE;
+									SquareTileFrame(i, j);
+									NetMessage.SendTile(i, j);
+									break;
+								case EntityID.TileID.DOOR_OPEN:
+									CloseDoor(i, j, forced: true);
+									NetMessage.CreateMessage2(24, i, j);
+									NetMessage.SendMessage();
+									break;
+								case EntityID.TileID.DOOR_CLOSED:
+									int direction = (Main.Rand.Next(2) << 1) - 1;
+									direction = OpenDoor(i, j, direction);
+									if (direction != 0)
 									{
-										return;
-									}
-								}
-								int type = ptr->Type;
-								switch (type)
-								{
-									case 144:
-										HitSwitch(i, j);
-										SquareTileFrame(i, j);
-										NetMessage.SendTile(i, j);
-										break;
-									case 130:
-										ptr->Type = 131;
-										SquareTileFrame(i, j);
-										NetMessage.SendTile(i, j);
-										break;
-									case 131:
-										ptr->Type = 130;
-										SquareTileFrame(i, j);
-										NetMessage.SendTile(i, j);
-										break;
-									case 11:
-										CloseDoor(i, j, forced: true);
-										NetMessage.CreateMessage2(24, i, j);
+										NetMessage.CreateMessage3(19, i, j, direction);
 										NetMessage.SendMessage();
+									}
+									break;
+								case EntityID.TileID.TORCH:
+									if (Main.TileSet[i, j].FrameX < 66)
+									{
+										Main.TileSet[i, j].FrameX += 66;
+									}
+									else
+									{
+										Main.TileSet[i, j].FrameX -= 66;
+									}
+									NetMessage.SendTile(i, j);
+									break;
+								case EntityID.TileID.XMAS_LIGHT:
+									if (Main.TileSet[i, j].FrameX < 54)
+									{
+										Main.TileSet[i, j].FrameX += 54;
+									}
+									else
+									{
+										Main.TileSet[i, j].FrameX -= 54;
+									}
+									NetMessage.SendTile(i, j);
+									break;
+								case EntityID.TileID.CHAIN_LANTERN:
+									int num35 = j - Main.TileSet[i, j].FrameY / 18;
+									short num36 = 18;
+									if (Main.TileSet[i, j].FrameX > 0)
+									{
+										num36 = -18;
+									}
+									Main.TileSet[i, num35].FrameX += num36;
+									Main.TileSet[i, num35 + 1].FrameX += num36;
+									NoWire(i, num35);
+									NoWire(i, num35 + 1);
+									NetMessage.SendTileSquare(i, j, 2);
+									break;
+								case EntityID.TileID.TIKI_TORCH:
+									int num25 = j - Main.TileSet[i, j].FrameY / 18;
+									short num26 = 18;
+									if (Main.TileSet[i, j].FrameX > 0)
+									{
+										num26 = -18;
+									}
+									Main.TileSet[i, num25].FrameX += num26;
+									Main.TileSet[i, num25 + 1].FrameX += num26;
+									Main.TileSet[i, num25 + 2].FrameX += num26;
+									NoWire(i, num25);
+									NoWire(i, num25 + 1);
+									NoWire(i, num25 + 2);
+									NetMessage.SendTileSquare(i, num25 + 1, 3);
+									break;
+								case EntityID.TileID.CHINESE_LANTERN:
+								case EntityID.TileID.CANDELABRA:
+								case EntityID.TileID.DISCO_BALL:
+									{
+										int num15 = j - Main.TileSet[i, j].FrameY / 18;
+										int num16 = Main.TileSet[i, j].FrameX / 18;
+										if (num16 > 1)
+										{
+											num16 -= 2;
+										}
+										num16 = i - num16;
+										short num17 = 36;
+										if (Main.TileSet[num16, num15].FrameX > 0)
+										{
+											num17 = -36;
+										}
+										Main.TileSet[num16, num15].FrameX += num17;
+										Main.TileSet[num16, num15 + 1].FrameX += num17;
+										Main.TileSet[num16 + 1, num15].FrameX += num17;
+										Main.TileSet[num16 + 1, num15 + 1].FrameX += num17;
+										NoWire(num16, num15);
+										NoWire(num16, num15 + 1);
+										NoWire(num16 + 1, num15);
+										NoWire(num16 + 1, num15 + 1);
+										NetMessage.SendTileSquare(num16, num15, 3);
 										break;
-									case 10:
+									}
+								case EntityID.TileID.CHANDELIER:
+								case EntityID.TileID.JACK_O_LANTERN:
+								case EntityID.TileID.PRESENT:
+									{
+										int num27 = j - Main.TileSet[i, j].FrameY / 18;
+										int num28 = Main.TileSet[i, j].FrameX / 18;
+										if (num28 > 2)
 										{
-											int direction = (Main.Rand.Next(2) << 1) - 1;
-											direction = OpenDoor(i, j, direction);
-											if (direction != 0)
+											num28 -= 3;
+										}
+										num28 = i - num28;
+										short num29 = 54;
+										if (Main.TileSet[num28, num27].FrameX > 0)
+										{
+											num29 = -54;
+										}
+										for (int num30 = num28; num30 < num28 + 3; num30++)
+										{
+											for (int num31 = num27; num31 < num27 + 3; num31++)
 											{
-												NetMessage.CreateMessage3(19, i, j, direction);
-												NetMessage.SendMessage();
+												Main.TileSet[num30, num31].FrameX += num29;
+												NoWire(num30, num31);
 											}
-											break;
 										}
-									case 4:
-										if (ptr->FrameX < 66)
-										{
-											ptr->FrameX += 66;
-										}
-										else
-										{
-											ptr->FrameX -= 66;
-										}
-										NetMessage.SendTile(i, j);
+										NetMessage.SendTileSquare(num28 + 1, num27 + 1, 3);
 										break;
-									case 149:
-										if (ptr->FrameX < 54)
+									}
+								case EntityID.TileID.CANDLE:
+									short num24 = 18;
+									if (Main.TileSet[i, j].FrameX > 0)
+									{
+										num24 = -18;
+									}
+									Main.TileSet[i, j].FrameX += num24;
+									NetMessage.SendTileSquare(i, j, 3);
+									break;
+								case EntityID.TileID.LAMP_POST:
+									int num37 = j - Main.TileSet[i, j].FrameY / 18;
+									short num38 = 18;
+									if (Main.TileSet[i, j].FrameX > 0)
+									{
+										num38 = -18;
+									}
+									Main.TileSet[i, num37].FrameX += num38;
+									Main.TileSet[i, num37 + 1].FrameX += num38;
+									Main.TileSet[i, num37 + 2].FrameX += num38;
+									Main.TileSet[i, num37 + 3].FrameX += num38;
+									Main.TileSet[i, num37 + 4].FrameX += num38;
+									Main.TileSet[i, num37 + 5].FrameX += num38;
+									NoWire(i, num37);
+									NoWire(i, num37 + 1);
+									NoWire(i, num37 + 2);
+									NoWire(i, num37 + 3);
+									NoWire(i, num37 + 4);
+									NoWire(i, num37 + 5);
+									NetMessage.SendTileSquare(i, num37 + 3, 7);
+									break;
+								case EntityID.TileID.TRAP:
+									if (checkMech(i, j, 180))
+									{
+										int num32 = ((Main.TileSet[i, j].FrameX != 0) ? 1 : (-1));
+										float speedX = 12 * num32;
+										int num33 = i * 16 + 8 + 10 * num32;
+										int num34 = j * 16 + 9;
+										Projectile.NewProjectile(num33, num34, speedX, 0f, (int)EntityID.ProjectileID.POISON_DART, 20, 2f);
+									}
+									break;
+								case EntityID.TileID.MUSIC_BOX:
+									SwitchMB(i, j);
+									break;
+								case EntityID.TileID.EXPLOSIVES:
+									KillTile(i, j, KillToFail: false, EffectOnly: false, noItem: true);
+									NetMessage.SendTile(i, j);
+									Projectile.NewProjectile(i * 16 + 8, j * 16 + 8, 0f, 0f, (int)EntityID.ProjectileID.EXPLOSIVES, 250, 10f);
+									break;
+								case EntityID.TileID.PUMP_IN:
+								case EntityID.TileID.PUMP_OUT:
+									int num18 = j - Main.TileSet[i, j].FrameY / 18;
+									int num19 = Main.TileSet[i, j].FrameX / 18;
+									if (num19 > 1)
+									{
+										num19 -= 2;
+									}
+									num19 = i - num19;
+									NoWire(num19, num18);
+									NoWire(num19, num18 + 1);
+									NoWire(num19 + 1, num18);
+									NoWire(num19 + 1, num18 + 1);
+									if (type == (int)EntityID.TileID.PUMP_IN)
+									{
+										int num20 = num19;
+										int num21 = num18;
+										for (int m = 0; m < 4; m++)
 										{
-											ptr->FrameX += 54;
+											if (numInPump >= 19)
+											{
+												break;
+											}
+											switch (m)
+											{
+												case 0:
+													num20 = num19;
+													num21 = num18 + 1;
+													break;
+												case 1:
+													num20 = num19 + 1;
+													num21 = num18 + 1;
+													break;
+												case 2:
+													num20 = num19;
+													num21 = num18;
+													break;
+												default:
+													num20 = num19 + 1;
+													num21 = num18;
+													break;
+											}
+											inPump[numInPump].X = (short)num20;
+											inPump[numInPump].Y = (short)num21;
+											numInPump++;
 										}
-										else
-										{
-											ptr->FrameX -= 54;
-										}
-										NetMessage.SendTile(i, j);
 										break;
-									case 42:
+									}
+									int num22 = num19;
+									int num23 = num18;
+									for (int n = 0; n < 4; n++)
+									{
+										if (numOutPump >= 19)
 										{
-											int num35 = j - ptr->FrameY / 18;
-											short num36 = 18;
-											if (ptr->FrameX > 0)
-											{
-												num36 = -18;
-											}
-											Main.TileSet[i, num35].FrameX += num36;
-											Main.TileSet[i, num35 + 1].FrameX += num36;
-											NoWire(i, num35);
-											NoWire(i, num35 + 1);
-											NetMessage.SendTileSquare(i, j, 2);
 											break;
 										}
-									case 93:
+										switch (n)
 										{
-											int num25 = j - ptr->FrameY / 18;
-											short num26 = 18;
-											if (ptr->FrameX > 0)
-											{
-												num26 = -18;
-											}
-											Main.TileSet[i, num25].FrameX += num26;
-											Main.TileSet[i, num25 + 1].FrameX += num26;
-											Main.TileSet[i, num25 + 2].FrameX += num26;
-											NoWire(i, num25);
-											NoWire(i, num25 + 1);
-											NoWire(i, num25 + 2);
-											NetMessage.SendTileSquare(i, num25 + 1, 3);
-											break;
+											case 0:
+												num22 = num19;
+												num23 = num18 + 1;
+												break;
+											case 1:
+												num22 = num19 + 1;
+												num23 = num18 + 1;
+												break;
+											case 2:
+												num22 = num19;
+												num23 = num18;
+												break;
+											default:
+												num22 = num19 + 1;
+												num23 = num18;
+												break;
 										}
-									case 95:
-									case 100:
-									case 126:
-										{
-											int num15 = j - ptr->FrameY / 18;
-											int num16 = ptr->FrameX / 18;
-											if (num16 > 1)
+										outPump[numOutPump].X = (short)num22;
+										outPump[numOutPump].Y = (short)num23;
+										numOutPump++;
+									}
+									break;
+								case EntityID.TileID.STATUE:
+									int num5 = j - Main.TileSet[i, j].FrameY / 18;
+									int num6 = Main.TileSet[i, j].FrameX / 18;
+									int num7 = num6 >> 1;
+									num6 = i - (num6 & 1);
+									NoWire(num6, num5);
+									NoWire(num6, num5 + 1);
+									NoWire(num6, num5 + 2);
+									NoWire(num6 + 1, num5);
+									NoWire(num6 + 1, num5 + 1);
+									NoWire(num6 + 1, num5 + 2);
+									int num8 = num6 * 16 + 16;
+									int num9 = (num5 + 3) * 16;
+									int num10 = -1;
+									switch (num7)
+									{
+										case 4:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.SLIME))
 											{
-												num16 -= 2;
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.SLIME);
 											}
-											num16 = i - num16;
-											short num17 = 36;
-											if (Main.TileSet[num16, num15].FrameX > 0)
-											{
-												num17 = -36;
-											}
-											Main.TileSet[num16, num15].FrameX += num17;
-											Main.TileSet[num16, num15 + 1].FrameX += num17;
-											Main.TileSet[num16 + 1, num15].FrameX += num17;
-											Main.TileSet[num16 + 1, num15 + 1].FrameX += num17;
-											NoWire(num16, num15);
-											NoWire(num16, num15 + 1);
-											NoWire(num16 + 1, num15);
-											NoWire(num16 + 1, num15 + 1);
-											NetMessage.SendTileSquare(num16, num15, 3);
 											break;
-										}
-									case 34:
-									case 35:
-									case 36:
-										{
-											int num27 = j - ptr->FrameY / 18;
-											int num28 = ptr->FrameX / 18;
-											if (num28 > 2)
+										case 7:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.CAVE_BAT))
 											{
-												num28 -= 3;
+												num10 = NPC.NewNPC(num8 - 4, num9 - 6, (int)EntityID.NPCID.CAVE_BAT);
 											}
-											num28 = i - num28;
-											short num29 = 54;
-											if (Main.TileSet[num28, num27].FrameX > 0)
+											break;
+										case 8:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.GOLDFISH))
 											{
-												num29 = -54;
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.GOLDFISH);
 											}
-											for (int num30 = num28; num30 < num28 + 3; num30++)
+											break;
+										case 9:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.BUNNY))
 											{
-												for (int num31 = num27; num31 < num27 + 3; num31++)
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.BUNNY);
+											}
+											break;
+										case 10:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.SKELETON))
+											{
+												num10 = NPC.NewNPC(num8, num9, (int)EntityID.NPCID.SKELETON);
+											}
+											break;
+										case 18:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.CRAB))
+											{
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.CRAB);
+											}
+											break;
+										case 23:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.BLUE_JELLYFISH))
+											{
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.BLUE_JELLYFISH);
+											}
+											break;
+										case 27:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.MIMIC))
+											{
+												num10 = NPC.NewNPC(num8 - 9, num9, (int)EntityID.NPCID.MIMIC);
+											}
+											break;
+										case 28:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.BIRD))
+											{
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.BIRD);
+											}
+											break;
+										case 42:
+											if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)EntityID.NPCID.PIRANHA))
+											{
+												num10 = NPC.NewNPC(num8, num9 - 12, (int)EntityID.NPCID.PIRANHA);
+											}
+											break;
+										case 37:
+											if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)EntityID.ItemID.HEART))
+											{
+												Item.NewItem(num8, num9 - 16, 0, 0, (int)EntityID.ItemID.HEART);
+											}
+											break;
+										case 2:
+											if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)EntityID.ItemID.STAR))
+											{
+												Item.NewItem(num8, num9 - 16, 0, 0, (int)EntityID.ItemID.STAR);
+											}
+											break;
+										case 17:
+											if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)EntityID.ItemID.BOMB))
+											{
+												Item.NewItem(num8, num9 - 20, 0, 0, (int)EntityID.ItemID.BOMB);
+											}
+											break;
+										case 40:
+											{
+												if (!checkMech(i, j, 300))
 												{
-													Main.TileSet[num30, num31].FrameX += num29;
-													NoWire(num30, num31);
+													break;
 												}
-											}
-											NetMessage.SendTileSquare(num28 + 1, num27 + 1, 3);
-											break;
-										}
-									case 33:
-										{
-											short num24 = 18;
-											if (ptr->FrameX > 0)
-											{
-												num24 = -18;
-											}
-											ptr->FrameX += num24;
-											NetMessage.SendTileSquare(i, j, 3);
-											break;
-										}
-									case 92:
-										{
-											int num37 = j - ptr->FrameY / 18;
-											short num38 = 18;
-											if (ptr->FrameX > 0)
-											{
-												num38 = -18;
-											}
-											Main.TileSet[i, num37].FrameX += num38;
-											Main.TileSet[i, num37 + 1].FrameX += num38;
-											Main.TileSet[i, num37 + 2].FrameX += num38;
-											Main.TileSet[i, num37 + 3].FrameX += num38;
-											Main.TileSet[i, num37 + 4].FrameX += num38;
-											Main.TileSet[i, num37 + 5].FrameX += num38;
-											NoWire(i, num37);
-											NoWire(i, num37 + 1);
-											NoWire(i, num37 + 2);
-											NoWire(i, num37 + 3);
-											NoWire(i, num37 + 4);
-											NoWire(i, num37 + 5);
-											NetMessage.SendTileSquare(i, num37 + 3, 7);
-											break;
-										}
-									case 137:
-										if (checkMech(i, j, 180))
-										{
-											int num32 = ((ptr->FrameX != 0) ? 1 : (-1));
-											float speedX = 12 * num32;
-											int num33 = i * 16 + 8 + 10 * num32;
-											int num34 = j * 16 + 9;
-											Projectile.NewProjectile(num33, num34, speedX, 0f, 98, 20, 2f);
-										}
-										break;
-									case 139:
-										SwitchMB(i, j);
-										break;
-									case 141:
-										KillTile(i, j, KillToFail: false, EffectOnly: false, noItem: true);
-										NetMessage.SendTile(i, j);
-										Projectile.NewProjectile(i * 16 + 8, j * 16 + 8, 0f, 0f, 108, 250, 10f);
-										break;
-									case 142:
-									case 143:
-										{
-											int num18 = j - ptr->FrameY / 18;
-											int num19 = ptr->FrameX / 18;
-											if (num19 > 1)
-											{
-												num19 -= 2;
-											}
-											num19 = i - num19;
-											NoWire(num19, num18);
-											NoWire(num19, num18 + 1);
-											NoWire(num19 + 1, num18);
-											NoWire(num19 + 1, num18 + 1);
-											if (type == 142)
-											{
-												int num20 = num19;
-												int num21 = num18;
-												for (int m = 0; m < 4; m++)
+												int[] array2 = new int[8];
+												int num13 = 0;
+												for (int l = 0; l < NPC.MaxNumNPCs; l++)
 												{
-													if (numInPump >= 19)
+													if (Main.NPCSet[l].Active == 0)
 													{
-														break;
+														continue;
 													}
-													switch (m)
+													int type3 = Main.NPCSet[l].Type;
+													if (type3 == (int)EntityID.NPCID.MERCHANT || type3 == (int)EntityID.NPCID.ARMS_DEALER || type3 == (int)EntityID.NPCID.GUIDE || type3 == (int)EntityID.NPCID.DEMOLITIONIST || type3 == (int)EntityID.NPCID.CLOTHIER || type3 == (int)EntityID.NPCID.GOBLIN_TINKERER || type3 == (int)EntityID.NPCID.WIZARD || type3 == (int)EntityID.NPCID.SANTA_CLAUS)
 													{
-														case 0:
-															num20 = num19;
-															num21 = num18 + 1;
+														array2[num13] = l;
+														if (++num13 == 8)
+														{
 															break;
-														case 1:
-															num20 = num19 + 1;
-															num21 = num18 + 1;
-															break;
-														case 2:
-															num20 = num19;
-															num21 = num18;
-															break;
-														default:
-															num20 = num19 + 1;
-															num21 = num18;
-															break;
+														}
 													}
-													inPump[numInPump].X = (short)num20;
-													inPump[numInPump].Y = (short)num21;
-													numInPump++;
+												}
+												if (num13 > 0)
+												{
+													int num14 = array2[Main.Rand.Next(num13)];
+													Main.NPCSet[num14].XYWH.X = num8 - (Main.NPCSet[num14].Width >> 1);
+													Main.NPCSet[num14].XYWH.Y = num9 - Main.NPCSet[num14].Height - 1;
+													Main.NPCSet[num14].Position.X = Main.NPCSet[num14].XYWH.X;
+													Main.NPCSet[num14].Position.Y = Main.NPCSet[num14].XYWH.Y;
+													NetMessage.CreateMessage1(23, num14);
+													NetMessage.SendMessage();
 												}
 												break;
 											}
-											int num22 = num19;
-											int num23 = num18;
-											for (int n = 0; n < 4; n++)
+										case 41:
 											{
-												if (numOutPump >= 19)
+												if (!checkMech(i, j, 300))
 												{
 													break;
 												}
-												switch (n)
+												int[] array = new int[4];
+												int num11 = 0;
+												for (int k = 0; k < NPC.MaxNumNPCs; k++)
 												{
-													case 0:
-														num22 = num19;
-														num23 = num18 + 1;
-														break;
-													case 1:
-														num22 = num19 + 1;
-														num23 = num18 + 1;
-														break;
-													case 2:
-														num22 = num19;
-														num23 = num18;
-														break;
-													default:
-														num22 = num19 + 1;
-														num23 = num18;
-														break;
+													if (Main.NPCSet[k].Active == 0)
+													{
+														continue;
+													}
+													int type2 = Main.NPCSet[k].Type;
+													if (type2 == (int)EntityID.NPCID.NURSE || type2 == (int)EntityID.NPCID.DRYAD || type2 == (int)EntityID.NPCID.MECHANIC)
+													{
+														array[num11] = k;
+														if (++num11 == 4)
+														{
+															break;
+														}
+													}
 												}
-												outPump[numOutPump].X = (short)num22;
-												outPump[numOutPump].Y = (short)num23;
-												numOutPump++;
+												if (num11 > 0)
+												{
+													int num12 = array[Main.Rand.Next(num11)];
+													Main.NPCSet[num12].XYWH.X = num8 - (Main.NPCSet[num12].Width >> 1);
+													Main.NPCSet[num12].XYWH.Y = num9 - Main.NPCSet[num12].Height - 1;
+													Main.NPCSet[num12].Position.X = Main.NPCSet[num12].XYWH.X;
+													Main.NPCSet[num12].Position.Y = Main.NPCSet[num12].XYWH.Y;
+													NetMessage.CreateMessage1(23, num12);
+													NetMessage.SendMessage();
+												}
+												break;
 											}
-											break;
-										}
-									case 105:
-										{
-											int num5 = j - ptr->FrameY / 18;
-											int num6 = ptr->FrameX / 18;
-											int num7 = num6 >> 1;
-											num6 = i - (num6 & 1);
-											NoWire(num6, num5);
-											NoWire(num6, num5 + 1);
-											NoWire(num6, num5 + 2);
-											NoWire(num6 + 1, num5);
-											NoWire(num6 + 1, num5 + 1);
-											NoWire(num6 + 1, num5 + 2);
-											int num8 = num6 * 16 + 16;
-											int num9 = (num5 + 3) * 16;
-											int num10 = -1;
-											switch (num7)
-											{
-												case 4:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.SLIME))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.SLIME);
-													}
-													break;
-												case 7:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.CAVE_BAT))
-													{
-														num10 = NPC.NewNPC(num8 - 4, num9 - 6, (int)NPC.ID.CAVE_BAT);
-													}
-													break;
-												case 8:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.GOLDFISH))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.GOLDFISH);
-													}
-													break;
-												case 9:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.BUNNY))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.BUNNY);
-													}
-													break;
-												case 10:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.SKELETON))
-													{
-														num10 = NPC.NewNPC(num8, num9, (int)NPC.ID.SKELETON);
-													}
-													break;
-												case 18:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.CRAB))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.CRAB);
-													}
-													break;
-												case 23:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.BLUE_JELLYFISH))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.BLUE_JELLYFISH);
-													}
-													break;
-												case 27:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.MIMIC))
-													{
-														num10 = NPC.NewNPC(num8 - 9, num9, (int)NPC.ID.MIMIC);
-													}
-													break;
-												case 28:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.BIRD))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.BIRD);
-													}
-													break;
-												case 42:
-													if (checkMech(i, j, 30) && NPC.MechSpawn(num8, num9, (int)NPC.ID.PIRANHA))
-													{
-														num10 = NPC.NewNPC(num8, num9 - 12, (int)NPC.ID.PIRANHA);
-													}
-													break;
-												case 37:
-													if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)Item.ID.HEART))
-													{
-														Item.NewItem(num8, num9 - 16, 0, 0, (int)Item.ID.HEART);
-													}
-													break;
-												case 2:
-													if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)Item.ID.STAR))
-													{
-														Item.NewItem(num8, num9 - 16, 0, 0, (int)Item.ID.STAR);
-													}
-													break;
-												case 17:
-													if (checkMech(i, j, 600) && Item.MechSpawn(num8, num9, (int)Item.ID.BOMB))
-													{
-														Item.NewItem(num8, num9 - 20, 0, 0, (int)Item.ID.BOMB);
-													}
-													break;
-												case 40:
-													{
-														if (!checkMech(i, j, 300))
-														{
-															break;
-														}
-														int[] array2 = new int[8];
-														int num13 = 0;
-														for (int l = 0; l < NPC.MaxNumNPCs; l++)
-														{
-															if (Main.NPCSet[l].Active == 0)
-															{
-																continue;
-															}
-															int type3 = Main.NPCSet[l].Type;
-															if (type3 == (int)NPC.ID.MERCHANT || type3 == (int)NPC.ID.ARMS_DEALER || type3 == (int)NPC.ID.GUIDE || type3 == (int)NPC.ID.DEMOLITIONIST || type3 == (int)NPC.ID.CLOTHIER || type3 == (int)NPC.ID.GOBLIN_TINKERER || type3 == (int)NPC.ID.WIZARD || type3 == (int)NPC.ID.SANTA_CLAUS)
-															{
-																array2[num13] = l;
-																if (++num13 == 8)
-																{
-																	break;
-																}
-															}
-														}
-														if (num13 > 0)
-														{
-															int num14 = array2[Main.Rand.Next(num13)];
-															Main.NPCSet[num14].XYWH.X = num8 - (Main.NPCSet[num14].Width >> 1);
-															Main.NPCSet[num14].XYWH.Y = num9 - Main.NPCSet[num14].Height - 1;
-															Main.NPCSet[num14].Position.X = Main.NPCSet[num14].XYWH.X;
-															Main.NPCSet[num14].Position.Y = Main.NPCSet[num14].XYWH.Y;
-															NetMessage.CreateMessage1(23, num14);
-															NetMessage.SendMessage();
-														}
-														break;
-													}
-												case 41:
-													{
-														if (!checkMech(i, j, 300))
-														{
-															break;
-														}
-														int[] array = new int[4];
-														int num11 = 0;
-														for (int k = 0; k < NPC.MaxNumNPCs; k++)
-														{
-															if (Main.NPCSet[k].Active == 0)
-															{
-																continue;
-															}
-															int type2 = Main.NPCSet[k].Type;
-															if (type2 == (int)NPC.ID.NURSE || type2 == (int)NPC.ID.DRYAD || type2 == (int)NPC.ID.MECHANIC)
-															{
-																array[num11] = k;
-																if (++num11 == 4)
-																{
-																	break;
-																}
-															}
-														}
-														if (num11 > 0)
-														{
-															int num12 = array[Main.Rand.Next(num11)];
-															Main.NPCSet[num12].XYWH.X = num8 - (Main.NPCSet[num12].Width >> 1);
-															Main.NPCSet[num12].XYWH.Y = num9 - Main.NPCSet[num12].Height - 1;
-															Main.NPCSet[num12].Position.X = Main.NPCSet[num12].XYWH.X;
-															Main.NPCSet[num12].Position.Y = Main.NPCSet[num12].XYWH.Y;
-															NetMessage.CreateMessage1(23, num12);
-															NetMessage.SendMessage();
-														}
-														break;
-													}
-											}
-											if (num10 >= 0)
-											{
-												Main.NPCSet[num10].Value = 0f;
-												Main.NPCSet[num10].NpcSlots = 0f;
-											}
-											break;
-										}
-								}
-								break;
+									}
+									if (num10 >= 0)
+									{
+										Main.NPCSet[num10].Value = 0f;
+										Main.NPCSet[num10].NpcSlots = 0f;
+									}
+									break;
 							}
-							if (wire[num3].X != i || wire[num3].Y != j)
-							{
-								num3--;
-								continue;
-							}
-
-							flag = true;
 							break;
 						}
-
-						if (flag)
+						if (wire[num3].X != i || wire[num3].Y != j)
 						{
+							num3--;
 							continue;
 						}
+
+						flag = true;
+						break;
+					}
+
+					if (flag)
+					{
+						continue;
 					}
 				}
 				switch (dir)
@@ -14665,18 +14475,18 @@ namespace Terraria
 					{
 						int type = ptr->Type;
 						int type2 = ptr2->Type;
-						switch (type2)
+						switch ((EntityID.TileID)type2)
 						{
-							case 5:
+							case EntityID.TileID.TREE:
 								if (type != type2)
 								{
 									return (ptr[-1].FrameX == 66 && ptr[-1].FrameY >= 0 && ptr[-1].FrameY <= 44) || (ptr[-1].FrameX == 88 && ptr[-1].FrameY >= 66 && ptr[-1].FrameY <= 110) || ptr[-1].FrameY >= 198;
 								}
 								return true;
-							case 12:
-							case 21:
-							case 26:
-							case 72:
+							case EntityID.TileID.LIFE_CRYSTAL:
+							case EntityID.TileID.CHEST:
+							case EntityID.TileID.DEMON_ALTAR:
+							case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 								return type == type2;
 						}
 					}
@@ -14718,62 +14528,62 @@ namespace Terraria
 			}
 			int type = 0;
 			int type2 = 0;
-			switch (wall)
+			switch ((EntityID.WallID)wall)
 			{
-				case 1:
-				case 5:
-				case 6:
-				case 7:
-				case 8:
-				case 9:
+				case EntityID.WallID.STONE:
+				case EntityID.WallID.GREY_BRICK:
+				case EntityID.WallID.RED_BRICK:
+				case EntityID.WallID.BLUE_DUNGEON_UNSAFE:
+				case EntityID.WallID.GREEN_DUNGEON_UNSAFE:
+				case EntityID.WallID.PINK_DUNGEON_UNSAFE:
 					type = 1;
 					break;
-				case 4:
+				case EntityID.WallID.WOOD:
 					type = 7;
 					break;
-				case 12:
+				case EntityID.WallID.COPPER_BRICK:
 					type = 9;
 					break;
-				case 10:
-				case 11:
+				case EntityID.WallID.GOLD_BRICK:
+				case EntityID.WallID.SILVER_BRICK:
 					type = wall;
 					break;
-				case 21:
+				case EntityID.WallID.GLASS:
 					type2 = 13;
 					type = 13;
 					break;
-				case 22:
-				case 28:
+				case EntityID.WallID.PEARLSTONE_BRICK:
+				case EntityID.WallID.PEARLSTONE_BRICK_UNSAFE:
 					type = 51;
 					break;
-				case 23:
+				case EntityID.WallID.IRIDESCENT_BRICK:
 					type = 38;
 					break;
-				case 24:
+				case EntityID.WallID.MUDSTONE_BRICK:
 					type = 36;
 					break;
-				case 25:
+				case EntityID.WallID.COBALT_BRICK:
 					type = 48;
 					break;
-				case 26:
-				case 30:
+				case EntityID.WallID.MYTHRIL_BRICK:
+				case EntityID.WallID.GREEN_CANDY_CANE:
 					type = 49;
 					break;
-				case 29:
+				case EntityID.WallID.CANDY_CANE:
 					type = 50;
 					break;
-				case 31:
+				case EntityID.WallID.SNOW_BRICK:
 					type = 51;
 					break;
 #if VERSION_101
-				case 32:
-				case 33:
-				case 34:
-				case 35:
-				case 36:
-				case 37:
-					type = 86 + wall - 32;
-					if (wall == 37)
+				case EntityID.WallID.PURPLE_STAINED_GLASS:
+				case EntityID.WallID.YELLOW_STAINED_GLASS:
+				case EntityID.WallID.BLUE_STAINED_GLASS:
+				case EntityID.WallID.GREEN_STAINED_GLASS:
+				case EntityID.WallID.RED_STAINED_GLASS:
+				case EntityID.WallID.RAINBOW_STAINED_GLASS:
+					type = 86 + wall - (byte)EntityID.WallID.PURPLE_STAINED_GLASS;
+					if (wall == (byte)EntityID.WallID.RAINBOW_STAINED_GLASS)
 					{
 						type = genRand.Next(88, 94);
 					}
@@ -14783,12 +14593,12 @@ namespace Terraria
 			Main.PlaySound(type2, i * 16, j * 16);
 			for (int num = (fail ? 1 : 5); num >= 0; num--)
 			{
-				switch (wall)
+				switch ((EntityID.WallID)wall)
 				{
-					case 3:
+					case EntityID.WallID.EBONSTONE_UNSAFE:
 						type = 1 + 13 * genRand.Next(2);
 						break;
-					case 27:
+					case EntityID.WallID.PLANKED:
 						type = 1 + 6 * genRand.Next(2);
 						break;
 				}
@@ -14796,95 +14606,95 @@ namespace Terraria
 			}
 			if (!fail)
 			{
-				Item.ID num2 = 0;
-				switch (wall)
+				EntityID.ItemID num2 = 0;
+				switch ((EntityID.WallID)wall)
 				{
-					case 1:
-						num2 = Item.ID.STONE_WALL;
+					case EntityID.WallID.STONE:
+						num2 = EntityID.ItemID.STONE_WALL;
 						break;
-					case 4:
-						num2 = Item.ID.WOOD_WALL;
+					case EntityID.WallID.WOOD:
+						num2 = EntityID.ItemID.WOOD_WALL;
 						break;
-					case 5:
-						num2 = Item.ID.GRAY_BRICK_WALL;
+					case EntityID.WallID.GREY_BRICK:
+						num2 = EntityID.ItemID.GRAY_BRICK_WALL;
 						break;
-					case 6:
-						num2 = Item.ID.RED_BRICK_WALL;
+					case EntityID.WallID.RED_BRICK:
+						num2 = EntityID.ItemID.RED_BRICK_WALL;
 						break;
-					case 7:
-						num2 = Item.ID.BLUE_BRICK_WALL;
+					case EntityID.WallID.BLUE_DUNGEON_UNSAFE:
+						num2 = EntityID.ItemID.BLUE_BRICK_WALL;
 						break;
-					case 8:
-						num2 = Item.ID.GREEN_BRICK_WALL;
+					case EntityID.WallID.GREEN_DUNGEON_UNSAFE:
+						num2 = EntityID.ItemID.GREEN_BRICK_WALL;
 						break;
-					case 9:
-						num2 = Item.ID.PINK_BRICK_WALL;
+					case EntityID.WallID.PINK_DUNGEON_UNSAFE:
+						num2 = EntityID.ItemID.PINK_BRICK_WALL;
 						break;
-					case 10:
-						num2 = Item.ID.GOLD_BRICK_WALL;
+					case EntityID.WallID.GOLD_BRICK:
+						num2 = EntityID.ItemID.GOLD_BRICK_WALL;
 						break;
-					case 11:
-						num2 = Item.ID.SILVER_BRICK_WALL;
+					case EntityID.WallID.SILVER_BRICK:
+						num2 = EntityID.ItemID.SILVER_BRICK_WALL;
 						break;
-					case 12:
-						num2 = Item.ID.COPPER_BRICK_WALL;
+					case EntityID.WallID.COPPER_BRICK:
+						num2 = EntityID.ItemID.COPPER_BRICK_WALL;
 						break;
-					case 14:
-						num2 = Item.ID.OBSIDIAN_BRICK_WALL;
+					case EntityID.WallID.OBSIDIAN_BRICK_UNSAFE:
+						num2 = EntityID.ItemID.OBSIDIAN_BRICK_WALL;
 						break;
-					case 16:
-						num2 = Item.ID.DIRT_WALL;
+					case EntityID.WallID.DIRT:
+						num2 = EntityID.ItemID.DIRT_WALL;
 						break;
-					case 17:
-						num2 = Item.ID.BLUE_BRICK_WALL;
+					case EntityID.WallID.BLUE_DUNGEON:
+						num2 = EntityID.ItemID.BLUE_BRICK_WALL;
 						break;
-					case 18:
-						num2 = Item.ID.GREEN_BRICK_WALL;
+					case EntityID.WallID.GREEN_DUNGEON:
+						num2 = EntityID.ItemID.GREEN_BRICK_WALL;
 						break;
-					case 19:
-						num2 = Item.ID.PINK_BRICK_WALL;
+					case EntityID.WallID.PINK_DUNGEON:
+						num2 = EntityID.ItemID.PINK_BRICK_WALL;
 						break;
-					case 20:
-						num2 = Item.ID.OBSIDIAN_BRICK_WALL;
+					case EntityID.WallID.OBSIDIAN_BRICK:
+						num2 = EntityID.ItemID.OBSIDIAN_BRICK_WALL;
 						break;
-					case 21:
-						num2 = Item.ID.GLASS_WALL;
+					case EntityID.WallID.GLASS:
+						num2 = EntityID.ItemID.GLASS_WALL;
 						break;
-					case 22:
-						num2 = Item.ID.PEARLSTONE_BRICK_WALL;
+					case EntityID.WallID.PEARLSTONE_BRICK:
+						num2 = EntityID.ItemID.PEARLSTONE_BRICK_WALL;
 						break;
-					case 23:
-						num2 = Item.ID.IRIDESCENT_BRICK_WALL;
+					case EntityID.WallID.IRIDESCENT_BRICK:
+						num2 = EntityID.ItemID.IRIDESCENT_BRICK_WALL;
 						break;
-					case 24:
-						num2 = Item.ID.MUDSTONE_BRICK_WALL;
+					case EntityID.WallID.MUDSTONE_BRICK:
+						num2 = EntityID.ItemID.MUDSTONE_BRICK_WALL;
 						break;
-					case 25:
-						num2 = Item.ID.COBALT_BRICK_WALL;
+					case EntityID.WallID.COBALT_BRICK:
+						num2 = EntityID.ItemID.COBALT_BRICK_WALL;
 						break;
-					case 26:
-						num2 = Item.ID.MYTHRIL_BRICK_WALL;
+					case EntityID.WallID.MYTHRIL_BRICK:
+						num2 = EntityID.ItemID.MYTHRIL_BRICK_WALL;
 						break;
-					case 27:
-						num2 = Item.ID.PLANKED_WALL;
+					case EntityID.WallID.PLANKED:
+						num2 = EntityID.ItemID.PLANKED_WALL;
 						break;
-					case 29:
-						num2 = Item.ID.CANDY_CANE_WALL;
+					case EntityID.WallID.CANDY_CANE:
+						num2 = EntityID.ItemID.CANDY_CANE_WALL;
 						break;
-					case 30:
-						num2 = Item.ID.GREEN_CANDY_CANE_WALL;
+					case EntityID.WallID.GREEN_CANDY_CANE:
+						num2 = EntityID.ItemID.GREEN_CANDY_CANE_WALL;
 						break;
-					case 31:
-						num2 = Item.ID.SNOW_BRICK_WALL;
+					case EntityID.WallID.SNOW_BRICK:
+						num2 = EntityID.ItemID.SNOW_BRICK_WALL;
 						break;
 #if VERSION_101
-					case 32:
-					case 33:
-					case 34:
-					case 35:
-					case 36:
-					case 37:
-						num2 = (Item.ID)((int)Item.ID.PURPLE_STAINED_GLASS + wall - 32);
+					case EntityID.WallID.PURPLE_STAINED_GLASS:
+					case EntityID.WallID.YELLOW_STAINED_GLASS:
+					case EntityID.WallID.BLUE_STAINED_GLASS:
+					case EntityID.WallID.GREEN_STAINED_GLASS:
+					case EntityID.WallID.RED_STAINED_GLASS:
+					case EntityID.WallID.RAINBOW_STAINED_GLASS:
+						num2 = (EntityID.ItemID)((int)EntityID.ItemID.PURPLE_STAINED_GLASS_WALL + wall - (byte)EntityID.WallID.PURPLE_STAINED_GLASS);
 						break;
 #endif
 				}
@@ -14892,7 +14702,7 @@ namespace Terraria
 				{
 					Item.NewItem(i * 16, j * 16, 16, 16, (int)num2);
 				}
-				Main.TileSet[i, j].WallType = 0;
+				Main.TileSet[i, j].WallType = (byte)EntityID.WallID.NONE;
 				SquareWallFrame(i, j);
 			}
 		}
@@ -14912,18 +14722,18 @@ namespace Terraria
 					if (ptr2->IsActive != 0)
 					{
 						int type2 = ptr2->Type;
-						switch (type2)
+						switch ((EntityID.TileID)type2)
 						{
-							case 5:
+							case EntityID.TileID.TREE:
 								if (type != type2 && (ptr[-1].FrameX != 66 || ptr[-1].FrameY < 0 || ptr[-1].FrameY > 44) && (ptr[-1].FrameX != 88 || ptr[-1].FrameY < 66 || ptr[-1].FrameY > 110) && ptr[-1].FrameY < 198)
 								{
 									return;
 								}
 								break;
-							case 12:
-							case 21:
-							case 26:
-							case 72:
+							case EntityID.TileID.LIFE_CRYSTAL:
+							case EntityID.TileID.CHEST:
+							case EntityID.TileID.DEMON_ALTAR:
+							case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 								if (type != type2)
 								{
 									return;
@@ -14932,9 +14742,9 @@ namespace Terraria
 						}
 					}
 				}
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 128:
+					case EntityID.TileID.MANNEQUIN:
 						{
 							int num2 = i;
 							int frameX = ptr->FrameX;
@@ -14965,7 +14775,7 @@ namespace Terraria
 							}
 							break;
 						}
-					case 21:
+					case EntityID.TileID.CHEST:
 						if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
 							int num = ptr->FrameX / 18;
@@ -14983,7 +14793,7 @@ namespace Terraria
 				ptr->FrameX = -1;
 				ptr->FrameY = -1;
 				ptr->frameNumber = 0;
-				if (type == 58 && j > Main.MaxTilesY - 200)
+				if (type == (byte)EntityID.TileID.HELLSTONE && j > Main.MaxTilesY - 200)
 				{
 					ptr->Lava = 32;
 					ptr->Liquid = 128;
@@ -15007,18 +14817,18 @@ namespace Terraria
 							if (ptr2->IsActive != 0)
 							{
 								int type2 = ptr2->Type;
-								switch (type2)
+								switch ((EntityID.TileID)type2)
 								{
-									case 5:
+									case EntityID.TileID.TREE:
 										if (type != type2 && (ptr[-1].FrameX != 66 || ptr[-1].FrameY < 0 || ptr[-1].FrameY > 44) && (ptr[-1].FrameX != 88 || ptr[-1].FrameY < 66 || ptr[-1].FrameY > 110) && ptr[-1].FrameY < 198)
 										{
 											return false;
 										}
 										break;
-									case 12:
-									case 21:
-									case 26:
-									case 72:
+									case EntityID.TileID.LIFE_CRYSTAL:
+									case EntityID.TileID.CHEST:
+									case EntityID.TileID.DEMON_ALTAR:
+									case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 										if (type != type2)
 										{
 											return false;
@@ -15029,88 +14839,95 @@ namespace Terraria
 						}
 						if (!Gen && !stopDrops)
 						{
-							if (type == 127)
+							switch ((EntityID.TileID)type)
 							{
-								Main.PlaySound(2, i * 16, j * 16, 27);
-							}
-							else if (type == 3 || type == 110)
-							{
-								Main.PlaySound(6, i * 16, j * 16);
-								if (ptr->FrameX == 144)
-								{
-									Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.MUSHROOM);
-								}
-							}
-							else if (type == 24)
-							{
-								Main.PlaySound(6, i * 16, j * 16);
-								if (ptr->FrameX == 144)
-								{
-									Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.VILE_MUSHROOM);
-								}
-							}
-							else if (type == 32 || type == 51 || type == 52 || type == 61 || type == 62 || type == 69 || type == 71 || type == 73 || type == 74 || (type >= 82 && type <= 84) || type == 113 || type == 115)
-							{
-								Main.PlaySound(6, i * 16, j * 16);
-							}
-							else
-							{
-								switch (type)
-								{
-									case 1:
-									case 6:
-									case 7:
-									case 8:
-									case 9:
-									case 22:
-									case 25:
-									case 37:
-									case 38:
-									case 39:
-									case 41:
-									case 43:
-									case 44:
-									case 45:
-									case 46:
-									case 47:
-									case 48:
-									case 56:
-									case 58:
-									case 63:
-									case 64:
-									case 65:
-									case 66:
-									case 67:
-									case 68:
-									case 75:
-									case 76:
-									case 107:
-									case 108:
-									case 111:
-									case 117:
-									case 118:
-									case 119:
-									case 120:
-									case 121:
-									case 122:
-									case 140:
-										Main.PlaySound(21, i * 16, j * 16);
-										break;
-									default:
-										Main.PlaySound(0, i * 16, j * 16);
-										if (type == 129)
-										{
-											Main.PlaySound(2, i * 16, j * 16, 27);
-										}
-										break;
-									case 138:
-										break;
-								}
+								case EntityID.TileID.STONE:
+								case EntityID.TileID.IRON_ORE:
+								case EntityID.TileID.COPPER_ORE:
+								case EntityID.TileID.GOLD_ORE:
+								case EntityID.TileID.SILVER_ORE:
+								case EntityID.TileID.DEMONITE_ORE:
+								case EntityID.TileID.EBONSTONE:
+								case EntityID.TileID.METEORITE:
+								case EntityID.TileID.GRAY_BRICK:
+								case EntityID.TileID.RED_BRICK:
+								case EntityID.TileID.BLUE_BRICK:
+								case EntityID.TileID.GREEN_BRICK:
+								case EntityID.TileID.PINK_BRICK:
+								case EntityID.TileID.GOLD_BRICK:
+								case EntityID.TileID.SILVER_BRICK:
+								case EntityID.TileID.COPPER_BRICK:
+								case EntityID.TileID.SPIKE:
+								case EntityID.TileID.OBSIDIAN:
+								case EntityID.TileID.HELLSTONE:
+								case EntityID.TileID.SAPPHIRE:
+								case EntityID.TileID.RUBY:
+								case EntityID.TileID.EMERALD:
+								case EntityID.TileID.TOPAZ:
+								case EntityID.TileID.AMETHYST:
+								case EntityID.TileID.DIAMOND:
+								case EntityID.TileID.OBSIDIAN_BRICK:
+								case EntityID.TileID.HELLSTONE_BRICK:
+								case EntityID.TileID.COBALT_ORE:
+								case EntityID.TileID.MYTHRIL_ORE:
+								case EntityID.TileID.ADAMANTITE_ORE:
+								case EntityID.TileID.PEARLSTONE:
+								case EntityID.TileID.PEARLSTONE_BRICK:
+								case EntityID.TileID.IRIDESCENT_BRICK:
+								case EntityID.TileID.MUDSTONE:
+								case EntityID.TileID.COBALT_BRICK:
+								case EntityID.TileID.MYTHRIL_BRICK:
+								case EntityID.TileID.DEMONITE_BRICK:
+									Main.PlaySound(21, i * 16, j * 16);
+									break;
+								case EntityID.TileID.SHORT_GRASS_PLANTS:
+								case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+									Main.PlaySound(6, i * 16, j * 16);
+									if (ptr->FrameX == 144)
+									{
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.MUSHROOM);
+									}
+									break;
+								case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+									Main.PlaySound(6, i * 16, j * 16);
+									if (ptr->FrameX == 144)
+									{
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.VILE_MUSHROOM);
+									}
+									break;
+								case EntityID.TileID.CORRUPTION_THORN:
+								case EntityID.TileID.COBWEB:
+								case EntityID.TileID.VINE:
+								case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+								case EntityID.TileID.JUNGLE_VINE:
+								case EntityID.TileID.JUNGLE_THORN:
+								case EntityID.TileID.GLOWING_MUSHROOM:
+								case EntityID.TileID.TALL_GRASS_PLANTS:
+								case EntityID.TileID.TALL_JUNGLE_PLANTS:
+								case EntityID.TileID.DAYBLOOM_GROWING:
+								case EntityID.TileID.DAYBLOOM_MATURE:
+								case EntityID.TileID.DAYBLOOM_BLOOMING:
+								case EntityID.TileID.TALL_HALLOWED_PLANTS:
+								case EntityID.TileID.HALLOWED_VINE:
+									Main.PlaySound(6, i * 16, j * 16);
+									break;
+								case EntityID.TileID.ICE:
+									Main.PlaySound(2, i * 16, j * 16, 27);
+									break;
+								case EntityID.TileID.BOULDER:
+									break;
+								default:
+									Main.PlaySound(0, i * 16, j * 16);
+									if (type == (int)EntityID.TileID.CRYSTAL_SHARD)
+									{
+										Main.PlaySound(2, i * 16, j * 16, 27);
+									}
+									break;
 							}
 						}
-						if (type != 138)
+						if (type != (int)EntityID.TileID.BOULDER)
 						{
-							if (type == 128)
+							if (type == (int)EntityID.TileID.MANNEQUIN)
 							{
 								int num = i;
 								int frameX = ptr->FrameX;
@@ -15145,279 +14962,295 @@ namespace Terraria
 								int num4 = 0;
 								if (type != 0)
 								{
-									if (type == 1 || type == 16 || type == 17 || type == 38 || type == 39 || type == 41 || type == 43 || type == 44 || type == 48 || type == 85 || type == 90 || type == 92 || type == 96 || type == 97 || type == 99 || type == 105 || type == 117 || type == 130 || type == 131 || type == 132 || type == 135 || type == 137 || type == 142 || type == 143 || type == 144 || Main.TileStone[type])
+									switch ((EntityID.TileID)type)
 									{
-										num4 = 1;
-									}
-									else
-									{
-										switch (type)
-										{
-											case 33:
-											case 95:
-											case 98:
-											case 100:
+										case EntityID.TileID.STONE:
+										case EntityID.TileID.ANVIL:
+										case EntityID.TileID.FURNACE:
+										case EntityID.TileID.GRAY_BRICK:
+										case EntityID.TileID.RED_BRICK:
+										case EntityID.TileID.BLUE_BRICK:
+										case EntityID.TileID.GREEN_BRICK:
+										case EntityID.TileID.PINK_BRICK:
+										case EntityID.TileID.SPIKE:
+										case EntityID.TileID.SAPPHIRE:
+										case EntityID.TileID.RUBY:
+										case EntityID.TileID.EMERALD:
+										case EntityID.TileID.TOPAZ:
+										case EntityID.TileID.AMETHYST:
+										case EntityID.TileID.DIAMOND:
+										case EntityID.TileID.TOMBSTONE:
+										case EntityID.TileID.BATHTUB:
+										case EntityID.TileID.LAMP_POST:
+										case EntityID.TileID.COOKING_POT:
+										case EntityID.TileID.SAFE:
+										case EntityID.TileID.TRASH_CAN:
+										case EntityID.TileID.STATUE:
+										case EntityID.TileID.PEARLSTONE:
+										case EntityID.TileID.ACTIVE_STONE:
+										case EntityID.TileID.INACTIVE_STONE:
+										case EntityID.TileID.LEVER:
+										case EntityID.TileID.PRESSURE_PLATE:
+										case EntityID.TileID.TRAP:
+										case EntityID.TileID.PUMP_IN:
+										case EntityID.TileID.PUMP_OUT:
+										case EntityID.TileID.TIMER:
+											num4 = 1;
+											break;
+										case EntityID.TileID.CANDLE:
+										case EntityID.TileID.CHINESE_LANTERN:
+										case EntityID.TileID.SKULL_LANTERN:
+										case EntityID.TileID.CANDELABRA:
 #if VERSION_101
-											case 150:
+										case EntityID.TileID.CAMPFIRE:
 #endif
-												num4 = 6;
-												break;
-											case 5:
-											case 10:
-											case 11:
-											case 14:
-											case 15:
-											case 19:
-											case 30:
-											case 86:
-											case 87:
-											case 88:
-											case 89:
-											case 93:
-											case 94:
-											case 104:
-											case 106:
-											case 114:
-											case 124:
-											case 128:
-											case 139:
-												num4 = 7;
-												break;
-											case 21:
-												num4 = ((ptr->FrameX < 108) ? ((ptr->FrameX < 36) ? 7 : 10) : 37);
-												break;
-											case 127:
-												num4 = 67;
-												break;
-											case 91:
-												num4 = -1;
-												break;
-											case 6:
-											case 26:
-												num4 = 8;
-												break;
-											case 7:
-											case 34:
-											case 47:
-												num4 = 9;
-												break;
-											case 8:
-											case 36:
-											case 45:
-											case 102:
-												num4 = 10;
-												break;
-											case 9:
-											case 35:
-											case 42:
-											case 46:
-											case 126:
-											case 136:
-												num4 = 11;
-												break;
-											case 12:
-												num4 = 12;
-												break;
-											case 3:
-											case 73:
-												num4 = 3;
-												break;
-											case 13:
-											case 54:
-												num4 = 13;
-												break;
-											case 22:
-											case 140:
-												num4 = 14;
-												break;
-											case 28:
-											case 78:
-												num4 = 22;
-												break;
-											case 29:
-												num4 = 23;
-												break;
-											case 40:
-											case 103:
-												num4 = 28;
-												break;
-											case 49:
-												num4 = 29;
-												break;
-											case 50:
-												num4 = 22;
-												break;
-											case 51:
-												num4 = 30;
-												break;
-											case 52:
-												num4 = 3;
-												break;
-											case 53:
-											case 81:
-												num4 = 32;
-												break;
-											case 56:
-											case 75:
-												num4 = 37;
-												break;
-											case 57:
-											case 119:
-											case 141:
-												num4 = 36;
-												break;
-											case 59:
-											case 120:
-												num4 = 38;
-												break;
-											case 61:
-											case 62:
-											case 74:
-											case 80:
-												num4 = 40;
-												break;
-											case 69:
-												num4 = 7;
-												break;
-											case 71:
-											case 72:
-												num4 = 26;
-												break;
-											case 70:
-												num4 = 17;
-												break;
-											case 112:
-												num4 = 14;
-												break;
-											case 123:
-												num4 = 53;
-												break;
-											case 116:
-											case 118:
-											case 147:
-											case 148:
-												num4 = 51;
-												break;
-											case 110:
-											case 113:
-											case 115:
-												num4 = 47;
-												break;
-											case 107:
-											case 121:
-												num4 = 48;
-												break;
-											case 108:
-											case 122:
-											case 134:
-											case 146:
-												num4 = 49;
-												break;
-											case 111:
-											case 133:
-											case 145:
-												num4 = 50;
-												break;
-											case 149:
-												num4 = 49;
-												break;
-											case 82:
-											case 83:
-											case 84:
-												switch (ptr->FrameX / 18)
-												{
-													case 0:
-														num4 = 3;
-														break;
-													case 1:
-														num4 = 3;
-														break;
-													case 2:
-														num4 = 7;
-														break;
-													case 3:
-														num4 = 17;
-														break;
-													case 4:
-														num4 = 3;
-														break;
-													case 5:
-														num4 = 6;
-														break;
-												}
-												break;
-											default:
-												switch (type)
-												{
-													case 129:
-														num4 = ((ptr->FrameX != 0 && ptr->FrameX != 54 && ptr->FrameX != 108) ? ((ptr->FrameX != 18 && ptr->FrameX != 72 && ptr->FrameX != 126) ? 70 : 69) : 68);
-														break;
-													case 4:
-														{
-															int num5 = ptr->FrameY / 22;
-															switch (num5)
-															{
-																case 0:
-																	num4 = 6;
-																	break;
-																case 8:
-																	num4 = 75;
-																	break;
-																default:
-																	num4 = 58 + num5;
-																	break;
-															}
+											num4 = 6;
+											break;
+										case EntityID.TileID.TREE:
+										case EntityID.TileID.DOOR_CLOSED:
+										case EntityID.TileID.DOOR_OPEN:
+										case EntityID.TileID.TABLE:
+										case EntityID.TileID.CHAIR:
+										case EntityID.TileID.PLATFORM:
+										case EntityID.TileID.WOOD:
+										case EntityID.TileID.LOOM:
+										case EntityID.TileID.PIANO:
+										case EntityID.TileID.DRESSER:
+										case EntityID.TileID.BENCH:
+										case EntityID.TileID.TIKI_TORCH:
+										case EntityID.TileID.KEG:
+										case EntityID.TileID.GRANDFATHERS_CLOCK:
+										case EntityID.TileID.SAWMILL:
+										case EntityID.TileID.TINKERERS_WORKSHOP:
+										case EntityID.TileID.WOODEN_BEAM:
+										case EntityID.TileID.MANNEQUIN:
+										case EntityID.TileID.MUSIC_BOX:
+											num4 = 7;
+											break;
+										case EntityID.TileID.CHEST:
+											num4 = ((ptr->FrameX < 108) ? ((ptr->FrameX < 36) ? 7 : 10) : 37);
+											break;
+										case EntityID.TileID.ICE:
+											num4 = 67;
+											break;
+										case EntityID.TileID.BANNER:
+											num4 = -1;
+											break;
+										case EntityID.TileID.IRON_ORE:
+										case EntityID.TileID.DEMON_ALTAR:
+											num4 = 8;
+											break;
+										case EntityID.TileID.COPPER_ORE:
+										case EntityID.TileID.CHANDELIER:
+										case EntityID.TileID.COPPER_BRICK:
+											num4 = 9;
+											break;
+										case EntityID.TileID.GOLD_ORE:
+										case EntityID.TileID.PRESENT:
+										case EntityID.TileID.GOLD_BRICK:
+										case EntityID.TileID.THRONE:
+											num4 = 10;
+											break;
+										case EntityID.TileID.SILVER_ORE:
+										case EntityID.TileID.JACK_O_LANTERN:
+										case EntityID.TileID.CHAIN_LANTERN:
+										case EntityID.TileID.SILVER_BRICK:
+										case EntityID.TileID.DISCO_BALL:
+										case EntityID.TileID.SWITCH:
+											num4 = 11;
+											break;
+										case EntityID.TileID.LIFE_CRYSTAL:
+											num4 = 12;
+											break;
+										case EntityID.TileID.SHORT_GRASS_PLANTS:
+										case EntityID.TileID.TALL_GRASS_PLANTS:
+										case EntityID.TileID.VINE:
+											num4 = 3;
+											break;
+										case EntityID.TileID.BOTTLE:
+										case EntityID.TileID.GLASS:
+											num4 = 13;
+											break;
+										case EntityID.TileID.DEMONITE_ORE:
+										case EntityID.TileID.DEMONITE_BRICK:
+										case EntityID.TileID.EBONSAND:
+											num4 = 14;
+											break;
+										case EntityID.TileID.POT:
+										case EntityID.TileID.CLAY_POT:
+										case EntityID.TileID.BOOK:
+											num4 = 22;
+											break;
+										case EntityID.TileID.PIGGYBANK:
+											num4 = 23;
+											break;
+										case EntityID.TileID.CLAY:
+										case EntityID.TileID.BOWL:
+											num4 = 28;
+											break;
+										case EntityID.TileID.WATER_CANDLE:
+											num4 = 29;
+											break;
+										case EntityID.TileID.COBWEB:
+											num4 = 30;
+											break;
+										case EntityID.TileID.SAND:
+										case EntityID.TileID.CORAL:
+											num4 = 32;
+											break;
+										case EntityID.TileID.OBSIDIAN:
+										case EntityID.TileID.OBSIDIAN_BRICK:
+											num4 = 37;
+											break;
+										case EntityID.TileID.ASH:
+										case EntityID.TileID.IRIDESCENT_BRICK:
+										case EntityID.TileID.EXPLOSIVES:
+											num4 = 36;
+											break;
+										case EntityID.TileID.MUD:
+										case EntityID.TileID.MUDSTONE:
+											num4 = 38;
+											break;
+										case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+										case EntityID.TileID.JUNGLE_VINE:
+										case EntityID.TileID.TALL_JUNGLE_PLANTS:
+										case EntityID.TileID.CACTUS:
+											num4 = 40;
+											break;
+										case EntityID.TileID.JUNGLE_THORN:
+											num4 = 7;
+											break;
+										case EntityID.TileID.GLOWING_MUSHROOM:
+										case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
+											num4 = 26;
+											break;
+										case EntityID.TileID.MUSHROOM_GRASS:
+											num4 = 17;
+											break;
+										case EntityID.TileID.SILT:
+											num4 = 53;
+											break;
+										case EntityID.TileID.PEARLSAND:
+										case EntityID.TileID.PEARLSTONE_BRICK:
+										case EntityID.TileID.SNOW:
+										case EntityID.TileID.SNOW_BRICK:
+											num4 = 51;
+											break;
+										case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+										case EntityID.TileID.TALL_HALLOWED_PLANTS:
+										case EntityID.TileID.HALLOWED_VINE:
+											num4 = 47;
+											break;
+										case EntityID.TileID.COBALT_ORE:
+										case EntityID.TileID.COBALT_BRICK:
+											num4 = 48;
+											break;
+										case EntityID.TileID.MYTHRIL_ORE:
+										case EntityID.TileID.MYTHRIL_BRICK:
+										case EntityID.TileID.MYTHRIL_ANVIL:
+										case EntityID.TileID.CANDY_CANE_GREEN:
+										case EntityID.TileID.XMAS_LIGHT:
+											num4 = 49;
+											break;
+										case EntityID.TileID.ADAMANTITE_ORE:
+										case EntityID.TileID.ADAMANTITE_FORGE:
+										case EntityID.TileID.CANDY_CANE_RED:
+											num4 = 50;
+											break;
+										case EntityID.TileID.DAYBLOOM_GROWING:
+										case EntityID.TileID.DAYBLOOM_MATURE:
+										case EntityID.TileID.DAYBLOOM_BLOOMING:
+											switch (ptr->FrameX / 18)
+											{
+												case 0:
+													num4 = 3;
+													break;
+												case 1:
+													num4 = 3;
+													break;
+												case 2:
+													num4 = 7;
+													break;
+												case 3:
+													num4 = 17;
+													break;
+												case 4:
+													num4 = 3;
+													break;
+												case 5:
+													num4 = 6;
+													break;
+											}
+											break;
+										default:
+											switch ((EntityID.TileID)type)
+											{
+												case EntityID.TileID.CRYSTAL_SHARD:
+													num4 = ((ptr->FrameX != 0 && ptr->FrameX != 54 && ptr->FrameX != 108) ? ((ptr->FrameX != 18 && ptr->FrameX != 72 && ptr->FrameX != 126) ? 70 : 69) : 68);
+													break;
+												case EntityID.TileID.TORCH:
+													int num5 = ptr->FrameY / 22;
+													switch (num5)
+													{
+														case 0:
+															num4 = 6;
 															break;
-														}
-												}
-												break;
-										}
+														case 8:
+															num4 = 75;
+															break;
+														default:
+															num4 = 58 + num5;
+															break;
+													}
+													break;
+											}
+											break;
 									}
 								}
 								if (num4 >= 0)
 								{
 									for (int num6 = 4; num6 >= 0; num6--)
 									{
-										switch (type)
+										switch ((EntityID.TileID)type)
 										{
-											case 2:
+											case EntityID.TileID.GRASS:
 												num4 = genRand.Next(2) << 1;
 												break;
-											case 20:
+											case EntityID.TileID.SAPLING:
 												num4 = ((genRand.Next(2) == 0) ? 7 : 2);
 												break;
-											case 23:
-											case 24:
+											case EntityID.TileID.CORRUPT_GRASS:
+											case EntityID.TileID.SHORT_CORRUPT_PLANTS:
 												num4 = ((genRand.Next(2) == 0) ? 14 : 17);
 												break;
-											case 27:
+											case EntityID.TileID.SUNFLOWER:
 												num4 = ((genRand.Next(2) == 0) ? 3 : 19);
 												break;
-											case 25:
-											case 31:
+											case EntityID.TileID.EBONSTONE:
+											case EntityID.TileID.SHADOW_ORB:
 												num4 = ((genRand.Next(2) != 0) ? 1 : 14);
 												break;
-											case 32:
+											case EntityID.TileID.CORRUPTION_THORN:
 												num4 = ((genRand.Next(2) == 0) ? 14 : 24);
 												break;
-											case 34:
-											case 35:
-											case 36:
-											case 42:
+											case EntityID.TileID.CHANDELIER:
+											case EntityID.TileID.JACK_O_LANTERN:
+											case EntityID.TileID.PRESENT:
+											case EntityID.TileID.CHAIN_LANTERN:
 												num4 = genRand.Next(2) * 6;
 												break;
-											case 37:
+											case EntityID.TileID.METEORITE:
 												num4 = ((genRand.Next(2) == 0) ? 6 : 23);
 												break;
-											case 61:
+											case EntityID.TileID.SHORT_JUNGLE_PLANTS:
 												num4 = 38 + genRand.Next(2);
 												break;
-											case 58:
-											case 76:
-											case 77:
+											case EntityID.TileID.HELLSTONE:
+											case EntityID.TileID.HELLSTONE_BRICK:
+											case EntityID.TileID.HELLFORGE:
 												num4 = ((genRand.Next(2) == 0) ? 6 : 25);
 												break;
-											case 109:
+											case EntityID.TileID.HALLOWED_GRASS:
 												num4 = genRand.Next(2) * 47;
 												break;
 										}
@@ -15426,7 +15259,7 @@ namespace Terraria
 								}
 							}
 						}
-						if (type == 21 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+						if (type == (int)EntityID.TileID.CHEST && Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
 							int num7 = ptr->FrameX / 18;
 							int y = j - ptr->FrameY / 18;
@@ -15438,414 +15271,389 @@ namespace Terraria
 						}
 						if (!Gen && !stopDrops && Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
-							int num8 = (int)Item.ID.NONE;
-							if (type == 0 || type == 2 || type == 109)
+							int num8 = (int)EntityID.ItemID.NONE;
+							switch ((EntityID.TileID)type)
 							{
-								num8 = (int)Item.ID.DIRT_BLOCK;
-							}
-							else if (type == 1)
-							{
-								num8 = (int)Item.ID.STONE_BLOCK;
-							}
-							else if (type == 3 || type == 73)
-							{
-								if (Main.Rand.Next(2) == 0)
-								{
-									Rectangle rect = default;
-									rect.X = i << 4;
-									rect.Y = j << 4;
-									rect.Width = (rect.Height = 16);
-									if (Player.FindClosest(ref rect).HasItem(281))
+								case EntityID.TileID.DIRT:
+								case EntityID.TileID.GRASS:
+								case EntityID.TileID.HALLOWED_GRASS:
+									num8 = (int)EntityID.ItemID.DIRT_BLOCK;
+									break;
+								case EntityID.TileID.STONE:
+									num8 = (int)EntityID.ItemID.STONE_BLOCK;
+									break;
+								case EntityID.TileID.SHORT_GRASS_PLANTS:
+								case EntityID.TileID.TALL_GRASS_PLANTS:
+									if (Main.Rand.Next(2) == 0)
 									{
-										num8 = (int)Item.ID.SEED;
-									}
-								}
-							}
-							else if (type == 4)
-							{
-								int num9 = ptr->FrameY / 22;
-								switch (num9)
-								{
-									case 0:
-										num8 = (int)Item.ID.TORCH;
-										break;
-									case 8:
-										num8 = (int)Item.ID.CURSED_TORCH;
-										break;
-									default:
-										num8 = (int)Item.ID.BREAKER_BLADE + num9;
-										break;
-								}
-							}
-							else if (type == 5)
-							{
-								if (ptr->FrameX >= 22 && ptr->FrameY >= 198)
-								{
-									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
-									{
-										num8 = (int)Item.ID.WOOD;
-										if (genRand.Next(2) == 0)
+										Rectangle rect = default;
+										rect.X = i << 4;
+										rect.Y = j << 4;
+										rect.Width = (rect.Height = 16);
+										if (Player.FindClosest(ref rect).HasItem((int)EntityID.ItemID.BLOWPIPE))
 										{
-											int num10 = j - 1;
-											int type3;
-											do
-											{
-												type3 = Main.TileSet[i, ++num10].Type;
-											}
-											while (!Main.TileSolidNotSolidTop[type3] || Main.TileSet[i, num10].IsActive == 0);
-											if (type3 == 2 || type3 == 109)
-											{
-												num8 = (int)Item.ID.ACORN;
-											}
+											num8 = (int)EntityID.ItemID.SEED;
 										}
 									}
-								}
-								else
-								{
-									num8 = (int)Item.ID.WOOD;
-								}
-								woodSpawned++;
-							}
-							else if (type == 6)
-							{
-								num8 = (int)Item.ID.IRON_ORE;
-							}
-							else if (type == 7)
-							{
-								num8 = (int)Item.ID.COPPER_ORE;
-							}
-							else if (type == 8)
-							{
-								num8 = (int)Item.ID.GOLD_ORE;
-							}
-							else if (type == 9)
-							{
-								num8 = (int)Item.ID.SILVER_ORE;
-							}
-							else if (type == 123)
-							{
-								num8 = (int)Item.ID.SILT_BLOCK;
-							}
-							else if (type == 124)
-							{
-								num8 = (int)Item.ID.WOODEN_BEAM;
-							}
-							else if (type == 149)
-							{
-								if (ptr->FrameX == 0 || ptr->FrameX == 54)
-								{
-									num8 = (int)Item.ID.BLUE_LIGHT;
-								}
-								else if (ptr->FrameX == 18 || ptr->FrameX == 72)
-								{
-									num8 = (int)Item.ID.RED_LIGHT;
-								}
-								else if (ptr->FrameX == 36 || ptr->FrameX == 90)
-								{
-									num8 = (int)Item.ID.GREEN_LIGHT;
-								}
-							}
-							else if (type == 13)
-							{
-								Main.PlaySound(13, i * 16, j * 16);
-								num8 = ((ptr->FrameX == 18) ? (int)Item.ID.LESSER_HEALING_POTION : ((ptr->FrameX == 36) ? (int)Item.ID.LESSER_MANA_POTION : ((ptr->FrameX == 54) ? (int)Item.ID.PINK_VASE : ((ptr->FrameX != 72) ? (int)Item.ID.BOTTLE : (int)Item.ID.MUG))));
-							}
-							else if (type == 19)
-							{
-								num8 = (int)Item.ID.WOOD_PLATFORM;
-							}
-							else if (type == 22)
-							{
-								num8 = (int)Item.ID.DEMONITE_ORE;
-							}
-							else if (type == 140)
-							{
-								num8 = (int)Item.ID.DEMONITE_BRICK;
-							}
-							else if (type == 23)
-							{
-								num8 = (int)Item.ID.DIRT_BLOCK;
-							}
-							else if (type == 25)
-							{
-								num8 = (int)Item.ID.EBONSTONE_BLOCK;
-							}
-							else if (type == 30)
-							{
-								num8 = (int)Item.ID.WOOD;
-							}
-							else if (type == 33)
-							{
-								num8 = (int)Item.ID.CANDLE;
-							}
-							else if (type == 37)
-							{
-								num8 = (int)Item.ID.METEORITE;
-							}
-							else if (type == 38)
-							{
-								num8 = (int)Item.ID.GRAY_BRICK;
-							}
-							else if (type == 39)
-							{
-								num8 = (int)Item.ID.RED_BRICK;
-							}
-							else if (type == 40)
-							{
-								num8 = (int)Item.ID.CLAY_BLOCK;
-							}
-							else if (type == 41)
-							{
-								num8 = (int)Item.ID.BLUE_BRICK;
-							}
-							else if (type == 43)
-							{
-								num8 = (int)Item.ID.GREEN_BRICK;
-							}
-							else if (type == 44)
-							{
-								num8 = (int)Item.ID.PINK_BRICK;
-							}
-							else if (type == 45)
-							{
-								num8 = (int)Item.ID.GOLD_BRICK;
-							}
-							else if (type == 46)
-							{
-								num8 = (int)Item.ID.SILVER_BRICK;
-							}
-							else if (type == 47)
-							{
-								num8 = (int)Item.ID.COPPER_BRICK;
-							}
-							else if (type == 48)
-							{
-								num8 = (int)Item.ID.SPIKE;
-							}
-							else if (type == 49)
-							{
-								num8 = (int)Item.ID.WATER_CANDLE;
-							}
-							else if (type == 51)
-							{
-								num8 = (int)Item.ID.COBWEB;
-							}
-							else if (type == 53)
-							{
-								num8 = (int)Item.ID.SAND_BLOCK;
-							}
-							else if (type == 54)
-							{
-								num8 = (int)Item.ID.GLASS;
-								Main.PlaySound(13, i * 16, j * 16);
-							}
-							else if (type == 56)
-							{
-								num8 = (int)Item.ID.OBSIDIAN;
-							}
-							else if (type == 57)
-							{
-								num8 = (int)Item.ID.ASH_BLOCK;
-							}
-							else if (type == 58)
-							{
-								num8 = (int)Item.ID.HELLSTONE;
-							}
-							else if (type == 60)
-							{
-								num8 = (int)Item.ID.MUD_BLOCK;
-							}
-							else
-							{
-								switch (type)
-								{
-									case 70:
-										num8 = (int)Item.ID.MUD_BLOCK;
-										break;
-									case 75:
-										num8 = (int)Item.ID.OBSIDIAN_BRICK;
-										break;
-									case 76:
-										num8 = (int)Item.ID.HELLSTONE_BRICK;
-										break;
-									case 78:
-										num8 = (int)Item.ID.CLAY_POT;
-										break;
-									case 81:
-										num8 = (int)Item.ID.CORAL;
-										break;
-									case 80:
-										num8 = (int)Item.ID.CACTUS;
-										break;
-									case 107:
-										num8 = (int)Item.ID.COBALT_ORE;
-										break;
-									case 108:
-										num8 = (int)Item.ID.MYTHRIL_ORE;
-										break;
-									case 111:
-										num8 = (int)Item.ID.ADAMANTITE_ORE;
-										break;
-									case 112:
-										num8 = (int)Item.ID.EBONSAND_BLOCK;
-										break;
-									case 116:
-										num8 = (int)Item.ID.PEARLSAND_BLOCK;
-										break;
-									case 117:
-										num8 = (int)Item.ID.PEARLSTONE_BLOCK;
-										break;
-									case 118:
-										num8 = (int)Item.ID.PEARLSTONE_BRICK;
-										break;
-									case 119:
-										num8 = (int)Item.ID.IRIDESCENT_BRICK;
-										break;
-									case 120:
-										num8 = (int)Item.ID.MUDSTONE_BRICK;
-										break;
-									case 121:
-										num8 = (int)Item.ID.COBALT_BRICK;
-										break;
-									case 122:
-										num8 = (int)Item.ID.MYTHRIL_BRICK;
-										break;
-									case 129:
-										num8 = (int)Item.ID.CRYSTAL_SHARD;
-										break;
-									case 130:
-										num8 = (int)Item.ID.ACTIVE_STONE_BLOCK;
-										break;
-									case 131:
-										num8 = (int)Item.ID.INACTIVE_STONE_BLOCK;
-										break;
-									case 136:
-										num8 = (int)Item.ID.SWITCH;
-										break;
-									case 137:
-										num8 = (int)Item.ID.DART_TRAP;
-										break;
-									case 141:
-										num8 = (int)Item.ID.EXPLOSIVES;
-										break;
-									case 145:
-										num8 = (int)Item.ID.CANDY_CANE_BLOCK;
-										break;
-									case 146:
-										num8 = (int)Item.ID.GREEN_CANDY_CANE_BLOCK;
-										break;
-									case 147:
-										num8 = (int)Item.ID.SNOW_BLOCK;
-										break;
-									case 148:
-										num8 = (int)Item.ID.SNOW_BRICK;
-										break;
-									case 135:
-										if (ptr->FrameY == 0)
+									break;
+								case EntityID.TileID.TORCH:
+									int num9 = ptr->FrameY / 22;
+									switch (num9)
+									{
+										case 0:
+											num8 = (int)EntityID.ItemID.TORCH;
+											break;
+										case 8:
+											num8 = (int)EntityID.ItemID.CURSED_TORCH;
+											break;
+										default:
+											num8 = (int)EntityID.ItemID.BLUE_TORCH - 1 + num9;
+											break;
+									}
+									break;
+								case EntityID.TileID.TREE:
+									if (ptr->FrameX >= 22 && ptr->FrameY >= 198)
+									{
+										if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 										{
-											num8 = (int)Item.ID.RED_PRESSURE_PLATE;
-										}
-										else if (ptr->FrameY == 18)
-										{
-											num8 = (int)Item.ID.GREEN_PRESSURE_PLATE;
-										}
-										else if (ptr->FrameY == 36)
-										{
-											num8 = (int)Item.ID.GRAY_PRESSURE_PLATE;
-										}
-										else if (ptr->FrameY == 54)
-										{
-											num8 = (int)Item.ID.BROWN_PRESSURE_PLATE;
-										}
-										break;
-									case 144:
-										if (ptr->FrameX == 0)
-										{
-											num8 = (int)Item.ID.ONE_SECOND_TIMER;
-										}
-										else if (ptr->FrameX == 18)
-										{
-											num8 = (int)Item.ID.THREE_SECOND_TIMER;
-										}
-										else if (ptr->FrameX == 36)
-										{
-											num8 = (int)Item.ID.FIVE_SECOND_TIMER;
-										}
-										break;
-									case 61:
-									case 74:
-										if (ptr->FrameX == 144)
-										{
-											Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.JUNGLE_SPORES, genRand.Next(2, 4));
-										}
-										else if (ptr->FrameX == 162)
-										{
-											num8 = (int)Item.ID.NATURES_GIFT;
-										}
-										else if (ptr->FrameX >= 108 && ptr->FrameX <= 126 && genRand.Next(100) == 0)
-										{
-											num8 = (int)Item.ID.JUNGLE_ROSE;
-										}
-										else if (genRand.Next(100) == 0)
-										{
-											num8 = (int)Item.ID.JUNGLE_GRASS_SEEDS;
-										}
-										break;
-									case 59:
-									case 60:
-										num8 = (int)Item.ID.MUD_BLOCK;
-										break;
-									case 71:
-									case 72:
-										{
-											int num12 = genRand.Next(50);
-											if (num12 < 25)
+											num8 = (int)EntityID.ItemID.WOOD;
+											if (genRand.Next(2) == 0)
 											{
-												num8 = ((num12 != 0) ? (int)Item.ID.GLOWING_MUSHROOM : (int)Item.ID.MUSHROOM_GRASS_SEEDS);
-											}
-											break;
-										}
-									default:
-										if (ptr->Type >= 63 && ptr->Type <= 68)
-										{
-											num8 = ptr->Type - 63 + (int)Item.ID.SAPPHIRE;
-											break;
-										}
-										switch (type)
-										{
-											case 50:
-												num8 = ((ptr->FrameX != 90) ? (int)Item.ID.BOOK : (int)Item.ID.WATER_BOLT);
-												break;
-											case 83:
-											case 84:
+												int num10 = j - 1;
+												int type3;
+												do
 												{
-													int num11 = ptr->FrameX / 18;
-													bool flag = type == 84;
-													if (!flag)
-													{
-														if (num11 == 0 && Main.GameTime.DayTime)
-														{
-															flag = true;
-														}
-														else if (num11 == 1 && !Main.GameTime.DayTime)
-														{
-															flag = true;
-														}
-														else if (num11 == 3 && Main.GameTime.IsBloodMoon)
-														{
-															flag = true;
-														}
-													}
-													if (flag)
-													{
-														Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.DAYBLOOM_SEEDS + num11, genRand.Next(1, 4));
-													}
-													num8 = (int)Item.ID.DAYBLOOM + num11;
-													break;
+													type3 = Main.TileSet[i, ++num10].Type;
 												}
+												while (!Main.TileSolidNotSolidTop[type3] || Main.TileSet[i, num10].IsActive == 0);
+												if (type3 == (int)EntityID.TileID.GRASS || type3 == (int)EntityID.TileID.HALLOWED_GRASS)
+												{
+													num8 = (int)EntityID.ItemID.ACORN;
+												}
+											}
+										}
+									}
+									else
+									{
+										num8 = (int)EntityID.ItemID.WOOD;
+									}
+									woodSpawned++;
+									break;
+								case EntityID.TileID.IRON_ORE:
+									num8 = (int)EntityID.ItemID.IRON_ORE;
+									break;
+								case EntityID.TileID.COPPER_ORE:
+									num8 = (int)EntityID.ItemID.COPPER_ORE;
+									break;
+								case EntityID.TileID.GOLD_ORE:
+									num8 = (int)EntityID.ItemID.GOLD_ORE;
+									break;
+								case EntityID.TileID.SILVER_ORE:
+									num8 = (int)EntityID.ItemID.SILVER_ORE;
+									break;
+								case EntityID.TileID.SILT:
+									num8 = (int)EntityID.ItemID.SILT_BLOCK;
+									break;
+								case EntityID.TileID.WOODEN_BEAM:
+									num8 = (int)EntityID.ItemID.WOODEN_BEAM;
+									break;
+								case EntityID.TileID.XMAS_LIGHT:
+									if (ptr->FrameX == 0 || ptr->FrameX == 54)
+									{
+										num8 = (int)EntityID.ItemID.BLUE_LIGHT;
+									}
+									else if (ptr->FrameX == 18 || ptr->FrameX == 72)
+									{
+										num8 = (int)EntityID.ItemID.RED_LIGHT;
+									}
+									else if (ptr->FrameX == 36 || ptr->FrameX == 90)
+									{
+										num8 = (int)EntityID.ItemID.GREEN_LIGHT;
+									}
+									break;
+								case EntityID.TileID.BOTTLE:
+									Main.PlaySound(13, i * 16, j * 16);
+									switch (ptr->FrameX)
+									{
+										case 18:
+											num8 = (int)EntityID.ItemID.LESSER_HEALING_POTION;
+											break;
+										case 36:
+											num8 = (int)EntityID.ItemID.LESSER_MANA_POTION;
+											break;
+										case 54:
+											num8 = (int)EntityID.ItemID.PINK_VASE;
+											break;
+										case 72:
+											num8 = (int)EntityID.ItemID.MUG;
+											break;
+										default:
+											num8 = (int)EntityID.ItemID.BOTTLE;
+											break;
+									}
+									break;
+								case EntityID.TileID.PLATFORM:
+									num8 = (int)EntityID.ItemID.WOOD_PLATFORM;
+									break;
+								case EntityID.TileID.DEMONITE_ORE:
+									num8 = (int)EntityID.ItemID.DEMONITE_ORE;
+									break;
+								case EntityID.TileID.DEMONITE_BRICK:
+									num8 = (int)EntityID.ItemID.DEMONITE_BRICK;
+									break;
+								case EntityID.TileID.CORRUPT_GRASS:
+									num8 = (int)EntityID.ItemID.DIRT_BLOCK;
+									break;
+								case EntityID.TileID.EBONSTONE:
+									num8 = (int)EntityID.ItemID.EBONSTONE_BLOCK;
+									break;
+								case EntityID.TileID.WOOD:
+									num8 = (int)EntityID.ItemID.WOOD;
+									break;
+								case EntityID.TileID.CANDLE:
+									num8 = (int)EntityID.ItemID.CANDLE;
+									break;
+								case EntityID.TileID.METEORITE:
+									num8 = (int)EntityID.ItemID.METEORITE;
+									break;
+								case EntityID.TileID.GRAY_BRICK:
+									num8 = (int)EntityID.ItemID.GRAY_BRICK;
+									break;
+								case EntityID.TileID.RED_BRICK:
+									num8 = (int)EntityID.ItemID.RED_BRICK;
+									break;
+								case EntityID.TileID.CLAY:
+									num8 = (int)EntityID.ItemID.CLAY_BLOCK;
+									break;
+								case EntityID.TileID.BLUE_BRICK:
+									num8 = (int)EntityID.ItemID.BLUE_BRICK;
+									break;
+								case EntityID.TileID.GREEN_BRICK:
+									num8 = (int)EntityID.ItemID.GREEN_BRICK;
+									break;
+								case EntityID.TileID.PINK_BRICK:
+									num8 = (int)EntityID.ItemID.PINK_BRICK;
+									break;
+								case EntityID.TileID.GOLD_BRICK:
+									num8 = (int)EntityID.ItemID.GOLD_BRICK;
+									break;
+								case EntityID.TileID.SILVER_BRICK:
+									num8 = (int)EntityID.ItemID.SILVER_BRICK;
+									break;
+								case EntityID.TileID.COPPER_BRICK:
+									num8 = (int)EntityID.ItemID.COPPER_BRICK;
+									break;
+								case EntityID.TileID.SPIKE:
+									num8 = (int)EntityID.ItemID.SPIKE;
+									break;
+								case EntityID.TileID.WATER_CANDLE:
+									num8 = (int)EntityID.ItemID.WATER_CANDLE;
+									break;
+								case EntityID.TileID.COBWEB:
+									num8 = (int)EntityID.ItemID.COBWEB;
+									break;
+								case EntityID.TileID.SAND:
+									num8 = (int)EntityID.ItemID.SAND_BLOCK;
+									break;
+								case EntityID.TileID.GLASS:
+									num8 = (int)EntityID.ItemID.GLASS;
+									Main.PlaySound(13, i * 16, j * 16);
+									break;
+								case EntityID.TileID.OBSIDIAN:
+									num8 = (int)EntityID.ItemID.OBSIDIAN;
+									break;
+								case EntityID.TileID.ASH:
+									num8 = (int)EntityID.ItemID.ASH_BLOCK;
+									break;
+								case EntityID.TileID.HELLSTONE:
+									num8 = (int)EntityID.ItemID.HELLSTONE;
+									break;
+								case EntityID.TileID.MUSHROOM_GRASS:
+									num8 = (int)EntityID.ItemID.MUD_BLOCK;
+									break;
+								case EntityID.TileID.OBSIDIAN_BRICK:
+									num8 = (int)EntityID.ItemID.OBSIDIAN_BRICK;
+									break;
+								case EntityID.TileID.HELLSTONE_BRICK:
+									num8 = (int)EntityID.ItemID.HELLSTONE_BRICK;
+									break;
+								case EntityID.TileID.CLAY_POT:
+									num8 = (int)EntityID.ItemID.CLAY_POT;
+									break;
+								case EntityID.TileID.CORAL:
+									num8 = (int)EntityID.ItemID.CORAL;
+									break;
+								case EntityID.TileID.CACTUS:
+									num8 = (int)EntityID.ItemID.CACTUS;
+									break;
+								case EntityID.TileID.COBALT_ORE:
+									num8 = (int)EntityID.ItemID.COBALT_ORE;
+									break;
+								case EntityID.TileID.MYTHRIL_ORE:
+									num8 = (int)EntityID.ItemID.MYTHRIL_ORE;
+									break;
+								case EntityID.TileID.ADAMANTITE_ORE:
+									num8 = (int)EntityID.ItemID.ADAMANTITE_ORE;
+									break;
+								case EntityID.TileID.EBONSAND:
+									num8 = (int)EntityID.ItemID.EBONSAND_BLOCK;
+									break;
+								case EntityID.TileID.PEARLSAND:
+									num8 = (int)EntityID.ItemID.PEARLSAND_BLOCK;
+									break;
+								case EntityID.TileID.PEARLSTONE:
+									num8 = (int)EntityID.ItemID.PEARLSTONE_BLOCK;
+									break;
+								case EntityID.TileID.PEARLSTONE_BRICK:
+									num8 = (int)EntityID.ItemID.PEARLSTONE_BRICK;
+									break;
+								case EntityID.TileID.IRIDESCENT_BRICK:
+									num8 = (int)EntityID.ItemID.IRIDESCENT_BRICK;
+									break;
+								case EntityID.TileID.MUDSTONE:
+									num8 = (int)EntityID.ItemID.MUDSTONE_BRICK;
+									break;
+								case EntityID.TileID.COBALT_BRICK:
+									num8 = (int)EntityID.ItemID.COBALT_BRICK;
+									break;
+								case EntityID.TileID.MYTHRIL_BRICK:
+									num8 = (int)EntityID.ItemID.MYTHRIL_BRICK;
+									break;
+								case EntityID.TileID.CRYSTAL_SHARD:
+									num8 = (int)EntityID.ItemID.CRYSTAL_SHARD;
+									break;
+								case EntityID.TileID.ACTIVE_STONE:
+									num8 = (int)EntityID.ItemID.ACTIVE_STONE_BLOCK;
+									break;
+								case EntityID.TileID.INACTIVE_STONE:
+									num8 = (int)EntityID.ItemID.INACTIVE_STONE_BLOCK;
+									break;
+								case EntityID.TileID.SWITCH:
+									num8 = (int)EntityID.ItemID.SWITCH;
+									break;
+								case EntityID.TileID.TRAP:
+									num8 = (int)EntityID.ItemID.DART_TRAP;
+									break;
+								case EntityID.TileID.EXPLOSIVES:
+									num8 = (int)EntityID.ItemID.EXPLOSIVES;
+									break;
+								case EntityID.TileID.CANDY_CANE_RED:
+									num8 = (int)EntityID.ItemID.CANDY_CANE_BLOCK;
+									break;
+								case EntityID.TileID.CANDY_CANE_GREEN:
+									num8 = (int)EntityID.ItemID.GREEN_CANDY_CANE_BLOCK;
+									break;
+								case EntityID.TileID.SNOW:
+									num8 = (int)EntityID.ItemID.SNOW_BLOCK;
+									break;
+								case EntityID.TileID.SNOW_BRICK:
+									num8 = (int)EntityID.ItemID.SNOW_BRICK;
+									break;
+								case EntityID.TileID.PRESSURE_PLATE:
+									if (ptr->FrameY == 0)
+									{
+										num8 = (int)EntityID.ItemID.RED_PRESSURE_PLATE;
+									}
+									else if (ptr->FrameY == 18)
+									{
+										num8 = (int)EntityID.ItemID.GREEN_PRESSURE_PLATE;
+									}
+									else if (ptr->FrameY == 36)
+									{
+										num8 = (int)EntityID.ItemID.GRAY_PRESSURE_PLATE;
+									}
+									else if (ptr->FrameY == 54)
+									{
+										num8 = (int)EntityID.ItemID.BROWN_PRESSURE_PLATE;
+									}
+									break;
+								case EntityID.TileID.TIMER:
+									if (ptr->FrameX == 0)
+									{
+										num8 = (int)EntityID.ItemID.ONE_SECOND_TIMER;
+									}
+									else if (ptr->FrameX == 18)
+									{
+										num8 = (int)EntityID.ItemID.THREE_SECOND_TIMER;
+									}
+									else if (ptr->FrameX == 36)
+									{
+										num8 = (int)EntityID.ItemID.FIVE_SECOND_TIMER;
+									}
+									break;
+								case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+								case EntityID.TileID.TALL_JUNGLE_PLANTS:
+									if (ptr->FrameX == 144)
+									{
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.JUNGLE_SPORES, genRand.Next(2, 4));
+									}
+									else if (ptr->FrameX == 162)
+									{
+										num8 = (int)EntityID.ItemID.NATURES_GIFT;
+									}
+									else if (ptr->FrameX >= 108 && ptr->FrameX <= 126 && genRand.Next(100) == 0)
+									{
+										num8 = (int)EntityID.ItemID.JUNGLE_ROSE;
+									}
+									else if (genRand.Next(100) == 0)
+									{
+										num8 = (int)EntityID.ItemID.JUNGLE_GRASS_SEEDS;
+									}
+									break;
+								case EntityID.TileID.MUD:
+								case EntityID.TileID.JUNGLE_GRASS:
+									num8 = (int)EntityID.ItemID.MUD_BLOCK;
+									break;
+								case EntityID.TileID.GLOWING_MUSHROOM:
+								case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
+									{
+										int num12 = genRand.Next(50);
+										if (num12 < 25)
+										{
+											num8 = ((num12 != 0) ? (int)EntityID.ItemID.GLOWING_MUSHROOM : (int)EntityID.ItemID.MUSHROOM_GRASS_SEEDS);
 										}
 										break;
-								}
+									}
+								default:
+									if (ptr->Type >= (byte)EntityID.TileID.SAPPHIRE && ptr->Type <= (byte)EntityID.TileID.DIAMOND)
+									{
+										num8 = ptr->Type - (byte)EntityID.TileID.SAPPHIRE + (int)EntityID.ItemID.SAPPHIRE;
+										break;
+									}
+									switch ((EntityID.TileID)type)
+									{
+										case EntityID.TileID.BOOK:
+											num8 = ((ptr->FrameX != 90) ? (int)EntityID.ItemID.BOOK : (int)EntityID.ItemID.WATER_BOLT);
+											break;
+										case EntityID.TileID.DAYBLOOM_MATURE:
+										case EntityID.TileID.DAYBLOOM_BLOOMING:
+											{
+												int num11 = ptr->FrameX / 18;
+												bool flag = type == (int)EntityID.TileID.DAYBLOOM_BLOOMING;
+												if (!flag)
+												{
+													if (num11 == 0 && Main.GameTime.DayTime)
+													{
+														flag = true;
+													}
+													else if (num11 == 1 && !Main.GameTime.DayTime)
+													{
+														flag = true;
+													}
+													else if (num11 == 3 && Main.GameTime.IsBloodMoon)
+													{
+														flag = true;
+													}
+												}
+												if (flag)
+												{
+													Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.DAYBLOOM_SEEDS + num11, genRand.Next(1, 4));
+												}
+												num8 = (int)EntityID.ItemID.DAYBLOOM + num11;
+												break;
+											}
+									}
+									break;
 							}
 							if (num8 > 0)
 							{
@@ -15857,7 +15665,7 @@ namespace Terraria
 						ptr->FrameX = -1;
 						ptr->FrameY = -1;
 						ptr->frameNumber = 0;
-						if (type == 58 && j > Main.MaxTilesY - 200)
+						if (type == (int)EntityID.TileID.HELLSTONE && j > Main.MaxTilesY - 200)
 						{
 							ptr->Lava = 32;
 							ptr->Liquid = 128;
@@ -15889,18 +15697,18 @@ namespace Terraria
 					if (ptr2->IsActive != 0)
 					{
 						int type2 = ptr2->Type;
-						switch (type2)
+						switch ((EntityID.TileID)type2)
 						{
-							case 5:
+							case EntityID.TileID.TREE:
 								if (type != type2 && (ptr[-1].FrameX != 66 || ptr[-1].FrameY < 0 || ptr[-1].FrameY > 44) && (ptr[-1].FrameX != 88 || ptr[-1].FrameY < 66 || ptr[-1].FrameY > 110) && ptr[-1].FrameY < 198)
 								{
 									return;
 								}
 								break;
-							case 12:
-							case 21:
-							case 26:
-							case 72:
+							case EntityID.TileID.LIFE_CRYSTAL:
+							case EntityID.TileID.CHEST:
+							case EntityID.TileID.DEMON_ALTAR:
+							case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 								if (type != type2)
 								{
 									return;
@@ -15911,88 +15719,95 @@ namespace Terraria
 				}
 				if (!Gen && !EffectOnly && !stopDrops)
 				{
-					if (type == 127)
+					switch ((EntityID.TileID)type)
 					{
-						Main.PlaySound(2, i * 16, j * 16, 27);
-					}
-					else if (type == 3 || type == 110)
-					{
-						Main.PlaySound(6, i * 16, j * 16);
-						if (ptr->FrameX == 144)
-						{
-							Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.MUSHROOM);
-						}
-					}
-					else if (type == 24)
-					{
-						Main.PlaySound(6, i * 16, j * 16);
-						if (ptr->FrameX == 144)
-						{
-							Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.VILE_MUSHROOM);
-						}
-					}
-					else if (type == 32 || type == 51 || type == 52 || type == 61 || type == 62 || type == 69 || type == 71 || type == 73 || type == 74 || (type >= 82 && type <= 84) || type == 113 || type == 115)
-					{
-						Main.PlaySound(6, i * 16, j * 16);
-					}
-					else
-					{
-						switch (type)
-						{
-							case 1:
-							case 6:
-							case 7:
-							case 8:
-							case 9:
-							case 22:
-							case 25:
-							case 37:
-							case 38:
-							case 39:
-							case 41:
-							case 43:
-							case 44:
-							case 45:
-							case 46:
-							case 47:
-							case 48:
-							case 56:
-							case 58:
-							case 63:
-							case 64:
-							case 65:
-							case 66:
-							case 67:
-							case 68:
-							case 75:
-							case 76:
-							case 107:
-							case 108:
-							case 111:
-							case 117:
-							case 118:
-							case 119:
-							case 120:
-							case 121:
-							case 122:
-							case 140:
-								Main.PlaySound(21, i * 16, j * 16);
-								break;
-							default:
-								Main.PlaySound(0, i * 16, j * 16);
-								if (type == 129 && !KillToFail)
-								{
-									Main.PlaySound(2, i * 16, j * 16, 27);
-								}
-								break;
-							case 138:
-								break;
-						}
+						case EntityID.TileID.STONE:
+						case EntityID.TileID.IRON_ORE:
+						case EntityID.TileID.COPPER_ORE:
+						case EntityID.TileID.GOLD_ORE:
+						case EntityID.TileID.SILVER_ORE:
+						case EntityID.TileID.DEMONITE_ORE:
+						case EntityID.TileID.EBONSTONE:
+						case EntityID.TileID.METEORITE:
+						case EntityID.TileID.GRAY_BRICK:
+						case EntityID.TileID.RED_BRICK:
+						case EntityID.TileID.BLUE_BRICK:
+						case EntityID.TileID.GREEN_BRICK:
+						case EntityID.TileID.PINK_BRICK:
+						case EntityID.TileID.GOLD_BRICK:
+						case EntityID.TileID.SILVER_BRICK:
+						case EntityID.TileID.COPPER_BRICK:
+						case EntityID.TileID.SPIKE:
+						case EntityID.TileID.OBSIDIAN:
+						case EntityID.TileID.HELLSTONE:
+						case EntityID.TileID.SAPPHIRE:
+						case EntityID.TileID.RUBY:
+						case EntityID.TileID.EMERALD:
+						case EntityID.TileID.TOPAZ:
+						case EntityID.TileID.AMETHYST:
+						case EntityID.TileID.DIAMOND:
+						case EntityID.TileID.OBSIDIAN_BRICK:
+						case EntityID.TileID.HELLSTONE_BRICK:
+						case EntityID.TileID.COBALT_ORE:
+						case EntityID.TileID.MYTHRIL_ORE:
+						case EntityID.TileID.ADAMANTITE_ORE:
+						case EntityID.TileID.PEARLSTONE:
+						case EntityID.TileID.PEARLSTONE_BRICK:
+						case EntityID.TileID.IRIDESCENT_BRICK:
+						case EntityID.TileID.MUDSTONE:
+						case EntityID.TileID.COBALT_BRICK:
+						case EntityID.TileID.MYTHRIL_BRICK:
+						case EntityID.TileID.DEMONITE_BRICK:
+							Main.PlaySound(21, i * 16, j * 16);
+							break;
+						case EntityID.TileID.SHORT_GRASS_PLANTS:
+						case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+							Main.PlaySound(6, i * 16, j * 16);
+							if (ptr->FrameX == 144)
+							{
+								Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.MUSHROOM);
+							}
+							break;
+						case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							Main.PlaySound(6, i * 16, j * 16);
+							if (ptr->FrameX == 144)
+							{
+								Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.VILE_MUSHROOM);
+							}
+							break;
+						case EntityID.TileID.CORRUPTION_THORN:
+						case EntityID.TileID.COBWEB:
+						case EntityID.TileID.VINE:
+						case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+						case EntityID.TileID.JUNGLE_VINE:
+						case EntityID.TileID.JUNGLE_THORN:
+						case EntityID.TileID.GLOWING_MUSHROOM:
+						case EntityID.TileID.TALL_GRASS_PLANTS:
+						case EntityID.TileID.TALL_JUNGLE_PLANTS:
+						case EntityID.TileID.DAYBLOOM_GROWING:
+						case EntityID.TileID.DAYBLOOM_MATURE:
+						case EntityID.TileID.DAYBLOOM_BLOOMING:
+						case EntityID.TileID.TALL_HALLOWED_PLANTS:
+						case EntityID.TileID.HALLOWED_VINE:
+							Main.PlaySound(6, i * 16, j * 16);
+							break;
+						case EntityID.TileID.ICE:
+							Main.PlaySound(2, i * 16, j * 16, 27);
+							break;
+						case EntityID.TileID.BOULDER:
+							break;
+						default:
+							Main.PlaySound(0, i * 16, j * 16);
+							if (type == (int)EntityID.TileID.CRYSTAL_SHARD && !KillToFail)
+							{
+								Main.PlaySound(2, i * 16, j * 16, 27);
+							}
+							break;
 					}
 				}
-				if (type != 138)
+				if (type != (int)EntityID.TileID.BOULDER)
 				{
-					if (type == 128)
+					if (type == (int)EntityID.TileID.MANNEQUIN)
 					{
 						int num = i;
 						int frameX = ptr->FrameX;
@@ -16027,276 +15842,295 @@ namespace Terraria
 						int num4 = 0;
 						if (type != 0)
 						{
-							if (type == 1 || type == 16 || type == 17 || type == 38 || type == 39 || type == 41 || type == 43 || type == 44 || type == 48 || type == 85 || type == 90 || type == 92 || type == 96 || type == 97 || type == 99 || type == 105 || type == 117 || type == 130 || type == 131 || type == 132 || type == 135 || type == 137 || type == 142 || type == 143 || type == 144 || Main.TileStone[type])
+							switch ((EntityID.TileID)type)
 							{
-								num4 = 1;
-							}
-							else
-							{
-								switch (type)
-								{
-									case 33:
-									case 95:
-									case 98:
-									case 100:
-										num4 = 6;
-										break;
-									case 5:
-									case 10:
-									case 11:
-									case 14:
-									case 15:
-									case 19:
-									case 30:
-									case 86:
-									case 87:
-									case 88:
-									case 89:
-									case 93:
-									case 94:
-									case 104:
-									case 106:
-									case 114:
-									case 124:
-									case 128:
-									case 139:
-										num4 = 7;
-										break;
-									case 21:
-										num4 = ((ptr->FrameX < 108) ? ((ptr->FrameX < 36) ? 7 : 10) : 37);
-										break;
-									case 127:
-										num4 = 67;
-										break;
-									case 91:
-										num4 = -1;
-										break;
-									case 6:
-									case 26:
-										num4 = 8;
-										break;
-									case 7:
-									case 34:
-									case 47:
-										num4 = 9;
-										break;
-									case 8:
-									case 36:
-									case 45:
-									case 102:
-										num4 = 10;
-										break;
-									case 9:
-									case 35:
-									case 42:
-									case 46:
-									case 126:
-									case 136:
-										num4 = 11;
-										break;
-									case 12:
-										num4 = 12;
-										break;
-									case 3:
-									case 73:
-										num4 = 3;
-										break;
-									case 13:
-									case 54:
-										num4 = 13;
-										break;
-									case 22:
-									case 140:
-										num4 = 14;
-										break;
-									case 28:
-									case 78:
-										num4 = 22;
-										break;
-									case 29:
-										num4 = 23;
-										break;
-									case 40:
-									case 103:
-										num4 = 28;
-										break;
-									case 49:
-										num4 = 29;
-										break;
-									case 50:
-										num4 = 22;
-										break;
-									case 51:
-										num4 = 30;
-										break;
-									case 52:
-										num4 = 3;
-										break;
-									case 53:
-									case 81:
-										num4 = 32;
-										break;
-									case 56:
-									case 75:
-										num4 = 37;
-										break;
-									case 57:
-									case 119:
-									case 141:
-										num4 = 36;
-										break;
-									case 59:
-									case 120:
-										num4 = 38;
-										break;
-									case 61:
-									case 62:
-									case 74:
-									case 80:
-										num4 = 40;
-										break;
-									case 69:
-										num4 = 7;
-										break;
-									case 71:
-									case 72:
-										num4 = 26;
-										break;
-									case 70:
-										num4 = 17;
-										break;
-									case 112:
-										num4 = 14;
-										break;
-									case 123:
-										num4 = 53;
-										break;
-									case 116:
-									case 118:
-									case 147:
-									case 148:
-										num4 = 51;
-										break;
-									case 110:
-									case 113:
-									case 115:
-										num4 = 47;
-										break;
-									case 107:
-									case 121:
-										num4 = 48;
-										break;
-									case 108:
-									case 122:
-									case 134:
-									case 146:
-										num4 = 49;
-										break;
-									case 111:
-									case 133:
-									case 145:
-										num4 = 50;
-										break;
-									case 149:
-										num4 = 49;
-										break;
-									case 82:
-									case 83:
-									case 84:
-										switch (ptr->FrameX / 18)
-										{
-											case 0:
-												num4 = 3;
-												break;
-											case 1:
-												num4 = 3;
-												break;
-											case 2:
-												num4 = 7;
-												break;
-											case 3:
-												num4 = 17;
-												break;
-											case 4:
-												num4 = 3;
-												break;
-											case 5:
-												num4 = 6;
-												break;
-										}
-										break;
-									default:
-										switch (type)
-										{
-											case 129:
-												num4 = ((ptr->FrameX != 0 && ptr->FrameX != 54 && ptr->FrameX != 108) ? ((ptr->FrameX != 18 && ptr->FrameX != 72 && ptr->FrameX != 126) ? 70 : 69) : 68);
-												break;
-											case 4:
-												{
-													int num5 = ptr->FrameY / 22;
-													switch (num5)
-													{
-														case 0:
-															num4 = 6;
-															break;
-														case 8:
-															num4 = 75;
-															break;
-														default:
-															num4 = 58 + num5;
-															break;
-													}
+								case EntityID.TileID.STONE:
+								case EntityID.TileID.ANVIL:
+								case EntityID.TileID.FURNACE:
+								case EntityID.TileID.GRAY_BRICK:
+								case EntityID.TileID.RED_BRICK:
+								case EntityID.TileID.BLUE_BRICK:
+								case EntityID.TileID.GREEN_BRICK:
+								case EntityID.TileID.PINK_BRICK:
+								case EntityID.TileID.SPIKE:
+								case EntityID.TileID.SAPPHIRE:
+								case EntityID.TileID.RUBY:
+								case EntityID.TileID.EMERALD:
+								case EntityID.TileID.TOPAZ:
+								case EntityID.TileID.AMETHYST:
+								case EntityID.TileID.DIAMOND:
+								case EntityID.TileID.TOMBSTONE:
+								case EntityID.TileID.BATHTUB:
+								case EntityID.TileID.LAMP_POST:
+								case EntityID.TileID.COOKING_POT:
+								case EntityID.TileID.SAFE:
+								case EntityID.TileID.TRASH_CAN:
+								case EntityID.TileID.STATUE:
+								case EntityID.TileID.PEARLSTONE:
+								case EntityID.TileID.ACTIVE_STONE:
+								case EntityID.TileID.INACTIVE_STONE:
+								case EntityID.TileID.LEVER:
+								case EntityID.TileID.PRESSURE_PLATE:
+								case EntityID.TileID.TRAP:
+								case EntityID.TileID.PUMP_IN:
+								case EntityID.TileID.PUMP_OUT:
+								case EntityID.TileID.TIMER:
+									num4 = 1;
+									break;
+								case EntityID.TileID.CANDLE:
+								case EntityID.TileID.CHINESE_LANTERN:
+								case EntityID.TileID.SKULL_LANTERN:
+								case EntityID.TileID.CANDELABRA:
+#if VERSION_101
+								case EntityID.TileID.CAMPFIRE:
+#endif
+									num4 = 6;
+									break;
+								case EntityID.TileID.TREE:
+								case EntityID.TileID.DOOR_CLOSED:
+								case EntityID.TileID.DOOR_OPEN:
+								case EntityID.TileID.TABLE:
+								case EntityID.TileID.CHAIR:
+								case EntityID.TileID.PLATFORM:
+								case EntityID.TileID.WOOD:
+								case EntityID.TileID.LOOM:
+								case EntityID.TileID.PIANO:
+								case EntityID.TileID.DRESSER:
+								case EntityID.TileID.BENCH:
+								case EntityID.TileID.TIKI_TORCH:
+								case EntityID.TileID.KEG:
+								case EntityID.TileID.GRANDFATHERS_CLOCK:
+								case EntityID.TileID.SAWMILL:
+								case EntityID.TileID.TINKERERS_WORKSHOP:
+								case EntityID.TileID.WOODEN_BEAM:
+								case EntityID.TileID.MANNEQUIN:
+								case EntityID.TileID.MUSIC_BOX:
+									num4 = 7;
+									break;
+								case EntityID.TileID.CHEST:
+									num4 = ((ptr->FrameX < 108) ? ((ptr->FrameX < 36) ? 7 : 10) : 37);
+									break;
+								case EntityID.TileID.ICE:
+									num4 = 67;
+									break;
+								case EntityID.TileID.BANNER:
+									num4 = -1;
+									break;
+								case EntityID.TileID.IRON_ORE:
+								case EntityID.TileID.DEMON_ALTAR:
+									num4 = 8;
+									break;
+								case EntityID.TileID.COPPER_ORE:
+								case EntityID.TileID.CHANDELIER:
+								case EntityID.TileID.COPPER_BRICK:
+									num4 = 9;
+									break;
+								case EntityID.TileID.GOLD_ORE:
+								case EntityID.TileID.PRESENT:
+								case EntityID.TileID.GOLD_BRICK:
+								case EntityID.TileID.THRONE:
+									num4 = 10;
+									break;
+								case EntityID.TileID.SILVER_ORE:
+								case EntityID.TileID.JACK_O_LANTERN:
+								case EntityID.TileID.CHAIN_LANTERN:
+								case EntityID.TileID.SILVER_BRICK:
+								case EntityID.TileID.DISCO_BALL:
+								case EntityID.TileID.SWITCH:
+									num4 = 11;
+									break;
+								case EntityID.TileID.LIFE_CRYSTAL:
+									num4 = 12;
+									break;
+								case EntityID.TileID.SHORT_GRASS_PLANTS:
+								case EntityID.TileID.TALL_GRASS_PLANTS:
+								case EntityID.TileID.VINE:
+									num4 = 3;
+									break;
+								case EntityID.TileID.BOTTLE:
+								case EntityID.TileID.GLASS:
+									num4 = 13;
+									break;
+								case EntityID.TileID.DEMONITE_ORE:
+								case EntityID.TileID.DEMONITE_BRICK:
+								case EntityID.TileID.EBONSAND:
+									num4 = 14;
+									break;
+								case EntityID.TileID.POT:
+								case EntityID.TileID.CLAY_POT:
+								case EntityID.TileID.BOOK:
+									num4 = 22;
+									break;
+								case EntityID.TileID.PIGGYBANK:
+									num4 = 23;
+									break;
+								case EntityID.TileID.CLAY:
+								case EntityID.TileID.BOWL:
+									num4 = 28;
+									break;
+								case EntityID.TileID.WATER_CANDLE:
+									num4 = 29;
+									break;
+								case EntityID.TileID.COBWEB:
+									num4 = 30;
+									break;
+								case EntityID.TileID.SAND:
+								case EntityID.TileID.CORAL:
+									num4 = 32;
+									break;
+								case EntityID.TileID.OBSIDIAN:
+								case EntityID.TileID.OBSIDIAN_BRICK:
+									num4 = 37;
+									break;
+								case EntityID.TileID.ASH:
+								case EntityID.TileID.IRIDESCENT_BRICK:
+								case EntityID.TileID.EXPLOSIVES:
+									num4 = 36;
+									break;
+								case EntityID.TileID.MUD:
+								case EntityID.TileID.MUDSTONE:
+									num4 = 38;
+									break;
+								case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+								case EntityID.TileID.JUNGLE_VINE:
+								case EntityID.TileID.TALL_JUNGLE_PLANTS:
+								case EntityID.TileID.CACTUS:
+									num4 = 40;
+									break;
+								case EntityID.TileID.JUNGLE_THORN:
+									num4 = 7;
+									break;
+								case EntityID.TileID.GLOWING_MUSHROOM:
+								case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
+									num4 = 26;
+									break;
+								case EntityID.TileID.MUSHROOM_GRASS:
+									num4 = 17;
+									break;
+								case EntityID.TileID.SILT:
+									num4 = 53;
+									break;
+								case EntityID.TileID.PEARLSAND:
+								case EntityID.TileID.PEARLSTONE_BRICK:
+								case EntityID.TileID.SNOW:
+								case EntityID.TileID.SNOW_BRICK:
+									num4 = 51;
+									break;
+								case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+								case EntityID.TileID.TALL_HALLOWED_PLANTS:
+								case EntityID.TileID.HALLOWED_VINE:
+									num4 = 47;
+									break;
+								case EntityID.TileID.COBALT_ORE:
+								case EntityID.TileID.COBALT_BRICK:
+									num4 = 48;
+									break;
+								case EntityID.TileID.MYTHRIL_ORE:
+								case EntityID.TileID.MYTHRIL_BRICK:
+								case EntityID.TileID.MYTHRIL_ANVIL:
+								case EntityID.TileID.CANDY_CANE_GREEN:
+								case EntityID.TileID.XMAS_LIGHT:
+									num4 = 49;
+									break;
+								case EntityID.TileID.ADAMANTITE_ORE:
+								case EntityID.TileID.ADAMANTITE_FORGE:
+								case EntityID.TileID.CANDY_CANE_RED:
+									num4 = 50;
+									break;
+								case EntityID.TileID.DAYBLOOM_GROWING:
+								case EntityID.TileID.DAYBLOOM_MATURE:
+								case EntityID.TileID.DAYBLOOM_BLOOMING:
+									switch (ptr->FrameX / 18)
+									{
+										case 0:
+											num4 = 3;
+											break;
+										case 1:
+											num4 = 3;
+											break;
+										case 2:
+											num4 = 7;
+											break;
+										case 3:
+											num4 = 17;
+											break;
+										case 4:
+											num4 = 3;
+											break;
+										case 5:
+											num4 = 6;
+											break;
+									}
+									break;
+								default:
+									switch ((EntityID.TileID)type)
+									{
+										case EntityID.TileID.CRYSTAL_SHARD:
+											num4 = ((ptr->FrameX != 0 && ptr->FrameX != 54 && ptr->FrameX != 108) ? ((ptr->FrameX != 18 && ptr->FrameX != 72 && ptr->FrameX != 126) ? 70 : 69) : 68);
+											break;
+										case EntityID.TileID.TORCH:
+											int num5 = ptr->FrameY / 22;
+											switch (num5)
+											{
+												case 0:
+													num4 = 6;
 													break;
-												}
-										}
-										break;
-								}
+												case 8:
+													num4 = 75;
+													break;
+												default:
+													num4 = 58 + num5;
+													break;
+											}
+											break;
+									}
+									break;
 							}
 						}
 						if (num4 >= 0)
 						{
 							for (int num6 = (KillToFail ? 1 : 4); num6 >= 0; num6--)
 							{
-								switch (type)
+								switch ((EntityID.TileID)type)
 								{
-									case 2:
+									case EntityID.TileID.GRASS:
 										num4 = genRand.Next(2) << 1;
 										break;
-									case 20:
+									case EntityID.TileID.SAPLING:
 										num4 = ((genRand.Next(2) == 0) ? 7 : 2);
 										break;
-									case 23:
-									case 24:
+									case EntityID.TileID.CORRUPT_GRASS:
+									case EntityID.TileID.SHORT_CORRUPT_PLANTS:
 										num4 = ((genRand.Next(2) == 0) ? 14 : 17);
 										break;
-									case 27:
+									case EntityID.TileID.SUNFLOWER:
 										num4 = ((genRand.Next(2) == 0) ? 3 : 19);
 										break;
-									case 25:
-									case 31:
+									case EntityID.TileID.EBONSTONE:
+									case EntityID.TileID.SHADOW_ORB:
 										num4 = ((genRand.Next(2) != 0) ? 1 : 14);
 										break;
-									case 32:
+									case EntityID.TileID.CORRUPTION_THORN:
 										num4 = ((genRand.Next(2) == 0) ? 14 : 24);
 										break;
-									case 34:
-									case 35:
-									case 36:
-									case 42:
+									case EntityID.TileID.CHANDELIER:
+									case EntityID.TileID.JACK_O_LANTERN:
+									case EntityID.TileID.PRESENT:
+									case EntityID.TileID.CHAIN_LANTERN:
 										num4 = genRand.Next(2) * 6;
 										break;
-									case 37:
+									case EntityID.TileID.METEORITE:
 										num4 = ((genRand.Next(2) == 0) ? 6 : 23);
 										break;
-									case 61:
+									case EntityID.TileID.SHORT_JUNGLE_PLANTS:
 										num4 = 38 + genRand.Next(2);
 										break;
-									case 58:
-									case 76:
-									case 77:
+									case EntityID.TileID.HELLSTONE:
+									case EntityID.TileID.HELLSTONE_BRICK:
+									case EntityID.TileID.HELLFORGE:
 										num4 = ((genRand.Next(2) == 0) ? 6 : 25);
 										break;
-									case 109:
+									case EntityID.TileID.HALLOWED_GRASS:
 										num4 = genRand.Next(2) * 47;
 										break;
 								}
@@ -16311,445 +16145,416 @@ namespace Terraria
 				}
 				if (KillToFail)
 				{
-					switch (type)
+					switch ((EntityID.TileID)type)
 					{
-						case 2:
-						case 23:
-						case 109:
-							ptr->Type = 0;
+						case EntityID.TileID.GRASS:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.HALLOWED_GRASS:
+							ptr->Type = (byte)EntityID.TileID.DIRT;
 							break;
-						case 60:
-						case 70:
-							ptr->Type = 59;
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.MUSHROOM_GRASS:
+							ptr->Type = (byte)EntityID.TileID.MUD;
 							break;
 					}
 					SquareTileFrame(i, j);
 					return;
 				}
-				if (type == 21 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+				if (type == (int)EntityID.TileID.CHEST && Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
 					int num7 = ptr->FrameX / 18;
 					int y = j - ptr->FrameY / 18;
-					while (num7 > 1)
-					{
-						num7 -= 2;
-					}
-					num7 = i - num7;
+					num7 = i - (num7 & 1);
 					if (!Chest.DestroyChest(num7, y))
 					{
 						return;
 					}
 				}
-				if (!noItem && !stopDrops && Main.NetMode != (byte)NetModeSetting.CLIENT && !Gen)
+				if (!noItem && !Gen && !stopDrops && Main.NetMode != (byte)NetModeSetting.CLIENT)
 				{
-					int num8 = (int)Item.ID.NONE;
-					if (type == 0 || type == 2 || type == 109)
+					int num8 = (int)EntityID.ItemID.NONE;
+					switch ((EntityID.TileID)type)
 					{
-						num8 = (int)Item.ID.DIRT_BLOCK;
-					}
-					else if (type == 1)
-					{
-						num8 = (int)Item.ID.STONE_BLOCK;
-					}
-					else if (type == 3 || type == 73)
-					{
-						if (Main.Rand.Next(2) == 0)
-						{
-							Rectangle rect = default;
-							rect.X = i << 4;
-							rect.Y = j << 4;
-							rect.Width = (rect.Height = 16);
-							if (Player.FindClosest(ref rect).HasItem(281))
+						case EntityID.TileID.DIRT:
+						case EntityID.TileID.GRASS:
+						case EntityID.TileID.HALLOWED_GRASS:
+							num8 = (int)EntityID.ItemID.DIRT_BLOCK;
+							break;
+						case EntityID.TileID.STONE:
+							num8 = (int)EntityID.ItemID.STONE_BLOCK;
+							break;
+						case EntityID.TileID.SHORT_GRASS_PLANTS:
+						case EntityID.TileID.TALL_GRASS_PLANTS:
+							if (Main.Rand.Next(2) == 0)
 							{
-								num8 = (int)Item.ID.SEED;
-							}
-						}
-					}
-					else if (type == 4)
-					{
-						int num9 = ptr->FrameY / 22;
-						switch (num9)
-						{
-							case 0:
-								num8 = (int)Item.ID.TORCH;
-								break;
-							case 8:
-								num8 = (int)Item.ID.CURSED_TORCH;
-								break;
-							default:
-								num8 = (int)Item.ID.BREAKER_BLADE + num9;
-								break;
-						}
-					}
-					else if (type == 5)
-					{
-						if (ptr->FrameX >= 22 && ptr->FrameY >= 198)
-						{
-							if (Main.NetMode != (byte)NetModeSetting.CLIENT)
-							{
-								num8 = (int)Item.ID.WOOD;
-								if (genRand.Next(2) == 0)
+								Rectangle rect = default;
+								rect.X = i << 4;
+								rect.Y = j << 4;
+								rect.Width = (rect.Height = 16);
+								if (Player.FindClosest(ref rect).HasItem((int)EntityID.ItemID.BLOWPIPE))
 								{
-									int num10 = j - 1;
-									int type3;
-									do
-									{
-										type3 = Main.TileSet[i, ++num10].Type;
-									}
-									while (!Main.TileSolidNotSolidTop[type3] || Main.TileSet[i, num10].IsActive == 0);
-									if (type3 == 2 || type3 == 109)
-									{
-										num8 = (int)Item.ID.ACORN;
-									}
+									num8 = (int)EntityID.ItemID.SEED;
 								}
 							}
-						}
-						else
-						{
-							num8 = (int)Item.ID.WOOD;
-						}
-						woodSpawned++;
-					}
-					else if (type == 6)
-					{
-						num8 = (int)Item.ID.IRON_ORE;
-					}
-					else if (type == 7)
-					{
-						num8 = (int)Item.ID.COPPER_ORE;
-					}
-					else if (type == 8)
-					{
-						num8 = (int)Item.ID.GOLD_ORE;
-					}
-					else if (type == 9)
-					{
-						num8 = (int)Item.ID.SILVER_ORE;
-					}
-					else if (type == 123)
-					{
-						num8 = (int)Item.ID.SILT_BLOCK;
-					}
-					else if (type == 124)
-					{
-						num8 = (int)Item.ID.WOODEN_BEAM;
-					}
-					else if (type == 149)
-					{
-						if (ptr->FrameX == 0 || ptr->FrameX == 54)
-						{
-							num8 = (int)Item.ID.BLUE_LIGHT;
-						}
-						else if (ptr->FrameX == 18 || ptr->FrameX == 72)
-						{
-							num8 = (int)Item.ID.RED_LIGHT;
-						}
-						else if (ptr->FrameX == 36 || ptr->FrameX == 90)
-						{
-							num8 = (int)Item.ID.GREEN_LIGHT;
-						}
-					}
-					else if (type == 13)
-					{
-						Main.PlaySound(13, i * 16, j * 16);
-						num8 = ((ptr->FrameX == 18) ? (int)Item.ID.LESSER_HEALING_POTION : ((ptr->FrameX == 36) ? (int)Item.ID.LESSER_MANA_POTION : ((ptr->FrameX == 54) ? (int)Item.ID.PINK_VASE : ((ptr->FrameX != 72) ? (int)Item.ID.BOTTLE : (int)Item.ID.MUG))));
-					}
-					else if (type == 19)
-					{
-						num8 = (int)Item.ID.WOOD_PLATFORM;
-					}
-					else if (type == 22)
-					{
-						num8 = (int)Item.ID.DEMONITE_ORE;
-					}
-					else if (type == 140)
-					{
-						num8 = (int)Item.ID.DEMONITE_BRICK;
-					}
-					else if (type == 23)
-					{
-						num8 = (int)Item.ID.DIRT_BLOCK;
-					}
-					else if (type == 25)
-					{
-						num8 = (int)Item.ID.EBONSTONE_BLOCK;
-					}
-					else if (type == 30)
-					{
-						num8 = (int)Item.ID.WOOD;
-					}
-					else if (type == 33)
-					{
-						num8 = (int)Item.ID.CANDLE;
-					}
-					else if (type == 37)
-					{
-						num8 = (int)Item.ID.METEORITE;
-					}
-					else if (type == 38)
-					{
-						num8 = (int)Item.ID.GRAY_BRICK;
-					}
-					else if (type == 39)
-					{
-						num8 = (int)Item.ID.RED_BRICK;
-					}
-					else if (type == 40)
-					{
-						num8 = (int)Item.ID.CLAY_BLOCK;
-					}
-					else if (type == 41)
-					{
-						num8 = (int)Item.ID.BLUE_BRICK;
-					}
-					else if (type == 43)
-					{
-						num8 = (int)Item.ID.GREEN_BRICK;
-					}
-					else if (type == 44)
-					{
-						num8 = (int)Item.ID.PINK_BRICK;
-					}
-					else if (type == 45)
-					{
-						num8 = (int)Item.ID.GOLD_BRICK;
-					}
-					else if (type == 46)
-					{
-						num8 = (int)Item.ID.SILVER_BRICK;
-					}
-					else if (type == 47)
-					{
-						num8 = (int)Item.ID.COPPER_BRICK;
-					}
-					else if (type == 48)
-					{
-						num8 = (int)Item.ID.SPIKE;
-					}
-					else if (type == 49)
-					{
-						num8 = (int)Item.ID.WATER_CANDLE;
-					}
-					else if (type == 51)
-					{
-						num8 = (int)Item.ID.COBWEB;
-					}
-					else if (type == 53)
-					{
-						num8 = (int)Item.ID.SAND_BLOCK;
-					}
-					else if (type == 54)
-					{
-						num8 = (int)Item.ID.GLASS;
-						Main.PlaySound(13, i * 16, j * 16);
-					}
-					else if (type == 56)
-					{
-						num8 = (int)Item.ID.OBSIDIAN;
-					}
-					else if (type == 57)
-					{
-						num8 = (int)Item.ID.ASH_BLOCK;
-					}
-					else if (type == 58)
-					{
-						num8 = (int)Item.ID.HELLSTONE;
-					}
-					else if (type == 60)
-					{
-						num8 = (int)Item.ID.MUD_BLOCK;
-					}
-					else
-					{
-						switch (type)
-						{
-							case 70:
-								num8 = (int)Item.ID.MUD_BLOCK;
-								break;
-							case 75:
-								num8 = (int)Item.ID.OBSIDIAN_BRICK;
-								break;
-							case 76:
-								num8 = (int)Item.ID.HELLSTONE_BRICK;
-								break;
-							case 78:
-								num8 = (int)Item.ID.CLAY_POT;
-								break;
-							case 81:
-								num8 = (int)Item.ID.CORAL;
-								break;
-							case 80:
-								num8 = (int)Item.ID.CACTUS;
-								break;
-							case 107:
-								num8 = (int)Item.ID.COBALT_ORE;
-								break;
-							case 108:
-								num8 = (int)Item.ID.MYTHRIL_ORE;
-								break;
-							case 111:
-								num8 = (int)Item.ID.ADAMANTITE_ORE;
-								break;
-							case 112:
-								num8 = (int)Item.ID.EBONSAND_BLOCK;
-								break;
-							case 116:
-								num8 = (int)Item.ID.PEARLSAND_BLOCK;
-								break;
-							case 117:
-								num8 = (int)Item.ID.PEARLSTONE_BLOCK;
-								break;
-							case 118:
-								num8 = (int)Item.ID.PEARLSTONE_BRICK;
-								break;
-							case 119:
-								num8 = (int)Item.ID.IRIDESCENT_BRICK;
-								break;
-							case 120:
-								num8 = (int)Item.ID.MUDSTONE_BRICK;
-								break;
-							case 121:
-								num8 = (int)Item.ID.COBALT_BRICK;
-								break;
-							case 122:
-								num8 = (int)Item.ID.MYTHRIL_BRICK;
-								break;
-							case 129:
-								num8 = (int)Item.ID.CRYSTAL_SHARD;
-								break;
-							case 130:
-								num8 = (int)Item.ID.ACTIVE_STONE_BLOCK;
-								break;
-							case 131:
-								num8 = (int)Item.ID.INACTIVE_STONE_BLOCK;
-								break;
-							case 136:
-								num8 = (int)Item.ID.SWITCH;
-								break;
-							case 137:
-								num8 = (int)Item.ID.DART_TRAP;
-								break;
-							case 141:
-								num8 = (int)Item.ID.EXPLOSIVES;
-								break;
-							case 145:
-								num8 = (int)Item.ID.CANDY_CANE_BLOCK;
-								break;
-							case 146:
-								num8 = (int)Item.ID.GREEN_CANDY_CANE_BLOCK;
-								break;
-							case 147:
-								num8 = (int)Item.ID.SNOW_BLOCK;
-								break;
-							case 148:
-								num8 = (int)Item.ID.SNOW_BRICK;
-								break;
-							case 135:
-								if (ptr->FrameY == 0)
+							break;
+						case EntityID.TileID.TORCH:
+							int num9 = ptr->FrameY / 22;
+							switch (num9)
+							{
+								case 0:
+									num8 = (int)EntityID.ItemID.TORCH;
+									break;
+								case 8:
+									num8 = (int)EntityID.ItemID.CURSED_TORCH;
+									break;
+								default:
+									num8 = (int)EntityID.ItemID.BLUE_TORCH - 1 + num9;
+									break;
+							}
+							break;
+						case EntityID.TileID.TREE:
+							if (ptr->FrameX >= 22 && ptr->FrameY >= 198)
+							{
+								if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 								{
-									num8 = (int)Item.ID.RED_PRESSURE_PLATE;
-								}
-								else if (ptr->FrameY == 18)
-								{
-									num8 = (int)Item.ID.GREEN_PRESSURE_PLATE;
-								}
-								else if (ptr->FrameY == 36)
-								{
-									num8 = (int)Item.ID.GRAY_PRESSURE_PLATE;
-								}
-								else if (ptr->FrameY == 54)
-								{
-									num8 = (int)Item.ID.BROWN_PRESSURE_PLATE;
-								}
-								break;
-							case 144:
-								if (ptr->FrameX == 0)
-								{
-									num8 = (int)Item.ID.ONE_SECOND_TIMER;
-								}
-								else if (ptr->FrameX == 18)
-								{
-									num8 = (int)Item.ID.THREE_SECOND_TIMER;
-								}
-								else if (ptr->FrameX == 36)
-								{
-									num8 = (int)Item.ID.FIVE_SECOND_TIMER;
-								}
-								break;
-							case 61:
-							case 74:
-								if (ptr->FrameX == 144)
-								{
-									Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.JUNGLE_SPORES, genRand.Next(2, 4));
-								}
-								else if (ptr->FrameX == 162)
-								{
-									num8 = (int)Item.ID.NATURES_GIFT;
-								}
-								else if (ptr->FrameX >= 108 && ptr->FrameX <= 126 && genRand.Next(100) == 0)
-								{
-									num8 = (int)Item.ID.JUNGLE_ROSE;
-								}
-								else if (genRand.Next(100) == 0)
-								{
-									num8 = (int)Item.ID.JUNGLE_GRASS_SEEDS;
-								}
-								break;
-							case 59:
-							case 60:
-								num8 = (int)Item.ID.MUD_BLOCK;
-								break;
-							case 71:
-							case 72:
-								{
-									int num12 = genRand.Next(50);
-									if (num12 < 25)
+									num8 = (int)EntityID.ItemID.WOOD;
+									if (genRand.Next(2) == 0)
 									{
-										num8 = ((num12 != 0) ? (int)Item.ID.GLOWING_MUSHROOM : (int)Item.ID.MUSHROOM_GRASS_SEEDS);
-									}
-									break;
-								}
-							default:
-								if (ptr->Type >= 63 && ptr->Type <= 68)
-								{
-									num8 = ptr->Type - 63 + (int)Item.ID.SAPPHIRE;
-									break;
-								}
-								switch (type)
-								{
-									case 50:
-										num8 = ((ptr->FrameX != 90) ? (int)Item.ID.BOOK : (int)Item.ID.WATER_BOLT);
-										break;
-									case 83:
-									case 84:
+										int num10 = j - 1;
+										int type3;
+										do
 										{
-											int num11 = ptr->FrameX / 18;
-											bool flag = type == 84;
-											if (!flag)
-											{
-												if (num11 == 0 && Main.GameTime.DayTime)
-												{
-													flag = true;
-												}
-												else if (num11 == 1 && !Main.GameTime.DayTime)
-												{
-													flag = true;
-												}
-												else if (num11 == 3 && Main.GameTime.IsBloodMoon)
-												{
-													flag = true;
-												}
-											}
-											if (flag)
-											{
-												Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.DAYBLOOM_SEEDS + num11, genRand.Next(1, 4));
-											}
-											num8 = (int)Item.ID.DAYBLOOM + num11;
-											break;
+											type3 = Main.TileSet[i, ++num10].Type;
 										}
+										while (!Main.TileSolidNotSolidTop[type3] || Main.TileSet[i, num10].IsActive == 0);
+										if (type3 == (int)EntityID.TileID.GRASS || type3 == (int)EntityID.TileID.HALLOWED_GRASS)
+										{
+											num8 = (int)EntityID.ItemID.ACORN;
+										}
+									}
+								}
+							}
+							else
+							{
+								num8 = (int)EntityID.ItemID.WOOD;
+							}
+							woodSpawned++;
+							break;
+						case EntityID.TileID.IRON_ORE:
+							num8 = (int)EntityID.ItemID.IRON_ORE;
+							break;
+						case EntityID.TileID.COPPER_ORE:
+							num8 = (int)EntityID.ItemID.COPPER_ORE;
+							break;
+						case EntityID.TileID.GOLD_ORE:
+							num8 = (int)EntityID.ItemID.GOLD_ORE;
+							break;
+						case EntityID.TileID.SILVER_ORE:
+							num8 = (int)EntityID.ItemID.SILVER_ORE;
+							break;
+						case EntityID.TileID.SILT:
+							num8 = (int)EntityID.ItemID.SILT_BLOCK;
+							break;
+						case EntityID.TileID.WOODEN_BEAM:
+							num8 = (int)EntityID.ItemID.WOODEN_BEAM;
+							break;
+						case EntityID.TileID.XMAS_LIGHT:
+							if (ptr->FrameX == 0 || ptr->FrameX == 54)
+							{
+								num8 = (int)EntityID.ItemID.BLUE_LIGHT;
+							}
+							else if (ptr->FrameX == 18 || ptr->FrameX == 72)
+							{
+								num8 = (int)EntityID.ItemID.RED_LIGHT;
+							}
+							else if (ptr->FrameX == 36 || ptr->FrameX == 90)
+							{
+								num8 = (int)EntityID.ItemID.GREEN_LIGHT;
+							}
+							break;
+						case EntityID.TileID.BOTTLE:
+							Main.PlaySound(13, i * 16, j * 16);
+							switch (ptr->FrameX)
+							{
+								case 18:
+									num8 = (int)EntityID.ItemID.LESSER_HEALING_POTION;
+									break;
+								case 36:
+									num8 = (int)EntityID.ItemID.LESSER_MANA_POTION;
+									break;
+								case 54:
+									num8 = (int)EntityID.ItemID.PINK_VASE;
+									break;
+								case 72:
+									num8 = (int)EntityID.ItemID.MUG;
+									break;
+								default:
+									num8 = (int)EntityID.ItemID.BOTTLE;
+									break;
+							}
+							break;
+						case EntityID.TileID.PLATFORM:
+							num8 = (int)EntityID.ItemID.WOOD_PLATFORM;
+							break;
+						case EntityID.TileID.DEMONITE_ORE:
+							num8 = (int)EntityID.ItemID.DEMONITE_ORE;
+							break;
+						case EntityID.TileID.DEMONITE_BRICK:
+							num8 = (int)EntityID.ItemID.DEMONITE_BRICK;
+							break;
+						case EntityID.TileID.CORRUPT_GRASS:
+							num8 = (int)EntityID.ItemID.DIRT_BLOCK;
+							break;
+						case EntityID.TileID.EBONSTONE:
+							num8 = (int)EntityID.ItemID.EBONSTONE_BLOCK;
+							break;
+						case EntityID.TileID.WOOD:
+							num8 = (int)EntityID.ItemID.WOOD;
+							break;
+						case EntityID.TileID.CANDLE:
+							num8 = (int)EntityID.ItemID.CANDLE;
+							break;
+						case EntityID.TileID.METEORITE:
+							num8 = (int)EntityID.ItemID.METEORITE;
+							break;
+						case EntityID.TileID.GRAY_BRICK:
+							num8 = (int)EntityID.ItemID.GRAY_BRICK;
+							break;
+						case EntityID.TileID.RED_BRICK:
+							num8 = (int)EntityID.ItemID.RED_BRICK;
+							break;
+						case EntityID.TileID.CLAY:
+							num8 = (int)EntityID.ItemID.CLAY_BLOCK;
+							break;
+						case EntityID.TileID.BLUE_BRICK:
+							num8 = (int)EntityID.ItemID.BLUE_BRICK;
+							break;
+						case EntityID.TileID.GREEN_BRICK:
+							num8 = (int)EntityID.ItemID.GREEN_BRICK;
+							break;
+						case EntityID.TileID.PINK_BRICK:
+							num8 = (int)EntityID.ItemID.PINK_BRICK;
+							break;
+						case EntityID.TileID.GOLD_BRICK:
+							num8 = (int)EntityID.ItemID.GOLD_BRICK;
+							break;
+						case EntityID.TileID.SILVER_BRICK:
+							num8 = (int)EntityID.ItemID.SILVER_BRICK;
+							break;
+						case EntityID.TileID.COPPER_BRICK:
+							num8 = (int)EntityID.ItemID.COPPER_BRICK;
+							break;
+						case EntityID.TileID.SPIKE:
+							num8 = (int)EntityID.ItemID.SPIKE;
+							break;
+						case EntityID.TileID.WATER_CANDLE:
+							num8 = (int)EntityID.ItemID.WATER_CANDLE;
+							break;
+						case EntityID.TileID.COBWEB:
+							num8 = (int)EntityID.ItemID.COBWEB;
+							break;
+						case EntityID.TileID.SAND:
+							num8 = (int)EntityID.ItemID.SAND_BLOCK;
+							break;
+						case EntityID.TileID.GLASS:
+							num8 = (int)EntityID.ItemID.GLASS;
+							Main.PlaySound(13, i * 16, j * 16);
+							break;
+						case EntityID.TileID.OBSIDIAN:
+							num8 = (int)EntityID.ItemID.OBSIDIAN;
+							break;
+						case EntityID.TileID.ASH:
+							num8 = (int)EntityID.ItemID.ASH_BLOCK;
+							break;
+						case EntityID.TileID.HELLSTONE:
+							num8 = (int)EntityID.ItemID.HELLSTONE;
+							break;
+						case EntityID.TileID.MUSHROOM_GRASS:
+							num8 = (int)EntityID.ItemID.MUD_BLOCK;
+							break;
+						case EntityID.TileID.OBSIDIAN_BRICK:
+							num8 = (int)EntityID.ItemID.OBSIDIAN_BRICK;
+							break;
+						case EntityID.TileID.HELLSTONE_BRICK:
+							num8 = (int)EntityID.ItemID.HELLSTONE_BRICK;
+							break;
+						case EntityID.TileID.CLAY_POT:
+							num8 = (int)EntityID.ItemID.CLAY_POT;
+							break;
+						case EntityID.TileID.CORAL:
+							num8 = (int)EntityID.ItemID.CORAL;
+							break;
+						case EntityID.TileID.CACTUS:
+							num8 = (int)EntityID.ItemID.CACTUS;
+							break;
+						case EntityID.TileID.COBALT_ORE:
+							num8 = (int)EntityID.ItemID.COBALT_ORE;
+							break;
+						case EntityID.TileID.MYTHRIL_ORE:
+							num8 = (int)EntityID.ItemID.MYTHRIL_ORE;
+							break;
+						case EntityID.TileID.ADAMANTITE_ORE:
+							num8 = (int)EntityID.ItemID.ADAMANTITE_ORE;
+							break;
+						case EntityID.TileID.EBONSAND:
+							num8 = (int)EntityID.ItemID.EBONSAND_BLOCK;
+							break;
+						case EntityID.TileID.PEARLSAND:
+							num8 = (int)EntityID.ItemID.PEARLSAND_BLOCK;
+							break;
+						case EntityID.TileID.PEARLSTONE:
+							num8 = (int)EntityID.ItemID.PEARLSTONE_BLOCK;
+							break;
+						case EntityID.TileID.PEARLSTONE_BRICK:
+							num8 = (int)EntityID.ItemID.PEARLSTONE_BRICK;
+							break;
+						case EntityID.TileID.IRIDESCENT_BRICK:
+							num8 = (int)EntityID.ItemID.IRIDESCENT_BRICK;
+							break;
+						case EntityID.TileID.MUDSTONE:
+							num8 = (int)EntityID.ItemID.MUDSTONE_BRICK;
+							break;
+						case EntityID.TileID.COBALT_BRICK:
+							num8 = (int)EntityID.ItemID.COBALT_BRICK;
+							break;
+						case EntityID.TileID.MYTHRIL_BRICK:
+							num8 = (int)EntityID.ItemID.MYTHRIL_BRICK;
+							break;
+						case EntityID.TileID.CRYSTAL_SHARD:
+							num8 = (int)EntityID.ItemID.CRYSTAL_SHARD;
+							break;
+						case EntityID.TileID.ACTIVE_STONE:
+							num8 = (int)EntityID.ItemID.ACTIVE_STONE_BLOCK;
+							break;
+						case EntityID.TileID.INACTIVE_STONE:
+							num8 = (int)EntityID.ItemID.INACTIVE_STONE_BLOCK;
+							break;
+						case EntityID.TileID.SWITCH:
+							num8 = (int)EntityID.ItemID.SWITCH;
+							break;
+						case EntityID.TileID.TRAP:
+							num8 = (int)EntityID.ItemID.DART_TRAP;
+							break;
+						case EntityID.TileID.EXPLOSIVES:
+							num8 = (int)EntityID.ItemID.EXPLOSIVES;
+							break;
+						case EntityID.TileID.CANDY_CANE_RED:
+							num8 = (int)EntityID.ItemID.CANDY_CANE_BLOCK;
+							break;
+						case EntityID.TileID.CANDY_CANE_GREEN:
+							num8 = (int)EntityID.ItemID.GREEN_CANDY_CANE_BLOCK;
+							break;
+						case EntityID.TileID.SNOW:
+							num8 = (int)EntityID.ItemID.SNOW_BLOCK;
+							break;
+						case EntityID.TileID.SNOW_BRICK:
+							num8 = (int)EntityID.ItemID.SNOW_BRICK;
+							break;
+						case EntityID.TileID.PRESSURE_PLATE:
+							if (ptr->FrameY == 0)
+							{
+								num8 = (int)EntityID.ItemID.RED_PRESSURE_PLATE;
+							}
+							else if (ptr->FrameY == 18)
+							{
+								num8 = (int)EntityID.ItemID.GREEN_PRESSURE_PLATE;
+							}
+							else if (ptr->FrameY == 36)
+							{
+								num8 = (int)EntityID.ItemID.GRAY_PRESSURE_PLATE;
+							}
+							else if (ptr->FrameY == 54)
+							{
+								num8 = (int)EntityID.ItemID.BROWN_PRESSURE_PLATE;
+							}
+							break;
+						case EntityID.TileID.TIMER:
+							if (ptr->FrameX == 0)
+							{
+								num8 = (int)EntityID.ItemID.ONE_SECOND_TIMER;
+							}
+							else if (ptr->FrameX == 18)
+							{
+								num8 = (int)EntityID.ItemID.THREE_SECOND_TIMER;
+							}
+							else if (ptr->FrameX == 36)
+							{
+								num8 = (int)EntityID.ItemID.FIVE_SECOND_TIMER;
+							}
+							break;
+						case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+						case EntityID.TileID.TALL_JUNGLE_PLANTS:
+							if (ptr->FrameX == 144)
+							{
+								Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.JUNGLE_SPORES, genRand.Next(2, 4));
+							}
+							else if (ptr->FrameX == 162)
+							{
+								num8 = (int)EntityID.ItemID.NATURES_GIFT;
+							}
+							else if (ptr->FrameX >= 108 && ptr->FrameX <= 126 && genRand.Next(100) == 0)
+							{
+								num8 = (int)EntityID.ItemID.JUNGLE_ROSE;
+							}
+							else if (genRand.Next(100) == 0)
+							{
+								num8 = (int)EntityID.ItemID.JUNGLE_GRASS_SEEDS;
+							}
+							break;
+						case EntityID.TileID.MUD:
+						case EntityID.TileID.JUNGLE_GRASS:
+							num8 = (int)EntityID.ItemID.MUD_BLOCK;
+							break;
+						case EntityID.TileID.GLOWING_MUSHROOM:
+						case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
+							{
+								int num12 = genRand.Next(50);
+								if (num12 < 25)
+								{
+									num8 = ((num12 != 0) ? (int)EntityID.ItemID.GLOWING_MUSHROOM : (int)EntityID.ItemID.MUSHROOM_GRASS_SEEDS);
 								}
 								break;
-						}
+							}
+						default:
+							if (ptr->Type >= (byte)EntityID.TileID.SAPPHIRE && ptr->Type <= (byte)EntityID.TileID.DIAMOND)
+							{
+								num8 = ptr->Type - (byte)EntityID.TileID.SAPPHIRE + (int)EntityID.ItemID.SAPPHIRE;
+								break;
+							}
+							switch ((EntityID.TileID)type)
+							{
+								case EntityID.TileID.BOOK:
+									num8 = ((ptr->FrameX != 90) ? (int)EntityID.ItemID.BOOK : (int)EntityID.ItemID.WATER_BOLT);
+									break;
+								case EntityID.TileID.DAYBLOOM_MATURE:
+								case EntityID.TileID.DAYBLOOM_BLOOMING:
+									{
+										int num11 = ptr->FrameX / 18;
+										bool flag = type == (int)EntityID.TileID.DAYBLOOM_BLOOMING;
+										if (!flag)
+										{
+											if (num11 == 0 && Main.GameTime.DayTime)
+											{
+												flag = true;
+											}
+											else if (num11 == 1 && !Main.GameTime.DayTime)
+											{
+												flag = true;
+											}
+											else if (num11 == 3 && Main.GameTime.IsBloodMoon)
+											{
+												flag = true;
+											}
+										}
+										if (flag)
+										{
+											Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.DAYBLOOM_SEEDS + num11, genRand.Next(1, 4));
+										}
+										num8 = (int)EntityID.ItemID.DAYBLOOM + num11;
+										break;
+									}
+							}
+							break;
 					}
 					if (num8 > 0)
 					{
@@ -16761,7 +16566,7 @@ namespace Terraria
 				ptr->FrameX = -1;
 				ptr->FrameY = -1;
 				ptr->frameNumber = 0;
-				if (type == 58 && j > Main.MaxTilesY - 200)
+				if (type == (int)EntityID.TileID.HELLSTONE && j > Main.MaxTilesY - 200)
 				{
 					ptr->Lava = 32;
 					ptr->Liquid = 128;
@@ -16796,7 +16601,7 @@ namespace Terraria
 		public static void hardUpdateWorld(int i, int j)
 		{
 			int type = Main.TileSet[i, j].Type;
-			if (type == 117 && j > Main.RockLayer && Main.Rand.Next(110) == 0)
+			if (type == (byte)EntityID.TileID.PEARLSTONE && j > Main.RockLayer && Main.Rand.Next(110) == 0)
 			{
 				int num = genRand.Next(4);
 				int num2 = 0;
@@ -16821,7 +16626,7 @@ namespace Terraria
 					{
 						for (int l = j - num5; l <= j + num5; l++)
 						{
-							if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == 129)
+							if (Main.TileSet[k, l].IsActive != 0 && Main.TileSet[k, l].Type == (byte)EntityID.TileID.CRYSTAL_SHARD)
 							{
 								num4++;
 							}
@@ -16829,99 +16634,101 @@ namespace Terraria
 					}
 					if (num4 < 2)
 					{
-						PlaceTile(i + num2, j + num3, 129, ToMute: true);
+						PlaceTile(i + num2, j + num3, (byte)EntityID.TileID.CRYSTAL_SHARD, ToMute: true);
 						NetMessage.SendTile(i + num2, j + num3);
 					}
 				}
 			}
-			else if (type == 23 || type == 25 || type == 32 || type == 112)
+			else if (type == (byte)EntityID.TileID.CORRUPT_GRASS || type == (byte)EntityID.TileID.EBONSTONE || type == (byte)EntityID.TileID.CORRUPTION_THORN || type == (byte)EntityID.TileID.EBONSAND)
 			{
 				while (true)
 				{
 					int num6 = i + genRand.Next(-3, 4);
 					int num7 = j + genRand.Next(-3, 4);
-					if (Main.TileSet[num6, num7].Type == 2)
+
+					switch ((EntityID.TileID)Main.TileSet[num6, num7].Type)
 					{
-						Main.TileSet[num6, num7].Type = 23;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
+						case EntityID.TileID.GRASS:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.CORRUPT_GRASS;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) == 0)
+							{
+								break;
+							}
+							return;
+						case EntityID.TileID.STONE:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.EBONSTONE;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) == 0)
+							{
+								break;
+							}
+							return;
+						case EntityID.TileID.SAND:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.EBONSAND;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) != 0)
+							{
+								return;
+							}
+							break;
+						case EntityID.TileID.MUD:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.DIRT;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) == 0)
+							{
+								break;
+							}
+							return;
+						case EntityID.TileID.JUNGLE_GRASS:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.CORRUPT_GRASS;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) == 0)
+							{
+								break;
+							}
+							return;
+						case EntityID.TileID.JUNGLE_THORN:
+							Main.TileSet[num6, num7].Type = (byte)EntityID.TileID.CORRUPTION_THORN;
+							SquareTileFrame(num6, num7);
+							NetMessage.SendTile(num6, num7);
+							if (genRand.Next(2) != 0)
+							{
+								return;
+							}
+							break;
+						default:
+							return;
 					}
-					if (Main.TileSet[num6, num7].Type == 1)
-					{
-						Main.TileSet[num6, num7].Type = 25;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
-					}
-					if (Main.TileSet[num6, num7].Type == 53)
-					{
-						Main.TileSet[num6, num7].Type = 112;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
-					}
-					if (Main.TileSet[num6, num7].Type == 59)
-					{
-						Main.TileSet[num6, num7].Type = 0;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
-					}
-					if (Main.TileSet[num6, num7].Type == 60)
-					{
-						Main.TileSet[num6, num7].Type = 23;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
-					}
-					if (Main.TileSet[num6, num7].Type == 69)
-					{
-						Main.TileSet[num6, num7].Type = 32;
-						SquareTileFrame(num6, num7);
-						NetMessage.SendTile(num6, num7);
-						if (genRand.Next(2) == 0)
-						{
-							continue;
-						}
-						break;
-					}
-					break;
 				}
-				return;
 			}
-			if (type != 109 && type != 110 && type != 113 && type != 115 && type != 116 && type != 117 && type != 118)
+			switch ((EntityID.TileID)type)
 			{
-				return;
+				case EntityID.TileID.HALLOWED_GRASS:
+				case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+				case EntityID.TileID.TALL_HALLOWED_PLANTS:
+				case EntityID.TileID.HALLOWED_VINE:
+				case EntityID.TileID.PEARLSAND:
+				case EntityID.TileID.PEARLSTONE:
+				case EntityID.TileID.PEARLSTONE_BRICK:
+					break;
+
+				default:
+					return;
 			}
 			while (true)
 			{
 				int num8 = i + genRand.Next(-3, 4);
 				int num9 = j + genRand.Next(-3, 4);
-				switch (Main.TileSet[num8, num9].Type)
+				switch ((EntityID.TileID)Main.TileSet[num8, num9].Type)
 				{
-					case 2:
-						Main.TileSet[num8, num9].Type = 109;
+					case EntityID.TileID.GRASS:
+						Main.TileSet[num8, num9].Type = (byte)EntityID.TileID.HALLOWED_GRASS;
 						SquareTileFrame(num8, num9);
 						NetMessage.SendTile(num8, num9);
 						if (genRand.Next(2) == 0)
@@ -16929,8 +16736,8 @@ namespace Terraria
 							break;
 						}
 						return;
-					case 1:
-						Main.TileSet[num8, num9].Type = 117;
+					case EntityID.TileID.STONE:
+						Main.TileSet[num8, num9].Type = (byte)EntityID.TileID.PEARLSTONE;
 						SquareTileFrame(num8, num9);
 						NetMessage.SendTile(num8, num9);
 						if (genRand.Next(2) == 0)
@@ -16938,8 +16745,8 @@ namespace Terraria
 							break;
 						}
 						return;
-					case 53:
-						Main.TileSet[num8, num9].Type = 116;
+					case EntityID.TileID.SAND:
+						Main.TileSet[num8, num9].Type = (byte)EntityID.TileID.PEARLSAND;
 						SquareTileFrame(num8, num9);
 						NetMessage.SendTile(num8, num9);
 						if (genRand.Next(2) != 0)
@@ -16984,7 +16791,7 @@ namespace Terraria
 
 		public unsafe static void MineHouse(int i, int j)
 		{
-			if (i < 50 || i > Main.MaxTilesX - 50 || j < 50 || j > Main.MaxTilesY - 50 || SolidTileUnsafe(i, j) || Main.TileSet[i, j].WallType > 0)
+			if (i < 50 || i > Main.MaxTilesX - 50 || j < 50 || j > Main.MaxTilesY - 50 || SolidTileUnsafe(i, j) || Main.TileSet[i, j].WallType > (byte)EntityID.WallID.NONE)
 			{
 				return;
 			}
@@ -17034,20 +16841,20 @@ namespace Terraria
 							{
 								fixed (Tile* ptr = &Main.TileSet[num7 - num9, num11])
 								{
-									if (ptr->WallType != 27 && (ptr->IsActive == 0 || Main.TileSolidNotSolidTop[ptr->Type]))
+									if (ptr->WallType != (byte)EntityID.WallID.PLANKED && (ptr->IsActive == 0 || Main.TileSolidNotSolidTop[ptr->Type]))
 									{
 										ptr->IsActive = 1;
-										ptr->Type = 30;
+										ptr->Type = (byte)EntityID.TileID.WOOD;
 									}
 								}
 							}
 							if (SolidTileUnsafe(num7 - 1, num11))
 							{
-								Main.TileSet[num7 - 1, num11].Type = 30;
+								Main.TileSet[num7 - 1, num11].Type = (byte)EntityID.TileID.WOOD;
 							}
 							if (SolidTileUnsafe(num7 + 1, num11))
 							{
-								Main.TileSet[num7 + 1, num11].Type = 30;
+								Main.TileSet[num7 + 1, num11].Type = (byte)EntityID.TileID.WOOD;
 							}
 							if (SolidTileUnsafe(num7, num11))
 							{
@@ -17075,12 +16882,12 @@ namespace Terraria
 								else
 								{
 									flag = false;
-									Main.TileSet[num7, num11].Type = 30;
+									Main.TileSet[num7, num11].Type = (byte)EntityID.TileID.WOOD;
 								}
 							}
 							else
 							{
-								Main.TileSet[num7, num11].WallType = 27;
+								Main.TileSet[num7, num11].WallType = (byte)EntityID.WallID.PLANKED;
 								Main.TileSet[num7, num11].Liquid = 0;
 								Main.TileSet[num7, num11].Lava = 0;
 							}
@@ -17090,7 +16897,7 @@ namespace Terraria
 								if (Main.TileSet[num7, num11].IsActive == 0)
 								{
 									Main.TileSet[num7, num11].IsActive = 1;
-									Main.TileSet[num7, num11].Type = 30;
+									Main.TileSet[num7, num11].Type = (byte)EntityID.TileID.WOOD;
 								}
 								break;
 							}
@@ -17159,17 +16966,17 @@ namespace Terraria
 			{
 				for (int n = num20; n < num21; n++)
 				{
-					if (Main.TileSet[m, n].WallType == 27 && Main.TileSet[m, n].IsActive == 0)
+					if (Main.TileSet[m, n].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[m, n].IsActive == 0)
 					{
-						if (Main.TileSet[m - 1, n].WallType != 27 && m < i && !SolidTileUnsafe(m - 1, n))
+						if (Main.TileSet[m - 1, n].WallType != (byte)EntityID.WallID.PLANKED && m < i && !SolidTileUnsafe(m - 1, n))
 						{
-							PlaceTile(m, n, 30, ToMute: true);
-							Main.TileSet[m, n].WallType = 0;
+							PlaceTile(m, n, (byte)EntityID.TileID.WOOD, ToMute: true);
+							Main.TileSet[m, n].WallType = (byte)EntityID.WallID.NONE;
 						}
-						if (Main.TileSet[m + 1, n].WallType != 27 && m > i && !SolidTileUnsafe(m + 1, n))
+						if (Main.TileSet[m + 1, n].WallType != (byte)EntityID.WallID.PLANKED && m > i && !SolidTileUnsafe(m + 1, n))
 						{
-							PlaceTile(m, n, 30, ToMute: true);
-							Main.TileSet[m, n].WallType = 0;
+							PlaceTile(m, n, (byte)EntityID.TileID.WOOD, ToMute: true);
+							Main.TileSet[m, n].WallType = (byte)EntityID.WallID.NONE;
 						}
 						for (int num22 = m - 1; num22 <= m + 1; num22++)
 						{
@@ -17177,15 +16984,15 @@ namespace Terraria
 							{
 								if (SolidTileUnsafe(num22, num23))
 								{
-									Main.TileSet[num22, num23].Type = 30;
+									Main.TileSet[num22, num23].Type = (byte)EntityID.TileID.WOOD;
 								}
 							}
 						}
 					}
-					if (Main.TileSet[m, n].Type == 30 && Main.TileSet[m - 1, n].WallType == 27 && Main.TileSet[m + 1, n].WallType == 27 && (Main.TileSet[m, n - 1].WallType == 27 || Main.TileSet[m, n - 1].IsActive != 0) && (Main.TileSet[m, n + 1].WallType == 27 || Main.TileSet[m, n + 1].IsActive != 0))
+					if (Main.TileSet[m, n].Type == (byte)EntityID.TileID.WOOD && Main.TileSet[m - 1, n].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[m + 1, n].WallType == (byte)EntityID.WallID.PLANKED && (Main.TileSet[m, n - 1].WallType == (byte)EntityID.WallID.PLANKED || Main.TileSet[m, n - 1].IsActive != 0) && (Main.TileSet[m, n + 1].WallType == (byte)EntityID.WallID.PLANKED || Main.TileSet[m, n + 1].IsActive != 0))
 					{
 						Main.TileSet[m, n].IsActive = 0;
-						Main.TileSet[m, n].WallType = 27;
+						Main.TileSet[m, n].WallType = (byte)EntityID.WallID.PLANKED;
 					}
 				}
 			}
@@ -17193,24 +17000,24 @@ namespace Terraria
 			{
 				for (int num25 = num20; num25 < num21; num25++)
 				{
-					if (Main.TileSet[num24, num25].Type == 30)
+					if (Main.TileSet[num24, num25].Type == (byte)EntityID.TileID.WOOD)
 					{
-						if (Main.TileSet[num24 - 1, num25].WallType == 27 && Main.TileSet[num24 + 1, num25].WallType == 27 && Main.TileSet[num24 - 1, num25].IsActive == 0 && Main.TileSet[num24 + 1, num25].IsActive == 0)
+						if (Main.TileSet[num24 - 1, num25].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24 + 1, num25].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24 - 1, num25].IsActive == 0 && Main.TileSet[num24 + 1, num25].IsActive == 0)
 						{
 							Main.TileSet[num24, num25].IsActive = 0;
-							Main.TileSet[num24, num25].WallType = 27;
+							Main.TileSet[num24, num25].WallType = (byte)EntityID.WallID.PLANKED;
 						}
-						if (Main.TileSet[num24, num25 - 1].Type != 21 && Main.TileSet[num24 - 1, num25].WallType == 27 && Main.TileSet[num24 + 1, num25].Type == 30 && Main.TileSet[num24 + 2, num25].WallType == 27 && Main.TileSet[num24 - 1, num25].IsActive == 0 && Main.TileSet[num24 + 2, num25].IsActive == 0)
+						if (Main.TileSet[num24, num25 - 1].Type != (byte)EntityID.TileID.CHEST && Main.TileSet[num24 - 1, num25].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24 + 1, num25].Type == (byte)EntityID.TileID.WOOD && Main.TileSet[num24 + 2, num25].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24 - 1, num25].IsActive == 0 && Main.TileSet[num24 + 2, num25].IsActive == 0)
 						{
 							Main.TileSet[num24, num25].IsActive = 0;
-							Main.TileSet[num24, num25].WallType = 27;
+							Main.TileSet[num24, num25].WallType = (byte)EntityID.WallID.PLANKED;
 							Main.TileSet[num24 + 1, num25].IsActive = 0;
-							Main.TileSet[num24 + 1, num25].WallType = 27;
+							Main.TileSet[num24 + 1, num25].WallType = (byte)EntityID.WallID.PLANKED;
 						}
-						if (Main.TileSet[num24, num25 - 1].WallType == 27 && Main.TileSet[num24, num25 + 1].WallType == 27 && Main.TileSet[num24, num25 - 1].IsActive == 0 && Main.TileSet[num24, num25 + 1].IsActive == 0)
+						if (Main.TileSet[num24, num25 - 1].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24, num25 + 1].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num24, num25 - 1].IsActive == 0 && Main.TileSet[num24, num25 + 1].IsActive == 0)
 						{
 							Main.TileSet[num24, num25].IsActive = 0;
-							Main.TileSet[num24, num25].WallType = 27;
+							Main.TileSet[num24, num25].WallType = (byte)EntityID.WallID.PLANKED;
 						}
 					}
 				}
@@ -17220,17 +17027,17 @@ namespace Terraria
 				for (int num27 = num21; num27 > num20; num27--)
 				{
 					bool flag2 = false;
-					if (Main.TileSet[num26, num27].IsActive != 0 && Main.TileSet[num26, num27].Type == 30)
+					if (Main.TileSet[num26, num27].IsActive != 0 && Main.TileSet[num26, num27].Type == (byte)EntityID.TileID.WOOD)
 					{
 						int num28 = -1;
 						for (int num29 = 0; num29 < 2; num29++)
 						{
-							if (!SolidTileUnsafe(num26 + num28, num27) && Main.TileSet[num26 + num28, num27].WallType == 0)
+							if (!SolidTileUnsafe(num26 + num28, num27) && Main.TileSet[num26 + num28, num27].WallType == (byte)EntityID.WallID.NONE)
 							{
 								int num30 = 0;
 								int num31 = num27;
 								int num32 = num27;
-								while (Main.TileSet[num26, num31].IsActive != 0 && Main.TileSet[num26, num31].Type == 30 && !SolidTileUnsafe(num26 + num28, num31) && Main.TileSet[num26 + num28, num31].WallType == 0)
+								while (Main.TileSet[num26, num31].IsActive != 0 && Main.TileSet[num26, num31].Type == (byte)EntityID.TileID.WOOD && !SolidTileUnsafe(num26 + num28, num31) && Main.TileSet[num26 + num28, num31].WallType == (byte)EntityID.WallID.NONE)
 								{
 									num31--;
 									num30++;
@@ -17258,7 +17065,7 @@ namespace Terraria
 											Main.TileSet[num26, num31].IsActive = 0;
 											Main.TileSet[num26, num31 - 1].IsActive = 0;
 											Main.TileSet[num26, num31 - 2].IsActive = 0;
-											PlaceTile(num26, num31, 10, ToMute: true);
+											PlaceTile(num26, num31, (byte)EntityID.TileID.DOOR_CLOSED, ToMute: true);
 											flag2 = true;
 										}
 									}
@@ -17266,7 +17073,7 @@ namespace Terraria
 									{
 										for (int num36 = num33; num36 < num32; num36++)
 										{
-											Main.TileSet[num26, num36].Type = 124;
+											Main.TileSet[num26, num36].Type = (byte)EntityID.TileID.WOODEN_BEAM;
 										}
 									}
 								}
@@ -17288,7 +17095,7 @@ namespace Terraria
 				{
 					for (int num39 = num37 - 2; num39 <= num37 + 2; num39++)
 					{
-						if (Main.TileSet[num39, num38].IsActive != 0 && (!SolidTileUnsafe(num39, num38) || Main.TileSet[num39, num38].Type == 10))
+						if (Main.TileSet[num39, num38].IsActive != 0 && (!SolidTileUnsafe(num39, num38) || Main.TileSet[num39, num38].Type == (byte)EntityID.TileID.DOOR_CLOSED))
 						{
 							flag4 = false;
 						}
@@ -17298,9 +17105,9 @@ namespace Terraria
 				{
 					for (int num40 = num20; num40 < num21; num40++)
 					{
-						if (Main.TileSet[num37, num40].WallType == 27 && Main.TileSet[num37, num40].IsActive == 0)
+						if (Main.TileSet[num37, num40].WallType == (byte)EntityID.WallID.PLANKED && Main.TileSet[num37, num40].IsActive == 0)
 						{
-							PlaceTile(num37, num40, 124, ToMute: true);
+							PlaceTile(num37, num40, (byte)EntityID.TileID.WOODEN_BEAM, ToMute: true);
 						}
 					}
 				}
@@ -17310,7 +17117,7 @@ namespace Terraria
 			{
 				int num42 = genRand.Next(num18 + 2, num19 - 1);
 				int num43 = genRand.Next(num20 + 2, num21 - 1);
-				while (Main.TileSet[num42, num43].WallType != 27)
+				while (Main.TileSet[num42, num43].WallType != (byte)EntityID.WallID.PLANKED)
 				{
 					num42 = genRand.Next(num18 + 2, num19 - 1);
 					num43 = genRand.Next(num20 + 2, num21 - 1);
@@ -17323,49 +17130,49 @@ namespace Terraria
 				{
 				}
 				num43--;
-				if (Main.TileSet[num42, num43].WallType != 27)
+				if (Main.TileSet[num42, num43].WallType != (byte)EntityID.WallID.PLANKED)
 				{
 					continue;
 				}
 				if (genRand.Next(3) == 0)
 				{
-					int type;
+					EntityID.TileID type;
 					switch (genRand.Next(9))
 					{
 						case 0:
-							type = 14;
+							type = EntityID.TileID.TABLE;
 							break;
 						case 1:
-							type = 16;
+							type = EntityID.TileID.ANVIL;
 							break;
 						case 2:
-							type = 18;
+							type = EntityID.TileID.WORK_BENCH;
 							break;
 						case 3:
-							type = 86;
+							type = EntityID.TileID.LOOM;
 							break;
 						case 4:
-							type = 87;
+							type = EntityID.TileID.PIANO;
 							break;
 						case 5:
-							type = 94;
+							type = EntityID.TileID.KEG;
 							break;
 						case 6:
-							type = 101;
+							type = EntityID.TileID.BOOKCASE;
 							break;
 						case 7:
-							type = 104;
+							type = EntityID.TileID.GRANDFATHERS_CLOCK;
 							break;
 						default:
-							type = 106;
+							type = EntityID.TileID.SAWMILL;
 							break;
 					}
-					PlaceTile(num42, num43, type, ToMute: true);
+					PlaceTile(num42, num43, (int)type, ToMute: true);
 				}
 				else
 				{
 					int style = genRand.Next(2, 43);
-					PlaceTile(num42, num43, 105, ToMute: true, IsForced: true, -1, style);
+					PlaceTile(num42, num43, (byte)EntityID.TileID.STATUE, ToMute: true, IsForced: true, -1, style);
 				}
 			}
 		}
@@ -17410,16 +17217,16 @@ namespace Terraria
 			{
 				if (SolidTileUnsafe(X, num))
 				{
-					switch (Main.TileSet[X, num].Type)
+					switch ((EntityID.TileID)Main.TileSet[X, num].Type)
 					{
-						case 109:
-						case 116:
-						case 117:
+						case EntityID.TileID.HALLOWED_GRASS:
+						case EntityID.TileID.PEARLSAND:
+						case EntityID.TileID.PEARLSTONE:
 							totalGood2++;
 							break;
-						case 23:
-						case 25:
-						case 112:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.EBONSTONE:
+						case EntityID.TileID.EBONSAND:
 							totalEvil2++;
 							break;
 					}
@@ -17431,16 +17238,16 @@ namespace Terraria
 			{
 				if (SolidTileUnsafe(X, num))
 				{
-					switch (Main.TileSet[X, num].Type)
+					switch ((EntityID.TileID)Main.TileSet[X, num].Type)
 					{
-						case 109:
-						case 116:
-						case 117:
+						case EntityID.TileID.HALLOWED_GRASS:
+						case EntityID.TileID.PEARLSAND:
+						case EntityID.TileID.PEARLSTONE:
 							totalGood2 += 5;
 							break;
-						case 23:
-						case 25:
-						case 112:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.EBONSTONE:
+						case EntityID.TileID.EBONSAND:
 							totalEvil2 += 5;
 							break;
 					}
@@ -17479,7 +17286,7 @@ namespace Terraria
 			{
 				flag = true;
 				spawnDelay = 0;
-				if (ToSpawnNPC != (int)NPC.ID.OLD_MAN)
+				if (ToSpawnNPC != (int)EntityID.NPCID.OLD_MAN)
 				{
 					for (int i = 0; i < NPC.MaxNumNPCs; i++)
 					{
@@ -17517,16 +17324,16 @@ namespace Terraria
 				{
 					num8 = Main.MaxTilesY - 10;
 				}
-				if (Main.TileSet[num3, num4].Type >= 82 && Main.TileSet[num3, num4].Type <= 84)
+				if (Main.TileSet[num3, num4].Type >= (byte)EntityID.TileID.DAYBLOOM_GROWING && Main.TileSet[num3, num4].Type <= (byte)EntityID.TileID.DAYBLOOM_BLOOMING)
 				{
 					GrowAlch(num3, num4);
 				}
 				if (Main.TileSet[num3, num4].Liquid > 32)
 				{
-					if (Main.TileSet[num3, num4].IsActive != 0 && (Main.TileSet[num3, num4].Type == 3 || Main.TileSet[num3, num4].Type == 20 || Main.TileSet[num3, num4].Type == 24 || Main.TileSet[num3, num4].Type == 27 || Main.TileSet[num3, num4].Type == 73))
+					if (Main.TileSet[num3, num4].IsActive != 0 && (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SHORT_GRASS_PLANTS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SAPLING || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SHORT_CORRUPT_PLANTS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SUNFLOWER || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.TALL_GRASS_PLANTS))
 					{
 						KillTile(num3, num4);
-						if (Main.NetMode == (byte)NetModeSetting.SERVER)
+						if (Main.NetMode == (int)NetModeSetting.SERVER)
 						{
 							NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, num3, num4, 0);
 							NetMessage.SendMessage();
@@ -17536,20 +17343,20 @@ namespace Terraria
 				else if (Main.TileSet[num3, num4].IsActive != 0)
 				{
 					hardUpdateWorld(num3, num4);
-					if (Main.TileSet[num3, num4].Type == 80)
+					if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CACTUS)
 					{
 						if (genRand.Next(15) == 0)
 						{
 							GrowCactus(num3, num4);
 						}
 					}
-					else if (Main.TileSet[num3, num4].Type == 53)
+					else if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SAND)
 					{
 						if (Main.TileSet[num3, num7].IsActive == 0)
 						{
 							if (num3 < 250 || num3 > Main.MaxTilesX - 250)
 							{
-								if (genRand.Next(500) == 0 && Main.TileSet[num3, num7].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 1].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 2].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 3].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 4].Liquid == byte.MaxValue && PlaceTile(num3, num7, 81, true))
+								if (genRand.Next(500) == 0 && Main.TileSet[num3, num7].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 1].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 2].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 3].Liquid == byte.MaxValue && Main.TileSet[num3, num7 - 4].Liquid == byte.MaxValue && PlaceTile(num3, num7, (byte)EntityID.TileID.CORAL, true))
 								{
 									NetMessage.SendTile(num3, num7);
 								}
@@ -17560,32 +17367,32 @@ namespace Terraria
 							}
 						}
 					}
-					else if (Main.TileSet[num3, num4].Type == 116 || Main.TileSet[num3, num4].Type == 112)
+					else if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.PEARLSAND || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.EBONSAND)
 					{
 						if (Main.TileSet[num3, num7].IsActive == 0 && num3 > 400 && num3 < Main.MaxTilesX - 400 && genRand.Next(300) == 0)
 						{
 							GrowCactus(num3, num4);
 						}
 					}
-					else if (Main.TileSet[num3, num4].Type == 78)
+					else if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CLAY_POT)
 					{
-						if (Main.TileSet[num3, num7].IsActive == 0 && PlaceTile(num3, num7, 3, true))
+						if (Main.TileSet[num3, num7].IsActive == 0 && PlaceTile(num3, num7, (byte)EntityID.TileID.SHORT_GRASS_PLANTS, true))
 						{
 							NetMessage.SendTile(num3, num7);
 						}
 					}
-					else if (Main.TileSet[num3, num4].Type == 2 || Main.TileSet[num3, num4].Type == 23 || Main.TileSet[num3, num4].Type == 32 || Main.TileSet[num3, num4].Type == 109)
+					else if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.GRASS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CORRUPT_GRASS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CORRUPTION_THORN || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.HALLOWED_GRASS)
 					{
 						int num9 = Main.TileSet[num3, num4].Type;
-						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(12) == 0 && num9 == 2 && PlaceTile(num3, num7, 3, true))
+						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(12) == 0 && num9 == (int)EntityID.TileID.GRASS && PlaceTile(num3, num7, (int)EntityID.TileID.SHORT_GRASS_PLANTS, true))
 						{
 							NetMessage.SendTile(num3, num7);
 						}
-						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(10) == 0 && num9 == 23 && PlaceTile(num3, num7, 24, true))
+						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(10) == 0 && num9 == (int)EntityID.TileID.CORRUPT_GRASS && PlaceTile(num3, num7, (int)EntityID.TileID.SHORT_CORRUPT_PLANTS, true))
 						{
 							NetMessage.SendTile(num3, num7);
 						}
-						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(10) == 0 && num9 == 109 && PlaceTile(num3, num7, 110, true))
+						if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(10) == 0 && num9 == (int)EntityID.TileID.HALLOWED_GRASS && PlaceTile(num3, num7, (int)EntityID.TileID.SHORT_HALLOWED_PLANTS, true))
 						{
 							NetMessage.SendTile(num3, num7);
 						}
@@ -17598,17 +17405,17 @@ namespace Terraria
 								{
 									continue;
 								}
-								if (num9 == 32)
+								if (num9 == (int)EntityID.TileID.CORRUPTION_THORN)
 								{
-									num9 = 23;
+									num9 = (int)EntityID.TileID.CORRUPT_GRASS;
 								}
-								if (Main.TileSet[k, l].Type == 0 || (num9 == 23 && Main.TileSet[k, l].Type == 2) || (num9 == 23 && Main.TileSet[k, l].Type == 109))
+								if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.DIRT || (num9 == (int)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[k, l].Type == (byte)EntityID.TileID.GRASS) || (num9 == (int)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[k, l].Type == (byte)EntityID.TileID.HALLOWED_GRASS))
 								{
 									SpreadGrass(k, l, 0, num9, false);
-									if (num9 == 23)
+									if (num9 == (int)EntityID.TileID.CORRUPT_GRASS)
 									{
-										SpreadGrass(k, l, 2, num9, false);
-										SpreadGrass(k, l, 109, num9, false);
+										SpreadGrass(k, l, (int)EntityID.TileID.GRASS, num9, false);
+										SpreadGrass(k, l, (int)EntityID.TileID.HALLOWED_GRASS, num9, false);
 									}
 									if (Main.TileSet[k, l].Type == num9)
 									{
@@ -17616,13 +17423,13 @@ namespace Terraria
 										flag2 = true;
 									}
 								}
-								if (Main.TileSet[k, l].Type == 0 || (num9 == 109 && Main.TileSet[k, l].Type == 2) || (num9 == 109 && Main.TileSet[k, l].Type == 23))
+								if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.DIRT || (num9 == (int)EntityID.TileID.HALLOWED_GRASS && Main.TileSet[k, l].Type == (byte)EntityID.TileID.GRASS) || (num9 == (int)EntityID.TileID.HALLOWED_GRASS && Main.TileSet[k, l].Type == (byte)EntityID.TileID.CORRUPT_GRASS))
 								{
 									SpreadGrass(k, l, 0, num9, false);
-									if (num9 == 109)
+									if (num9 == (int)EntityID.TileID.HALLOWED_GRASS)
 									{
-										SpreadGrass(k, l, 2, num9, false);
-										SpreadGrass(k, l, 23, num9, false);
+										SpreadGrass(k, l, (int)EntityID.TileID.GRASS, num9, false);
+										SpreadGrass(k, l, (int)EntityID.TileID.CORRUPT_GRASS, num9, false);
 									}
 									if (Main.TileSet[k, l].Type == num9)
 									{
@@ -17637,42 +17444,42 @@ namespace Terraria
 							NetMessage.SendTileSquare(num3, num4, 3);
 						}
 					}
-					else if (Main.TileSet[num3, num4].Type == 20 && genRand.Next(20) == 0 && !PlayerLOS(num3, num4))
+					else if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SAPLING && genRand.Next(20) == 0 && !PlayerLOS(num3, num4))
 					{
 						GrowTree(num3, num4);
 					}
-					if (Main.TileSet[num3, num4].Type == 3 && genRand.Next(20) == 0 && Main.TileSet[num3, num4].FrameX < 144)
+					if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SHORT_GRASS_PLANTS && genRand.Next(20) == 0 && Main.TileSet[num3, num4].FrameX < 144)
 					{
-						Main.TileSet[num3, num4].Type = 73;
+						Main.TileSet[num3, num4].Type = (byte)EntityID.TileID.TALL_GRASS_PLANTS;
 						NetMessage.SendTileSquare(num3, num4, 3);
 					}
-					if (Main.TileSet[num3, num4].Type == 110 && genRand.Next(20) == 0 && Main.TileSet[num3, num4].FrameX < 144)
+					if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SHORT_HALLOWED_PLANTS && genRand.Next(20) == 0 && Main.TileSet[num3, num4].FrameX < 144)
 					{
-						Main.TileSet[num3, num4].Type = 113;
+						Main.TileSet[num3, num4].Type = (byte)EntityID.TileID.TALL_HALLOWED_PLANTS;
 						NetMessage.SendTileSquare(num3, num4, 3);
 					}
-					if (Main.TileSet[num3, num4].Type == 32 && genRand.Next(3) == 0)
+					if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CORRUPTION_THORN && genRand.Next(3) == 0)
 					{
 						int num10 = num3;
 						int num11 = num4;
 						int num12 = 0;
-						if (Main.TileSet[num10 + 1, num11].IsActive != 0 && Main.TileSet[num10 + 1, num11].Type == 32)
+						if (Main.TileSet[num10 + 1, num11].IsActive != 0 && Main.TileSet[num10 + 1, num11].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num12++;
 						}
-						if (Main.TileSet[num10 - 1, num11].IsActive != 0 && Main.TileSet[num10 - 1, num11].Type == 32)
+						if (Main.TileSet[num10 - 1, num11].IsActive != 0 && Main.TileSet[num10 - 1, num11].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num12++;
 						}
-						if (Main.TileSet[num10, num11 + 1].IsActive != 0 && Main.TileSet[num10, num11 + 1].Type == 32)
+						if (Main.TileSet[num10, num11 + 1].IsActive != 0 && Main.TileSet[num10, num11 + 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num12++;
 						}
-						if (Main.TileSet[num10, num11 - 1].IsActive != 0 && Main.TileSet[num10, num11 - 1].Type == 32)
+						if (Main.TileSet[num10, num11 - 1].IsActive != 0 && Main.TileSet[num10, num11 - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num12++;
 						}
-						if (num12 < 3 || Main.TileSet[num3, num4].Type == 23)
+						if (num12 < 3 || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.CORRUPT_GRASS)
 						{
 							switch (genRand.Next(4))
 							{
@@ -17692,19 +17499,19 @@ namespace Terraria
 							if (Main.TileSet[num10, num11].IsActive == 0)
 							{
 								num12 = 0;
-								if (Main.TileSet[num10 + 1, num11].IsActive != 0 && Main.TileSet[num10 + 1, num11].Type == 32)
+								if (Main.TileSet[num10 + 1, num11].IsActive != 0 && Main.TileSet[num10 + 1, num11].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num12++;
 								}
-								if (Main.TileSet[num10 - 1, num11].IsActive != 0 && Main.TileSet[num10 - 1, num11].Type == 32)
+								if (Main.TileSet[num10 - 1, num11].IsActive != 0 && Main.TileSet[num10 - 1, num11].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num12++;
 								}
-								if (Main.TileSet[num10, num11 + 1].IsActive != 0 && Main.TileSet[num10, num11 + 1].Type == 32)
+								if (Main.TileSet[num10, num11 + 1].IsActive != 0 && Main.TileSet[num10, num11 + 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num12++;
 								}
-								if (Main.TileSet[num10, num11 - 1].IsActive != 0 && Main.TileSet[num10, num11 - 1].Type == 32)
+								if (Main.TileSet[num10, num11 - 1].IsActive != 0 && Main.TileSet[num10, num11 - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num12++;
 								}
@@ -17720,7 +17527,7 @@ namespace Terraria
 									{
 										for (int n = num16; n < num17; n++)
 										{
-											if (Math.Abs(m - num10) * 2 + Math.Abs(n - num11) < 9 && Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].Type == 23 && Main.TileSet[m, n - 1].IsActive != 0 && Main.TileSet[m, n - 1].Type == 32 && Main.TileSet[m, n - 1].Liquid == 0)
+											if (Math.Abs(m - num10) * 2 + Math.Abs(n - num11) < 9 && Main.TileSet[m, n].IsActive != 0 && Main.TileSet[m, n].Type == (byte)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[m, n - 1].IsActive != 0 && Main.TileSet[m, n - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN && Main.TileSet[m, n - 1].Liquid == 0)
 											{
 												flag3 = true;
 												break;
@@ -17729,7 +17536,7 @@ namespace Terraria
 									}
 									if (flag3)
 									{
-										Main.TileSet[num10, num11].Type = 32;
+										Main.TileSet[num10, num11].Type = (byte)EntityID.TileID.CORRUPTION_THORN;
 										Main.TileSet[num10, num11].IsActive = 1;
 										SquareTileFrame(num10, num11);
 										NetMessage.SendTileSquare(num10, num11, 3);
@@ -17747,12 +17554,12 @@ namespace Terraria
 				{
 					continue;
 				}
-				if ((Main.TileSet[num3, num4].Type == 2 || Main.TileSet[num3, num4].Type == 52) && genRand.Next(40) == 0 && Main.TileSet[num3, num4 + 1].IsActive == 0 && Main.TileSet[num3, num4 + 1].Lava == 0)
+				if ((Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.GRASS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.VINE) && genRand.Next(40) == 0 && Main.TileSet[num3, num4 + 1].IsActive == 0 && Main.TileSet[num3, num4 + 1].Lava == 0)
 				{
 					bool flag4 = false;
 					for (int num18 = num4; num18 > num4 - 10; num18--)
 					{
-						if (Main.TileSet[num3, num18].IsActive != 0 && Main.TileSet[num3, num18].Type == 2)
+						if (Main.TileSet[num3, num18].IsActive != 0 && Main.TileSet[num3, num18].Type == (byte)EntityID.TileID.GRASS)
 						{
 							flag4 = true;
 							break;
@@ -17762,23 +17569,23 @@ namespace Terraria
 					{
 						int num19 = num3;
 						int num20 = num4 + 1;
-						Main.TileSet[num19, num20].Type = 52;
+						Main.TileSet[num19, num20].Type = (byte)EntityID.TileID.VINE;
 						Main.TileSet[num19, num20].IsActive = 1;
 						SquareTileFrame(num19, num20);
 						NetMessage.SendTileSquare(num19, num20, 3);
 					}
 				}
-				if (Main.TileSet[num3, num4].Type == 60)
+				if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 				{
 					int type = Main.TileSet[num3, num4].Type;
 					if (Main.TileSet[num3, num7].IsActive == 0 && genRand.Next(7) == 0)
 					{
-						if (PlaceTile(num3, num7, 61, true))
+						if (PlaceTile(num3, num7, (byte)EntityID.TileID.SHORT_JUNGLE_PLANTS, true))
 						{
 							NetMessage.SendTile(num3, num7);
 						}
 					}
-					else if (genRand.Next(500) == 0 && (Main.TileSet[num3, num7].IsActive == 0 || Main.TileSet[num3, num7].Type == 61 || Main.TileSet[num3, num7].Type == 74 || Main.TileSet[num3, num7].Type == 69) && !PlayerLOS(num3, num4))
+					else if (genRand.Next(500) == 0 && (Main.TileSet[num3, num7].IsActive == 0 || Main.TileSet[num3, num7].Type == (byte)EntityID.TileID.SHORT_JUNGLE_PLANTS || Main.TileSet[num3, num7].Type == (byte)EntityID.TileID.TALL_JUNGLE_PLANTS || Main.TileSet[num3, num7].Type == (byte)EntityID.TileID.JUNGLE_THORN) && !PlayerLOS(num3, num4))
 					{
 						GrowTree(num3, num4);
 					}
@@ -17787,9 +17594,9 @@ namespace Terraria
 					{
 						for (int num22 = num7; num22 < num8; num22++)
 						{
-							if ((num3 != num21 || num4 != num22) && Main.TileSet[num21, num22].IsActive != 0 && Main.TileSet[num21, num22].Type == 59)
+							if ((num3 != num21 || num4 != num22) && Main.TileSet[num21, num22].IsActive != 0 && Main.TileSet[num21, num22].Type == (byte)EntityID.TileID.MUD)
 							{
-								SpreadGrass(num21, num22, 59, type, false);
+								SpreadGrass(num21, num22, (byte)EntityID.TileID.MUD, type, false);
 								if (Main.TileSet[num21, num22].Type == type)
 								{
 									SquareTileFrame(num21, num22);
@@ -17803,17 +17610,17 @@ namespace Terraria
 						NetMessage.SendTileSquare(num3, num4, 3);
 					}
 				}
-				if (Main.TileSet[num3, num4].Type == 61 && genRand.Next(3) == 0 && Main.TileSet[num3, num4].FrameX < 144)
+				if (Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.SHORT_JUNGLE_PLANTS && genRand.Next(3) == 0 && Main.TileSet[num3, num4].FrameX < 144)
 				{
-					Main.TileSet[num3, num4].Type = 74;
+					Main.TileSet[num3, num4].Type = (byte)EntityID.TileID.TALL_JUNGLE_PLANTS;
 					NetMessage.SendTileSquare(num3, num4, 3);
 				}
-				if ((Main.TileSet[num3, num4].Type == 60 || Main.TileSet[num3, num4].Type == 62) && genRand.Next(15) == 0 && Main.TileSet[num3, num4 + 1].IsActive == 0 && Main.TileSet[num3, num4 + 1].Lava == 0)
+				if ((Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.JUNGLE_GRASS || Main.TileSet[num3, num4].Type == (byte)EntityID.TileID.JUNGLE_VINE) && genRand.Next(15) == 0 && Main.TileSet[num3, num4 + 1].IsActive == 0 && Main.TileSet[num3, num4 + 1].Lava == 0)
 				{
 					bool flag6 = false;
 					for (int num23 = num4; num23 > num4 - 10; num23--)
 					{
-						if (Main.TileSet[num3, num23].IsActive != 0 && Main.TileSet[num3, num23].Type == 60)
+						if (Main.TileSet[num3, num23].IsActive != 0 && Main.TileSet[num3, num23].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 						{
 							flag6 = true;
 							break;
@@ -17823,20 +17630,20 @@ namespace Terraria
 					{
 						int num24 = num3;
 						int num25 = num4 + 1;
-						Main.TileSet[num24, num25].Type = 62;
+						Main.TileSet[num24, num25].Type = (byte)EntityID.TileID.JUNGLE_VINE;
 						Main.TileSet[num24, num25].IsActive = 1;
 						SquareTileFrame(num24, num25);
 						NetMessage.SendTileSquare(num24, num25, 3);
 					}
 				}
-				if ((Main.TileSet[num3, num4].Type != 109 && Main.TileSet[num3, num4].Type != 115) || genRand.Next(15) != 0 || Main.TileSet[num3, num4 + 1].IsActive != 0 || Main.TileSet[num3, num4 + 1].Lava != 0)
+				if ((Main.TileSet[num3, num4].Type != (byte)EntityID.TileID.HALLOWED_GRASS && Main.TileSet[num3, num4].Type != (byte)EntityID.TileID.HALLOWED_VINE) || genRand.Next(15) != 0 || Main.TileSet[num3, num4 + 1].IsActive != 0 || Main.TileSet[num3, num4 + 1].Lava != 0)
 				{
 					continue;
 				}
 				bool flag7 = false;
 				for (int num26 = num4; num26 > num4 - 10; num26--)
 				{
-					if (Main.TileSet[num3, num26].IsActive != 0 && Main.TileSet[num3, num26].Type == 109)
+					if (Main.TileSet[num3, num26].IsActive != 0 && Main.TileSet[num3, num26].Type == (byte)EntityID.TileID.HALLOWED_GRASS)
 					{
 						flag7 = true;
 						break;
@@ -17846,7 +17653,7 @@ namespace Terraria
 				{
 					int num27 = num3;
 					int num28 = num4 + 1;
-					Main.TileSet[num27, num28].Type = 115;
+					Main.TileSet[num27, num28].Type = (byte)EntityID.TileID.HALLOWED_VINE;
 					Main.TileSet[num27, num28].IsActive = 1;
 					SquareTileFrame(num27, num28);
 					NetMessage.SendTileSquare(num27, num28, 3);
@@ -17876,7 +17683,7 @@ namespace Terraria
 				{
 					num35 = Main.MaxTilesY - 10;
 				}
-				if (Main.TileSet[num30, num31].Type >= 82 && Main.TileSet[num30, num31].Type <= 84)
+				if (Main.TileSet[num30, num31].Type >= (byte)EntityID.TileID.DAYBLOOM_GROWING && Main.TileSet[num30, num31].Type <= (byte)EntityID.TileID.DAYBLOOM_BLOOMING)
 				{
 					GrowAlch(num30, num31);
 				}
@@ -17887,32 +17694,32 @@ namespace Terraria
 				if (Main.TileSet[num30, num31].IsActive != 0)
 				{
 					hardUpdateWorld(num30, num31);
-					if (Main.TileSet[num30, num31].Type == 23 && Main.TileSet[num30, num34].IsActive == 0 && genRand.Next(1) == 0 && PlaceTile(num30, num34, 24, true))
+					if (Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[num30, num34].IsActive == 0 && genRand.Next(1) == 0 && PlaceTile(num30, num34, (byte)EntityID.TileID.SHORT_CORRUPT_PLANTS, true))
 					{
 						NetMessage.SendTile(num30, num34);
 					}
-					if (Main.TileSet[num30, num31].Type == 32 && genRand.Next(3) == 0)
+					if (Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.CORRUPTION_THORN && genRand.Next(3) == 0)
 					{
 						int num36 = num30;
 						int num37 = num31;
 						int num38 = 0;
-						if (Main.TileSet[num36 + 1, num37].IsActive != 0 && Main.TileSet[num36 + 1, num37].Type == 32)
+						if (Main.TileSet[num36 + 1, num37].IsActive != 0 && Main.TileSet[num36 + 1, num37].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num38++;
 						}
-						if (Main.TileSet[num36 - 1, num37].IsActive != 0 && Main.TileSet[num36 - 1, num37].Type == 32)
+						if (Main.TileSet[num36 - 1, num37].IsActive != 0 && Main.TileSet[num36 - 1, num37].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num38++;
 						}
-						if (Main.TileSet[num36, num37 + 1].IsActive != 0 && Main.TileSet[num36, num37 + 1].Type == 32)
+						if (Main.TileSet[num36, num37 + 1].IsActive != 0 && Main.TileSet[num36, num37 + 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num38++;
 						}
-						if (Main.TileSet[num36, num37 - 1].IsActive != 0 && Main.TileSet[num36, num37 - 1].Type == 32)
+						if (Main.TileSet[num36, num37 - 1].IsActive != 0 && Main.TileSet[num36, num37 - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 						{
 							num38++;
 						}
-						if (num38 < 3 || Main.TileSet[num30, num31].Type == 23)
+						if (num38 < 3 || Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.CORRUPT_GRASS)
 						{
 							switch (genRand.Next(4))
 							{
@@ -17932,19 +17739,19 @@ namespace Terraria
 							if (Main.TileSet[num36, num37].IsActive == 0)
 							{
 								num38 = 0;
-								if (Main.TileSet[num36 + 1, num37].IsActive != 0 && Main.TileSet[num36 + 1, num37].Type == 32)
+								if (Main.TileSet[num36 + 1, num37].IsActive != 0 && Main.TileSet[num36 + 1, num37].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num38++;
 								}
-								if (Main.TileSet[num36 - 1, num37].IsActive != 0 && Main.TileSet[num36 - 1, num37].Type == 32)
+								if (Main.TileSet[num36 - 1, num37].IsActive != 0 && Main.TileSet[num36 - 1, num37].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num38++;
 								}
-								if (Main.TileSet[num36, num37 + 1].IsActive != 0 && Main.TileSet[num36, num37 + 1].Type == 32)
+								if (Main.TileSet[num36, num37 + 1].IsActive != 0 && Main.TileSet[num36, num37 + 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num38++;
 								}
-								if (Main.TileSet[num36, num37 - 1].IsActive != 0 && Main.TileSet[num36, num37 - 1].Type == 32)
+								if (Main.TileSet[num36, num37 - 1].IsActive != 0 && Main.TileSet[num36, num37 - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN)
 								{
 									num38++;
 								}
@@ -17960,7 +17767,7 @@ namespace Terraria
 									{
 										for (int num45 = num42; num45 < num43; num45++)
 										{
-											if (Math.Abs(num44 - num36) * 2 + Math.Abs(num45 - num37) < 9 && Main.TileSet[num44, num45].IsActive != 0 && Main.TileSet[num44, num45].Type == 23 && Main.TileSet[num44, num45 - 1].IsActive != 0 && Main.TileSet[num44, num45 - 1].Type == 32 && Main.TileSet[num44, num45 - 1].Liquid == 0)
+											if (Math.Abs(num44 - num36) * 2 + Math.Abs(num45 - num37) < 9 && Main.TileSet[num44, num45].IsActive != 0 && Main.TileSet[num44, num45].Type == (byte)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[num44, num45 - 1].IsActive != 0 && Main.TileSet[num44, num45 - 1].Type == (byte)EntityID.TileID.CORRUPTION_THORN && Main.TileSet[num44, num45 - 1].Liquid == 0)
 											{
 												flag8 = true;
 												break;
@@ -17969,7 +17776,7 @@ namespace Terraria
 									}
 									if (flag8)
 									{
-										Main.TileSet[num36, num37].Type = 32;
+										Main.TileSet[num36, num37].Type = (byte)EntityID.TileID.CORRUPTION_THORN;
 										Main.TileSet[num36, num37].IsActive = 1;
 										SquareTileFrame(num36, num37);
 										NetMessage.SendTileSquare(num36, num37, 3);
@@ -17978,12 +17785,12 @@ namespace Terraria
 							}
 						}
 					}
-					if (Main.TileSet[num30, num31].Type == 60)
+					if (Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 					{
 						int type2 = Main.TileSet[num30, num31].Type;
 						if (Main.TileSet[num30, num34].IsActive == 0 && genRand.Next(10) == 0)
 						{
-							if (PlaceTile(num30, num34, 61, true))
+							if (PlaceTile(num30, num34, (byte)EntityID.TileID.SHORT_JUNGLE_PLANTS, true))
 							{
 								NetMessage.SendTile(num30, num34);
 							}
@@ -17993,9 +17800,9 @@ namespace Terraria
 						{
 							for (int num47 = num34; num47 < num35; num47++)
 							{
-								if ((num30 != num46 || num31 != num47) && Main.TileSet[num46, num47].IsActive != 0 && Main.TileSet[num46, num47].Type == 59)
+								if ((num30 != num46 || num31 != num47) && Main.TileSet[num46, num47].IsActive != 0 && Main.TileSet[num46, num47].Type == (byte)EntityID.TileID.MUD)
 								{
-									SpreadGrass(num46, num47, 59, type2, false);
+									SpreadGrass(num46, num47, (byte)EntityID.TileID.MUD, type2, false);
 									if (Main.TileSet[num46, num47].Type == type2)
 									{
 										SquareTileFrame(num46, num47);
@@ -18009,17 +17816,17 @@ namespace Terraria
 							NetMessage.SendTileSquare(num30, num31, 3);
 						}
 					}
-					if (Main.TileSet[num30, num31].Type == 61 && genRand.Next(3) == 0 && Main.TileSet[num30, num31].FrameX < 144)
+					if (Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.SHORT_JUNGLE_PLANTS && genRand.Next(3) == 0 && Main.TileSet[num30, num31].FrameX < 144)
 					{
-						Main.TileSet[num30, num31].Type = 74;
+						Main.TileSet[num30, num31].Type = (byte)EntityID.TileID.TALL_JUNGLE_PLANTS;
 						NetMessage.SendTileSquare(num30, num31, 3);
 					}
-					if ((Main.TileSet[num30, num31].Type == 60 || Main.TileSet[num30, num31].Type == 62) && genRand.Next(5) == 0 && Main.TileSet[num30, num31 + 1].IsActive == 0 && Main.TileSet[num30, num31 + 1].Lava == 0)
+					if ((Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.JUNGLE_GRASS || Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.JUNGLE_VINE) && genRand.Next(5) == 0 && Main.TileSet[num30, num31 + 1].IsActive == 0 && Main.TileSet[num30, num31 + 1].Lava == 0)
 					{
 						bool flag10 = false;
 						for (int num48 = num31; num48 > num31 - 10; num48--)
 						{
-							if (Main.TileSet[num30, num48].IsActive != 0 && Main.TileSet[num30, num48].Type == 60)
+							if (Main.TileSet[num30, num48].IsActive != 0 && Main.TileSet[num30, num48].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 							{
 								flag10 = true;
 								break;
@@ -18029,34 +17836,34 @@ namespace Terraria
 						{
 							int num49 = num30;
 							int num50 = num31 + 1;
-							Main.TileSet[num49, num50].Type = 62;
+							Main.TileSet[num49, num50].Type = (byte)EntityID.TileID.JUNGLE_VINE;
 							Main.TileSet[num49, num50].IsActive = 1;
 							SquareTileFrame(num49, num50);
 							NetMessage.SendTileSquare(num49, num50, 3);
 						}
 					}
-					if (Main.TileSet[num30, num31].Type == 69 && genRand.Next(3) == 0)
+					if (Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.JUNGLE_THORN && genRand.Next(3) == 0)
 					{
 						int num51 = num30;
 						int num52 = num31;
 						int num53 = 0;
-						if (Main.TileSet[num51 + 1, num52].IsActive != 0 && Main.TileSet[num51 + 1, num52].Type == 69)
+						if (Main.TileSet[num51 + 1, num52].IsActive != 0 && Main.TileSet[num51 + 1, num52].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 						{
 							num53++;
 						}
-						if (Main.TileSet[num51 - 1, num52].IsActive != 0 && Main.TileSet[num51 - 1, num52].Type == 69)
+						if (Main.TileSet[num51 - 1, num52].IsActive != 0 && Main.TileSet[num51 - 1, num52].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 						{
 							num53++;
 						}
-						if (Main.TileSet[num51, num52 + 1].IsActive != 0 && Main.TileSet[num51, num52 + 1].Type == 69)
+						if (Main.TileSet[num51, num52 + 1].IsActive != 0 && Main.TileSet[num51, num52 + 1].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 						{
 							num53++;
 						}
-						if (Main.TileSet[num51, num52 - 1].IsActive != 0 && Main.TileSet[num51, num52 - 1].Type == 69)
+						if (Main.TileSet[num51, num52 - 1].IsActive != 0 && Main.TileSet[num51, num52 - 1].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 						{
 							num53++;
 						}
-						if (num53 < 3 || Main.TileSet[num30, num31].Type == 60)
+						if (num53 < 3 || Main.TileSet[num30, num31].Type == (byte)EntityID.TileID.JUNGLE_GRASS)
 						{
 							switch (genRand.Next(4))
 							{
@@ -18076,19 +17883,19 @@ namespace Terraria
 							if (Main.TileSet[num51, num52].IsActive == 0)
 							{
 								num53 = 0;
-								if (Main.TileSet[num51 + 1, num52].IsActive != 0 && Main.TileSet[num51 + 1, num52].Type == 69)
+								if (Main.TileSet[num51 + 1, num52].IsActive != 0 && Main.TileSet[num51 + 1, num52].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 								{
 									num53++;
 								}
-								if (Main.TileSet[num51 - 1, num52].IsActive != 0 && Main.TileSet[num51 - 1, num52].Type == 69)
+								if (Main.TileSet[num51 - 1, num52].IsActive != 0 && Main.TileSet[num51 - 1, num52].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 								{
 									num53++;
 								}
-								if (Main.TileSet[num51, num52 + 1].IsActive != 0 && Main.TileSet[num51, num52 + 1].Type == 69)
+								if (Main.TileSet[num51, num52 + 1].IsActive != 0 && Main.TileSet[num51, num52 + 1].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 								{
 									num53++;
 								}
-								if (Main.TileSet[num51, num52 - 1].IsActive != 0 && Main.TileSet[num51, num52 - 1].Type == 69)
+								if (Main.TileSet[num51, num52 - 1].IsActive != 0 && Main.TileSet[num51, num52 - 1].Type == (byte)EntityID.TileID.JUNGLE_THORN)
 								{
 									num53++;
 								}
@@ -18104,7 +17911,7 @@ namespace Terraria
 									{
 										for (int num60 = num57; num60 < num58; num60++)
 										{
-											if (Math.Abs(num59 - num51) * 2 + Math.Abs(num60 - num52) < 9 && Main.TileSet[num59, num60].IsActive != 0 && Main.TileSet[num59, num60].Type == 60 && Main.TileSet[num59, num60 - 1].IsActive != 0 && Main.TileSet[num59, num60 - 1].Type == 69 && Main.TileSet[num59, num60 - 1].Liquid == 0)
+											if (Math.Abs(num59 - num51) * 2 + Math.Abs(num60 - num52) < 9 && Main.TileSet[num59, num60].IsActive != 0 && Main.TileSet[num59, num60].Type == (byte)EntityID.TileID.JUNGLE_GRASS && Main.TileSet[num59, num60 - 1].IsActive != 0 && Main.TileSet[num59, num60 - 1].Type == (byte)EntityID.TileID.JUNGLE_THORN && Main.TileSet[num59, num60 - 1].Liquid == 0)
 											{
 												flag11 = true;
 												break;
@@ -18113,7 +17920,7 @@ namespace Terraria
 									}
 									if (flag11)
 									{
-										Main.TileSet[num51, num52].Type = 69;
+										Main.TileSet[num51, num52].Type = (byte)EntityID.TileID.JUNGLE_THORN;
 										Main.TileSet[num51, num52].IsActive = 1;
 										SquareTileFrame(num51, num52);
 										NetMessage.SendTileSquare(num51, num52, 3);
@@ -18122,14 +17929,14 @@ namespace Terraria
 							}
 						}
 					}
-					if (Main.TileSet[num30, num31].Type != 70)
+					if (Main.TileSet[num30, num31].Type != (byte)EntityID.TileID.MUSHROOM_GRASS)
 					{
 						continue;
 					}
 					int type3 = Main.TileSet[num30, num31].Type;
 					if (Main.TileSet[num30, num34].IsActive == 0 && genRand.Next(10) == 0)
 					{
-						if (PlaceTile(num30, num34, 71, true))
+						if (PlaceTile(num30, num34, (byte)EntityID.TileID.GLOWING_MUSHROOM, true))
 						{
 							NetMessage.SendTile(num30, num34);
 						}
@@ -18143,9 +17950,9 @@ namespace Terraria
 					{
 						for (int num62 = num34; num62 < num35; num62++)
 						{
-							if ((num30 != num61 || num31 != num62) && Main.TileSet[num61, num62].IsActive != 0 && Main.TileSet[num61, num62].Type == 59)
+							if ((num30 != num61 || num31 != num62) && Main.TileSet[num61, num62].IsActive != 0 && Main.TileSet[num61, num62].Type == (byte)EntityID.TileID.MUD)
 							{
-								SpreadGrass(num61, num62, 59, type3, false);
+								SpreadGrass(num61, num62, (byte)EntityID.TileID.MUD, type3, false);
 								if (Main.TileSet[num61, num62].Type == type3)
 								{
 									SquareTileFrame(num61, num62);
@@ -18185,7 +17992,7 @@ namespace Terraria
 					num61 = num56 / num61;
 					num59 *= num61;
 					num60 *= num61;
-					Projectile.NewProjectile(vector.X, vector.Y, num59, num60, 12, 1000, 10f);
+					Projectile.NewProjectile(vector.X, vector.Y, num59, num60, (int)EntityID.ProjectileID.FALLING_STAR, 1000, 10f);
 				}
 			}
 		}
@@ -18196,7 +18003,7 @@ namespace Terraria
 			{
 				return false;
 			}
-			if (Main.TileSet[i, j].WallType == 0)
+			if (Main.TileSet[i, j].WallType == (byte)EntityID.WallID.NONE)
 			{
 				Main.TileSet[i, j].WallType = (byte)type;
 				WallFrame(i - 1, j - 1);
@@ -18226,21 +18033,21 @@ namespace Terraria
 					{
 						if (ptr2->IsActive != 0)
 						{
-							if (ptr2->Type == 2)
+							if (ptr2->Type == (int)EntityID.TileID.GRASS)
 							{
 								ptr2--;
 								if (ptr2->IsActive == 0)
 								{
-									PlaceTile(i, num - 1, 3, ToMute: true);
+									PlaceTile(i, num - 1, (int)EntityID.TileID.SHORT_GRASS_PLANTS, ToMute: true);
 								}
 								ptr2++;
 							}
-							else if (ptr2->Type == 23)
+							else if (ptr2->Type == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
 								ptr2--;
 								if (ptr2->IsActive == 0)
 								{
-									PlaceTile(i, num - 1, 24, ToMute: true);
+									PlaceTile(i, num - 1, (int)EntityID.TileID.SHORT_CORRUPT_PLANTS, ToMute: true);
 								}
 								ptr2++;
 							}
@@ -18252,11 +18059,11 @@ namespace Terraria
 			}
 		}
 
-		public static void SpreadGrass(int i, int j, int dirt = 0, int grass = 2, bool repeat = true)
+		public static void SpreadGrass(int i, int j, int dirt = (int)EntityID.TileID.DIRT, int grass = (int)EntityID.TileID.GRASS, bool repeat = true)
 		{
 			try
 			{
-				if (Main.TileSet[i, j].Type != dirt || Main.TileSet[i, j].IsActive == 0 || (j < Main.WorldSurface && grass == 70) || (j >= Main.WorldSurface && dirt == 0))
+				if (Main.TileSet[i, j].Type != dirt || Main.TileSet[i, j].IsActive == 0 || (j < Main.WorldSurface && grass == (int)EntityID.TileID.MUSHROOM_GRASS) || (j >= Main.WorldSurface && dirt == (int)EntityID.TileID.DIRT))
 				{
 					return;
 				}
@@ -18296,7 +18103,7 @@ namespace Terraria
 						}
 					}
 				}
-				if (flag || (grass == 23 && Main.TileSet[i, j - 1].Type == 27))
+				if (flag || (grass == (int)EntityID.TileID.CORRUPT_GRASS && Main.TileSet[i, j - 1].Type == (int)EntityID.TileID.SUNFLOWER))
 				{
 					return;
 				}
@@ -18391,7 +18198,7 @@ namespace Terraria
 				{
 					for (int l = num5; l < num6; l++)
 					{
-						if (Math.Abs(k - vector.X) + Math.Abs(l - vector.Y) < num2 * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].Type != 31 && Main.TileSet[k, l].Type != 22)
+						if (Math.Abs(k - vector.X) + Math.Abs(l - vector.Y) < num2 * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].Type != (byte)EntityID.TileID.SHADOW_ORB && Main.TileSet[k, l].Type != (byte)EntityID.TileID.DEMONITE_ORE)
 						{
 							Main.TileSet[k, l].IsActive = 0;
 						}
@@ -18464,20 +18271,20 @@ namespace Terraria
 				{
 					for (int n = num5; n < num6; n++)
 					{
-						if (Math.Abs(m - vector.X) + Math.Abs(n - vector.Y) < num2 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[m, n].WallType != 3)
+						if (Math.Abs(m - vector.X) + Math.Abs(n - vector.Y) < num2 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[m, n].WallType != (byte)EntityID.WallID.EBONSTONE_UNSAFE)
 						{
-							if (Main.TileSet[m, n].Type != 25 && n > j + genRand.Next(3, 20))
+							if (Main.TileSet[m, n].Type != (byte)EntityID.TileID.EBONSTONE && n > j + genRand.Next(3, 20))
 							{
 								Main.TileSet[m, n].IsActive = 1;
 							}
 							Main.TileSet[m, n].IsActive = 1;
-							if (Main.TileSet[m, n].Type != 31 && Main.TileSet[m, n].Type != 22)
+							if (Main.TileSet[m, n].Type != (byte)EntityID.TileID.SHADOW_ORB && Main.TileSet[m, n].Type != (byte)EntityID.TileID.DEMONITE_ORE)
 							{
-								Main.TileSet[m, n].Type = 25;
+								Main.TileSet[m, n].Type = (byte)EntityID.TileID.EBONSTONE;
 							}
-							if (Main.TileSet[m, n].WallType == 2)
+							if (Main.TileSet[m, n].WallType == (byte)EntityID.WallID.DIRT_UNSAFE)
 							{
-								Main.TileSet[m, n].WallType = 0;
+								Main.TileSet[m, n].WallType = (byte)EntityID.WallID.NONE;
 							}
 						}
 					}
@@ -18486,16 +18293,16 @@ namespace Terraria
 				{
 					for (int num8 = num5; num8 < num6; num8++)
 					{
-						if (Math.Abs(num7 - vector.X) + Math.Abs(num8 - vector.Y) < num2 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[num7, num8].WallType != 3)
+						if (Math.Abs(num7 - vector.X) + Math.Abs(num8 - vector.Y) < num2 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[num7, num8].WallType != (byte)EntityID.WallID.EBONSTONE_UNSAFE)
 						{
-							if (Main.TileSet[num7, num8].Type != 31 && Main.TileSet[num7, num8].Type != 22)
+							if (Main.TileSet[num7, num8].Type != (byte)EntityID.TileID.SHADOW_ORB && Main.TileSet[num7, num8].Type != (byte)EntityID.TileID.DEMONITE_ORE)
 							{
-								Main.TileSet[num7, num8].Type = 25;
+								Main.TileSet[num7, num8].Type = (byte)EntityID.TileID.EBONSTONE;
 							}
 							Main.TileSet[num7, num8].IsActive = 1;
-							if (Main.TileSet[num7, num8].WallType == 0)
+							if (Main.TileSet[num7, num8].WallType == (byte)EntityID.WallID.NONE)
 							{
-								Main.TileSet[num7, num8].WallType = 3;
+								Main.TileSet[num7, num8].WallType = (byte)EntityID.WallID.EBONSTONE_UNSAFE;
 							}
 						}
 					}
@@ -18508,7 +18315,7 @@ namespace Terraria
 				for (num10 = (int)vector.Y; Main.TileSet[num9, num10].IsActive == 0; num10++)
 				{
 				}
-				TileRunner(num9, num10, genRand.Next(2, 6), genRand.Next(3, 7), 22);
+				TileRunner(num9, num10, genRand.Next(2, 6), genRand.Next(3, 7), (byte)EntityID.TileID.DEMONITE_ORE);
 			}
 		}
 
@@ -18587,7 +18394,7 @@ namespace Terraria
 					{
 						for (int l = num6; l < num7; l++)
 						{
-							if (Math.Abs(k - vector.X) + Math.Abs(l - vector.Y) < num3 * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].Type != 31 && Main.TileSet[k, l].Type != 22)
+							if (Math.Abs(k - vector.X) + Math.Abs(l - vector.Y) < num3 * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f) && Main.TileSet[k, l].Type != (byte)EntityID.TileID.SHADOW_ORB && Main.TileSet[k, l].Type != (byte)EntityID.TileID.DEMONITE_ORE)
 							{
 								Main.TileSet[k, l].IsActive = 0;
 							}
@@ -18627,7 +18434,7 @@ namespace Terraria
 							{
 								num9 = Main.MaxTilesX - 5;
 							}
-							if (Place3x2(num9, num8, 26))
+							if (Place3x2(num9, num8, (byte)EntityID.TileID.DEMON_ALTAR))
 							{
 								break;
 							}
@@ -18671,7 +18478,7 @@ namespace Terraria
 					{
 						if (Math.Abs(n - vector.X) + Math.Abs(num10 - vector.Y) < num3 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f))
 						{
-							if (Main.TileSet[n, num10].Type != 25 && num10 > j + genRand.Next(3, 20))
+							if (Main.TileSet[n, num10].Type != (byte)EntityID.TileID.EBONSTONE && num10 > j + genRand.Next(3, 20))
 							{
 								Main.TileSet[n, num10].IsActive = 1;
 							}
@@ -18679,13 +18486,13 @@ namespace Terraria
 							{
 								Main.TileSet[n, num10].IsActive = 1;
 							}
-							if (Main.TileSet[n, num10].Type != 31)
+							if (Main.TileSet[n, num10].Type != (byte)EntityID.TileID.SHADOW_ORB)
 							{
-								Main.TileSet[n, num10].Type = 25;
+								Main.TileSet[n, num10].Type = (byte)EntityID.TileID.EBONSTONE;
 							}
-							if (Main.TileSet[n, num10].WallType == 2)
+							if (Main.TileSet[n, num10].WallType == (byte)EntityID.WallID.DIRT_UNSAFE)
 							{
-								Main.TileSet[n, num10].WallType = 0;
+								Main.TileSet[n, num10].WallType = (byte)EntityID.WallID.NONE;
 							}
 						}
 					}
@@ -18696,17 +18503,17 @@ namespace Terraria
 					{
 						if (Math.Abs(num11 - vector.X) + Math.Abs(num12 - vector.Y) < num3 * 1.1f * (1f + genRand.Next(-10, 11) * 0.015f))
 						{
-							if (Main.TileSet[num11, num12].Type != 31)
+							if (Main.TileSet[num11, num12].Type != (byte)EntityID.TileID.SHADOW_ORB)
 							{
-								Main.TileSet[num11, num12].Type = 25;
+								Main.TileSet[num11, num12].Type = (byte)EntityID.TileID.EBONSTONE;
 							}
 							if (steps <= num2)
 							{
 								Main.TileSet[num11, num12].IsActive = 1;
 							}
-							if (num12 > j + genRand.Next(3, 20) && Main.TileSet[num11, num12].WallType == 0)
+							if (num12 > j + genRand.Next(3, 20) && Main.TileSet[num11, num12].WallType == (byte)EntityID.WallID.NONE)
 							{
-								Main.TileSet[num11, num12].WallType = 3;
+								Main.TileSet[num11, num12].WallType = (byte)EntityID.WallID.EBONSTONE_UNSAFE;
 							}
 						}
 					}
@@ -18727,7 +18534,7 @@ namespace Terraria
 			{
 				int num3 = (int)vector.X;
 				int num4 = (int)vector.Y;
-				if (num4 < Main.WorldSurface && Main.TileSet[num3, num4].WallType == 0 && Main.TileSet[num3, num4].IsActive == 0 && Main.TileSet[num3, num4 - 3].WallType == 0 && Main.TileSet[num3, num4 - 3].IsActive == 0 && Main.TileSet[num3, num4 - 1].WallType == 0 && Main.TileSet[num3, num4 - 1].IsActive == 0 && Main.TileSet[num3, num4 - 4].WallType == 0 && Main.TileSet[num3, num4 - 4].IsActive == 0 && Main.TileSet[num3, num4 - 2].WallType == 0 && Main.TileSet[num3, num4 - 2].IsActive == 0 && Main.TileSet[num3, num4 - 5].WallType == 0 && Main.TileSet[num3, num4 - 5].IsActive == 0)
+				if (num4 < Main.WorldSurface && Main.TileSet[num3, num4].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4].IsActive == 0 && Main.TileSet[num3, num4 - 3].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4 - 3].IsActive == 0 && Main.TileSet[num3, num4 - 1].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4 - 1].IsActive == 0 && Main.TileSet[num3, num4 - 4].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4 - 4].IsActive == 0 && Main.TileSet[num3, num4 - 2].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4 - 2].IsActive == 0 && Main.TileSet[num3, num4 - 5].WallType == (byte)EntityID.WallID.NONE && Main.TileSet[num3, num4 - 5].IsActive == 0)
 				{
 					flag = false;
 				}
@@ -18779,7 +18586,7 @@ namespace Terraria
 					{
 						num9 = 2;
 					}
-					TileRunner((int)vector.X, (int)vector.Y, genRand.Next(3, 20), genRand.Next(10, 100), -1, addTile: false, new Vector2(num9, 0f));
+					TileRunner((int)vector.X, (int)vector.Y, genRand.Next(3, 20), genRand.Next(10, 100), (int)EntityID.TileID.NONE, addTile: false, new Vector2(num9, 0f));
 				}
 				vector.X += vector2.X;
 				vector.Y += vector2.Y;
@@ -18851,50 +18658,50 @@ namespace Terraria
 						{
 							continue;
 						}
-						int num8 = 0;
+						EntityID.TileID num8 = EntityID.TileID.DIRT;
 						if (good)
 						{
-							if (Main.TileSet[j, k].WallType == 3)
+							if (Main.TileSet[j, k].WallType == (byte)EntityID.WallID.EBONSTONE_UNSAFE)
 							{
-								Main.TileSet[j, k].WallType = 28;
+								Main.TileSet[j, k].WallType = (byte)EntityID.WallID.PEARLSTONE_BRICK_UNSAFE;
 							}
-							switch (Main.TileSet[j, k].Type)
+							switch ((EntityID.TileID)Main.TileSet[j, k].Type)
 							{
-								case 1:
-								case 25:
-									num8 = 117;
+								case EntityID.TileID.STONE:
+								case EntityID.TileID.EBONSTONE:
+									num8 = EntityID.TileID.PEARLSTONE;
 									break;
-								case 2:
-								case 23:
-									num8 = 109;
+								case EntityID.TileID.GRASS:
+								case EntityID.TileID.CORRUPT_GRASS:
+									num8 = EntityID.TileID.HALLOWED_GRASS;
 									break;
-								case 53:
-								case 112:
-								case 123:
-									num8 = 116;
+								case EntityID.TileID.SAND:
+								case EntityID.TileID.EBONSAND:
+								case EntityID.TileID.SILT:
+									num8 = EntityID.TileID.PEARLSAND;
 									break;
 							}
 						}
 						else
 						{
-							switch (Main.TileSet[j, k].Type)
+							switch ((EntityID.TileID)Main.TileSet[j, k].Type)
 							{
-								case 1:
-								case 117:
-									num8 = 25;
+								case EntityID.TileID.STONE:
+								case EntityID.TileID.PEARLSTONE:
+									num8 = EntityID.TileID.EBONSTONE;
 									break;
-								case 2:
-								case 109:
-									num8 = 23;
+								case EntityID.TileID.GRASS:
+								case EntityID.TileID.HALLOWED_GRASS:
+									num8 = EntityID.TileID.CORRUPT_GRASS;
 									break;
-								case 53:
-								case 116:
-								case 123:
-									num8 = 112;
+								case EntityID.TileID.SAND:
+								case EntityID.TileID.PEARLSAND:
+								case EntityID.TileID.SILT:
+									num8 = EntityID.TileID.EBONSAND;
 									break;
 							}
 						}
-						if (num8 > 0)
+						if ((byte)num8 > 0)
 						{
 							if (j < minArea.X)
 							{
@@ -18948,7 +18755,7 @@ namespace Terraria
 			}
 			while (num > 0f && num2 > 0)
 			{
-				if (vector.Y < 0f && type == 59)
+				if (vector.Y < 0f && type == (int)EntityID.TileID.MUD)
 				{
 					num2 = 0;
 				}
@@ -18986,13 +18793,13 @@ namespace Terraria
 							{
 								if (Math.Abs(k - vector.X) + Math.Abs(num8 - vector.Y) < strength * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f))
 								{
-									if (mudWall && num8 > Main.WorldSurface && num8 < Main.MaxTilesY - 210 - genRand.Next(3) && ptr2->WallType == 0)
+									if (mudWall && num8 > Main.WorldSurface && num8 < Main.MaxTilesY - 210 - genRand.Next(3) && ptr2->WallType == (byte)EntityID.WallID.NONE)
 									{
-										ptr2->WallType = 15;
+										ptr2->WallType = (byte)EntityID.WallID.MUD_UNSAFE;
 									}
 									if (type < 0)
 									{
-										if (type == -2 && ptr2->IsActive != 0 && (num8 < WaterLine || num8 > lavaLine))
+										if (type == (int)EntityID.TileID.LIQUID && ptr2->IsActive != 0 && (num8 < WaterLine || num8 > lavaLine))
 										{
 											ptr2->Liquid = byte.MaxValue;
 											if (num8 > lavaLine)
@@ -19007,13 +18814,13 @@ namespace Terraria
 										if (overRide || ptr2->IsActive == 0)
 										{
 											int type2 = ptr2->Type;
-											if ((type != 40 || type2 != 53) && (!Main.TileStone[type] || type2 == 1) && type2 != 45 && type2 != 147 && (type2 != 1 || type != 59 || num8 >= Main.WorldSurface + genRand.Next(-50, 50)))
+											if ((type != (int)EntityID.TileID.CLAY || type2 != (int)EntityID.TileID.SAND) && (!Main.TileStone[type] || type2 == (int)EntityID.TileID.STONE) && type2 != (int)EntityID.TileID.GOLD_BRICK && type2 != (int)EntityID.TileID.SNOW && (type2 != (int)EntityID.TileID.STONE || type != (int)EntityID.TileID.MUD || num8 >= Main.WorldSurface + genRand.Next(-50, 50)))
 											{
-												if (type2 != 53 || num8 >= Main.WorldSurface)
+												if (type2 != (int)EntityID.TileID.SAND || num8 >= Main.WorldSurface)
 												{
 													ptr2->Type = (byte)type;
 												}
-												else if (type == 59)
+												else if (type == (int)EntityID.TileID.MUD)
 												{
 													ptr2->Type = (byte)type;
 												}
@@ -19025,7 +18832,7 @@ namespace Terraria
 											ptr2->Liquid = 0;
 											ptr2->Lava = 0;
 										}
-										if (type == 59)
+										if (type == (int)EntityID.TileID.MUD)
 										{
 											if (num8 > WaterLine && ptr2->Liquid > 0)
 											{
@@ -19035,7 +18842,7 @@ namespace Terraria
 										}
 										else if (noYChange && num8 < Main.WorldSurface)
 										{
-											ptr2->WallType = 2;
+											ptr2->WallType = (byte)EntityID.WallID.DIRT_UNSAFE;
 										}
 									}
 								}
@@ -19047,6 +18854,9 @@ namespace Terraria
 				}
 				vector.X += velocity.X;
 				vector.Y += velocity.Y;
+
+				// Why have this:
+				/*
 				if (num > 50f)
 				{
 					vector.X += velocity.X;
@@ -19143,6 +18953,20 @@ namespace Terraria
 						}
 					}
 				}
+				*/
+
+				int steps50 = (int)Math.Max(0.0, Math.Min(6.0, Math.Ceiling(((double)num - 50.0) / 50.0)));
+				int steps100 = (int)Math.Max(0.0, Math.Min(6.0, Math.Ceiling(((double)num - 400.0) / 100.0)));
+
+				for (int step = 0; step < steps50 + steps100; step++)
+				{
+					vector.X += velocity.X;
+					vector.Y += velocity.Y;
+					num2--;
+					velocity.Y += genRand.Next(-10, 11) * 0.05f;
+					velocity.X += genRand.Next(-10, 11) * 0.05f;
+				}
+
 				velocity.X += genRand.Next(-10, 11) * 0.05f;
 				if (velocity.X > 1f)
 				{
@@ -19163,7 +18987,7 @@ namespace Terraria
 					{
 						velocity.Y = -1f;
 					}
-					if (type == 59)
+					if (type == (int)EntityID.TileID.MUD)
 					{
 						int num9 = (int)vector.Y;
 						if (num9 < Main.RockLayer + 100)
@@ -19184,7 +19008,7 @@ namespace Terraria
 						}
 					}
 				}
-				else if (type != 59 && num < 3f)
+				else if (type != (int)EntityID.TileID.MUD && num < 3f)
 				{
 					if (velocity.Y > 1f)
 					{
@@ -19238,7 +19062,7 @@ namespace Terraria
 					{
 						if (num9 + Math.Abs(l - vector.Y) < num * 0.5f * (1f + genRand.Next(-10, 11) * 0.015f))
 						{
-							Main.TileSet[k, l].WallType = 0;
+							Main.TileSet[k, l].WallType = (byte)EntityID.WallID.NONE;
 						}
 					}
 				}
@@ -19325,14 +19149,14 @@ namespace Terraria
 						if (num12 < num8)
 						{
 							Main.TileSet[k, l].IsActive = 1;
-							if (Main.TileSet[k, l].Type == 59)
+							if (Main.TileSet[k, l].Type == (byte)EntityID.TileID.MUD)
 							{
-								Main.TileSet[k, l].Type = 0;
+								Main.TileSet[k, l].Type = (byte)EntityID.TileID.DIRT;
 							}
 						}
 					}
 				}
-				TileRunner(genRand.Next(num4 + 10, num5 - 10), (int)(vector.Y + num2 * 0.1f + 5f), genRand.Next(5, 10), genRand.Next(10, 15), 0, addTile: true, new Vector2(0f, 2f), noYChange: true);
+				TileRunner(genRand.Next(num4 + 10, num5 - 10), (int)(vector.Y + num2 * 0.1f + 5f), genRand.Next(5, 10), genRand.Next(10, 15), (int)EntityID.TileID.DIRT, addTile: true, new Vector2(0f, 2f), noYChange: true);
 				num4 = (int)(vector.X - num * 0.4f);
 				num5 = (int)(vector.X + num * 0.4f);
 				num6 = (int)(vector.Y - num * 0.4f);
@@ -19367,7 +19191,7 @@ namespace Terraria
 						float num15 = num13 + num14 * num14;
 						if (num15 < num2)
 						{
-							Main.TileSet[m, n].WallType = 2;
+							Main.TileSet[m, n].WallType = (byte)EntityID.WallID.DIRT_UNSAFE;
 						}
 					}
 				}
@@ -19442,7 +19266,7 @@ namespace Terraria
 					}
 					Vector2 pos2 = pos;
 					digTunnel(ref pos2, num5, num6, genRand.Next(30, 50), genRand.Next(3, 6));
-					TileRunner((int)pos2.X, (int)pos2.Y, genRand.Next(10, 20), genRand.Next(5, 10), -1);
+					TileRunner((int)pos2.X, (int)pos2.Y, genRand.Next(10, 20), genRand.Next(5, 10), (int)EntityID.TileID.NONE);
 				}
 				return;
 			}
@@ -19533,8 +19357,8 @@ namespace Terraria
 
 		public static void IslandHouse(int i, int j)
 		{
-			byte type = (byte)genRand.Next(45, 48);
-			byte wall = (byte)genRand.Next(10, 13);
+			byte type = (byte)genRand.Next((int)EntityID.TileID.GOLD_BRICK, (int)EntityID.TileID.COPPER_BRICK + 1);
+			byte wall = (byte)genRand.Next((int)EntityID.WallID.GOLD_BRICK, (int)EntityID.WallID.COPPER_BRICK + 1);
 			Vector2 vector = new Vector2(i, j);
 			int num = 1;
 			if (genRand.Next(2) == 0)
@@ -19579,7 +19403,7 @@ namespace Terraria
 				{
 					Main.TileSet[l, m].IsActive = 1;
 					Main.TileSet[l, m].Type = type;
-					Main.TileSet[l, m].WallType = 0;
+					Main.TileSet[l, m].WallType = (byte)EntityID.WallID.NONE;
 				}
 			}
 			num4 = (int)(vector.X - num2);
@@ -19606,7 +19430,7 @@ namespace Terraria
 			{
 				for (int num8 = num6; num8 < num7; num8++)
 				{
-					if (Main.TileSet[n, num8].WallType == 0)
+					if (Main.TileSet[n, num8].WallType == (byte)EntityID.WallID.NONE)
 					{
 						Main.TileSet[n, num8].IsActive = 0;
 						Main.TileSet[n, num8].WallType = wall;
@@ -19621,7 +19445,7 @@ namespace Terraria
 				Main.TileSet[num11, num10 - 1].IsActive = 0;
 				Main.TileSet[num11, num10 - 2].IsActive = 0;
 			}
-			PlaceTile(num9, num10, 10, ToMute: true);
+			PlaceTile(num9, num10, (int)EntityID.TileID.DOOR_CLOSED, ToMute: true);
 			int contain = 0;
 			int num12 = houseCount;
 			if (num12 > 2)
@@ -19631,13 +19455,13 @@ namespace Terraria
 			switch (num12)
 			{
 				case 0:
-					contain = (int)Item.ID.SHINY_RED_BALLOON;
+					contain = (int)EntityID.ItemID.SHINY_RED_BALLOON;
 					break;
 				case 1:
-					contain = (int)Item.ID.STARFURY;
+					contain = (int)EntityID.ItemID.STARFURY;
 					break;
 				case 2:
-					contain = (int)Item.ID.LUCKY_HORSESHOE;
+					contain = (int)EntityID.ItemID.LUCKY_HORSESHOE;
 					break;
 			}
 			AddBuriedChest(i, num10 - 3, contain, notNearOtherChests: false, 2);
@@ -19692,7 +19516,7 @@ namespace Terraria
 						if (num10 < num2 && Main.TileSet[k, l].IsActive == 0)
 						{
 							Main.TileSet[k, l].IsActive = 1;
-							Main.TileSet[k, l].Type = 0;
+							Main.TileSet[k, l].Type = (int)EntityID.TileID.DIRT;
 						}
 					}
 				}
@@ -19861,14 +19685,14 @@ namespace Terraria
 						}
 						if (l < vector.Y + num2 * 0.02)
 						{
-							if (Main.TileSet[k, l].Type != 59)
+							if (Main.TileSet[k, l].Type != (byte)EntityID.TileID.MUD)
 							{
 								Main.TileSet[k, l].IsActive = 0;
 							}
 						}
 						else
 						{
-							Main.TileSet[k, l].Type = 59;
+							Main.TileSet[k, l].Type = (byte)EntityID.TileID.MUD;
 						}
 						Main.TileSet[k, l].Liquid = 0;
 						Main.TileSet[k, l].Lava = 0;
@@ -19917,13 +19741,13 @@ namespace Terraria
 						num14 = num12 + genRand.Next(-20, 20);
 						num15 = num13 + genRand.Next(20);
 					}
-					while (Main.TileSet[num14, num15].IsActive == 0 && Main.TileSet[num14, num15].Type != 59);
+					while (Main.TileSet[num14, num15].IsActive == 0 && Main.TileSet[num14, num15].Type != (byte)EntityID.TileID.MUD);
 					int num16 = genRand.Next(7, 10);
 					int num17 = genRand.Next(7, 10);
-					TileRunner(num14, num15, num16, num17, 59, addTile: false, new Vector2(0f, 2f), noYChange: true);
+					TileRunner(num14, num15, num16, num17, (int)EntityID.TileID.MUD, addTile: false, new Vector2(0f, 2f), noYChange: true);
 					if (genRand.Next(3) == 0)
 					{
-						TileRunner(num14, num15, num16 - 3, num17 - 3, -1, addTile: false, new Vector2(0f, 2f), noYChange: true);
+						TileRunner(num14, num15, num16 - 3, num17 - 3, (int)EntityID.TileID.NONE, addTile: false, new Vector2(0f, 2f), noYChange: true);
 					}
 				}
 			}
@@ -20020,7 +19844,7 @@ namespace Terraria
 			int num4 = 100;
 			do
 			{
-				num4 = ((Main.TileSet[(int)vector.X, (int)vector.Y].WallType != 0) ? (num4 - 1) : 0);
+				num4 = ((Main.TileSet[(int)vector.X, (int)vector.Y].WallType != (byte)EntityID.WallID.NONE) ? (num4 - 1) : 0);
 				int num5 = (int)(vector.X - num2 * 0.5);
 				int num6 = (int)(vector.X + num2 * 0.5);
 				int num7 = (int)(vector.Y - num2 * 0.5);
@@ -20128,7 +19952,8 @@ namespace Terraria
 		}
 
 		public static void SectionTileFrame(int startX, int startY)
-		{ // Another weird case here, gonna err on the side of caution tho
+		{
+			// The initial version will skip over an edge case due to a clamped boundary.
 #if (!IS_PATCHED && VERSION_INITIAL)
 			int num = startX;
 			int num2 = startX + 40;
@@ -20182,7 +20007,7 @@ namespace Terraria
 #endif
 				{
 					int type = Main.TileSet[i, j].Type;
-					if (type == 4 || !Main.TileFrameImportant[type])
+					if (type == (int)EntityID.TileID.TORCH || !Main.TileFrameImportant[type])
 					{
 						TileFrame(i, j, -1);
 					}
@@ -20234,7 +20059,7 @@ namespace Terraria
 							{
 								if (ptr2->IsActive != 0)
 								{
-									if (Main.TileWaterDeath[ptr2->Type] && (ptr2->Type != 4 || ptr2->FrameY != 176))
+									if (Main.TileWaterDeath[ptr2->Type] && (ptr2->Type != (byte)EntityID.TileID.TORCH || ptr2->FrameY != 176))
 									{
 										KillTile(num, num2);
 									}
@@ -20341,37 +20166,44 @@ namespace Terraria
 
 		private static void PlantCheck(int i, int j)
 		{
-			int num = -1;
-			int num2 = Main.TileSet[i, j].Type;
+			EntityID.TileID num = EntityID.TileID.NONE;
+			EntityID.TileID num2 = (EntityID.TileID)Main.TileSet[i, j].Type;
 			if (j + 1 >= Main.MaxTilesY)
 			{
 				num = num2;
 			}
 			if (j + 1 < Main.MaxTilesY && Main.TileSet[i, j + 1].IsActive != 0)
 			{
-				num = Main.TileSet[i, j + 1].Type;
+				num = (EntityID.TileID)Main.TileSet[i, j + 1].Type;
 			}
-			if ((num2 != 3 || num == 2 || num == 78) && (num2 != 24 || num == 23) && (num2 != 61 || num == 60) && (num2 != 71 || num == 70) && (num2 != 73 || num == 2 || num == 78) && (num2 != 74 || num == 60) && (num2 != 110 || num == 109) && (num2 != 113 || num == 109))
+			if ((num2 != EntityID.TileID.SHORT_GRASS_PLANTS || num == EntityID.TileID.GRASS || num == EntityID.TileID.CLAY_POT) && 
+				(num2 != EntityID.TileID.SHORT_CORRUPT_PLANTS || num == EntityID.TileID.CORRUPT_GRASS) && 
+				(num2 != EntityID.TileID.SHORT_JUNGLE_PLANTS || num == EntityID.TileID.JUNGLE_GRASS) && 
+				(num2 != EntityID.TileID.GLOWING_MUSHROOM || num == EntityID.TileID.MUSHROOM_GRASS) && 
+				(num2 != EntityID.TileID.TALL_GRASS_PLANTS || num == EntityID.TileID.GRASS || num == EntityID.TileID.CLAY_POT) && 
+				(num2 != EntityID.TileID.TALL_JUNGLE_PLANTS || num == EntityID.TileID.JUNGLE_GRASS) && 
+				(num2 != EntityID.TileID.SHORT_HALLOWED_PLANTS || num == EntityID.TileID.HALLOWED_GRASS) && 
+				(num2 != EntityID.TileID.TALL_HALLOWED_PLANTS || num == EntityID.TileID.HALLOWED_GRASS))
 			{
 				return;
 			}
 			switch (num)
 			{
-				case 23:
-					num2 = 24;
+				case EntityID.TileID.CORRUPT_GRASS:
+					num2 = EntityID.TileID.SHORT_CORRUPT_PLANTS;
 					if (Main.TileSet[i, j].FrameX >= 162)
 					{
 						Main.TileSet[i, j].FrameX = 126;
 					}
 					break;
-				case 2:
-					num2 = ((num2 != 113) ? 3 : 73);
+				case EntityID.TileID.GRASS:
+					num2 = ((num2 != EntityID.TileID.TALL_HALLOWED_PLANTS) ? EntityID.TileID.SHORT_GRASS_PLANTS : EntityID.TileID.TALL_GRASS_PLANTS);
 					break;
-				case 109:
-					num2 = ((num2 != 73) ? 110 : 113);
+				case EntityID.TileID.HALLOWED_GRASS:
+					num2 = ((num2 != EntityID.TileID.TALL_GRASS_PLANTS) ? EntityID.TileID.SHORT_HALLOWED_PLANTS : EntityID.TileID.TALL_HALLOWED_PLANTS);
 					break;
 			}
-			if (num2 != Main.TileSet[i, j].Type)
+			if (num2 != (EntityID.TileID)Main.TileSet[i, j].Type)
 			{
 				Main.TileSet[i, j].Type = (byte)num2;
 			}
@@ -20383,845 +20215,546 @@ namespace Terraria
 
 		public unsafe static void WallFrame(int i, int j, bool resetFrame = false)
 		{
-			if (i < 0 || j < 0 || i >= Main.MaxTilesX || j >= Main.MaxTilesY || Main.TileSet[i, j].WallType <= 0)
+			if (i < 0 || j < 0 || i >= Main.MaxTilesX || j >= Main.MaxTilesY)
 			{
 				return;
 			}
-			int num = -1;
-			int num2 = -1;
-			int num3 = -1;
-			int num4 = -1;
-			int num5 = -1;
-			int num6 = -1;
-			int num7 = -1;
-			int num8 = -1;
-			int wall = Main.TileSet[i, j].WallType;
-			if (wall == 0)
+			fixed (Tile* ptr = &Main.TileSet[i, j])
 			{
-				return;
-			}
-			Rectangle rectangle = default;
-			rectangle.X = -1;
-			rectangle.Y = -1;
-			if (i - 1 < 0)
-			{
-				num = wall;
-				num4 = wall;
-				num6 = wall;
-			}
-			if (i + 1 >= Main.MaxTilesX)
-			{
-				num3 = wall;
-				num5 = wall;
-				num8 = wall;
-			}
-			if (j - 1 < 0)
-			{
-				num = wall;
-				num2 = wall;
-				num3 = wall;
-			}
-			if (j + 1 >= Main.MaxTilesY)
-			{
-				num6 = wall;
-				num7 = wall;
-				num8 = wall;
-			}
-			if (i - 1 >= 0)
-			{
-				num4 = Main.TileSet[i - 1, j].WallType;
-			}
-			if (i + 1 < Main.MaxTilesX)
-			{
-				num5 = Main.TileSet[i + 1, j].WallType;
-			}
-			if (j - 1 >= 0)
-			{
-				num2 = Main.TileSet[i, j - 1].WallType;
-			}
-			if (j + 1 < Main.MaxTilesY)
-			{
-				num7 = Main.TileSet[i, j + 1].WallType;
-			}
-			if (i - 1 >= 0 && j - 1 >= 0)
-			{
-				num = Main.TileSet[i - 1, j - 1].WallType;
-			}
-			if (i + 1 < Main.MaxTilesX && j - 1 >= 0)
-			{
-				num3 = Main.TileSet[i + 1, j - 1].WallType;
-			}
-			if (i - 1 >= 0 && j + 1 < Main.MaxTilesY)
-			{
-				num6 = Main.TileSet[i - 1, j + 1].WallType;
-			}
-			if (i + 1 < Main.MaxTilesX && j + 1 < Main.MaxTilesY)
-			{
-				num8 = Main.TileSet[i + 1, j + 1].WallType;
-			}
-			if (wall == 2)
-			{
-				if (j == Main.WorldSurface)
-				{
-					num7 = wall;
-					num6 = wall;
-					num8 = wall;
-				}
-				else if (j >= Main.WorldSurface)
-				{
-					num7 = wall;
-					num6 = wall;
-					num8 = wall;
-					num2 = wall;
-					num = wall;
-					num3 = wall;
-					num4 = wall;
-					num5 = wall;
-				}
-			}
-			if (num7 > 0)
-			{
-				num7 = wall;
-			}
-			if (num6 > 0)
-			{
-				num6 = wall;
-			}
-			if (num8 > 0)
-			{
-				num8 = wall;
-			}
-			if (num2 > 0)
-			{
-				num2 = wall;
-			}
-			if (num > 0)
-			{
-				num = wall;
-			}
-			if (num3 > 0)
-			{
-				num3 = wall;
-			}
-			if (num4 > 0)
-			{
-				num4 = wall;
-			}
-			if (num5 > 0)
-			{
-				num5 = wall;
-			}
-			int num9 = 0;
-			if (resetFrame)
-			{
-				num9 = genRand.Next(0, 3);
-				Main.TileSet[i, j].wallFrameNumber = (byte)num9;
-			}
-			else
-			{
-				num9 = Main.TileSet[i, j].wallFrameNumber;
-			}
-			if (rectangle.X < 0 || rectangle.Y < 0)
-			{
-				if (num2 == wall && num7 == wall && num4 == wall && num5 == wall)
-				{
-					if (num != wall && num3 != wall)
-					{
-						if (num9 == 0)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 18;
-						}
-						if (num9 == 1)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 18;
-						}
-						if (num9 == 2)
-						{
-							rectangle.X = 144;
-							rectangle.Y = 18;
-						}
-					}
-					else if (num6 != wall && num8 != wall)
-					{
-						if (num9 == 0)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 36;
-						}
-						if (num9 == 1)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 36;
-						}
-						if (num9 == 2)
-						{
-							rectangle.X = 144;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num != wall && num6 != wall)
-					{
-						if (num9 == 0)
-						{
-							rectangle.X = 180;
-							rectangle.Y = 0;
-						}
-						if (num9 == 1)
-						{
-							rectangle.X = 180;
-							rectangle.Y = 18;
-						}
-						if (num9 == 2)
-						{
-							rectangle.X = 180;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num3 != wall && num8 != wall)
-					{
-						if (num9 == 0)
-						{
-							rectangle.X = 198;
-							rectangle.Y = 0;
-						}
-						if (num9 == 1)
-						{
-							rectangle.X = 198;
-							rectangle.Y = 18;
-						}
-						if (num9 == 2)
-						{
-							rectangle.X = 198;
-							rectangle.Y = 36;
-						}
-					}
-					else
-					{
-						if (num9 == 0)
-						{
-							rectangle.X = 18;
-							rectangle.Y = 18;
-						}
-						if (num9 == 1)
-						{
-							rectangle.X = 36;
-							rectangle.Y = 18;
-						}
-						if (num9 == 2)
-						{
-							rectangle.X = 54;
-							rectangle.Y = 18;
-						}
-					}
-				}
-				else if (num2 != wall && num7 == wall && num4 == wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 0;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 0;
-					}
-				}
-				else if (num2 == wall && num7 != wall && num4 == wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 36;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 36;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 == wall && num7 == wall && num4 != wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 0;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 0;
-						rectangle.Y = 18;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 0;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 == wall && num7 == wall && num4 == wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 72;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 72;
-						rectangle.Y = 18;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 72;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 != wall && num7 == wall && num4 != wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 0;
-						rectangle.Y = 54;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 54;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 72;
-						rectangle.Y = 54;
-					}
-				}
-				else if (num2 != wall && num7 == wall && num4 == wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 54;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 54;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 54;
-					}
-				}
-				else if (num2 == wall && num7 != wall && num4 != wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 0;
-						rectangle.Y = 72;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 72;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 72;
-						rectangle.Y = 72;
-					}
-				}
-				else if (num2 == wall && num7 != wall && num4 == wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 72;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 72;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 72;
-					}
-				}
-				else if (num2 == wall && num7 == wall && num4 != wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 18;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 != wall && num7 != wall && num4 == wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 108;
-						rectangle.Y = 72;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 126;
-						rectangle.Y = 72;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 144;
-						rectangle.Y = 72;
-					}
-				}
-				else if (num2 != wall && num7 == wall && num4 != wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 108;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 126;
-						rectangle.Y = 0;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 144;
-						rectangle.Y = 0;
-					}
-				}
-				else if (num2 == wall && num7 != wall && num4 != wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 108;
-						rectangle.Y = 54;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 126;
-						rectangle.Y = 54;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 144;
-						rectangle.Y = 54;
-					}
-				}
-				else if (num2 != wall && num7 != wall && num4 != wall && num5 == wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 162;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 162;
-						rectangle.Y = 18;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 162;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 != wall && num7 != wall && num4 == wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 216;
-						rectangle.Y = 0;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 216;
-						rectangle.Y = 18;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 216;
-						rectangle.Y = 36;
-					}
-				}
-				else if (num2 != wall && num7 != wall && num4 != wall && num5 != wall)
-				{
-					if (num9 == 0)
-					{
-						rectangle.X = 162;
-						rectangle.Y = 54;
-					}
-					if (num9 == 1)
-					{
-						rectangle.X = 180;
-						rectangle.Y = 54;
-					}
-					if (num9 == 2)
-					{
-						rectangle.X = 198;
-						rectangle.Y = 54;
-					}
-				}
-			}
-			if (rectangle.X <= -1 || rectangle.Y <= -1)
-			{
-				if (num9 <= 0)
-				{
-					rectangle.X = 18;
-					rectangle.Y = 18;
-				}
-				if (num9 == 1)
-				{
-					rectangle.X = 36;
-					rectangle.Y = 18;
-				}
-				if (num9 >= 2)
-				{
-					rectangle.X = 54;
-					rectangle.Y = 18;
-				}
-			}
-			Main.TileSet[i, j].wallFrameX = (byte)rectangle.X;
-			Main.TileSet[i, j].wallFrameY = (byte)rectangle.Y;
-		}
-
-
-		public static void TileFrame(int i, int j, int frameNumber = 0)
-		{
-			try
-			{
-				if (i <= 5 || j <= 5 || i >= Main.MaxTilesX - 5 || j >= Main.MaxTilesY - 5)
+				int wall = ptr->WallType;
+				if (wall == (int)EntityID.WallID.NONE)
 				{
 					return;
 				}
-				if (Main.TileSet[i, j].Liquid > 0 && Main.NetMode != (byte)NetModeSetting.CLIENT)
+				int num = wall;
+				int num2 = wall;
+				int num3 = wall;
+				int num4 = wall;
+				int num5 = wall;
+				int num6 = wall;
+				int num7 = wall;
+				int num8 = wall;
+				int num9 = -1;
+				int num10 = -1;
+
+				if (j - 1 >= 0)
+				{
+					num2 = ptr[-1].WallType;
+				}
+				if (j + 1 < Main.MaxTilesY)
+				{
+					num7 = ptr[1].WallType;
+				}
+				if (i - 1 >= 0)
+				{
+					num4 = ptr[-Main.LargeWorldH].WallType;
+					if (j - 1 >= 0)
+					{
+						num = ptr[-Main.LargeWorldH - 1].WallType;
+					}
+					if (j + 1 < Main.MaxTilesY)
+					{
+						num6 = ptr[-Main.LargeWorldH + 1].WallType;
+					}
+				}
+				if (i + 1 < Main.MaxTilesX)
+				{
+					num5 = ptr[Main.LargeWorldH].WallType;
+					if (j - 1 >= 0)
+					{
+						num3 = ptr[Main.LargeWorldH - 1].WallType;
+					}
+					if (j + 1 < Main.MaxTilesY)
+					{
+						num8 = ptr[Main.LargeWorldH + 1].WallType;
+					}
+				}
+				if (wall == (int)EntityID.WallID.DIRT_UNSAFE && j >= Main.WorldSurface)
+				{
+					num7 = wall;
+					num6 = wall;
+					num8 = wall;
+					if (j > Main.WorldSurface)
+					{
+						num2 = wall;
+						num = wall;
+						num3 = wall;
+						num4 = wall;
+						num5 = wall;
+					}
+				}
+				else
+				{
+					if (num7 > 0)
+					{
+						num7 = wall;
+					}
+					if (num6 > 0)
+					{
+						num6 = wall;
+					}
+					if (num8 > 0)
+					{
+						num8 = wall;
+					}
+				}
+				if (num2 > (int)EntityID.WallID.NONE)
+				{
+					num2 = wall;
+				}
+				if (num > (int)EntityID.WallID.NONE)
+				{
+					num = wall;
+				}
+				if (num3 > (int)EntityID.WallID.NONE)
+				{
+					num3 = wall;
+				}
+				if (num4 > (int)EntityID.WallID.NONE)
+				{
+					num4 = wall;
+				}
+				if (num5 > (int)EntityID.WallID.NONE)
+				{
+					num5 = wall;
+				}
+				int num11;
+				if (resetFrame)
+				{
+					num11 = genRand.Next(3);
+					Main.TileSet[i, j].wallFrameNumber = num11;
+				}
+				else
+				{
+					num11 = Main.TileSet[i, j].wallFrameNumber;
+				}
+
+				// 'if/case' removal and inlining as a calculation for the frame X & Y done for optimisation.
+
+				if (num9 < 0 || num10 < 0)
+				{
+					if (num2 == wall && num7 == wall && num4 == wall && num5 == wall)
+					{
+						if (num != wall && num3 != wall)
+						{
+							num9 = 108 + num11 * 18;
+							num10 = 18;
+						}
+						else if (num6 != wall && num8 != wall)
+						{
+							num9 = 108 + num11 * 18;
+							num10 = 36;
+						}
+						else if (num != wall && num6 != wall)
+						{
+							num9 = 180;
+							num10 = num11 * 18;
+						}
+						else if (num3 != wall && num8 != wall)
+						{
+							num9 = 198;
+							num10 = num11 * 18;
+						}
+						else
+						{
+							num9 = 18 + num11 * 18;
+							num10 = 18;
+						}
+					}
+					else if (num2 != wall && num7 == wall && num4 == wall && num5 == wall)
+					{
+						num9 = 18 + num11 * 18;
+						num10 = 0;
+					}
+					else if (num2 == wall && num7 != wall && num4 == wall && num5 == wall)
+					{
+						num9 = 18 + num11 * 18;
+						num10 = 36;
+					}
+					else if (num2 == wall && num7 == wall && num4 != wall && num5 == wall)
+					{
+						num9 = 0;
+						num10 = num11 * 18;
+					}
+					else if (num2 == wall && num7 == wall && num4 == wall && num5 != wall)
+					{
+						num9 = 72;
+						num10 = num11 * 18;
+					}
+					else if (num2 != wall && num7 == wall && num4 != wall && num5 == wall)
+					{
+						num9 = num11 * 36;
+						num10 = 54;
+					}
+					else if (num2 != wall && num7 == wall && num4 == wall && num5 != wall)
+					{
+						num9 = 18 + num11 * 36;
+						num10 = 54;
+					}
+					else if (num2 == wall && num7 != wall && num4 != wall && num5 == wall)
+					{
+						num9 = num11 * 36;
+						num10 = 72;
+					}
+					else if (num2 == wall && num7 != wall && num4 == wall && num5 != wall)
+					{
+						num9 = 18 + num11 * 36;
+						num10 = 72;
+					}
+					else if (num2 == wall && num7 == wall && num4 != wall && num5 != wall)
+					{
+						num9 = 90;
+						num10 = num11 * 18;
+					}
+					else if (num2 != wall && num7 != wall && num4 == wall && num5 == wall)
+					{
+						num9 = 108 + num11 * 18;
+						num10 = 72;
+					}
+					else if (num2 != wall && num7 == wall && num4 != wall && num5 != wall)
+					{
+						num9 = 108 + num11 * 18;
+						num10 = 0;
+					}
+					else if (num2 == wall && num7 != wall && num4 != wall && num5 != wall)
+					{
+						num9 = 108 + num11 * 18;
+						num10 = 54;
+					}
+					else if (num2 != wall && num7 != wall && num4 != wall && num5 == wall)
+					{
+						num9 = 162;
+						num10 = num11 * 18;
+					}
+					else if (num2 != wall && num7 != wall && num4 == wall && num5 != wall)
+					{
+						num9 = 216;
+						num10 = num11 * 18;
+					}
+					else if (num2 != wall && num7 != wall && num4 != wall && num5 != wall)
+					{
+						num9 = 162 + num11 * 18;
+						num10 = 54;
+					}
+				}
+				if (num9 < 0 || num10 < 0)
+				{
+					num9 = 18 + num11 * 18;
+					num10 = 18;
+				}
+				ptr->wallFrameX = (ushort)num9;
+				ptr->wallFrameY = (byte)num10;
+			}
+		}
+		public unsafe static void TileFrame(int i, int j, int frameNumber = 0)
+		{
+			if (i <= 5 || j <= 5 || i >= Main.MaxTilesX - 5 || j >= Main.MaxTilesY - 5)
+			{
+				return;
+			}
+			fixed (Tile* ptr = &Main.TileSet[i, j])
+			{
+				if (ptr->Liquid > 0 && Main.NetMode != (int)NetModeSetting.CLIENT)
 				{
 					Liquid.AddWater(i, j);
 				}
-				if (Main.TileSet[i, j].IsActive == 0)
+				if (ptr->IsActive == 0)
 				{
 					return;
 				}
-				int num = Main.TileSet[i, j].Type;
+				int num = ptr->Type;
 				if (Main.TileStone[num])
 				{
-					num = 1;
+					num = (int)EntityID.TileID.STONE;
 				}
-				int frameX = Main.TileSet[i, j].FrameX;
-				int frameY = Main.TileSet[i, j].FrameY;
-				Rectangle rectangle = new Rectangle(-1, -1, 0, 0);
-				if (Main.TileFrameImportant[Main.TileSet[i, j].Type])
+				int frameX = ptr->FrameX;
+				int frameY = ptr->FrameY;
+				int num2 = -1;
+				int num3 = -1;
+				if (Main.TileFrameImportant[num])
 				{
-					switch (num)
+					switch ((EntityID.TileID)num)
 					{
-						case 4:
+						case EntityID.TileID.POT:
+							CheckPot(i, j);
+							break;
+						case EntityID.TileID.TREE:
+							CheckTree(i, j);
+							break;
+						case EntityID.TileID.SHORT_GRASS_PLANTS:
+						case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+						case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+						case EntityID.TileID.GLOWING_MUSHROOM:
+						case EntityID.TileID.TALL_GRASS_PLANTS:
+						case EntityID.TileID.TALL_JUNGLE_PLANTS:
+						case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+						case EntityID.TileID.TALL_HALLOWED_PLANTS:
+							PlantCheck(i, j);
+							break;
+						case EntityID.TileID.TORCH:
 							{
-								short num6 = 0;
-								if (Main.TileSet[i, j].FrameX >= 66)
+								int num19 = ((ptr->FrameX >= 66) ? 66 : 0);
+								int num20 = -1;
+								int num21 = -1;
+								int num22 = -1;
+								int num23 = -1;
+								int num24 = -1;
+								int num25 = -1;
+								int num26 = -1;
+								if (ptr[-1].IsActive != 0)
 								{
-									num6 = 66;
+									_ = ptr[-1].Type;
 								}
-								int num7 = -1;
-								int num8 = -1;
-								int num9 = -1;
-								int num10 = -1;
-								int num11 = -1;
-								int num12 = -1;
-								int num13 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									_ = Main.TileSet[i, j - 1].Type;
+									num20 = ptr[1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
 								{
-									num7 = Main.TileSet[i, j + 1].Type;
+									num21 = ptr[-Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
+								if (ptr[Main.LargeWorldH].IsActive != 0)
 								{
-									num8 = Main.TileSet[i - 1, j].Type;
+									num22 = ptr[Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
+								if (ptr[-Main.LargeWorldH + 1].IsActive != 0)
 								{
-									num9 = Main.TileSet[i + 1, j].Type;
+									num23 = ptr[-Main.LargeWorldH + 1].Type;
 								}
-								if (Main.TileSet[i - 1, j + 1].IsActive != 0)
+								if (ptr[Main.LargeWorldH + 1].IsActive != 0)
 								{
-									num10 = Main.TileSet[i - 1, j + 1].Type;
+									num24 = ptr[Main.LargeWorldH + 1].Type;
 								}
-								if (Main.TileSet[i + 1, j + 1].IsActive != 0)
+								if (ptr[-Main.LargeWorldH - 1].IsActive != 0)
 								{
-									num11 = Main.TileSet[i + 1, j + 1].Type;
+									num25 = ptr[-Main.LargeWorldH - 1].Type;
 								}
-								if (Main.TileSet[i - 1, j - 1].IsActive != 0)
+								if (ptr[Main.LargeWorldH - 1].IsActive != 0)
 								{
-									num12 = Main.TileSet[i - 1, j - 1].Type;
+									num26 = ptr[Main.LargeWorldH - 1].Type;
 								}
-								if (Main.TileSet[i + 1, j - 1].IsActive != 0)
+								if (num20 >= 0 && Main.TileSolidAndAttach[num20])
 								{
-									num13 = Main.TileSet[i + 1, j - 1].Type;
+									ptr->FrameX = (short)num19;
 								}
-								if (num7 >= 0 && Main.TileSolidAndAttach[num7])
+								else if (num21 >= 0 && (Main.TileSolidAndAttach[num21] || num21 == (int)EntityID.TileID.WOODEN_BEAM || (num21 == (int)EntityID.TileID.TREE && num25 == (int)EntityID.TileID.TREE && num23 == (int)EntityID.TileID.TREE)))
 								{
-									Main.TileSet[i, j].FrameX = num6;
+									ptr->FrameX = (short)(22 + num19);
 								}
-								else if ((num8 >= 0 && Main.TileSolidAndAttach[num8]) || num8 == 124 || (num8 == 5 && num12 == 5 && num10 == 5))
+								else if (num22 >= 0 && (Main.TileSolidAndAttach[num22] || num22 == (int)EntityID.TileID.WOODEN_BEAM || (num22 == (int)EntityID.TileID.TREE && num26 == (int)EntityID.TileID.TREE && num24 == (int)EntityID.TileID.TREE)))
 								{
-									Main.TileSet[i, j].FrameX = (short)(22 + num6);
-								}
-								else if ((num9 >= 0 && Main.TileSolidAndAttach[num9]) || num9 == 124 || (num9 == 5 && num13 == 5 && num11 == 5))
-								{
-									Main.TileSet[i, j].FrameX = (short)(44 + num6);
+									ptr->FrameX = (short)(44 + num19);
 								}
 								else
 								{
 									KillTile(i, j);
 								}
-								return;
+								break;
 							}
-						case 136:
+						case EntityID.TileID.SWITCH:
+							{
+								int num28 = -1;
+								int num29 = -1;
+								int num30 = -1;
+								if (ptr[-1].IsActive != 0)
+								{
+									_ = ptr[-1].Type;
+								}
+								if (ptr[1].IsActive != 0)
+								{
+									num28 = ptr[1].Type;
+								}
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
+								{
+									num29 = ptr[-Main.LargeWorldH].Type;
+								}
+								if (ptr[Main.LargeWorldH].IsActive != 0)
+								{
+									num30 = ptr[Main.LargeWorldH].Type;
+								}
+								if (num28 >= 0 && Main.TileSolidAndAttach[num28])
+								{
+									ptr->FrameX = 0;
+								}
+								else if (num29 >= 0 && (Main.TileSolidAndAttach[num29] || num29 == (int)EntityID.TileID.WOODEN_BEAM || num29 == (int)EntityID.TileID.TREE))
+								{
+									ptr->FrameX = 18;
+								}
+								else if (num30 >= 0 && (Main.TileSolidAndAttach[num30] || num30 == (int)EntityID.TileID.WOODEN_BEAM || num30 == (int)EntityID.TileID.TREE))
+								{
+									ptr->FrameX = 36;
+								}
+								else
+								{
+									KillTile(i, j);
+								}
+								break;
+							}
+						case EntityID.TileID.CRYSTAL_SHARD:
+						case EntityID.TileID.XMAS_LIGHT:
 							{
 								int num15 = -1;
 								int num16 = -1;
 								int num17 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
-								{
-									_ = Main.TileSet[i, j - 1].Type;
-								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
-								{
-									num15 = Main.TileSet[i, j + 1].Type;
-								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
-								{
-									num16 = Main.TileSet[i - 1, j].Type;
-								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
-								{
-									num17 = Main.TileSet[i + 1, j].Type;
-								}
-								if (num15 >= 0 && Main.TileSolidAndAttach[num15])
-								{
-									Main.TileSet[i, j].FrameX = 0;
-								}
-								else if ((num16 >= 0 && Main.TileSolidAndAttach[num16]) || num16 == 124 || num16 == 5)
-								{
-									Main.TileSet[i, j].FrameX = 18;
-								}
-								else if ((num17 >= 0 && Main.TileSolidAndAttach[num17]) || num17 == 124 || num17 == 5)
-								{
-									Main.TileSet[i, j].FrameX = 36;
-								}
-								else
-								{
-									KillTile(i, j);
-								}
-								return;
-							}
-						case 129:
-						case 149:
-							{
 								int num18 = -1;
-								int num19 = -1;
-								int num20 = -1;
-								int num21 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								if (ptr[-1].IsActive != 0)
 								{
-									num19 = Main.TileSet[i, j - 1].Type;
+									num16 = ptr[-1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									num18 = Main.TileSet[i, j + 1].Type;
+									num15 = ptr[1].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
 								{
-									num20 = Main.TileSet[i - 1, j].Type;
+									num17 = ptr[-Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
+								if (ptr[Main.LargeWorldH].IsActive != 0)
 								{
-									num21 = Main.TileSet[i + 1, j].Type;
+									num18 = ptr[Main.LargeWorldH].Type;
 								}
-								if (num18 >= 0 && Main.TileSolidNotSolidTop[num18])
+								if (num15 >= 0 && Main.TileSolidNotSolidTop[num15])
 								{
-									Main.TileSet[i, j].FrameY = 0;
+									ptr->FrameY = 0;
 								}
-								else if (num20 >= 0 && Main.TileSolidNotSolidTop[num20])
+								else if (num17 >= 0 && Main.TileSolidNotSolidTop[num17])
 								{
-									Main.TileSet[i, j].FrameY = 54;
+									ptr->FrameY = 54;
 								}
-								else if (num21 >= 0 && Main.TileSolidNotSolidTop[num21])
+								else if (num18 >= 0 && Main.TileSolidNotSolidTop[num18])
 								{
-									Main.TileSet[i, j].FrameY = 36;
+									ptr->FrameY = 36;
 								}
-								else if (num19 >= 0 && Main.TileSolidNotSolidTop[num19])
+								else if (num16 >= 0 && Main.TileSolidNotSolidTop[num16])
 								{
-									Main.TileSet[i, j].FrameY = 18;
+									ptr->FrameY = 18;
 								}
 								else
 								{
 									KillTile(i, j);
 								}
-								return;
+								break;
 							}
-						case 3:
-						case 24:
-						case 61:
-						case 71:
-						case 73:
-						case 74:
-						case 110:
-						case 113:
-							PlantCheck(i, j);
-							return;
-						case 12:
-						case 31:
+						case EntityID.TileID.LIFE_CRYSTAL:
+						case EntityID.TileID.SHADOW_ORB:
 							CheckOrb(i, j, num);
-							return;
-						case 10:
-							if (!ToDestroyObject)
+							break;
+						case EntityID.TileID.DOOR_CLOSED:
 							{
-								short frameY3 = Main.TileSet[i, j].FrameY;
-								int num14 = j;
+								if (ToDestroyObject)
+								{
+									break;
+								}
+								int num27 = j - frameY / 18;
 								bool flag2 = false;
-								if (frameY3 == 0)
-								{
-									num14 = j;
-								}
-								if (frameY3 == 18)
-								{
-									num14 = j - 1;
-								}
-								if (frameY3 == 36)
-								{
-									num14 = j - 2;
-								}
-								if (Main.TileSet[i, num14 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num14 - 1].Type])
+								if (Main.TileSet[i, num27 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num27 - 1].Type])
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num14 + 3].Type])
+								else if (Main.TileSet[i, num27 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num27 + 3].Type])
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14].IsActive == 0 || Main.TileSet[i, num14].Type != num)
+								else if (Main.TileSet[i, num27].IsActive == 0 || Main.TileSet[i, num27].Type != num)
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 1].IsActive == 0 || Main.TileSet[i, num14 + 1].Type != num)
+								else if (Main.TileSet[i, num27 + 1].IsActive == 0 || Main.TileSet[i, num27 + 1].Type != num)
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 2].IsActive == 0 || Main.TileSet[i, num14 + 2].Type != num)
+								else if (Main.TileSet[i, num27 + 2].IsActive == 0 || Main.TileSet[i, num27 + 2].Type != num)
 								{
 									flag2 = true;
 								}
 								if (flag2)
 								{
 									ToDestroyObject = true;
-									KillTile(i, num14);
-									KillTile(i, num14 + 1);
-									KillTile(i, num14 + 2);
+									KillTile(i, num27);
+									KillTile(i, num27 + 1);
+									KillTile(i, num27 + 2);
 									if (!Gen)
 									{
-										Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
 									}
 								}
 								ToDestroyObject = false;
+								break;
 							}
-							return;
-						case 11:
+						case EntityID.TileID.DOOR_OPEN:
 							{
 								if (ToDestroyObject)
 								{
-									return;
+									break;
 								}
-								int num2 = 0;
-								int num3 = i;
-								int num4 = j;
-								int frameX2 = Main.TileSet[i, j].FrameX;
-								int frameY2 = Main.TileSet[i, j].FrameY;
+								int num10 = 0;
+								int num11 = 0;
+								int num12 = i;
+								int num13 = j;
 								bool flag = false;
-								switch (frameX2)
+								switch (frameX)
 								{
 									case 0:
-										num3 = i;
-										num2 = 1;
+										num10 = 1;
 										break;
 									case 18:
-										num3 = i - 1;
-										num2 = 1;
+										num12 = i - 1;
+										num11 = -Main.LargeWorldH;
+										num10 = 1;
 										break;
 									case 36:
-										num3 = i + 1;
-										num2 = -1;
+										num11 = Main.LargeWorldH;
+										num12 = i + 1;
+										num10 = -1;
 										break;
 									case 54:
-										num3 = i;
-										num2 = -1;
+										num10 = -1;
 										break;
 								}
-								switch (frameY2)
+								switch (frameY)
 								{
-									case 0:
-										num4 = j;
-										break;
 									case 18:
-										num4 = j - 1;
+										num11--;
+										num13 = j - 1;
 										break;
 									case 36:
-										num4 = j - 2;
+										num13 = j - 2;
+										num11 -= 2;
 										break;
 								}
-								if (Main.TileSet[num3, num4 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num3, num4 - 1].Type] || Main.TileSet[num3, num4 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num3, num4 + 3].Type])
+								if (ptr[num11 - 1].IsActive == 0 || !Main.TileSolid[ptr[num11 - 1].Type] || ptr[num11 + 3].IsActive == 0 || !Main.TileSolid[ptr[num11 + 3].Type])
 								{
 									flag = true;
 									ToDestroyObject = true;
 									if (!Gen)
 									{
-										Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
 									}
 								}
-								int num5 = num3;
-								if (num2 == -1)
+								int num14 = num12;
+								if (num10 == -1)
 								{
-									num5 = num3 - 1;
+									num14 = num12 - 1;
 								}
-								for (int k = num5; k < num5 + 2; k++)
+								for (int k = num14; k < num14 + 2; k++)
 								{
-									for (int l = num4; l < num4 + 3; l++)
+									for (int l = num13; l < num13 + 3; l++)
 									{
-										if (!flag && (Main.TileSet[k, l].Type != 11 || Main.TileSet[k, l].IsActive == 0))
+										if (!flag)
 										{
-											ToDestroyObject = true;
-											flag = true;
-											k = num5;
-											l = num4;
-											if (!Gen)
+											fixed (Tile* ptr2 = &Main.TileSet[k, l])
 											{
-												Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+												if (ptr2->Type != (int)EntityID.TileID.DOOR_OPEN || ptr2->IsActive == 0)
+												{
+													ToDestroyObject = true;
+													flag = true;
+													k = num14;
+													l = num13;
+													if (!Gen)
+													{
+														Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
+													}
+												}
 											}
 										}
 										if (flag)
@@ -21231,399 +20764,238 @@ namespace Terraria
 									}
 								}
 								ToDestroyObject = false;
-								return;
+								break;
 							}
-						case 34:
-						case 35:
-						case 36:
-						case 106:
+						case EntityID.TileID.CHANDELIER:
+						case EntityID.TileID.JACK_O_LANTERN:
+						case EntityID.TileID.PRESENT:
+						case EntityID.TileID.SAWMILL:
 							Check3x3(i, j, num);
-							return;
-						case 15:
-						case 20:
+							break;
+						case EntityID.TileID.CHAIR:
+						case EntityID.TileID.SAPLING:
 							Check1x2(i, j, num);
-							return;
-						case 14:
-						case 17:
-						case 26:
-						case 77:
-						case 86:
-						case 87:
-						case 88:
-						case 89:
-						case 114:
-						case 133:
+							break;
+						case EntityID.TileID.TABLE:
+						case EntityID.TileID.FURNACE:
+						case EntityID.TileID.DEMON_ALTAR:
+						case EntityID.TileID.HELLFORGE:
+						case EntityID.TileID.LOOM:
+						case EntityID.TileID.PIANO:
+						case EntityID.TileID.DRESSER:
+						case EntityID.TileID.BENCH:
+						case EntityID.TileID.TINKERERS_WORKSHOP:
+						case EntityID.TileID.ADAMANTITE_FORGE:
 #if VERSION_101
-						case 150:
+						case EntityID.TileID.CAMPFIRE:
 #endif
 							Check3x2(i, j, num);
-							return;
-						case 135:
-						case 141:
-						case 144:
+							break;
+						case EntityID.TileID.PRESSURE_PLATE:
+						case EntityID.TileID.EXPLOSIVES:
+						case EntityID.TileID.TIMER:
 							Check1x1(i, j, num);
-							return;
-						case 16:
-						case 18:
-						case 29:
-						case 103:
-						case 134:
+							break;
+						case EntityID.TileID.ANVIL:
+						case EntityID.TileID.WORK_BENCH:
+						case EntityID.TileID.PIGGYBANK:
+						case EntityID.TileID.BOWL:
+						case EntityID.TileID.MYTHRIL_ANVIL:
 							Check2x1(i, j, num);
-							return;
-						case 13:
-						case 33:
-						case 50:
-						case 78:
+							break;
+						case EntityID.TileID.BOTTLE:
+						case EntityID.TileID.CANDLE:
+						case EntityID.TileID.BOOK:
 							CheckOnTable1x1(i, j);
-							return;
-						case 21:
+							break;
+						case EntityID.TileID.CLAY_POT:
+							CheckOnTableClaypot(i, j);
+							break;
+						case EntityID.TileID.CHEST:
 							CheckChest(i, j);
-							return;
-						case 128:
-							CheckMan(i, j);
-							return;
-						case 27:
+							break;
+						case EntityID.TileID.SUNFLOWER:
 							CheckSunflower(i, j);
-							return;
-						case 28:
-							CheckPot(i, j);
-							return;
-						case 132:
-						case 138:
-						case 142:
-						case 143:
+							break;
+						case EntityID.TileID.MANNEQUIN:
+							CheckMan(i, j);
+							break;
+						case EntityID.TileID.KEG:
+						case EntityID.TileID.CHINESE_LANTERN:
+						case EntityID.TileID.COOKING_POT:
+						case EntityID.TileID.SAFE:
+						case EntityID.TileID.SKULL_LANTERN:
+						case EntityID.TileID.TRASH_CAN:
+						case EntityID.TileID.CANDELABRA:
+						case EntityID.TileID.CRYSTAL_BALL:
+						case EntityID.TileID.DISCO_BALL:
+						case EntityID.TileID.LEVER:
+						case EntityID.TileID.BOULDER:
+						case EntityID.TileID.PUMP_IN:
+						case EntityID.TileID.PUMP_OUT:
 							Check2x2(i, j, num);
-							return;
-						case 91:
+							break;
+						case EntityID.TileID.BANNER:
 							CheckBanner(i, j);
-							return;
-						case 139:
+							break;
+						case EntityID.TileID.MUSIC_BOX:
 							CheckMusicBox(i, j);
-							return;
-						case 92:
-						case 93:
+							break;
+						case EntityID.TileID.LAMP_POST:
+						case EntityID.TileID.TIKI_TORCH:
 							Check1xX(i, j, num);
-							return;
-						case 104:
-						case 105:
-							Check2xX(i, j, num);
-							return;
-						case 101:
-						case 102:
+							break;
+						case EntityID.TileID.BOOKCASE:
+						case EntityID.TileID.THRONE:
 							Check3x4(i, j, num);
-							return;
-						case 42:
+							break;
+						case EntityID.TileID.GRANDFATHERS_CLOCK:
+						case EntityID.TileID.STATUE:
+							Check2xX(i, j, num);
+							break;
+						case EntityID.TileID.CHAIN_LANTERN:
 							Check1x2Top(i, j);
-							return;
-						case 55:
-						case 85:
-							CheckSign(i, j, num);
-							return;
-						case 79:
-						case 90:
-							Check4x2(i, j, num);
-							return;
-					}
-					switch (num)
-					{
-						case 85:
-						case 94:
-						case 95:
-						case 96:
-						case 97:
-						case 98:
-						case 99:
-						case 100:
-						case 125:
-						case 126:
-							Check2x2(i, j, num);
-							return;
-						case 82:
-						case 83:
-						case 84:
+							break;
+						case EntityID.TileID.DAYBLOOM_GROWING:
+						case EntityID.TileID.DAYBLOOM_MATURE:
+						case EntityID.TileID.DAYBLOOM_BLOOMING:
 							CheckAlch(i, j);
-							return;
-						case 81:
+							break;
+						case EntityID.TileID.SIGN:
+						case EntityID.TileID.TOMBSTONE:
+							CheckSign(i, j, num);
+							break;
+						case EntityID.TileID.BED:
+						case EntityID.TileID.BATHTUB:
+							Check4x2(i, j, num);
+							break;
+						case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 							{
-								int num22 = -1;
-								int num23 = -1;
-								int num24 = -1;
-								int num25 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								int num8 = -1;
+								int num9 = -1;
+								if (ptr[-1].IsActive != 0)
 								{
-									num23 = Main.TileSet[i, j - 1].Type;
+									num9 = ptr[-1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									num22 = Main.TileSet[i, j + 1].Type;
+									num8 = ptr[1].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
-								{
-									num24 = Main.TileSet[i - 1, j].Type;
-								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
-								{
-									num25 = Main.TileSet[i + 1, j].Type;
-								}
-								if (num24 != -1 || num23 != -1 || num25 != -1)
+								if (num8 != num && num8 != (int)EntityID.TileID.MUSHROOM_GRASS)
 								{
 									KillTile(i, j);
 								}
-								else if (num22 < 0 || !Main.TileSolid[num22])
+								else if (num9 != num && ptr->FrameX == 0)
 								{
-									KillTile(i, j);
-								}
-								return;
-							}
-					}
-					switch (num)
-					{
-						case 72:
-							{
-								int num26 = -1;
-								int num27 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
-								{
-									num27 = Main.TileSet[i, j - 1].Type;
-								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
-								{
-									num26 = Main.TileSet[i, j + 1].Type;
-								}
-								if (num26 != num && num26 != 70)
-								{
-									KillTile(i, j);
-								}
-								else if (num27 != num && Main.TileSet[i, j].FrameX == 0)
-								{
-									Main.TileSet[i, j].frameNumber = (byte)genRand.Next(3);
-									if (Main.TileSet[i, j].frameNumber == 0)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 0;
-									}
-									if (Main.TileSet[i, j].frameNumber == 1)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 18;
-									}
-									if (Main.TileSet[i, j].frameNumber == 2)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 36;
-									}
+									ptr->frameNumber = (byte)genRand.Next(3);
+									ptr->FrameX = 18;
+									ptr->FrameY = (short)(18 * ptr->frameNumber);
 								}
 								break;
 							}
-						case 5:
-							CheckTree(i, j);
-							break;
+						case EntityID.TileID.CORAL:
+							{
+								int num4 = -1;
+								int num5 = -1;
+								int num6 = -1;
+								int num7 = -1;
+								if (ptr[-1].IsActive != 0)
+								{
+									num5 = ptr[-1].Type;
+								}
+								if (ptr[1].IsActive != 0)
+								{
+									num4 = ptr[1].Type;
+								}
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
+								{
+									num6 = ptr[-Main.LargeWorldH].Type;
+								}
+								if (ptr[Main.LargeWorldH].IsActive != 0)
+								{
+									num7 = ptr[Main.LargeWorldH].Type;
+								}
+								if (num6 != -1 || num5 != -1 || num7 != -1)
+								{
+									KillTile(i, j);
+								}
+								else if (num4 < 0 || !Main.TileSolid[num4])
+								{
+									KillTile(i, j);
+								}
+								break;
+							}
 					}
 					return;
 				}
-				int num28 = -1;
-				int num29 = -1;
-				int num30 = -1;
-				int num31 = -1;
-				int num32 = -1;
-				int num33 = -1;
-				int num34 = -1;
-				int num35 = -1;
-				if (Main.TileSet[i - 1, j].IsActive != 0)
+				int num31 = (int)EntityID.TileID.NONE;
+				int num32 = (int)EntityID.TileID.NONE;
+				int num33 = (int)EntityID.TileID.NONE;
+				int num34 = (int)EntityID.TileID.NONE;
+				int num35 = (int)EntityID.TileID.NONE;
+				int num36 = (int)EntityID.TileID.NONE;
+				int num37 = (int)EntityID.TileID.NONE;
+				int num38 = (int)EntityID.TileID.NONE;
+				if (ptr[-Main.LargeWorldH].IsActive != 0)
 				{
-					num31 = (Main.TileStone[Main.TileSet[i - 1, j].Type] ? 1 : Main.TileSet[i - 1, j].Type);
+					int type = ptr[-Main.LargeWorldH].Type;
+					num34 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j].IsActive != 0)
+				if (ptr[Main.LargeWorldH].IsActive != 0)
 				{
-					num32 = (Main.TileStone[Main.TileSet[i + 1, j].Type] ? 1 : Main.TileSet[i + 1, j].Type);
+					int type = ptr[Main.LargeWorldH].Type;
+					num35 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i, j - 1].IsActive != 0)
+				if (ptr[-1].IsActive != 0)
 				{
-					num29 = (Main.TileStone[Main.TileSet[i, j - 1].Type] ? 1 : Main.TileSet[i, j - 1].Type);
+					int type = ptr[-1].Type;
+					num32 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i, j + 1].IsActive != 0)
+				if (ptr[1].IsActive != 0)
 				{
-					num34 = (Main.TileStone[Main.TileSet[i, j + 1].Type] ? 1 : Main.TileSet[i, j + 1].Type);
+					int type = ptr[1].Type;
+					num37 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i - 1, j - 1].IsActive != 0)
+				if (ptr[-Main.LargeWorldH - 1].IsActive != 0)
 				{
-					num28 = (Main.TileStone[Main.TileSet[i - 1, j - 1].Type] ? 1 : Main.TileSet[i - 1, j - 1].Type);
+					int type = ptr[-Main.LargeWorldH - 1].Type;
+					num31 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j - 1].IsActive != 0)
+				if (ptr[Main.LargeWorldH - 1].IsActive != 0)
 				{
-					num30 = (Main.TileStone[Main.TileSet[i + 1, j - 1].Type] ? 1 : Main.TileSet[i + 1, j - 1].Type);
+					int type = ptr[Main.LargeWorldH - 1].Type;
+					num33 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i - 1, j + 1].IsActive != 0)
+				if (ptr[-Main.LargeWorldH + 1].IsActive != 0)
 				{
-					num33 = (Main.TileStone[Main.TileSet[i - 1, j + 1].Type] ? 1 : Main.TileSet[i - 1, j + 1].Type);
+					int type = ptr[-Main.LargeWorldH + 1].Type;
+					num36 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j + 1].IsActive != 0)
+				if (ptr[Main.LargeWorldH + 1].IsActive != 0)
 				{
-					num35 = (Main.TileStone[Main.TileSet[i + 1, j + 1].Type] ? 1 : Main.TileSet[i + 1, j + 1].Type);
+					int type = ptr[Main.LargeWorldH + 1].Type;
+					num38 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (!Main.TileSolid[num])
+				switch ((EntityID.TileID)num)
 				{
-					switch (num)
-					{
-						case 49:
-							CheckOnTable1x1(i, j);
-							return;
-						case 80:
-							CactusFrame(i, j);
-							return;
-					}
-				}
-				else if (num == 19)
-				{
-					if (num32 >= 0 && !Main.TileSolid[num32])
-					{
-						num32 = -1;
-					}
-					if (num31 >= 0 && !Main.TileSolid[num31])
-					{
-						num31 = -1;
-					}
-					if (num31 == num && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
+					case EntityID.TileID.PLATFORM:
+						if (num35 >= 0 && !Main.TileSolid[num35])
 						{
-							rectangle.X = 0;
-							rectangle.Y = 0;
+							num35 = -1;
 						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
+						if (num34 >= 0 && !Main.TileSolid[num34])
 						{
-							rectangle.X = 0;
-							rectangle.Y = 18;
+							num34 = -1;
 						}
-						else
-						{
-							rectangle.X = 0;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == num && num32 == -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 18;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 18;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 18;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == -1 && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 36;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 36;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 36;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 != num && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 54;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 54;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 54;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == num && num32 != num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 72;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 72;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 72;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 != num && num31 != -1 && num32 == -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 108;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == -1 && num32 != num && num32 != -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 126;
-							rectangle.Y = 36;
-						}
-					}
-					else if (Main.TileSet[i, j].frameNumber == 0)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 0;
-					}
-					else if (Main.TileSet[i, j].frameNumber == 1)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 18;
-					}
-					else
-					{
-						rectangle.X = 90;
-						rectangle.Y = 36;
-					}
+						num2 = ((num34 == num) ? ((num35 != num) ? ((num35 >= 0) ? 72 : 18) : 0) : ((num34 < 0) ? ((num35 == num) ? 36 : ((num35 <= 0) ? 90 : 126)) : ((num35 == num) ? 54 : ((num35 >= 0) ? 90 : 108))));
+						num3 = 18 * ptr->frameNumber;
+						break;
+					case EntityID.TileID.CACTUS:
+						CactusFrame(i, j);
+						return;
+					case EntityID.TileID.WATER_CANDLE:
+						CheckOnTable1x1(i, j);
+						return;
 				}
 				mergeUp = false;
 				mergeDown = false;
@@ -21632,3601 +21004,1922 @@ namespace Terraria
 				if (frameNumber < 0)
 				{
 					frameNumber = genRand.Next(3);
-					Main.TileSet[i, j].frameNumber = (byte)frameNumber;
+					ptr->frameNumber = (byte)frameNumber;
 				}
 				else
 				{
-					frameNumber = Main.TileSet[i, j].frameNumber;
+					frameNumber = ptr->frameNumber;
 				}
-				if (num == 0)
+				if (num == (int)EntityID.TileID.DIRT)
 				{
-					if (num29 >= 0 && Main.TileMergeDirt[num29])
+					if (num32 >= 0 && Main.TileMergeDirt[num32])
 					{
 						TileFrame(i, j - 1);
 						if (mergeDown)
 						{
-							num29 = num;
+							num32 = num;
 						}
 					}
-					if (num34 >= 0 && Main.TileMergeDirt[num34])
+					if (num37 >= 0 && Main.TileMergeDirt[num37])
 					{
 						TileFrame(i, j + 1);
 						if (mergeUp)
 						{
-							num34 = num;
+							num37 = num;
 						}
 					}
-					if (num31 >= 0 && Main.TileMergeDirt[num31])
+					if (num34 >= 0 && Main.TileMergeDirt[num34])
 					{
 						TileFrame(i - 1, j);
 						if (mergeRight)
 						{
-							num31 = num;
+							num34 = num;
 						}
 					}
-					if (num32 >= 0 && Main.TileMergeDirt[num32])
+					if (num35 >= 0 && Main.TileMergeDirt[num35])
 					{
 						TileFrame(i + 1, j);
 						if (mergeLeft)
 						{
-							num32 = num;
+							num35 = num;
 						}
 					}
-					if (num29 == 2 || num29 == 23 || num29 == 109)
-					{
-						num29 = num;
-					}
-					if (num34 == 2 || num34 == 23 || num34 == 109)
-					{
-						num34 = num;
-					}
-					if (num31 == 2 || num31 == 23 || num31 == 109)
-					{
-						num31 = num;
-					}
-					if (num32 == 2 || num32 == 23 || num32 == 109)
+					if (num32 == (int)EntityID.TileID.GRASS || num32 == (int)EntityID.TileID.CORRUPT_GRASS || num32 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
 						num32 = num;
 					}
-					if (num28 >= 0 && Main.TileMergeDirt[num28])
+					if (num37 == (int)EntityID.TileID.GRASS || num37 == (int)EntityID.TileID.CORRUPT_GRASS || num37 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num28 = num;
+						num37 = num;
 					}
-					else if (num28 == 2 || num28 == 23 || num28 == 109)
+					if (num34 == (int)EntityID.TileID.GRASS || num34 == (int)EntityID.TileID.CORRUPT_GRASS || num34 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num28 = num;
+						num34 = num;
 					}
-					if (num30 >= 0 && Main.TileMergeDirt[num30])
+					if (num35 == (int)EntityID.TileID.GRASS || num35 == (int)EntityID.TileID.CORRUPT_GRASS || num35 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num30 = num;
+						num35 = num;
 					}
-					else if (num30 == 2 || num30 == 23 || num30 == 109)
+					if (num31 >= (int)EntityID.TileID.DIRT && Main.TileMergeDirt[num31])
 					{
-						num30 = num;
+						num31 = num;
+					}
+					else if (num31 == (int)EntityID.TileID.GRASS || num31 == (int)EntityID.TileID.CORRUPT_GRASS || num31 == (int)EntityID.TileID.HALLOWED_GRASS)
+					{
+						num31 = num;
 					}
 					if (num33 >= 0 && Main.TileMergeDirt[num33])
 					{
 						num33 = num;
 					}
-					else if (num33 == 2 || num33 == 23 || num30 == 109)
+					else if (num33 == (int)EntityID.TileID.GRASS || num33 == (int)EntityID.TileID.CORRUPT_GRASS || num33 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
 						num33 = num;
 					}
-					if (num35 >= 0 && Main.TileMergeDirt[num35])
+					if (num36 >= 0 && Main.TileMergeDirt[num36])
 					{
-						num35 = num;
+						num36 = num;
 					}
-					else if (num35 == 2 || num35 == 23 || num35 == 109)
+					else if (num36 == (int)EntityID.TileID.GRASS || num36 == (int)EntityID.TileID.CORRUPT_GRASS || num33 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num35 = num;
+						num36 = num;
 					}
-					if ((double)j < Main.RockLayer)
+					if (num38 >= (int)EntityID.TileID.DIRT && Main.TileMergeDirt[num38])
 					{
-						if (num29 == 59)
+						num38 = num;
+					}
+					else if (num38 == (int)EntityID.TileID.GRASS || num38 == (int)EntityID.TileID.CORRUPT_GRASS || num38 == (int)EntityID.TileID.HALLOWED_GRASS)
+					{
+						num38 = num;
+					}
+					if (j < Main.RockLayer)
+					{
+						if (num32 == (int)EntityID.TileID.MUD)
 						{
-							num29 = -2;
+							num32 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num34 == 59)
+						if (num37 == (int)EntityID.TileID.MUD)
 						{
-							num34 = -2;
+							num37 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num31 == 59)
+						if (num34 == (int)EntityID.TileID.MUD)
 						{
-							num31 = -2;
+							num34 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num32 == 59)
+						if (num35 == (int)EntityID.TileID.MUD)
 						{
-							num32 = -2;
+							num35 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num28 == 59)
+						if (num31 == (int)EntityID.TileID.MUD)
 						{
-							num28 = -2;
+							num31 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num30 == 59)
+						if (num33 == (int)EntityID.TileID.MUD)
 						{
-							num30 = -2;
+							num33 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num33 == 59)
+						if (num36 == (int)EntityID.TileID.MUD)
 						{
-							num33 = -2;
+							num36 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num35 == 59)
+						if (num38 == (int)EntityID.TileID.MUD)
 						{
-							num35 = -2;
+							num38 = (int)EntityID.TileID.LIQUID;
 						}
 					}
 				}
 				else if (Main.TileMergeDirt[num])
 				{
-					if (num29 == 0)
+					if (num32 == (int)EntityID.TileID.DIRT)
 					{
-						num29 = -2;
+						num32 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num34 == 0)
+					if (num37 == (int)EntityID.TileID.DIRT)
 					{
-						num34 = -2;
+						num37 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num31 == 0)
+					if (num34 == (int)EntityID.TileID.DIRT)
 					{
-						num31 = -2;
+						num34 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num32 == 0)
+					if (num35 == (int)EntityID.TileID.DIRT)
 					{
-						num32 = -2;
+						num35 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num28 == 0)
+					if (num31 == (int)EntityID.TileID.DIRT)
 					{
-						num28 = -2;
+						num31 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num30 == 0)
+					if (num33 == (int)EntityID.TileID.DIRT)
 					{
-						num30 = -2;
+						num33 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num33 == 0)
+					if (num36 == (int)EntityID.TileID.DIRT)
 					{
-						num33 = -2;
+						num36 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num35 == 0)
+					if (num38 == (int)EntityID.TileID.DIRT)
 					{
-						num35 = -2;
+						num38 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num == 1)
+					if (num == (int)EntityID.TileID.STONE)
 					{
-						if ((double)j > Main.RockLayer)
+						if (j > Main.RockLayer)
 						{
-							if (num29 == 59)
+							if (num32 == (int)EntityID.TileID.MUD)
 							{
 								TileFrame(i, j - 1);
 								if (mergeDown)
 								{
-									num29 = num;
+									num32 = num;
 								}
 							}
-							if (num34 == 59)
+							if (num37 == (int)EntityID.TileID.MUD)
 							{
 								TileFrame(i, j + 1);
 								if (mergeUp)
 								{
-									num34 = num;
+									num37 = num;
 								}
 							}
-							if (num31 == 59)
+							if (num34 == (int)EntityID.TileID.MUD)
 							{
 								TileFrame(i - 1, j);
 								if (mergeRight)
 								{
-									num31 = num;
+									num34 = num;
 								}
 							}
-							if (num32 == 59)
+							if (num35 == (int)EntityID.TileID.MUD)
 							{
 								TileFrame(i + 1, j);
 								if (mergeLeft)
 								{
-									num32 = num;
+									num35 = num;
 								}
 							}
-							if (num28 == 59)
+							if (num31 == (int)EntityID.TileID.MUD)
 							{
-								num28 = num;
+								num31 = num;
 							}
-							if (num30 == 59)
-							{
-								num30 = num;
-							}
-							if (num33 == 59)
+							if (num33 == (int)EntityID.TileID.MUD)
 							{
 								num33 = num;
 							}
-							if (num35 == 59)
+							if (num36 == (int)EntityID.TileID.MUD)
 							{
-								num35 = num;
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.MUD)
+							{
+								num38 = num;
 							}
 						}
-						if (num29 == 57)
+						if (num32 == (int)EntityID.TileID.ASH)
 						{
 							TileFrame(i, j - 1);
 							if (mergeDown)
 							{
-								num29 = num;
+								num32 = num;
 							}
 						}
-						if (num34 == 57)
+						if (num37 == (int)EntityID.TileID.ASH)
 						{
 							TileFrame(i, j + 1);
 							if (mergeUp)
 							{
-								num34 = num;
+								num37 = num;
 							}
 						}
-						if (num31 == 57)
+						if (num34 == (int)EntityID.TileID.ASH)
 						{
 							TileFrame(i - 1, j);
 							if (mergeRight)
 							{
-								num31 = num;
+								num34 = num;
 							}
 						}
-						if (num32 == 57)
+						if (num35 == (int)EntityID.TileID.ASH)
 						{
 							TileFrame(i + 1, j);
 							if (mergeLeft)
 							{
-								num32 = num;
+								num35 = num;
 							}
 						}
-						if (num28 == 57)
+						if (num31 == (int)EntityID.TileID.ASH)
 						{
-							num28 = num;
+							num31 = num;
 						}
-						if (num30 == 57)
-						{
-							num30 = num;
-						}
-						if (num33 == 57)
+						if (num33 == (int)EntityID.TileID.ASH)
 						{
 							num33 = num;
 						}
-						if (num35 == 57)
+						if (num36 == (int)EntityID.TileID.ASH)
 						{
-							num35 = num;
+							num36 = num;
+						}
+						if (num38 == (int)EntityID.TileID.ASH)
+						{
+							num38 = num;
 						}
 					}
 				}
 				else
 				{
-					switch (num)
+					switch ((EntityID.TileID)num)
 					{
-						case 58:
-						case 75:
-						case 76:
-							if (num29 == 57)
+						case EntityID.TileID.HELLSTONE:
+						case EntityID.TileID.OBSIDIAN_BRICK:
+						case EntityID.TileID.HELLSTONE_BRICK:
+							if (num32 == (int)EntityID.TileID.ASH)
 							{
-								num29 = -2;
+								num32 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num34 == 57)
+							if (num37 == (int)EntityID.TileID.ASH)
 							{
-								num34 = -2;
+								num37 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num31 == 57)
+							if (num34 == (int)EntityID.TileID.ASH)
 							{
-								num31 = -2;
+								num34 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num32 == 57)
+							if (num35 == (int)EntityID.TileID.ASH)
 							{
-								num32 = -2;
+								num35 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num28 == 57)
+							if (num31 == (int)EntityID.TileID.ASH)
 							{
-								num28 = -2;
+								num31 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num30 == 57)
+							if (num33 == (int)EntityID.TileID.ASH)
 							{
-								num30 = -2;
+								num33 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num33 == 57)
+							if (num36 == (int)EntityID.TileID.ASH)
 							{
-								num33 = -2;
+								num36 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num35 == 57)
+							if (num38 == (int)EntityID.TileID.ASH)
 							{
-								num35 = -2;
+								num38 = (int)EntityID.TileID.LIQUID;
 							}
 							break;
-						case 59:
-							if ((double)j > Main.RockLayer)
+						case EntityID.TileID.MUD:
+							if (j > Main.RockLayer)
 							{
-								if (num29 == 1)
+								if (num32 == (int)EntityID.TileID.STONE)
 								{
-									num29 = -2;
+									num32 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num34 == 1)
+								if (num37 == (int)EntityID.TileID.STONE)
 								{
-									num34 = -2;
+									num37 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num31 == 1)
+								if (num34 == (int)EntityID.TileID.STONE)
 								{
-									num31 = -2;
+									num34 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num32 == 1)
+								if (num35 == (int)EntityID.TileID.STONE)
 								{
-									num32 = -2;
+									num35 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num28 == 1)
+								if (num31 == (int)EntityID.TileID.STONE)
 								{
-									num28 = -2;
+									num31 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num30 == 1)
+								if (num33 == (int)EntityID.TileID.STONE)
 								{
-									num30 = -2;
+									num33 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num33 == 1)
+								if (num36 == (int)EntityID.TileID.STONE)
 								{
-									num33 = -2;
+									num36 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num35 == 1)
+								if (num38 == (int)EntityID.TileID.STONE)
 								{
-									num35 = -2;
+									num38 = (int)EntityID.TileID.LIQUID;
 								}
 							}
-							if (num29 == 60)
-							{
-								num29 = num;
-							}
-							if (num34 == 60)
-							{
-								num34 = num;
-							}
-							if (num31 == 60)
-							{
-								num31 = num;
-							}
-							if (num32 == 60)
+							if (num32 == (int)EntityID.TileID.JUNGLE_GRASS || num32 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num32 = num;
 							}
-							if (num28 == 60)
+							if (num37 == (int)EntityID.TileID.JUNGLE_GRASS || num37 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
-								num28 = num;
+								num37 = num;
 							}
-							if (num30 == 60)
-							{
-								num30 = num;
-							}
-							if (num33 == 60)
-							{
-								num33 = num;
-							}
-							if (num35 == 60)
-							{
-								num35 = num;
-							}
-							if (num29 == 70)
-							{
-								num29 = num;
-							}
-							if (num34 == 70)
+							if (num34 == (int)EntityID.TileID.JUNGLE_GRASS || num34 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num34 = num;
 							}
-							if (num31 == 70)
+							if (num35 == (int)EntityID.TileID.JUNGLE_GRASS || num35 == (int)EntityID.TileID.MUSHROOM_GRASS)
+							{
+								num35 = num;
+							}
+							if (num31 == (int)EntityID.TileID.JUNGLE_GRASS || num31 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num31 = num;
 							}
-							if (num32 == 70)
-							{
-								num32 = num;
-							}
-							if (num28 == 70)
-							{
-								num28 = num;
-							}
-							if (num30 == 70)
-							{
-								num30 = num;
-							}
-							if (num33 == 70)
+							if (num33 == (int)EntityID.TileID.JUNGLE_GRASS || num33 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num33 = num;
 							}
-							if (num35 == 70)
+							if (num36 == (int)EntityID.TileID.JUNGLE_GRASS || num36 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
-								num35 = num;
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.JUNGLE_GRASS || num38 == (int)EntityID.TileID.MUSHROOM_GRASS)
+							{
+								num38 = num;
 							}
 							if (j >= Main.RockLayer)
 							{
 								break;
 							}
-							if (num29 == 0)
+							if (num32 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrame(i, j - 1);
 								if (mergeDown)
 								{
-									num29 = num;
+									num32 = num;
 								}
 							}
-							if (num34 == 0)
+							if (num37 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrame(i, j + 1);
 								if (mergeUp)
 								{
-									num34 = num;
+									num37 = num;
 								}
 							}
-							if (num31 == 0)
+							if (num34 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrame(i - 1, j);
 								if (mergeRight)
 								{
-									num31 = num;
-								}
-							}
-							if (num32 == 0)
-							{
-								TileFrame(i + 1, j);
-								if (mergeLeft)
-								{
-									num32 = num;
-								}
-							}
-							if (num28 == 0)
-							{
-								num28 = num;
-							}
-							if (num30 == 0)
-							{
-								num30 = num;
-							}
-							if (num33 == 0)
-							{
-								num33 = num;
-							}
-							if (num35 == 0)
-							{
-								num35 = num;
-							}
-							break;
-						case 57:
-							if (num29 == 1)
-							{
-								num29 = -2;
-							}
-							if (num34 == 1)
-							{
-								num34 = -2;
-							}
-							if (num31 == 1)
-							{
-								num31 = -2;
-							}
-							if (num32 == 1)
-							{
-								num32 = -2;
-							}
-							if (num28 == 1)
-							{
-								num28 = -2;
-							}
-							if (num30 == 1)
-							{
-								num30 = -2;
-							}
-							if (num33 == 1)
-							{
-								num33 = -2;
-							}
-							if (num35 == 1)
-							{
-								num35 = -2;
-							}
-							if (num29 == 58 || num29 == 76 || num29 == 75)
-							{
-								TileFrame(i, j - 1);
-								if (mergeDown)
-								{
-									num29 = num;
-								}
-							}
-							if (num34 == 58 || num34 == 76 || num34 == 75)
-							{
-								TileFrame(i, j + 1);
-								if (mergeUp)
-								{
 									num34 = num;
 								}
 							}
-							if (num31 == 58 || num31 == 76 || num31 == 75)
-							{
-								TileFrame(i - 1, j);
-								if (mergeRight)
-								{
-									num31 = num;
-								}
-							}
-							if (num32 == 58 || num32 == 76 || num32 == 75)
+							if (num35 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrame(i + 1, j);
 								if (mergeLeft)
 								{
-									num32 = num;
+									num35 = num;
 								}
 							}
-							if (num28 == 58 || num28 == 76 || num28 == 75)
-							{
-								num28 = num;
-							}
-							if (num30 == 58 || num30 == 76 || num30 == 75)
-							{
-								num30 = num;
-							}
-							if (num33 == 58 || num33 == 76 || num33 == 75)
-							{
-								num33 = num;
-							}
-							if (num35 == 58 || num35 == 76 || num35 == 75)
-							{
-								num35 = num;
-							}
-							break;
-						case 32:
-							if (num34 == 23)
-							{
-								num34 = num;
-							}
-							break;
-						case 69:
-							if (num34 == 60)
-							{
-								num34 = num;
-							}
-							break;
-						case 51:
-							if (num29 > -1 && !Main.TileNoAttach[num29])
-							{
-								num29 = num;
-							}
-							if (num34 > -1 && !Main.TileNoAttach[num34])
-							{
-								num34 = num;
-							}
-							if (num31 > -1 && !Main.TileNoAttach[num31])
+							if (num31 == (int)EntityID.TileID.DIRT)
 							{
 								num31 = num;
 							}
-							if (num32 > -1 && !Main.TileNoAttach[num32])
-							{
-								num32 = num;
-							}
-							if (num28 > -1 && !Main.TileNoAttach[num28])
-							{
-								num28 = num;
-							}
-							if (num30 > -1 && !Main.TileNoAttach[num30])
-							{
-								num30 = num;
-							}
-							if (num33 > -1 && !Main.TileNoAttach[num33])
+							if (num33 == (int)EntityID.TileID.DIRT)
 							{
 								num33 = num;
 							}
-							if (num35 > -1 && !Main.TileNoAttach[num35])
+							if (num36 == (int)EntityID.TileID.DIRT)
+							{
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.DIRT)
+							{
+								num38 = num;
+							}
+							break;
+						case EntityID.TileID.ASH:
+							if (num32 == (int)EntityID.TileID.STONE)
+							{
+								num32 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num37 == (int)EntityID.TileID.STONE)
+							{
+								num37 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num34 == (int)EntityID.TileID.STONE)
+							{
+								num34 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num35 == (int)EntityID.TileID.STONE)
+							{
+								num35 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num31 == (int)EntityID.TileID.STONE)
+							{
+								num31 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num33 == (int)EntityID.TileID.STONE)
+							{
+								num33 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num36 == (int)EntityID.TileID.STONE)
+							{
+								num36 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num38 == (int)EntityID.TileID.STONE)
+							{
+								num38 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num32 == (int)EntityID.TileID.HELLSTONE || num32 == (int)EntityID.TileID.HELLSTONE_BRICK || num32 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrame(i, j - 1);
+								if (mergeDown)
+								{
+									num32 = num;
+								}
+							}
+							if (num37 == (int)EntityID.TileID.HELLSTONE || num37 == (int)EntityID.TileID.HELLSTONE_BRICK || num37 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrame(i, j + 1);
+								if (mergeUp)
+								{
+									num37 = num;
+								}
+							}
+							if (num34 == (int)EntityID.TileID.HELLSTONE || num34 == (int)EntityID.TileID.HELLSTONE_BRICK || num34 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrame(i - 1, j);
+								if (mergeRight)
+								{
+									num34 = num;
+								}
+							}
+							if (num35 == (int)EntityID.TileID.HELLSTONE || num35 == (int)EntityID.TileID.HELLSTONE_BRICK || num35 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrame(i + 1, j);
+								if (mergeLeft)
+								{
+									num35 = num;
+								}
+							}
+							if (num31 == (int)EntityID.TileID.HELLSTONE || num31 == (int)EntityID.TileID.HELLSTONE_BRICK || num31 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num31 = num;
+							}
+							if (num33 == (int)EntityID.TileID.HELLSTONE || num33 == (int)EntityID.TileID.HELLSTONE_BRICK || num33 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num33 = num;
+							}
+							if (num36 == (int)EntityID.TileID.HELLSTONE || num36 == (int)EntityID.TileID.HELLSTONE_BRICK || num36 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.HELLSTONE || num38 == (int)EntityID.TileID.HELLSTONE_BRICK || num38 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num38 = num;
+							}
+							break;
+						case EntityID.TileID.CORRUPTION_THORN:
+							if (num37 == (int)EntityID.TileID.CORRUPT_GRASS)
+							{
+								num37 = num;
+							}
+							break;
+						case EntityID.TileID.JUNGLE_THORN:
+							if (num37 == (int)EntityID.TileID.JUNGLE_GRASS)
+							{
+								num37 = num;
+							}
+							break;
+						case EntityID.TileID.COBWEB:
+							if (num32 >= 0 && !Main.TileNoAttach[num32])
+							{
+								num32 = num;
+							}
+							if (num37 >= 0 && !Main.TileNoAttach[num37])
+							{
+								num37 = num;
+							}
+							if (num34 >= 0 && !Main.TileNoAttach[num34])
+							{
+								num34 = num;
+							}
+							if (num35 >= 0 && !Main.TileNoAttach[num35])
 							{
 								num35 = num;
+							}
+							if (num31 >= 0 && !Main.TileNoAttach[num31])
+							{
+								num31 = num;
+							}
+							if (num33 >= 0 && !Main.TileNoAttach[num33])
+							{
+								num33 = num;
+							}
+							if (num36 >= 0 && !Main.TileNoAttach[num36])
+							{
+								num36 = num;
+							}
+							if (num38 >= 0 && !Main.TileNoAttach[num38])
+							{
+								num38 = num;
 							}
 							break;
 					}
 				}
 				bool flag3 = false;
-				if (num == 2 || num == 23 || num == 60 || num == 70 || num == 109)
+				if (num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.CORRUPT_GRASS || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS)
 				{
 					flag3 = true;
-					if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+					if (num32 >= 0 && num32 != num && !Main.TileSolid[num32])
 					{
-						num29 = -1;
+						num32 = (int)EntityID.TileID.NONE;
 					}
-					if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+					if (num37 >= 0 && num37 != num && !Main.TileSolid[num37])
 					{
-						num34 = -1;
+						num37 = (int)EntityID.TileID.NONE;
 					}
-					if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+					if (num34 >= 0 && num34 != num && !Main.TileSolid[num34])
 					{
-						num31 = -1;
+						num34 = (int)EntityID.TileID.NONE;
 					}
-					if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+					if (num35 >= 0 && num35 != num && !Main.TileSolid[num35])
 					{
-						num32 = -1;
+						num35 = (int)EntityID.TileID.NONE;
 					}
-					if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
+					if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 					{
-						num28 = -1;
+						num31 = (int)EntityID.TileID.NONE;
 					}
-					if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
+					if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 					{
-						num30 = -1;
+						num33 = (int)EntityID.TileID.NONE;
 					}
-					if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
+					if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 					{
-						num33 = -1;
+						num36 = (int)EntityID.TileID.NONE;
 					}
-					if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
+					if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 					{
-						num35 = -1;
+						num38 = (int)EntityID.TileID.NONE;
 					}
-					int num37 = 0;
-					switch (num)
+					int num39 = 0;
+					switch ((EntityID.TileID)num)
 					{
-						case 60:
-						case 70:
-							num37 = 59;
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.MUSHROOM_GRASS:
+							num39 = (int)EntityID.TileID.MUD;
 							break;
-						case 2:
-							if (num29 == 23)
+						case EntityID.TileID.GRASS:
+							if (num32 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num29 = num37;
+								num32 = num39;
 							}
-							if (num34 == 23)
+							if (num37 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num34 = num37;
+								num37 = num39;
 							}
-							if (num31 == 23)
+							if (num34 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num31 = num37;
+								num34 = num39;
 							}
-							if (num32 == 23)
+							if (num35 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num32 = num37;
+								num35 = num39;
 							}
-							if (num28 == 23)
+							if (num31 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num28 = num37;
+								num31 = num39;
 							}
-							if (num30 == 23)
+							if (num33 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num30 = num37;
+								num33 = num39;
 							}
-							if (num33 == 23)
+							if (num36 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num33 = num37;
+								num36 = num39;
 							}
-							if (num35 == 23)
+							if (num38 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num35 = num37;
-							}
-							break;
-						case 23:
-							if (num29 == 2)
-							{
-								num29 = num37;
-							}
-							if (num34 == 2)
-							{
-								num34 = num37;
-							}
-							if (num31 == 2)
-							{
-								num31 = num37;
-							}
-							if (num32 == 2)
-							{
-								num32 = num37;
-							}
-							if (num28 == 2)
-							{
-								num28 = num37;
-							}
-							if (num30 == 2)
-							{
-								num30 = num37;
-							}
-							if (num33 == 2)
-							{
-								num33 = num37;
-							}
-							if (num35 == 2)
-							{
-								num35 = num37;
+								num38 = num39;
 							}
 							break;
+						case EntityID.TileID.CORRUPT_GRASS:
+							if (num32 == (int)EntityID.TileID.GRASS)
+							{
+								num32 = num39;
+							}
+							if (num37 == (int)EntityID.TileID.GRASS)
+							{
+								num37 = num39;
+							}
+							if (num34 == (int)EntityID.TileID.GRASS)
+							{
+								num34 = num39;
+							}
+							if (num35 == (int)EntityID.TileID.GRASS)
+							{
+								num35 = num39;
+							}
+							if (num31 == (int)EntityID.TileID.GRASS)
+							{
+								num31 = num39;
+							}
+							if (num33 == (int)EntityID.TileID.GRASS)
+							{
+								num33 = num39;
+							}
+							if (num36 == (int)EntityID.TileID.GRASS)
+							{
+								num36 = num39;
+							}
+							if (num38 == (int)EntityID.TileID.GRASS)
+							{
+								num38 = num39;
+							}
+							break;
 					}
-					if (num29 != num && num29 != num37 && (num34 == num || num34 == num37))
+					if (num32 != num && num32 != num39 && (num37 == num || num37 == num39))
 					{
-						if (num31 == num37 && num32 == num)
+						if (num34 == num39 && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 198;
-									break;
-							}
+							num2 = 18 * frameNumber;
+							num3 = 198;
 						}
-						else if (num31 == num && num32 == num37)
+						else if (num34 == num && num35 == num39)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 198;
-									break;
-							}
-						}
-					}
-					else if (num34 != num && num34 != num37 && (num29 == num || num29 == num37))
-					{
-						if (num31 == num37 && num32 == num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 216;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 216;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 216;
-									break;
-							}
-						}
-						else if (num31 == num && num32 == num37)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 216;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 216;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 216;
-									break;
-							}
+							num2 = 54 + 18 * frameNumber;
+							num3 = 198;
 						}
 					}
-					else if (num31 != num && num31 != num37 && (num32 == num || num32 == num37))
+					else if (num37 != num && num37 != num39 && (num32 == num || num32 == num39))
 					{
-						if (num29 == num37 && num34 == num)
+						if (num34 == num39 && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 72;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 18 * frameNumber;
+							num3 = 216;
 						}
-						else if (num34 == num && num32 == num29)
+						else if (num34 == num && num35 == num39)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 72;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 54 + 18 * frameNumber;
+							num3 = 216;
 						}
 					}
-					else if (num32 != num && num32 != num37 && (num31 == num || num31 == num37))
+					else if (num34 != num && num34 != num39 && (num35 == num || num35 == num39))
 					{
-						if (num29 == num37 && num34 == num)
+						if (num32 == num39 && num37 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 90;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 72;
+							num3 = 144 + 18 * frameNumber;
 						}
-						else if (num34 == num && num32 == num29)
+						else if (num37 == num && num35 == num32)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 90;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 72;
+							num3 = 90 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num)
+					else if (num35 != num && num35 != num39 && (num34 == num || num34 == num39))
 					{
-						if (num28 != num && num30 != num && num33 != num && num35 != num)
+						if (num32 == num39 && num37 == num)
 						{
-							if (num35 == num37)
+							num2 = 90;
+							num3 = 144 + 18 * frameNumber;
+						}
+						else if (num37 == num && num35 == num32)
+						{
+							num2 = 90;
+							num3 = 90 + 18 * frameNumber;
+						}
+					}
+					else if (num32 == num && num37 == num && num34 == num && num35 == num)
+					{
+						if (num31 != num && num33 != num && num36 != num && num38 != num)
+						{
+							if (num38 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 324;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 324;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 324;
-										break;
-								}
+								num3 = 324;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num30 == num37)
+							else if (num33 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 342;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 342;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 342;
-										break;
-								}
+								num3 = 342;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num33 == num37)
+							else if (num36 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 360;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 360;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 360;
-										break;
-								}
+								num3 = 360;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num28 == num37)
+							else if (num31 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 378;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 378;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 378;
-										break;
-								}
+								num3 = 378;
+								num2 = 108 + 18 * frameNumber;
 							}
 							else
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 144;
-										rectangle.Y = 234;
-										break;
-									case 1:
-										rectangle.X = 198;
-										rectangle.Y = 234;
-										break;
-									default:
-										rectangle.X = 252;
-										rectangle.Y = 234;
-										break;
-								}
+								num3 = 234;
+								num2 = 144 + 54 * frameNumber;
 							}
 						}
-						else if (num28 != num && num35 != num)
+						else if (num31 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 306;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 306;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 306;
-									break;
-							}
+							num3 = 306;
+							num2 = 36 + 18 * frameNumber;
 						}
-						else if (num30 != num && num33 != num)
+						else if (num33 != num && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 306;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 306;
-									break;
-								default:
-									rectangle.X = 126;
-									rectangle.Y = 306;
-									break;
-							}
+							num3 = 306;
+							num2 = 90 + 18 * frameNumber;
 						}
-						else if (num28 != num && num30 == num && num33 == num && num35 == num)
+						else if (num31 != num && num33 == num && num36 == num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 != num && num33 == num && num35 == num)
+						else if (num31 == num && num33 != num && num36 == num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 == num && num33 != num && num35 == num)
+						else if (num31 == num && num33 == num && num36 != num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 == num && num33 == num && num35 != num)
+						else if (num31 == num && num33 == num && num36 == num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num37 && num31 == num && num32 == num && num28 == -1 && num30 == -1)
+					else if (num32 == num && num37 == num39 && num34 == num && num35 == num && num31 == (int)EntityID.TileID.NONE && num33 == (int)EntityID.TileID.NONE)
 					{
-						switch (frameNumber)
+						num3 = 18;
+						num2 = 108 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num && num34 == num && num35 == num && num36 == (int)EntityID.TileID.NONE && num38 == (int)EntityID.TileID.NONE)
+					{
+						num3 = 36;
+						num2 = 108 + 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num && num34 == num39 && num35 == num && num33 == (int)EntityID.TileID.NONE && num38 == (int)EntityID.TileID.NONE)
+					{
+						num2 = 198;
+						num3 = 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num && num34 == num && num35 == num39 && num31 == (int)EntityID.TileID.NONE && num36 == (int)EntityID.TileID.NONE)
+					{
+						num2 = 180;
+						num3 = 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num39 && num34 == num && num35 == num)
+					{
+						if (num33 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 18;
-								break;
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
+						}
+						else if (num31 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num37 && num34 == num && num31 == num && num32 == num && num33 == -1 && num35 == -1)
+					else if (num32 == num39 && num37 == num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
+						if (num38 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 36;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 36;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 36;
-								break;
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num36 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num37 && num32 == num && num30 == -1 && num35 == -1)
+					else if (num32 == num && num37 == num && num34 == num && num35 == num39)
 					{
-						switch (frameNumber)
+						if (num31 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 198;
-								rectangle.Y = 36;
-								break;
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num36 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num37 && num28 == -1 && num33 == -1)
+					else if (num32 == num && num37 == num && num34 == num39 && num35 == num)
 					{
-						switch (frameNumber)
+						if (num33 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 180;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 36;
-								break;
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num38 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num37 && num31 == num && num32 == num)
+					else if ((num32 == num39 && num37 == num && num34 == num && num35 == num) || (num32 == num && num37 == num39 && num34 == num && num35 == num) || (num32 == num && num37 == num && num34 == num39 && num35 == num) || (num32 == num && num37 == num && num34 == num && num35 == num39))
 					{
-						if (num30 != -1)
+						num3 = 18;
+						num2 = 18 + 18 * frameNumber;
+					}
+					if ((num32 == num || num32 == num39) && (num37 == num || num37 == num39) && (num34 == num || num34 == num39) && (num35 == num || num35 == num39))
+					{
+						if (num31 != num && num31 != num39 && (num33 == num || num33 == num39) && (num36 == num || num36 == num39) && (num38 == num || num38 == num39))
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 != -1)
+						else if (num33 != num && num33 != num39 && (num31 == num || num31 == num39) && (num36 == num || num36 == num39) && (num38 == num || num38 == num39))
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
+						}
+						else if (num36 != num && num36 != num39 && (num31 == num || num31 == num39) && (num33 == num || num33 == num39) && (num38 == num || num38 == num39))
+						{
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num38 != num && num38 != num39 && (num31 == num || num31 == num39) && (num36 == num || num36 == num39) && (num33 == num || num33 == num39))
+						{
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num37 && num34 == num && num31 == num && num32 == num)
+					if (num32 != num39 && num32 != num && num37 == num && num34 != num39 && num34 != num && num35 == num && num38 != num39 && num38 != num)
 					{
-						if (num35 != -1)
+						num3 = 270;
+						num2 = 90 + 18 * frameNumber;
+					}
+					else if (num32 != num39 && num32 != num && num37 == num && num34 == num && num35 != num39 && num35 != num && num36 != num39 && num36 != num)
+					{
+						num3 = 270;
+						num2 = 144 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && num32 == num && num34 != num39 && num34 != num && num35 == num && num33 != num39 && num33 != num)
+					{
+						num3 = 288;
+						num2 = 90 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && num32 == num && num34 == num && num35 != num39 && num35 != num && num31 != num39 && num31 != num)
+					{
+						num3 = 288;
+						num2 = 144 + 18 * frameNumber;
+					}
+					else if (num32 != num && num32 != num39 && num37 == num && num34 == num && num35 == num && num36 != num && num36 != num39 && num38 != num && num38 != num39)
+					{
+						num3 = 216;
+						num2 = 144 + 54 * frameNumber;
+					}
+					else if (num37 != num && num37 != num39 && num32 == num && num34 == num && num35 == num && num31 != num && num31 != num39 && num33 != num && num33 != num39)
+					{
+						num3 = 252;
+						num2 = 144 + 54 * frameNumber;
+					}
+					else if (num34 != num && num34 != num39 && num37 == num && num32 == num && num35 == num && num33 != num && num33 != num39 && num38 != num && num38 != num39)
+					{
+						num3 = 234;
+						num2 = 126 + 54 * frameNumber;
+					}
+					else if (num35 != num && num35 != num39 && num37 == num && num32 == num && num34 == num && num31 != num && num31 != num39 && num36 != num && num36 != num39)
+					{
+						num3 = 234;
+						num2 = 162 + 54 * frameNumber;
+					}
+					else if (num32 != num39 && num32 != num && (num37 == num39 || num37 == num) && num34 == num39 && num35 == num39)
+					{
+						num3 = 270;
+						num2 = 36 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && (num32 == num39 || num32 == num) && num34 == num39 && num35 == num39)
+					{
+						num3 = 288;
+						num2 = 36 + 18 * frameNumber;
+					}
+					else if (num34 != num39 && num34 != num && (num35 == num39 || num35 == num) && num32 == num39 && num37 == num39)
+					{
+						num2 = 0;
+						num3 = 270 + 18 * frameNumber;
+					}
+					else if (num35 != num39 && num35 != num && (num34 == num39 || num34 == num) && num32 == num39 && num37 == num39)
+					{
+						num2 = 18;
+						num3 = 270 + 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num39 && num34 == num39 && num35 == num39)
+					{
+						num3 = 288;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num && num34 == num39 && num35 == num39)
+					{
+						num3 = 270;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num39 && num34 == num && num35 == num39)
+					{
+						num3 = 306;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num39 && num34 == num39 && num35 == num)
+					{
+						num3 = 306;
+						num2 = 144 + 18 * frameNumber;
+					}
+					if (num32 != num && num32 != num39 && num37 == num && num34 == num && num35 == num)
+					{
+						if ((num36 == num39 || num36 == num) && num38 != num39 && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 324;
+							num2 = 18 * frameNumber;
 						}
-						else if (num33 != -1)
+						else if ((num38 == num39 || num38 == num) && num36 != num39 && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 324;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num37)
+					else if (num37 != num && num37 != num39 && num32 == num && num34 == num && num35 == num)
 					{
-						if (num28 != -1)
+						if ((num31 == num39 || num31 == num) && num33 != num39 && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 342;
+							num2 = 18 * frameNumber;
 						}
-						else if (num33 != -1)
+						else if ((num33 == num39 || num33 == num) && num31 != num39 && num31 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 342;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num37 && num32 == num)
+					else if (num34 != num && num34 != num39 && num32 == num && num37 == num && num35 == num)
 					{
-						if (num30 != -1)
+						if ((num33 == num39 || num33 == num) && num38 != num39 && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 360;
+							num2 = 54 + 18 * frameNumber;
 						}
-						else if (num35 != -1)
+						else if ((num38 == num39 || num38 == num) && num33 != num39 && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 360;
+							num2 = 18 * frameNumber;
 						}
 					}
-					else if ((num29 == num37 && num34 == num && num31 == num && num32 == num) || (num29 == num && num34 == num37 && num31 == num && num32 == num) || (num29 == num && num34 == num && num31 == num37 && num32 == num) || (num29 == num && num34 == num && num31 == num && num32 == num37))
+					else if (num35 != num && num35 != num39 && num32 == num && num37 == num && num34 == num)
 					{
-						switch (frameNumber)
+						if ((num31 == num39 || num31 == num) && num36 != num39 && num36 != num)
 						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 18;
-								break;
+							num3 = 378;
+							num2 = 18 * frameNumber;
+						}
+						else if ((num36 == num39 || num36 == num) && num31 != num39 && num31 != num)
+						{
+							num3 = 378;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					if ((num29 == num || num29 == num37) && (num34 == num || num34 == num37) && (num31 == num || num31 == num37) && (num32 == num || num32 == num37))
+					if ((num32 == num || num32 == num39) && (num37 == num || num37 == num39) && (num34 == num || num34 == num39) && (num35 == num || num35 == num39) && num31 != (int)EntityID.TileID.NONE && num33 != (int)EntityID.TileID.NONE && num36 != (int)EntityID.TileID.NONE && num38 != (int)EntityID.TileID.NONE)
 					{
-						if (num28 != num && num28 != num37 && (num30 == num || num30 == num37) && (num33 == num || num33 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
-						}
-						else if (num30 != num && num30 != num37 && (num28 == num || num28 == num37) && (num33 == num || num33 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
-						}
-						else if (num33 != num && num33 != num37 && (num28 == num || num28 == num37) && (num30 == num || num30 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
-						}
-						else if (num35 != num && num35 != num37 && (num28 == num || num28 == num37) && (num33 == num || num33 == num37) && (num30 == num || num30 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
-						}
+						num3 = 18;
+						num2 = 18 + 18 * frameNumber;
 					}
-					if (num29 != num37 && num29 != num && num34 == num && num31 != num37 && num31 != num && num32 == num && num35 != num37 && num35 != num)
+					if (num32 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 108;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 126;
-								rectangle.Y = 270;
-								break;
-						}
+						num32 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num29 != num37 && num29 != num && num34 == num && num31 == num && num32 != num37 && num32 != num && num33 != num37 && num33 != num)
+					if (num37 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 270;
-								break;
-						}
+						num37 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num37 && num34 != num && num29 == num && num31 != num37 && num31 != num && num32 == num && num30 != num37 && num30 != num)
+					if (num34 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 108;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 126;
-								rectangle.Y = 288;
-								break;
-						}
+						num34 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num37 && num34 != num && num29 == num && num31 == num && num32 != num37 && num32 != num && num28 != num37 && num28 != num)
+					if (num35 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 288;
-								break;
-						}
+						num35 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num29 != num && num29 != num37 && num34 == num && num31 == num && num32 == num && num33 != num && num33 != num37 && num35 != num && num35 != num37)
+					if (num31 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 216;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 216;
-								break;
-							default:
-								rectangle.X = 252;
-								rectangle.Y = 216;
-								break;
-						}
+						num31 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num && num34 != num37 && num29 == num && num31 == num && num32 == num && num28 != num && num28 != num37 && num30 != num && num30 != num37)
+					if (num33 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 252;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 252;
-								break;
-							default:
-								rectangle.X = 252;
-								rectangle.Y = 252;
-								break;
-						}
+						num33 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num31 != num && num31 != num37 && num34 == num && num29 == num && num32 == num && num30 != num && num30 != num37 && num35 != num && num35 != num37)
+					if (num36 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 126;
-								rectangle.Y = 234;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 234;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 234;
-								break;
-						}
+						num36 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num32 != num && num32 != num37 && num34 == num && num29 == num && num31 == num && num28 != num && num28 != num37 && num33 != num && num33 != num37)
+					if (num38 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 234;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 234;
-								break;
-							default:
-								rectangle.X = 270;
-								rectangle.Y = 234;
-								break;
-						}
-					}
-					else if (num29 != num37 && num29 != num && (num34 == num37 || num34 == num) && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 36;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 270;
-								break;
-						}
-					}
-					else if (num34 != num37 && num34 != num && (num29 == num37 || num29 == num) && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 36;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 288;
-								break;
-						}
-					}
-					else if (num31 != num37 && num31 != num && (num32 == num37 || num32 == num) && num29 == num37 && num34 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 0;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 0;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num32 != num37 && num32 != num && (num31 == num37 || num31 == num) && num29 == num37 && num34 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 18;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 18;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num29 == num && num34 == num37 && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 288;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 270;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num37 && num31 == num && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 306;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 306;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num37 && num31 == num37 && num32 == num)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 306;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 306;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					if (num29 != num && num29 != num37 && num34 == num && num31 == num && num32 == num)
-					{
-						if ((num33 == num37 || num33 == num) && num35 != num37 && num35 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 324;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 324;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 324;
-									break;
-							}
-						}
-						else if ((num35 == num37 || num35 == num) && num33 != num37 && num33 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 324;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 324;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 324;
-									break;
-							}
-						}
-					}
-					else if (num34 != num && num34 != num37 && num29 == num && num31 == num && num32 == num)
-					{
-						if ((num28 == num37 || num28 == num) && num30 != num37 && num30 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 342;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 342;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 342;
-									break;
-							}
-						}
-						else if ((num30 == num37 || num30 == num) && num28 != num37 && num28 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 342;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 342;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 342;
-									break;
-							}
-						}
-					}
-					else if (num31 != num && num31 != num37 && num29 == num && num34 == num && num32 == num)
-					{
-						if ((num30 == num37 || num30 == num) && num35 != num37 && num35 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 360;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 360;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 360;
-									break;
-							}
-						}
-						else if ((num35 == num37 || num35 == num) && num30 != num37 && num30 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 360;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 360;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 360;
-									break;
-							}
-						}
-					}
-					else if (num32 != num && num32 != num37 && num29 == num && num34 == num && num31 == num)
-					{
-						if ((num28 == num37 || num28 == num) && num33 != num37 && num33 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 378;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 378;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 378;
-									break;
-							}
-						}
-						else if ((num33 == num37 || num33 == num) && num28 != num37 && num28 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 378;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 378;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 378;
-									break;
-							}
-						}
-					}
-					if ((num29 == num || num29 == num37) && (num34 == num || num34 == num37) && (num31 == num || num31 == num37) && (num32 == num || num32 == num37) && num28 != -1 && num30 != -1 && num33 != -1 && num35 != -1)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 18;
-								break;
-						}
-					}
-					if (num29 == num37)
-					{
-						num29 = -2;
-					}
-					if (num34 == num37)
-					{
-						num34 = -2;
-					}
-					if (num31 == num37)
-					{
-						num31 = -2;
-					}
-					if (num32 == num37)
-					{
-						num32 = -2;
-					}
-					if (num28 == num37)
-					{
-						num28 = -2;
-					}
-					if (num30 == num37)
-					{
-						num30 = -2;
-					}
-					if (num33 == num37)
-					{
-						num33 = -2;
-					}
-					if (num35 == num37)
-					{
-						num35 = -2;
+						num38 = (int)EntityID.TileID.LIQUID;
 					}
 				}
-				if (rectangle.X == -1 && rectangle.Y == -1 && (Main.TileMergeDirt[num] || num == 0 || num == 2 || num == 57 || num == 58 || num == 59 || num == 60 || num == 70 || num == 109 || num == 76 || num == 75))
+				if (num2 == (int)EntityID.TileID.NONE && (Main.TileMergeDirt[num] || num == (int)EntityID.TileID.DIRT || num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.ASH || num == (int)EntityID.TileID.HELLSTONE || num == (int)EntityID.TileID.MUD || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS || num == (int)EntityID.TileID.HELLSTONE_BRICK || num == (int)EntityID.TileID.OBSIDIAN_BRICK))
 				{
 					if (!flag3)
 					{
 						flag3 = true;
-						if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+						if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 						{
-							num29 = -1;
+							num31 = (int)EntityID.TileID.NONE;
 						}
-						if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+						if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 						{
-							num34 = -1;
+							num33 = (int)EntityID.TileID.NONE;
 						}
-						if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+						if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 						{
-							num31 = -1;
+							num36 = (int)EntityID.TileID.NONE;
 						}
-						if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+						if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 						{
-							num32 = -1;
+							num38 = (int)EntityID.TileID.NONE;
 						}
-						if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
-						{
-							num28 = -1;
-						}
-						if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
-						{
-							num30 = -1;
-						}
-						if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
-						{
-							num33 = -1;
-						}
-						if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
-						{
-							num35 = -1;
-						}
-					}
-					if (num29 >= 0 && num29 != num)
-					{
-						num29 = -1;
-					}
-					if (num34 >= 0 && num34 != num)
-					{
-						num34 = -1;
-					}
-					if (num31 >= 0 && num31 != num)
-					{
-						num31 = -1;
 					}
 					if (num32 >= 0 && num32 != num)
 					{
-						num32 = -1;
+						num32 = (int)EntityID.TileID.NONE;
 					}
-					if (num29 != -1 && num34 != -1 && num31 != -1 && num32 != -1)
+					if (num37 >= 0 && num37 != num)
 					{
-						if (num29 == -2 && num34 == num && num31 == num && num32 == num)
+						num37 = (int)EntityID.TileID.NONE;
+					}
+					if (num34 >= 0 && num34 != num)
+					{
+						num34 = (int)EntityID.TileID.NONE;
+					}
+					if (num35 >= 0 && num35 != num)
+					{
+						num35 = (int)EntityID.TileID.NONE;
+					}
+					if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
+					{
+						if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 108;
-									break;
-							}
+							num3 = 108;
+							num2 = 144 + 18 * frameNumber;
 							mergeUp = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == num && num32 == num)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 90;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 90;
-									break;
-							}
+							num3 = 90;
+							num2 = 144 + 18 * frameNumber;
 							mergeDown = true;
 						}
-						else if (num29 == num && num34 == num && num31 == -2 && num32 == num)
+						else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 162;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 162;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 162;
+							num3 = 126 + 18 * frameNumber;
 							mergeLeft = true;
 						}
-						else if (num29 == num && num34 == num && num31 == num && num32 == -2)
+						else if (num32 == num && num37 == num && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 144;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 144;
+							num3 = 126 + 18 * frameNumber;
 							mergeRight = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == -2 && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 							mergeUp = true;
 							mergeLeft = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == num && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
 							mergeUp = true;
 							mergeRight = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == -2 && num32 == num)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 							mergeDown = true;
 							mergeLeft = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == num && num32 == -2)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 							mergeDown = true;
 							mergeRight = true;
 						}
-						else if (num29 == num && num34 == num && num31 == -2 && num32 == -2)
+						else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 180;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 180;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 180;
+							num3 = 126 + 18 * frameNumber;
 							mergeLeft = true;
 							mergeRight = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == num && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 180;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 180;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 180;
+							num2 = 144 + 18 * frameNumber;
 							mergeUp = true;
 							mergeDown = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == -2 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 198;
+							num3 = 90 + 18 * frameNumber;
 							mergeUp = true;
 							mergeLeft = true;
 							mergeRight = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == -2 && num32 == -2)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 198;
+							num3 = 144 + 18 * frameNumber;
 							mergeDown = true;
 							mergeLeft = true;
 							mergeRight = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == num && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 216;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 216;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 216;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 216;
+							num3 = 144 + 18 * frameNumber;
 							mergeUp = true;
 							mergeDown = true;
 							mergeRight = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == -2 && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 216;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 216;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 216;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 216;
+							num3 = 90 + 18 * frameNumber;
 							mergeUp = true;
 							mergeDown = true;
 							mergeLeft = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == -2 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 198;
-									break;
-							}
+							num3 = 198;
+							num2 = 108 + 18 * frameNumber;
 							mergeUp = true;
 							mergeDown = true;
 							mergeLeft = true;
 							mergeRight = true;
 						}
-						else if (num29 == num && num34 == num && num31 == num && num32 == num)
+						else if (num32 == num && num37 == num && num34 == num && num35 == num)
 						{
-							if (num28 == -2)
+							if (num38 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 18;
-										rectangle.Y = 108;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 144;
-										break;
-									default:
-										rectangle.X = 18;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 0;
+								num3 = 90 + 36 * frameNumber;
 							}
-							if (num30 == -2)
+							else if (num36 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 108;
-										break;
-									case 1:
-										rectangle.X = 0;
-										rectangle.Y = 144;
-										break;
-									default:
-										rectangle.X = 0;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 18;
+								num3 = 90 + 36 * frameNumber;
 							}
-							if (num33 == -2)
+							else if (num33 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 18;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 126;
-										break;
-									default:
-										rectangle.X = 18;
-										rectangle.Y = 162;
-										break;
-								}
+								num2 = 0;
+								num3 = 108 + 36 * frameNumber;
 							}
-							if (num35 == -2)
+							else if (num31 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 0;
-										rectangle.Y = 126;
-										break;
-									default:
-										rectangle.X = 0;
-										rectangle.Y = 162;
-										break;
-								}
+								num2 = 18;
+								num3 = 108 + 36 * frameNumber;
 							}
 						}
 					}
 					else
 					{
-						if (num != 2 && num != 23 && num != 60 && num != 70 && num != 109)
+						if (num != (int)EntityID.TileID.GRASS && num != (int)EntityID.TileID.CORRUPT_GRASS && num != (int)EntityID.TileID.JUNGLE_GRASS && num != (int)EntityID.TileID.MUSHROOM_GRASS && num != (int)EntityID.TileID.HALLOWED_GRASS)
 						{
-							if (num29 == -1 && num34 == -2 && num31 == num && num32 == num)
+							if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 0;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 0;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 0;
-										break;
-								}
+								num3 = 0;
+								num2 = 234 + 18 * frameNumber;
 								mergeDown = true;
 							}
-							else if (num29 == -2 && num34 == -1 && num31 == num && num32 == num)
+							else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.NONE && num34 == num && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 18;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 18;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 18;
-										break;
-								}
+								num3 = 18;
+								num2 = 234 + 18 * frameNumber;
 								mergeUp = true;
 							}
-							else if (num29 == num && num34 == num && num31 == -1 && num32 == -2)
+							else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 36;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 36;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 36;
-										break;
-								}
+								num3 = 36;
+								num2 = 234 + 18 * frameNumber;
 								mergeRight = true;
 							}
-							else if (num29 == num && num34 == num && num31 == -2 && num32 == -1)
+							else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.NONE)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 54;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 54;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 54;
-										break;
-								}
+								num3 = 54;
+								num2 = 234 + 18 * frameNumber;
 								mergeLeft = true;
 							}
 						}
-						if (num29 != -1 && num34 != -1 && num31 == -1 && num32 == num)
+						if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == num)
 						{
-							if (num29 == -2 && num34 == num)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 72;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 72;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 72;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp = true;
 							}
-							else if (num34 == -2 && num29 == num)
+							else if (num37 == (int)EntityID.TileID.LIQUID && num32 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 72;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 72;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 72;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown = true;
 							}
 						}
-						else if (num29 != -1 && num34 != -1 && num31 == num && num32 == -1)
+						else if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == num && num35 == (int)EntityID.TileID.NONE)
 						{
-							if (num29 == -2 && num34 == num)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 90;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 90;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 90;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp = true;
 							}
-							else if (num34 == -2 && num29 == num)
+							else if (num37 == (int)EntityID.TileID.LIQUID && num32 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 90;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 90;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 90;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown = true;
 							}
 						}
-						else if (num29 == -1 && num34 == num && num31 != -1 && num32 != -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == num && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == num)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 198;
-										break;
-								}
+								num2 = 18 * frameNumber;
+								num3 = 198;
 								mergeLeft = true;
 							}
-							else if (num32 == -2 && num31 == num)
+							else if (num35 == (int)EntityID.TileID.LIQUID && num34 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 198;
-										break;
-								}
+								num2 = 54 + 18 * frameNumber;
+								num3 = 198;
 								mergeRight = true;
 							}
 						}
-						else if (num29 == num && num34 == -1 && num31 != -1 && num32 != -1)
+						else if (num32 == num && num37 == (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == num)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 216;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 216;
-										break;
-								}
+								num2 = 18 * frameNumber;
+								num3 = 216;
 								mergeLeft = true;
 							}
-							else if (num32 == -2 && num31 == num)
+							else if (num35 == (int)EntityID.TileID.LIQUID && num34 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 216;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 216;
-										break;
-								}
+								num2 = 54 + 18 * frameNumber;
+								num3 = 216;
 								mergeRight = true;
 							}
 						}
-						else if (num29 != -1 && num34 != -1 && num31 == -1 && num32 == -1)
+						else if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							if (num29 == -2 && num34 == -2)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 108;
-										rectangle.Y = 234;
-										break;
-									default:
-										rectangle.X = 108;
-										rectangle.Y = 252;
-										break;
-								}
+								num2 = 108;
+								num3 = 216 + 18 * frameNumber;
 								mergeUp = true;
 								mergeDown = true;
 							}
-							else if (num29 == -2)
+							else if (num32 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 126;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 126;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 126;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp = true;
 							}
-							else if (num34 == -2)
+							else if (num37 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 126;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 126;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 126;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown = true;
 							}
 						}
-						else if (num29 == -1 && num34 == -1 && num31 != -1 && num32 != -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == -2)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 162;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 180;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 198;
-										rectangle.Y = 198;
-										break;
-								}
+								num3 = 198;
+								num2 = 162 + 18 * frameNumber;
 								mergeLeft = true;
 								mergeRight = true;
 							}
-							else if (num31 == -2)
+							else if (num34 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 252;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 252;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 252;
-										break;
-								}
+								num3 = 252;
+								num2 = 18 * frameNumber;
 								mergeLeft = true;
 							}
-							else if (num32 == -2)
+							else if (num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 252;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 252;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 252;
-										break;
-								}
+								num3 = 252;
+								num2 = 54 + 18 * frameNumber;
 								mergeRight = true;
 							}
 						}
-						else if (num29 == -2 && num34 == -1 && num31 == -1 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 108;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 108;
+							num3 = 144 + 18 * frameNumber;
 							mergeUp = true;
 						}
-						else if (num29 == -1 && num34 == -2 && num31 == -1 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 108;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 108;
+							num3 = 90 + 18 * frameNumber;
 							mergeDown = true;
 						}
-						else if (num29 == -1 && num34 == -1 && num31 == -2 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 234;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 234;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 234;
-									break;
-							}
+							num3 = 234;
+							num2 = 18 * frameNumber;
 							mergeLeft = true;
 						}
-						else if (num29 == -1 && num34 == -1 && num31 == -1 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 234;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 234;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 234;
-									break;
-							}
+							num3 = 234;
+							num2 = 54 + 18 * frameNumber;
 							mergeRight = true;
 						}
 					}
 				}
-				if (rectangle.X < 0 || rectangle.Y < 0)
+				if (num2 < 0)
 				{
 					if (!flag3)
 					{
 						flag3 = true;
-						if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+						if (num32 >= 0 && num32 != num && !Main.TileSolid[num32])
 						{
-							num29 = -1;
+							num32 = (int)EntityID.TileID.NONE;
 						}
-						if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+						if (num37 >= 0 && num37 != num && !Main.TileSolid[num37])
 						{
-							num34 = -1;
+							num37 = (int)EntityID.TileID.NONE;
 						}
-						if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+						if (num34 >= 0 && num34 != num && !Main.TileSolid[num34])
 						{
-							num31 = -1;
+							num34 = (int)EntityID.TileID.NONE;
 						}
-						if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+						if (num35 >= 0 && num35 != num && !Main.TileSolid[num35])
 						{
-							num32 = -1;
+							num35 = (int)EntityID.TileID.NONE;
 						}
-						if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
+						if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 						{
-							num28 = -1;
+							num31 = (int)EntityID.TileID.NONE;
 						}
-						if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
+						if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 						{
-							num30 = -1;
+							num33 = (int)EntityID.TileID.NONE;
 						}
-						if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
+						if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 						{
-							num33 = -1;
+							num36 = (int)EntityID.TileID.NONE;
 						}
-						if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
+						if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 						{
-							num35 = -1;
+							num38 = (int)EntityID.TileID.NONE;
 						}
 					}
-					if (num == 2 || num == 23 || num == 60 || num == 70 || num == 109)
+					if (num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.CORRUPT_GRASS || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						if (num29 == -2)
-						{
-							num29 = num;
-						}
-						if (num34 == -2)
-						{
-							num34 = num;
-						}
-						if (num31 == -2)
-						{
-							num31 = num;
-						}
-						if (num32 == -2)
+						if (num32 == (int)EntityID.TileID.LIQUID)
 						{
 							num32 = num;
 						}
-						if (num28 == -2)
+						if (num37 == (int)EntityID.TileID.LIQUID)
 						{
-							num28 = num;
+							num37 = num;
 						}
-						if (num30 == -2)
+						if (num34 == (int)EntityID.TileID.LIQUID)
 						{
-							num30 = num;
+							num34 = num;
 						}
-						if (num33 == -2)
-						{
-							num33 = num;
-						}
-						if (num35 == -2)
+						if (num35 == (int)EntityID.TileID.LIQUID)
 						{
 							num35 = num;
 						}
+						if (num31 == (int)EntityID.TileID.LIQUID)
+						{
+							num31 = num;
+						}
+						if (num33 == (int)EntityID.TileID.LIQUID)
+						{
+							num33 = num;
+						}
+						if (num36 == (int)EntityID.TileID.LIQUID)
+						{
+							num36 = num;
+						}
+						if (num38 == (int)EntityID.TileID.LIQUID)
+						{
+							num38 = num;
+						}
 					}
-					if (num29 == num && num34 == num && num31 == num && num32 == num)
+					if (num32 == num && num37 == num && num34 == num && num35 == num)
 					{
-						if (num28 != num && num30 != num)
+						if (num31 != num && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 18;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 18;
-									break;
-							}
+							num3 = 18;
+							num2 = 108 + 18 * frameNumber;
 						}
-						else if (num33 != num && num35 != num)
+						else if (num36 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 36;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 36;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 36;
-									break;
-							}
+							num3 = 36;
+							num2 = 108 + 18 * frameNumber;
 						}
-						else if (num28 != num && num33 != num)
+						else if (num31 != num && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 180;
-									rectangle.Y = 0;
-									break;
-								case 1:
-									rectangle.X = 180;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 36;
-									break;
-							}
+							num2 = 180;
+							num3 = 18 * frameNumber;
 						}
-						else if (num30 != num && num35 != num)
+						else if (num33 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 0;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 36;
-									break;
-							}
+							num2 = 198;
+							num3 = 18 * frameNumber;
 						}
 						else
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 18;
-									rectangle.Y = 18;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 18;
-									break;
-							}
+							num3 = 18;
+							num2 = 18 + 18 * frameNumber;
 						}
 					}
-					else if (num29 != num && num34 == num && num31 == num && num32 == num)
+					else if (num32 != num && num37 == num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 0;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 0;
-								break;
-						}
+						num3 = 0;
+						num2 = 18 + 18 * frameNumber;
 					}
-					else if (num29 == num && num34 != num && num31 == num && num32 == num)
+					else if (num32 == num && num37 != num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 36;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 36;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 36;
-								break;
-						}
+						num3 = 36;
+						num2 = 18 + 18 * frameNumber;
 					}
-					else if (num29 == num && num34 == num && num31 != num && num32 == num)
+					else if (num32 == num && num37 == num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 0;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 0;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 0;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 != num)
+					else if (num32 == num && num37 == num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 72;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 72;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 72;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 == num && num31 != num && num32 == num)
+					else if (num32 != num && num37 == num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 36 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 != num && num34 == num && num31 == num && num32 != num)
+					else if (num32 != num && num37 == num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 18 + 36 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 == num && num34 != num && num31 != num && num32 == num)
+					else if (num32 == num && num37 != num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 36 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 == num && num34 != num && num31 == num && num32 != num)
+					else if (num32 == num && num37 != num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 18 + 36 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 == num && num34 == num && num31 != num && num32 != num)
+					else if (num32 == num && num37 == num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 90;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 90;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 == num && num32 == num)
+					else if (num32 != num && num37 != num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 != num && num34 == num && num31 != num && num32 != num)
+					else if (num32 != num && num37 == num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 0;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 0;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 0;
 					}
-					else if (num29 == num && num34 != num && num31 != num && num32 != num)
+					else if (num32 == num && num37 != num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 != num && num34 != num && num31 != num && num32 == num)
+					else if (num32 != num && num37 != num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 162;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 162;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 == num && num32 != num)
+					else if (num32 != num && num37 != num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 216;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 216;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 216;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 != num && num32 != num)
+					else if (num32 != num && num37 != num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 198;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 162 + 18 * frameNumber;
+						num3 = 54;
 					}
 				}
-				if (rectangle.X <= -1 || rectangle.Y <= -1)
+				if (num2 < 0)
 				{
-					if (frameNumber <= 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 18;
-					}
-					else if (frameNumber == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 18;
-					}
-					if (frameNumber >= 2)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 18;
-					}
+					num3 = 18;
+					num2 = 18 + 18 * frameNumber;
 				}
-				Main.TileSet[i, j].FrameX = (short)rectangle.X;
-				Main.TileSet[i, j].FrameY = (short)rectangle.Y;
-				if (num == 52 || num == 62 || num == 115)
+				ptr->FrameX = (short)num2;
+				ptr->FrameY = (short)num3;
+				if (num == (int)EntityID.TileID.VINE || num == (int)EntityID.TileID.JUNGLE_VINE || num == (int)EntityID.TileID.HALLOWED_VINE)
 				{
-					num29 = (Main.TileSet[i, j - 1].IsActive != 0 ? Main.TileSet[i, j - 1].Type : (-1));
-					if (num == 52 && (num29 == 109 || num29 == 115))
+					num32 = ((ptr[-1].IsActive != 0) ? ptr[-1].Type : (int)EntityID.TileID.NONE);
+					if (num == (int)EntityID.TileID.VINE && (num32 == (int)EntityID.TileID.HALLOWED_GRASS || num32 == (int)EntityID.TileID.HALLOWED_VINE))
 					{
-						Main.TileSet[i, j].Type = 115;
+						ptr->Type = (int)EntityID.TileID.HALLOWED_VINE;
 						SquareTileFrame(i, j);
 						return;
 					}
-					if (num == 115 && (num29 == 2 || num29 == 52))
+					if (num == (int)EntityID.TileID.HALLOWED_VINE && (num32 == (int)EntityID.TileID.GRASS || num32 == (int)EntityID.TileID.VINE))
 					{
-						Main.TileSet[i, j].Type = 52;
+						ptr->Type = (int)EntityID.TileID.VINE;
 						SquareTileFrame(i, j);
 						return;
 					}
-					if (num29 != num)
+					if (num32 != num && (num32 == (int)EntityID.TileID.NONE || (num == (int)EntityID.TileID.VINE && num32 != (int)EntityID.TileID.GRASS) || (num == (int)EntityID.TileID.JUNGLE_VINE && num32 != (int)EntityID.TileID.JUNGLE_GRASS) || (num == (int)EntityID.TileID.HALLOWED_VINE && num32 != (int)EntityID.TileID.HALLOWED_GRASS)))
 					{
-						bool flag4 = false;
-						if (num29 == -1)
-						{
-							flag4 = true;
-						}
-						if (num == 52 && num29 != 2)
-						{
-							flag4 = true;
-						}
-						if (num == 62 && num29 != 60)
-						{
-							flag4 = true;
-						}
-						if (num == 115 && num29 != 109)
-						{
-							flag4 = true;
-						}
-						if (flag4)
-						{
-							KillTile(i, j);
-						}
+						KillTile(i, j);
 					}
 				}
-				bool FinFlag = true;
-				if (!Gen && (num == 53 || num == 112 || num == 116 || num == 123))
+				if (!Gen && Main.NetMode != (int)NetModeSetting.CLIENT && (num == (int)EntityID.TileID.SAND || num == (int)EntityID.TileID.EBONSAND || num == (int)EntityID.TileID.PEARLSAND || num == (int)EntityID.TileID.SILT))
 				{
-					if (Main.TileSet[i, j + 1].IsActive == 0)
+					Tile* ptr3 = ptr + 1;
+					if (ptr3->IsActive== 0)
 					{
-						bool flag5 = true;
-						if (Main.TileSet[i, j - 1].IsActive != 0 && Main.TileSet[i, j - 1].Type == 21)
+						ptr3 = ptr - 1;
+						if (ptr3->IsActive== 0 || ptr3->Type != (int)EntityID.TileID.CHEST)
 						{
-							flag5 = false;
-						}
-						if (flag5)
-						{
-							Main.TileSet[i, j].IsActive = 0;
+							ptr->IsActive= 0;
 							sandBuffer[currentSandBuffer].Add(i, j);
-							FinFlag = false;
+							return;
 						}
 					}
 				}
-				if (FinFlag && rectangle.X != frameX && rectangle.Y != frameY && frameX >= 0 && frameY >= 0 && tileFrameRecursion)
+				if (frameX >= 0 && num2 != frameX && frameY >= 0 && num3 != frameY && tileFrameRecursion)
 				{
-					bool num40 = mergeUp;
-					bool flag7 = mergeDown;
-					bool flag8 = mergeLeft;
-					bool flag9 = mergeRight;
+					bool flag4 = mergeUp;
+					bool flag5 = mergeDown;
+					bool flag6 = mergeLeft;
+					bool flag7 = mergeRight;
 					TileFrame(i, j - 1);
 					TileFrame(i, j + 1);
 					TileFrame(i - 1, j);
 					TileFrame(i + 1, j);
-					mergeUp = num40;
-					mergeDown = flag7;
-					mergeLeft = flag8;
-					mergeRight = flag9;
+					mergeUp = flag4;
+					mergeDown = flag5;
+					mergeLeft = flag6;
+					mergeRight = flag7;
 				}
-			}
-			catch
-			{
 			}
 		}
 
-		public static void TileFrameNoLiquid(int i, int j, int frameNumber = 0)
+		public unsafe static void TileFrameNoLiquid(int i, int j, int frameNumber = 0)
 		{
-			try
+			if (i <= 5 || j <= 5 || i >= Main.MaxTilesX - 5 || j >= Main.MaxTilesY - 5)
 			{
-				if (i <= 5 || j <= 5 || i >= Main.MaxTilesX - 5 || j >= Main.MaxTilesY - 5)
+				return;
+			}
+			fixed (Tile* ptr = &Main.TileSet[i, j])
+			{
+				if (ptr->IsActive == 0)
 				{
 					return;
 				}
-				if (Main.TileSet[i, j].IsActive == 0)
-				{
-					return;
-				}
-				int num = Main.TileSet[i, j].Type;
+				int num = ptr->Type;
 				if (Main.TileStone[num])
 				{
-					num = 1;
+					num = (int)EntityID.TileID.STONE;
 				}
-				int frameX = Main.TileSet[i, j].FrameX;
-				int frameY = Main.TileSet[i, j].FrameY;
-				Rectangle rectangle = new Rectangle(-1, -1, 0, 0);
-				if (Main.TileFrameImportant[Main.TileSet[i, j].Type])
+				int frameX = ptr->FrameX;
+				int frameY = ptr->FrameY;
+				int num2 = -1;
+				int num3 = -1;
+				if (Main.TileFrameImportant[num])
 				{
-					switch (num)
+					switch ((EntityID.TileID)num)
 					{
-						case 4:
+						case EntityID.TileID.POT:
+							break;
+						case EntityID.TileID.TREE:
+							break;
+						case EntityID.TileID.SHORT_GRASS_PLANTS:
+						case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+						case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+						case EntityID.TileID.GLOWING_MUSHROOM:
+						case EntityID.TileID.TALL_GRASS_PLANTS:
+						case EntityID.TileID.TALL_JUNGLE_PLANTS:
+						case EntityID.TileID.SHORT_HALLOWED_PLANTS:
+						case EntityID.TileID.TALL_HALLOWED_PLANTS:
+							PlantCheck(i, j);
+							break;
+						case EntityID.TileID.TORCH:
 							{
-								short num6 = 0;
-								if (Main.TileSet[i, j].FrameX >= 66)
+								int num19 = ((ptr->FrameX >= 66) ? 66 : 0);
+								int num20 = -1;
+								int num21 = -1;
+								int num22 = -1;
+								int num23 = -1;
+								int num24 = -1;
+								int num25 = -1;
+								int num26 = -1;
+								if (ptr[-1].IsActive != 0)
 								{
-									num6 = 66;
+									_ = ptr[-1].Type;
 								}
-								int num7 = -1;
-								int num8 = -1;
-								int num9 = -1;
-								int num10 = -1;
-								int num11 = -1;
-								int num12 = -1;
-								int num13 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									_ = Main.TileSet[i, j - 1].Type;
+									num20 = ptr[1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
 								{
-									num7 = Main.TileSet[i, j + 1].Type;
+									num21 = ptr[-Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
+								if (ptr[Main.LargeWorldH].IsActive != 0)
 								{
-									num8 = Main.TileSet[i - 1, j].Type;
+									num22 = ptr[Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
+								if (ptr[-Main.LargeWorldH + 1].IsActive != 0)
 								{
-									num9 = Main.TileSet[i + 1, j].Type;
+									num23 = ptr[-Main.LargeWorldH + 1].Type;
 								}
-								if (Main.TileSet[i - 1, j + 1].IsActive != 0)
+								if (ptr[Main.LargeWorldH + 1].IsActive != 0)
 								{
-									num10 = Main.TileSet[i - 1, j + 1].Type;
+									num24 = ptr[Main.LargeWorldH + 1].Type;
 								}
-								if (Main.TileSet[i + 1, j + 1].IsActive != 0)
+								if (ptr[-Main.LargeWorldH - 1].IsActive != 0)
 								{
-									num11 = Main.TileSet[i + 1, j + 1].Type;
+									num25 = ptr[-Main.LargeWorldH - 1].Type;
 								}
-								if (Main.TileSet[i - 1, j - 1].IsActive != 0)
+								if (ptr[Main.LargeWorldH - 1].IsActive != 0)
 								{
-									num12 = Main.TileSet[i - 1, j - 1].Type;
+									num26 = ptr[Main.LargeWorldH - 1].Type;
 								}
-								if (Main.TileSet[i + 1, j - 1].IsActive != 0)
+								if (num20 >= 0 && Main.TileSolidAndAttach[num20])
 								{
-									num13 = Main.TileSet[i + 1, j - 1].Type;
+									ptr->FrameX = (short)num19;
 								}
-								if (num7 >= 0 && Main.TileSolidAndAttach[num7])
+								else if (num21 >= 0 && (Main.TileSolidAndAttach[num21] || num21 == (int)EntityID.TileID.WOODEN_BEAM || (num21 == (int)EntityID.TileID.TREE && num25 == (int)EntityID.TileID.TREE && num23 == (int)EntityID.TileID.TREE)))
 								{
-									Main.TileSet[i, j].FrameX = num6;
+									ptr->FrameX = (short)(22 + num19);
 								}
-								else if ((num8 >= 0 && Main.TileSolidAndAttach[num8]) || num8 == 124 || (num8 == 5 && num12 == 5 && num10 == 5))
+								else if (num22 >= 0 && (Main.TileSolidAndAttach[num22] || num22 == (int)EntityID.TileID.WOODEN_BEAM || (num22 == (int)EntityID.TileID.TREE && num26 == (int)EntityID.TileID.TREE && num24 == (int)EntityID.TileID.TREE)))
 								{
-									Main.TileSet[i, j].FrameX = (short)(22 + num6);
-								}
-								else if ((num9 >= 0 && Main.TileSolidAndAttach[num9]) || num9 == 124 || (num9 == 5 && num13 == 5 && num11 == 5))
-								{
-									Main.TileSet[i, j].FrameX = (short)(44 + num6);
+									ptr->FrameX = (short)(44 + num19);
 								}
 								else
 								{
 									KillTile(i, j);
 								}
-								return;
+								break;
 							}
-						case 136:
+						case EntityID.TileID.SWITCH:
+							{
+								int num28 = -1;
+								int num29 = -1;
+								int num30 = -1;
+								if (ptr[-1].IsActive != 0)
+								{
+									_ = ptr[-1].Type;
+								}
+								if (ptr[1].IsActive != 0)
+								{
+									num28 = ptr[1].Type;
+								}
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
+								{
+									num29 = ptr[-Main.LargeWorldH].Type;
+								}
+								if (ptr[Main.LargeWorldH].IsActive != 0)
+								{
+									num30 = ptr[Main.LargeWorldH].Type;
+								}
+								if (num28 >= 0 && Main.TileSolidAndAttach[num28])
+								{
+									ptr->FrameX = 0;
+								}
+								else if (num29 >= 0 && (Main.TileSolidAndAttach[num29] || num29 == (int)EntityID.TileID.WOODEN_BEAM || num29 == (int)EntityID.TileID.TREE))
+								{
+									ptr->FrameX = 18;
+								}
+								else if (num30 >= 0 && (Main.TileSolidAndAttach[num30] || num30 == (int)EntityID.TileID.WOODEN_BEAM || num30 == (int)EntityID.TileID.TREE))
+								{
+									ptr->FrameX = 36;
+								}
+								else
+								{
+									KillTile(i, j);
+								}
+								break;
+							}
+						case EntityID.TileID.CRYSTAL_SHARD:
+						case EntityID.TileID.XMAS_LIGHT:
 							{
 								int num15 = -1;
 								int num16 = -1;
 								int num17 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
-								{
-									_ = Main.TileSet[i, j - 1].Type;
-								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
-								{
-									num15 = Main.TileSet[i, j + 1].Type;
-								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
-								{
-									num16 = Main.TileSet[i - 1, j].Type;
-								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
-								{
-									num17 = Main.TileSet[i + 1, j].Type;
-								}
-								if (num15 >= 0 && Main.TileSolidAndAttach[num15])
-								{
-									Main.TileSet[i, j].FrameX = 0;
-								}
-								else if ((num16 >= 0 && Main.TileSolidAndAttach[num16]) || num16 == 124 || num16 == 5)
-								{
-									Main.TileSet[i, j].FrameX = 18;
-								}
-								else if ((num17 >= 0 && Main.TileSolidAndAttach[num17]) || num17 == 124 || num17 == 5)
-								{
-									Main.TileSet[i, j].FrameX = 36;
-								}
-								else
-								{
-									KillTile(i, j);
-								}
-								return;
-							}
-						case 129:
-						case 149:
-							{
 								int num18 = -1;
-								int num19 = -1;
-								int num20 = -1;
-								int num21 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								if (ptr[-1].IsActive != 0)
 								{
-									num19 = Main.TileSet[i, j - 1].Type;
+									num16 = ptr[-1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									num18 = Main.TileSet[i, j + 1].Type;
+									num15 = ptr[1].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
 								{
-									num20 = Main.TileSet[i - 1, j].Type;
+									num17 = ptr[-Main.LargeWorldH].Type;
 								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
+								if (ptr[Main.LargeWorldH].IsActive != 0)
 								{
-									num21 = Main.TileSet[i + 1, j].Type;
+									num18 = ptr[Main.LargeWorldH].Type;
 								}
-								if (num18 >= 0 && Main.TileSolidNotSolidTop[num18])
+								if (num15 >= 0 && Main.TileSolidNotSolidTop[num15])
 								{
-									Main.TileSet[i, j].FrameY = 0;
+									ptr->FrameY = 0;
 								}
-								else if (num20 >= 0 && Main.TileSolidNotSolidTop[num20])
+								else if (num17 >= 0 && Main.TileSolidNotSolidTop[num17])
 								{
-									Main.TileSet[i, j].FrameY = 54;
+									ptr->FrameY = 54;
 								}
-								else if (num21 >= 0 && Main.TileSolidNotSolidTop[num21])
+								else if (num18 >= 0 && Main.TileSolidNotSolidTop[num18])
 								{
-									Main.TileSet[i, j].FrameY = 36;
+									ptr->FrameY = 36;
 								}
-								else if (num19 >= 0 && Main.TileSolidNotSolidTop[num19])
+								else if (num16 >= 0 && Main.TileSolidNotSolidTop[num16])
 								{
-									Main.TileSet[i, j].FrameY = 18;
+									ptr->FrameY = 18;
 								}
 								else
 								{
 									KillTile(i, j);
 								}
-								return;
+								break;
 							}
-						case 3:
-						case 24:
-						case 61:
-						case 71:
-						case 73:
-						case 74:
-						case 110:
-						case 113:
-							PlantCheck(i, j);
-							return;
-						case 12:
-						case 31:
-							return;
-						case 10:
-							if (!ToDestroyObject)
+						case EntityID.TileID.LIFE_CRYSTAL:
+						case EntityID.TileID.SHADOW_ORB:
+							break;
+						case EntityID.TileID.DOOR_CLOSED:
 							{
-								short frameY3 = Main.TileSet[i, j].FrameY;
-								int num14 = j;
+								if (ToDestroyObject)
+								{
+									break;
+								}
+								int num27 = j - frameY / 18;
 								bool flag2 = false;
-								if (frameY3 == 0)
-								{
-									num14 = j;
-								}
-								if (frameY3 == 18)
-								{
-									num14 = j - 1;
-								}
-								if (frameY3 == 36)
-								{
-									num14 = j - 2;
-								}
-								if (Main.TileSet[i, num14 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num14 - 1].Type])
+								if (Main.TileSet[i, num27 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num27 - 1].Type])
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num14 + 3].Type])
+								else if (Main.TileSet[i, num27 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[i, num27 + 3].Type])
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14].IsActive == 0 || Main.TileSet[i, num14].Type != num)
+								else if (Main.TileSet[i, num27].IsActive == 0 || Main.TileSet[i, num27].Type != num)
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 1].IsActive == 0 || Main.TileSet[i, num14 + 1].Type != num)
+								else if (Main.TileSet[i, num27 + 1].IsActive == 0 || Main.TileSet[i, num27 + 1].Type != num)
 								{
 									flag2 = true;
 								}
-								if (Main.TileSet[i, num14 + 2].IsActive == 0 || Main.TileSet[i, num14 + 2].Type != num)
+								else if (Main.TileSet[i, num27 + 2].IsActive == 0 || Main.TileSet[i, num27 + 2].Type != num)
 								{
 									flag2 = true;
 								}
 								if (flag2)
 								{
 									ToDestroyObject = true;
-									KillTile(i, num14);
-									KillTile(i, num14 + 1);
-									KillTile(i, num14 + 2);
+									KillTile(i, num27);
+									KillTile(i, num27 + 1);
+									KillTile(i, num27 + 2);
 									if (!Gen)
 									{
-										Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
 									}
 								}
 								ToDestroyObject = false;
+								break;
 							}
-							return;
-						case 11:
+						case EntityID.TileID.DOOR_OPEN:
 							{
 								if (ToDestroyObject)
 								{
-									return;
+									break;
 								}
-								int num2 = 0;
-								int num3 = i;
-								int num4 = j;
-								int frameX2 = Main.TileSet[i, j].FrameX;
-								int frameY2 = Main.TileSet[i, j].FrameY;
+								int num10 = 0;
+								int num11 = 0;
+								int num12 = i;
+								int num13 = j;
 								bool flag = false;
-								switch (frameX2)
+								switch (frameX)
 								{
 									case 0:
-										num3 = i;
-										num2 = 1;
+										num10 = 1;
 										break;
 									case 18:
-										num3 = i - 1;
-										num2 = 1;
+										num12 = i - 1;
+										num11 = -Main.LargeWorldH;
+										num10 = 1;
 										break;
 									case 36:
-										num3 = i + 1;
-										num2 = -1;
+										num11 = Main.LargeWorldH;
+										num12 = i + 1;
+										num10 = -1;
 										break;
 									case 54:
-										num3 = i;
-										num2 = -1;
+										num10 = -1;
 										break;
 								}
-								switch (frameY2)
+								switch (frameY)
 								{
-									case 0:
-										num4 = j;
-										break;
 									case 18:
-										num4 = j - 1;
+										num11--;
+										num13 = j - 1;
 										break;
 									case 36:
-										num4 = j - 2;
+										num13 = j - 2;
+										num11 -= 2;
 										break;
 								}
-								if (Main.TileSet[num3, num4 - 1].IsActive == 0 || !Main.TileSolid[Main.TileSet[num3, num4 - 1].Type] || Main.TileSet[num3, num4 + 3].IsActive == 0 || !Main.TileSolid[Main.TileSet[num3, num4 + 3].Type])
+								if (ptr[num11 - 1].IsActive == 0 || !Main.TileSolid[ptr[num11 - 1].Type] || ptr[num11 + 3].IsActive == 0 || !Main.TileSolid[ptr[num11 + 3].Type])
 								{
 									flag = true;
 									ToDestroyObject = true;
 									if (!Gen)
 									{
-										Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+										Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
 									}
 								}
-								int num5 = num3;
-								if (num2 == -1)
+								int num14 = num12;
+								if (num10 == -1)
 								{
-									num5 = num3 - 1;
+									num14 = num12 - 1;
 								}
-								for (int k = num5; k < num5 + 2; k++)
+								for (int k = num14; k < num14 + 2; k++)
 								{
-									for (int l = num4; l < num4 + 3; l++)
+									for (int l = num13; l < num13 + 3; l++)
 									{
-										if (!flag && (Main.TileSet[k, l].Type != 11 || Main.TileSet[k, l].IsActive == 0))
+										if (!flag)
 										{
-											ToDestroyObject = true;
-											if (!Gen)
+											fixed (Tile* ptr2 = &Main.TileSet[k, l])
 											{
-												Item.NewItem(i * 16, j * 16, 16, 16, (int)Item.ID.WOODEN_DOOR);
+												if (ptr2->Type != (int)EntityID.TileID.DOOR_OPEN || ptr2->IsActive == 0)
+												{
+													ToDestroyObject = true;
+													flag = true;
+													k = num14;
+													l = num13;
+													if (!Gen)
+													{
+														Item.NewItem(i * 16, j * 16, 16, 16, (int)EntityID.ItemID.WOODEN_DOOR);
+													}
+												}
 											}
-											flag = true;
-											k = num5;
-											l = num4;
 										}
 										if (flag)
 										{
@@ -25235,376 +22928,217 @@ namespace Terraria
 									}
 								}
 								ToDestroyObject = false;
-								return;
+								break;
 							}
-						case 34:
-						case 35:
-						case 36:
-						case 106:
-							return;
-						case 15:
-						case 20:
-							return;
-						case 14:
-						case 17:
-						case 26:
-						case 77:
-						case 86:
-						case 87:
-						case 88:
-						case 89:
-						case 114:
-						case 133:
+						case EntityID.TileID.CHANDELIER:
+						case EntityID.TileID.JACK_O_LANTERN:
+						case EntityID.TileID.PRESENT:
+						case EntityID.TileID.SAWMILL:
+							break;
+						case EntityID.TileID.CHAIR:
+						case EntityID.TileID.SAPLING:
+							break;
+						case EntityID.TileID.TABLE:
+						case EntityID.TileID.FURNACE:
+						case EntityID.TileID.DEMON_ALTAR:
+						case EntityID.TileID.HELLFORGE:
+						case EntityID.TileID.LOOM:
+						case EntityID.TileID.PIANO:
+						case EntityID.TileID.DRESSER:
+						case EntityID.TileID.BENCH:
+						case EntityID.TileID.TINKERERS_WORKSHOP:
+						case EntityID.TileID.ADAMANTITE_FORGE:
 #if VERSION_101
-						case 150:
+						case EntityID.TileID.CAMPFIRE:
 #endif
-							return;
-						case 135:
-						case 141:
-						case 144:
-							return;
-						case 16:
-						case 18:
-						case 29:
-						case 103:
-						case 134:
-							return;
-						case 13:
-						case 33:
-						case 50:
-						case 78:
-							return;
-						case 21:
-							return;
-						case 128:
-							return;
-						case 27:
-							return;
-						case 28:
-							return;
-						case 132:
-						case 138:
-						case 142:
-						case 143:
-							return;
-						case 91:
-							return;
-						case 139:
-							return;
-						case 92:
-						case 93:
-							return;
-						case 104:
-						case 105:
-							return;
-						case 101:
-						case 102:
-							return;
-						case 42:
-							return;
-						case 55:
-						case 85:
-							return;
-						case 79:
-						case 90:
-							return;
-					}
-					switch (num)
-					{
-						case 85:
-						case 94:
-						case 95:
-						case 96:
-						case 97:
-						case 98:
-						case 99:
-						case 100:
-						case 125:
-						case 126:
-							return;
-						case 82:
-						case 83:
-						case 84:
-							return;
-						case 81:
+							break;
+						case EntityID.TileID.PRESSURE_PLATE:
+						case EntityID.TileID.EXPLOSIVES:
+						case EntityID.TileID.TIMER:
+							break;
+						case EntityID.TileID.ANVIL:
+						case EntityID.TileID.WORK_BENCH:
+						case EntityID.TileID.PIGGYBANK:
+						case EntityID.TileID.BOWL:
+						case EntityID.TileID.MYTHRIL_ANVIL:
+							break;
+						case EntityID.TileID.BOTTLE:
+						case EntityID.TileID.CANDLE:
+						case EntityID.TileID.BOOK:
+							break;
+						case EntityID.TileID.CLAY_POT:
+							break;
+						case EntityID.TileID.CHEST:
+							break;
+						case EntityID.TileID.SUNFLOWER:
+							break;
+						case EntityID.TileID.MANNEQUIN:
+							break;
+						case EntityID.TileID.KEG:
+						case EntityID.TileID.CHINESE_LANTERN:
+						case EntityID.TileID.COOKING_POT:
+						case EntityID.TileID.SAFE:
+						case EntityID.TileID.SKULL_LANTERN:
+						case EntityID.TileID.TRASH_CAN:
+						case EntityID.TileID.CANDELABRA:
+						case EntityID.TileID.CRYSTAL_BALL:
+						case EntityID.TileID.DISCO_BALL:
+						case EntityID.TileID.LEVER:
+						case EntityID.TileID.BOULDER:
+						case EntityID.TileID.PUMP_IN:
+						case EntityID.TileID.PUMP_OUT:
+							break;
+						case EntityID.TileID.BANNER:
+							break;
+						case EntityID.TileID.MUSIC_BOX:
+							break;
+						case EntityID.TileID.LAMP_POST:
+						case EntityID.TileID.TIKI_TORCH:
+							break;
+						case EntityID.TileID.BOOKCASE:
+						case EntityID.TileID.THRONE:
+							break;
+						case EntityID.TileID.GRANDFATHERS_CLOCK:
+						case EntityID.TileID.STATUE:
+							break;
+						case EntityID.TileID.CHAIN_LANTERN:
+							break;
+						case EntityID.TileID.DAYBLOOM_GROWING:
+						case EntityID.TileID.DAYBLOOM_MATURE:
+						case EntityID.TileID.DAYBLOOM_BLOOMING:
+							break;
+						case EntityID.TileID.SIGN:
+						case EntityID.TileID.TOMBSTONE:
+							break;
+						case EntityID.TileID.BED:
+						case EntityID.TileID.BATHTUB:
+							break;
+						case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 							{
-								int num22 = -1;
-								int num23 = -1;
-								int num24 = -1;
-								int num25 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
+								int num8 = -1;
+								int num9 = -1;
+								if (ptr[-1].IsActive != 0)
 								{
-									num23 = Main.TileSet[i, j - 1].Type;
+									num9 = ptr[-1].Type;
 								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
+								if (ptr[1].IsActive != 0)
 								{
-									num22 = Main.TileSet[i, j + 1].Type;
+									num8 = ptr[1].Type;
 								}
-								if (Main.TileSet[i - 1, j].IsActive != 0)
-								{
-									num24 = Main.TileSet[i - 1, j].Type;
-								}
-								if (Main.TileSet[i + 1, j].IsActive != 0)
-								{
-									num25 = Main.TileSet[i + 1, j].Type;
-								}
-								if (num24 != -1 || num23 != -1 || num25 != -1)
+								if (num8 != num && num8 != (int)EntityID.TileID.MUSHROOM_GRASS)
 								{
 									KillTile(i, j);
 								}
-								else if (num22 < 0 || !Main.TileSolid[num22])
+								else if (num9 != num && ptr->FrameX == 0)
 								{
-									KillTile(i, j);
-								}
-								return;
-							}
-					}
-					switch (num)
-					{
-						case 72:
-							{
-								int num26 = -1;
-								int num27 = -1;
-								if (Main.TileSet[i, j - 1].IsActive != 0)
-								{
-									num27 = Main.TileSet[i, j - 1].Type;
-								}
-								if (Main.TileSet[i, j + 1].IsActive != 0)
-								{
-									num26 = Main.TileSet[i, j + 1].Type;
-								}
-								if (num26 != num && num26 != 70)
-								{
-									KillTile(i, j);
-								}
-								else if (num27 != num && Main.TileSet[i, j].FrameX == 0)
-								{
-									Main.TileSet[i, j].frameNumber = (byte)genRand.Next(3);
-									if (Main.TileSet[i, j].frameNumber == 0)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 0;
-									}
-									if (Main.TileSet[i, j].frameNumber == 1)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 18;
-									}
-									if (Main.TileSet[i, j].frameNumber == 2)
-									{
-										Main.TileSet[i, j].FrameX = 18;
-										Main.TileSet[i, j].FrameY = 36;
-									}
+									ptr->frameNumber = (byte)genRand.Next(3);
+									ptr->FrameX = 18;
+									ptr->FrameY = (short)(18 * ptr->frameNumber);
 								}
 								break;
 							}
-						case 5:
-							break;
+						case EntityID.TileID.CORAL:
+							{
+								int num4 = -1;
+								int num5 = -1;
+								int num6 = -1;
+								int num7 = -1;
+								if (ptr[-1].IsActive != 0)
+								{
+									num5 = ptr[-1].Type;
+								}
+								if (ptr[1].IsActive != 0)
+								{
+									num4 = ptr[1].Type;
+								}
+								if (ptr[-Main.LargeWorldH].IsActive != 0)
+								{
+									num6 = ptr[-Main.LargeWorldH].Type;
+								}
+								if (ptr[Main.LargeWorldH].IsActive != 0)
+								{
+									num7 = ptr[Main.LargeWorldH].Type;
+								}
+								if (num6 != -1 || num5 != -1 || num7 != -1)
+								{
+									KillTile(i, j);
+								}
+								else if (num4 < 0 || !Main.TileSolid[num4])
+								{
+									KillTile(i, j);
+								}
+								break;
+							}
 					}
 					return;
 				}
-				int num28 = -1;
-				int num29 = -1;
-				int num30 = -1;
-				int num31 = -1;
-				int num32 = -1;
-				int num33 = -1;
-				int num34 = -1;
-				int num35 = -1;
-				if (Main.TileSet[i - 1, j].IsActive != 0)
+				int num31 = (int)EntityID.TileID.NONE;
+				int num32 = (int)EntityID.TileID.NONE;
+				int num33 = (int)EntityID.TileID.NONE;
+				int num34 = (int)EntityID.TileID.NONE;
+				int num35 = (int)EntityID.TileID.NONE;
+				int num36 = (int)EntityID.TileID.NONE;
+				int num37 = (int)EntityID.TileID.NONE;
+				int num38 = (int)EntityID.TileID.NONE;
+				if (ptr[-Main.LargeWorldH].IsActive != 0)
 				{
-					num31 = (Main.TileStone[Main.TileSet[i - 1, j].Type] ? 1 : Main.TileSet[i - 1, j].Type);
+					int type = ptr[-Main.LargeWorldH].Type;
+					num34 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j].IsActive != 0)
+				if (ptr[Main.LargeWorldH].IsActive != 0)
 				{
-					num32 = (Main.TileStone[Main.TileSet[i + 1, j].Type] ? 1 : Main.TileSet[i + 1, j].Type);
+					int type = ptr[Main.LargeWorldH].Type;
+					num35 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i, j - 1].IsActive != 0)
+				if (ptr[-1].IsActive != 0)
 				{
-					num29 = (Main.TileStone[Main.TileSet[i, j - 1].Type] ? 1 : Main.TileSet[i, j - 1].Type);
+					int type = ptr[-1].Type;
+					num32 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i, j + 1].IsActive != 0)
+				if (ptr[1].IsActive != 0)
 				{
-					num34 = (Main.TileStone[Main.TileSet[i, j + 1].Type] ? 1 : Main.TileSet[i, j + 1].Type);
+					int type = ptr[1].Type;
+					num37 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i - 1, j - 1].IsActive != 0)
+				if (ptr[-Main.LargeWorldH - 1].IsActive != 0)
 				{
-					num28 = (Main.TileStone[Main.TileSet[i - 1, j - 1].Type] ? 1 : Main.TileSet[i - 1, j - 1].Type);
+					int type = ptr[-Main.LargeWorldH - 1].Type;
+					num31 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j - 1].IsActive != 0)
+				if (ptr[Main.LargeWorldH - 1].IsActive != 0)
 				{
-					num30 = (Main.TileStone[Main.TileSet[i + 1, j - 1].Type] ? 1 : Main.TileSet[i + 1, j - 1].Type);
+					int type = ptr[Main.LargeWorldH - 1].Type;
+					num33 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i - 1, j + 1].IsActive != 0)
+				if (ptr[-Main.LargeWorldH + 1].IsActive != 0)
 				{
-					num33 = (Main.TileStone[Main.TileSet[i - 1, j + 1].Type] ? 1 : Main.TileSet[i - 1, j + 1].Type);
+					int type = ptr[-Main.LargeWorldH + 1].Type;
+					num36 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (Main.TileSet[i + 1, j + 1].IsActive != 0)
+				if (ptr[Main.LargeWorldH + 1].IsActive != 0)
 				{
-					num35 = (Main.TileStone[Main.TileSet[i + 1, j + 1].Type] ? 1 : Main.TileSet[i + 1, j + 1].Type);
+					int type = ptr[Main.LargeWorldH + 1].Type;
+					num38 = (Main.TileStone[type] ? (int)EntityID.TileID.STONE : type);
 				}
-				if (!Main.TileSolid[num])
+				switch ((EntityID.TileID)num)
 				{
-					switch (num)
-					{
-						case 49:
-							return;
-						case 80:
-							CactusFrame(i, j);
-							return;
-					}
-				}
-				else if (num == 19)
-				{
-					if (num32 >= 0 && !Main.TileSolid[num32])
-					{
-						num32 = -1;
-					}
-					if (num31 >= 0 && !Main.TileSolid[num31])
-					{
-						num31 = -1;
-					}
-					if (num31 == num && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
+					case EntityID.TileID.PLATFORM:
+						if (num35 >= 0 && !Main.TileSolid[num35])
 						{
-							rectangle.X = 0;
-							rectangle.Y = 0;
+							num35 = -1;
 						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
+						if (num34 >= 0 && !Main.TileSolid[num34])
 						{
-							rectangle.X = 0;
-							rectangle.Y = 18;
+							num34 = -1;
 						}
-						else
-						{
-							rectangle.X = 0;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == num && num32 == -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 18;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 18;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 18;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == -1 && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 36;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 36;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 36;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 != num && num32 == num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 54;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 54;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 54;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == num && num32 != num)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 72;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 72;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 72;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 != num && num31 != -1 && num32 == -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 108;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 108;
-							rectangle.Y = 36;
-						}
-					}
-					else if (num31 == -1 && num32 != num && num32 != -1)
-					{
-						if (Main.TileSet[i, j].frameNumber == 0)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 0;
-						}
-						else if (Main.TileSet[i, j].frameNumber == 1)
-						{
-							rectangle.X = 126;
-							rectangle.Y = 18;
-						}
-						else
-						{
-							rectangle.X = 126;
-							rectangle.Y = 36;
-						}
-					}
-					else if (Main.TileSet[i, j].frameNumber == 0)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 0;
-					}
-					else if (Main.TileSet[i, j].frameNumber == 1)
-					{
-						rectangle.X = 90;
-						rectangle.Y = 18;
-					}
-					else
-					{
-						rectangle.X = 90;
-						rectangle.Y = 36;
-					}
+						num2 = ((num34 == num) ? ((num35 != num) ? ((num35 >= 0) ? 72 : 18) : 0) : ((num34 < 0) ? ((num35 == num) ? 36 : ((num35 <= 0) ? 90 : 126)) : ((num35 == num) ? 54 : ((num35 >= 0) ? 90 : 108))));
+						num3 = 18 * ptr->frameNumber;
+						break;
+					case EntityID.TileID.CACTUS:
+						CactusFrame(i, j);
+						return;
+					case EntityID.TileID.WATER_CANDLE:
+						return;
 				}
 				mergeUp2 = false;
 				mergeDown2 = false;
@@ -25613,3275 +23147,1611 @@ namespace Terraria
 				if (frameNumber < 0)
 				{
 					frameNumber = genRand.Next(3);
-					Main.TileSet[i, j].frameNumber = (byte)frameNumber;
+					ptr->frameNumber = (byte)frameNumber;
 				}
 				else
 				{
-					frameNumber = Main.TileSet[i, j].frameNumber;
+					frameNumber = ptr->frameNumber;
 				}
-				if (num == 0)
+				if (num == (int)EntityID.TileID.DIRT)
 				{
-					if (num29 >= 0 && Main.TileMergeDirt[num29])
+					if (num32 >= 0 && Main.TileMergeDirt[num32])
 					{
 						TileFrameNoLiquid(i, j - 1);
 						if (mergeDown2)
 						{
-							num29 = num;
+							num32 = num;
 						}
 					}
-					if (num34 >= 0 && Main.TileMergeDirt[num34])
+					if (num37 >= 0 && Main.TileMergeDirt[num37])
 					{
 						TileFrameNoLiquid(i, j + 1);
 						if (mergeUp2)
 						{
-							num34 = num;
+							num37 = num;
 						}
 					}
-					if (num31 >= 0 && Main.TileMergeDirt[num31])
+					if (num34 >= 0 && Main.TileMergeDirt[num34])
 					{
 						TileFrameNoLiquid(i - 1, j);
 						if (mergeRight2)
 						{
-							num31 = num;
+							num34 = num;
 						}
 					}
-					if (num32 >= 0 && Main.TileMergeDirt[num32])
+					if (num35 >= 0 && Main.TileMergeDirt[num35])
 					{
 						TileFrameNoLiquid(i + 1, j);
 						if (mergeLeft2)
 						{
-							num32 = num;
+							num35 = num;
 						}
 					}
-					if (num29 == 2 || num29 == 23 || num29 == 109)
-					{
-						num29 = num;
-					}
-					if (num34 == 2 || num34 == 23 || num34 == 109)
-					{
-						num34 = num;
-					}
-					if (num31 == 2 || num31 == 23 || num31 == 109)
-					{
-						num31 = num;
-					}
-					if (num32 == 2 || num32 == 23 || num32 == 109)
+					if (num32 == (int)EntityID.TileID.GRASS || num32 == (int)EntityID.TileID.CORRUPT_GRASS || num32 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
 						num32 = num;
 					}
-					if (num28 >= 0 && Main.TileMergeDirt[num28])
+					if (num37 == (int)EntityID.TileID.GRASS || num37 == (int)EntityID.TileID.CORRUPT_GRASS || num37 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num28 = num;
+						num37 = num;
 					}
-					else if (num28 == 2 || num28 == 23 || num28 == 109)
+					if (num34 == (int)EntityID.TileID.GRASS || num34 == (int)EntityID.TileID.CORRUPT_GRASS || num34 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num28 = num;
+						num34 = num;
 					}
-					if (num30 >= 0 && Main.TileMergeDirt[num30])
+					if (num35 == (int)EntityID.TileID.GRASS || num35 == (int)EntityID.TileID.CORRUPT_GRASS || num35 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num30 = num;
+						num35 = num;
 					}
-					else if (num30 == 2 || num30 == 23 || num30 == 109)
+					if (num31 >= (int)EntityID.TileID.DIRT && Main.TileMergeDirt[num31])
 					{
-						num30 = num;
+						num31 = num;
+					}
+					else if (num31 == (int)EntityID.TileID.GRASS || num31 == (int)EntityID.TileID.CORRUPT_GRASS || num31 == (int)EntityID.TileID.HALLOWED_GRASS)
+					{
+						num31 = num;
 					}
 					if (num33 >= 0 && Main.TileMergeDirt[num33])
 					{
 						num33 = num;
 					}
-					else if (num33 == 2 || num33 == 23 || num30 == 109)
+					else if (num33 == (int)EntityID.TileID.GRASS || num33 == (int)EntityID.TileID.CORRUPT_GRASS || num33 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
 						num33 = num;
 					}
-					if (num35 >= 0 && Main.TileMergeDirt[num35])
+					if (num36 >= 0 && Main.TileMergeDirt[num36])
 					{
-						num35 = num;
+						num36 = num;
 					}
-					else if (num35 == 2 || num35 == 23 || num35 == 109)
+					else if (num36 == (int)EntityID.TileID.GRASS || num36 == (int)EntityID.TileID.CORRUPT_GRASS || num33 == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						num35 = num;
+						num36 = num;
 					}
-					if ((double)j < Main.RockLayer)
+					if (num38 >= (int)EntityID.TileID.DIRT && Main.TileMergeDirt[num38])
 					{
-						if (num29 == 59)
+						num38 = num;
+					}
+					else if (num38 == (int)EntityID.TileID.GRASS || num38 == (int)EntityID.TileID.CORRUPT_GRASS || num38 == (int)EntityID.TileID.HALLOWED_GRASS)
+					{
+						num38 = num;
+					}
+					if (j < Main.RockLayer)
+					{
+						if (num32 == (int)EntityID.TileID.MUD)
 						{
-							num29 = -2;
+							num32 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num34 == 59)
+						if (num37 == (int)EntityID.TileID.MUD)
 						{
-							num34 = -2;
+							num37 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num31 == 59)
+						if (num34 == (int)EntityID.TileID.MUD)
 						{
-							num31 = -2;
+							num34 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num32 == 59)
+						if (num35 == (int)EntityID.TileID.MUD)
 						{
-							num32 = -2;
+							num35 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num28 == 59)
+						if (num31 == (int)EntityID.TileID.MUD)
 						{
-							num28 = -2;
+							num31 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num30 == 59)
+						if (num33 == (int)EntityID.TileID.MUD)
 						{
-							num30 = -2;
+							num33 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num33 == 59)
+						if (num36 == (int)EntityID.TileID.MUD)
 						{
-							num33 = -2;
+							num36 = (int)EntityID.TileID.LIQUID;
 						}
-						if (num35 == 59)
+						if (num38 == (int)EntityID.TileID.MUD)
 						{
-							num35 = -2;
+							num38 = (int)EntityID.TileID.LIQUID;
 						}
 					}
 				}
 				else if (Main.TileMergeDirt[num])
 				{
-					if (num29 == 0)
+					if (num32 == (int)EntityID.TileID.DIRT)
 					{
-						num29 = -2;
+						num32 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num34 == 0)
+					if (num37 == (int)EntityID.TileID.DIRT)
 					{
-						num34 = -2;
+						num37 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num31 == 0)
+					if (num34 == (int)EntityID.TileID.DIRT)
 					{
-						num31 = -2;
+						num34 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num32 == 0)
+					if (num35 == (int)EntityID.TileID.DIRT)
 					{
-						num32 = -2;
+						num35 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num28 == 0)
+					if (num31 == (int)EntityID.TileID.DIRT)
 					{
-						num28 = -2;
+						num31 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num30 == 0)
+					if (num33 == (int)EntityID.TileID.DIRT)
 					{
-						num30 = -2;
+						num33 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num33 == 0)
+					if (num36 == (int)EntityID.TileID.DIRT)
 					{
-						num33 = -2;
+						num36 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num35 == 0)
+					if (num38 == (int)EntityID.TileID.DIRT)
 					{
-						num35 = -2;
+						num38 = (int)EntityID.TileID.LIQUID;
 					}
-					if (num == 1)
+					if (num == (int)EntityID.TileID.STONE)
 					{
-						if ((double)j > Main.RockLayer)
+						if (j > Main.RockLayer)
 						{
-							if (num29 == 59)
+							if (num32 == (int)EntityID.TileID.MUD)
 							{
 								TileFrameNoLiquid(i, j - 1);
 								if (mergeDown2)
 								{
-									num29 = num;
+									num32 = num;
 								}
 							}
-							if (num34 == 59)
+							if (num37 == (int)EntityID.TileID.MUD)
 							{
 								TileFrameNoLiquid(i, j + 1);
 								if (mergeUp2)
 								{
-									num34 = num;
+									num37 = num;
 								}
 							}
-							if (num31 == 59)
+							if (num34 == (int)EntityID.TileID.MUD)
 							{
 								TileFrameNoLiquid(i - 1, j);
 								if (mergeRight2)
 								{
-									num31 = num;
+									num34 = num;
 								}
 							}
-							if (num32 == 59)
+							if (num35 == (int)EntityID.TileID.MUD)
 							{
 								TileFrameNoLiquid(i + 1, j);
 								if (mergeLeft2)
 								{
-									num32 = num;
+									num35 = num;
 								}
 							}
-							if (num28 == 59)
+							if (num31 == (int)EntityID.TileID.MUD)
 							{
-								num28 = num;
+								num31 = num;
 							}
-							if (num30 == 59)
-							{
-								num30 = num;
-							}
-							if (num33 == 59)
+							if (num33 == (int)EntityID.TileID.MUD)
 							{
 								num33 = num;
 							}
-							if (num35 == 59)
+							if (num36 == (int)EntityID.TileID.MUD)
 							{
-								num35 = num;
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.MUD)
+							{
+								num38 = num;
 							}
 						}
-						if (num29 == 57)
+						if (num32 == (int)EntityID.TileID.ASH)
 						{
 							TileFrameNoLiquid(i, j - 1);
 							if (mergeDown2)
 							{
-								num29 = num;
+								num32 = num;
 							}
 						}
-						if (num34 == 57)
+						if (num37 == (int)EntityID.TileID.ASH)
 						{
 							TileFrameNoLiquid(i, j + 1);
 							if (mergeUp2)
 							{
-								num34 = num;
+								num37 = num;
 							}
 						}
-						if (num31 == 57)
+						if (num34 == (int)EntityID.TileID.ASH)
 						{
 							TileFrameNoLiquid(i - 1, j);
 							if (mergeRight2)
 							{
-								num31 = num;
+								num34 = num;
 							}
 						}
-						if (num32 == 57)
+						if (num35 == (int)EntityID.TileID.ASH)
 						{
 							TileFrameNoLiquid(i + 1, j);
 							if (mergeLeft2)
 							{
-								num32 = num;
+								num35 = num;
 							}
 						}
-						if (num28 == 57)
+						if (num31 == (int)EntityID.TileID.ASH)
 						{
-							num28 = num;
+							num31 = num;
 						}
-						if (num30 == 57)
-						{
-							num30 = num;
-						}
-						if (num33 == 57)
+						if (num33 == (int)EntityID.TileID.ASH)
 						{
 							num33 = num;
 						}
-						if (num35 == 57)
+						if (num36 == (int)EntityID.TileID.ASH)
 						{
-							num35 = num;
+							num36 = num;
+						}
+						if (num38 == (int)EntityID.TileID.ASH)
+						{
+							num38 = num;
 						}
 					}
 				}
 				else
 				{
-					switch (num)
+					switch ((EntityID.TileID)num)
 					{
-						case 58:
-						case 75:
-						case 76:
-							if (num29 == 57)
+						case EntityID.TileID.HELLSTONE:
+						case EntityID.TileID.OBSIDIAN_BRICK:
+						case EntityID.TileID.HELLSTONE_BRICK:
+							if (num32 == (int)EntityID.TileID.ASH)
 							{
-								num29 = -2;
+								num32 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num34 == 57)
+							if (num37 == (int)EntityID.TileID.ASH)
 							{
-								num34 = -2;
+								num37 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num31 == 57)
+							if (num34 == (int)EntityID.TileID.ASH)
 							{
-								num31 = -2;
+								num34 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num32 == 57)
+							if (num35 == (int)EntityID.TileID.ASH)
 							{
-								num32 = -2;
+								num35 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num28 == 57)
+							if (num31 == (int)EntityID.TileID.ASH)
 							{
-								num28 = -2;
+								num31 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num30 == 57)
+							if (num33 == (int)EntityID.TileID.ASH)
 							{
-								num30 = -2;
+								num33 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num33 == 57)
+							if (num36 == (int)EntityID.TileID.ASH)
 							{
-								num33 = -2;
+								num36 = (int)EntityID.TileID.LIQUID;
 							}
-							if (num35 == 57)
+							if (num38 == (int)EntityID.TileID.ASH)
 							{
-								num35 = -2;
+								num38 = (int)EntityID.TileID.LIQUID;
 							}
 							break;
-						case 59:
-							if ((double)j > Main.RockLayer)
+						case EntityID.TileID.MUD:
+							if (j > Main.RockLayer)
 							{
-								if (num29 == 1)
+								if (num32 == (int)EntityID.TileID.STONE)
 								{
-									num29 = -2;
+									num32 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num34 == 1)
+								if (num37 == (int)EntityID.TileID.STONE)
 								{
-									num34 = -2;
+									num37 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num31 == 1)
+								if (num34 == (int)EntityID.TileID.STONE)
 								{
-									num31 = -2;
+									num34 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num32 == 1)
+								if (num35 == (int)EntityID.TileID.STONE)
 								{
-									num32 = -2;
+									num35 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num28 == 1)
+								if (num31 == (int)EntityID.TileID.STONE)
 								{
-									num28 = -2;
+									num31 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num30 == 1)
+								if (num33 == (int)EntityID.TileID.STONE)
 								{
-									num30 = -2;
+									num33 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num33 == 1)
+								if (num36 == (int)EntityID.TileID.STONE)
 								{
-									num33 = -2;
+									num36 = (int)EntityID.TileID.LIQUID;
 								}
-								if (num35 == 1)
+								if (num38 == (int)EntityID.TileID.STONE)
 								{
-									num35 = -2;
+									num38 = (int)EntityID.TileID.LIQUID;
 								}
 							}
-							if (num29 == 60)
-							{
-								num29 = num;
-							}
-							if (num34 == 60)
-							{
-								num34 = num;
-							}
-							if (num31 == 60)
-							{
-								num31 = num;
-							}
-							if (num32 == 60)
+							if (num32 == (int)EntityID.TileID.JUNGLE_GRASS || num32 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num32 = num;
 							}
-							if (num28 == 60)
+							if (num37 == (int)EntityID.TileID.JUNGLE_GRASS || num37 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
-								num28 = num;
+								num37 = num;
 							}
-							if (num30 == 60)
-							{
-								num30 = num;
-							}
-							if (num33 == 60)
-							{
-								num33 = num;
-							}
-							if (num35 == 60)
-							{
-								num35 = num;
-							}
-							if (num29 == 70)
-							{
-								num29 = num;
-							}
-							if (num34 == 70)
+							if (num34 == (int)EntityID.TileID.JUNGLE_GRASS || num34 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num34 = num;
 							}
-							if (num31 == 70)
+							if (num35 == (int)EntityID.TileID.JUNGLE_GRASS || num35 == (int)EntityID.TileID.MUSHROOM_GRASS)
+							{
+								num35 = num;
+							}
+							if (num31 == (int)EntityID.TileID.JUNGLE_GRASS || num31 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num31 = num;
 							}
-							if (num32 == 70)
-							{
-								num32 = num;
-							}
-							if (num28 == 70)
-							{
-								num28 = num;
-							}
-							if (num30 == 70)
-							{
-								num30 = num;
-							}
-							if (num33 == 70)
+							if (num33 == (int)EntityID.TileID.JUNGLE_GRASS || num33 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
 								num33 = num;
 							}
-							if (num35 == 70)
+							if (num36 == (int)EntityID.TileID.JUNGLE_GRASS || num36 == (int)EntityID.TileID.MUSHROOM_GRASS)
 							{
-								num35 = num;
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.JUNGLE_GRASS || num38 == (int)EntityID.TileID.MUSHROOM_GRASS)
+							{
+								num38 = num;
 							}
 							if (j >= Main.RockLayer)
 							{
 								break;
 							}
-							if (num29 == 0)
+							if (num32 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrameNoLiquid(i, j - 1);
 								if (mergeDown2)
 								{
-									num29 = num;
+									num32 = num;
 								}
 							}
-							if (num34 == 0)
+							if (num37 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrameNoLiquid(i, j + 1);
 								if (mergeUp2)
 								{
-									num34 = num;
+									num37 = num;
 								}
 							}
-							if (num31 == 0)
+							if (num34 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrameNoLiquid(i - 1, j);
 								if (mergeRight2)
 								{
-									num31 = num;
-								}
-							}
-							if (num32 == 0)
-							{
-								TileFrameNoLiquid(i + 1, j);
-								if (mergeLeft2)
-								{
-									num32 = num;
-								}
-							}
-							if (num28 == 0)
-							{
-								num28 = num;
-							}
-							if (num30 == 0)
-							{
-								num30 = num;
-							}
-							if (num33 == 0)
-							{
-								num33 = num;
-							}
-							if (num35 == 0)
-							{
-								num35 = num;
-							}
-							break;
-						case 57:
-							if (num29 == 1)
-							{
-								num29 = -2;
-							}
-							if (num34 == 1)
-							{
-								num34 = -2;
-							}
-							if (num31 == 1)
-							{
-								num31 = -2;
-							}
-							if (num32 == 1)
-							{
-								num32 = -2;
-							}
-							if (num28 == 1)
-							{
-								num28 = -2;
-							}
-							if (num30 == 1)
-							{
-								num30 = -2;
-							}
-							if (num33 == 1)
-							{
-								num33 = -2;
-							}
-							if (num35 == 1)
-							{
-								num35 = -2;
-							}
-							if (num29 == 58 || num29 == 76 || num29 == 75)
-							{
-								TileFrameNoLiquid(i, j - 1);
-								if (mergeDown2)
-								{
-									num29 = num;
-								}
-							}
-							if (num34 == 58 || num34 == 76 || num34 == 75)
-							{
-								TileFrameNoLiquid(i, j + 1);
-								if (mergeUp2)
-								{
 									num34 = num;
 								}
 							}
-							if (num31 == 58 || num31 == 76 || num31 == 75)
-							{
-								TileFrameNoLiquid(i - 1, j);
-								if (mergeRight2)
-								{
-									num31 = num;
-								}
-							}
-							if (num32 == 58 || num32 == 76 || num32 == 75)
+							if (num35 == (int)EntityID.TileID.DIRT)
 							{
 								TileFrameNoLiquid(i + 1, j);
 								if (mergeLeft2)
 								{
-									num32 = num;
+									num35 = num;
 								}
 							}
-							if (num28 == 58 || num28 == 76 || num28 == 75)
-							{
-								num28 = num;
-							}
-							if (num30 == 58 || num30 == 76 || num30 == 75)
-							{
-								num30 = num;
-							}
-							if (num33 == 58 || num33 == 76 || num33 == 75)
-							{
-								num33 = num;
-							}
-							if (num35 == 58 || num35 == 76 || num35 == 75)
-							{
-								num35 = num;
-							}
-							break;
-						case 32:
-							if (num34 == 23)
-							{
-								num34 = num;
-							}
-							break;
-						case 69:
-							if (num34 == 60)
-							{
-								num34 = num;
-							}
-							break;
-						case 51:
-							if (num29 > -1 && !Main.TileNoAttach[num29])
-							{
-								num29 = num;
-							}
-							if (num34 > -1 && !Main.TileNoAttach[num34])
-							{
-								num34 = num;
-							}
-							if (num31 > -1 && !Main.TileNoAttach[num31])
+							if (num31 == (int)EntityID.TileID.DIRT)
 							{
 								num31 = num;
 							}
-							if (num32 > -1 && !Main.TileNoAttach[num32])
-							{
-								num32 = num;
-							}
-							if (num28 > -1 && !Main.TileNoAttach[num28])
-							{
-								num28 = num;
-							}
-							if (num30 > -1 && !Main.TileNoAttach[num30])
-							{
-								num30 = num;
-							}
-							if (num33 > -1 && !Main.TileNoAttach[num33])
+							if (num33 == (int)EntityID.TileID.DIRT)
 							{
 								num33 = num;
 							}
-							if (num35 > -1 && !Main.TileNoAttach[num35])
+							if (num36 == (int)EntityID.TileID.DIRT)
+							{
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.DIRT)
+							{
+								num38 = num;
+							}
+							break;
+						case EntityID.TileID.ASH:
+							if (num32 == (int)EntityID.TileID.STONE)
+							{
+								num32 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num37 == (int)EntityID.TileID.STONE)
+							{
+								num37 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num34 == (int)EntityID.TileID.STONE)
+							{
+								num34 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num35 == (int)EntityID.TileID.STONE)
+							{
+								num35 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num31 == (int)EntityID.TileID.STONE)
+							{
+								num31 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num33 == (int)EntityID.TileID.STONE)
+							{
+								num33 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num36 == (int)EntityID.TileID.STONE)
+							{
+								num36 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num38 == (int)EntityID.TileID.STONE)
+							{
+								num38 = (int)EntityID.TileID.LIQUID;
+							}
+							if (num32 == (int)EntityID.TileID.HELLSTONE || num32 == (int)EntityID.TileID.HELLSTONE_BRICK || num32 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrameNoLiquid(i, j - 1);
+								if (mergeDown2)
+								{
+									num32 = num;
+								}
+							}
+							if (num37 == (int)EntityID.TileID.HELLSTONE || num37 == (int)EntityID.TileID.HELLSTONE_BRICK || num37 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrameNoLiquid(i, j + 1);
+								if (mergeUp2)
+								{
+									num37 = num;
+								}
+							}
+							if (num34 == (int)EntityID.TileID.HELLSTONE || num34 == (int)EntityID.TileID.HELLSTONE_BRICK || num34 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrameNoLiquid(i - 1, j);
+								if (mergeRight2)
+								{
+									num34 = num;
+								}
+							}
+							if (num35 == (int)EntityID.TileID.HELLSTONE || num35 == (int)EntityID.TileID.HELLSTONE_BRICK || num35 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								TileFrameNoLiquid(i + 1, j);
+								if (mergeLeft2)
+								{
+									num35 = num;
+								}
+							}
+							if (num31 == (int)EntityID.TileID.HELLSTONE || num31 == (int)EntityID.TileID.HELLSTONE_BRICK || num31 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num31 = num;
+							}
+							if (num33 == (int)EntityID.TileID.HELLSTONE || num33 == (int)EntityID.TileID.HELLSTONE_BRICK || num33 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num33 = num;
+							}
+							if (num36 == (int)EntityID.TileID.HELLSTONE || num36 == (int)EntityID.TileID.HELLSTONE_BRICK || num36 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num36 = num;
+							}
+							if (num38 == (int)EntityID.TileID.HELLSTONE || num38 == (int)EntityID.TileID.HELLSTONE_BRICK || num38 == (int)EntityID.TileID.OBSIDIAN_BRICK)
+							{
+								num38 = num;
+							}
+							break;
+						case EntityID.TileID.CORRUPTION_THORN:
+							if (num37 == (int)EntityID.TileID.CORRUPT_GRASS)
+							{
+								num37 = num;
+							}
+							break;
+						case EntityID.TileID.JUNGLE_THORN:
+							if (num37 == (int)EntityID.TileID.JUNGLE_GRASS)
+							{
+								num37 = num;
+							}
+							break;
+						case EntityID.TileID.COBWEB:
+							if (num32 >= 0 && !Main.TileNoAttach[num32])
+							{
+								num32 = num;
+							}
+							if (num37 >= 0 && !Main.TileNoAttach[num37])
+							{
+								num37 = num;
+							}
+							if (num34 >= 0 && !Main.TileNoAttach[num34])
+							{
+								num34 = num;
+							}
+							if (num35 >= 0 && !Main.TileNoAttach[num35])
 							{
 								num35 = num;
+							}
+							if (num31 >= 0 && !Main.TileNoAttach[num31])
+							{
+								num31 = num;
+							}
+							if (num33 >= 0 && !Main.TileNoAttach[num33])
+							{
+								num33 = num;
+							}
+							if (num36 >= 0 && !Main.TileNoAttach[num36])
+							{
+								num36 = num;
+							}
+							if (num38 >= 0 && !Main.TileNoAttach[num38])
+							{
+								num38 = num;
 							}
 							break;
 					}
 				}
 				bool flag3 = false;
-				if (num == 2 || num == 23 || num == 60 || num == 70 || num == 109)
+				if (num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.CORRUPT_GRASS || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS)
 				{
 					flag3 = true;
-					if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+					if (num32 >= 0 && num32 != num && !Main.TileSolid[num32])
 					{
-						num29 = -1;
+						num32 = (int)EntityID.TileID.NONE;
 					}
-					if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+					if (num37 >= 0 && num37 != num && !Main.TileSolid[num37])
 					{
-						num34 = -1;
+						num37 = (int)EntityID.TileID.NONE;
 					}
-					if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+					if (num34 >= 0 && num34 != num && !Main.TileSolid[num34])
 					{
-						num31 = -1;
+						num34 = (int)EntityID.TileID.NONE;
 					}
-					if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+					if (num35 >= 0 && num35 != num && !Main.TileSolid[num35])
 					{
-						num32 = -1;
+						num35 = (int)EntityID.TileID.NONE;
 					}
-					if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
+					if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 					{
-						num28 = -1;
+						num31 = (int)EntityID.TileID.NONE;
 					}
-					if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
+					if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 					{
-						num30 = -1;
+						num33 = (int)EntityID.TileID.NONE;
 					}
-					if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
+					if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 					{
-						num33 = -1;
+						num36 = (int)EntityID.TileID.NONE;
 					}
-					if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
+					if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 					{
-						num35 = -1;
+						num38 = (int)EntityID.TileID.NONE;
 					}
-					int num37 = 0;
-					switch (num)
+					int num39 = 0;
+					switch ((EntityID.TileID)num)
 					{
-						case 60:
-						case 70:
-							num37 = 59;
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.MUSHROOM_GRASS:
+							num39 = (int)EntityID.TileID.MUD;
 							break;
-						case 2:
-							if (num29 == 23)
+						case EntityID.TileID.GRASS:
+							if (num32 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num29 = num37;
+								num32 = num39;
 							}
-							if (num34 == 23)
+							if (num37 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num34 = num37;
+								num37 = num39;
 							}
-							if (num31 == 23)
+							if (num34 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num31 = num37;
+								num34 = num39;
 							}
-							if (num32 == 23)
+							if (num35 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num32 = num37;
+								num35 = num39;
 							}
-							if (num28 == 23)
+							if (num31 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num28 = num37;
+								num31 = num39;
 							}
-							if (num30 == 23)
+							if (num33 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num30 = num37;
+								num33 = num39;
 							}
-							if (num33 == 23)
+							if (num36 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num33 = num37;
+								num36 = num39;
 							}
-							if (num35 == 23)
+							if (num38 == (int)EntityID.TileID.CORRUPT_GRASS)
 							{
-								num35 = num37;
-							}
-							break;
-						case 23:
-							if (num29 == 2)
-							{
-								num29 = num37;
-							}
-							if (num34 == 2)
-							{
-								num34 = num37;
-							}
-							if (num31 == 2)
-							{
-								num31 = num37;
-							}
-							if (num32 == 2)
-							{
-								num32 = num37;
-							}
-							if (num28 == 2)
-							{
-								num28 = num37;
-							}
-							if (num30 == 2)
-							{
-								num30 = num37;
-							}
-							if (num33 == 2)
-							{
-								num33 = num37;
-							}
-							if (num35 == 2)
-							{
-								num35 = num37;
+								num38 = num39;
 							}
 							break;
+						case EntityID.TileID.CORRUPT_GRASS:
+							if (num32 == (int)EntityID.TileID.GRASS)
+							{
+								num32 = num39;
+							}
+							if (num37 == (int)EntityID.TileID.GRASS)
+							{
+								num37 = num39;
+							}
+							if (num34 == (int)EntityID.TileID.GRASS)
+							{
+								num34 = num39;
+							}
+							if (num35 == (int)EntityID.TileID.GRASS)
+							{
+								num35 = num39;
+							}
+							if (num31 == (int)EntityID.TileID.GRASS)
+							{
+								num31 = num39;
+							}
+							if (num33 == (int)EntityID.TileID.GRASS)
+							{
+								num33 = num39;
+							}
+							if (num36 == (int)EntityID.TileID.GRASS)
+							{
+								num36 = num39;
+							}
+							if (num38 == (int)EntityID.TileID.GRASS)
+							{
+								num38 = num39;
+							}
+							break;
 					}
-					if (num29 != num && num29 != num37 && (num34 == num || num34 == num37))
+					if (num32 != num && num32 != num39 && (num37 == num || num37 == num39))
 					{
-						if (num31 == num37 && num32 == num)
+						if (num34 == num39 && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 198;
-									break;
-							}
+							num2 = 18 * frameNumber;
+							num3 = 198;
 						}
-						else if (num31 == num && num32 == num37)
+						else if (num34 == num && num35 == num39)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 198;
-									break;
-							}
-						}
-					}
-					else if (num34 != num && num34 != num37 && (num29 == num || num29 == num37))
-					{
-						if (num31 == num37 && num32 == num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 216;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 216;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 216;
-									break;
-							}
-						}
-						else if (num31 == num && num32 == num37)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 216;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 216;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 216;
-									break;
-							}
+							num2 = 54 + 18 * frameNumber;
+							num3 = 198;
 						}
 					}
-					else if (num31 != num && num31 != num37 && (num32 == num || num32 == num37))
+					else if (num37 != num && num37 != num39 && (num32 == num || num32 == num39))
 					{
-						if (num29 == num37 && num34 == num)
+						if (num34 == num39 && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 72;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 18 * frameNumber;
+							num3 = 216;
 						}
-						else if (num34 == num && num32 == num29)
+						else if (num34 == num && num35 == num39)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 72;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 54 + 18 * frameNumber;
+							num3 = 216;
 						}
 					}
-					else if (num32 != num && num32 != num37 && (num31 == num || num31 == num37))
+					else if (num34 != num && num34 != num39 && (num35 == num || num35 == num39))
 					{
-						if (num29 == num37 && num34 == num)
+						if (num32 == num39 && num37 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 90;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 72;
+							num3 = 144 + 18 * frameNumber;
 						}
-						else if (num34 == num && num32 == num29)
+						else if (num37 == num && num35 == num32)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 90;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 72;
+							num3 = 90 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num)
+					else if (num35 != num && num35 != num39 && (num34 == num || num34 == num39))
 					{
-						if (num28 != num && num30 != num && num33 != num && num35 != num)
+						if (num32 == num39 && num37 == num)
 						{
-							if (num35 == num37)
+							num2 = 90;
+							num3 = 144 + 18 * frameNumber;
+						}
+						else if (num37 == num && num35 == num32)
+						{
+							num2 = 90;
+							num3 = 90 + 18 * frameNumber;
+						}
+					}
+					else if (num32 == num && num37 == num && num34 == num && num35 == num)
+					{
+						if (num31 != num && num33 != num && num36 != num && num38 != num)
+						{
+							if (num38 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 324;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 324;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 324;
-										break;
-								}
+								num3 = 324;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num30 == num37)
+							else if (num33 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 342;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 342;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 342;
-										break;
-								}
+								num3 = 342;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num33 == num37)
+							else if (num36 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 360;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 360;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 360;
-										break;
-								}
+								num3 = 360;
+								num2 = 108 + 18 * frameNumber;
 							}
-							else if (num28 == num37)
+							else if (num31 == num39)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 378;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 378;
-										break;
-									default:
-										rectangle.X = 144;
-										rectangle.Y = 378;
-										break;
-								}
+								num3 = 378;
+								num2 = 108 + 18 * frameNumber;
 							}
 							else
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 144;
-										rectangle.Y = 234;
-										break;
-									case 1:
-										rectangle.X = 198;
-										rectangle.Y = 234;
-										break;
-									default:
-										rectangle.X = 252;
-										rectangle.Y = 234;
-										break;
-								}
+								num3 = 234;
+								num2 = 144 + 54 * frameNumber;
 							}
 						}
-						else if (num28 != num && num35 != num)
+						else if (num31 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 306;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 306;
-									break;
-								default:
-									rectangle.X = 72;
-									rectangle.Y = 306;
-									break;
-							}
+							num3 = 306;
+							num2 = 36 + 18 * frameNumber;
 						}
-						else if (num30 != num && num33 != num)
+						else if (num33 != num && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 90;
-									rectangle.Y = 306;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 306;
-									break;
-								default:
-									rectangle.X = 126;
-									rectangle.Y = 306;
-									break;
-							}
+							num3 = 306;
+							num2 = 90 + 18 * frameNumber;
 						}
-						else if (num28 != num && num30 == num && num33 == num && num35 == num)
+						else if (num31 != num && num33 == num && num36 == num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 != num && num33 == num && num35 == num)
+						else if (num31 == num && num33 != num && num36 == num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 == num && num33 != num && num35 == num)
+						else if (num31 == num && num33 == num && num36 != num && num38 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
 						}
-						else if (num28 == num && num30 == num && num33 == num && num35 != num)
+						else if (num31 == num && num33 == num && num36 == num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num37 && num31 == num && num32 == num && num28 == -1 && num30 == -1)
+					else if (num32 == num && num37 == num39 && num34 == num && num35 == num && num31 == (int)EntityID.TileID.NONE && num33 == (int)EntityID.TileID.NONE)
 					{
-						switch (frameNumber)
+						num3 = 18;
+						num2 = 108 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num && num34 == num && num35 == num && num36 == (int)EntityID.TileID.NONE && num38 == (int)EntityID.TileID.NONE)
+					{
+						num3 = 36;
+						num2 = 108 + 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num && num34 == num39 && num35 == num && num33 == (int)EntityID.TileID.NONE && num38 == (int)EntityID.TileID.NONE)
+					{
+						num2 = 198;
+						num3 = 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num && num34 == num && num35 == num39 && num31 == (int)EntityID.TileID.NONE && num36 == (int)EntityID.TileID.NONE)
+					{
+						num2 = 180;
+						num3 = 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num39 && num34 == num && num35 == num)
+					{
+						if (num33 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 18;
-								break;
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
+						}
+						else if (num31 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num37 && num34 == num && num31 == num && num32 == num && num33 == -1 && num35 == -1)
+					else if (num32 == num39 && num37 == num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
+						if (num38 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 36;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 36;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 36;
-								break;
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num36 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num37 && num32 == num && num30 == -1 && num35 == -1)
+					else if (num32 == num && num37 == num && num34 == num && num35 == num39)
 					{
-						switch (frameNumber)
+						if (num31 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 198;
-								rectangle.Y = 36;
-								break;
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num36 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num37 && num28 == -1 && num33 == -1)
+					else if (num32 == num && num37 == num && num34 == num39 && num35 == num)
 					{
-						switch (frameNumber)
+						if (num33 != (int)EntityID.TileID.NONE)
 						{
-							case 0:
-								rectangle.X = 180;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 36;
-								break;
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num38 != (int)EntityID.TileID.NONE)
+						{
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num37 && num31 == num && num32 == num)
+					else if ((num32 == num39 && num37 == num && num34 == num && num35 == num) || (num32 == num && num37 == num39 && num34 == num && num35 == num) || (num32 == num && num37 == num && num34 == num39 && num35 == num) || (num32 == num && num37 == num && num34 == num && num35 == num39))
 					{
-						if (num30 != -1)
+						num3 = 18;
+						num2 = 18 + 18 * frameNumber;
+					}
+					if ((num32 == num || num32 == num39) && (num37 == num || num37 == num39) && (num34 == num || num34 == num39) && (num35 == num || num35 == num39))
+					{
+						if (num31 != num && num31 != num39 && (num33 == num || num33 == num39) && (num36 == num || num36 == num39) && (num38 == num || num38 == num39))
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 						}
-						else if (num28 != -1)
+						else if (num33 != num && num33 != num39 && (num31 == num || num31 == num39) && (num36 == num || num36 == num39) && (num38 == num || num38 == num39))
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
+						}
+						else if (num36 != num && num36 != num39 && (num31 == num || num31 == num39) && (num33 == num || num33 == num39) && (num38 == num || num38 == num39))
+						{
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
+						}
+						else if (num38 != num && num38 != num39 && (num31 == num || num31 == num39) && (num36 == num || num36 == num39) && (num33 == num || num33 == num39))
+						{
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 						}
 					}
-					else if (num29 == num37 && num34 == num && num31 == num && num32 == num)
+					if (num32 != num39 && num32 != num && num37 == num && num34 != num39 && num34 != num && num35 == num && num38 != num39 && num38 != num)
 					{
-						if (num35 != -1)
+						num3 = 270;
+						num2 = 90 + 18 * frameNumber;
+					}
+					else if (num32 != num39 && num32 != num && num37 == num && num34 == num && num35 != num39 && num35 != num && num36 != num39 && num36 != num)
+					{
+						num3 = 270;
+						num2 = 144 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && num32 == num && num34 != num39 && num34 != num && num35 == num && num33 != num39 && num33 != num)
+					{
+						num3 = 288;
+						num2 = 90 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && num32 == num && num34 == num && num35 != num39 && num35 != num && num31 != num39 && num31 != num)
+					{
+						num3 = 288;
+						num2 = 144 + 18 * frameNumber;
+					}
+					else if (num32 != num && num32 != num39 && num37 == num && num34 == num && num35 == num && num36 != num && num36 != num39 && num38 != num && num38 != num39)
+					{
+						num3 = 216;
+						num2 = 144 + 54 * frameNumber;
+					}
+					else if (num37 != num && num37 != num39 && num32 == num && num34 == num && num35 == num && num31 != num && num31 != num39 && num33 != num && num33 != num39)
+					{
+						num3 = 252;
+						num2 = 144 + 54 * frameNumber;
+					}
+					else if (num34 != num && num34 != num39 && num37 == num && num32 == num && num35 == num && num33 != num && num33 != num39 && num38 != num && num38 != num39)
+					{
+						num3 = 234;
+						num2 = 126 + 54 * frameNumber;
+					}
+					else if (num35 != num && num35 != num39 && num37 == num && num32 == num && num34 == num && num31 != num && num31 != num39 && num36 != num && num36 != num39)
+					{
+						num3 = 234;
+						num2 = 162 + 54 * frameNumber;
+					}
+					else if (num32 != num39 && num32 != num && (num37 == num39 || num37 == num) && num34 == num39 && num35 == num39)
+					{
+						num3 = 270;
+						num2 = 36 + 18 * frameNumber;
+					}
+					else if (num37 != num39 && num37 != num && (num32 == num39 || num32 == num) && num34 == num39 && num35 == num39)
+					{
+						num3 = 288;
+						num2 = 36 + 18 * frameNumber;
+					}
+					else if (num34 != num39 && num34 != num && (num35 == num39 || num35 == num) && num32 == num39 && num37 == num39)
+					{
+						num2 = 0;
+						num3 = 270 + 18 * frameNumber;
+					}
+					else if (num35 != num39 && num35 != num && (num34 == num39 || num34 == num) && num32 == num39 && num37 == num39)
+					{
+						num2 = 18;
+						num3 = 270 + 18 * frameNumber;
+					}
+					else if (num32 == num && num37 == num39 && num34 == num39 && num35 == num39)
+					{
+						num3 = 288;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num && num34 == num39 && num35 == num39)
+					{
+						num3 = 270;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num39 && num34 == num && num35 == num39)
+					{
+						num3 = 306;
+						num2 = 198 + 18 * frameNumber;
+					}
+					else if (num32 == num39 && num37 == num39 && num34 == num39 && num35 == num)
+					{
+						num3 = 306;
+						num2 = 144 + 18 * frameNumber;
+					}
+					if (num32 != num && num32 != num39 && num37 == num && num34 == num && num35 == num)
+					{
+						if ((num36 == num39 || num36 == num) && num38 != num39 && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 324;
+							num2 = 18 * frameNumber;
 						}
-						else if (num33 != -1)
+						else if ((num38 == num39 || num38 == num) && num36 != num39 && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 324;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 == num37)
+					else if (num37 != num && num37 != num39 && num32 == num && num34 == num && num35 == num)
 					{
-						if (num28 != -1)
+						if ((num31 == num39 || num31 == num) && num33 != num39 && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 342;
+							num2 = 18 * frameNumber;
 						}
-						else if (num33 != -1)
+						else if ((num33 == num39 || num33 == num) && num31 != num39 && num31 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 342;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					else if (num29 == num && num34 == num && num31 == num37 && num32 == num)
+					else if (num34 != num && num34 != num39 && num32 == num && num37 == num && num35 == num)
 					{
-						if (num30 != -1)
+						if ((num33 == num39 || num33 == num) && num38 != num39 && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num3 = 360;
+							num2 = 54 + 18 * frameNumber;
 						}
-						else if (num35 != -1)
+						else if ((num38 == num39 || num38 == num) && num33 != num39 && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 360;
+							num2 = 18 * frameNumber;
 						}
 					}
-					else if ((num29 == num37 && num34 == num && num31 == num && num32 == num) || (num29 == num && num34 == num37 && num31 == num && num32 == num) || (num29 == num && num34 == num && num31 == num37 && num32 == num) || (num29 == num && num34 == num && num31 == num && num32 == num37))
+					else if (num35 != num && num35 != num39 && num32 == num && num37 == num && num34 == num)
 					{
-						switch (frameNumber)
+						if ((num31 == num39 || num31 == num) && num36 != num39 && num36 != num)
 						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 18;
-								break;
+							num3 = 378;
+							num2 = 18 * frameNumber;
+						}
+						else if ((num36 == num39 || num36 == num) && num31 != num39 && num31 != num)
+						{
+							num3 = 378;
+							num2 = 54 + 18 * frameNumber;
 						}
 					}
-					if ((num29 == num || num29 == num37) && (num34 == num || num34 == num37) && (num31 == num || num31 == num37) && (num32 == num || num32 == num37))
+					if ((num32 == num || num32 == num39) && (num37 == num || num37 == num39) && (num34 == num || num34 == num39) && (num35 == num || num35 == num39) && num31 != (int)EntityID.TileID.NONE && num33 != (int)EntityID.TileID.NONE && num36 != (int)EntityID.TileID.NONE && num38 != (int)EntityID.TileID.NONE)
 					{
-						if (num28 != num && num28 != num37 && (num30 == num || num30 == num37) && (num33 == num || num33 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
-						}
-						else if (num30 != num && num30 != num37 && (num28 == num || num28 == num37) && (num33 == num || num33 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
-						}
-						else if (num33 != num && num33 != num37 && (num28 == num || num28 == num37) && (num30 == num || num30 == num37) && (num35 == num || num35 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
-						}
-						else if (num35 != num && num35 != num37 && (num28 == num || num28 == num37) && (num33 == num || num33 == num37) && (num30 == num || num30 == num37))
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
-						}
+						num3 = 18;
+						num2 = 18 + 18 * frameNumber;
 					}
-					if (num29 != num37 && num29 != num && num34 == num && num31 != num37 && num31 != num && num32 == num && num35 != num37 && num35 != num)
+					if (num32 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 108;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 126;
-								rectangle.Y = 270;
-								break;
-						}
+						num32 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num29 != num37 && num29 != num && num34 == num && num31 == num && num32 != num37 && num32 != num && num33 != num37 && num33 != num)
+					if (num37 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 270;
-								break;
-						}
+						num37 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num37 && num34 != num && num29 == num && num31 != num37 && num31 != num && num32 == num && num30 != num37 && num30 != num)
+					if (num34 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 108;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 126;
-								rectangle.Y = 288;
-								break;
-						}
+						num34 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num37 && num34 != num && num29 == num && num31 == num && num32 != num37 && num32 != num && num28 != num37 && num28 != num)
+					if (num35 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 288;
-								break;
-						}
+						num35 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num29 != num && num29 != num37 && num34 == num && num31 == num && num32 == num && num33 != num && num33 != num37 && num35 != num && num35 != num37)
+					if (num31 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 216;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 216;
-								break;
-							default:
-								rectangle.X = 252;
-								rectangle.Y = 216;
-								break;
-						}
+						num31 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num34 != num && num34 != num37 && num29 == num && num31 == num && num32 == num && num28 != num && num28 != num37 && num30 != num && num30 != num37)
+					if (num33 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 252;
-								break;
-							case 1:
-								rectangle.X = 198;
-								rectangle.Y = 252;
-								break;
-							default:
-								rectangle.X = 252;
-								rectangle.Y = 252;
-								break;
-						}
+						num33 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num31 != num && num31 != num37 && num34 == num && num29 == num && num32 == num && num30 != num && num30 != num37 && num35 != num && num35 != num37)
+					if (num36 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 126;
-								rectangle.Y = 234;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 234;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 234;
-								break;
-						}
+						num36 = (int)EntityID.TileID.LIQUID;
 					}
-					else if (num32 != num && num32 != num37 && num34 == num && num29 == num && num31 == num && num28 != num && num28 != num37 && num33 != num && num33 != num37)
+					if (num38 == num39)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 234;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 234;
-								break;
-							default:
-								rectangle.X = 270;
-								rectangle.Y = 234;
-								break;
-						}
-					}
-					else if (num29 != num37 && num29 != num && (num34 == num37 || num34 == num) && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 36;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 270;
-								break;
-						}
-					}
-					else if (num34 != num37 && num34 != num && (num29 == num37 || num29 == num) && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 36;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 288;
-								break;
-						}
-					}
-					else if (num31 != num37 && num31 != num && (num32 == num37 || num32 == num) && num29 == num37 && num34 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 0;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 0;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num32 != num37 && num32 != num && (num31 == num37 || num31 == num) && num29 == num37 && num34 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 18;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 18;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num29 == num && num34 == num37 && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 288;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 288;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 288;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num && num31 == num37 && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 270;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 270;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 270;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num37 && num31 == num && num32 == num37)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 198;
-								rectangle.Y = 306;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 306;
-								break;
-							default:
-								rectangle.X = 234;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					else if (num29 == num37 && num34 == num37 && num31 == num37 && num32 == num)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 144;
-								rectangle.Y = 306;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 306;
-								break;
-							default:
-								rectangle.X = 180;
-								rectangle.Y = 306;
-								break;
-						}
-					}
-					if (num29 != num && num29 != num37 && num34 == num && num31 == num && num32 == num)
-					{
-						if ((num33 == num37 || num33 == num) && num35 != num37 && num35 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 324;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 324;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 324;
-									break;
-							}
-						}
-						else if ((num35 == num37 || num35 == num) && num33 != num37 && num33 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 324;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 324;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 324;
-									break;
-							}
-						}
-					}
-					else if (num34 != num && num34 != num37 && num29 == num && num31 == num && num32 == num)
-					{
-						if ((num28 == num37 || num28 == num) && num30 != num37 && num30 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 342;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 342;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 342;
-									break;
-							}
-						}
-						else if ((num30 == num37 || num30 == num) && num28 != num37 && num28 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 342;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 342;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 342;
-									break;
-							}
-						}
-					}
-					else if (num31 != num && num31 != num37 && num29 == num && num34 == num && num32 == num)
-					{
-						if ((num30 == num37 || num30 == num) && num35 != num37 && num35 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 360;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 360;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 360;
-									break;
-							}
-						}
-						else if ((num35 == num37 || num35 == num) && num30 != num37 && num30 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 360;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 360;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 360;
-									break;
-							}
-						}
-					}
-					else if (num32 != num && num32 != num37 && num29 == num && num34 == num && num31 == num)
-					{
-						if ((num28 == num37 || num28 == num) && num33 != num37 && num33 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 378;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 378;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 378;
-									break;
-							}
-						}
-						else if ((num33 == num37 || num33 == num) && num28 != num37 && num28 != num)
-						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 378;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 378;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 378;
-									break;
-							}
-						}
-					}
-					if ((num29 == num || num29 == num37) && (num34 == num || num34 == num37) && (num31 == num || num31 == num37) && (num32 == num || num32 == num37) && num28 != -1 && num30 != -1 && num33 != -1 && num35 != -1)
-					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 18;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 18;
-								break;
-						}
-					}
-					if (num29 == num37)
-					{
-						num29 = -2;
-					}
-					if (num34 == num37)
-					{
-						num34 = -2;
-					}
-					if (num31 == num37)
-					{
-						num31 = -2;
-					}
-					if (num32 == num37)
-					{
-						num32 = -2;
-					}
-					if (num28 == num37)
-					{
-						num28 = -2;
-					}
-					if (num30 == num37)
-					{
-						num30 = -2;
-					}
-					if (num33 == num37)
-					{
-						num33 = -2;
-					}
-					if (num35 == num37)
-					{
-						num35 = -2;
+						num38 = (int)EntityID.TileID.LIQUID;
 					}
 				}
-				if (rectangle.X == -1 && rectangle.Y == -1 && (Main.TileMergeDirt[num] || num == 0 || num == 2 || num == 57 || num == 58 || num == 59 || num == 60 || num == 70 || num == 109 || num == 76 || num == 75))
+				if (num2 == (int)EntityID.TileID.NONE && (Main.TileMergeDirt[num] || num == (int)EntityID.TileID.DIRT || num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.ASH || num == (int)EntityID.TileID.HELLSTONE || num == (int)EntityID.TileID.MUD || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS || num == (int)EntityID.TileID.HELLSTONE_BRICK || num == (int)EntityID.TileID.OBSIDIAN_BRICK))
 				{
 					if (!flag3)
 					{
 						flag3 = true;
-						if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+						if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 						{
-							num29 = -1;
+							num31 = (int)EntityID.TileID.NONE;
 						}
-						if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+						if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 						{
-							num34 = -1;
+							num33 = (int)EntityID.TileID.NONE;
 						}
-						if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+						if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 						{
-							num31 = -1;
+							num36 = (int)EntityID.TileID.NONE;
 						}
-						if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+						if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 						{
-							num32 = -1;
+							num38 = (int)EntityID.TileID.NONE;
 						}
-						if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
-						{
-							num28 = -1;
-						}
-						if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
-						{
-							num30 = -1;
-						}
-						if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
-						{
-							num33 = -1;
-						}
-						if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
-						{
-							num35 = -1;
-						}
-					}
-					if (num29 >= 0 && num29 != num)
-					{
-						num29 = -1;
-					}
-					if (num34 >= 0 && num34 != num)
-					{
-						num34 = -1;
-					}
-					if (num31 >= 0 && num31 != num)
-					{
-						num31 = -1;
 					}
 					if (num32 >= 0 && num32 != num)
 					{
-						num32 = -1;
+						num32 = (int)EntityID.TileID.NONE;
 					}
-					if (num29 != -1 && num34 != -1 && num31 != -1 && num32 != -1)
+					if (num37 >= 0 && num37 != num)
 					{
-						if (num29 == -2 && num34 == num && num31 == num && num32 == num)
+						num37 = (int)EntityID.TileID.NONE;
+					}
+					if (num34 >= 0 && num34 != num)
+					{
+						num34 = (int)EntityID.TileID.NONE;
+					}
+					if (num35 >= 0 && num35 != num)
+					{
+						num35 = (int)EntityID.TileID.NONE;
+					}
+					if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
+					{
+						if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 108;
-									break;
-							}
+							num3 = 108;
+							num2 = 144 + 18 * frameNumber;
 							mergeUp2 = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == num && num32 == num)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 90;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 90;
-									break;
-							}
+							num3 = 90;
+							num2 = 144 + 18 * frameNumber;
 							mergeDown2 = true;
 						}
-						else if (num29 == num && num34 == num && num31 == -2 && num32 == num)
+						else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 162;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 162;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 162;
+							num3 = 126 + 18 * frameNumber;
 							mergeLeft2 = true;
 						}
-						else if (num29 == num && num34 == num && num31 == num && num32 == -2)
+						else if (num32 == num && num37 == num && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 144;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 144;
+							num3 = 126 + 18 * frameNumber;
 							mergeRight2 = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == -2 && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 36;
+							num3 = 90 + 36 * frameNumber;
 							mergeUp2 = true;
 							mergeLeft2 = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == num && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 126;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 54;
+							num3 = 90 + 36 * frameNumber;
 							mergeUp2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == -2 && num32 == num)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 36;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 36;
+							num3 = 108 + 36 * frameNumber;
 							mergeDown2 = true;
 							mergeLeft2 = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == num && num32 == -2)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 108;
-									break;
-								case 1:
-									rectangle.X = 54;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 54;
+							num3 = 108 + 36 * frameNumber;
 							mergeDown2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == num && num34 == num && num31 == -2 && num32 == -2)
+						else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 180;
-									rectangle.Y = 126;
-									break;
-								case 1:
-									rectangle.X = 180;
-									rectangle.Y = 144;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 162;
-									break;
-							}
+							num2 = 180;
+							num3 = 126 + 18 * frameNumber;
 							mergeLeft2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == num && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 144;
-									rectangle.Y = 180;
-									break;
-								case 1:
-									rectangle.X = 162;
-									rectangle.Y = 180;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 180;
-									break;
-							}
+							num3 = 180;
+							num2 = 144 + 18 * frameNumber;
 							mergeUp2 = true;
 							mergeDown2 = true;
 						}
-						else if (num29 == -2 && num34 == num && num31 == -2 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 198;
+							num3 = 90 + 18 * frameNumber;
 							mergeUp2 = true;
 							mergeLeft2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == num && num34 == -2 && num31 == -2 && num32 == -2)
+						else if (num32 == num && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 198;
+							num3 = 144 + 18 * frameNumber;
 							mergeDown2 = true;
 							mergeLeft2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == num && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 216;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 216;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 216;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 216;
+							num3 = 144 + 18 * frameNumber;
 							mergeUp2 = true;
 							mergeDown2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == -2 && num32 == num)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 216;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 216;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 216;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 216;
+							num3 = 90 + 18 * frameNumber;
 							mergeUp2 = true;
 							mergeDown2 = true;
 							mergeLeft2 = true;
 						}
-						else if (num29 == -2 && num34 == -2 && num31 == -2 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 198;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 198;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 198;
-									break;
-							}
+							num3 = 198;
+							num2 = 108 + 18 * frameNumber;
 							mergeUp2 = true;
 							mergeDown2 = true;
 							mergeLeft2 = true;
 							mergeRight2 = true;
 						}
-						else if (num29 == num && num34 == num && num31 == num && num32 == num)
+						else if (num32 == num && num37 == num && num34 == num && num35 == num)
 						{
-							if (num28 == -2)
+							if (num38 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 18;
-										rectangle.Y = 108;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 144;
-										break;
-									default:
-										rectangle.X = 18;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 0;
+								num3 = 90 + 36 * frameNumber;
 							}
-							if (num30 == -2)
+							else if (num36 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 108;
-										break;
-									case 1:
-										rectangle.X = 0;
-										rectangle.Y = 144;
-										break;
-									default:
-										rectangle.X = 0;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 18;
+								num3 = 90 + 36 * frameNumber;
 							}
-							if (num33 == -2)
+							else if (num33 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 18;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 126;
-										break;
-									default:
-										rectangle.X = 18;
-										rectangle.Y = 162;
-										break;
-								}
+								num2 = 0;
+								num3 = 108 + 36 * frameNumber;
 							}
-							if (num35 == -2)
+							else if (num31 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 0;
-										rectangle.Y = 126;
-										break;
-									default:
-										rectangle.X = 0;
-										rectangle.Y = 162;
-										break;
-								}
+								num2 = 18;
+								num3 = 108 + 36 * frameNumber;
 							}
 						}
 					}
 					else
 					{
-						if (num != 2 && num != 23 && num != 60 && num != 70 && num != 109)
+						if (num != (int)EntityID.TileID.GRASS && num != (int)EntityID.TileID.CORRUPT_GRASS && num != (int)EntityID.TileID.JUNGLE_GRASS && num != (int)EntityID.TileID.MUSHROOM_GRASS && num != (int)EntityID.TileID.HALLOWED_GRASS)
 						{
-							if (num29 == -1 && num34 == -2 && num31 == num && num32 == num)
+							if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.LIQUID && num34 == num && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 0;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 0;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 0;
-										break;
-								}
+								num3 = 0;
+								num2 = 234 + 18 * frameNumber;
 								mergeDown2 = true;
 							}
-							else if (num29 == -2 && num34 == -1 && num31 == num && num32 == num)
+							else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.NONE && num34 == num && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 18;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 18;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 18;
-										break;
-								}
+								num3 = 18;
+								num2 = 234 + 18 * frameNumber;
 								mergeUp2 = true;
 							}
-							else if (num29 == num && num34 == num && num31 == -1 && num32 == -2)
+							else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 36;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 36;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 36;
-										break;
-								}
+								num3 = 36;
+								num2 = 234 + 18 * frameNumber;
 								mergeRight2 = true;
 							}
-							else if (num29 == num && num34 == num && num31 == -2 && num32 == -1)
+							else if (num32 == num && num37 == num && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.NONE)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 234;
-										rectangle.Y = 54;
-										break;
-									case 1:
-										rectangle.X = 252;
-										rectangle.Y = 54;
-										break;
-									default:
-										rectangle.X = 270;
-										rectangle.Y = 54;
-										break;
-								}
+								num3 = 54;
+								num2 = 234 + 18 * frameNumber;
 								mergeLeft2 = true;
 							}
 						}
-						if (num29 != -1 && num34 != -1 && num31 == -1 && num32 == num)
+						if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == num)
 						{
-							if (num29 == -2 && num34 == num)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 72;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 72;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 72;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp2 = true;
 							}
-							else if (num34 == -2 && num29 == num)
+							else if (num37 == (int)EntityID.TileID.LIQUID && num32 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 72;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 72;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 72;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown2 = true;
 							}
 						}
-						else if (num29 != -1 && num34 != -1 && num31 == num && num32 == -1)
+						else if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == num && num35 == (int)EntityID.TileID.NONE)
 						{
-							if (num29 == -2 && num34 == num)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 90;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 90;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 90;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp2 = true;
 							}
-							else if (num34 == -2 && num29 == num)
+							else if (num37 == (int)EntityID.TileID.LIQUID && num32 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 90;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 90;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 90;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown2 = true;
 							}
 						}
-						else if (num29 == -1 && num34 == num && num31 != -1 && num32 != -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == num && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == num)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 198;
-										break;
-								}
+								num2 = 18 * frameNumber;
+								num3 = 198;
 								mergeLeft2 = true;
 							}
-							else if (num32 == -2 && num31 == num)
+							else if (num35 == (int)EntityID.TileID.LIQUID && num34 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 198;
-										break;
-								}
+								num2 = 54 + 18 * frameNumber;
+								num3 = 198;
 								mergeRight2 = true;
 							}
 						}
-						else if (num29 == num && num34 == -1 && num31 != -1 && num32 != -1)
+						else if (num32 == num && num37 == (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == num)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 216;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 216;
-										break;
-								}
+								num2 = 18 * frameNumber;
+								num3 = 216;
 								mergeLeft2 = true;
 							}
-							else if (num32 == -2 && num31 == num)
+							else if (num35 == (int)EntityID.TileID.LIQUID && num34 == num)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 216;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 216;
-										break;
-								}
+								num2 = 54 + 18 * frameNumber;
+								num3 = 216;
 								mergeRight2 = true;
 							}
 						}
-						else if (num29 != -1 && num34 != -1 && num31 == -1 && num32 == -1)
+						else if (num32 != (int)EntityID.TileID.NONE && num37 != (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							if (num29 == -2 && num34 == -2)
+							if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 108;
-										rectangle.Y = 216;
-										break;
-									case 1:
-										rectangle.X = 108;
-										rectangle.Y = 234;
-										break;
-									default:
-										rectangle.X = 108;
-										rectangle.Y = 252;
-										break;
-								}
+								num2 = 108;
+								num3 = 216 + 18 * frameNumber;
 								mergeUp2 = true;
 								mergeDown2 = true;
 							}
-							else if (num29 == -2)
+							else if (num32 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 126;
-										rectangle.Y = 144;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 162;
-										break;
-									default:
-										rectangle.X = 126;
-										rectangle.Y = 180;
-										break;
-								}
+								num2 = 126;
+								num3 = 144 + 18 * frameNumber;
 								mergeUp2 = true;
 							}
-							else if (num34 == -2)
+							else if (num37 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 126;
-										rectangle.Y = 90;
-										break;
-									case 1:
-										rectangle.X = 126;
-										rectangle.Y = 108;
-										break;
-									default:
-										rectangle.X = 126;
-										rectangle.Y = 126;
-										break;
-								}
+								num2 = 126;
+								num3 = 90 + 18 * frameNumber;
 								mergeDown2 = true;
 							}
 						}
-						else if (num29 == -1 && num34 == -1 && num31 != -1 && num32 != -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 != (int)EntityID.TileID.NONE && num35 != (int)EntityID.TileID.NONE)
 						{
-							if (num31 == -2 && num32 == -2)
+							if (num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 162;
-										rectangle.Y = 198;
-										break;
-									case 1:
-										rectangle.X = 180;
-										rectangle.Y = 198;
-										break;
-									default:
-										rectangle.X = 198;
-										rectangle.Y = 198;
-										break;
-								}
+								num3 = 198;
+								num2 = 162 + 18 * frameNumber;
 								mergeLeft2 = true;
 								mergeRight2 = true;
 							}
-							else if (num31 == -2)
+							else if (num34 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 0;
-										rectangle.Y = 252;
-										break;
-									case 1:
-										rectangle.X = 18;
-										rectangle.Y = 252;
-										break;
-									default:
-										rectangle.X = 36;
-										rectangle.Y = 252;
-										break;
-								}
+								num3 = 252;
+								num2 = 18 * frameNumber;
 								mergeLeft2 = true;
 							}
-							else if (num32 == -2)
+							else if (num35 == (int)EntityID.TileID.LIQUID)
 							{
-								switch (frameNumber)
-								{
-									case 0:
-										rectangle.X = 54;
-										rectangle.Y = 252;
-										break;
-									case 1:
-										rectangle.X = 72;
-										rectangle.Y = 252;
-										break;
-									default:
-										rectangle.X = 90;
-										rectangle.Y = 252;
-										break;
-								}
+								num3 = 252;
+								num2 = 54 + 18 * frameNumber;
 								mergeRight2 = true;
 							}
 						}
-						else if (num29 == -2 && num34 == -1 && num31 == -1 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.LIQUID && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 144;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 162;
-									break;
-								default:
-									rectangle.X = 108;
-									rectangle.Y = 180;
-									break;
-							}
+							num2 = 108;
+							num3 = 144 + 18 * frameNumber;
 							mergeUp2 = true;
 						}
-						else if (num29 == -1 && num34 == -2 && num31 == -1 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.LIQUID && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 90;
-									break;
-								case 1:
-									rectangle.X = 108;
-									rectangle.Y = 108;
-									break;
-								default:
-									rectangle.X = 108;
-									rectangle.Y = 126;
-									break;
-							}
+							num2 = 108;
+							num3 = 90 + 18 * frameNumber;
 							mergeDown2 = true;
 						}
-						else if (num29 == -1 && num34 == -1 && num31 == -2 && num32 == -1)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.LIQUID && num35 == (int)EntityID.TileID.NONE)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 0;
-									rectangle.Y = 234;
-									break;
-								case 1:
-									rectangle.X = 18;
-									rectangle.Y = 234;
-									break;
-								default:
-									rectangle.X = 36;
-									rectangle.Y = 234;
-									break;
-							}
+							num3 = 234;
+							num2 = 18 * frameNumber;
 							mergeLeft2 = true;
 						}
-						else if (num29 == -1 && num34 == -1 && num31 == -1 && num32 == -2)
+						else if (num32 == (int)EntityID.TileID.NONE && num37 == (int)EntityID.TileID.NONE && num34 == (int)EntityID.TileID.NONE && num35 == (int)EntityID.TileID.LIQUID)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 54;
-									rectangle.Y = 234;
-									break;
-								case 1:
-									rectangle.X = 72;
-									rectangle.Y = 234;
-									break;
-								default:
-									rectangle.X = 90;
-									rectangle.Y = 234;
-									break;
-							}
+							num3 = 234;
+							num2 = 54 + 18 * frameNumber;
 							mergeRight2 = true;
 						}
 					}
 				}
-				if (rectangle.X < 0 || rectangle.Y < 0)
+				if (num2 < 0)
 				{
 					if (!flag3)
 					{
 						flag3 = true;
-						if (num29 > -1 && !Main.TileSolid[num29] && num29 != num)
+						if (num32 >= 0 && num32 != num && !Main.TileSolid[num32])
 						{
-							num29 = -1;
+							num32 = (int)EntityID.TileID.NONE;
 						}
-						if (num34 > -1 && !Main.TileSolid[num34] && num34 != num)
+						if (num37 >= 0 && num37 != num && !Main.TileSolid[num37])
 						{
-							num34 = -1;
+							num37 = (int)EntityID.TileID.NONE;
 						}
-						if (num31 > -1 && !Main.TileSolid[num31] && num31 != num)
+						if (num34 >= 0 && num34 != num && !Main.TileSolid[num34])
 						{
-							num31 = -1;
+							num34 = (int)EntityID.TileID.NONE;
 						}
-						if (num32 > -1 && !Main.TileSolid[num32] && num32 != num)
+						if (num35 >= 0 && num35 != num && !Main.TileSolid[num35])
 						{
-							num32 = -1;
+							num35 = (int)EntityID.TileID.NONE;
 						}
-						if (num28 > -1 && !Main.TileSolid[num28] && num28 != num)
+						if (num31 >= 0 && num31 != num && !Main.TileSolid[num31])
 						{
-							num28 = -1;
+							num31 = (int)EntityID.TileID.NONE;
 						}
-						if (num30 > -1 && !Main.TileSolid[num30] && num30 != num)
+						if (num33 >= 0 && num33 != num && !Main.TileSolid[num33])
 						{
-							num30 = -1;
+							num33 = (int)EntityID.TileID.NONE;
 						}
-						if (num33 > -1 && !Main.TileSolid[num33] && num33 != num)
+						if (num36 >= 0 && num36 != num && !Main.TileSolid[num36])
 						{
-							num33 = -1;
+							num36 = (int)EntityID.TileID.NONE;
 						}
-						if (num35 > -1 && !Main.TileSolid[num35] && num35 != num)
+						if (num38 >= 0 && num38 != num && !Main.TileSolid[num38])
 						{
-							num35 = -1;
+							num38 = (int)EntityID.TileID.NONE;
 						}
 					}
-					if (num == 2 || num == 23 || num == 60 || num == 70 || num == 109)
+					if (num == (int)EntityID.TileID.GRASS || num == (int)EntityID.TileID.CORRUPT_GRASS || num == (int)EntityID.TileID.JUNGLE_GRASS || num == (int)EntityID.TileID.MUSHROOM_GRASS || num == (int)EntityID.TileID.HALLOWED_GRASS)
 					{
-						if (num29 == -2)
-						{
-							num29 = num;
-						}
-						if (num34 == -2)
-						{
-							num34 = num;
-						}
-						if (num31 == -2)
-						{
-							num31 = num;
-						}
-						if (num32 == -2)
+						if (num32 == (int)EntityID.TileID.LIQUID)
 						{
 							num32 = num;
 						}
-						if (num28 == -2)
+						if (num37 == (int)EntityID.TileID.LIQUID)
 						{
-							num28 = num;
+							num37 = num;
 						}
-						if (num30 == -2)
+						if (num34 == (int)EntityID.TileID.LIQUID)
 						{
-							num30 = num;
+							num34 = num;
 						}
-						if (num33 == -2)
-						{
-							num33 = num;
-						}
-						if (num35 == -2)
+						if (num35 == (int)EntityID.TileID.LIQUID)
 						{
 							num35 = num;
 						}
+						if (num31 == (int)EntityID.TileID.LIQUID)
+						{
+							num31 = num;
+						}
+						if (num33 == (int)EntityID.TileID.LIQUID)
+						{
+							num33 = num;
+						}
+						if (num36 == (int)EntityID.TileID.LIQUID)
+						{
+							num36 = num;
+						}
+						if (num38 == (int)EntityID.TileID.LIQUID)
+						{
+							num38 = num;
+						}
 					}
-					if (num29 == num && num34 == num && num31 == num && num32 == num)
+					if (num32 == num && num37 == num && num34 == num && num35 == num)
 					{
-						if (num28 != num && num30 != num)
+						if (num31 != num && num33 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 18;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 18;
-									break;
-							}
+							num3 = 18;
+							num2 = 108 + 18 * frameNumber;
 						}
-						else if (num33 != num && num35 != num)
+						else if (num36 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 108;
-									rectangle.Y = 36;
-									break;
-								case 1:
-									rectangle.X = 126;
-									rectangle.Y = 36;
-									break;
-								default:
-									rectangle.X = 144;
-									rectangle.Y = 36;
-									break;
-							}
+							num3 = 36;
+							num2 = 108 + 18 * frameNumber;
 						}
-						else if (num28 != num && num33 != num)
+						else if (num31 != num && num36 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 180;
-									rectangle.Y = 0;
-									break;
-								case 1:
-									rectangle.X = 180;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 180;
-									rectangle.Y = 36;
-									break;
-							}
+							num2 = 180;
+							num3 = 18 * frameNumber;
 						}
-						else if (num30 != num && num35 != num)
+						else if (num33 != num && num38 != num)
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 198;
-									rectangle.Y = 0;
-									break;
-								case 1:
-									rectangle.X = 198;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 198;
-									rectangle.Y = 36;
-									break;
-							}
+							num2 = 198;
+							num3 = 18 * frameNumber;
 						}
 						else
 						{
-							switch (frameNumber)
-							{
-								case 0:
-									rectangle.X = 18;
-									rectangle.Y = 18;
-									break;
-								case 1:
-									rectangle.X = 36;
-									rectangle.Y = 18;
-									break;
-								default:
-									rectangle.X = 54;
-									rectangle.Y = 18;
-									break;
-							}
+							num3 = 18;
+							num2 = 18 + 18 * frameNumber;
 						}
 					}
-					else if (num29 != num && num34 == num && num31 == num && num32 == num)
+					else if (num32 != num && num37 == num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 0;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 0;
-								break;
-						}
+						num3 = 0;
+						num2 = 18 + 18 * frameNumber;
 					}
-					else if (num29 == num && num34 != num && num31 == num && num32 == num)
+					else if (num32 == num && num37 != num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 36;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 36;
-								break;
-							default:
-								rectangle.X = 54;
-								rectangle.Y = 36;
-								break;
-						}
+						num3 = 36;
+						num2 = 18 + 18 * frameNumber;
 					}
-					else if (num29 == num && num34 == num && num31 != num && num32 == num)
+					else if (num32 == num && num37 == num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 0;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 0;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 0;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 == num && num34 == num && num31 == num && num32 != num)
+					else if (num32 == num && num37 == num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 72;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 72;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 72;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 == num && num31 != num && num32 == num)
+					else if (num32 != num && num37 == num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 36 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 != num && num34 == num && num31 == num && num32 != num)
+					else if (num32 != num && num37 == num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 18 + 36 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 == num && num34 != num && num31 != num && num32 == num)
+					else if (num32 == num && num37 != num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 0;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 36;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 72;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 36 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 == num && num34 != num && num31 == num && num32 != num)
+					else if (num32 == num && num37 != num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 18;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 54;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 18 + 36 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 == num && num34 == num && num31 != num && num32 != num)
+					else if (num32 == num && num37 == num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 90;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 90;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 90;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 90;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 == num && num32 == num)
+					else if (num32 != num && num37 != num && num34 == num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 72;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 72;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 72;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 72;
 					}
-					else if (num29 != num && num34 == num && num31 != num && num32 != num)
+					else if (num32 != num && num37 == num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 0;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 0;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 0;
 					}
-					else if (num29 == num && num34 != num && num31 != num && num32 != num)
+					else if (num32 == num && num37 != num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 108;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 126;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 144;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 108 + 18 * frameNumber;
+						num3 = 54;
 					}
-					else if (num29 != num && num34 != num && num31 != num && num32 == num)
+					else if (num32 != num && num37 != num && num34 != num && num35 == num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 162;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 162;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 162;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 == num && num32 != num)
+					else if (num32 != num && num37 != num && num34 == num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 216;
-								rectangle.Y = 0;
-								break;
-							case 1:
-								rectangle.X = 216;
-								rectangle.Y = 18;
-								break;
-							default:
-								rectangle.X = 216;
-								rectangle.Y = 36;
-								break;
-						}
+						num2 = 216;
+						num3 = 18 * frameNumber;
 					}
-					else if (num29 != num && num34 != num && num31 != num && num32 != num)
+					else if (num32 != num && num37 != num && num34 != num && num35 != num)
 					{
-						switch (frameNumber)
-						{
-							case 0:
-								rectangle.X = 162;
-								rectangle.Y = 54;
-								break;
-							case 1:
-								rectangle.X = 180;
-								rectangle.Y = 54;
-								break;
-							default:
-								rectangle.X = 198;
-								rectangle.Y = 54;
-								break;
-						}
+						num2 = 162 + 18 * frameNumber;
+						num3 = 54;
 					}
 				}
-				if (rectangle.X <= -1 || rectangle.Y <= -1)
+				if (num2 < 0)
 				{
-					if (frameNumber <= 0)
-					{
-						rectangle.X = 18;
-						rectangle.Y = 18;
-					}
-					else if (frameNumber == 1)
-					{
-						rectangle.X = 36;
-						rectangle.Y = 18;
-					}
-					if (frameNumber >= 2)
-					{
-						rectangle.X = 54;
-						rectangle.Y = 18;
-					}
+					num3 = 18;
+					num2 = 18 + 18 * frameNumber;
 				}
-				Main.TileSet[i, j].FrameX = (short)rectangle.X;
-				Main.TileSet[i, j].FrameY = (short)rectangle.Y;
-				if (num == 52 || num == 62 || num == 115)
+				ptr->FrameX = (short)num2;
+				ptr->FrameY = (short)num3;
+				if (num == (int)EntityID.TileID.VINE || num == (int)EntityID.TileID.JUNGLE_VINE || num == (int)EntityID.TileID.HALLOWED_VINE)
 				{
-					num29 = (Main.TileSet[i, j - 1].IsActive != 0 ? Main.TileSet[i, j - 1].Type : (-1));
-					if (num == 52 && (num29 == 109 || num29 == 115))
+					num32 = ((ptr[-1].IsActive != 0) ? ptr[-1].Type : (int)EntityID.TileID.NONE);
+					if (num == (int)EntityID.TileID.VINE && (num32 == (int)EntityID.TileID.HALLOWED_GRASS || num32 == (int)EntityID.TileID.HALLOWED_VINE))
 					{
-						Main.TileSet[i, j].Type = 115;
+						ptr->Type = (int)EntityID.TileID.HALLOWED_VINE;
 						SquareTileFrameNoLiquid(i, j);
 						return;
 					}
-					if (num == 115 && (num29 == 2 || num29 == 52))
+					if (num == (int)EntityID.TileID.HALLOWED_VINE && (num32 == (int)EntityID.TileID.GRASS || num32 == (int)EntityID.TileID.VINE))
 					{
-						Main.TileSet[i, j].Type = 52;
+						ptr->Type = (int)EntityID.TileID.VINE;
 						SquareTileFrameNoLiquid(i, j);
 						return;
 					}
-					if (num29 != num)
+					if (num32 != num && (num32 == (int)EntityID.TileID.NONE || (num == (int)EntityID.TileID.VINE && num32 != (int)EntityID.TileID.GRASS) || (num == (int)EntityID.TileID.JUNGLE_VINE && num32 != (int)EntityID.TileID.JUNGLE_GRASS) || (num == (int)EntityID.TileID.HALLOWED_VINE && num32 != (int)EntityID.TileID.HALLOWED_GRASS)))
 					{
-						bool flag4 = false;
-						if (num29 == -1)
-						{
-							flag4 = true;
-						}
-						if (num == 52 && num29 != 2)
-						{
-							flag4 = true;
-						}
-						if (num == 62 && num29 != 60)
-						{
-							flag4 = true;
-						}
-						if (num == 115 && num29 != 109)
-						{
-							flag4 = true;
-						}
-						if (flag4)
-						{
-							KillTile(i, j);
-						}
+						KillTile(i, j);
 					}
 				}
-				if (!Gen && (num == 53 || num == 112 || num == 116 || num == 123))
+				if (Gen || Main.NetMode == (int)NetModeSetting.CLIENT || (num != (int)EntityID.TileID.SAND && num != (int)EntityID.TileID.EBONSAND && num != (int)EntityID.TileID.PEARLSAND && num != (int)EntityID.TileID.SILT))
 				{
-					if (Main.TileSet[i, j + 1].IsActive == 0)
+					return;
+				}
+				Tile* ptr3 = ptr + 1;
+				if (ptr3->IsActive == 0)
+				{
+					ptr3 = ptr - 1;
+					if (ptr3->IsActive == 0 || ptr3->Type != (int)EntityID.TileID.CHEST)
 					{
-						if (Main.TileSet[i, j - 1].IsActive == 0 || Main.TileSet[i, j - 1].Type != 21)
-						{
-							Main.TileSet[i, j].IsActive = 0;
-							sandBuffer[currentSandBuffer].Add(i, j);
-						}
+						ptr->IsActive = 0;
+						sandBuffer[currentSandBuffer].Add(i, j);
+						return;
 					}
 				}
-			}
-			catch
-			{
 			}
 		}
 
 		public static void UpdateMagmaLayerPos()
 		{
 			int num = Main.MaxTilesY - 230;
-			Main.MagmaLayerPixels = (Main.MagmaLayer = Main.WorldSurface + (num - Main.WorldSurface) / 6 * 6 - 5) << 4;
+			int magmaVal = (int)((num - Main.WorldSurface) / 6.0) * 6;
+			Main.MagmaLayer = Main.WorldSurface + magmaVal - 5;
+			Main.MagmaLayerPixels = Main.MagmaLayer << 4;
 		}
 	}
 }

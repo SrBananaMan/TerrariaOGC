@@ -107,27 +107,27 @@ namespace Terraria
 				ItemText[CurrentTextCount].Position.X = NewItem.Position.X + NewItem.Width * 0.5f - ItemTextSize.X * 0.5f;
 				ItemText[CurrentTextCount].Position.Y = NewItem.Position.Y + NewItem.Height * 0.25f - ItemTextSize.Y * 0.5f;
 
-				switch (NewItem.Rarity)
+				switch ((EntityID.RarityID)NewItem.Rarity)
 				{
-					case 1:
+					case EntityID.RarityID.BLUE:
 						ItemText[CurrentTextCount].Color = new Color(150, 150, 255);
 						break;
-					case 2:
+					case EntityID.RarityID.GREEN:
 						ItemText[CurrentTextCount].Color = new Color(150, 255, 150);
 						break;
-					case 3:
+					case EntityID.RarityID.ORANGE:
 						ItemText[CurrentTextCount].Color = new Color(255, 200, 150);
 						break;
-					case 4:
+					case EntityID.RarityID.LIGHT_RED:
 						ItemText[CurrentTextCount].Color = new Color(255, 150, 150);
 						break;
-					case 5:
+					case EntityID.RarityID.PINK:
 						ItemText[CurrentTextCount].Color = new Color(255, 150, 255);
 						break;
-					case -1:
+					case EntityID.RarityID.GREY:
 						ItemText[CurrentTextCount].Color = new Color(130, 130, 130);
 						break;
-					case 6:
+					case EntityID.RarityID.LIGHT_PURPLE:
 						ItemText[CurrentTextCount].Color = new Color(210, 160, 255);
 						break;
 					default:

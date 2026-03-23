@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Net
         private GamerCollection<LocalNetworkGamer> _localGamers;
         private GamerCollection<NetworkGamer> _remoteGamers;
         private GamerCollection<NetworkGamer> _previousGamers;
-        private NetworkGamer hostingGamer;
+        // private NetworkGamer hostingGamer; Not used here yet
         internal Queue<CommandEvent> commandQueue;
         internal MonoGamerPeer networkPeer;
 
@@ -451,7 +451,7 @@ namespace Microsoft.Xna.Framework.Net
 
             _remoteGamers = new GamerCollection<NetworkGamer>();
             _previousGamers = new GamerCollection<NetworkGamer>();
-            hostingGamer = null;
+            // hostingGamer = null;
 
             commandQueue = new Queue<CommandEvent>();
 
@@ -563,7 +563,8 @@ namespace Microsoft.Xna.Framework.Net
 					{
 						SessionEnded(
 							this,
-							new NetworkSessionEndedEventArgs(evt.Reason)
+							// new NetworkSessionEndedEventArgs(evt.Reason)
+							new NetworkSessionEndedEventArgs(NetworkSessionEndReason.Disconnected) // From default reason.
 						);
 					}
 

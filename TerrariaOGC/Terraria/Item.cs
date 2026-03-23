@@ -5,668 +5,7 @@ namespace Terraria
 {
 	public struct Item
 	{
-		public enum ID
-		{
-			NONE,
-			IRON_PICKAXE,
-			DIRT_BLOCK,
-			STONE_BLOCK,
-			IRON_BROADSWORD,
-			MUSHROOM,
-			IRON_SHORTSWORD,
-			IRON_HAMMER,
-			TORCH,
-			WOOD,
-			IRON_AXE,
-			IRON_ORE,
-			COPPER_ORE,
-			GOLD_ORE,
-			SILVER_ORE,
-			COPPER_WATCH,
-			SILVER_WATCH,
-			GOLD_WATCH,
-			DEPTH_METER,
-			GOLD_BAR,
-			COPPER_BAR,
-			SILVER_BAR,
-			IRON_BAR,
-			GEL,
-			WOODEN_SWORD,
-			WOODEN_DOOR,
-			STONE_WALL,
-			ACORN,
-			LESSER_HEALING_POTION,
-			LIFE_CRYSTAL,
-			DIRT_WALL,
-			BOTTLE,
-			WOODEN_TABLE,
-			FURNACE,
-			WOODEN_CHAIR,
-			IRON_ANVIL,
-			WORK_BENCH,
-			GOGGLES,
-			LENS,
-			WOODEN_BOW,
-			WOODEN_ARROW,
-			FLAMING_ARROW,
-			SHURIKEN,
-			SUSPICIOUS_LOOKING_EYE,
-			DEMON_BOW,
-			WAR_AXE_OF_THE_NIGHT,
-			LIGHTS_BANE,
-			UNHOLY_ARROW,
-			CHEST,
-			BAND_OF_REGENERATION,
-			MAGIC_MIRROR,
-			JESTERS_ARROW,
-			ANGEL_STATUE,
-			CLOUD_IN_A_BOTTLE,
-			HERMES_BOOTS,
-			ENCHANTED_BOOMERANG,
-			DEMONITE_ORE,
-			DEMONITE_BAR,
-			HEART,
-			CORRUPT_SEEDS,
-			VILE_MUSHROOM,
-			EBONSTONE_BLOCK,
-			GRASS_SEEDS,
-			SUNFLOWER,
-			VILETHORN,
-			STARFURY,
-			PURIFICATION_POWDER,
-			VILE_POWDER,
-			ROTTEN_CHUNK,
-			WORM_TOOTH,
-			WORM_FOOD,
-			COPPER_COIN,
-			SILVER_COIN,
-			GOLD_COIN,
-			PLATINUM_COIN,
-			FALLEN_STAR,
-			COPPER_GREAVES,
-			IRON_GREAVES,
-			SILVER_GREAVES,
-			GOLD_GREAVES,
-			COPPER_CHAINMAIL,
-			IRON_CHAINMAIL,
-			SILVER_CHAINMAIL,
-			GOLD_CHAINMAIL,
-			GRAPPLING_HOOK,
-			IRON_CHAIN,
-			SHADOW_SCALE,
-			PIGGY_BANK,
-			MINING_HELMET,
-			COPPER_HELMET,
-			IRON_HELMET,
-			SILVER_HELMET,
-			GOLD_HELMET,
-			WOOD_WALL,
-			WOOD_PLATFORM,
-			FLINTLOCK_PISTOL,
-			MUSKET,
-			MUSKET_BALL,
-			MINISHARK,
-			IRON_BOW,
-			SHADOW_GREAVES,
-			SHADOW_SCALEMAIL,
-			SHADOW_HELMET,
-			NIGHTMARE_PICKAXE,
-			THE_BREAKER,
-			CANDLE,
-			COPPER_CHANDELIER,
-			SILVER_CHANDELIER,
-			GOLD_CHANDELIER,
-			MANA_CRYSTAL,
-			LESSER_MANA_POTION,
-			BAND_OF_STARPOWER,
-			FLOWER_OF_FIRE,
-			MAGIC_MISSILE,
-			DIRT_ROD,
-			ORB_OF_LIGHT,
-			METEORITE,
-			METEORITE_BAR,
-			HOOK,
-			FLAMARANG,
-			MOLTEN_FURY,
-			FIERY_GREATSWORD,
-			MOLTEN_PICKAXE,
-			METEOR_HELMET,
-			METEOR_SUIT,
-			METEOR_LEGGINGS,
-			BOTTLED_WATER,
-			SPACE_GUN,
-			ROCKET_BOOTS,
-			GRAY_BRICK,
-			GRAY_BRICK_WALL,
-			RED_BRICK,
-			RED_BRICK_WALL,
-			CLAY_BLOCK,
-			BLUE_BRICK,
-			BLUE_BRICK_WALL,
-			CHAIN_LANTERN,
-			GREEN_BRICK,
-			GREEN_BRICK_WALL,
-			PINK_BRICK,
-			PINK_BRICK_WALL,
-			GOLD_BRICK,
-			GOLD_BRICK_WALL,
-			SILVER_BRICK,
-			SILVER_BRICK_WALL,
-			COPPER_BRICK,
-			COPPER_BRICK_WALL,
-			SPIKE,
-			WATER_CANDLE,
-			BOOK,
-			COBWEB,
-			NECRO_HELMET,
-			NECRO_BREASTPLATE,
-			NECRO_GREAVES,
-			BONE,
-			MURAMASA,
-			COBALT_SHIELD,
-			AQUA_SCEPTER,
-			LUCKY_HORSESHOE,
-			SHINY_RED_BALLOON,
-			HARPOON,
-			SPIKY_BALL,
-			BALL_O_HURT,
-			BLUE_MOON,
-			HANDGUN,
-			WATER_BOLT,
-			BOMB,
-			DYNAMITE,
-			GRENADE,
-			SAND_BLOCK,
-			GLASS,
-			SIGN,
-			ASH_BLOCK,
-			OBSIDIAN,
-			HELLSTONE,
-			HELLSTONE_BAR,
-			MUD_BLOCK,
-			SAPPHIRE,
-			RUBY,
-			EMERALD,
-			TOPAZ,
-			AMETHYST,
-			DIAMOND,
-			GLOWING_MUSHROOM,
-			STAR,
-			IVY_WHIP,
-			BREATHING_REED,
-			FLIPPER,
-			HEALING_POTION,
-			MANA_POTION,
-			BLADE_OF_GRASS,
-			THORN_CHAKRAM,
-			OBSIDIAN_BRICK,
-			OBSIDIAN_SKULL,
-			MUSHROOM_GRASS_SEEDS,
-			JUNGLE_GRASS_SEEDS,
-			WOODEN_HAMMER,
-			STAR_CANNON,
-			BLUE_PHASEBLADE,
-			RED_PHASEBLADE,
-			GREEN_PHASEBLADE,
-			PURPLE_PHASEBLADE,
-			WHITE_PHASEBLADE,
-			YELLOW_PHASEBLADE,
-			METEOR_HAMAXE,
-			EMPTY_BUCKET,
-			WATER_BUCKET,
-			LAVA_BUCKET,
-			JUNGLE_ROSE,
-			STINGER,
-			VINE,
-			FERAL_CLAWS,
-			ANKLET_OF_THE_WIND,
-			STAFF_OF_REGROWTH,
-			HELLSTONE_BRICK,
-			WHOOPIE_CUSHION,
-			SHACKLE,
-			MOLTEN_HAMAXE,
-			FLAMELASH,
-			PHOENIX_BLASTER,
-			SUNFURY,
-			HELLFORGE,
-			CLAY_POT,
-			NATURES_GIFT,
-			BED,
-			SILK,
-			LESSER_RESTORATION_POTION,
-			RESTORATION_POTION,
-			JUNGLE_HAT,
-			JUNGLE_SHIRT,
-			JUNGLE_PANTS,
-			MOLTEN_HELMET,
-			MOLTEN_BREASTPLATE,
-			MOLTEN_GREAVES,
-			METEOR_SHOT,
-			STICKY_BOMB,
-			BLACK_LENS,
-			SUNGLASSES,
-			WIZARD_HAT,
-			TOP_HAT,
-			TUXEDO_SHIRT,
-			TUXEDO_PANTS,
-			SUMMER_HAT,
-			BUNNY_HOOD,
-			PLUMBERS_HAT,
-			PLUMBERS_SHIRT,
-			PLUMBERS_PANTS,
-			HEROS_HAT,
-			HEROS_SHIRT,
-			HEROS_PANTS,
-			FISH_BOWL,
-			ARCHAEOLOGISTS_HAT,
-			ARCHAEOLOGISTS_JACKET,
-			ARCHAEOLOGISTS_PANTS,
-			BLACK_DYE,
-			PURPLE_DYE,
-			NINJA_HOOD,
-			NINJA_SHIRT,
-			NINJA_PANTS,
-			LEATHER,
-			RED_HAT,
-			GOLDFISH,
-			ROBE,
-			ROBOT_HAT,
-			GOLD_CROWN,
-			HELLFIRE_ARROW,
-			SANDGUN,
-			GUIDE_VOODOO_DOLL,
-			DIVING_HELMET,
-			FAMILIAR_SHIRT,
-			FAMILIAR_PANTS,
-			FAMILIAR_WIG,
-			DEMON_SCYTHE,
-			NIGHTS_EDGE,
-			DARK_LANCE,
-			CORAL,
-			CACTUS,
-			TRIDENT,
-			SILVER_BULLET,
-			THROWING_KNIFE,
-			SPEAR,
-			BLOWPIPE,
-			GLOWSTICK,
-			SEED,
-			WOODEN_BOOMERANG,
-			AGLET,
-			STICKY_GLOWSTICK,
-			POISONED_KNIFE,
-			OBSIDIAN_SKIN_POTION,
-			REGENERATION_POTION,
-			SWIFTNESS_POTION,
-			GILLS_POTION,
-			IRONSKIN_POTION,
-			MANA_REGENERATION_POTION,
-			MAGIC_POWER_POTION,
-			FEATHERFALL_POTION,
-			SPELUNKER_POTION,
-			INVISIBILITY_POTION,
-			SHINE_POTION,
-			NIGHT_OWL_POTION,
-			BATTLE_POTION,
-			THORNS_POTION,
-			WATER_WALKING_POTION,
-			ARCHERY_POTION,
-			HUNTER_POTION,
-			GRAVITATION_POTION,
-			GOLD_CHEST,
-			DAYBLOOM_SEEDS,
-			MOONGLOW_SEEDS,
-			BLINKROOT_SEEDS,
-			DEATHWEED_SEEDS,
-			WATERLEAF_SEEDS,
-			FIREBLOSSOM_SEEDS,
-			DAYBLOOM,
-			MOONGLOW,
-			BLINKROOT,
-			DEATHWEED,
-			WATERLEAF,
-			FIREBLOSSOM,
-			SHARK_FIN,
-			FEATHER,
-			TOMBSTONE,
-			MIME_MASK,
-			ANTLION_MANDIBLE,
-			ILLEGAL_GUN_PARTS,
-			THE_DOCTORS_SHIRT,
-			THE_DOCTORS_PANTS,
-			GOLDEN_KEY,
-			SHADOW_CHEST,
-			SHADOW_KEY,
-			OBSIDIAN_BRICK_WALL,
-			JUNGLE_SPORES,
-			LOOM,
-			PIANO,
-			DRESSER,
-			BENCH,
-			BATHTUB,
-			RED_BANNER,
-			GREEN_BANNER,
-			BLUE_BANNER,
-			YELLOW_BANNER,
-			LAMP_POST,
-			TIKI_TORCH,
-			BARREL,
-			CHINESE_LANTERN,
-			COOKING_POT,
-			SAFE,
-			SKULL_LANTERN,
-			TRASH_CAN,
-			CANDELABRA,
-			PINK_VASE,
-			MUG,
-			KEG,
-			ALE,
-			BOOKCASE,
-			THRONE,
-			BOWL,
-			BOWL_OF_SOUP,
-			TOILET,
-			GRANDFATHER_CLOCK,
-			STATUE,
-			GOBLIN_BATTLE_STANDARD,
-			TATTERED_CLOTH,
-			SAWMILL,
-			COBALT_ORE,
-			MYTHRIL_ORE,
-			ADAMANTITE_ORE,
-			PWNHAMMER,
-			EXCALIBUR,
-			HALLOWED_SEEDS,
-			EBONSAND_BLOCK,
-			COBALT_HAT,
-			COBALT_HELMET,
-			COBALT_MASK,
-			COBALT_BREASTPLATE,
-			COBALT_LEGGINGS,
-			MYTHRIL_HOOD,
-			MYTHRIL_HELMET,
-			MYTHRIL_HAT,
-			MYTHRIL_CHAINMAIL,
-			MYTHRIL_GREAVES,
-			COBALT_BAR,
-			MYTHRIL_BAR,
-			COBALT_CHAINSAW,
-			MYTHRIL_CHAINSAW,
-			COBALT_DRILL,
-			MYTHRIL_DRILL,
-			ADAMANTITE_CHAINSAW,
-			ADAMANTITE_DRILL,
-			DAO_OF_POW,
-			MYTHRIL_HALBERD,
-			ADAMANTITE_BAR,
-			GLASS_WALL,
-			COMPASS,
-			DIVING_GEAR,
-			GPS,
-			OBSIDIAN_HORSESHOE,
-			OBSIDIAN_SHIELD,
-			TINKERERS_WORKSHOP,
-			CLOUD_IN_A_BALLOON,
-			ADAMANTITE_HEADGEAR,
-			ADAMANTITE_HELMET,
-			ADAMANTITE_MASK,
-			ADAMANTITE_BREASTPLATE,
-			ADAMANTITE_LEGGINGS,
-			SPECTRE_BOOTS,
-			ADAMANTITE_GLAIVE,
-			TOOLBELT,
-			PEARLSAND_BLOCK,
-			PEARLSTONE_BLOCK,
-			MINING_SHIRT,
-			MINING_PANTS,
-			PEARLSTONE_BRICK,
-			IRIDESCENT_BRICK,
-			MUDSTONE_BRICK,
-			COBALT_BRICK,
-			MYTHRIL_BRICK,
-			PEARLSTONE_BRICK_WALL,
-			IRIDESCENT_BRICK_WALL,
-			MUDSTONE_BRICK_WALL,
-			COBALT_BRICK_WALL,
-			MYTHRIL_BRICK_WALL,
-			HOLY_WATER,
-			UNHOLY_WATER,
-			SILT_BLOCK,
-			FAIRY_BELL,
-			BREAKER_BLADE,
-			BLUE_TORCH,
-			RED_TORCH,
-			GREEN_TORCH,
-			PURPLE_TORCH,
-			WHITE_TORCH,
-			YELLOW_TORCH,
-			DEMON_TORCH,
-			CLOCKWORK_ASSAULT_RIFLE,
-			COBALT_REPEATER,
-			MYTHRIL_REPEATER,
-			DUAL_HOOK,
-			STAR_STATUE,
-			SWORD_STATUE,
-			SLIME_STATUE,
-			GOBLIN_STATUE,
-			SHIELD_STATUE,
-			BAT_STATUE,
-			FISH_STATUE,
-			BUNNY_STATUE,
-			SKELETON_STATUE,
-			REAPER_STATUE,
-			WOMAN_STATUE,
-			IMP_STATUE,
-			GARGOYLE_STATUE,
-			GLOOM_STATUE,
-			HORNET_STATUE,
-			BOMB_STATUE,
-			CRAB_STATUE,
-			HAMMER_STATUE,
-			POTION_STATUE,
-			SPEAR_STATUE,
-			CROSS_STATUE,
-			JELLYFISH_STATUE,
-			BOW_STATUE,
-			BOOMERANG_STATUE,
-			BOOT_STATUE,
-			CHEST_STATUE,
-			BIRD_STATUE,
-			AXE_STATUE,
-			CORRUPT_STATUE,
-			TREE_STATUE,
-			ANVIL_STATUE,
-			PICKAXE_STATUE,
-			MUSHROOM_STATUE,
-			EYEBALL_STATUE,
-			PILLAR_STATUE,
-			HEART_STATUE,
-			POT_STATUE,
-			SUNFLOWER_STATUE,
-			KING_STATUE,
-			QUEEN_STATUE,
-			PIRANHA_STATUE,
-			PLANKED_WALL,
-			WOODEN_BEAM,
-			ADAMANTITE_REPEATER,
-			ADAMANTITE_SWORD,
-			COBALT_SWORD,
-			MYTHRIL_SWORD,
-			MOON_CHARM,
-			RULER,
-			CRYSTAL_BALL,
-			DISCO_BALL,
-			SORCERER_EMBLEM,
-			WARRIOR_EMBLEM,
-			RANGER_EMBLEM,
-			DEMON_WINGS,
-			ANGEL_WINGS,
-			MAGICAL_HARP,
-			RAINBOW_ROD,
-			ICE_ROD,
-			NEPTUNES_SHELL,
-			MANNEQUIN,
-			GREATER_HEALING_POTION,
-			GREATER_MANA_POTION,
-			PIXIE_DUST,
-			CRYSTAL_SHARD,
-			CLOWN_HAT,
-			CLOWN_SHIRT,
-			CLOWN_PANTS,
-			FLAMETHROWER,
-			BELL,
-			HARP,
-			WRENCH,
-			WIRE_CUTTER,
-			ACTIVE_STONE_BLOCK,
-			INACTIVE_STONE_BLOCK,
-			LEVER,
-			LASER_RIFLE,
-			CRYSTAL_BULLET,
-			HOLY_ARROW,
-			MAGIC_DAGGER,
-			CRYSTAL_STORM,
-			CURSED_FLAMES,
-			SOUL_OF_LIGHT,
-			SOUL_OF_NIGHT,
-			CURSED_FLAME,
-			CURSED_TORCH,
-			ADAMANTITE_FORGE,
-			MYTHRIL_ANVIL,
-			UNICORN_HORN,
-			DARK_SHARD,
-			LIGHT_SHARD,
-			RED_PRESSURE_PLATE,
-			WIRE,
-			SPELL_TOME,
-			STAR_CLOAK,
-			MEGASHARK,
-			SHOTGUN,
-			PHILOSOPHERS_STONE,
-			TITAN_GLOVE,
-			COBALT_NAGINATA,
-			SWITCH,
-			DART_TRAP,
-			BOULDER,
-			GREEN_PRESSURE_PLATE,
-			GRAY_PRESSURE_PLATE,
-			BROWN_PRESSURE_PLATE,
-			MECHANICAL_EYE,
-			CURSED_ARROW,
-			CURSED_BULLET,
-			SOUL_OF_FRIGHT,
-			SOUL_OF_MIGHT,
-			SOUL_OF_SIGHT,
-			GUNGNIR,
-			HALLOWED_PLATE_MAIL,
-			HALLOWED_GREAVES,
-			HALLOWED_HELMET,
-			CROSS_NECKLACE,
-			MANA_FLOWER,
-			MECHANICAL_WORM,
-			MECHANICAL_SKULL,
-			HALLOWED_HEADGEAR,
-			HALLOWED_MASK,
-			SLIME_CROWN,
-			LIGHT_DISC,
-			MUSIC_BOX_OVERWORLD_DAY,
-			MUSIC_BOX_EERIE,
-			MUSIC_BOX_NIGHT,
-			MUSIC_BOX_TITLE,
-			MUSIC_BOX_UNDERGROUND,
-			MUSIC_BOX_BOSS1,
-			MUSIC_BOX_JUNGLE,
-			MUSIC_BOX_CORRUPTION,
-			MUSIC_BOX_UNDERGROUND_CORRUPTION,
-			MUSIC_BOX_THE_HALLOW,
-			MUSIC_BOX_BOSS2,
-			MUSIC_BOX_UNDERGROUND_HALLOW,
-			MUSIC_BOX_BOSS3,
-			SOUL_OF_FLIGHT,
-			MUSIC_BOX,
-			DEMONITE_BRICK,
-			HALLOWED_REPEATER,
-			HAMDRAX,
-			EXPLOSIVES,
-			INLET_PUMP,
-			OUTLET_PUMP,
-			ONE_SECOND_TIMER,
-			THREE_SECOND_TIMER,
-			FIVE_SECOND_TIMER,
-			CANDY_CANE_BLOCK,
-			CANDY_CANE_WALL,
-			SANTA_HAT,
-			SANTA_SHIRT,
-			SANTA_PANTS,
-			GREEN_CANDY_CANE_BLOCK,
-			GREEN_CANDY_CANE_WALL,
-			SNOW_BLOCK,
-			SNOW_BRICK,
-			SNOW_BRICK_WALL,
-			BLUE_LIGHT,
-			RED_LIGHT,
-			GREEN_LIGHT,
-			BLUE_PRESENT,
-			GREEN_PRESENT,
-			YELLOW_PRESENT,
-			SNOW_GLOBE,
-			PET_SPAWN_1, // Guinea Pig
-			DRAGON_MASK,
-			TITAN_HELMET,
-			SPECTRAL_HEADGEAR,
-			DRAGON_BREASTPLATE,
-			TITAN_MAIL,
-			SPECTRAL_ARMOR,
-			DRAGON_GREAVES,
-			TITAN_LEGGINGS,
-			SPECTRAL_SUBLIGAR,
-			TIZONA,
-			TONBOGIRI,
-			SHARANGA,
-			SPECTRAL_ARROW,
-			VULCAN_REPEATER,
-			VULCAN_BOLT,
-			SUSPICIOUS_LOOKING_SKULL,
-			SOUL_OF_BLIGHT,
-			PET_SPAWN_2, // Slime
-			PET_SPAWN_3, // Hornet
-			PET_SPAWN_4, // Bat
-			PET_SPAWN_5, // Werewolf
-			PET_SPAWN_6, // Zombie
-			MUSIC_BOX_DESERT,
-			MUSIC_BOX_SPACE,
-			MUSIC_BOX_TUTORIAL,
-			MUSIC_BOX_BOSS4,
-			MUSIC_BOX_OCEAN,
-			MUSIC_BOX_SNOW,
-#if VERSION_101
-			FABULOUS_RIBBON,
-			GEORGES_HAT,
-			FABULOUS_DRESS,
-			GEORGES_SUIT,
-			FABULOUS_SLIPPERS,
-			GEORGES_PANTS,
-			SPARKLY_WINGS,
-			CAMPFIRE,
-			WOOD_HELMET,
-			WOOD_BREASTPLATE,
-			WOOD_GREAVES,
-			CACTUS_SWORD,
-			CACTUS_PICKAXE,
-			CACTUS_HELMET,
-			CACTUS_BREASTPLATE,
-			CACTUS_LEGGINGS,
-			PURPLE_STAINED_GLASS,
-			YELLOW_STAINED_GLASS,
-			BLUE_STAINED_GLASS,
-			GREEN_STAINED_GLASS,
-			RED_STAINED_GLASS,
-			MULTICOLORED_STAINED_GLASS,
-#endif
-			NUM_TYPES
-		}
-
-		public const int MaxNumItemTypes = (int)ID.NUM_TYPES;
+		public const int MaxNumItemTypes = (int)EntityID.ItemID.NUM_TYPES;
 
 		public const uint PotionDelay = 3600u;
 
@@ -828,238 +167,242 @@ namespace Terraria
 
 		public int Value;
 
-		private static readonly byte[] ToolPrefixs = new byte[40]
+		private static readonly EntityID.PrefixID[] ToolPrefixs = new EntityID.PrefixID[40]
 		{
-			1,
-			2,
-			3,
-			4,
-			5,
-			6,
-			7,
-			8,
-			9,
-			10,
-			11,
-			12,
-			13,
-			14,
-			15,
-			36,
-			37,
-			38,
-			53,
-			54,
-			55,
-			39,
-			40,
-			56,
-			41,
-			57,
-			42,
-			43,
-			44,
-			45,
-			46,
-			47,
-			48,
-			49,
-			50,
-			51,
-			59,
-			60,
-			61,
-			81
+			EntityID.PrefixID.LARGE,
+			EntityID.PrefixID.MASSIVE,
+			EntityID.PrefixID.DANGEROUS,
+			EntityID.PrefixID.SAVAGE,
+			EntityID.PrefixID.SHARP,
+			EntityID.PrefixID.POINTY,
+			EntityID.PrefixID.TINY,
+			EntityID.PrefixID.TERRIBLE,
+			EntityID.PrefixID.SMALL,
+			EntityID.PrefixID.DULL,
+			EntityID.PrefixID.UNHAPPY,
+			EntityID.PrefixID.BULKY,
+			EntityID.PrefixID.SHAMEFUL,
+			EntityID.PrefixID.HEAVY,
+			EntityID.PrefixID.LIGHT,
+			EntityID.PrefixID.KEEN,
+			EntityID.PrefixID.SUPERIOR,
+			EntityID.PrefixID.FORCEFUL,
+			EntityID.PrefixID.HURTFUL,
+			EntityID.PrefixID.STRONG,
+			EntityID.PrefixID.UNPLEASANT,
+			EntityID.PrefixID.BROKEN,
+			EntityID.PrefixID.DAMAGED,
+			EntityID.PrefixID.WEAK,
+			EntityID.PrefixID.SHODDY,
+			EntityID.PrefixID.RUTHLESS,
+			EntityID.PrefixID.QUICK,
+			EntityID.PrefixID.DEADLY2,
+			EntityID.PrefixID.AGILE,
+			EntityID.PrefixID.NIMBLE,
+			EntityID.PrefixID.MURDEROUS,
+			EntityID.PrefixID.SLOW,
+			EntityID.PrefixID.SLUGGISH,
+			EntityID.PrefixID.LAZY,
+			EntityID.PrefixID.ANNOYING,
+			EntityID.PrefixID.NASTY,
+			EntityID.PrefixID.GODLY,
+			EntityID.PrefixID.DEMONIC,
+			EntityID.PrefixID.ZEALOUS,
+			EntityID.PrefixID.LEGENDARY,
+			// EntityID.PrefixID.PIERCING
 		};
 
-		private static readonly byte[] SpearPrefixs = new byte[14]
+		private static readonly EntityID.PrefixID[] SpearPrefixs = new EntityID.PrefixID[14]
 		{
-			36,
-			37,
-			38,
-			53,
-			54,
-			55,
-			39,
-			40,
-			56,
-			41,
-			57,
-			59,
-			60,
-			61
+			EntityID.PrefixID.KEEN,
+			EntityID.PrefixID.SUPERIOR,
+			EntityID.PrefixID.FORCEFUL,
+			EntityID.PrefixID.HURTFUL,
+			EntityID.PrefixID.STRONG,
+			EntityID.PrefixID.UNPLEASANT,
+			EntityID.PrefixID.BROKEN,
+			EntityID.PrefixID.DAMAGED,
+			EntityID.PrefixID.WEAK,
+			EntityID.PrefixID.SHODDY,
+			EntityID.PrefixID.RUTHLESS,
+			EntityID.PrefixID.GODLY,
+			EntityID.PrefixID.DEMONIC,
+			EntityID.PrefixID.ZEALOUS,
+			// EntityID.PrefixID.PIERCING
 		};
 
-		private static readonly byte[] GunPrefixs = new byte[36]
+		private static readonly EntityID.PrefixID[] GunPrefixs = new EntityID.PrefixID[36]
 		{
-			16,
-			17,
-			18,
-			19,
-			20,
-			21,
-			22,
-			23,
-			24,
-			25,
-			58,
-			36,
-			37,
-			38,
-			53,
-			54,
-			55,
-			39,
-			40,
-			56,
-			41,
-			57,
-			42,
-			43,
-			44,
-			45,
-			46,
-			47,
-			48,
-			49,
-			50,
-			51,
-			59,
-			60,
-			61,
-			82
+			EntityID.PrefixID.SIGHTED,
+			EntityID.PrefixID.RAPID,
+			EntityID.PrefixID.HASTY,
+			EntityID.PrefixID.INTIMIDATING,
+			EntityID.PrefixID.DEADLY,
+			EntityID.PrefixID.STAUNCH,
+			EntityID.PrefixID.AWFUL,
+			EntityID.PrefixID.LETHARGIC,
+			EntityID.PrefixID.AWKWARD,
+			EntityID.PrefixID.POWERFUL,
+			EntityID.PrefixID.FRENZYING,
+			EntityID.PrefixID.KEEN,
+			EntityID.PrefixID.SUPERIOR,
+			EntityID.PrefixID.FORCEFUL,
+			EntityID.PrefixID.HURTFUL,
+			EntityID.PrefixID.STRONG,
+			EntityID.PrefixID.UNPLEASANT,
+			EntityID.PrefixID.BROKEN,
+			EntityID.PrefixID.DAMAGED,
+			EntityID.PrefixID.WEAK,
+			EntityID.PrefixID.SHODDY,
+			EntityID.PrefixID.RUTHLESS,
+			EntityID.PrefixID.QUICK,
+			EntityID.PrefixID.DEADLY2,
+			EntityID.PrefixID.AGILE,
+			EntityID.PrefixID.NIMBLE,
+			EntityID.PrefixID.MURDEROUS,
+			EntityID.PrefixID.SLOW,
+			EntityID.PrefixID.SLUGGISH,
+			EntityID.PrefixID.LAZY,
+			EntityID.PrefixID.ANNOYING,
+			EntityID.PrefixID.NASTY,
+			EntityID.PrefixID.GODLY,
+			EntityID.PrefixID.DEMONIC,
+			EntityID.PrefixID.ZEALOUS,
+			EntityID.PrefixID.UNREAL
 		};
 
-		private static readonly byte[] MagicPrefixs = new byte[36]
+		private static readonly EntityID.PrefixID[] MagicPrefixs = new EntityID.PrefixID[36]
 		{
-			26,
-			27,
-			28,
-			29,
-			30,
-			31,
-			32,
-			33,
-			34,
-			35,
-			52,
-			36,
-			37,
-			38,
-			53,
-			54,
-			55,
-			39,
-			40,
-			56,
-			41,
-			57,
-			42,
-			43,
-			44,
-			45,
-			46,
-			47,
-			48,
-			49,
-			50,
-			51,
-			59,
-			60,
-			61,
-			83
+			EntityID.PrefixID.MYSTIC,
+			EntityID.PrefixID.ADEPT,
+			EntityID.PrefixID.MASTERFUL,
+			EntityID.PrefixID.INEPT,
+			EntityID.PrefixID.IGNORANT,
+			EntityID.PrefixID.DERANGED,
+			EntityID.PrefixID.INTENSE,
+			EntityID.PrefixID.TABOO,
+			EntityID.PrefixID.CELESTIAL,
+			EntityID.PrefixID.FURIOUS,
+			EntityID.PrefixID.MANIC,
+			EntityID.PrefixID.KEEN,
+			EntityID.PrefixID.SUPERIOR,
+			EntityID.PrefixID.FORCEFUL,
+			EntityID.PrefixID.HURTFUL,
+			EntityID.PrefixID.STRONG,
+			EntityID.PrefixID.UNPLEASANT,
+			EntityID.PrefixID.BROKEN,
+			EntityID.PrefixID.DAMAGED,
+			EntityID.PrefixID.WEAK,
+			EntityID.PrefixID.SHODDY,
+			EntityID.PrefixID.RUTHLESS,
+			EntityID.PrefixID.QUICK,
+			EntityID.PrefixID.DEADLY2,
+			EntityID.PrefixID.AGILE,
+			EntityID.PrefixID.NIMBLE,
+			EntityID.PrefixID.MURDEROUS,
+			EntityID.PrefixID.SLOW,
+			EntityID.PrefixID.SLUGGISH,
+			EntityID.PrefixID.LAZY,
+			EntityID.PrefixID.ANNOYING,
+			EntityID.PrefixID.NASTY,
+			EntityID.PrefixID.GODLY,
+			EntityID.PrefixID.DEMONIC,
+			EntityID.PrefixID.ZEALOUS,
+			EntityID.PrefixID.MYTHICAL,
+			// EntityID.PrefixID.PIERCING
 		};
 
-		private static readonly byte[] BoomerangPrefixs = new byte[14]
+		private static readonly EntityID.PrefixID[] BoomerangPrefixs = new EntityID.PrefixID[14] // This is identical to SpearPrefixs, not sure why they did not just merge the two.
 		{
-			36,
-			37,
-			38,
-			53,
-			54,
-			55,
-			39,
-			40,
-			56,
-			41,
-			57,
-			59,
-			60,
-			61
+			EntityID.PrefixID.KEEN,
+			EntityID.PrefixID.SUPERIOR,
+			EntityID.PrefixID.FORCEFUL,
+			EntityID.PrefixID.HURTFUL,
+			EntityID.PrefixID.STRONG,
+			EntityID.PrefixID.UNPLEASANT,
+			EntityID.PrefixID.BROKEN,
+			EntityID.PrefixID.DAMAGED,
+			EntityID.PrefixID.WEAK,
+			EntityID.PrefixID.SHODDY,
+			EntityID.PrefixID.RUTHLESS,
+			EntityID.PrefixID.GODLY,
+			EntityID.PrefixID.DEMONIC,
+			EntityID.PrefixID.ZEALOUS,
+			// EntityID.PrefixID.PIERCING
 		};
 
 #if !USE_ORIGINAL_CODE
-		public static readonly ID[] ArmorIDs =
+		public static readonly EntityID.ItemID[] ArmorIDs =
 		{
-			ID.MINING_HELMET,
-			ID.MINING_SHIRT,
-			ID.MINING_PANTS,
+			EntityID.ItemID.MINING_HELMET,
+			EntityID.ItemID.MINING_SHIRT,
+			EntityID.ItemID.MINING_PANTS,
 
 #if VERSION_103 || VERSION_FINAL // BUG: In 1.01, they added Cactus and Wood as armours from PC 1.2, but they didn't account for the armour achievement until Console 1.2.
-			ID.WOOD_HELMET,
-			ID.WOOD_BREASTPLATE,
-			ID.WOOD_GREAVES,
-			ID.CACTUS_HELMET,
-			ID.CACTUS_BREASTPLATE,
-			ID.CACTUS_LEGGINGS,
+			EntityID.ItemID.WOOD_HELMET,
+			EntityID.ItemID.WOOD_BREASTPLATE,
+			EntityID.ItemID.WOOD_GREAVES,
+			EntityID.ItemID.CACTUS_HELMET,
+			EntityID.ItemID.CACTUS_BREASTPLATE,
+			EntityID.ItemID.CACTUS_LEGGINGS,
 #endif
 
-			ID.COPPER_HELMET,
-			ID.COPPER_CHAINMAIL,
-			ID.COPPER_GREAVES,
-			ID.IRON_HELMET,
-			ID.IRON_CHAINMAIL,
-			ID.IRON_GREAVES,
-			ID.SILVER_HELMET,
-			ID.SILVER_CHAINMAIL,
-			ID.SILVER_GREAVES,
-			ID.GOLD_HELMET,
-			ID.GOLD_CHAINMAIL,
-			ID.GOLD_GREAVES,
-			ID.METEOR_HELMET,
-			ID.METEOR_SUIT,
-			ID.METEOR_LEGGINGS,
-			ID.SHADOW_HELMET,
-			ID.SHADOW_SCALEMAIL,
-			ID.SHADOW_GREAVES,
-			ID.JUNGLE_HAT,
-			ID.JUNGLE_SHIRT,
-			ID.JUNGLE_PANTS,
-			ID.NECRO_HELMET,
-			ID.NECRO_BREASTPLATE,
-			ID.NECRO_GREAVES,
-			ID.MOLTEN_HELMET,
-			ID.MOLTEN_BREASTPLATE,
-			ID.MOLTEN_GREAVES,
-			ID.COBALT_HAT,
-			ID.COBALT_HELMET,
-			ID.COBALT_MASK,
-			ID.COBALT_BREASTPLATE,
-			ID.COBALT_LEGGINGS,
-			ID.MYTHRIL_HOOD,
-			ID.MYTHRIL_HELMET,
-			ID.MYTHRIL_HAT,
-			ID.MYTHRIL_CHAINMAIL,
-			ID.MYTHRIL_GREAVES,
-			ID.ADAMANTITE_HEADGEAR,
-			ID.ADAMANTITE_MASK,
-			ID.ADAMANTITE_HELMET,
-			ID.ADAMANTITE_BREASTPLATE,
-			ID.ADAMANTITE_LEGGINGS,
-			ID.HALLOWED_HEADGEAR,
-			ID.HALLOWED_MASK,
-			ID.HALLOWED_HELMET,
-			ID.HALLOWED_PLATE_MAIL,
-			ID.HALLOWED_GREAVES,
-			ID.DRAGON_MASK,
-			ID.DRAGON_BREASTPLATE,
-			ID.DRAGON_GREAVES,
-			ID.TITAN_HELMET,
-			ID.TITAN_MAIL,
-			ID.TITAN_LEGGINGS,
-			ID.SPECTRAL_HEADGEAR,
-			ID.SPECTRAL_ARMOR,
-			ID.SPECTRAL_SUBLIGAR,
+			EntityID.ItemID.COPPER_HELMET,
+			EntityID.ItemID.COPPER_CHAINMAIL,
+			EntityID.ItemID.COPPER_GREAVES,
+			EntityID.ItemID.IRON_HELMET,
+			EntityID.ItemID.IRON_CHAINMAIL,
+			EntityID.ItemID.IRON_GREAVES,
+			EntityID.ItemID.SILVER_HELMET,
+			EntityID.ItemID.SILVER_CHAINMAIL,
+			EntityID.ItemID.SILVER_GREAVES,
+			EntityID.ItemID.GOLD_HELMET,
+			EntityID.ItemID.GOLD_CHAINMAIL,
+			EntityID.ItemID.GOLD_GREAVES,
+			EntityID.ItemID.METEOR_HELMET,
+			EntityID.ItemID.METEOR_SUIT,
+			EntityID.ItemID.METEOR_LEGGINGS,
+			EntityID.ItemID.SHADOW_HELMET,
+			EntityID.ItemID.SHADOW_SCALEMAIL,
+			EntityID.ItemID.SHADOW_GREAVES,
+			EntityID.ItemID.JUNGLE_HAT,
+			EntityID.ItemID.JUNGLE_SHIRT,
+			EntityID.ItemID.JUNGLE_PANTS,
+			EntityID.ItemID.NECRO_HELMET,
+			EntityID.ItemID.NECRO_BREASTPLATE,
+			EntityID.ItemID.NECRO_GREAVES,
+			EntityID.ItemID.MOLTEN_HELMET,
+			EntityID.ItemID.MOLTEN_BREASTPLATE,
+			EntityID.ItemID.MOLTEN_GREAVES,
+			EntityID.ItemID.COBALT_HAT,
+			EntityID.ItemID.COBALT_HELMET,
+			EntityID.ItemID.COBALT_MASK,
+			EntityID.ItemID.COBALT_BREASTPLATE,
+			EntityID.ItemID.COBALT_LEGGINGS,
+			EntityID.ItemID.MYTHRIL_HOOD,
+			EntityID.ItemID.MYTHRIL_HELMET,
+			EntityID.ItemID.MYTHRIL_HAT,
+			EntityID.ItemID.MYTHRIL_CHAINMAIL,
+			EntityID.ItemID.MYTHRIL_GREAVES,
+			EntityID.ItemID.ADAMANTITE_HEADGEAR,
+			EntityID.ItemID.ADAMANTITE_MASK,
+			EntityID.ItemID.ADAMANTITE_HELMET,
+			EntityID.ItemID.ADAMANTITE_BREASTPLATE,
+			EntityID.ItemID.ADAMANTITE_LEGGINGS,
+			EntityID.ItemID.HALLOWED_HEADGEAR,
+			EntityID.ItemID.HALLOWED_MASK,
+			EntityID.ItemID.HALLOWED_HELMET,
+			EntityID.ItemID.HALLOWED_PLATE_MAIL,
+			EntityID.ItemID.HALLOWED_GREAVES,
+			EntityID.ItemID.DRAGON_MASK,
+			EntityID.ItemID.DRAGON_BREASTPLATE,
+			EntityID.ItemID.DRAGON_GREAVES,
+			EntityID.ItemID.TITAN_HELMET,
+			EntityID.ItemID.TITAN_MAIL,
+			EntityID.ItemID.TITAN_LEGGINGS,
+			EntityID.ItemID.SPECTRAL_HEADGEAR,
+			EntityID.ItemID.SPECTRAL_ARMOR,
+			EntityID.ItemID.SPECTRAL_SUBLIGAR,
 		};
 #endif
 
@@ -1117,7 +460,7 @@ namespace Terraria
 			HealLife = 0;
 			Knockback = 0f;
 			PickPower = 0;
-			Rarity = 0;
+			Rarity = (sbyte)EntityID.RarityID.WHITE;
 			Scale = 1f;
 			Shoot = 0;
 			Stack = 0;
@@ -1156,7 +499,7 @@ namespace Terraria
 
 		public bool SetPrefix(int Setting)
 		{
-			if (Setting == 0 || Type == 0)
+			if (Setting == (byte)EntityID.PrefixID.NONE || Type == 0)
 			{
 				return false;
 			}
@@ -1181,7 +524,7 @@ namespace Terraria
 				flag = false;
 				if (PrefixID == -1 && Main.Rand.Next(4) == 0)
 				{
-					PrefixID = 0;
+					PrefixID = (int)EntityID.PrefixID.NONE;
 				}
 				if (Setting < -1)
 				{
@@ -1189,38 +532,34 @@ namespace Terraria
 				}
 				if (PrefixID == -1 || PrefixID == -2 || PrefixID == -3)
 				{
-#if !VERSION_INITIAL
-					if (Type == (int)Item.ID.IRON_PICKAXE || Type == (int)Item.ID.IRON_BROADSWORD || Type == (int)Item.ID.IRON_SHORTSWORD || Type == (int)Item.ID.IRON_HAMMER || Type == (int)Item.ID.IRON_AXE || Type == (int)Item.ID.WOODEN_SWORD || Type == (int)Item.ID.WAR_AXE_OF_THE_NIGHT || Type == (int)Item.ID.LIGHTS_BANE || Type == (int)Item.ID.NIGHTMARE_PICKAXE || Type == (int)Item.ID.THE_BREAKER || Type == (int)Item.ID.FIERY_GREATSWORD || Type == (int)Item.ID.MOLTEN_PICKAXE || Type == (int)Item.ID.MURAMASA || Type == (int)Item.ID.BLADE_OF_GRASS || Type == (int)Item.ID.WOODEN_HAMMER || Type == (int)Item.ID.BLUE_PHASEBLADE || Type == (int)Item.ID.RED_PHASEBLADE || Type == (int)Item.ID.GREEN_PHASEBLADE || Type == (int)Item.ID.PURPLE_PHASEBLADE || Type == (int)Item.ID.WHITE_PHASEBLADE || Type == (int)Item.ID.YELLOW_PHASEBLADE || Type == (int)Item.ID.METEOR_HAMAXE || Type == (int)Item.ID.STAFF_OF_REGROWTH || Type == (int)Item.ID.MOLTEN_HAMAXE || Type == (int)Item.ID.NIGHTS_EDGE || Type == (int)Item.ID.PWNHAMMER || Type == (int)Item.ID.EXCALIBUR || Type == (int)Item.ID.BREAKER_BLADE || Type == (int)Item.ID.ADAMANTITE_SWORD || Type == (int)Item.ID.COBALT_SWORD || Type == (int)Item.ID.MYTHRIL_SWORD || Type == (int)Item.ID.TIZONA || Type == (int)ID.CACTUS_SWORD || Type == (int)ID.CACTUS_PICKAXE)
-#else
-					if (Type == (int)Item.ID.IRON_PICKAXE || Type == (int)Item.ID.IRON_BROADSWORD || Type == (int)Item.ID.IRON_SHORTSWORD || Type == (int)Item.ID.IRON_HAMMER || Type == (int)Item.ID.IRON_AXE || Type == (int)Item.ID.WOODEN_SWORD || Type == (int)Item.ID.WAR_AXE_OF_THE_NIGHT || Type == (int)Item.ID.LIGHTS_BANE || Type == (int)Item.ID.NIGHTMARE_PICKAXE || Type == (int)Item.ID.THE_BREAKER || Type == (int)Item.ID.FIERY_GREATSWORD || Type == (int)Item.ID.MOLTEN_PICKAXE || Type == (int)Item.ID.MURAMASA || Type == (int)Item.ID.BLADE_OF_GRASS || Type == (int)Item.ID.WOODEN_HAMMER || Type == (int)Item.ID.BLUE_PHASEBLADE || Type == (int)Item.ID.RED_PHASEBLADE || Type == (int)Item.ID.GREEN_PHASEBLADE || Type == (int)Item.ID.PURPLE_PHASEBLADE || Type == (int)Item.ID.WHITE_PHASEBLADE || Type == (int)Item.ID.YELLOW_PHASEBLADE || Type == (int)Item.ID.METEOR_HAMAXE || Type == (int)Item.ID.STAFF_OF_REGROWTH || Type == (int)Item.ID.MOLTEN_HAMAXE || Type == (int)Item.ID.NIGHTS_EDGE || Type == (int)Item.ID.PWNHAMMER || Type == (int)Item.ID.EXCALIBUR || Type == (int)Item.ID.BREAKER_BLADE || Type == (int)Item.ID.ADAMANTITE_SWORD || Type == (int)Item.ID.COBALT_SWORD || Type == (int)Item.ID.MYTHRIL_SWORD || Type == (int)Item.ID.TIZONA)
-#endif
+					if (Array.BinarySearch(EntityID.ToolItems, (EntityID.ItemID)Type) >= 0)
 					{
-						PrefixID = ToolPrefixs[Main.Rand.Next(ToolPrefixs.Length)];
+						PrefixID = (byte)ToolPrefixs[Main.Rand.Next(ToolPrefixs.Length)];
 					}
-					else if (Type == (int)Item.ID.BALL_O_HURT || Type == (int)Item.ID.HARPOON || Type == (int)Item.ID.BLUE_MOON || Type == (int)Item.ID.SUNFURY || Type == (int)Item.ID.DARK_LANCE || Type == (int)Item.ID.TRIDENT || Type == (int)Item.ID.SPEAR || Type == (int)Item.ID.COBALT_CHAINSAW || Type == (int)Item.ID.MYTHRIL_CHAINSAW || Type == (int)Item.ID.COBALT_DRILL || Type == (int)Item.ID.MYTHRIL_DRILL || Type == (int)Item.ID.ADAMANTITE_CHAINSAW || Type == (int)Item.ID.ADAMANTITE_DRILL || Type == (int)Item.ID.DAO_OF_POW || Type == (int)Item.ID.MYTHRIL_HALBERD || Type == (int)Item.ID.ADAMANTITE_GLAIVE || Type == (int)Item.ID.COBALT_NAGINATA || Type == (int)Item.ID.GUNGNIR || Type == (int)Item.ID.HAMDRAX || Type == (int)Item.ID.TONBOGIRI)
+					else if (Array.BinarySearch(EntityID.SpearItems, (EntityID.ItemID)Type) >= 0)
 					{
-						PrefixID = SpearPrefixs[Main.Rand.Next(SpearPrefixs.Length)];
+						PrefixID = (byte)SpearPrefixs[Main.Rand.Next(SpearPrefixs.Length)];
 					}
-					else if (Type == (int)Item.ID.WOODEN_BOW || Type == (int)Item.ID.DEMON_BOW || Type == (int)Item.ID.FLINTLOCK_PISTOL || Type == (int)Item.ID.MUSKET || Type == (int)Item.ID.MINISHARK || Type == (int)Item.ID.IRON_BOW || Type == (int)Item.ID.MOLTEN_FURY || Type == (int)Item.ID.HANDGUN || Type == (int)Item.ID.STAR_CANNON || Type == (int)Item.ID.PHOENIX_BLASTER || Type == (int)Item.ID.SANDGUN || Type == (int)Item.ID.BLOWPIPE || Type == (int)Item.ID.CLOCKWORK_ASSAULT_RIFLE || Type == (int)Item.ID.COBALT_REPEATER || Type == (int)Item.ID.MYTHRIL_REPEATER || Type == (int)Item.ID.ADAMANTITE_REPEATER || Type == (int)Item.ID.FLAMETHROWER || Type == (int)Item.ID.MEGASHARK || Type == (int)Item.ID.SHOTGUN || Type == (int)Item.ID.HALLOWED_REPEATER || Type == (int)Item.ID.SHARANGA || Type == (int)Item.ID.VULCAN_REPEATER)
+					else if (Array.BinarySearch(EntityID.GunItems, (EntityID.ItemID)Type) >= 0)
 					{
-						PrefixID = GunPrefixs[Main.Rand.Next(GunPrefixs.Length)];
+						PrefixID = (byte)GunPrefixs[Main.Rand.Next(GunPrefixs.Length)];
 					}
-					else if (Type == (int)Item.ID.VILETHORN || Type == (int)Item.ID.STARFURY || Type == (int)Item.ID.FLOWER_OF_FIRE || Type == (int)Item.ID.MAGIC_MISSILE || Type == (int)Item.ID.SPACE_GUN || Type == (int)Item.ID.AQUA_SCEPTER || Type == (int)Item.ID.WATER_BOLT || Type == (int)Item.ID.FLAMELASH || Type == (int)Item.ID.DEMON_SCYTHE || Type == (int)Item.ID.MAGICAL_HARP || Type == (int)Item.ID.RAINBOW_ROD || Type == (int)Item.ID.ICE_ROD || Type == (int)Item.ID.LASER_RIFLE || Type == (int)Item.ID.MAGIC_DAGGER || Type == (int)Item.ID.CRYSTAL_STORM || Type == (int)Item.ID.CURSED_FLAMES)
+					else if (Array.BinarySearch(EntityID.MagicItems, (EntityID.ItemID)Type) >= 0)
 					{
-						PrefixID = MagicPrefixs[Main.Rand.Next(MagicPrefixs.Length)];
+						PrefixID = (byte)MagicPrefixs[Main.Rand.Next(MagicPrefixs.Length)];
 					}
-					else if (Type == (int)Item.ID.ENCHANTED_BOOMERANG || Type == (int)Item.ID.FLAMARANG || Type == (int)Item.ID.THORN_CHAKRAM || Type == (int)Item.ID.WOODEN_BOOMERANG)
+					else if (Array.BinarySearch(EntityID.BoomerangItems, (EntityID.ItemID)Type) >= 0)
 					{
-						PrefixID = BoomerangPrefixs[Main.Rand.Next(BoomerangPrefixs.Length)];
+						PrefixID = (byte)BoomerangPrefixs[Main.Rand.Next(BoomerangPrefixs.Length)];
 					}
 					else
 					{
-						if (!IsAccessory || Type == (int)Item.ID.GUIDE_VOODOO_DOLL || Type == (int)Item.ID.MUSIC_BOX_OVERWORLD_DAY || Type == (int)Item.ID.MUSIC_BOX_EERIE || Type == (int)Item.ID.MUSIC_BOX_NIGHT || Type == (int)Item.ID.MUSIC_BOX_TITLE || Type == (int)Item.ID.MUSIC_BOX_UNDERGROUND || Type == (int)Item.ID.MUSIC_BOX_BOSS1 || Type == (int)Item.ID.MUSIC_BOX_JUNGLE || Type == (int)Item.ID.MUSIC_BOX_CORRUPTION || Type == (int)Item.ID.MUSIC_BOX_UNDERGROUND_CORRUPTION || Type == (int)Item.ID.MUSIC_BOX_THE_HALLOW || Type == (int)Item.ID.MUSIC_BOX_BOSS2 || Type == (int)Item.ID.MUSIC_BOX_UNDERGROUND_HALLOW || Type == (int)Item.ID.MUSIC_BOX_BOSS3 || Type == (int)Item.ID.MUSIC_BOX)
+						if (!IsAccessory || Array.BinarySearch(EntityID.ExcludedEquips, (EntityID.ItemID)Type) >= 0)
 						// BUG: Despite adding the checks for the cactus sword and pick, they do not exclude the exclusive music boxes in either 1.0 or 1.01. This means you can get accessory modifiers on the console music boxes.
 						{
 							return false;
 						}
-						PrefixID = Main.Rand.Next(62, 81);
+						PrefixID = Main.Rand.Next((byte)EntityID.PrefixID.HARD, (byte)EntityID.PrefixID.VIOLENT + 1);  // 62 to 80 inclusive marks the range of accessory prefixes.
 					}
 				}
 
@@ -1229,282 +568,292 @@ namespace Terraria
 					case -3:
 						return true;
 					case -1:
-						if (((PrefixID >= 7 && PrefixID <= 11) || PrefixID == 22 || PrefixID == 23 || PrefixID == 24 || PrefixID == 29 || PrefixID == 30 || PrefixID == 31 || PrefixID == 39 || PrefixID == 40 || PrefixID == 41 || PrefixID == 47 || PrefixID == 48 || PrefixID == 49 || PrefixID == 56) && Main.Rand.Next(3) != 0)
+						// This part ensures that bad prefixes are less likely to appear than good ones upon crafting an item. This is done by giving them a 33% chance to appear when compared to other prefixes.
+						// Fun fact: If you check the prefixes, you'll find that 'Annoying', which slows and weakens your weapon, is not included in this list. This is the case in every version of the game up to, and including PC 1.4.4.9.
+						if ((Array.BinarySearch(EntityID.BadPrefixes, (EntityID.PrefixID)PrefixID) >= 0) && Main.Rand.Next(3) != 0)
 						{
-							PrefixID = 0;
+							PrefixID = (byte)EntityID.PrefixID.NONE;
 						}
 						break;
 				}
-				switch (PrefixID)
+
+				switch ((EntityID.PrefixID)PrefixID)
 				{
-					case 1:
+					case EntityID.PrefixID.LARGE:
 						PrefixScale = 1.12f;
 						break;
-					case 2:
+					case EntityID.PrefixID.MASSIVE:
 						PrefixScale = 1.18f;
 						break;
-					case 3:
+					case EntityID.PrefixID.DANGEROUS:
 						PrefixDamage = 1.05f;
 						PrefixCrit = 2;
 						PrefixScale = 1.05f;
 						break;
-					case 4:
+					case EntityID.PrefixID.SAVAGE:
 						PrefixDamage = 1.1f;
 						PrefixScale = 1.1f;
 						PrefixKB = 1.1f;
 						break;
-					case 5:
+					case EntityID.PrefixID.SHARP:
 						PrefixDamage = 1.15f;
 						break;
-					case 6:
+					case EntityID.PrefixID.POINTY:
 						PrefixDamage = 1.1f;
 						break;
-					case 81:
-						PrefixKB = 1.15f;
-						PrefixDamage = 1.15f;
-						PrefixCrit = 5;
-						PrefixDelay = 0.9f;
-						PrefixScale = 1.1f;
-						break;
-					case 7:
+					case EntityID.PrefixID.TINY:
 						PrefixScale = 0.82f;
 						break;
-					case 8:
+					case EntityID.PrefixID.TERRIBLE:
 						PrefixKB = 0.85f;
 						PrefixDamage = 0.85f;
 						PrefixScale = 0.87f;
 						break;
-					case 9:
+					case EntityID.PrefixID.SMALL:
 						PrefixScale = 0.9f;
 						break;
-					case 10:
+					case EntityID.PrefixID.DULL:
 						PrefixDamage = 0.85f;
 						break;
-					case 11:
+					case EntityID.PrefixID.UNHAPPY:
 						PrefixDelay = 1.1f;
 						PrefixKB = 0.9f;
 						PrefixScale = 0.9f;
 						break;
-					case 12:
+					case EntityID.PrefixID.BULKY:
 						PrefixKB = 1.1f;
 						PrefixDamage = 1.05f;
 						PrefixScale = 1.1f;
 						PrefixDelay = 1.15f;
 						break;
-					case 13:
+					case EntityID.PrefixID.SHAMEFUL:
 						PrefixKB = 0.8f;
 						PrefixDamage = 0.9f;
 						PrefixScale = 1.1f;
 						break;
-					case 14:
+					case EntityID.PrefixID.HEAVY:
 						PrefixKB = 1.15f;
 						PrefixDelay = 1.1f;
 						break;
-					case 15:
+					case EntityID.PrefixID.LIGHT:
 						PrefixKB = 0.9f;
 						PrefixDelay = 0.85f;
 						break;
-					case 16:
+					case EntityID.PrefixID.SIGHTED:
 						PrefixDamage = 1.1f;
 						PrefixCrit = 3;
 						break;
-					case 17:
+					case EntityID.PrefixID.RAPID:
 						PrefixDelay = 0.85f;
 						PrefixFireRate = 1.1f;
 						break;
-					case 18:
+					case EntityID.PrefixID.HASTY:
 						PrefixDelay = 0.9f;
 						PrefixFireRate = 1.15f;
 						break;
-					case 19:
+					case EntityID.PrefixID.INTIMIDATING:
 						PrefixKB = 1.15f;
 						PrefixFireRate = 1.05f;
 						break;
-					case 20:
+					case EntityID.PrefixID.DEADLY:
 						PrefixKB = 1.05f;
 						PrefixFireRate = 1.05f;
 						PrefixDamage = 1.1f;
 						PrefixDelay = 0.95f;
 						PrefixCrit = 2;
 						break;
-					case 21:
+					case EntityID.PrefixID.STAUNCH:
 						PrefixKB = 1.15f;
 						PrefixDamage = 1.1f;
 						break;
-					case 82:
-						PrefixKB = 1.15f;
-						PrefixDamage = 1.15f;
-						PrefixCrit = 5;
-						PrefixDelay = 0.9f;
-						PrefixFireRate = 1.1f;
-						break;
-					case 22:
+					case EntityID.PrefixID.AWFUL:
 						PrefixKB = 0.9f;
 						PrefixFireRate = 0.9f;
 						PrefixDamage = 0.85f;
 						break;
-					case 23:
+					case EntityID.PrefixID.LETHARGIC:
 						PrefixDelay = 1.15f;
 						PrefixFireRate = 0.9f;
 						break;
-					case 24:
+					case EntityID.PrefixID.AWKWARD:
 						PrefixDelay = 1.1f;
 						PrefixKB = 0.8f;
 						break;
-					case 25:
+					case EntityID.PrefixID.POWERFUL:
 						PrefixDelay = 1.1f;
 						PrefixDamage = 1.15f;
 						PrefixCrit = 1;
 						break;
-					case 58:
-						PrefixDelay = 0.85f;
-						PrefixDamage = 0.85f;
-						break;
-					case 26:
+					case EntityID.PrefixID.MYSTIC:
 						PrefixManaSave = 0.85f;
 						PrefixDamage = 1.1f;
 						break;
-					case 27:
+					case EntityID.PrefixID.ADEPT:
 						PrefixManaSave = 0.85f;
 						break;
-					case 28:
+					case EntityID.PrefixID.MASTERFUL:
 						PrefixManaSave = 0.85f;
 						PrefixDamage = 1.15f;
 						PrefixKB = 1.05f;
 						break;
-					case 83:
-						PrefixKB = 1.15f;
-						PrefixDamage = 1.15f;
-						PrefixCrit = 5;
-						PrefixDelay = 0.9f;
-						PrefixManaSave = 0.9f;
-						break;
-					case 29:
+					case EntityID.PrefixID.INEPT:
 						PrefixManaSave = 1.1f;
 						break;
-					case 30:
+					case EntityID.PrefixID.IGNORANT:
 						PrefixManaSave = 1.2f;
 						PrefixDamage = 0.9f;
 						break;
-					case 31:
+					case EntityID.PrefixID.DERANGED:
 						PrefixKB = 0.9f;
 						PrefixDamage = 0.9f;
 						break;
-					case 32:
+					case EntityID.PrefixID.INTENSE:
 						PrefixManaSave = 1.15f;
 						PrefixDamage = 1.1f;
 						break;
-					case 33:
+					case EntityID.PrefixID.TABOO:
 						PrefixManaSave = 1.1f;
 						PrefixKB = 1.1f;
 						PrefixDelay = 0.9f;
 						break;
-					case 34:
+					case EntityID.PrefixID.CELESTIAL:
 						PrefixManaSave = 0.9f;
 						PrefixKB = 1.1f;
 						PrefixDelay = 1.1f;
 						PrefixDamage = 1.1f;
 						break;
-					case 35:
+					case EntityID.PrefixID.FURIOUS:
 						PrefixManaSave = 1.2f;
 						PrefixDamage = 1.15f;
 						PrefixKB = 1.15f;
 						break;
-					case 52:
-						PrefixManaSave = 0.9f;
-						PrefixDamage = 0.9f;
-						PrefixDelay = 0.9f;
-						break;
-					case 36:
+					case EntityID.PrefixID.KEEN:
 						PrefixCrit = 3;
 						break;
-					case 37:
+					case EntityID.PrefixID.SUPERIOR:
 						PrefixDamage = 1.1f;
 						PrefixCrit = 3;
 						PrefixKB = 1.1f;
 						break;
-					case 38:
+					case EntityID.PrefixID.FORCEFUL:
 						PrefixKB = 1.15f;
 						break;
-					case 53:
-						PrefixDamage = 1.1f;
-						break;
-					case 54:
-						PrefixKB = 1.15f;
-						break;
-					case 55:
-						PrefixKB = 1.15f;
-						PrefixDamage = 1.05f;
-						break;
-					case 59:
-						PrefixKB = 1.15f;
-						PrefixDamage = 1.15f;
-						PrefixCrit = 5;
-						break;
-					case 60:
-						PrefixDamage = 1.15f;
-						PrefixCrit = 5;
-						break;
-					case 61:
-						PrefixCrit = 5;
-						break;
-					case 39:
+					case EntityID.PrefixID.BROKEN:
 						PrefixDamage = 0.7f;
 						PrefixKB = 0.8f;
 						break;
-					case 40:
+					case EntityID.PrefixID.DAMAGED:
 						PrefixDamage = 0.85f;
 						break;
-					case 56:
-						PrefixKB = 0.8f;
-						break;
-					case 41:
+					case EntityID.PrefixID.SHODDY:
 						PrefixKB = 0.85f;
 						PrefixDamage = 0.9f;
 						break;
-					case 57:
-						PrefixKB = 0.9f;
-						PrefixDamage = 1.18f;
-						break;
-					case 42:
+					case EntityID.PrefixID.QUICK:
 						PrefixDelay = 0.9f;
 						break;
-					case 43:
+					case EntityID.PrefixID.DEADLY2:
 						PrefixDamage = 1.1f;
 						PrefixDelay = 0.9f;
 						break;
-					case 44:
+					case EntityID.PrefixID.AGILE:
 						PrefixDelay = 0.9f;
 						PrefixCrit = 3;
 						break;
-					case 45:
+					case EntityID.PrefixID.NIMBLE:
 						PrefixDelay = 0.95f;
 						break;
-					case 46:
+					case EntityID.PrefixID.MURDEROUS:
 						PrefixCrit = 3;
 						PrefixDelay = 0.94f;
 						PrefixDamage = 1.07f;
 						break;
-					case 47:
+					case EntityID.PrefixID.SLOW:
 						PrefixDelay = 1.15f;
 						break;
-					case 48:
+					case EntityID.PrefixID.SLUGGISH:
 						PrefixDelay = 1.2f;
 						break;
-					case 49:
+					case EntityID.PrefixID.LAZY:
 						PrefixDelay = 1.08f;
 						break;
-					case 50:
+					case EntityID.PrefixID.ANNOYING:
 						PrefixDamage = 0.8f;
 						PrefixDelay = 1.15f;
 						break;
-					case 51:
+					case EntityID.PrefixID.NASTY:
 						PrefixKB = 0.9f;
 						PrefixDelay = 0.9f;
 						PrefixDamage = 1.05f;
 						PrefixCrit = 2;
 						break;
+					case EntityID.PrefixID.MANIC:
+						PrefixManaSave = 0.9f;
+						PrefixDamage = 0.9f;
+						PrefixDelay = 0.9f;
+						break;
+					case EntityID.PrefixID.HURTFUL:
+						PrefixDamage = 1.1f;
+						break;
+					case EntityID.PrefixID.STRONG:
+						PrefixKB = 1.15f;
+						break;
+					case EntityID.PrefixID.UNPLEASANT:
+						PrefixKB = 1.15f;
+						PrefixDamage = 1.05f;
+						break;
+					case EntityID.PrefixID.WEAK:
+						PrefixKB = 0.8f;
+						break;
+					case EntityID.PrefixID.RUTHLESS:
+						PrefixKB = 0.9f;
+						PrefixDamage = 1.18f;
+						break;
+					case EntityID.PrefixID.FRENZYING:
+						PrefixDelay = 0.85f;
+						PrefixDamage = 0.85f;
+						break;
+					case EntityID.PrefixID.GODLY:
+						PrefixKB = 1.15f;
+						PrefixDamage = 1.15f;
+						PrefixCrit = 5;
+						break;
+					case EntityID.PrefixID.DEMONIC:
+						PrefixDamage = 1.15f;
+						PrefixCrit = 5;
+						break;
+					case EntityID.PrefixID.ZEALOUS:
+						PrefixCrit = 5;
+						break;
+					case EntityID.PrefixID.LEGENDARY:
+						PrefixKB = 1.15f;
+						PrefixDamage = 1.15f;
+						PrefixCrit = 5;
+						PrefixDelay = 0.9f;
+						PrefixScale = 1.1f;
+						break;
+					case EntityID.PrefixID.UNREAL:
+						PrefixKB = 1.15f;
+						PrefixDamage = 1.15f;
+						PrefixCrit = 5;
+						PrefixDelay = 0.9f;
+						PrefixFireRate = 1.1f;
+						break;
+					case EntityID.PrefixID.MYTHICAL:
+						PrefixKB = 1.15f;
+						PrefixDamage = 1.15f;
+						PrefixCrit = 5;
+						PrefixDelay = 0.9f;
+						PrefixManaSave = 0.9f;
+						break;
+					/*
+					case EntityID.PrefixID.PIERCING:
+						PrefixDamage = 1.1f;
+						PrefixCrit = 10;
+						break;
+					*/
 				}
+
 				if (PrefixDamage != 1f && Math.Round(Damage * PrefixDamage) == Damage)
 				{
 					flag = true;
@@ -1525,7 +874,7 @@ namespace Terraria
 					flag = true;
 					PrefixID = -1;
 				}
-				if (Setting == -2 && PrefixID == 0)
+				if (Setting == -2 && PrefixID == (byte)EntityID.PrefixID.NONE)
 				{
 					PrefixID = -1;
 					flag = true;
@@ -1541,33 +890,33 @@ namespace Terraria
 			ShootSpeed *= PrefixFireRate;
 			Crit += (short)PrefixCrit;
 			float FinalMultiplier = PrefixDamage * (2f - PrefixDelay) * (2f - PrefixManaSave) * PrefixScale * PrefixKB * PrefixFireRate * (1f + Crit * 0.02f);
-			switch (PrefixID)
+			switch ((EntityID.PrefixID)PrefixID)
 			{
-				case 62:
-				case 69:
-				case 73:
-				case 77:
+				case EntityID.PrefixID.HARD:
+				case EntityID.PrefixID.JAGGED:
+				case EntityID.PrefixID.BRISK:
+				case EntityID.PrefixID.WILD:
 					FinalMultiplier *= 1.05f;
 					break;
-				case 63:
-				case 67:
-				case 70:
-				case 74:
-				case 78:
+				case EntityID.PrefixID.GUARDING:
+				case EntityID.PrefixID.PRECISE:
+				case EntityID.PrefixID.SPIKED:
+				case EntityID.PrefixID.FLEETING:
+				case EntityID.PrefixID.RASH:
 					FinalMultiplier *= 1.1f;
 					break;
-				case 64:
-				case 66:
-				case 71:
-				case 75:
-				case 79:
+				case EntityID.PrefixID.ARMORED:
+				case EntityID.PrefixID.ARCANE:
+				case EntityID.PrefixID.ANGRY:
+				case EntityID.PrefixID.HASTY2:
+				case EntityID.PrefixID.INTREPID:
 					FinalMultiplier *= 1.15f;
 					break;
-				case 65:
-				case 68:
-				case 72:
-				case 76:
-				case 80:
+				case EntityID.PrefixID.WARDING:
+				case EntityID.PrefixID.LUCKY:
+				case EntityID.PrefixID.MENACING:
+				case EntityID.PrefixID.QUICK2:
+				case EntityID.PrefixID.VIOLENT:
 					FinalMultiplier *= 1.2f;
 					break;
 			}
@@ -1588,13 +937,13 @@ namespace Terraria
 			{
 				Rarity--;
 			}
-			if (Rarity < -1)
+			if (Rarity < (sbyte)EntityID.RarityID.GREY)
 			{
-				Rarity = -1;
+				Rarity = (sbyte)EntityID.RarityID.GREY;
 			}
-			else if (Rarity > 6)
+			else if (Rarity > (sbyte)EntityID.RarityID.LIGHT_PURPLE)
 			{
-				Rarity = 6;
+				Rarity = (sbyte)EntityID.RarityID.LIGHT_PURPLE;
 			}
 			FinalMultiplier *= FinalMultiplier;
 			Value = (int)(Value * FinalMultiplier);
@@ -1617,7 +966,7 @@ namespace Terraria
 			switch (ItemName)
 			{
 				case "Gold Pickaxe":
-					SetDefaults((int)ID.IRON_PICKAXE);
+					SetDefaults((int)EntityID.ItemID.IRON_PICKAXE);
 					Colour = new Color(210, 190, 0, 100);
 					UseTime = 17;
 					PickPower = 55;
@@ -1625,28 +974,28 @@ namespace Terraria
 					Scale = 1.05f;
 					Damage = 6;
 					Value = 10000;
-					NetID = -1;
+					NetID = (short)EntityID.ItemID.GOLD_PICKAXE;
 					break;
 				case "Gold Broadsword":
-					SetDefaults((int)ID.IRON_BROADSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_BROADSWORD);
 					Colour = new Color(210, 190, 0, 100);
 					UseAnimation = 20;
 					Damage = 13;
 					Scale = 1.05f;
 					Value = 9000;
-					NetID = -2;
+					NetID = (short)EntityID.ItemID.GOLD_BROADSWORD;
 					break;
 				case "Gold Shortsword":
-					SetDefaults((int)ID.IRON_SHORTSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_SHORTSWORD);
 					Colour = new Color(210, 190, 0, 100);
 					Damage = 11;
 					UseAnimation = 11;
 					Scale = 0.95f;
 					Value = 7000;
-					NetID = -3;
+					NetID = (short)EntityID.ItemID.GOLD_SHORTSWORD;
 					break;
 				case "Gold Axe":
-					SetDefaults((int)ID.IRON_AXE);
+					SetDefaults((int)EntityID.ItemID.IRON_AXE);
 					Colour = new Color(210, 190, 0, 100);
 					UseTime = 18;
 					AxePower = 11;
@@ -1654,10 +1003,10 @@ namespace Terraria
 					Scale = 1.15f;
 					Damage = 7;
 					Value = 8000;
-					NetID = -4;
+					NetID = (short)EntityID.ItemID.GOLD_AXE;
 					break;
 				case "Gold Hammer":
-					SetDefaults((int)ID.IRON_HAMMER);
+					SetDefaults((int)EntityID.ItemID.IRON_HAMMER);
 					Colour = new Color(210, 190, 0, 100);
 					UseAnimation = 28;
 					UseTime = 23;
@@ -1665,19 +1014,19 @@ namespace Terraria
 					Damage = 9;
 					HammerPower = 55;
 					Value = 8000;
-					NetID = -5;
+					NetID = (short)EntityID.ItemID.GOLD_HAMMER;
 					break;
 				case "Gold Bow":
-					SetDefaults((int)ID.IRON_BOW);
+					SetDefaults((int)EntityID.ItemID.IRON_BOW);
 					UseAnimation = 26;
 					UseTime = 26;
 					Colour = new Color(210, 190, 0, 100);
 					Damage = 11;
 					Value = 7000;
-					NetID = -6;
+					NetID = (short)EntityID.ItemID.GOLD_BOW;
 					break;
 				case "Silver Pickaxe":
-					SetDefaults((int)ID.IRON_PICKAXE);
+					SetDefaults((int)EntityID.ItemID.IRON_PICKAXE);
 					Colour = new Color(180, 180, 180, 100);
 					UseTime = 11;
 					PickPower = 45;
@@ -1685,27 +1034,27 @@ namespace Terraria
 					Scale = 1.05f;
 					Damage = 6;
 					Value = 5000;
-					NetID = -7;
+					NetID = (short)EntityID.ItemID.SILVER_PICKAXE;
 					break;
 				case "Silver Broadsword":
-					SetDefaults((int)ID.IRON_BROADSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_BROADSWORD);
 					Colour = new Color(180, 180, 180, 100);
 					UseAnimation = 21;
 					Damage = 11;
 					Value = 4500;
-					NetID = -8;
+					NetID = (short)EntityID.ItemID.SILVER_BROADSWORD;
 					break;
 				case "Silver Shortsword":
-					SetDefaults((int)ID.IRON_SHORTSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_SHORTSWORD);
 					Colour = new Color(180, 180, 180, 100);
 					Damage = 9;
 					UseAnimation = 12;
 					Scale = 0.95f;
 					Value = 3500;
-					NetID = -9;
+					NetID = (short)EntityID.ItemID.SILVER_SHORTSWORD;
 					break;
 				case "Silver Axe":
-					SetDefaults((int)ID.IRON_AXE);
+					SetDefaults((int)EntityID.ItemID.IRON_AXE);
 					Colour = new Color(180, 180, 180, 100);
 					UseTime = 18;
 					AxePower = 10;
@@ -1713,10 +1062,10 @@ namespace Terraria
 					Scale = 1.15f;
 					Damage = 6;
 					Value = 4000;
-					NetID = -10;
+					NetID = (short)EntityID.ItemID.SILVER_AXE;
 					break;
 				case "Silver Hammer":
-					SetDefaults((int)ID.IRON_HAMMER);
+					SetDefaults((int)EntityID.ItemID.IRON_HAMMER);
 					Colour = new Color(180, 180, 180, 100);
 					UseAnimation = 29;
 					UseTime = 19;
@@ -1724,19 +1073,19 @@ namespace Terraria
 					Damage = 9;
 					HammerPower = 45;
 					Value = 4000;
-					NetID = -11;
+					NetID = (short)EntityID.ItemID.SILVER_HAMMER;
 					break;
 				case "Silver Bow":
-					SetDefaults((int)ID.IRON_BOW);
+					SetDefaults((int)EntityID.ItemID.IRON_BOW);
 					UseAnimation = 27;
 					UseTime = 27;
 					Colour = new Color(180, 180, 180, 100);
 					Damage = 9;
 					Value = 3500;
-					NetID = -12;
+					NetID = (short)EntityID.ItemID.SILVER_BOW;
 					break;
 				case "Copper Pickaxe":
-					SetDefaults((int)ID.IRON_PICKAXE);
+					SetDefaults((int)EntityID.ItemID.IRON_PICKAXE);
 					Colour = new Color(180, 100, 45, 80);
 					UseTime = 15;
 					PickPower = 35;
@@ -1745,27 +1094,27 @@ namespace Terraria
 					Scale = 0.9f;
 					TileBoost = -1;
 					Value = 500;
-					NetID = -13;
+					NetID = (short)EntityID.ItemID.COPPER_PICKAXE;
 					break;
 				case "Copper Broadsword":
-					SetDefaults((int)ID.IRON_BROADSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_BROADSWORD);
 					Colour = new Color(180, 100, 45, 80);
 					UseAnimation = 23;
 					Damage = 8;
 					Value = 450;
-					NetID = -14;
+					NetID = (short)EntityID.ItemID.COPPER_BROADSWORD;
 					break;
 				case "Copper Shortsword":
-					SetDefaults((int)ID.IRON_SHORTSWORD);
+					SetDefaults((int)EntityID.ItemID.IRON_SHORTSWORD);
 					Colour = new Color(180, 100, 45, 80);
 					Damage = 5;
 					UseAnimation = 13;
 					Scale = 0.8f;
 					Value = 350;
-					NetID = -15;
+					NetID = (short)EntityID.ItemID.COPPER_SHORTSWORD;
 					break;
 				case "Copper Axe":
-					SetDefaults((int)ID.IRON_AXE);
+					SetDefaults((int)EntityID.ItemID.IRON_AXE);
 					Colour = new Color(180, 100, 45, 80);
 					UseTime = 21;
 					AxePower = 7;
@@ -1774,10 +1123,10 @@ namespace Terraria
 					Damage = 3;
 					TileBoost = -1;
 					Value = 400;
-					NetID = -16;
+					NetID = (short)EntityID.ItemID.COPPER_AXE;
 					break;
 				case "Copper Hammer":
-					SetDefaults((int)ID.IRON_HAMMER);
+					SetDefaults((int)EntityID.ItemID.IRON_HAMMER);
 					Colour = new Color(180, 100, 45, 80);
 					UseAnimation = 33;
 					UseTime = 23;
@@ -1786,76 +1135,76 @@ namespace Terraria
 					HammerPower = 35;
 					TileBoost = -1;
 					Value = 400;
-					NetID = -17;
+					NetID = (short)EntityID.ItemID.COPPER_HAMMER;
 					break;
 				case "Copper Bow":
-					SetDefaults((int)ID.IRON_BOW);
+					SetDefaults((int)EntityID.ItemID.IRON_BOW);
 					UseAnimation = 29;
 					UseTime = 29;
 					Colour = new Color(180, 100, 45, 80);
 					Damage = 6;
 					Value = 350;
-					NetID = -18;
+					NetID = (short)EntityID.ItemID.COPPER_BOW;
 					break;
 				case "Blue Phasesaber":
-					SetDefaults((int)ID.BLUE_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.BLUE_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -19;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.BLUE_PHASESABER;
 					break;
 				case "Red Phasesaber":
-					SetDefaults((int)ID.RED_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.RED_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -20;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.RED_PHASESABER;
 					break;
 				case "Green Phasesaber":
-					SetDefaults((int)ID.GREEN_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.GREEN_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -21;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.GREEN_PHASESABER;
 					break;
 				case "Purple Phasesaber":
-					SetDefaults((int)ID.PURPLE_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.PURPLE_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -22;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.PURPLE_PHASESABER;
 					break;
 				case "White Phasesaber":
-					SetDefaults((int)ID.WHITE_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.WHITE_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -23;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.WHITE_PHASESABER;
 					break;
 				case "Yellow Phasesaber":
-					SetDefaults((int)ID.YELLOW_PHASEBLADE);
+					SetDefaults((int)EntityID.ItemID.YELLOW_PHASEBLADE);
 					Damage = 41;
 					Scale = 1.15f;
 					IsNotMaterial = true;
 					AutoReuse = true;
 					CanUseTurn = true;
-					Rarity = 4;
-					NetID = -24;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
+					NetID = (short)EntityID.ItemID.YELLOW_PHASESABER;
 					break;
 			}
 			if (IsNotMaterial)
@@ -1896,78 +1245,78 @@ namespace Terraria
 		{
 			if (Type < 0)
 			{
-				switch (Type)
+				switch ((EntityID.ItemID)Type)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						SetDefaults("Gold Pickaxe");
 						break;
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						SetDefaults("Gold Broadsword");
 						break;
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						SetDefaults("Gold Shortsword");
 						break;
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						SetDefaults("Gold Axe");
 						break;
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						SetDefaults("Gold Hammer");
 						break;
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						SetDefaults("Gold Bow");
 						break;
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						SetDefaults("Silver Pickaxe");
 						break;
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						SetDefaults("Silver Broadsword");
 						break;
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						SetDefaults("Silver Shortsword");
 						break;
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						SetDefaults("Silver Axe");
 						break;
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						SetDefaults("Silver Hammer");
 						break;
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						SetDefaults("Silver Bow");
 						break;
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						SetDefaults("Copper Pickaxe");
 						break;
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						SetDefaults("Copper Broadsword");
 						break;
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						SetDefaults("Copper Shortsword");
 						break;
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						SetDefaults("Copper Axe");
 						break;
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						SetDefaults("Copper Hammer");
 						break;
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						SetDefaults("Copper Bow");
 						break;
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						SetDefaults("Blue Phasesaber");
 						break;
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						SetDefaults("Red Phasesaber");
 						break;
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						SetDefaults("Green Phasesaber");
 						break;
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						SetDefaults("Purple Phasesaber");
 						break;
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						SetDefaults("White Phasesaber");
 						break;
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						SetDefaults("Yellow Phasesaber");
 						break;
 				}
@@ -1981,7 +1330,7 @@ namespace Terraria
 		public void SetDefaults(int ItemType, int ItemStack = 1, bool NoMaterialCheck = false)
 		{
 			Active = 1;
-			Owner = 8;
+			Owner = Player.MaxNumPlayers;
 			Type = (short)ItemType;
 			NetID = (short)ItemType;
 			PrefixType = 0;
@@ -2031,7 +1380,7 @@ namespace Terraria
 			HealLife = 0;
 			Knockback = 0f;
 			PickPower = 0;
-			Rarity = 0;
+			Rarity = (sbyte)EntityID.RarityID.WHITE;
 			Scale = 1f;
 			Shoot = 0;
 			Stack = (short)ItemStack;
@@ -2045,12 +1394,12 @@ namespace Terraria
 			Value = 0;
 			CanUseTurn = false;
 			CanBuy = false;
-			OwnIgnore = 8;
+			OwnIgnore = Player.MaxNumPlayers;
 			OwnTime = 0;
 			KeepTime = 0;
-			switch ((ID)ItemType)
+			switch ((EntityID.ItemID)ItemType)
 			{
-				case ID.IRON_PICKAXE:
+				case EntityID.ItemID.IRON_PICKAXE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 20;
@@ -2065,7 +1414,7 @@ namespace Terraria
 					Value = 2000;
 					IsMelee = true;
 					break;
-				case ID.DIRT_BLOCK:
+				case EntityID.ItemID.DIRT_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2073,11 +1422,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 0;
+					CreateTile = (short)EntityID.TileID.DIRT;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.STONE_BLOCK:
+				case EntityID.ItemID.STONE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2085,11 +1434,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 1;
+					CreateTile = (short)EntityID.TileID.STONE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.IRON_BROADSWORD:
+				case EntityID.ItemID.IRON_BROADSWORD:
 					UseStyle = 1;
 					CanUseTurn = false;
 					UseAnimation = 21;
@@ -2103,7 +1452,7 @@ namespace Terraria
 					Value = 1800;
 					IsMelee = true;
 					break;
-				case ID.MUSHROOM:
+				case EntityID.ItemID.MUSHROOM:
 					UseStyle = 2;
 					UseSound = 2;
 					CanUseTurn = false;
@@ -2117,7 +1466,7 @@ namespace Terraria
 					IsPotion = true;
 					Value = 25;
 					break;
-				case ID.IRON_SHORTSWORD:
+				case EntityID.ItemID.IRON_SHORTSWORD:
 					UseStyle = 3;
 					CanUseTurn = false;
 					UseAnimation = 12;
@@ -2132,7 +1481,7 @@ namespace Terraria
 					Value = 1400;
 					IsMelee = true;
 					break;
-				case ID.IRON_HAMMER:
+				case EntityID.ItemID.IRON_HAMMER:
 					AutoReuse = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -2148,7 +1497,7 @@ namespace Terraria
 					Value = 1600;
 					IsMelee = true;
 					break;
-				case ID.TORCH:
+				case EntityID.ItemID.TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -2157,12 +1506,12 @@ namespace Terraria
 					HoldStyle = 1;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					Width = 10;
 					Height = 12;
 					Value = 50;
 					break;
-				case ID.WOOD:
+				case EntityID.ItemID.WOOD:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2170,11 +1519,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 30;
+					CreateTile = (short)EntityID.TileID.WOOD;
 					Width = 8;
 					Height = 10;
 					break;
-				case ID.IRON_AXE:
+				case EntityID.ItemID.IRON_AXE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 27;
@@ -2190,7 +1539,7 @@ namespace Terraria
 					Value = 1600;
 					IsMelee = true;
 					break;
-				case ID.IRON_ORE:
+				case EntityID.ItemID.IRON_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2198,12 +1547,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 6;
+					CreateTile = (short)EntityID.TileID.IRON_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 500;
 					break;
-				case ID.COPPER_ORE:
+				case EntityID.ItemID.COPPER_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2211,12 +1560,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 7;
+					CreateTile = (short)EntityID.TileID.COPPER_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 250;
 					break;
-				case ID.GOLD_ORE:
+				case EntityID.ItemID.GOLD_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2224,12 +1573,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 8;
+					CreateTile = (short)EntityID.TileID.GOLD_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 2000;
 					break;
-				case ID.SILVER_ORE:
+				case EntityID.ItemID.SILVER_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2237,62 +1586,62 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 9;
+					CreateTile = (short)EntityID.TileID.SILVER_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 1000;
 					break;
-				case ID.COPPER_WATCH:
+				case EntityID.ItemID.COPPER_WATCH:
 					Width = 24;
 					Height = 28;
 					IsAccessory = true;
 					Value = 1000;
 					break;
-				case ID.SILVER_WATCH:
+				case EntityID.ItemID.SILVER_WATCH:
 					Width = 24;
 					Height = 28;
 					IsAccessory = true;
 					Value = 5000;
 					break;
-				case ID.GOLD_WATCH:
+				case EntityID.ItemID.GOLD_WATCH:
 					Width = 24;
 					Height = 28;
 					IsAccessory = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 10000;
 					break;
-				case ID.DEPTH_METER:
+				case EntityID.ItemID.DEPTH_METER:
 					Width = 24;
 					Height = 18;
 					IsAccessory = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 10000;
 					break;
-				case ID.GOLD_BAR:
+				case EntityID.ItemID.GOLD_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 6000;
 					break;
-				case ID.COPPER_BAR:
+				case EntityID.ItemID.COPPER_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 750;
 					break;
-				case ID.SILVER_BAR:
+				case EntityID.ItemID.SILVER_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 3000;
 					break;
-				case ID.IRON_BAR:
+				case EntityID.ItemID.IRON_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 1500;
 					break;
-				case ID.GEL:
+				case EntityID.ItemID.GEL:
 					Width = 10;
 					Height = 12;
 					MaxStack = 250;
@@ -2301,7 +1650,7 @@ namespace Terraria
 					Colour = new Color(0, 80, 255, 100);
 					Value = 5;
 					break;
-				case ID.WOODEN_SWORD:
+				case EntityID.ItemID.WOODEN_SWORD:
 					UseStyle = 1;
 					CanUseTurn = false;
 					UseAnimation = 25;
@@ -2314,19 +1663,19 @@ namespace Terraria
 					Value = 100;
 					IsMelee = true;
 					break;
-				case ID.WOODEN_DOOR:
+				case EntityID.ItemID.WOODEN_DOOR:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 10;
+					CreateTile = (short)EntityID.TileID.DOOR_CLOSED;
 					Width = 14;
 					Height = 28;
 					Value = 200;
 					break;
-				case ID.STONE_WALL:
+				case EntityID.ItemID.STONE_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2334,23 +1683,23 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 1;
+					CreateWall = (short)EntityID.WallID.STONE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.ACORN:
+				case EntityID.ItemID.ACORN:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 20;
+					CreateTile = (short)EntityID.TileID.SAPLING;
 					Width = 18;
 					Height = 18;
 					Value = 10;
 					break;
-				case ID.LESSER_HEALING_POTION:
+				case EntityID.ItemID.LESSER_HEALING_POTION:
 					UseSound = 3;
 					HealLife = 50;
 					UseStyle = 2;
@@ -2364,7 +1713,7 @@ namespace Terraria
 					IsPotion = true;
 					Value = 300;
 					break;
-				case ID.LIFE_CRYSTAL:
+				case EntityID.ItemID.LIFE_CRYSTAL:
 					MaxStack = 99;
 					IsConsumable = true;
 					Width = 18;
@@ -2373,10 +1722,10 @@ namespace Terraria
 					UseTime = 30;
 					UseSound = 4;
 					UseAnimation = 30;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 75000;
 					break;
-				case ID.DIRT_WALL:
+				case EntityID.ItemID.DIRT_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2384,23 +1733,23 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 16;
+					CreateWall = (short)EntityID.WallID.DIRT;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.BOTTLE:
+				case EntityID.ItemID.BOTTLE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 13;
+					CreateTile = (short)EntityID.TileID.BOTTLE;
 					Width = 16;
 					Height = 24;
 					Value = 20;
 					break;
-				case ID.WOODEN_TABLE:
+				case EntityID.ItemID.WOODEN_TABLE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2408,12 +1757,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 14;
+					CreateTile = (short)EntityID.TileID.TABLE;
 					Width = 26;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.FURNACE:
+				case EntityID.ItemID.FURNACE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2421,12 +1770,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 17;
+					CreateTile = (short)EntityID.TileID.FURNACE;
 					Width = 26;
 					Height = 24;
 					Value = 300;
 					break;
-				case ID.WOODEN_CHAIR:
+				case EntityID.ItemID.WOODEN_CHAIR:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2434,12 +1783,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 15;
+					CreateTile = (short)EntityID.TileID.CHAIR;
 					Width = 12;
 					Height = 30;
 					Value = 150;
 					break;
-				case ID.IRON_ANVIL:
+				case EntityID.ItemID.IRON_ANVIL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2447,12 +1796,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 16;
+					CreateTile = (short)EntityID.TileID.ANVIL;
 					Width = 28;
 					Height = 14;
 					Value = 5000;
 					break;
-				case ID.WORK_BENCH:
+				case EntityID.ItemID.WORK_BENCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2460,32 +1809,32 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 18;
+					CreateTile = (short)EntityID.TileID.WORK_BENCH;
 					Width = 28;
 					Height = 14;
 					Value = 150;
 					break;
-				case ID.GOGGLES:
+				case EntityID.ItemID.GOGGLES:
 					Width = 28;
 					Height = 12;
 					Defense = 1;
-					HeadSlot = 10;
-					Rarity = 1;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_GOGGLES;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 1000;
 					break;
-				case ID.LENS:
+				case EntityID.ItemID.LENS:
 					Width = 12;
 					Height = 20;
 					MaxStack = 99;
 					Value = 500;
 					break;
-				case ID.WOODEN_BOW:
+				case EntityID.ItemID.WOODEN_BOW:
 					UseStyle = 5;
 					UseAnimation = 30;
 					UseTime = 30;
 					Width = 12;
 					Height = 28;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 4;
@@ -2494,9 +1843,9 @@ namespace Terraria
 					Value = 100;
 					IsRanged = true;
 					break;
-				case ID.WOODEN_ARROW:
+				case EntityID.ItemID.WOODEN_ARROW:
 					ShootSpeed = 3f;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					Damage = 4;
 					Width = 10;
 					Height = 28;
@@ -2507,9 +1856,9 @@ namespace Terraria
 					Value = 10;
 					IsRanged = true;
 					break;
-				case ID.FLAMING_ARROW:
+				case EntityID.ItemID.FLAMING_ARROW:
 					ShootSpeed = 3.5f;
-					Shoot = 2;
+					Shoot = (byte)EntityID.ProjectileID.FIRE_ARROW;
 					Damage = 6;
 					Width = 10;
 					Height = 28;
@@ -2520,10 +1869,10 @@ namespace Terraria
 					Value = 15;
 					IsRanged = true;
 					break;
-				case ID.SHURIKEN:
+				case EntityID.ItemID.SHURIKEN:
 					UseStyle = 1;
 					ShootSpeed = 9f;
-					Shoot = 3;
+					Shoot = (byte)EntityID.ProjectileID.SHURIKEN;
 					Damage = 10;
 					Width = 18;
 					Height = 20;
@@ -2537,7 +1886,7 @@ namespace Terraria
 					Value = 20;
 					IsRanged = true;
 					break;
-				case ID.SUSPICIOUS_LOOKING_EYE:
+				case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 					UseStyle = 4;
 					Width = 22;
 					Height = 14;
@@ -2546,7 +1895,7 @@ namespace Terraria
 					UseTime = 45;
 					MaxStack = 20;
 					break;
-				case ID.SUSPICIOUS_LOOKING_SKULL:
+				case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 					UseStyle = 4;
 					Width = 26;
 					Height = 26;
@@ -2555,25 +1904,25 @@ namespace Terraria
 					UseTime = 45;
 					MaxStack = 20;
 					break;
-				case ID.DEMON_BOW:
+				case EntityID.ItemID.DEMON_BOW:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 25;
 					Width = 12;
 					Height = 28;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 14;
 					ShootSpeed = 6.7f;
 					Knockback = 1f;
 					Alpha = 30;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					NoMelee = true;
 					Value = 18000;
 					IsRanged = true;
 					break;
-				case ID.WAR_AXE_OF_THE_NIGHT:
+				case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 					AutoReuse = true;
 					UseStyle = 1;
 					UseAnimation = 30;
@@ -2585,11 +1934,11 @@ namespace Terraria
 					AxePower = 15;
 					Scale = 1.2f;
 					UseSound = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 13500;
 					IsMelee = true;
 					break;
-				case ID.LIGHTS_BANE:
+				case EntityID.ItemID.LIGHTS_BANE:
 					UseStyle = 1;
 					UseAnimation = 20;
 					Knockback = 5f;
@@ -2598,13 +1947,13 @@ namespace Terraria
 					Damage = 17;
 					Scale = 1.1f;
 					UseSound = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 13500;
 					IsMelee = true;
 					break;
-				case ID.UNHOLY_ARROW:
+				case EntityID.ItemID.UNHOLY_ARROW:
 					ShootSpeed = 3.4f;
-					Shoot = 4;
+					Shoot = (byte)EntityID.ProjectileID.UNHOLY_ARROW;
 					Damage = 8;
 					Width = 10;
 					Height = 28;
@@ -2613,11 +1962,11 @@ namespace Terraria
 					Ammo = 1;
 					Knockback = 3f;
 					Alpha = 30;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 40;
 					IsRanged = true;
 					break;
-				case ID.CHEST:
+				case EntityID.ItemID.CHEST:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2625,20 +1974,20 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 21;
+					CreateTile = (short)EntityID.TileID.CHEST;
 					Width = 26;
 					Height = 22;
 					Value = 500;
 					break;
-				case ID.BAND_OF_REGENERATION:
+				case EntityID.ItemID.BAND_OF_REGENERATION:
 					Width = 22;
 					Height = 22;
 					IsAccessory = true;
 					LifeRegen = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					break;
-				case ID.MAGIC_MIRROR:
+				case EntityID.ItemID.MAGIC_MIRROR:
 					Mana = 20;
 					CanUseTurn = true;
 					Width = 20;
@@ -2647,12 +1996,12 @@ namespace Terraria
 					UseTime = 90;
 					UseSound = 6;
 					UseAnimation = 90;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					break;
-				case ID.JESTERS_ARROW:
+				case EntityID.ItemID.JESTERS_ARROW:
 					ShootSpeed = 0.5f;
-					Shoot = 5;
+					Shoot = (byte)EntityID.ProjectileID.JESTERS_ARROW;
 					Damage = 9;
 					Width = 10;
 					Height = 28;
@@ -2660,11 +2009,11 @@ namespace Terraria
 					IsConsumable = true;
 					Ammo = 1;
 					Knockback = 4f;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 100;
 					IsRanged = true;
 					break;
-				case ID.ANGEL_STATUE:
+				case EntityID.ItemID.ANGEL_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2672,31 +2021,31 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 1;
 					break;
-				case ID.CLOUD_IN_A_BOTTLE:
+				case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 					Width = 16;
 					Height = 24;
 					IsAccessory = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					break;
-				case ID.HERMES_BOOTS:
+				case EntityID.ItemID.HERMES_BOOTS:
 					Width = 28;
 					Height = 24;
 					IsAccessory = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					break;
-				case ID.ENCHANTED_BOOMERANG:
+				case EntityID.ItemID.ENCHANTED_BOOMERANG:
 					NoMelee = true;
 					UseStyle = 1;
 					ShootSpeed = 10f;
-					Shoot = 6;
+					Shoot = (byte)EntityID.ProjectileID.ENCHANTED_BOOMERANG;
 					Damage = 13;
 					Knockback = 8f;
 					Width = 14;
@@ -2705,11 +2054,11 @@ namespace Terraria
 					UseAnimation = 15;
 					UseTime = 15;
 					NoUseGraphic = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					IsMelee = true;
 					break;
-				case ID.DEMONITE_ORE:
+				case EntityID.ItemID.DEMONITE_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2717,42 +2066,42 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 22;
+					CreateTile = (short)EntityID.TileID.DEMONITE_ORE;
 					Width = 12;
 					Height = 12;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 4000;
 					break;
-				case ID.DEMONITE_BAR:
+				case EntityID.ItemID.DEMONITE_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 16000;
 					break;
-				case ID.HEART:
+				case EntityID.ItemID.HEART:
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.CORRUPT_SEEDS:
+				case EntityID.ItemID.CORRUPT_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 23;
+					CreateTile = (short)EntityID.TileID.CORRUPT_GRASS;
 					Width = 14;
 					Height = 14;
 					Value = 500;
 					break;
-				case ID.VILE_MUSHROOM:
+				case EntityID.ItemID.VILE_MUSHROOM:
 					Width = 16;
 					Height = 18;
 					MaxStack = 99;
 					Value = 50;
 					break;
-				case ID.EBONSTONE_BLOCK:
+				case EntityID.ItemID.EBONSTONE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -2760,52 +2109,52 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 25;
+					CreateTile = (short)EntityID.TileID.EBONSTONE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GRASS_SEEDS:
+				case EntityID.ItemID.GRASS_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 2;
+					CreateTile = (short)EntityID.TileID.GRASS;
 					Width = 14;
 					Height = 14;
 					Value = 20;
 					break;
-				case ID.SUNFLOWER:
+				case EntityID.ItemID.SUNFLOWER:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 27;
+					CreateTile = (short)EntityID.TileID.SUNFLOWER;
 					Width = 26;
 					Height = 26;
 					Value = 200;
 					break;
-				case ID.VILETHORN:
+				case EntityID.ItemID.VILETHORN:
 					Mana = 12;
 					Damage = 8;
 					UseStyle = 1;
 					ShootSpeed = 32f;
-					Shoot = 7;
+					Shoot = (byte)EntityID.ProjectileID.VILETHORN_BASE;
 					Width = 26;
 					Height = 28;
 					UseSound = 8;
 					UseAnimation = 30;
 					UseTime = 30;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					NoMelee = true;
 					Knockback = 1f;
 					Value = 10000;
 					IsMagic = true;
 					break;
-				case ID.STARFURY:
+				case EntityID.ItemID.STARFURY:
 					AutoReuse = true;
 					Mana = 16;
 					Knockback = 5f;
@@ -2815,20 +2164,20 @@ namespace Terraria
 					UseStyle = 1;
 					Scale = 1.15f;
 					ShootSpeed = 12f;
-					Shoot = 9;
+					Shoot = (byte)EntityID.ProjectileID.STARFURY;
 					Width = 14;
 					Height = 28;
 					UseSound = 9;
 					UseAnimation = 25;
 					UseTime = 10;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					IsMagic = true;
 					break;
-				case ID.PURIFICATION_POWDER:
+				case EntityID.ItemID.PURIFICATION_POWDER:
 					UseStyle = 1;
 					ShootSpeed = 4f;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					Width = 16;
 					Height = 24;
 					MaxStack = 99;
@@ -2839,11 +2188,11 @@ namespace Terraria
 					NoMelee = true;
 					Value = 75;
 					break;
-				case ID.VILE_POWDER:
+				case EntityID.ItemID.VILE_POWDER:
 					Damage = 0;
 					UseStyle = 1;
 					ShootSpeed = 4f;
-					Shoot = 11;
+					Shoot = (byte)EntityID.ProjectileID.VILE_POWDER;
 					Width = 16;
 					Height = 24;
 					MaxStack = 99;
@@ -2854,19 +2203,19 @@ namespace Terraria
 					NoMelee = true;
 					Value = 100;
 					break;
-				case ID.ROTTEN_CHUNK:
+				case EntityID.ItemID.ROTTEN_CHUNK:
 					Width = 18;
 					Height = 20;
 					MaxStack = 99;
 					Value = 10;
 					break;
-				case ID.WORM_TOOTH:
+				case EntityID.ItemID.WORM_TOOTH:
 					Width = 8;
 					Height = 20;
 					MaxStack = 99;
 					Value = 100;
 					break;
-				case ID.WORM_FOOD:
+				case EntityID.ItemID.WORM_FOOD:
 					UseStyle = 4;
 					IsConsumable = true;
 					UseAnimation = 45;
@@ -2875,31 +2224,31 @@ namespace Terraria
 					Height = 28;
 					MaxStack = 20;
 					break;
-				case ID.COPPER_COIN:
+				case EntityID.ItemID.COPPER_COIN:
 					Width = 10;
 					Height = 12;
 					MaxStack = 100;
 					Value = 5;
 					break;
-				case ID.SILVER_COIN:
+				case EntityID.ItemID.SILVER_COIN:
 					Width = 10;
 					Height = 12;
 					MaxStack = 100;
 					Value = 500;
 					break;
-				case ID.GOLD_COIN:
+				case EntityID.ItemID.GOLD_COIN:
 					Width = 10;
 					Height = 12;
 					MaxStack = 100;
 					Value = 50000;
 					break;
-				case ID.PLATINUM_COIN:
+				case EntityID.ItemID.PLATINUM_COIN:
 					Width = 10;
 					Height = 12;
 					MaxStack = 100;
 					Value = 5000000;
 					break;
-				case ID.FALLEN_STAR:
+				case EntityID.ItemID.FALLEN_STAR:
 					Width = 18;
 					Height = 20;
 					MaxStack = 100;
@@ -2912,94 +2261,94 @@ namespace Terraria
 					UseAnimation = 17;
 					UseTime = 17;
 					IsConsumable = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.COPPER_GREAVES:
+				case EntityID.ItemID.COPPER_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					LegSlot = 1;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_COPPER_GREAVES;
 					Value = 750;
 					break;
-				case ID.IRON_GREAVES:
+				case EntityID.ItemID.IRON_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 2;
-					LegSlot = 2;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_IRON_GREAVES;
 					Value = 3000;
 					break;
-				case ID.SILVER_GREAVES:
+				case EntityID.ItemID.SILVER_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					LegSlot = 3;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_SILVER_GREAVES;
 					Value = 7500;
 					break;
-				case ID.GOLD_GREAVES:
+				case EntityID.ItemID.GOLD_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					LegSlot = 4;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_GOLD_GREAVES;
 					Value = 15000;
 					break;
-				case ID.COPPER_CHAINMAIL:
+				case EntityID.ItemID.COPPER_CHAINMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 2;
-					BodySlot = 1;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_COPPER_CHAINMAIL;
 					Value = 1000;
 					break;
-				case ID.IRON_CHAINMAIL:
+				case EntityID.ItemID.IRON_CHAINMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					BodySlot = 2;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_IRON_CHAINMAIL;
 					Value = 4000;
 					break;
-				case ID.SILVER_CHAINMAIL:
+				case EntityID.ItemID.SILVER_CHAINMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					BodySlot = 3;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_SILVER_CHAINMAIL;
 					Value = 10000;
 					break;
-				case ID.GOLD_CHAINMAIL:
+				case EntityID.ItemID.GOLD_CHAINMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 5;
-					BodySlot = 4;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_GOLD_CHAINMAIL;
 					Value = 20000;
 					break;
-				case ID.GRAPPLING_HOOK:
+				case EntityID.ItemID.GRAPPLING_HOOK:
 					NoUseGraphic = true;
 					Damage = 0;
 					Knockback = 7f;
 					UseStyle = 5;
 					ShootSpeed = 11f;
-					Shoot = 13;
+					Shoot = (byte)EntityID.ProjectileID.HOOK;
 					Width = 18;
 					Height = 28;
 					UseSound = 1;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					NoMelee = true;
 					Value = 20000;
 					break;
-				case ID.IRON_CHAIN:
+				case EntityID.ItemID.CHAIN:
 					Width = 14;
 					Height = 20;
 					MaxStack = 99;
 					Value = 1000;
 					break;
-				case ID.SHADOW_SCALE:
+				case EntityID.ItemID.SHADOW_SCALE:
 					Width = 14;
 					Height = 18;
 					MaxStack = 99;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 500;
 					break;
-				case ID.PIGGY_BANK:
+				case EntityID.ItemID.PIGGY_BANK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3007,48 +2356,48 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 29;
+					CreateTile = (short)EntityID.TileID.PIGGYBANK;
 					Width = 20;
 					Height = 12;
 					Value = 10000;
 					break;
-				case ID.MINING_HELMET:
+				case EntityID.ItemID.MINING_HELMET:
 					Width = 22;
 					Height = 16;
 					Defense = 1;
-					HeadSlot = 11;
-					Rarity = 1;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MINING_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 80000;
 					break;
-				case ID.COPPER_HELMET:
+				case EntityID.ItemID.COPPER_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					HeadSlot = 1;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_COPPER_HELMET;
 					Value = 1250;
 					break;
-				case ID.IRON_HELMET:
+				case EntityID.ItemID.IRON_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 2;
-					HeadSlot = 2;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_IRON_HELMET;
 					Value = 5000;
 					break;
-				case ID.SILVER_HELMET:
+				case EntityID.ItemID.SILVER_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					HeadSlot = 3;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SILVER_HELMET;
 					Value = 12500;
 					break;
-				case ID.GOLD_HELMET:
+				case EntityID.ItemID.GOLD_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					HeadSlot = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_GOLD_HELMET;
 					Value = 25000;
 					break;
-				case ID.WOOD_WALL:
+				case EntityID.ItemID.WOOD_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3056,11 +2405,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 4;
+					CreateWall = (short)EntityID.WallID.WOOD;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.WOOD_PLATFORM:
+				case EntityID.ItemID.WOOD_PLATFORM:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3068,17 +2417,17 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 19;
+					CreateTile = (short)EntityID.TileID.PLATFORM;
 					Width = 8;
 					Height = 10;
 					break;
-				case ID.FLINTLOCK_PISTOL:
+				case EntityID.ItemID.FLINTLOCK_PISTOL:
 					UseStyle = 5;
 					UseAnimation = 16;
 					UseTime = 16;
 					Width = 24;
 					Height = 28;
-					Shoot = 14;
+					Shoot = (byte)EntityID.ProjectileID.BULLET;
 					UseAmmo = 14;
 					UseSound = 11;
 					Damage = 10;
@@ -3086,17 +2435,17 @@ namespace Terraria
 					NoMelee = true;
 					Value = 50000;
 					Scale = 0.9f;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsRanged = true;
 					break;
-				case ID.MUSKET:
+				case EntityID.ItemID.MUSKET:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 43;
 					UseTime = 43;
 					Width = 44;
 					Height = 14;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 14;
 					UseSound = 11;
 					Damage = 23;
@@ -3104,12 +2453,12 @@ namespace Terraria
 					NoMelee = true;
 					Value = 100000;
 					Knockback = 4f;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsRanged = true;
 					break;
-				case ID.MUSKET_BALL:
+				case EntityID.ItemID.MUSKET_BALL:
 					ShootSpeed = 4f;
-					Shoot = 14;
+					Shoot = (byte)EntityID.ProjectileID.BULLET;
 					Damage = 7;
 					Width = 8;
 					Height = 8;
@@ -3120,30 +2469,30 @@ namespace Terraria
 					Value = 7;
 					IsRanged = true;
 					break;
-				case ID.MINISHARK:
+				case EntityID.ItemID.MINISHARK:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 8;
 					UseTime = 8;
 					Width = 50;
 					Height = 18;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 14;
 					UseSound = 11;
 					Damage = 6;
 					ShootSpeed = 7f;
 					NoMelee = true;
 					Value = 350000;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					IsRanged = true;
 					break;
-				case ID.IRON_BOW:
+				case EntityID.ItemID.IRON_BOW:
 					UseStyle = 5;
 					UseAnimation = 28;
 					UseTime = 28;
 					Width = 12;
 					Height = 28;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 8;
@@ -3152,31 +2501,31 @@ namespace Terraria
 					Value = 1400;
 					IsRanged = true;
 					break;
-				case ID.SHADOW_GREAVES:
+				case EntityID.ItemID.SHADOW_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 6;
-					LegSlot = 5;
-					Rarity = 1;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_SHADOW_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 22500;
 					break;
-				case ID.SHADOW_SCALEMAIL:
+				case EntityID.ItemID.SHADOW_SCALEMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 7;
-					BodySlot = 5;
-					Rarity = 1;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_SHADOW_SCALEMAIL;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 30000;
 					break;
-				case ID.SHADOW_HELMET:
+				case EntityID.ItemID.SHADOW_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 6;
-					HeadSlot = 5;
-					Rarity = 1;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SHADOW_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 37500;
 					break;
-				case ID.NIGHTMARE_PICKAXE:
+				case EntityID.ItemID.NIGHTMARE_PICKAXE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 20;
@@ -3188,12 +2537,12 @@ namespace Terraria
 					PickPower = 65;
 					UseSound = 1;
 					Knockback = 3f;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 18000;
 					Scale = 1.15f;
 					IsMelee = true;
 					break;
-				case ID.THE_BREAKER:
+				case EntityID.ItemID.THE_BREAKER:
 					AutoReuse = true;
 					UseStyle = 1;
 					UseAnimation = 45;
@@ -3205,11 +2554,11 @@ namespace Terraria
 					Knockback = 6f;
 					Scale = 1.3f;
 					UseSound = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 15000;
 					IsMelee = true;
 					break;
-				case ID.CANDLE:
+				case EntityID.ItemID.CANDLE:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -3217,12 +2566,12 @@ namespace Terraria
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 33;
+					CreateTile = (short)EntityID.TileID.CANDLE;
 					Width = 8;
 					Height = 18;
 					HoldStyle = 1;
 					break;
-				case ID.COPPER_CHANDELIER:
+				case EntityID.ItemID.COPPER_CHANDELIER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3230,11 +2579,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 34;
+					CreateTile = (short)EntityID.TileID.CHANDELIER;
 					Width = 26;
 					Height = 26;
 					break;
-				case ID.SILVER_CHANDELIER:
+				case EntityID.ItemID.SILVER_CHANDELIER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3242,11 +2591,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 35;
+					CreateTile = (short)EntityID.TileID.JACK_O_LANTERN;
 					Width = 26;
 					Height = 26;
 					break;
-				case ID.GOLD_CHANDELIER:
+				case EntityID.ItemID.GOLD_CHANDELIER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3254,11 +2603,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 36;
+					CreateTile = (short)EntityID.TileID.PRESENT;
 					Width = 26;
 					Height = 26;
 					break;
-				case ID.MANA_CRYSTAL:
+				case EntityID.ItemID.MANA_CRYSTAL:
 					MaxStack = 99;
 					IsConsumable = true;
 					Width = 18;
@@ -3267,9 +2616,9 @@ namespace Terraria
 					UseTime = 30;
 					UseSound = 29;
 					UseAnimation = 30;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.LESSER_MANA_POTION:
+				case EntityID.ItemID.LESSER_MANA_POTION:
 					UseSound = 3;
 					HealMana = 50;
 					UseStyle = 2;
@@ -3282,83 +2631,83 @@ namespace Terraria
 					Height = 24;
 					Value = 100;
 					break;
-				case ID.BAND_OF_STARPOWER:
+				case EntityID.ItemID.BAND_OF_STARPOWER:
 					Width = 22;
 					Height = 22;
 					IsAccessory = true;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 50000;
 					break;
-				case ID.FLOWER_OF_FIRE:
+				case EntityID.ItemID.FLOWER_OF_FIRE:
 					Mana = 17;
 					Damage = 44;
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 15;
+					Shoot = (byte)EntityID.ProjectileID.BALL_OF_FIRE;
 					Width = 26;
 					Height = 28;
 					UseSound = 20;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Knockback = 5.5f;
 					Value = 10000;
 					IsMagic = true;
 					break;
-				case ID.MAGIC_MISSILE:
+				case EntityID.ItemID.MAGIC_MISSILE:
 					Mana = 10;
 					Channelling = true;
 					Damage = 22;
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 16;
+					Shoot = (byte)EntityID.ProjectileID.MAGIC_MISSILE;
 					Width = 26;
 					Height = 28;
 					UseSound = 9;
 					UseAnimation = 17;
 					UseTime = 17;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					NoMelee = true;
 					Knockback = 5f;
 					TileBoost = 64;
 					Value = 10000;
 					IsMagic = true;
 					break;
-				case ID.DIRT_ROD:
+				case EntityID.ItemID.DIRT_ROD:
 					Mana = 5;
 					Channelling = true;
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 17;
+					Shoot = (byte)EntityID.ProjectileID.DIRT_BALL;
 					Width = 26;
 					Height = 28;
 					UseSound = 8;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					NoMelee = true;
 					Knockback = 5f;
 					Value = 200000;
 					break;
-				case ID.ORB_OF_LIGHT:
+				case EntityID.ItemID.SHADOW_ORB:
 					Mana = 40;
 					Channelling = true;
 					Damage = 0;
 					UseStyle = 4;
-					Shoot = 18;
+					Shoot = (byte)EntityID.ProjectileID.SHADOW_ORB;
 					Width = 24;
 					Height = 24;
 					UseSound = 8;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					NoMelee = true;
 					Value = 10000;
-					BuffType = (int)Buff.ID.LIGHT_ORB;
+					BuffType = (int)EntityID.BuffID.LIGHT_ORB;
 					BuffTime = 18000;
 					break;
-				case ID.METEORITE:
+				case EntityID.ItemID.METEORITE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3366,29 +2715,29 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 37;
+					CreateTile = (short)EntityID.TileID.METEORITE;
 					Width = 12;
 					Height = 12;
 					Value = 1000;
 					break;
-				case ID.METEORITE_BAR:
+				case EntityID.ItemID.METEORITE_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 7000;
 					break;
-				case ID.HOOK:
+				case EntityID.ItemID.HOOK:
 					MaxStack = 99;
 					Width = 18;
 					Height = 18;
 					Value = 1000;
 					break;
-				case ID.FLAMARANG:
+				case EntityID.ItemID.FLAMARANG:
 					NoMelee = true;
 					UseStyle = 1;
 					ShootSpeed = 11f;
-					Shoot = 19;
+					Shoot = (byte)EntityID.ProjectileID.FLAMARANG;
 					Damage = 32;
 					Knockback = 8f;
 					Width = 14;
@@ -3397,49 +2746,49 @@ namespace Terraria
 					UseAnimation = 15;
 					UseTime = 15;
 					NoUseGraphic = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 100000;
 					IsMelee = true;
 					break;
-				case ID.MOLTEN_FURY:
+				case EntityID.ItemID.MOLTEN_FURY:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 25;
 					Width = 14;
 					Height = 32;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 29;
 					ShootSpeed = 8f;
 					Knockback = 2f;
 					Alpha = 30;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Scale = 1.1f;
 					Value = 27000;
 					IsRanged = true;
 					break;
-				case ID.SHARANGA:
+				case EntityID.ItemID.SHARANGA:
 					UseStyle = 5;
 					UseAnimation = 20;
 					UseTime = 20;
 					Width = 14;
 					Height = 32;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 35;
 					ShootSpeed = 10f;
 					Knockback = 2.3f;
 					Alpha = 30;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					NoMelee = true;
 					Scale = 1.1f;
 					Value = 60000;
 					IsRanged = true;
 					break;
-				case ID.FIERY_GREATSWORD:
+				case EntityID.ItemID.FIERY_GREATSWORD:
 					UseStyle = 1;
 					UseAnimation = 34;
 					Knockback = 6.5f;
@@ -3448,11 +2797,11 @@ namespace Terraria
 					Damage = 36;
 					Scale = 1.3f;
 					UseSound = 1;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.MOLTEN_PICKAXE:
+				case EntityID.ItemID.MOLTEN_PICKAXE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 25;
@@ -3465,35 +2814,35 @@ namespace Terraria
 					Scale = 1.15f;
 					UseSound = 1;
 					Knockback = 2f;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.METEOR_HELMET:
+				case EntityID.ItemID.METEOR_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					HeadSlot = 6;
-					Rarity = 1;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_METEOR_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 45000;
 					break;
-				case ID.METEOR_SUIT:
+				case EntityID.ItemID.METEOR_SUIT:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					BodySlot = 6;
-					Rarity = 1;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_METEOR_SUIT;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 30000;
 					break;
-				case ID.METEOR_LEGGINGS:
+				case EntityID.ItemID.METEOR_LEGGINGS:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					LegSlot = 6;
-					Rarity = 1;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_METEOR_LEGGINGS;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 30000;
 					break;
-				case ID.BOTTLED_WATER:
+				case EntityID.ItemID.BOTTLED_WATER:
 					UseSound = 3;
 					HealLife = 20;
 					UseStyle = 2;
@@ -3507,14 +2856,14 @@ namespace Terraria
 					IsPotion = true;
 					Value = 20;
 					break;
-				case ID.SPACE_GUN:
+				case EntityID.ItemID.SPACE_GUN:
 					AutoReuse = true;
 					UseStyle = 5;
 					UseAnimation = 19;
 					UseTime = 19;
 					Width = 24;
 					Height = 28;
-					Shoot = 20;
+					Shoot = (byte)EntityID.ProjectileID.GREEN_LASER;
 					Mana = 8;
 					UseSound = 12;
 					Knockback = 0.5f;
@@ -3522,18 +2871,18 @@ namespace Terraria
 					ShootSpeed = 10f;
 					NoMelee = true;
 					Scale = 0.8f;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsMagic = true;
 					Value = 20000;
 					break;
-				case ID.ROCKET_BOOTS:
+				case EntityID.ItemID.ROCKET_BOOTS:
 					Width = 28;
 					Height = 24;
 					IsAccessory = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 50000;
 					break;
-				case ID.GRAY_BRICK:
+				case EntityID.ItemID.GRAY_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3541,11 +2890,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 38;
+					CreateTile = (short)EntityID.TileID.GRAY_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GRAY_BRICK_WALL:
+				case EntityID.ItemID.GRAY_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3553,11 +2902,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 5;
+					CreateWall = (short)EntityID.WallID.GREY_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.RED_BRICK:
+				case EntityID.ItemID.RED_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3565,11 +2914,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 39;
+					CreateTile = (short)EntityID.TileID.RED_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.RED_BRICK_WALL:
+				case EntityID.ItemID.RED_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3577,11 +2926,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 6;
+					CreateWall = (short)EntityID.WallID.RED_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.CLAY_BLOCK:
+				case EntityID.ItemID.CLAY_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3589,11 +2938,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 40;
+					CreateTile = (short)EntityID.TileID.CLAY;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.BLUE_BRICK:
+				case EntityID.ItemID.BLUE_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3601,11 +2950,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 41;
+					CreateTile = (short)EntityID.TileID.BLUE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.BLUE_BRICK_WALL:
+				case EntityID.ItemID.BLUE_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3613,11 +2962,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 17;
+					CreateWall = (short)EntityID.WallID.BLUE_DUNGEON;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.CHAIN_LANTERN:
+				case EntityID.ItemID.CHAIN_LANTERN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3625,11 +2974,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 42;
+					CreateTile = (short)EntityID.TileID.CHAIN_LANTERN;
 					Width = 12;
 					Height = 28;
 					break;
-				case ID.GREEN_BRICK:
+				case EntityID.ItemID.GREEN_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3637,11 +2986,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 43;
+					CreateTile = (short)EntityID.TileID.GREEN_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GREEN_BRICK_WALL:
+				case EntityID.ItemID.GREEN_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3649,11 +2998,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 18;
+					CreateWall = (short)EntityID.WallID.GREEN_DUNGEON;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.PINK_BRICK:
+				case EntityID.ItemID.PINK_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3661,11 +3010,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 44;
+					CreateTile = (short)EntityID.TileID.PINK_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.PINK_BRICK_WALL:
+				case EntityID.ItemID.PINK_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3673,11 +3022,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 19;
+					CreateWall = (short)EntityID.WallID.PINK_DUNGEON;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GOLD_BRICK:
+				case EntityID.ItemID.GOLD_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3685,11 +3034,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 45;
+					CreateTile = (short)EntityID.TileID.GOLD_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GOLD_BRICK_WALL:
+				case EntityID.ItemID.GOLD_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3697,11 +3046,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 10;
+					CreateWall = (short)EntityID.WallID.GOLD_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SILVER_BRICK:
+				case EntityID.ItemID.SILVER_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3709,11 +3058,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 46;
+					CreateTile = (short)EntityID.TileID.SILVER_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SILVER_BRICK_WALL:
+				case EntityID.ItemID.SILVER_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3721,11 +3070,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 11;
+					CreateWall = (short)EntityID.WallID.SILVER_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.COPPER_BRICK:
+				case EntityID.ItemID.COPPER_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3733,11 +3082,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 47;
+					CreateTile = (short)EntityID.TileID.COPPER_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.COPPER_BRICK_WALL:
+				case EntityID.ItemID.COPPER_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3745,11 +3094,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 12;
+					CreateWall = (short)EntityID.WallID.COPPER_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SPIKE:
+				case EntityID.ItemID.SPIKE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3757,11 +3106,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 48;
+					CreateTile = (short)EntityID.TileID.SPIKE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.WATER_CANDLE:
+				case EntityID.ItemID.WATER_CANDLE:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -3770,12 +3119,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 49;
+					CreateTile = (short)EntityID.TileID.WATER_CANDLE;
 					Width = 8;
 					Height = 18;
 					HoldStyle = 1;
 					break;
-				case ID.BOOK:
+				case EntityID.ItemID.BOOK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -3783,47 +3132,47 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 50;
+					CreateTile = (short)EntityID.TileID.BOOK;
 					Width = 24;
 					Height = 28;
 					break;
-				case ID.COBWEB:
+				case EntityID.ItemID.COBWEB:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 51;
+					CreateTile = (short)EntityID.TileID.COBWEB;
 					Width = 20;
 					Height = 24;
 					Alpha = 100;
 					break;
-				case ID.NECRO_HELMET:
+				case EntityID.ItemID.NECRO_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 5;
-					HeadSlot = 7;
-					Rarity = 2;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_NECRO_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 45000;
 					break;
-				case ID.NECRO_BREASTPLATE:
+				case EntityID.ItemID.NECRO_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 6;
-					BodySlot = 7;
-					Rarity = 2;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_NECRO_BREASTPLATE;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 30000;
 					break;
-				case ID.NECRO_GREAVES:
+				case EntityID.ItemID.NECRO_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 5;
-					LegSlot = 7;
-					Rarity = 2;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_NECRO_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 30000;
 					break;
-				case ID.BONE:
+				case EntityID.ItemID.BONE:
 					MaxStack = 99;
 					IsConsumable = true;
 					Width = 12;
@@ -3837,10 +3186,10 @@ namespace Terraria
 					NoUseGraphic = true;
 					Damage = 22;
 					Knockback = 4f;
-					Shoot = 21;
+					Shoot = (byte)EntityID.ProjectileID.BONE;
 					IsRanged = true;
 					break;
-				case ID.MURAMASA:
+				case EntityID.ItemID.MURAMASA:
 					AutoReuse = true;
 					CanUseTurn = true;
 					UseStyle = 1;
@@ -3850,20 +3199,20 @@ namespace Terraria
 					Damage = 18;
 					Scale = 1.1f;
 					UseSound = 1;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					Knockback = 1f;
 					IsMelee = true;
 					break;
-				case ID.COBALT_SHIELD:
+				case EntityID.ItemID.COBALT_SHIELD:
 					Width = 24;
 					Height = 28;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					IsAccessory = true;
 					Defense = 1;
 					break;
-				case ID.AQUA_SCEPTER:
+				case EntityID.ItemID.AQUA_SCEPTER:
 					Mana = 7;
 					AutoReuse = true;
 					UseStyle = 5;
@@ -3874,28 +3223,28 @@ namespace Terraria
 					Height = 10;
 					Damage = 14;
 					Scale = 1f;
-					Shoot = 22;
+					Shoot = (byte)EntityID.ProjectileID.WATER_STREAM;
 					ShootSpeed = 11f;
 					UseSound = 13;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					IsMagic = true;
 					break;
-				case ID.LUCKY_HORSESHOE:
+				case EntityID.ItemID.LUCKY_HORSESHOE:
 					Width = 20;
 					Height = 22;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsAccessory = true;
 					break;
-				case ID.SHINY_RED_BALLOON:
+				case EntityID.ItemID.SHINY_RED_BALLOON:
 					Width = 14;
 					Height = 28;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsAccessory = true;
 					break;
-				case ID.HARPOON:
+				case EntityID.ItemID.HARPOON:
 					AutoReuse = true;
 					UseStyle = 5;
 					UseAnimation = 30;
@@ -3905,17 +3254,17 @@ namespace Terraria
 					Height = 10;
 					Damage = 25;
 					Scale = 1.1f;
-					Shoot = 23;
+					Shoot = (byte)EntityID.ProjectileID.HARPOON;
 					ShootSpeed = 11f;
 					UseSound = 10;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					IsRanged = true;
 					break;
-				case ID.SPIKY_BALL:
+				case EntityID.ItemID.SPIKY_BALL:
 					UseStyle = 1;
 					ShootSpeed = 5f;
-					Shoot = 24;
+					Shoot = (byte)EntityID.ProjectileID.SPIKY_BALL;
 					Knockback = 1f;
 					Damage = 15;
 					Width = 10;
@@ -3930,7 +3279,7 @@ namespace Terraria
 					Value = 80;
 					IsRanged = true;
 					break;
-				case ID.BALL_O_HURT:
+				case EntityID.ItemID.BALL_O_HURT:
 					UseStyle = 5;
 					UseAnimation = 45;
 					UseTime = 45;
@@ -3940,16 +3289,16 @@ namespace Terraria
 					Damage = 15;
 					Scale = 1.1f;
 					NoUseGraphic = true;
-					Shoot = 25;
+					Shoot = (byte)EntityID.ProjectileID.BALL_O_HURT;
 					ShootSpeed = 12f;
 					UseSound = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					Channelling = true;
 					NoMelee = true;
 					break;
-				case ID.BLUE_MOON:
+				case EntityID.ItemID.BLUE_MOON:
 					UseStyle = 5;
 					UseAnimation = 45;
 					UseTime = 45;
@@ -3959,22 +3308,22 @@ namespace Terraria
 					Damage = 23;
 					Scale = 1.1f;
 					NoUseGraphic = true;
-					Shoot = 26;
+					Shoot = (byte)EntityID.ProjectileID.BLUE_MOON;
 					ShootSpeed = 12f;
 					UseSound = 1;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.HANDGUN:
+				case EntityID.ItemID.HANDGUN:
 					AutoReuse = false;
 					UseStyle = 5;
 					UseAnimation = 12;
 					UseTime = 12;
 					Width = 24;
 					Height = 24;
-					Shoot = 14;
+					Shoot = (byte)EntityID.ProjectileID.BULLET;
 					Knockback = 3f;
 					UseAmmo = 14;
 					UseSound = 11;
@@ -3983,12 +3332,12 @@ namespace Terraria
 					NoMelee = true;
 					Value = 50000;
 					Scale = 0.75f;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					IsRanged = true;
 					break;
-				case ID.WATER_BOLT:
+				case EntityID.ItemID.WATER_BOLT:
 					AutoReuse = true;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Mana = 14;
 					UseSound = 21;
 					UseStyle = 5;
@@ -3997,17 +3346,17 @@ namespace Terraria
 					UseTime = 17;
 					Width = 24;
 					Height = 28;
-					Shoot = 27;
+					Shoot = (byte)EntityID.ProjectileID.WATER_BOLT;
 					Scale = 0.9f;
 					ShootSpeed = 4.5f;
 					Knockback = 5f;
 					IsMagic = true;
 					Value = 50000;
 					break;
-				case ID.BOMB:
+				case EntityID.ItemID.BOMB:
 					UseStyle = 1;
 					ShootSpeed = 5f;
-					Shoot = 28;
+					Shoot = (byte)EntityID.ProjectileID.BOMB;
 					Width = 20;
 					Height = 20;
 					MaxStack = 50;
@@ -4020,10 +3369,10 @@ namespace Terraria
 					Value = 500;
 					Damage = 0;
 					break;
-				case ID.DYNAMITE:
+				case EntityID.ItemID.DYNAMITE:
 					UseStyle = 1;
 					ShootSpeed = 4f;
-					Shoot = 29;
+					Shoot = (byte)EntityID.ProjectileID.DYNAMITE;
 					Width = 8;
 					Height = 28;
 					MaxStack = 5;
@@ -4034,12 +3383,12 @@ namespace Terraria
 					NoUseGraphic = true;
 					NoMelee = true;
 					Value = 5000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.GRENADE:
+				case EntityID.ItemID.GRENADE:
 					UseStyle = 5;
 					ShootSpeed = 5.5f;
-					Shoot = 30;
+					Shoot = (byte)EntityID.ProjectileID.GRENADE;
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
@@ -4054,7 +3403,7 @@ namespace Terraria
 					Knockback = 8f;
 					IsRanged = true;
 					break;
-				case ID.SAND_BLOCK:
+				case EntityID.ItemID.SAND_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4062,12 +3411,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 53;
+					CreateTile = (short)EntityID.TileID.SAND;
 					Width = 12;
 					Height = 12;
 					Ammo = 42;
 					break;
-				case ID.GLASS:
+				case EntityID.ItemID.GLASS:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4075,11 +3424,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 54;
+					CreateTile = (short)EntityID.TileID.GLASS;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SIGN:
+				case EntityID.ItemID.SIGN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4087,11 +3436,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 55;
+					CreateTile = (short)EntityID.TileID.SIGN;
 					Width = 28;
 					Height = 28;
 					break;
-				case ID.ASH_BLOCK:
+				case EntityID.ItemID.ASH_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4099,11 +3448,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 57;
+					CreateTile = (short)EntityID.TileID.ASH;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.OBSIDIAN:
+				case EntityID.ItemID.OBSIDIAN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4111,11 +3460,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 56;
+					CreateTile = (short)EntityID.TileID.OBSIDIAN;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.HELLSTONE:
+				case EntityID.ItemID.HELLSTONE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4123,19 +3472,19 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 58;
+					CreateTile = (short)EntityID.TileID.HELLSTONE;
 					Width = 12;
 					Height = 12;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.HELLSTONE_BAR:
+				case EntityID.ItemID.HELLSTONE_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 20000;
 					break;
-				case ID.MUD_BLOCK:
+				case EntityID.ItemID.MUD_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4143,53 +3492,53 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 59;
+					CreateTile = (short)EntityID.TileID.MUD;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.AMETHYST:
+				case EntityID.ItemID.AMETHYST:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 1875;
 					break;
-				case ID.TOPAZ:
+				case EntityID.ItemID.TOPAZ:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 3750;
 					break;
-				case ID.SAPPHIRE:
+				case EntityID.ItemID.SAPPHIRE:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 5625;
 					break;
-				case ID.EMERALD:
+				case EntityID.ItemID.EMERALD:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 7500;
 					break;
-				case ID.RUBY:
+				case EntityID.ItemID.RUBY:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 11250;
 					break;
-				case ID.DIAMOND:
+				case EntityID.ItemID.DIAMOND:
 					MaxStack = 99;
 					Alpha = 50;
 					Width = 10;
 					Height = 14;
 					Value = 15000;
 					break;
-				case ID.GLOWING_MUSHROOM:
+				case EntityID.ItemID.GLOWING_MUSHROOM:
 					UseStyle = 2;
 					UseSound = 2;
 					CanUseTurn = false;
@@ -4203,41 +3552,41 @@ namespace Terraria
 					IsPotion = true;
 					Value = 50;
 					break;
-				case ID.STAR:
+				case EntityID.ItemID.STAR:
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.IVY_WHIP:
+				case EntityID.ItemID.IVY_WHIP:
 					NoUseGraphic = true;
 					Damage = 0;
 					Knockback = 7f;
 					UseStyle = 5;
 					ShootSpeed = 13f;
-					Shoot = 32;
+					Shoot = (byte)EntityID.ProjectileID.IVY_WHIP;
 					Width = 18;
 					Height = 28;
 					UseSound = 1;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 20000;
 					break;
-				case ID.BREATHING_REED:
+				case EntityID.ItemID.BREATHING_REED:
 					Width = 44;
 					Height = 44;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 10000;
 					HoldStyle = 2;
 					break;
-				case ID.FLIPPER:
+				case EntityID.ItemID.FLIPPER:
 					Width = 28;
 					Height = 28;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 10000;
 					IsAccessory = true;
 					break;
-				case ID.HEALING_POTION:
+				case EntityID.ItemID.HEALING_POTION:
 					UseSound = 3;
 					HealLife = 100;
 					UseStyle = 2;
@@ -4248,11 +3597,11 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsPotion = true;
 					Value = 1000;
 					break;
-				case ID.MANA_POTION:
+				case EntityID.ItemID.MANA_POTION:
 					UseSound = 3;
 					HealMana = 100;
 					UseStyle = 2;
@@ -4263,10 +3612,10 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 250;
 					break;
-				case ID.BLADE_OF_GRASS:
+				case EntityID.ItemID.BLADE_OF_GRASS:
 					UseStyle = 1;
 					UseAnimation = 30;
 					Knockback = 3f;
@@ -4275,15 +3624,15 @@ namespace Terraria
 					Damage = 28;
 					Scale = 1.4f;
 					UseSound = 1;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.THORN_CHAKRAM:
+				case EntityID.ItemID.THORN_CHAKRAM:
 					NoMelee = true;
 					UseStyle = 1;
 					ShootSpeed = 11f;
-					Shoot = 33;
+					Shoot = (byte)EntityID.ProjectileID.THORN_CHAKRAM;
 					Damage = 25;
 					Knockback = 8f;
 					Width = 14;
@@ -4292,11 +3641,11 @@ namespace Terraria
 					UseAnimation = 15;
 					UseTime = 15;
 					NoUseGraphic = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 50000;
 					IsMelee = true;
 					break;
-				case ID.OBSIDIAN_BRICK:
+				case EntityID.ItemID.OBSIDIAN_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4304,43 +3653,43 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 75;
+					CreateTile = (short)EntityID.TileID.OBSIDIAN_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.OBSIDIAN_SKULL:
+				case EntityID.ItemID.OBSIDIAN_SKULL:
 					Width = 20;
 					Height = 22;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 27000;
 					IsAccessory = true;
 					Defense = 1;
 					break;
-				case ID.MUSHROOM_GRASS_SEEDS:
+				case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 70;
+					CreateTile = (short)EntityID.TileID.MUSHROOM_GRASS;
 					Width = 14;
 					Height = 14;
 					Value = 150;
 					break;
-				case ID.JUNGLE_GRASS_SEEDS:
+				case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 60;
+					CreateTile = (short)EntityID.TileID.JUNGLE_GRASS;
 					Width = 14;
 					Height = 14;
 					Value = 150;
 					break;
-				case ID.WOODEN_HAMMER:
+				case EntityID.ItemID.WOODEN_HAMMER:
 					AutoReuse = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -4357,24 +3706,24 @@ namespace Terraria
 					Value = 50;
 					IsMelee = true;
 					break;
-				case ID.STAR_CANNON:
+				case EntityID.ItemID.STAR_CANNON:
 					AutoReuse = true;
 					UseStyle = 5;
 					UseAnimation = 12;
 					UseTime = 12;
 					Width = 50;
 					Height = 18;
-					Shoot = 12;
+					Shoot = (byte)EntityID.ProjectileID.FALLING_STAR;
 					UseAmmo = 15;
 					UseSound = 9;
 					Damage = 55;
 					ShootSpeed = 14f;
 					NoMelee = true;
 					Value = 500000;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					IsRanged = true;
 					break;
-				case ID.BLUE_PHASEBLADE:
+				case EntityID.ItemID.BLUE_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4383,11 +3732,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.RED_PHASEBLADE:
+				case EntityID.ItemID.RED_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4396,11 +3745,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.GREEN_PHASEBLADE:
+				case EntityID.ItemID.GREEN_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4409,11 +3758,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.PURPLE_PHASEBLADE:
+				case EntityID.ItemID.PURPLE_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4422,11 +3771,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.WHITE_PHASEBLADE:
+				case EntityID.ItemID.WHITE_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4435,11 +3784,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.YELLOW_PHASEBLADE:
+				case EntityID.ItemID.YELLOW_PHASEBLADE:
 					UseStyle = 1;
 					UseAnimation = 25;
 					Knockback = 3f;
@@ -4448,11 +3797,11 @@ namespace Terraria
 					Damage = 21;
 					Scale = 1f;
 					UseSound = 15;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.METEOR_HAMAXE:
+				case EntityID.ItemID.METEOR_HAMAXE:
 					CanUseTurn = true;
 					AutoReuse = true;
 					UseStyle = 1;
@@ -4466,21 +3815,21 @@ namespace Terraria
 					Knockback = 7f;
 					Scale = 1.2f;
 					UseSound = 1;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 15000;
 					IsMelee = true;
 					break;
-				case ID.EMPTY_BUCKET:
+				case EntityID.ItemID.EMPTY_BUCKET:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					Width = 20;
 					Height = 20;
-					HeadSlot = 13;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_EMPTY_BUCKET;
 					Defense = 1;
 					break;
-				case ID.WATER_BUCKET:
+				case EntityID.ItemID.WATER_BUCKET:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4488,7 +3837,7 @@ namespace Terraria
 					Width = 20;
 					Height = 20;
 					break;
-				case ID.LAVA_BUCKET:
+				case EntityID.ItemID.LAVA_BUCKET:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4496,40 +3845,40 @@ namespace Terraria
 					Width = 20;
 					Height = 20;
 					break;
-				case ID.JUNGLE_ROSE:
+				case EntityID.ItemID.JUNGLE_ROSE:
 					Width = 20;
 					Height = 20;
 					Value = 100;
-					HeadSlot = 23;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_JUNGLE_ROSE;
 					IsVanity = true;
 					break;
-				case ID.STINGER:
+				case EntityID.ItemID.STINGER:
 					Width = 16;
 					Height = 18;
 					MaxStack = 99;
 					Value = 200;
 					break;
-				case ID.VINE:
+				case EntityID.ItemID.VINE:
 					Width = 14;
 					Height = 20;
 					MaxStack = 99;
 					Value = 1000;
 					break;
-				case ID.FERAL_CLAWS:
+				case EntityID.ItemID.FERAL_CLAWS:
 					Width = 20;
 					Height = 20;
 					IsAccessory = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 50000;
 					break;
-				case ID.ANKLET_OF_THE_WIND:
+				case EntityID.ItemID.ANKLET_OF_THE_WIND:
 					Width = 20;
 					Height = 20;
 					IsAccessory = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 50000;
 					break;
-				case ID.STAFF_OF_REGROWTH:
+				case EntityID.ItemID.STAFF_OF_REGROWTH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 25;
@@ -4538,15 +3887,15 @@ namespace Terraria
 					Width = 24;
 					Height = 28;
 					Damage = 7;
-					CreateTile = 2;
+					CreateTile = (short)EntityID.TileID.GRASS;
 					Scale = 1.2f;
 					UseSound = 1;
 					Knockback = 3f;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 2000;
 					IsMelee = true;
 					break;
-				case ID.HELLSTONE_BRICK:
+				case EntityID.ItemID.HELLSTONE_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4554,11 +3903,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 76;
+					CreateTile = (short)EntityID.TileID.HELLSTONE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.WHOOPIE_CUSHION:
+				case EntityID.ItemID.WHOOPIE_CUSHION:
 					Width = 18;
 					Height = 18;
 					CanUseTurn = true;
@@ -4570,18 +3919,18 @@ namespace Terraria
 #endif
 					UseStyle = 10;
 					UseSound = 16;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 100;
 					break;
-				case ID.SHACKLE:
+				case EntityID.ItemID.SHACKLE:
 					Width = 20;
 					Height = 20;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 1500;
 					IsAccessory = true;
 					Defense = 1;
 					break;
-				case ID.MOLTEN_HAMAXE:
+				case EntityID.ItemID.MOLTEN_HAMAXE:
 					CanUseTurn = true;
 					AutoReuse = true;
 					UseStyle = 1;
@@ -4595,37 +3944,37 @@ namespace Terraria
 					Knockback = 7f;
 					Scale = 1.4f;
 					UseSound = 1;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 15000;
 					IsMelee = true;
 					break;
-				case ID.FLAMELASH:
+				case EntityID.ItemID.FLAMELASH:
 					Mana = 16;
 					Channelling = true;
 					Damage = 34;
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 34;
+					Shoot = (byte)EntityID.ProjectileID.FLAMELASH;
 					Width = 26;
 					Height = 28;
 					UseSound = 20;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Knockback = 6.5f;
 					TileBoost = 64;
 					Value = 10000;
 					IsMagic = true;
 					break;
-				case ID.PHOENIX_BLASTER:
+				case EntityID.ItemID.PHOENIX_BLASTER:
 					AutoReuse = false;
 					UseStyle = 5;
 					UseAnimation = 11;
 					UseTime = 11;
 					Width = 24;
 					Height = 22;
-					Shoot = 14;
+					Shoot = (byte)EntityID.ProjectileID.BULLET;
 					Knockback = 2f;
 					UseAmmo = 14;
 					UseSound = 11;
@@ -4634,10 +3983,10 @@ namespace Terraria
 					NoMelee = true;
 					Value = 50000;
 					Scale = 0.75f;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					IsRanged = true;
 					break;
-				case ID.SUNFURY:
+				case EntityID.ItemID.SUNFURY:
 					NoMelee = true;
 					UseStyle = 5;
 					UseAnimation = 45;
@@ -4648,15 +3997,15 @@ namespace Terraria
 					Damage = 33;
 					Scale = 1.1f;
 					NoUseGraphic = true;
-					Shoot = 35;
+					Shoot = (byte)EntityID.ProjectileID.SUNFURY;
 					ShootSpeed = 12f;
 					UseSound = 1;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.HELLFORGE:
+				case EntityID.ItemID.HELLFORGE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4664,12 +4013,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 77;
+					CreateTile = (short)EntityID.TileID.HELLFORGE;
 					Width = 26;
 					Height = 24;
 					Value = 3000;
 					break;
-				case ID.CLAY_POT:
+				case EntityID.ItemID.CLAY_POT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -4677,37 +4026,37 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 78;
+					CreateTile = (short)EntityID.TileID.CLAY_POT;
 					Width = 14;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.NATURES_GIFT:
+				case EntityID.ItemID.NATURES_GIFT:
 					Width = 20;
 					Height = 22;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsAccessory = true;
 					break;
-				case ID.BED:
+				case EntityID.ItemID.BED:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 79;
+					CreateTile = (short)EntityID.TileID.BED;
 					Width = 28;
 					Height = 20;
 					Value = 2000;
 					break;
-				case ID.SILK:
+				case EntityID.ItemID.SILK:
 					MaxStack = 99;
 					Width = 22;
 					Height = 22;
 					Value = 1000;
 					break;
-				case ID.LESSER_RESTORATION_POTION:
+				case EntityID.ItemID.LESSER_RESTORATION_POTION:
 					UseSound = 3;
 					HealMana = 50;
 					HealLife = 50;
@@ -4722,7 +4071,7 @@ namespace Terraria
 					IsPotion = true;
 					Value = 2000;
 					break;
-				case ID.RESTORATION_POTION:
+				case EntityID.ItemID.RESTORATION_POTION:
 					UseSound = 3;
 					HealMana = 100;
 					HealLife = 100;
@@ -4737,57 +4086,57 @@ namespace Terraria
 					IsPotion = true;
 					Value = 4000;
 					break;
-				case ID.JUNGLE_HAT:
+				case EntityID.ItemID.JUNGLE_HAT:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					HeadSlot = 8;
-					Rarity = 3;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_JUNGLE_HAT;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 45000;
 					break;
-				case ID.JUNGLE_SHIRT:
+				case EntityID.ItemID.JUNGLE_SHIRT:
 					Width = 18;
 					Height = 18;
 					Defense = 5;
-					BodySlot = 8;
-					Rarity = 3;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_JUNGLE_SHIRT;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 30000;
 					break;
-				case ID.JUNGLE_PANTS:
+				case EntityID.ItemID.JUNGLE_PANTS:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					LegSlot = 8;
-					Rarity = 3;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_JUNGLE_PANTS;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 30000;
 					break;
-				case ID.MOLTEN_HELMET:
+				case EntityID.ItemID.MOLTEN_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 8;
-					HeadSlot = 9;
-					Rarity = 3;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MOLTEN_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 45000;
 					break;
-				case ID.MOLTEN_BREASTPLATE:
+				case EntityID.ItemID.MOLTEN_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 9;
-					BodySlot = 9;
-					Rarity = 3;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_MOLTEN_BREASTPLATE;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 30000;
 					break;
-				case ID.MOLTEN_GREAVES:
+				case EntityID.ItemID.MOLTEN_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 8;
-					LegSlot = 9;
-					Rarity = 3;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_MOLTEN_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 30000;
 					break;
-				case ID.METEOR_SHOT:
+				case EntityID.ItemID.METEOR_SHOT:
 					ShootSpeed = 3f;
-					Shoot = 36;
+					Shoot = (byte)EntityID.ProjectileID.METEOR_SHOT;
 					Damage = 9;
 					Width = 8;
 					Height = 8;
@@ -4796,13 +4145,13 @@ namespace Terraria
 					Ammo = 14;
 					Knockback = 1f;
 					Value = 8;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsRanged = true;
 					break;
-				case ID.STICKY_BOMB:
+				case EntityID.ItemID.STICKY_BOMB:
 					UseStyle = 1;
 					ShootSpeed = 5f;
-					Shoot = 37;
+					Shoot = (byte)EntityID.ProjectileID.STICKY_BOMB;
 					Width = 20;
 					Height = 20;
 					MaxStack = 50;
@@ -4815,180 +4164,180 @@ namespace Terraria
 					Value = 500;
 					Damage = 0;
 					break;
-				case ID.BLACK_LENS:
+				case EntityID.ItemID.BLACK_LENS:
 					Width = 12;
 					Height = 20;
 					MaxStack = 99;
 					Value = 5000;
 					break;
-				case ID.SUNGLASSES:
+				case EntityID.ItemID.SUNGLASSES:
 					Width = 28;
 					Height = 12;
-					HeadSlot = 12;
-					Rarity = 2;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SUNGLASSES;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.WIZARD_HAT:
+				case EntityID.ItemID.WIZARD_HAT:
 					Width = 28;
 					Height = 20;
-					HeadSlot = 14;
-					Rarity = 2;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_WIZARD_HAT;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					Value = 10000;
 					Defense = 2;
 					break;
-				case ID.TOP_HAT:
+				case EntityID.ItemID.TOP_HAT:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 15;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_TOP_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.TUXEDO_SHIRT:
+				case EntityID.ItemID.TUXEDO_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 10;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_TUXEDO_SHIRT;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.TUXEDO_PANTS:
+				case EntityID.ItemID.TUXEDO_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 10;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_TUXEDO_PANTS;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.SUMMER_HAT:
+				case EntityID.ItemID.SUMMER_HAT:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 16;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SUMMER_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.BUNNY_HOOD:
+				case EntityID.ItemID.BUNNY_HOOD:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 17;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_BUNNY_HOOD;
 					Value = 20000;
 					IsVanity = true;
 					break;
-				case ID.PLUMBERS_HAT:
+				case EntityID.ItemID.PLUMBERS_HAT:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 18;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_PLUMBERS_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.PLUMBERS_SHIRT:
+				case EntityID.ItemID.PLUMBERS_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 11;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_PLUMBERS_SHIRT;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.PLUMBERS_PANTS:
+				case EntityID.ItemID.PLUMBERS_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 11;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_PLUMBERS_PANTS;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.HEROS_HAT:
+				case EntityID.ItemID.HEROS_HAT:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 19;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_HEROS_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.HEROS_SHIRT:
+				case EntityID.ItemID.HEROS_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 12;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_HEROS_SHIRT;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.HEROS_PANTS:
+				case EntityID.ItemID.HEROS_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 12;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_HEROS_PANTS;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.FISH_BOWL:
+				case EntityID.ItemID.FISH_BOWL:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 20;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_FISH_BOWL;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.ARCHAEOLOGISTS_HAT:
+				case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 21;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_ARCHAEOLOGISTS_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.ARCHAEOLOGISTS_JACKET:
+				case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 					Width = 18;
 					Height = 18;
-					BodySlot = 13;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_ARCHAEOLOGISTS_JACKET;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.ARCHAEOLOGISTS_PANTS:
+				case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 13;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_ARCHAEOLOGISTS_PANTS;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.BLACK_DYE:
+				case EntityID.ItemID.BLACK_THREAD:
 					MaxStack = 99;
 					Width = 12;
 					Height = 20;
 					Value = 10000;
 					break;
-				case ID.PURPLE_DYE:
+				case EntityID.ItemID.PURPLE_THREAD:
 					MaxStack = 99;
 					Width = 12;
 					Height = 20;
 					Value = 2000;
 					break;
-				case ID.NINJA_HOOD:
+				case EntityID.ItemID.NINJA_HOOD:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 22;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_NINJA_HOOD;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.NINJA_SHIRT:
+				case EntityID.ItemID.NINJA_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 14;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_NINJA_SHIRT;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.NINJA_PANTS:
+				case EntityID.ItemID.NINJA_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 14;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_NINJA_PANTS;
 					Value = 5000;
 					IsVanity = true;
 					break;
-				case ID.LEATHER:
+				case EntityID.ItemID.LEATHER:
 					Width = 18;
 					Height = 20;
 					MaxStack = 99;
 					Value = 50;
 					break;
-				case ID.RED_HAT:
+				case EntityID.ItemID.RED_HAT:
 					Width = 18;
 					Height = 14;
-					HeadSlot = 24;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_RED_HAT;
 					Value = 1000;
 					IsVanity = true;
 					break;
-				case ID.GOLDFISH:
+				case EntityID.ItemID.GOLDFISH:
 					UseStyle = 2;
 					UseSound = 2;
 					CanUseTurn = false;
@@ -5002,30 +4351,30 @@ namespace Terraria
 					Value = 1000;
 					IsPotion = true;
 					break;
-				case ID.ROBE:
+				case EntityID.ItemID.ROBE:
 					Width = 18;
 					Height = 14;
-					BodySlot = 15;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_ROBE;
 					Value = 2000;
 					IsVanity = true;
 					break;
-				case ID.ROBOT_HAT:
+				case EntityID.ItemID.ROBOT_HAT:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 25;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_ROBOT_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.GOLD_CROWN:
+				case EntityID.ItemID.GOLD_CROWN:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 26;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_GOLD_CROWN;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.HELLFIRE_ARROW:
+				case EntityID.ItemID.HELLFIRE_ARROW:
 					ShootSpeed = 6.5f;
-					Shoot = 41;
+					Shoot = (byte)EntityID.ProjectileID.HELLFIRE_ARROW;
 					Damage = 10;
 					Width = 10;
 					Height = 28;
@@ -5034,12 +4383,12 @@ namespace Terraria
 					Ammo = 1;
 					Knockback = 8f;
 					Value = 100;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					IsRanged = true;
 					break;
-				case ID.VULCAN_BOLT:
+				case EntityID.ItemID.VULCAN_BOLT:
 					ShootSpeed = 6.6f;
-					Shoot = 114;
+					Shoot = (byte)EntityID.ProjectileID.VULCAN_BOLT;
 					Damage = 12;
 					Width = 10;
 					Height = 28;
@@ -5048,17 +4397,17 @@ namespace Terraria
 					Ammo = 1;
 					Knockback = 8.2f;
 					Value = 150;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					IsRanged = true;
 					break;
-				case ID.SANDGUN:
+				case EntityID.ItemID.SANDGUN:
 					UseStyle = 5;
 					UseAnimation = 16;
 					UseTime = 16;
 					AutoReuse = true;
 					Width = 40;
 					Height = 20;
-					Shoot = 42;
+					Shoot = (byte)EntityID.ProjectileID.SAND_BALL_GUN;
 					UseAmmo = 42;
 					UseSound = 11;
 					Damage = 30;
@@ -5066,25 +4415,25 @@ namespace Terraria
 					NoMelee = true;
 					Knockback = 5f;
 					Value = 10000;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					IsRanged = true;
 					break;
-				case ID.GUIDE_VOODOO_DOLL:
+				case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 					IsAccessory = true;
 					Width = 14;
 					Height = 26;
 					Value = 1000;
 					break;
-				case ID.DIVING_HELMET:
-					HeadSlot = 27;
+				case EntityID.ItemID.DIVING_HELMET:
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_DIVING_HELMET;
 					Defense = 2;
 					Width = 20;
 					Height = 20;
 					Value = 1000;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.FAMILIAR_SHIRT:
-					BodySlot = 0;
+				case EntityID.ItemID.FAMILIAR_SHIRT:
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_NORMAL;
 					Width = 20;
 					Height = 20;
 					Value = 10000;
@@ -5093,8 +4442,8 @@ namespace Terraria
 						Colour = UI.CurrentUI.ActivePlayer.shirtColor;
 					}
 					break;
-				case ID.FAMILIAR_PANTS:
-					LegSlot = 0;
+				case EntityID.ItemID.FAMILIAR_PANTS:
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_NORMAL;
 					Width = 20;
 					Height = 20;
 					Value = 10000;
@@ -5103,8 +4452,8 @@ namespace Terraria
 						Colour = UI.CurrentUI.ActivePlayer.pantsColor;
 					}
 					break;
-				case ID.FAMILIAR_WIG:
-					HeadSlot = 0;
+				case EntityID.ItemID.FAMILIAR_WIG:
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_NORMAL;
 					Width = 20;
 					Height = 20;
 					Value = 10000;
@@ -5113,25 +4462,25 @@ namespace Terraria
 						Colour = UI.CurrentUI.ActivePlayer.hairColor;
 					}
 					break;
-				case ID.DEMON_SCYTHE:
+				case EntityID.ItemID.DEMON_SCYTHE:
 					Mana = 14;
 					Damage = 35;
 					UseStyle = 5;
 					ShootSpeed = 0.2f;
-					Shoot = 45;
+					Shoot = (byte)EntityID.ProjectileID.DEMON_SCYTHE;
 					Width = 26;
 					Height = 28;
 					UseSound = 8;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Knockback = 5f;
 					Scale = 0.9f;
 					Value = 10000;
 					IsMagic = true;
 					break;
-				case ID.NIGHTS_EDGE:
+				case EntityID.ItemID.NIGHTS_EDGE:
 					UseStyle = 1;
 					UseAnimation = 27;
 					UseTime = 27;
@@ -5141,11 +4490,11 @@ namespace Terraria
 					Damage = 42;
 					Scale = 1.15f;
 					UseSound = 1;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					IsMelee = true;
 					break;
-				case ID.DARK_LANCE:
+				case EntityID.ItemID.DARK_LANCE:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 25;
@@ -5156,14 +4505,14 @@ namespace Terraria
 					Damage = 27;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 46;
-					Rarity = 3;
+					Shoot = (byte)EntityID.ProjectileID.DARK_LANCE;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 27000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.CORAL:
+				case EntityID.ItemID.CORAL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5171,18 +4520,18 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 81;
+					CreateTile = (short)EntityID.TileID.CORAL;
 					Width = 20;
 					Height = 22;
 					Value = 400;
 					break;
-				case ID.CACTUS:
+				case EntityID.ItemID.CACTUS:
 					MaxStack = 250;
 					Width = 12;
 					Height = 12;
 					Value = 10;
 					break;
-				case ID.TRIDENT:
+				case EntityID.ItemID.TRIDENT:
 					UseStyle = 5;
 					UseAnimation = 31;
 					UseTime = 31;
@@ -5193,16 +4542,16 @@ namespace Terraria
 					Damage = 10;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 47;
-					Rarity = 1;
+					Shoot = (byte)EntityID.ProjectileID.TRIDENT;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 10000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.SILVER_BULLET:
+				case EntityID.ItemID.SILVER_BULLET:
 					ShootSpeed = 4.5f;
-					Shoot = 14;
+					Shoot = (byte)EntityID.ProjectileID.BULLET;
 					Damage = 9;
 					Width = 8;
 					Height = 8;
@@ -5213,10 +4562,10 @@ namespace Terraria
 					Value = 15;
 					IsRanged = true;
 					break;
-				case ID.THROWING_KNIFE:
+				case EntityID.ItemID.THROWING_KNIFE:
 					UseStyle = 1;
 					ShootSpeed = 10f;
-					Shoot = 48;
+					Shoot = (byte)EntityID.ProjectileID.THROWING_KNIFE;
 					Damage = 12;
 					Width = 18;
 					Height = 20;
@@ -5231,7 +4580,7 @@ namespace Terraria
 					Knockback = 2f;
 					IsRanged = true;
 					break;
-				case ID.SPEAR:
+				case EntityID.ItemID.SPEAR:
 					UseStyle = 5;
 					UseAnimation = 31;
 					UseTime = 31;
@@ -5242,20 +4591,20 @@ namespace Terraria
 					Damage = 8;
 					Scale = 1f;
 					UseSound = 1;
-					Shoot = 49;
+					Shoot = (byte)EntityID.ProjectileID.SPEAR;
 					Value = 1000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.BLOWPIPE:
+				case EntityID.ItemID.BLOWPIPE:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 45;
 					UseTime = 45;
 					Width = 38;
 					Height = 6;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 51;
 					UseSound = 5;
 					Damage = 9;
@@ -5263,13 +4612,12 @@ namespace Terraria
 					NoMelee = true;
 					Value = 10000;
 					Knockback = 4f;
-					UseAmmo = 51;
 					IsRanged = true;
 					break;
-				case ID.GLOWSTICK:
+				case EntityID.ItemID.GLOWSTICK:
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 50;
+					Shoot = (byte)EntityID.ProjectileID.GLOWSTICK;
 					Width = 12;
 					Height = 12;
 					MaxStack = 99;
@@ -5281,18 +4629,18 @@ namespace Terraria
 					Value = 10;
 					HoldStyle = 1;
 					break;
-				case ID.SEED:
-					Shoot = 51;
+				case EntityID.ItemID.SEED:
+					Shoot = (byte)EntityID.ProjectileID.SEED;
 					Width = 8;
 					Height = 8;
 					MaxStack = 250;
 					Ammo = 51;
 					break;
-				case ID.WOODEN_BOOMERANG:
+				case EntityID.ItemID.WOODEN_BOOMERANG:
 					NoMelee = true;
 					UseStyle = 1;
 					ShootSpeed = 6.5f;
-					Shoot = 52;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_BOOMERANG;
 					Damage = 7;
 					Knockback = 5f;
 					Width = 14;
@@ -5304,16 +4652,16 @@ namespace Terraria
 					Value = 5000;
 					IsMelee = true;
 					break;
-				case ID.AGLET:
+				case EntityID.ItemID.AGLET:
 					Width = 24;
 					Height = 8;
 					IsAccessory = true;
 					Value = 5000;
 					break;
-				case ID.STICKY_GLOWSTICK:
+				case EntityID.ItemID.STICKY_GLOWSTICK:
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 53;
+					Shoot = (byte)EntityID.ProjectileID.STICKY_GLOWSTICK;
 					Width = 12;
 					Height = 12;
 					MaxStack = 99;
@@ -5325,10 +4673,10 @@ namespace Terraria
 					Value = 20;
 					HoldStyle = 1;
 					break;
-				case ID.POISONED_KNIFE:
+				case EntityID.ItemID.POISONED_KNIFE:
 					UseStyle = 1;
 					ShootSpeed = 11f;
-					Shoot = 54;
+					Shoot = (byte)EntityID.ProjectileID.POISONED_KNIFE;
 					Damage = 13;
 					Width = 18;
 					Height = 20;
@@ -5343,7 +4691,7 @@ namespace Terraria
 					Knockback = 2f;
 					IsRanged = true;
 					break;
-				case ID.OBSIDIAN_SKIN_POTION:
+				case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5353,12 +4701,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.LAVA_IMMUNE;
+					BuffType = (int)EntityID.BuffID.LAVA_IMMUNE;
 					BuffTime = 14400;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.REGENERATION_POTION:
+				case EntityID.ItemID.REGENERATION_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5368,12 +4716,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.LIFE_REGEN;
+					BuffType = (int)EntityID.BuffID.LIFE_REGEN;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.SWIFTNESS_POTION:
+				case EntityID.ItemID.SWIFTNESS_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5383,12 +4731,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.HASTE;
+					BuffType = (int)EntityID.BuffID.HASTE;
 					BuffTime = 14400;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.GILLS_POTION:
+				case EntityID.ItemID.GILLS_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5398,12 +4746,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.GILLS;
+					BuffType = (int)EntityID.BuffID.GILLS;
 					BuffTime = 7200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.IRONSKIN_POTION:
+				case EntityID.ItemID.IRONSKIN_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5413,12 +4761,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.IRONSKIN;
+					BuffType = (int)EntityID.BuffID.IRONSKIN;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.MANA_REGENERATION_POTION:
+				case EntityID.ItemID.MANA_REGENERATION_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5428,12 +4776,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.MANA_REGEN;
+					BuffType = (int)EntityID.BuffID.MANA_REGEN;
 					BuffTime = 7200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.MAGIC_POWER_POTION:
+				case EntityID.ItemID.MAGIC_POWER_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5443,12 +4791,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.MAGIC_POWER;
+					BuffType = (int)EntityID.BuffID.MAGIC_POWER;
 					BuffTime = 7200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.FEATHERFALL_POTION:
+				case EntityID.ItemID.FEATHERFALL_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5458,12 +4806,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.SLOWFALL;
+					BuffType = (int)EntityID.BuffID.SLOWFALL;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.SPELUNKER_POTION:
+				case EntityID.ItemID.SPELUNKER_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5473,12 +4821,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.FIND_TREASURE;
+					BuffType = (int)EntityID.BuffID.FIND_TREASURE;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.INVISIBILITY_POTION:
+				case EntityID.ItemID.INVISIBILITY_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5488,12 +4836,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.INVISIBLE;
+					BuffType = (int)EntityID.BuffID.INVISIBLE;
 					BuffTime = 7200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.SHINE_POTION:
+				case EntityID.ItemID.SHINE_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5503,12 +4851,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.SHINE;
+					BuffType = (int)EntityID.BuffID.SHINE;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.NIGHT_OWL_POTION:
+				case EntityID.ItemID.NIGHT_OWL_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5518,12 +4866,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.NIGHTVISION;
+					BuffType = (int)EntityID.BuffID.NIGHTVISION;
 					BuffTime = 14400;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.BATTLE_POTION:
+				case EntityID.ItemID.BATTLE_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5533,12 +4881,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.ENEMY_SPAWNS;
+					BuffType = (int)EntityID.BuffID.ENEMY_SPAWNS;
 					BuffTime = 25200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.THORNS_POTION:
+				case EntityID.ItemID.THORNS_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5548,12 +4896,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.THORNS;
+					BuffType = (int)EntityID.BuffID.THORNS;
 					BuffTime = 7200;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.WATER_WALKING_POTION:
+				case EntityID.ItemID.WATER_WALKING_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5563,12 +4911,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.WATER_WALK;
+					BuffType = (int)EntityID.BuffID.WATER_WALK;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.ARCHERY_POTION:
+				case EntityID.ItemID.ARCHERY_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5578,12 +4926,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.RANGED_DAMAGE;
+					BuffType = (int)EntityID.BuffID.RANGED_DAMAGE;
 					BuffTime = 14400;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.HUNTER_POTION:
+				case EntityID.ItemID.HUNTER_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5593,12 +4941,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.DETECT_CREATURE;
+					BuffType = (int)EntityID.BuffID.DETECT_CREATURE;
 					BuffTime = 18000;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.GRAVITATION_POTION:
+				case EntityID.ItemID.GRAVITATION_POTION:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -5608,12 +4956,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					BuffType = (int)Buff.ID.GRAVITY_CONTROL;
+					BuffType = (int)EntityID.BuffID.GRAVITY_CONTROL;
 					BuffTime = 10800;
 					Value = 1000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.GOLD_CHEST:
+				case EntityID.ItemID.GOLD_CHEST:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5621,187 +4969,187 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 21;
+					CreateTile = (short)EntityID.TileID.CHEST;
 					PlaceStyle = 1;
 					Width = 26;
 					Height = 22;
 					Value = 5000;
 					break;
-				case ID.DAYBLOOM_SEEDS:
+				case EntityID.ItemID.DAYBLOOM_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 0;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.MOONGLOW_SEEDS:
+				case EntityID.ItemID.MOONGLOW_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 1;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.BLINKROOT_SEEDS:
+				case EntityID.ItemID.BLINKROOT_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 2;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.DEATHWEED_SEEDS:
+				case EntityID.ItemID.DEATHWEED_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 3;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.WATERLEAF_SEEDS:
+				case EntityID.ItemID.WATERLEAF_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 4;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.FIREBLOSSOM_SEEDS:
+				case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 82;
+					CreateTile = (short)EntityID.TileID.DAYBLOOM_GROWING;
 					PlaceStyle = 5;
 					Width = 12;
 					Height = 14;
 					Value = 80;
 					break;
-				case ID.DAYBLOOM:
+				case EntityID.ItemID.DAYBLOOM:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.MOONGLOW:
+				case EntityID.ItemID.MOONGLOW:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.BLINKROOT:
+				case EntityID.ItemID.BLINKROOT:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.DEATHWEED:
+				case EntityID.ItemID.DEATHWEED:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.WATERLEAF:
+				case EntityID.ItemID.WATERLEAF:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.FIREBLOSSOM:
+				case EntityID.ItemID.FIREBLOSSOM:
 					MaxStack = 99;
 					Width = 12;
 					Height = 14;
 					Value = 100;
 					break;
-				case ID.SHARK_FIN:
+				case EntityID.ItemID.SHARK_FIN:
 					MaxStack = 99;
 					Width = 16;
 					Height = 14;
 					Value = 200;
 					break;
-				case ID.FEATHER:
+				case EntityID.ItemID.FEATHER:
 					MaxStack = 99;
 					Width = 16;
 					Height = 14;
 					Value = 50;
 					break;
-				case ID.TOMBSTONE:
+				case EntityID.ItemID.TOMBSTONE:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 85;
+					CreateTile = (short)EntityID.TileID.TOMBSTONE;
 					Width = 20;
 					Height = 20;
 					break;
-				case ID.MIME_MASK:
-					HeadSlot = 28;
+				case EntityID.ItemID.MIME_MASK:
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MIME_MASK;
 					Width = 20;
 					Height = 20;
 					Value = 20000;
 					break;
-				case ID.ANTLION_MANDIBLE:
+				case EntityID.ItemID.ANTLION_MANDIBLE:
 					Width = 10;
 					Height = 20;
 					MaxStack = 99;
 					Value = 50;
 					break;
-				case ID.ILLEGAL_GUN_PARTS:
+				case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 					Width = 10;
 					Height = 20;
 					MaxStack = 99;
 					Value = 750000;
 					break;
-				case ID.THE_DOCTORS_SHIRT:
+				case EntityID.ItemID.THE_DOCTORS_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 16;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_THE_DOCTORS_SHIRT;
 					Value = 200000;
 					IsVanity = true;
 					break;
-				case ID.THE_DOCTORS_PANTS:
+				case EntityID.ItemID.THE_DOCTORS_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 15;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_THE_DOCTORS_PANTS;
 					Value = 200000;
 					IsVanity = true;
 					break;
-				case ID.GOLDEN_KEY:
+				case EntityID.ItemID.GOLDEN_KEY:
 					Width = 14;
 					Height = 20;
 					MaxStack = 99;
 					break;
-				case ID.SHADOW_CHEST:
+				case EntityID.ItemID.SHADOW_CHEST:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5809,19 +5157,19 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 21;
+					CreateTile = (short)EntityID.TileID.CHEST;
 					PlaceStyle = 3;
 					Width = 26;
 					Height = 22;
 					Value = 5000;
 					break;
-				case ID.SHADOW_KEY:
+				case EntityID.ItemID.SHADOW_KEY:
 					Width = 14;
 					Height = 20;
 					MaxStack = 1;
 					Value = 75000;
 					break;
-				case ID.OBSIDIAN_BRICK_WALL:
+				case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5829,17 +5177,17 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 20;
+					CreateWall = (short)EntityID.WallID.OBSIDIAN_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.JUNGLE_SPORES:
+				case EntityID.ItemID.JUNGLE_SPORES:
 					Width = 18;
 					Height = 16;
 					MaxStack = 99;
 					Value = 100;
 					break;
-				case ID.LOOM:
+				case EntityID.ItemID.LOOM:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5847,12 +5195,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 86;
+					CreateTile = (short)EntityID.TileID.LOOM;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.PIANO:
+				case EntityID.ItemID.PIANO:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5860,12 +5208,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 87;
+					CreateTile = (short)EntityID.TileID.PIANO;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.DRESSER:
+				case EntityID.ItemID.DRESSER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5873,12 +5221,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 88;
+					CreateTile = (short)EntityID.TileID.DRESSER;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.BENCH:
+				case EntityID.ItemID.BENCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5886,12 +5234,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 89;
+					CreateTile = (short)EntityID.TileID.BENCH;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.BATHTUB:
+				case EntityID.ItemID.BATHTUB:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5899,12 +5247,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 90;
+					CreateTile = (short)EntityID.TileID.BATHTUB;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.RED_BANNER:
+				case EntityID.ItemID.RED_BANNER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5912,13 +5260,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 91;
+					CreateTile = (short)EntityID.TileID.BANNER;
 					PlaceStyle = 0;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.GREEN_BANNER:
+				case EntityID.ItemID.GREEN_BANNER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5926,13 +5274,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 91;
+					CreateTile = (short)EntityID.TileID.BANNER;
 					PlaceStyle = 1;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.BLUE_BANNER:
+				case EntityID.ItemID.BLUE_BANNER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5940,13 +5288,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 91;
+					CreateTile = (short)EntityID.TileID.BANNER;
 					PlaceStyle = 2;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.YELLOW_BANNER:
+				case EntityID.ItemID.YELLOW_BANNER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5954,13 +5302,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 91;
+					CreateTile = (short)EntityID.TileID.BANNER;
 					PlaceStyle = 3;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.LAMP_POST:
+				case EntityID.ItemID.LAMP_POST:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5968,12 +5316,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 92;
+					CreateTile = (short)EntityID.TileID.LAMP_POST;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.TIKI_TORCH:
+				case EntityID.ItemID.TIKI_TORCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5981,12 +5329,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 93;
+					CreateTile = (short)EntityID.TileID.TIKI_TORCH;
 					Width = 10;
 					Height = 24;
 					Value = 500;
 					break;
-				case ID.BARREL:
+				case EntityID.ItemID.BARREL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -5994,13 +5342,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 21;
+					CreateTile = (short)EntityID.TileID.CHEST;
 					PlaceStyle = 5;
 					Width = 20;
 					Height = 20;
 					Value = 500;
 					break;
-				case ID.CHINESE_LANTERN:
+				case EntityID.ItemID.CHINESE_LANTERN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6008,12 +5356,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 95;
+					CreateTile = (short)EntityID.TileID.CHINESE_LANTERN;
 					Width = 20;
 					Height = 20;
 					Value = 500;
 					break;
-				case ID.COOKING_POT:
+				case EntityID.ItemID.COOKING_POT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6021,12 +5369,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 96;
+					CreateTile = (short)EntityID.TileID.COOKING_POT;
 					Width = 20;
 					Height = 20;
 					Value = 500;
 					break;
-				case ID.SAFE:
+				case EntityID.ItemID.SAFE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6034,12 +5382,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 97;
+					CreateTile = (short)EntityID.TileID.SAFE;
 					Width = 20;
 					Height = 20;
 					Value = 500000;
 					break;
-				case ID.SKULL_LANTERN:
+				case EntityID.ItemID.SKULL_LANTERN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6047,12 +5395,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 98;
+					CreateTile = (short)EntityID.TileID.SKULL_LANTERN;
 					Width = 20;
 					Height = 20;
 					Value = 500;
 					break;
-				case ID.TRASH_CAN:
+				case EntityID.ItemID.TRASH_CAN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6060,13 +5408,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 21;
+					CreateTile = (short)EntityID.TileID.CHEST;
 					PlaceStyle = 6;
 					Width = 20;
 					Height = 20;
 					Value = 1000;
 					break;
-				case ID.CANDELABRA:
+				case EntityID.ItemID.CANDELABRA:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6074,12 +5422,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 100;
+					CreateTile = (short)EntityID.TileID.CANDELABRA;
 					Width = 20;
 					Height = 20;
 					Value = 1500;
 					break;
-				case ID.PINK_VASE:
+				case EntityID.ItemID.PINK_VASE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6087,13 +5435,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 13;
+					CreateTile = (short)EntityID.TileID.BOTTLE;
 					PlaceStyle = 3;
 					Width = 16;
 					Height = 24;
 					Value = 70;
 					break;
-				case ID.MUG:
+				case EntityID.ItemID.MUG:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6101,13 +5449,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 13;
+					CreateTile = (short)EntityID.TileID.BOTTLE;
 					PlaceStyle = 4;
 					Width = 16;
 					Height = 24;
 					Value = 20;
 					break;
-				case ID.KEG:
+				case EntityID.ItemID.KEG:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6115,12 +5463,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 94;
+					CreateTile = (short)EntityID.TileID.KEG;
 					Width = 24;
 					Height = 24;
 					Value = 600;
 					break;
-				case ID.ALE:
+				case EntityID.ItemID.ALE:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -6130,11 +5478,11 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 10;
 					Height = 10;
-					BuffType = (int)Buff.ID.DRUNK;
+					BuffType = (int)EntityID.BuffID.DRUNK;
 					BuffTime = 7200;
 					Value = 100;
 					break;
-				case ID.BOOKCASE:
+				case EntityID.ItemID.BOOKCASE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6142,12 +5490,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 101;
+					CreateTile = (short)EntityID.TileID.BOOKCASE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.THRONE:
+				case EntityID.ItemID.THRONE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6155,12 +5503,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 102;
+					CreateTile = (short)EntityID.TileID.THRONE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.BOWL:
+				case EntityID.ItemID.BOWL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6168,12 +5516,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 103;
+					CreateTile = (short)EntityID.TileID.BOWL;
 					Width = 16;
 					Height = 24;
 					Value = 20;
 					break;
-				case ID.BOWL_OF_SOUP:
+				case EntityID.ItemID.BOWL_OF_SOUP:
 					UseSound = 3;
 					UseStyle = 2;
 					CanUseTurn = true;
@@ -6183,12 +5531,12 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 10;
 					Height = 10;
-					BuffType = (int)Buff.ID.WELL_FED;
+					BuffType = (int)EntityID.BuffID.WELL_FED;
 					BuffTime = 36000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 1000;
 					break;
-				case ID.TOILET:
+				case EntityID.ItemID.TOILET:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6196,13 +5544,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 15;
+					CreateTile = (short)EntityID.TileID.CHAIR;
 					PlaceStyle = 1;
 					Width = 12;
 					Height = 30;
 					Value = 150;
 					break;
-				case ID.GRANDFATHER_CLOCK:
+				case EntityID.ItemID.GRANDFATHER_CLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6210,12 +5558,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 104;
+					CreateTile = (short)EntityID.TileID.GRANDFATHERS_CLOCK;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.STATUE:
+				case EntityID.ItemID.STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6223,12 +5571,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.GOBLIN_BATTLE_STANDARD:
+				case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 					UseStyle = 4;
 					IsConsumable = true;
 					UseAnimation = 45;
@@ -6236,13 +5584,13 @@ namespace Terraria
 					Width = 28;
 					Height = 28;
 					break;
-				case ID.TATTERED_CLOTH:
+				case EntityID.ItemID.TATTERED_CLOTH:
 					MaxStack = 99;
 					Width = 24;
 					Height = 24;
 					Value = 30;
 					break;
-				case ID.SAWMILL:
+				case EntityID.ItemID.SAWMILL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6250,12 +5598,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 106;
+					CreateTile = (short)EntityID.TileID.SAWMILL;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					break;
-				case ID.COBALT_ORE:
+				case EntityID.ItemID.COBALT_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6263,13 +5611,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 107;
+					CreateTile = (short)EntityID.TileID.COBALT_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 3500;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MYTHRIL_ORE:
+				case EntityID.ItemID.MYTHRIL_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6277,13 +5625,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 108;
+					CreateTile = (short)EntityID.TileID.MYTHRIL_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 5500;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.ADAMANTITE_ORE:
+				case EntityID.ItemID.ADAMANTITE_ORE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6291,13 +5639,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 111;
+					CreateTile = (short)EntityID.TileID.ADAMANTITE_ORE;
 					Width = 12;
 					Height = 12;
 					Value = 7500;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.PWNHAMMER:
+				case EntityID.ItemID.PWNHAMMER:
 					CanUseTurn = true;
 					AutoReuse = true;
 					UseStyle = 1;
@@ -6310,11 +5658,11 @@ namespace Terraria
 					Knockback = 7.5f;
 					Scale = 1.2f;
 					UseSound = 1;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 39000;
 					IsMelee = true;
 					break;
-				case ID.EXCALIBUR:
+				case EntityID.ItemID.EXCALIBUR:
 					AutoReuse = true;
 					UseStyle = 1;
 					UseAnimation = 25;
@@ -6325,11 +5673,11 @@ namespace Terraria
 					Damage = 47;
 					Scale = 1.15f;
 					UseSound = 1;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 230000;
 					IsMelee = true;
 					break;
-				case ID.TIZONA:
+				case EntityID.ItemID.TIZONA:
 					AutoReuse = true;
 					UseStyle = 1;
 					UseAnimation = 25;
@@ -6340,24 +5688,24 @@ namespace Terraria
 					Damage = 55;
 					Scale = 1.15f;
 					UseSound = 1;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 300000;
 					IsMelee = true;
 					break;
-				case ID.HALLOWED_SEEDS:
+				case EntityID.ItemID.HALLOWED_SEEDS:
 					CanUseTurn = true;
 					UseStyle = 1;
 					UseAnimation = 15;
 					UseTime = 10;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 109;
+					CreateTile = (short)EntityID.TileID.HALLOWED_GRASS;
 					Width = 14;
 					Height = 14;
 					Value = 2000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.EBONSAND_BLOCK:
+				case EntityID.ItemID.EBONSAND_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6365,106 +5713,106 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 112;
+					CreateTile = (short)EntityID.TileID.EBONSAND;
 					Width = 12;
 					Height = 12;
 					Ammo = 42;
 					break;
-				case ID.COBALT_HAT:
+				case EntityID.ItemID.COBALT_HAT:
 					Width = 18;
 					Height = 18;
 					Defense = 2;
-					HeadSlot = 29;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_COBALT_HAT;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 75000;
 					break;
-				case ID.COBALT_HELMET:
+				case EntityID.ItemID.COBALT_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 11;
-					HeadSlot = 30;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_COBALT_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 75000;
 					break;
-				case ID.COBALT_MASK:
+				case EntityID.ItemID.COBALT_MASK:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					HeadSlot = 31;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_COBALT_MASK;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 75000;
 					break;
-				case ID.COBALT_BREASTPLATE:
+				case EntityID.ItemID.COBALT_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 8;
-					BodySlot = 17;
-					Rarity = 4;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_COBALT_BREASTPLATE;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 60000;
 					break;
-				case ID.COBALT_LEGGINGS:
+				case EntityID.ItemID.COBALT_LEGGINGS:
 					Width = 18;
 					Height = 18;
 					Defense = 7;
-					LegSlot = 16;
-					Rarity = 4;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_COBALT_LEGGINGS;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 45000;
 					break;
-				case ID.MYTHRIL_HOOD:
+				case EntityID.ItemID.MYTHRIL_HOOD:
 					Width = 18;
 					Height = 18;
 					Defense = 3;
-					HeadSlot = 32;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HOOD;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 112500;
 					break;
-				case ID.MYTHRIL_HELMET:
+				case EntityID.ItemID.MYTHRIL_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 16;
-					HeadSlot = 33;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 112500;
 					break;
-				case ID.MYTHRIL_HAT:
+				case EntityID.ItemID.MYTHRIL_HAT:
 					Width = 18;
 					Height = 18;
 					Defense = 6;
-					HeadSlot = 34;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HAT;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 112500;
 					break;
-				case ID.MYTHRIL_CHAINMAIL:
+				case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 12;
-					BodySlot = 18;
-					Rarity = 4;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_MYTHRIL_CHAINMAIL;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 90000;
 					break;
-				case ID.MYTHRIL_GREAVES:
+				case EntityID.ItemID.MYTHRIL_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 9;
-					LegSlot = 17;
-					Rarity = 4;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_MYTHRIL_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 67500;
 					break;
-				case ID.COBALT_BAR:
+				case EntityID.ItemID.COBALT_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 10500;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MYTHRIL_BAR:
+				case EntityID.ItemID.MYTHRIL_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 22000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.COBALT_CHAINSAW:
+				case EntityID.ItemID.COBALT_CHAINSAW:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 8;
@@ -6475,15 +5823,15 @@ namespace Terraria
 					Damage = 23;
 					AxePower = 14;
 					UseSound = 23;
-					Shoot = 57;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.COBALT_CHAINSAW;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 54000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.MYTHRIL_CHAINSAW:
+				case EntityID.ItemID.MYTHRIL_CHAINSAW:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 8;
@@ -6494,15 +5842,15 @@ namespace Terraria
 					Damage = 29;
 					AxePower = 17;
 					UseSound = 23;
-					Shoot = 58;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.MYTHRIL_CHAINSAW;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 81000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.COBALT_DRILL:
+				case EntityID.ItemID.COBALT_DRILL:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 13;
@@ -6513,15 +5861,15 @@ namespace Terraria
 					Damage = 10;
 					PickPower = 110;
 					UseSound = 23;
-					Shoot = 59;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.COBALT_DRILL;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 54000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.MYTHRIL_DRILL:
+				case EntityID.ItemID.MYTHRIL_DRILL:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 10;
@@ -6532,15 +5880,15 @@ namespace Terraria
 					Damage = 15;
 					PickPower = 150;
 					UseSound = 23;
-					Shoot = 60;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.MYTHRIL_DRILL;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 81000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.ADAMANTITE_CHAINSAW:
+				case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 6;
@@ -6551,15 +5899,15 @@ namespace Terraria
 					Damage = 33;
 					AxePower = 20;
 					UseSound = 23;
-					Shoot = 61;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.ADAMANTITE_CHAINSAW;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 108000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.ADAMANTITE_DRILL:
+				case EntityID.ItemID.ADAMANTITE_DRILL:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 7;
@@ -6570,15 +5918,15 @@ namespace Terraria
 					Damage = 20;
 					PickPower = 180;
 					UseSound = 23;
-					Shoot = 62;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.ADAMANTITE_DRILL;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 108000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.DAO_OF_POW:
+				case EntityID.ItemID.DAO_OF_POW:
 					NoMelee = true;
 					UseStyle = 5;
 					UseAnimation = 45;
@@ -6589,15 +5937,15 @@ namespace Terraria
 					Damage = 49;
 					Scale = 1.1f;
 					NoUseGraphic = true;
-					Shoot = 63;
+					Shoot = (byte)EntityID.ProjectileID.THE_DAO_OF_POW;
 					ShootSpeed = 15f;
 					UseSound = 1;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 144000;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.MYTHRIL_HALBERD:
+				case EntityID.ItemID.MYTHRIL_HALBERD:
 					UseStyle = 5;
 					UseAnimation = 26;
 					UseTime = 26;
@@ -6608,21 +5956,21 @@ namespace Terraria
 					Damage = 35;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 64;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.MYTHRIL_HALBERD;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 67500;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.ADAMANTITE_BAR:
+				case EntityID.ItemID.ADAMANTITE_BAR:
 					Width = 20;
 					Height = 20;
 					MaxStack = 99;
 					Value = 37500;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.GLASS_WALL:
+				case EntityID.ItemID.GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6630,47 +5978,47 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 21;
+					CreateWall = (short)EntityID.WallID.GLASS;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.COMPASS:
+				case EntityID.ItemID.COMPASS:
 					Width = 24;
 					Height = 28;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.DIVING_GEAR:
+				case EntityID.ItemID.DIVING_GEAR:
 					Width = 24;
 					Height = 28;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.GPS:
+				case EntityID.ItemID.GPS:
 					Width = 24;
 					Height = 28;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					IsAccessory = true;
 					break;
-				case ID.OBSIDIAN_HORSESHOE:
+				case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 					Width = 24;
 					Height = 28;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.OBSIDIAN_SHIELD:
+				case EntityID.ItemID.OBSIDIAN_SHIELD:
 					Width = 24;
 					Height = 28;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					Defense = 2;
 					break;
-				case ID.TINKERERS_WORKSHOP:
+				case EntityID.ItemID.TINKERERS_WORKSHOP:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6678,66 +6026,66 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 114;
+					CreateTile = (short)EntityID.TileID.TINKERERS_WORKSHOP;
 					Width = 26;
 					Height = 20;
 					Value = 100000;
 					break;
-				case ID.CLOUD_IN_A_BALLOON:
+				case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 					Width = 14;
 					Height = 28;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					IsAccessory = true;
 					break;
-				case ID.ADAMANTITE_HEADGEAR:
+				case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 					Width = 18;
 					Height = 18;
 					Defense = 4;
-					HeadSlot = 35;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HEADGEAR;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					break;
-				case ID.ADAMANTITE_HELMET:
+				case EntityID.ItemID.ADAMANTITE_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 22;
-					HeadSlot = 36;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					break;
-				case ID.ADAMANTITE_MASK:
+				case EntityID.ItemID.ADAMANTITE_MASK:
 					Width = 18;
 					Height = 18;
 					Defense = 8;
-					HeadSlot = 37;
-					Rarity = 4;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_MASK;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					break;
-				case ID.ADAMANTITE_BREASTPLATE:
+				case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 14;
-					BodySlot = 19;
-					Rarity = 4;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_ADAMANTITE_BREASTPLATE;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 120000;
 					break;
-				case ID.ADAMANTITE_LEGGINGS:
+				case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 					Width = 18;
 					Height = 18;
 					Defense = 10;
-					LegSlot = 18;
-					Rarity = 4;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_ADAMANTITE_LEGGINGS;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 90000;
 					break;
-				case ID.SPECTRE_BOOTS:
+				case EntityID.ItemID.SPECTRE_BOOTS:
 					Width = 28;
 					Height = 24;
 					IsAccessory = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					break;
-				case ID.ADAMANTITE_GLAIVE:
+				case EntityID.ItemID.ADAMANTITE_GLAIVE:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 25;
@@ -6748,21 +6096,21 @@ namespace Terraria
 					Damage = 38;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 66;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.ADAMANTITE_GLAIVE;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 90000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.TOOLBELT:
+				case EntityID.ItemID.TOOLBELT:
 					Width = 28;
 					Height = 24;
 					IsAccessory = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 100000;
 					break;
-				case ID.PEARLSAND_BLOCK:
+				case EntityID.ItemID.PEARLSAND_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6770,12 +6118,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 116;
+					CreateTile = (short)EntityID.TileID.PEARLSAND;
 					Width = 12;
 					Height = 12;
 					Ammo = 42;
 					break;
-				case ID.PEARLSTONE_BLOCK:
+				case EntityID.ItemID.PEARLSTONE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6783,27 +6131,27 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 117;
+					CreateTile = (short)EntityID.TileID.PEARLSTONE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.MINING_SHIRT:
+				case EntityID.ItemID.MINING_SHIRT:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					BodySlot = 20;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_MINING_SHIRT;
 					Value = 5000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.MINING_PANTS:
+				case EntityID.ItemID.MINING_PANTS:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					LegSlot = 19;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_MINING_PANTS;
 					Value = 5000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.PEARLSTONE_BRICK:
+				case EntityID.ItemID.PEARLSTONE_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6811,11 +6159,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 118;
+					CreateTile = (short)EntityID.TileID.PEARLSTONE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.IRIDESCENT_BRICK:
+				case EntityID.ItemID.IRIDESCENT_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6823,11 +6171,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 119;
+					CreateTile = (short)EntityID.TileID.IRIDESCENT_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.MUDSTONE_BRICK:
+				case EntityID.ItemID.MUDSTONE_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6835,11 +6183,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 120;
+					CreateTile = (short)EntityID.TileID.MUDSTONE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.COBALT_BRICK:
+				case EntityID.ItemID.COBALT_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6847,11 +6195,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 121;
+					CreateTile = (short)EntityID.TileID.COBALT_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.MYTHRIL_BRICK:
+				case EntityID.ItemID.MYTHRIL_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6859,11 +6207,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 122;
+					CreateTile = (short)EntityID.TileID.MYTHRIL_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.PEARLSTONE_BRICK_WALL:
+				case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6871,11 +6219,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 22;
+					CreateWall = (short)EntityID.WallID.PEARLSTONE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.IRIDESCENT_BRICK_WALL:
+				case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6883,11 +6231,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 23;
+					CreateWall = (short)EntityID.WallID.IRIDESCENT_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.MUDSTONE_BRICK_WALL:
+				case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6895,11 +6243,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 24;
+					CreateWall = (short)EntityID.WallID.MUDSTONE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.COBALT_BRICK_WALL:
+				case EntityID.ItemID.COBALT_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6907,11 +6255,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 25;
+					CreateWall = (short)EntityID.WallID.COBALT_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.MYTHRIL_BRICK_WALL:
+				case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6919,16 +6267,16 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 26;
+					CreateWall = (short)EntityID.WallID.MYTHRIL_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.HOLY_WATER:
+				case EntityID.ItemID.HOLY_WATER:
 					UseStyle = 1;
 					ShootSpeed = 9f;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Damage = 20;
-					Shoot = 69;
+					Shoot = (byte)EntityID.ProjectileID.HOLY_WATER;
 					Width = 18;
 					Height = 20;
 					MaxStack = 250;
@@ -6941,12 +6289,12 @@ namespace Terraria
 					NoMelee = true;
 					Value = 200;
 					break;
-				case ID.UNHOLY_WATER:
+				case EntityID.ItemID.UNHOLY_WATER:
 					UseStyle = 1;
 					ShootSpeed = 9f;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Damage = 20;
-					Shoot = 70;
+					Shoot = (byte)EntityID.ProjectileID.UNHOLY_WATER;
 					Width = 18;
 					Height = 20;
 					MaxStack = 250;
@@ -6959,7 +6307,7 @@ namespace Terraria
 					NoMelee = true;
 					Value = 200;
 					break;
-				case ID.SILT_BLOCK:
+				case EntityID.ItemID.SILT_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -6967,28 +6315,28 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 123;
+					CreateTile = (short)EntityID.TileID.SILT;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.FAIRY_BELL:
+				case EntityID.ItemID.FAIRY_BELL:
 					Mana = 40;
 					Channelling = true;
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 72;
+					Shoot = (byte)EntityID.ProjectileID.BLUE_FAIRY;
 					Width = 24;
 					Height = 24;
 					UseSound = 25;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					NoMelee = true;
 					Value = (Value = 250000);
-					BuffType = (int)Buff.ID.FAIRY;
+					BuffType = (int)EntityID.BuffID.FAIRY;
 					BuffTime = 18000;
 					break;
-				case ID.BREAKER_BLADE:
+				case EntityID.ItemID.BREAKER_BLADE:
 					UseStyle = 1;
 					UseAnimation = 30;
 					Knockback = 8f;
@@ -6997,11 +6345,11 @@ namespace Terraria
 					Damage = 39;
 					Scale = 1.05f;
 					UseSound = 1;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 150000;
 					IsMelee = true;
 					break;
-				case ID.BLUE_TORCH:
+				case EntityID.ItemID.BLUE_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7011,13 +6359,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 1;
 					Width = 10;
 					Height = 12;
 					Value = 200;
 					break;
-				case ID.RED_TORCH:
+				case EntityID.ItemID.RED_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7027,13 +6375,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 2;
 					Width = 10;
 					Height = 12;
 					Value = 200;
 					break;
-				case ID.GREEN_TORCH:
+				case EntityID.ItemID.GREEN_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7043,13 +6391,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 3;
 					Width = 10;
 					Height = 12;
 					Value = 200;
 					break;
-				case ID.PURPLE_TORCH:
+				case EntityID.ItemID.PURPLE_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7059,13 +6407,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 4;
 					Width = 10;
 					Height = 12;
 					Value = 200;
 					break;
-				case ID.WHITE_TORCH:
+				case EntityID.ItemID.WHITE_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7075,13 +6423,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 5;
 					Width = 10;
 					Height = 12;
 					Value = 500;
 					break;
-				case ID.YELLOW_TORCH:
+				case EntityID.ItemID.YELLOW_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7091,13 +6439,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 6;
 					Width = 10;
 					Height = 12;
 					Value = 200;
 					break;
-				case ID.DEMON_TORCH:
+				case EntityID.ItemID.DEMON_TORCH:
 					CantTouchLiquid = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -7107,13 +6455,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 7;
 					Width = 10;
 					Height = 12;
 					Value = 300;
 					break;
-				case ID.CLOCKWORK_ASSAULT_RIFLE:
+				case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 					AutoReuse = true;
 					UseStyle = 5;
 					UseAnimation = 12;
@@ -7121,24 +6469,24 @@ namespace Terraria
 					ReuseDelay = 14;
 					Width = 50;
 					Height = 18;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 14;
 					UseSound = 31;
 					Damage = 19;
 					ShootSpeed = 7.75f;
 					NoMelee = true;
 					Value = 150000;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					IsRanged = true;
 					break;
-				case ID.COBALT_REPEATER:
+				case EntityID.ItemID.COBALT_REPEATER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 25;
 					UseTime = 25;
 					Width = 50;
 					Height = 18;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 30;
@@ -7146,17 +6494,17 @@ namespace Terraria
 					NoMelee = true;
 					Value = 60000;
 					IsRanged = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Knockback = 1.5f;
 					break;
-				case ID.MYTHRIL_REPEATER:
+				case EntityID.ItemID.MYTHRIL_REPEATER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 23;
 					UseTime = 23;
 					Width = 50;
 					Height = 18;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 34;
@@ -7164,26 +6512,26 @@ namespace Terraria
 					NoMelee = true;
 					Value = 90000;
 					IsRanged = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Knockback = 2f;
 					break;
-				case ID.DUAL_HOOK:
+				case EntityID.ItemID.DUAL_HOOK:
 					NoUseGraphic = true;
 					Damage = 0;
 					Knockback = 7f;
 					UseStyle = 5;
 					ShootSpeed = 14f;
-					Shoot = 73;
+					Shoot = (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE;
 					Width = 18;
 					Height = 28;
 					UseSound = 1;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					NoMelee = true;
 					Value = 200000;
 					break;
-				case ID.STAR_STATUE:
+				case EntityID.ItemID.STAR_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7191,13 +6539,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 2;
 					break;
-				case ID.SWORD_STATUE:
+				case EntityID.ItemID.SWORD_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7205,13 +6553,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 3;
 					break;
-				case ID.SLIME_STATUE:
+				case EntityID.ItemID.SLIME_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7219,13 +6567,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 4;
 					break;
-				case ID.GOBLIN_STATUE:
+				case EntityID.ItemID.GOBLIN_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7233,13 +6581,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 5;
 					break;
-				case ID.SHIELD_STATUE:
+				case EntityID.ItemID.SHIELD_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7247,13 +6595,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 6;
 					break;
-				case ID.BAT_STATUE:
+				case EntityID.ItemID.BAT_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7261,13 +6609,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 7;
 					break;
-				case ID.FISH_STATUE:
+				case EntityID.ItemID.FISH_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7275,13 +6623,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 8;
 					break;
-				case ID.BUNNY_STATUE:
+				case EntityID.ItemID.BUNNY_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7289,13 +6637,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 9;
 					break;
-				case ID.SKELETON_STATUE:
+				case EntityID.ItemID.SKELETON_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7303,13 +6651,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 10;
 					break;
-				case ID.REAPER_STATUE:
+				case EntityID.ItemID.REAPER_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7317,13 +6665,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 11;
 					break;
-				case ID.WOMAN_STATUE:
+				case EntityID.ItemID.WOMAN_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7331,13 +6679,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 12;
 					break;
-				case ID.IMP_STATUE:
+				case EntityID.ItemID.IMP_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7345,13 +6693,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 13;
 					break;
-				case ID.GARGOYLE_STATUE:
+				case EntityID.ItemID.GARGOYLE_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7359,13 +6707,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 14;
 					break;
-				case ID.GLOOM_STATUE:
+				case EntityID.ItemID.GLOOM_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7373,13 +6721,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 15;
 					break;
-				case ID.HORNET_STATUE:
+				case EntityID.ItemID.HORNET_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7387,13 +6735,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 16;
 					break;
-				case ID.BOMB_STATUE:
+				case EntityID.ItemID.BOMB_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7401,13 +6749,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 17;
 					break;
-				case ID.CRAB_STATUE:
+				case EntityID.ItemID.CRAB_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7415,13 +6763,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 18;
 					break;
-				case ID.HAMMER_STATUE:
+				case EntityID.ItemID.HAMMER_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7429,13 +6777,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 19;
 					break;
-				case ID.POTION_STATUE:
+				case EntityID.ItemID.POTION_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7443,13 +6791,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 20;
 					break;
-				case ID.SPEAR_STATUE:
+				case EntityID.ItemID.SPEAR_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7457,13 +6805,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 21;
 					break;
-				case ID.CROSS_STATUE:
+				case EntityID.ItemID.CROSS_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7471,13 +6819,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 22;
 					break;
-				case ID.JELLYFISH_STATUE:
+				case EntityID.ItemID.JELLYFISH_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7485,13 +6833,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 23;
 					break;
-				case ID.BOW_STATUE:
+				case EntityID.ItemID.BOW_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7499,13 +6847,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 24;
 					break;
-				case ID.BOOMERANG_STATUE:
+				case EntityID.ItemID.BOOMERANG_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7513,13 +6861,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 25;
 					break;
-				case ID.BOOT_STATUE:
+				case EntityID.ItemID.BOOT_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7527,13 +6875,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 26;
 					break;
-				case ID.CHEST_STATUE:
+				case EntityID.ItemID.CHEST_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7541,13 +6889,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 27;
 					break;
-				case ID.BIRD_STATUE:
+				case EntityID.ItemID.BIRD_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7555,13 +6903,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 28;
 					break;
-				case ID.AXE_STATUE:
+				case EntityID.ItemID.AXE_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7569,13 +6917,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 29;
 					break;
-				case ID.CORRUPT_STATUE:
+				case EntityID.ItemID.CORRUPT_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7583,13 +6931,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 30;
 					break;
-				case ID.TREE_STATUE:
+				case EntityID.ItemID.TREE_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7597,13 +6945,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 31;
 					break;
-				case ID.ANVIL_STATUE:
+				case EntityID.ItemID.ANVIL_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7611,13 +6959,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 32;
 					break;
-				case ID.PICKAXE_STATUE:
+				case EntityID.ItemID.PICKAXE_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7625,13 +6973,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 33;
 					break;
-				case ID.MUSHROOM_STATUE:
+				case EntityID.ItemID.MUSHROOM_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7639,13 +6987,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 34;
 					break;
-				case ID.EYEBALL_STATUE:
+				case EntityID.ItemID.EYEBALL_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7653,13 +7001,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 35;
 					break;
-				case ID.PILLAR_STATUE:
+				case EntityID.ItemID.PILLAR_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7667,13 +7015,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 36;
 					break;
-				case ID.HEART_STATUE:
+				case EntityID.ItemID.HEART_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7681,13 +7029,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 37;
 					break;
-				case ID.POT_STATUE:
+				case EntityID.ItemID.POT_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7695,13 +7043,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 38;
 					break;
-				case ID.SUNFLOWER_STATUE:
+				case EntityID.ItemID.SUNFLOWER_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7709,13 +7057,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 39;
 					break;
-				case ID.KING_STATUE:
+				case EntityID.ItemID.KING_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7723,13 +7071,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 40;
 					break;
-				case ID.QUEEN_STATUE:
+				case EntityID.ItemID.QUEEN_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7737,13 +7085,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 41;
 					break;
-				case ID.PIRANHA_STATUE:
+				case EntityID.ItemID.PIRANHA_STATUE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7751,13 +7099,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 105;
+					CreateTile = (short)EntityID.TileID.STATUE;
 					Width = 20;
 					Height = 20;
 					Value = 300;
 					PlaceStyle = 42;
 					break;
-				case ID.PLANKED_WALL:
+				case EntityID.ItemID.PLANKED_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7765,11 +7113,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 27;
+					CreateWall = (short)EntityID.WallID.PLANKED;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.WOODEN_BEAM:
+				case EntityID.ItemID.WOODEN_BEAM:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7777,18 +7125,18 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 124;
+					CreateTile = (short)EntityID.TileID.WOODEN_BEAM;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.ADAMANTITE_REPEATER:
+				case EntityID.ItemID.ADAMANTITE_REPEATER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 20;
 					UseTime = 20;
 					Width = 50;
 					Height = 18;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 37;
@@ -7796,10 +7144,10 @@ namespace Terraria
 					NoMelee = true;
 					Value = 120000;
 					IsRanged = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Knockback = 2.5f;
 					break;
-				case ID.ADAMANTITE_SWORD:
+				case EntityID.ItemID.ADAMANTITE_SWORD:
 					UseStyle = 1;
 					UseAnimation = 27;
 					UseTime = 27;
@@ -7809,11 +7157,11 @@ namespace Terraria
 					Damage = 44;
 					Scale = 1.2f;
 					UseSound = 1;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 138000;
 					IsMelee = true;
 					break;
-				case ID.COBALT_SWORD:
+				case EntityID.ItemID.COBALT_SWORD:
 					CanUseTurn = true;
 					AutoReuse = true;
 					UseStyle = 1;
@@ -7825,11 +7173,11 @@ namespace Terraria
 					Damage = 34;
 					Scale = 1.1f;
 					UseSound = 1;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 69000;
 					IsMelee = true;
 					break;
-				case ID.MYTHRIL_SWORD:
+				case EntityID.ItemID.MYTHRIL_SWORD:
 					UseStyle = 1;
 					UseAnimation = 26;
 					UseTime = 26;
@@ -7839,25 +7187,25 @@ namespace Terraria
 					Damage = 39;
 					Scale = 1.15f;
 					UseSound = 1;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 103500;
 					IsMelee = true;
 					break;
-				case ID.MOON_CHARM:
-					Rarity = 4;
+				case EntityID.ItemID.MOON_CHARM:
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Width = 24;
 					Height = 28;
 					IsAccessory = true;
 					Value = 150000;
 					break;
-				case ID.RULER:
+				case EntityID.ItemID.RULER:
 					Width = 10;
 					Height = 26;
 					IsAccessory = true;
 					Value = 10000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.CRYSTAL_BALL:
+				case EntityID.ItemID.CRYSTAL_BALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7865,13 +7213,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 125;
+					CreateTile = (short)EntityID.TileID.CRYSTAL_BALL;
 					Width = 22;
 					Height = 22;
 					Value = 100000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.DISCO_BALL:
+				case EntityID.ItemID.DISCO_BALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7879,50 +7227,50 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 126;
+					CreateTile = (short)EntityID.TileID.DISCO_BALL;
 					Width = 22;
 					Height = 26;
 					Value = 10000;
 					break;
-				case ID.SORCERER_EMBLEM:
+				case EntityID.ItemID.SORCERER_EMBLEM:
 					Width = 24;
 					Height = 24;
 					IsAccessory = true;
 					Value = 100000;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.RANGER_EMBLEM:
+				case EntityID.ItemID.RANGER_EMBLEM:
 					Width = 24;
 					Height = 24;
 					IsAccessory = true;
 					Value = 100000;
 					break;
-				case ID.WARRIOR_EMBLEM:
+				case EntityID.ItemID.WARRIOR_EMBLEM:
 					Width = 24;
 					Height = 24;
 					IsAccessory = true;
 					Value = 100000;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.DEMON_WINGS:
-				case ID.ANGEL_WINGS:
+				case EntityID.ItemID.DEMON_WINGS:
+				case EntityID.ItemID.ANGEL_WINGS:
 #if !VERSION_INITIAL
-				case ID.SPARKLY_WINGS:
+				case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 					Width = 24;
 					Height = 8;
 					IsAccessory = true;
 					Value = 400000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.MAGICAL_HARP:
-					Rarity = 5;
+				case EntityID.ItemID.MAGICAL_HARP:
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					UseStyle = 5;
 					UseAnimation = 12;
 					UseTime = 12;
 					Width = 12;
 					Height = 28;
-					Shoot = 76;
+					Shoot = (byte)EntityID.ProjectileID.QUARTER_NOTE;
 					HoldStyle = 3;
 					AutoReuse = true;
 					Damage = 30;
@@ -7932,14 +7280,14 @@ namespace Terraria
 					Mana = 4;
 					IsMagic = true;
 					break;
-				case ID.RAINBOW_ROD:
-					Rarity = 5;
+				case EntityID.ItemID.RAINBOW_ROD:
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Mana = 10;
 					Channelling = true;
 					Damage = 53;
 					UseStyle = 1;
 					ShootSpeed = 6f;
-					Shoot = 79;
+					Shoot = (byte)EntityID.ProjectileID.RAINBOW_ROD_BULLET;
 					Width = 26;
 					Height = 28;
 					UseSound = 28;
@@ -7951,19 +7299,19 @@ namespace Terraria
 					Value = 200000;
 					IsMagic = true;
 					break;
-				case ID.ICE_ROD:
-					Rarity = 4;
+				case EntityID.ItemID.ICE_ROD:
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Mana = 7;
 					Damage = 26;
 					UseStyle = 1;
 					ShootSpeed = 12f;
-					Shoot = 80;
+					Shoot = (byte)EntityID.ProjectileID.ICE_BLOCK;
 					Width = 26;
 					Height = 28;
 					UseSound = 28;
 					UseAnimation = 17;
 					UseTime = 17;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					AutoReuse = true;
 					NoMelee = true;
 					Knockback = 0f;
@@ -7971,14 +7319,14 @@ namespace Terraria
 					IsMagic = true;
 					Knockback = 2f;
 					break;
-				case ID.NEPTUNES_SHELL:
+				case EntityID.ItemID.NEPTUNES_SHELL:
 					Width = 24;
 					Height = 28;
 					IsAccessory = true;
 					Value = 150000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.MANNEQUIN:
+				case EntityID.ItemID.MANNEQUIN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -7986,11 +7334,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 128;
+					CreateTile = (short)EntityID.TileID.MANNEQUIN;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GREATER_HEALING_POTION:
+				case EntityID.ItemID.GREATER_HEALING_POTION:
 					UseSound = 3;
 					HealLife = 150;
 					UseStyle = 2;
@@ -8001,11 +7349,11 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					IsPotion = true;
 					Value = 5000;
 					break;
-				case ID.GREATER_MANA_POTION:
+				case EntityID.ItemID.GREATER_MANA_POTION:
 					UseSound = 3;
 					HealMana = 200;
 					UseStyle = 2;
@@ -8016,17 +7364,17 @@ namespace Terraria
 					IsConsumable = true;
 					Width = 14;
 					Height = 24;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 500;
 					break;
-				case ID.PIXIE_DUST:
+				case EntityID.ItemID.PIXIE_DUST:
 					Width = 16;
 					Height = 14;
 					MaxStack = 99;
 					Value = 500;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.CRYSTAL_SHARD:
+				case EntityID.ItemID.CRYSTAL_SHARD:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8034,44 +7382,44 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 129;
+					CreateTile = (short)EntityID.TileID.CRYSTAL_SHARD;
 					Width = 24;
 					Height = 24;
 					Value = 8000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.CLOWN_HAT:
+				case EntityID.ItemID.CLOWN_HAT:
 					Width = 18;
 					Height = 18;
-					HeadSlot = 40;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_CLOWN_HAT;
 					Value = 20000;
 					IsVanity = true;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.CLOWN_SHIRT:
+				case EntityID.ItemID.CLOWN_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 23;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_CLOWN_SHIRT;
 					Value = 10000;
 					IsVanity = true;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.CLOWN_PANTS:
+				case EntityID.ItemID.CLOWN_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 22;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_CLOWN_PANTS;
 					Value = 10000;
 					IsVanity = true;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.FLAMETHROWER:
+				case EntityID.ItemID.FLAMETHROWER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 30;
 					UseTime = 6;
 					Width = 50;
 					Height = 18;
-					Shoot = 85;
+					Shoot = (byte)EntityID.ProjectileID.FLAMES;
 					UseAmmo = 23;
 					UseSound = 34;
 					Damage = 27;
@@ -8079,11 +7427,11 @@ namespace Terraria
 					ShootSpeed = 7f;
 					NoMelee = true;
 					Value = 500000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					IsRanged = true;
 					break;
-				case ID.BELL:
-					Rarity = 3;
+				case EntityID.ItemID.BELL:
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					UseStyle = 1;
 					UseAnimation = 12;
 					UseTime = 12;
@@ -8093,8 +7441,8 @@ namespace Terraria
 					NoMelee = true;
 					Value = 10000;
 					break;
-				case ID.HARP:
-					Rarity = 3;
+				case EntityID.ItemID.HARP:
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					UseStyle = 5;
 					UseAnimation = 12;
 					UseTime = 12;
@@ -8104,7 +7452,7 @@ namespace Terraria
 					NoMelee = true;
 					Value = 10000;
 					break;
-				case ID.WRENCH:
+				case EntityID.ItemID.WRENCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8112,11 +7460,11 @@ namespace Terraria
 					AutoReuse = true;
 					Width = 24;
 					Height = 28;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 20000;
 					Mech = true;
 					break;
-				case ID.WIRE_CUTTER:
+				case EntityID.ItemID.WIRE_CUTTER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8124,11 +7472,11 @@ namespace Terraria
 					AutoReuse = true;
 					Width = 24;
 					Height = 28;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					Value = 20000;
 					Mech = true;
 					break;
-				case ID.ACTIVE_STONE_BLOCK:
+				case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8136,13 +7484,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 130;
+					CreateTile = (short)EntityID.TileID.ACTIVE_STONE;
 					Width = 12;
 					Height = 12;
 					Value = 1000;
 					Mech = true;
 					break;
-				case ID.INACTIVE_STONE_BLOCK:
+				case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8150,13 +7498,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 131;
+					CreateTile = (short)EntityID.TileID.INACTIVE_STONE;
 					Width = 12;
 					Height = 12;
 					Value = 1000;
 					Mech = true;
 					break;
-				case ID.LEVER:
+				case EntityID.ItemID.LEVER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8164,33 +7512,33 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 132;
+					CreateTile = (short)EntityID.TileID.LEVER;
 					Width = 24;
 					Height = 24;
 					Value = 3000;
 					Mech = true;
 					break;
-				case ID.LASER_RIFLE:
+				case EntityID.ItemID.LASER_RIFLE:
 					AutoReuse = true;
 					UseStyle = 5;
 					UseAnimation = 12;
 					UseTime = 12;
 					Width = 36;
 					Height = 22;
-					Shoot = 88;
+					Shoot = (byte)EntityID.ProjectileID.PURPLE_LASER;
 					Mana = 8;
 					UseSound = 12;
 					Knockback = 2.5f;
 					Damage = 29;
 					ShootSpeed = 17f;
 					NoMelee = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					IsMagic = true;
 					Value = 500000;
 					break;
-				case ID.CRYSTAL_BULLET:
+				case EntityID.ItemID.CRYSTAL_BULLET:
 					ShootSpeed = 5f;
-					Shoot = 89;
+					Shoot = (byte)EntityID.ProjectileID.CRYSTAL_BULLET;
 					Damage = 9;
 					Width = 8;
 					Height = 8;
@@ -8200,11 +7548,11 @@ namespace Terraria
 					Knockback = 1f;
 					Value = 30;
 					IsRanged = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.HOLY_ARROW:
+				case EntityID.ItemID.HOLY_ARROW:
 					ShootSpeed = 3.5f;
-					Shoot = 91;
+					Shoot = (byte)EntityID.ProjectileID.HOLY_ARROW;
 					Damage = 6;
 					Width = 10;
 					Height = 28;
@@ -8214,12 +7562,12 @@ namespace Terraria
 					Knockback = 2f;
 					Value = 80;
 					IsRanged = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MAGIC_DAGGER:
+				case EntityID.ItemID.MAGIC_DAGGER:
 					UseStyle = 1;
 					ShootSpeed = 10f;
-					Shoot = 93;
+					Shoot = (byte)EntityID.ProjectileID.MAGIC_DAGGER;
 					Damage = 28;
 					Width = 18;
 					Height = 20;
@@ -8232,11 +7580,11 @@ namespace Terraria
 					Value = 1000000;
 					Knockback = 2f;
 					IsMagic = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.CRYSTAL_STORM:
+				case EntityID.ItemID.CRYSTAL_STORM:
 					AutoReuse = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Mana = 5;
 					UseSound = 9;
 					UseStyle = 5;
@@ -8245,16 +7593,16 @@ namespace Terraria
 					UseTime = 7;
 					Width = 24;
 					Height = 28;
-					Shoot = 94;
+					Shoot = (byte)EntityID.ProjectileID.CRYSTAL_STORM;
 					Scale = 0.9f;
 					ShootSpeed = 16f;
 					Knockback = 5f;
 					IsMagic = true;
 					Value = 500000;
 					break;
-				case ID.CURSED_FLAMES:
+				case EntityID.ItemID.CURSED_FLAMES:
 					AutoReuse = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Mana = 14;
 					UseSound = 20;
 					UseStyle = 5;
@@ -8263,42 +7611,42 @@ namespace Terraria
 					UseTime = 20;
 					Width = 24;
 					Height = 28;
-					Shoot = 95;
+					Shoot = (byte)EntityID.ProjectileID.CURSED_FLAME_FRIENDLY;
 					Scale = 0.9f;
 					ShootSpeed = 10f;
 					Knockback = 6.5f;
 					IsMagic = true;
 					Value = 500000;
 					break;
-				case ID.SOUL_OF_LIGHT:
+				case EntityID.ItemID.SOUL_OF_LIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 1000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.SOUL_OF_NIGHT:
+				case EntityID.ItemID.SOUL_OF_NIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 1000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.SOUL_OF_BLIGHT:
+				case EntityID.ItemID.SOUL_OF_BLIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 100000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.CURSED_FLAME:
+				case EntityID.ItemID.CURSED_FLAME:
 					Width = 12;
 					Height = 14;
 					MaxStack = 99;
 					Value = 4000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.CURSED_TORCH:
+				case EntityID.ItemID.CURSED_TORCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8307,14 +7655,14 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 4;
+					CreateTile = (short)EntityID.TileID.TORCH;
 					PlaceStyle = 8;
 					Width = 10;
 					Height = 12;
 					Value = 300;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.ADAMANTITE_FORGE:
+				case EntityID.ItemID.ADAMANTITE_FORGE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8322,13 +7670,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 133;
+					CreateTile = (short)EntityID.TileID.ADAMANTITE_FORGE;
 					Width = 44;
 					Height = 30;
 					Value = 50000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MYTHRIL_ANVIL:
+				case EntityID.ItemID.MYTHRIL_ANVIL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8336,34 +7684,34 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 134;
+					CreateTile = (short)EntityID.TileID.MYTHRIL_ANVIL;
 					Width = 28;
 					Height = 14;
 					Value = 25000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.UNICORN_HORN:
+				case EntityID.ItemID.UNICORN_HORN:
 					Width = 14;
 					Height = 14;
 					MaxStack = 99;
 					Value = 15000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.DARK_SHARD:
+				case EntityID.ItemID.DARK_SHARD:
 					Width = 14;
 					Height = 14;
 					MaxStack = 99;
 					Value = 4500;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.LIGHT_SHARD:
+				case EntityID.ItemID.LIGHT_SHARD:
 					Width = 14;
 					Height = 14;
 					MaxStack = 99;
 					Value = 4500;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.RED_PRESSURE_PLATE:
+				case EntityID.ItemID.RED_PRESSURE_PLATE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8371,7 +7719,7 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 135;
+					CreateTile = (short)EntityID.TileID.PRESSURE_PLATE;
 					Width = 12;
 					Height = 12;
 					PlaceStyle = 0;
@@ -8379,77 +7727,77 @@ namespace Terraria
 					Value = 5000;
 					Mech = true;
 					break;
-				case ID.WIRE:
+				case EntityID.ItemID.WIRE:
 					Width = 12;
 					Height = 18;
 					MaxStack = 250;
 					Value = 500;
 					Mech = true;
 					break;
-				case ID.SPELL_TOME:
+				case EntityID.ItemID.SPELL_TOME:
 					Width = 12;
 					Height = 18;
 					MaxStack = 99;
 					Value = 50000;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.STAR_CLOAK:
+				case EntityID.ItemID.STAR_CLOAK:
 					Width = 20;
 					Height = 24;
 					Value = 100000;
 					IsAccessory = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.MEGASHARK:
+				case EntityID.ItemID.MEGASHARK:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 7;
 					UseTime = 7;
 					Width = 50;
 					Height = 18;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 14;
 					UseSound = 11;
 					Damage = 23;
 					ShootSpeed = 10f;
 					NoMelee = true;
 					Value = 300000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Knockback = 1f;
 					IsRanged = true;
 					break;
-				case ID.SHOTGUN:
+				case EntityID.ItemID.SHOTGUN:
 					Knockback = 6.5f;
 					UseStyle = 5;
 					UseAnimation = 45;
 					UseTime = 45;
 					Width = 50;
 					Height = 14;
-					Shoot = 10;
+					Shoot = (byte)EntityID.ProjectileID.PURIFICATION_POWDER;
 					UseAmmo = 14;
 					UseSound = 36;
 					Damage = 18;
 					ShootSpeed = 6f;
 					NoMelee = true;
 					Value = 700000;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					IsRanged = true;
 					break;
-				case ID.PHILOSOPHERS_STONE:
+				case EntityID.ItemID.PHILOSOPHERS_STONE:
 					Width = 12;
 					Height = 18;
 					Value = 100000;
 					IsAccessory = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.TITAN_GLOVE:
+				case EntityID.ItemID.TITAN_GLOVE:
 					Width = 12;
 					Height = 18;
 					Value = 100000;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					IsAccessory = true;
 					break;
-				case ID.COBALT_NAGINATA:
+				case EntityID.ItemID.COBALT_NAGINATA:
 					UseStyle = 5;
 					UseAnimation = 28;
 					UseTime = 28;
@@ -8460,14 +7808,14 @@ namespace Terraria
 					Damage = 29;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 97;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.COBALT_NAGINATA;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 45000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.SWITCH:
+				case EntityID.ItemID.SWITCH:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8475,13 +7823,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 136;
+					CreateTile = (short)EntityID.TileID.SWITCH;
 					Width = 12;
 					Height = 12;
 					Value = 2000;
 					Mech = true;
 					break;
-				case ID.DART_TRAP:
+				case EntityID.ItemID.DART_TRAP:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8489,13 +7837,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 137;
+					CreateTile = (short)EntityID.TileID.TRAP;
 					Width = 12;
 					Height = 12;
 					Value = 10000;
 					Mech = true;
 					break;
-				case ID.BOULDER:
+				case EntityID.ItemID.BOULDER:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8503,12 +7851,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 138;
+					CreateTile = (short)EntityID.TileID.BOULDER;
 					Width = 12;
 					Height = 12;
 					Mech = true;
 					break;
-				case ID.GREEN_PRESSURE_PLATE:
+				case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8516,14 +7864,14 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 135;
+					CreateTile = (short)EntityID.TileID.PRESSURE_PLATE;
 					Width = 12;
 					Height = 12;
 					PlaceStyle = 1;
 					Mech = true;
 					Value = 5000;
 					break;
-				case ID.GRAY_PRESSURE_PLATE:
+				case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8531,14 +7879,14 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 135;
+					CreateTile = (short)EntityID.TileID.PRESSURE_PLATE;
 					Width = 12;
 					Height = 12;
 					PlaceStyle = 2;
 					Mech = true;
 					Value = 5000;
 					break;
-				case ID.BROWN_PRESSURE_PLATE:
+				case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -8546,14 +7894,14 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 135;
+					CreateTile = (short)EntityID.TileID.PRESSURE_PLATE;
 					Width = 12;
 					Height = 12;
 					PlaceStyle = 3;
 					Mech = true;
 					Value = 5000;
 					break;
-				case ID.MECHANICAL_EYE:
+				case EntityID.ItemID.MECHANICAL_EYE:
 					UseStyle = 4;
 					Width = 22;
 					Height = 14;
@@ -8561,11 +7909,11 @@ namespace Terraria
 					UseAnimation = 45;
 					UseTime = 45;
 					MaxStack = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.CURSED_ARROW:
+				case EntityID.ItemID.CURSED_ARROW:
 					ShootSpeed = 4f;
-					Shoot = 103;
+					Shoot = (byte)EntityID.ProjectileID.CURSED_ARROW;
 					Damage = 14;
 					Width = 10;
 					Height = 28;
@@ -8575,11 +7923,11 @@ namespace Terraria
 					Knockback = 3f;
 					Value = 80;
 					IsRanged = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.SPECTRAL_ARROW:
+				case EntityID.ItemID.SPECTRAL_ARROW:
 					ShootSpeed = 4.2f;
-					Shoot = 113;
+					Shoot = (byte)EntityID.ProjectileID.SPECTRAL_ARROW;
 					Damage = 16;
 					Width = 10;
 					Height = 28;
@@ -8589,11 +7937,11 @@ namespace Terraria
 					Knockback = 3.1f;
 					Value = 90;
 					IsRanged = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.CURSED_BULLET:
+				case EntityID.ItemID.CURSED_BULLET:
 					ShootSpeed = 5f;
-					Shoot = 104;
+					Shoot = (byte)EntityID.ProjectileID.CURSED_BULLET;
 					Damage = 12;
 					Width = 8;
 					Height = 8;
@@ -8602,32 +7950,32 @@ namespace Terraria
 					Ammo = 14;
 					Knockback = 4f;
 					Value = 30;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					IsRanged = true;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.SOUL_OF_FRIGHT:
+				case EntityID.ItemID.SOUL_OF_FRIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 100000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.SOUL_OF_MIGHT:
+				case EntityID.ItemID.SOUL_OF_MIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 100000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.SOUL_OF_SIGHT:
+				case EntityID.ItemID.SOUL_OF_SIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 100000;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					break;
-				case ID.GUNGNIR:
+				case EntityID.ItemID.GUNGNIR:
 					UseStyle = 5;
 					UseAnimation = 22;
 					UseTime = 22;
@@ -8638,14 +7986,14 @@ namespace Terraria
 					Damage = 42;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 105;
-					Rarity = 5;
+					Shoot = (byte)EntityID.ProjectileID.GUNGNIR;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 1500000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.TONBOGIRI:
+				case EntityID.ItemID.TONBOGIRI:
 					UseStyle = 5;
 					UseAnimation = 20;
 					UseTime = 20;
@@ -8656,68 +8004,68 @@ namespace Terraria
 					Damage = 50;
 					Scale = 1.1f;
 					UseSound = 1;
-					Shoot = 112;
-					Rarity = 5;
+					Shoot = (byte)EntityID.ProjectileID.TONBOGIRI;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 2000000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					break;
-				case ID.HALLOWED_PLATE_MAIL:
+				case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 					Width = 18;
 					Height = 18;
 					Defense = 15;
-					BodySlot = 24;
-					Rarity = 5;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_HALLOWED_PLATE_MAIL;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 200000;
 					break;
-				case ID.HALLOWED_GREAVES:
+				case EntityID.ItemID.HALLOWED_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 11;
-					LegSlot = 23;
-					Rarity = 5;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_HALLOWED_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 150000;
 					break;
-				case ID.HALLOWED_HELMET:
+				case EntityID.ItemID.HALLOWED_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 9;
-					HeadSlot = 41;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 250000;
 					break;
-				case ID.HALLOWED_HEADGEAR:
+				case EntityID.ItemID.HALLOWED_HEADGEAR:
 					Width = 18;
 					Height = 18;
 					Defense = 5;
-					HeadSlot = 42;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HEADGEAR;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 250000;
 					break;
-				case ID.HALLOWED_MASK:
+				case EntityID.ItemID.HALLOWED_MASK:
 					Width = 18;
 					Height = 18;
 					Defense = 24;
-					HeadSlot = 43;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_HALLOWED_MASK;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 250000;
 					break;
-				case ID.CROSS_NECKLACE:
+				case EntityID.ItemID.CROSS_NECKLACE:
 					Width = 20;
 					Height = 24;
 					Value = 1500;
 					IsAccessory = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.MANA_FLOWER:
+				case EntityID.ItemID.MANA_FLOWER:
 					Width = 20;
 					Height = 24;
 					Value = 50000;
 					IsAccessory = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					break;
-				case ID.MECHANICAL_WORM:
+				case EntityID.ItemID.MECHANICAL_WORM:
 					UseStyle = 4;
 					Width = 22;
 					Height = 14;
@@ -8725,9 +8073,9 @@ namespace Terraria
 					UseAnimation = 45;
 					UseTime = 45;
 					MaxStack = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MECHANICAL_SKULL:
+				case EntityID.ItemID.MECHANICAL_SKULL:
 					UseStyle = 4;
 					Width = 22;
 					Height = 14;
@@ -8735,9 +8083,9 @@ namespace Terraria
 					UseAnimation = 45;
 					UseTime = 45;
 					MaxStack = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.SLIME_CROWN:
+				case EntityID.ItemID.SLIME_CROWN:
 					UseStyle = 4;
 					Width = 22;
 					Height = 14;
@@ -8745,15 +8093,15 @@ namespace Terraria
 					UseAnimation = 45;
 					UseTime = 45;
 					MaxStack = 20;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.LIGHT_DISC:
+				case EntityID.ItemID.LIGHT_DISC:
 					IsMelee = true;
 					AutoReuse = true;
 					NoMelee = true;
 					UseStyle = 1;
 					ShootSpeed = 13f;
-					Shoot = 106;
+					Shoot = (byte)EntityID.ProjectileID.LIGHT_DISC;
 					Damage = 35;
 					Knockback = 8f;
 					Width = 24;
@@ -8762,310 +8110,310 @@ namespace Terraria
 					UseAnimation = 15;
 					UseTime = 15;
 					NoUseGraphic = true;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					MaxStack = 5;
 					Value = 500000;
 					break;
-				case ID.MUSIC_BOX_OVERWORLD_DAY:
+				case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 0;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_EERIE:
+				case EntityID.ItemID.MUSIC_BOX_EERIE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 1;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_NIGHT:
+				case EntityID.ItemID.MUSIC_BOX_NIGHT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 2;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_TITLE:
+				case EntityID.ItemID.MUSIC_BOX_TITLE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 3;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_UNDERGROUND:
+				case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 4;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_BOSS1:
+				case EntityID.ItemID.MUSIC_BOX_BOSS1:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 5;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_JUNGLE:
+				case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 6;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_CORRUPTION:
+				case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 7;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
+				case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 8;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_THE_HALLOW:
+				case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 9;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_BOSS2:
+				case EntityID.ItemID.MUSIC_BOX_BOSS2:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 10;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_UNDERGROUND_HALLOW:
+				case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 11;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_BOSS3:
+				case EntityID.ItemID.MUSIC_BOX_BOSS3:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 12;
 					Width = 24;
 					Height = 24;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_DESERT:
+				case EntityID.ItemID.MUSIC_BOX_DESERT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 13;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_SPACE:
+				case EntityID.ItemID.MUSIC_BOX_SPACE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 14;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_TUTORIAL:
+				case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 15;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_BOSS4:
+				case EntityID.ItemID.MUSIC_BOX_BOSS4:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 16;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_OCEAN:
+				case EntityID.ItemID.MUSIC_BOX_OCEAN:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 17;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.MUSIC_BOX_SNOW:
+				case EntityID.ItemID.MUSIC_BOX_SNOW:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
 					UseTime = 10;
 					AutoReuse = true;
 					IsConsumable = true;
-					CreateTile = 139;
+					CreateTile = (short)EntityID.TileID.MUSIC_BOX;
 					PlaceStyle = 18;
 					Width = 24;
 					Height = 24;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.SOUL_OF_FLIGHT:
+				case EntityID.ItemID.SOUL_OF_FLIGHT:
 					Width = 18;
 					Height = 18;
 					MaxStack = 250;
 					Value = 1000;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					break;
-				case ID.MUSIC_BOX:
+				case EntityID.ItemID.MUSIC_BOX:
 					Width = 24;
 					Height = 24;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					Value = 100000;
 					IsAccessory = true;
 					break;
-				case ID.DEMONITE_BRICK:
+				case EntityID.ItemID.DEMONITE_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9073,18 +8421,18 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 140;
+					CreateTile = (short)EntityID.TileID.DEMONITE_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.HALLOWED_REPEATER:
+				case EntityID.ItemID.HALLOWED_REPEATER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 19;
 					UseTime = 19;
 					Width = 50;
 					Height = 18;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 39;
@@ -9092,17 +8440,17 @@ namespace Terraria
 					NoMelee = true;
 					Value = 200000;
 					IsRanged = true;
-					Rarity = 4;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Knockback = 2.5f;
 					break;
-				case ID.VULCAN_REPEATER:
+				case EntityID.ItemID.VULCAN_REPEATER:
 					UseStyle = 5;
 					AutoReuse = true;
 					UseAnimation = 18;
 					UseTime = 18;
 					Width = 50;
 					Height = 18;
-					Shoot = 1;
+					Shoot = (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY;
 					UseAmmo = 1;
 					UseSound = 5;
 					Damage = 42;
@@ -9110,10 +8458,10 @@ namespace Terraria
 					NoMelee = true;
 					Value = 250000;
 					IsRanged = true;
-					Rarity = 5;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Knockback = 2.65f;
 					break;
-				case ID.HAMDRAX:
+				case EntityID.ItemID.HAMDRAX:
 					UseStyle = 5;
 					UseAnimation = 25;
 					UseTime = 7;
@@ -9126,15 +8474,15 @@ namespace Terraria
 					AxePower = 22;
 					HammerPower = 85;
 					UseSound = 23;
-					Shoot = 107;
-					Rarity = 4;
+					Shoot = (byte)EntityID.ProjectileID.HAMDRAX;
+					Rarity = (sbyte)EntityID.RarityID.LIGHT_RED;
 					Value = 220000;
 					NoMelee = true;
 					NoUseGraphic = true;
 					IsMelee = true;
 					Channelling = true;
 					break;
-				case ID.EXPLOSIVES:
+				case EntityID.ItemID.EXPLOSIVES:
 					Mech = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -9143,11 +8491,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 141;
+					CreateTile = (short)EntityID.TileID.EXPLOSIVES;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.INLET_PUMP:
+				case EntityID.ItemID.INLET_PUMP:
 					Mech = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -9156,11 +8504,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 142;
+					CreateTile = (short)EntityID.TileID.PUMP_IN;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.OUTLET_PUMP:
+				case EntityID.ItemID.OUTLET_PUMP:
 					Mech = true;
 					UseStyle = 1;
 					CanUseTurn = true;
@@ -9169,11 +8517,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 143;
+					CreateTile = (short)EntityID.TileID.PUMP_OUT;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.ONE_SECOND_TIMER:
+				case EntityID.ItemID.ONE_SECOND_TIMER:
 					Mech = true;
 					CantTouchLiquid = true;
 					UseStyle = 1;
@@ -9183,13 +8531,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 144;
+					CreateTile = (short)EntityID.TileID.TIMER;
 					PlaceStyle = 0;
 					Width = 10;
 					Height = 12;
 					Value = 50;
 					break;
-				case ID.THREE_SECOND_TIMER:
+				case EntityID.ItemID.THREE_SECOND_TIMER:
 					Mech = true;
 					CantTouchLiquid = true;
 					UseStyle = 1;
@@ -9199,13 +8547,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 144;
+					CreateTile = (short)EntityID.TileID.TIMER;
 					PlaceStyle = 1;
 					Width = 10;
 					Height = 12;
 					Value = 50;
 					break;
-				case ID.FIVE_SECOND_TIMER:
+				case EntityID.ItemID.FIVE_SECOND_TIMER:
 					Mech = true;
 					CantTouchLiquid = true;
 					UseStyle = 1;
@@ -9215,13 +8563,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 99;
 					IsConsumable = true;
-					CreateTile = 144;
+					CreateTile = (short)EntityID.TileID.TIMER;
 					PlaceStyle = 2;
 					Width = 10;
 					Height = 12;
 					Value = 50;
 					break;
-				case ID.CANDY_CANE_BLOCK:
+				case EntityID.ItemID.CANDY_CANE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9229,11 +8577,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 145;
+					CreateTile = (short)EntityID.TileID.CANDY_CANE_RED;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.CANDY_CANE_WALL:
+				case EntityID.ItemID.CANDY_CANE_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9241,32 +8589,32 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 29;
+					CreateWall = (short)EntityID.WallID.CANDY_CANE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SANTA_HAT:
+				case EntityID.ItemID.SANTA_HAT:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 44;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SANTA_HAT;
 					Value = 150000;
 					IsVanity = true;
 					break;
-				case ID.SANTA_SHIRT:
-					Width = 18;
-					Height = 18;
-					BodySlot = 25;
-					Value = 150000;
-					IsVanity = true;
-					break;
-				case ID.SANTA_PANTS:
+				case EntityID.ItemID.SANTA_SHIRT:
 					Width = 18;
 					Height = 18;
-					LegSlot = 24;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_SANTA_SHIRT;
 					Value = 150000;
 					IsVanity = true;
 					break;
-				case ID.GREEN_CANDY_CANE_BLOCK:
+				case EntityID.ItemID.SANTA_PANTS:
+					Width = 18;
+					Height = 18;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_SANTA_PANTS;
+					Value = 150000;
+					IsVanity = true;
+					break;
+				case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9274,11 +8622,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 146;
+					CreateTile = (short)EntityID.TileID.CANDY_CANE_GREEN;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.GREEN_CANDY_CANE_WALL:
+				case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9286,11 +8634,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 30;
+					CreateWall = (short)EntityID.WallID.GREEN_CANDY_CANE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SNOW_BLOCK:
+				case EntityID.ItemID.SNOW_BLOCK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9298,11 +8646,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 147;
+					CreateTile = (short)EntityID.TileID.SNOW;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SNOW_BRICK:
+				case EntityID.ItemID.SNOW_BRICK:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9310,11 +8658,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 148;
+					CreateTile = (short)EntityID.TileID.SNOW_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.SNOW_BRICK_WALL:
+				case EntityID.ItemID.SNOW_BRICK_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9322,11 +8670,11 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateWall = 31;
+					CreateWall = (short)EntityID.WallID.SNOW_BRICK;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.BLUE_LIGHT:
+				case EntityID.ItemID.BLUE_LIGHT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9334,13 +8682,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 149;
+					CreateTile = (short)EntityID.TileID.XMAS_LIGHT;
 					PlaceStyle = 0;
 					Width = 12;
 					Height = 12;
 					Value = 500;
 					break;
-				case ID.RED_LIGHT:
+				case EntityID.ItemID.RED_LIGHT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9348,13 +8696,13 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 149;
+					CreateTile = (short)EntityID.TileID.XMAS_LIGHT;
 					PlaceStyle = 1;
 					Width = 12;
 					Height = 12;
 					Value = 500;
 					break;
-				case ID.GREEN_LIGHT:
+				case EntityID.ItemID.GREEN_LIGHT:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9362,236 +8710,236 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 250;
 					IsConsumable = true;
-					CreateTile = 149;
+					CreateTile = (short)EntityID.TileID.XMAS_LIGHT;
 					PlaceStyle = 2;
 					Width = 12;
 					Height = 12;
 					Value = 500;
 					break;
-				case ID.BLUE_PRESENT:
+				case EntityID.ItemID.BLUE_PRESENT:
 					Width = 12;
 					Height = 12;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.GREEN_PRESENT:
+				case EntityID.ItemID.GREEN_PRESENT:
 					Width = 12;
 					Height = 12;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.YELLOW_PRESENT:
+				case EntityID.ItemID.YELLOW_PRESENT:
 					Width = 12;
 					Height = 12;
-					Rarity = 1;
+					Rarity = (sbyte)EntityID.RarityID.BLUE;
 					break;
-				case ID.SNOW_GLOBE:
+				case EntityID.ItemID.SNOW_GLOBE:
 					UseStyle = 4;
 					IsConsumable = true;
 					UseAnimation = 45;
 					UseTime = 45;
 					Width = 28;
 					Height = 28;
-					Rarity = 2;
+					Rarity = (sbyte)EntityID.RarityID.GREEN;
 					break;
-				case ID.PET_SPAWN_1:
+				case EntityID.ItemID.PET_SPAWN_1:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 111;
+					Shoot = (byte)EntityID.ProjectileID.PET_BUNNY;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.PET_SPAWN_2:
+				case EntityID.ItemID.PET_SPAWN_2:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 115;
+					Shoot = (byte)EntityID.ProjectileID.PET_SLIME;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.PET_SPAWN_3:
+				case EntityID.ItemID.PET_SPAWN_3:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 116;
+					Shoot = (byte)EntityID.ProjectileID.PET_TIPHIA;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.PET_SPAWN_4:
+				case EntityID.ItemID.PET_SPAWN_4:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 117;
+					Shoot = (byte)EntityID.ProjectileID.PET_BAT;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.PET_SPAWN_5:
+				case EntityID.ItemID.PET_SPAWN_5:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 118;
+					Shoot = (byte)EntityID.ProjectileID.PET_WEREWOLF;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.PET_SPAWN_6:
+				case EntityID.ItemID.PET_SPAWN_6:
 					Damage = 0;
 					UseStyle = 1;
-					Shoot = 119;
+					Shoot = (byte)EntityID.ProjectileID.PET_ZOMBIE;
 					Width = 16;
 					Height = 30;
 					UseSound = 2;
 					UseAnimation = 20;
 					UseTime = 20;
-					Rarity = 3;
+					Rarity = (sbyte)EntityID.RarityID.ORANGE;
 					NoMelee = true;
 					Value = 0;
-					BuffType = (int)Buff.ID.PET;
+					BuffType = (int)EntityID.BuffID.PET;
 					break;
-				case ID.DRAGON_MASK:
+				case EntityID.ItemID.DRAGON_MASK:
 					Width = 26;
 					Height = 18;
 					Defense = 26;
-					HeadSlot = 45;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_DRAGON_MASK;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 500000;
 					break;
-				case ID.TITAN_HELMET:
+				case EntityID.ItemID.TITAN_HELMET:
 					Width = 26;
 					Height = 22;
 					Defense = 14;
-					HeadSlot = 46;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_TITAN_HELMET;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 500000;
 					break;
-				case ID.SPECTRAL_HEADGEAR:
+				case EntityID.ItemID.SPECTRAL_HEADGEAR:
 					Width = 22;
 					Height = 20;
 					Defense = 10;
-					HeadSlot = 47;
-					Rarity = 5;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_SPECTRAL_HEADGEAR;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 500000;
 					break;
-				case ID.DRAGON_BREASTPLATE:
+				case EntityID.ItemID.DRAGON_BREASTPLATE:
 					Width = 26;
 					Height = 18;
 					Defense = 20;
-					BodySlot = 26;
-					Rarity = 5;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_DRAGON_BREASTPLATE;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 1000000;
 					break;
-				case ID.TITAN_MAIL:
+				case EntityID.ItemID.TITAN_MAIL:
 					Width = 30;
 					Height = 18;
 					Defense = 18;
-					BodySlot = 27;
-					Rarity = 5;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_TITAN_MAIL;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 1000000;
 					break;
-				case ID.SPECTRAL_ARMOR:
+				case EntityID.ItemID.SPECTRAL_ARMOR:
 					Width = 30;
 					Height = 28;
 					Defense = 15;
-					BodySlot = 28;
-					Rarity = 5;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_SPECTRAL_ARMOR;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 1000000;
 					break;
-				case ID.DRAGON_GREAVES:
+				case EntityID.ItemID.DRAGON_GREAVES:
 					Width = 22;
 					Height = 18;
 					Defense = 14;
-					LegSlot = 25;
-					Rarity = 5;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_DRAGON_GREAVES;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 750000;
 					break;
-				case ID.TITAN_LEGGINGS:
+				case EntityID.ItemID.TITAN_LEGGINGS:
 					Width = 22;
 					Height = 18;
 					Defense = 13;
-					LegSlot = 26;
-					Rarity = 5;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_TITAN_LEGGINGS;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 750000;
 					break;
-				case ID.SPECTRAL_SUBLIGAR:
+				case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 					Width = 22;
 					Height = 18;
 					Defense = 15;
-					LegSlot = 27;
-					Rarity = 5;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_SPECTRAL_SUBLIGAR;
+					Rarity = (sbyte)EntityID.RarityID.PINK;
 					Value = 750000;
 					break;
 #if VERSION_101
-				case ID.FABULOUS_RIBBON:
+				case EntityID.ItemID.FABULOUS_RIBBON:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 48;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_FABULOUS_RIBBON;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.GEORGES_HAT:
+				case EntityID.ItemID.GEORGES_HAT:
 					Width = 18;
 					Height = 12;
-					HeadSlot = 49;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_GEORGES_HAT;
 					Value = 10000;
 					IsVanity = true;
 					break;
-				case ID.FABULOUS_DRESS:
+				case EntityID.ItemID.FABULOUS_TUTU:
 					Width = 18;
 					Height = 18;
-					BodySlot = 29;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_FABULOUS_TUTU;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.GEORGES_SUIT:
+				case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 					Width = 18;
 					Height = 18;
-					BodySlot = 30;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_GEORGES_TUXEDO_SHIRT;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.FABULOUS_SLIPPERS:
+				case EntityID.ItemID.FABULOUS_SLIPPERS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 28;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_FABULOUS_SLIPPERS;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.GEORGES_PANTS:
+				case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 					Width = 18;
 					Height = 18;
-					LegSlot = 29;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_GEORGES_TUXEDO_PANTS;
 					Value = 250000;
 					IsVanity = true;
 					break;
-				case ID.CAMPFIRE:
+				case EntityID.ItemID.CAMPFIRE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9599,29 +8947,29 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateTile = 150;
+					CreateTile = (short)EntityID.TileID.CAMPFIRE;
 					Width = 12;
 					Height = 12;
 					break;
-				case ID.WOOD_HELMET:
+				case EntityID.ItemID.WOOD_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					HeadSlot = 51;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_WOOD_HELMET;
 					break;
-				case ID.WOOD_BREASTPLATE:
+				case EntityID.ItemID.WOOD_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					BodySlot = 32;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_WOOD_BREASTPLATE;
 					break;
-				case ID.WOOD_GREAVES:
+				case EntityID.ItemID.WOOD_GREAVES:
 					Width = 18;
 					Height = 18;
 					Defense = 0;
-					LegSlot = 31;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_WOOD_GREAVES;
 					break;
-				case ID.CACTUS_SWORD:
+				case EntityID.ItemID.CACTUS_SWORD:
 					UseStyle = 1;
 					CanUseTurn = false;
 					UseAnimation = 25;
@@ -9635,7 +8983,7 @@ namespace Terraria
 					Value = 1800;
 					IsMelee = true;
 					break;
-				case ID.CACTUS_PICKAXE:
+				case EntityID.ItemID.CACTUS_PICKAXE:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 23;
@@ -9650,25 +8998,25 @@ namespace Terraria
 					Value = 2000;
 					IsMelee = true;
 					break;
-				case ID.CACTUS_HELMET:
+				case EntityID.ItemID.CACTUS_HELMET:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					HeadSlot = 50;
+					HeadSlot = (short)EntityID.ArmorHeadID.HEAD_CACTUS_HELMET;
 					break;
-				case ID.CACTUS_BREASTPLATE:
+				case EntityID.ItemID.CACTUS_BREASTPLATE:
 					Width = 18;
 					Height = 18;
 					Defense = 2;
-					BodySlot = 31;
+					BodySlot = (short)EntityID.ArmorBodyID.BODY_CACTUS_BREASTPLATE;
 					break;
-				case ID.CACTUS_LEGGINGS:
+				case EntityID.ItemID.CACTUS_LEGGINGS:
 					Width = 18;
 					Height = 18;
 					Defense = 1;
-					LegSlot = 30;
+					LegSlot = (short)EntityID.ArmorLegsID.LEGS_CACTUS_LEGGINGS;
 					break;
-				case ID.PURPLE_STAINED_GLASS:
+				case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9676,12 +9024,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 32;
+					CreateWall = (short)EntityID.WallID.PURPLE_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
 					break;
-				case ID.YELLOW_STAINED_GLASS:
+				case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9689,12 +9037,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 33;
+					CreateWall = (short)EntityID.WallID.YELLOW_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
 					break;
-				case ID.BLUE_STAINED_GLASS:
+				case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9702,12 +9050,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 34;
+					CreateWall = (short)EntityID.WallID.BLUE_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
 					break;
-				case ID.GREEN_STAINED_GLASS:
+				case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9715,12 +9063,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 35;
+					CreateWall = (short)EntityID.WallID.GREEN_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
 					break;
-				case ID.RED_STAINED_GLASS:
+				case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9728,12 +9076,12 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 36;
+					CreateWall = (short)EntityID.WallID.RED_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
 					break;
-				case ID.MULTICOLORED_STAINED_GLASS:
+				case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 					UseStyle = 1;
 					CanUseTurn = true;
 					UseAnimation = 15;
@@ -9741,7 +9089,7 @@ namespace Terraria
 					AutoReuse = true;
 					MaxStack = 999;
 					IsConsumable = true;
-					CreateWall = 37;
+					CreateWall = (short)EntityID.WallID.RAINBOW_STAINED_GLASS;
 					Width = 12;
 					Height = 12;
 					Value = 125;
@@ -9766,23 +9114,23 @@ namespace Terraria
 
 		public Color GetAlpha(Color ItemColour)
 		{
-			if (Type == (int)ID.FALLEN_STAR)
+			if (Type == (int)EntityID.ItemID.FALLEN_STAR)
 			{
 				return new Color(255, 255, 255, ItemColour.A - Alpha);
 			}
-			if ((Type >= (int)ID.FLAMARANG && Type <= (int)ID.MOLTEN_PICKAXE) || (Type >= (int)ID.BLUE_PHASEBLADE && Type <= (int)ID.YELLOW_PHASEBLADE) || Type == (int)ID.MOLTEN_HAMAXE || Type == (int)ID.FLAMELASH || Type == (int)ID.PHOENIX_BLASTER || Type == (int)ID.SUNFURY)
+			if ((Type >= (int)EntityID.ItemID.FLAMARANG && Type <= (int)EntityID.ItemID.MOLTEN_PICKAXE) || (Type >= (int)EntityID.ItemID.BLUE_PHASEBLADE && Type <= (int)EntityID.ItemID.YELLOW_PHASEBLADE) || Type == (int)EntityID.ItemID.MOLTEN_HAMAXE || Type == (int)EntityID.ItemID.FLAMELASH || Type == (int)EntityID.ItemID.PHOENIX_BLASTER || Type == (int)EntityID.ItemID.SUNFURY)
 			{
 				return new Color(255, 255, 255, 255);
 			}
 #if VERSION_103 || VERSION_FINAL // BUG: Souls of Blight are not lit up correctly in versions prior to the console 1.2 update.
-			if (Type == (int)ID.SOUL_OF_LIGHT || Type == (int)ID.SOUL_OF_NIGHT || Type == (int)ID.CURSED_FLAME || Type == (int)ID.SOUL_OF_FRIGHT || Type == (int)ID.SOUL_OF_MIGHT || Type == (int)ID.SOUL_OF_SIGHT || Type == (int)ID.SOUL_OF_FLIGHT || Type == (int)ID.SOUL_OF_BLIGHT)
+			if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || Type == (int)EntityID.ItemID.SOUL_OF_NIGHT || Type == (int)EntityID.ItemID.CURSED_FLAME || Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT || Type == (int)EntityID.ItemID.SOUL_OF_MIGHT || Type == (int)EntityID.ItemID.SOUL_OF_SIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT || Type == (int)EntityID.ItemID.SOUL_OF_BLIGHT)
 #else
-			if (Type == (int)ID.SOUL_OF_LIGHT || Type == (int)ID.SOUL_OF_NIGHT || Type == (int)ID.CURSED_FLAME || Type == (int)ID.SOUL_OF_FRIGHT || Type == (int)ID.SOUL_OF_MIGHT || Type == (int)ID.SOUL_OF_SIGHT || Type == (int)ID.SOUL_OF_FLIGHT)
+			if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || Type == (int)EntityID.ItemID.SOUL_OF_NIGHT || Type == (int)EntityID.ItemID.CURSED_FLAME || Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT || Type == (int)EntityID.ItemID.SOUL_OF_MIGHT || Type == (int)EntityID.ItemID.SOUL_OF_SIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT)
 #endif
 			{
 				return new Color(255, 255, 255, 50);
 			}
-			if (Type == (int)ID.HEART || Type == (int)ID.STAR || Type == (int)ID.PIXIE_DUST)
+			if (Type == (int)EntityID.ItemID.HEART || Type == (int)EntityID.ItemID.STAR || Type == (int)EntityID.ItemID.PIXIE_DUST)
 			{
 				return new Color(200, 200, 200, 200);
 			}
@@ -9818,8 +9166,8 @@ namespace Terraria
 			int Counter1 = 0;
 			int Counter2 = 0;
 			int Counter3 = 0;
-			for (int ItemNPCIdx = 0; ItemNPCIdx < NPC.MaxNumNPCs; ItemNPCIdx++) // Bit confusing; not actually related to NPCs.
-			{ // Also don't know why the max was 196, such an arbitrary number, but I linked it to the NPC limit anyway.
+			for (int ItemNPCIdx = 0; ItemNPCIdx < NPC.MaxNumNPCs; ItemNPCIdx++)
+			{
 				if (Main.ItemSet[ItemNPCIdx].Active == 0 || Main.ItemSet[ItemNPCIdx].Type != ItemType)
 				{
 					continue;
@@ -9877,9 +9225,9 @@ namespace Terraria
 					Velocity.X = 0f;
 				}
 #if VERSION_103 || VERSION_FINAL // BUG: Souls of Blight don't float in versions prior to the console 1.2 update.
-				if (Type == (int)ID.SOUL_OF_LIGHT || Type == (int)ID.SOUL_OF_NIGHT || Type == (int)ID.SOUL_OF_FRIGHT || Type == (int)ID.SOUL_OF_MIGHT || Type == (int)ID.SOUL_OF_SIGHT || Type == (int)ID.SOUL_OF_FLIGHT || Type == (int)ID.SOUL_OF_BLIGHT)
+				if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || Type == (int)EntityID.ItemID.SOUL_OF_NIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT || Type == (int)EntityID.ItemID.SOUL_OF_MIGHT || Type == (int)EntityID.ItemID.SOUL_OF_SIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT || Type == (int)EntityID.ItemID.SOUL_OF_BLIGHT)
 #else
-				if (Type == (int)ID.SOUL_OF_LIGHT || Type == (int)ID.SOUL_OF_NIGHT || Type == (int)ID.SOUL_OF_FRIGHT || Type == (int)ID.SOUL_OF_MIGHT || Type == (int)ID.SOUL_OF_SIGHT || Type == (int)ID.SOUL_OF_FLIGHT)
+				if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || Type == (int)EntityID.ItemID.SOUL_OF_NIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT || Type == (int)EntityID.ItemID.SOUL_OF_MIGHT || Type == (int)EntityID.ItemID.SOUL_OF_SIGHT || Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT)
 #endif
 				{
 					Velocity.Y *= 0.95f;
@@ -9971,7 +9319,7 @@ namespace Terraria
 				}
 				if (IsInLava)
 				{
-					if (Type == (int)ID.GUIDE_VOODOO_DOLL)
+					if (Type == (int)EntityID.ItemID.GUIDE_VOODOO_DOLL)
 					{
 						if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
@@ -9980,7 +9328,7 @@ namespace Terraria
 							Stack = 0;
 							for (int NpcSlotIdx = 0; NpcSlotIdx < NPC.MaxNumNPCs; NpcSlotIdx++)
 							{
-								if (Main.NPCSet[NpcSlotIdx].Type == (int)NPC.ID.GUIDE && Main.NPCSet[NpcSlotIdx].Active != 0)
+								if (Main.NPCSet[NpcSlotIdx].Type == (int)EntityID.NPCID.GUIDE && Main.NPCSet[NpcSlotIdx].Active != 0)
 								{
 									NetMessage.SendNpcHurt(NpcSlotIdx, 8192, 10.0, -Main.NPCSet[NpcSlotIdx].Direction);
 									Main.NPCSet[NpcSlotIdx].StrikeNPC(8192, 10f, -Main.NPCSet[NpcSlotIdx].Direction);
@@ -9992,7 +9340,7 @@ namespace Terraria
 							NetMessage.SendMessage();
 						}
 					}
-					else if (IsLocal() && Type != (int)ID.FIREBLOSSOM_SEEDS && Type != (int)ID.FIREBLOSSOM && Type != (int)ID.OBSIDIAN && Type != (int)ID.HELLSTONE && Type != (int)ID.HELLSTONE_BAR && Rarity == 0)
+					else if (IsLocal() && Type != (int)EntityID.ItemID.FIREBLOSSOM_SEEDS && Type != (int)EntityID.ItemID.FIREBLOSSOM && Type != (int)EntityID.ItemID.OBSIDIAN && Type != (int)EntityID.ItemID.HELLSTONE && Type != (int)EntityID.ItemID.HELLSTONE_BAR && Rarity == (sbyte)EntityID.RarityID.WHITE)
 					{
 						Active = 0;
 						Type = 0;
@@ -10001,69 +9349,69 @@ namespace Terraria
 						NetMessage.SendMessage();
 					}
 				}
-				if (Type == (int)ID.SOUL_OF_LIGHT)
+				if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.5f * LightMultiplier, 0.1f * LightMultiplier, 0.25f * LightMultiplier));
 				}
-				else if (Type == (int)ID.SOUL_OF_NIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_NIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.25f * LightMultiplier, 0.1f * LightMultiplier, 0.5f * LightMultiplier));
 				}
-				else if (Type == (int)ID.SOUL_OF_FRIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.5f * LightMultiplier, 0.3f * LightMultiplier, 0.05f * LightMultiplier));
 				}
-				else if (Type == (int)ID.SOUL_OF_MIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_MIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.1f * LightMultiplier, 0.1f * LightMultiplier, 0.6f * LightMultiplier));
 				}
-				else if (Type == (int)ID.SOUL_OF_FLIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.1f * LightMultiplier, 0.3f * LightMultiplier, 0.5f * LightMultiplier));
 				}
-				else if (Type == (int)ID.SOUL_OF_SIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_SIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.1f * LightMultiplier, 0.5f * LightMultiplier, 0.2f * LightMultiplier));
 				}
 #if VERSION_103 || VERSION_FINAL // BUG: Souls of Blight are not lit up correctly in versions prior to the console 1.2 update.
-				else if (Type == (int)ID.SOUL_OF_BLIGHT)
+				else if (Type == (int)EntityID.ItemID.SOUL_OF_BLIGHT)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.4f * LightMultiplier, 0.6f * LightMultiplier, 0.1f * LightMultiplier));
 				}
 #endif
-				else if (Type == (int)ID.HEART)
+				else if (Type == (int)EntityID.ItemID.HEART)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale * 0.5f;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.5f * LightMultiplier, 0.1f * LightMultiplier, 0.1f * LightMultiplier));
 				}
-				else if (Type == (int)ID.STAR)
+				else if (Type == (int)EntityID.ItemID.STAR)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale * 0.5f;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.1f * LightMultiplier, 0.1f * LightMultiplier, 0.5f * LightMultiplier));
 				}
-				else if (Type == (int)ID.CURSED_FLAME)
+				else if (Type == (int)EntityID.ItemID.CURSED_FLAME)
 				{
 					float LightMultiplier = Main.Rand.Next(90, 111) * 0.01f;
 					LightMultiplier *= UI.PulseScale * 0.2f;
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.5f * LightMultiplier, 1f * LightMultiplier, 0.1f * LightMultiplier));
 				}
-				else if (Type == (int)ID.FALLEN_STAR && Main.GameTime.DayTime)
+				else if (Type == (int)EntityID.ItemID.FALLEN_STAR && Main.GameTime.DayTime)
 				{
 					for (int i = 0; i < 8; i++)
 					{
@@ -10074,7 +9422,7 @@ namespace Terraria
 					}
 					for (int j = 0; j < 3; j++)
 					{
-						Gore.NewGore(Position, Velocity, Main.Rand.Next(16, 18));
+						Gore.NewGore(Position, Velocity, Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
 					}
 					Active = 0;
 					Type = 0;
@@ -10090,7 +9438,7 @@ namespace Terraria
 			{
 				BeingGrabbed = false;
 			}
-			if (Type == (int)ID.PIXIE_DUST)
+			if (Type == (int)EntityID.ItemID.PIXIE_DUST)
 			{
 				if (Main.Rand.Next(6) == 0)
 				{
@@ -10103,37 +9451,37 @@ namespace Terraria
 					}
 				}
 			}
-			else if (Type == (int)ID.TORCH || Type == (int)ID.CANDLE)
+			else if (Type == (int)EntityID.ItemID.TORCH || Type == (int)EntityID.ItemID.CANDLE)
 			{
 				if (!IsWet)
 				{
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(1f, 0.95f, 0.8f));
 				}
 			}
-			else if (Type == (int)ID.CURSED_TORCH)
+			else if (Type == (int)EntityID.ItemID.CURSED_TORCH)
 			{
 				Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.85f, 1f, 0.7f));
 			}
-			else if (Type >= (int)ID.BLUE_TORCH && Type <= (int)ID.YELLOW_TORCH)
+			else if (Type >= (int)EntityID.ItemID.BLUE_TORCH && Type <= (int)EntityID.ItemID.YELLOW_TORCH)
 			{
 				if (!IsWet)
 				{
 					Vector3 TorchLight;
 					switch (Type)
 					{
-						case (int)ID.BLUE_TORCH:
+						case (int)EntityID.ItemID.BLUE_TORCH:
 							TorchLight = new Vector3(0.1f, 0.2f, 1.1f);
 							break;
-						case (int)ID.RED_TORCH:
+						case (int)EntityID.ItemID.RED_TORCH:
 							TorchLight = new Vector3(1f, 0.1f, 0.1f);
 							break;
-						case (int)ID.GREEN_TORCH:
+						case (int)EntityID.ItemID.GREEN_TORCH:
 							TorchLight = new Vector3(0f, 1f, 0.1f);
 							break;
-						case (int)ID.PURPLE_TORCH:
+						case (int)EntityID.ItemID.PURPLE_TORCH:
 							TorchLight = new Vector3(0.9f, 0f, 0.9f);
 							break;
-						case (int)ID.WHITE_TORCH:
+						case (int)EntityID.ItemID.WHITE_TORCH:
 							TorchLight = new Vector3(1.3f, 1.3f, 1.3f);
 							break;
 						default: // Yellow Torch
@@ -10143,34 +9491,34 @@ namespace Terraria
 					Lighting.AddLight((int)Position.X + (Width >> 1) >> 4, (int)Position.Y + (Height >> 1) >> 4, TorchLight);
 				}
 			}
-			else if (Type == (int)ID.FLAMING_ARROW)
+			else if (Type == (int)EntityID.ItemID.FLAMING_ARROW)
 			{
 				if (!IsWet)
 				{
 					Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(1f, 0.75f, 0.55f));
 				}
 			}
-			else if (Type == (int)ID.SPECTRAL_ARROW)
+			else if (Type == (int)EntityID.ItemID.SPECTRAL_ARROW)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, IsWet ? new Vector3(0.25f, 0.5f, 0.5f) : new Vector3(0.5f, 1f, 1f));
 			}
-			else if (Type == (int)ID.GLOWSTICK)
+			else if (Type == (int)EntityID.ItemID.GLOWSTICK)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.7f, 1f, 0.8f));
 			}
-			else if (Type == (int)ID.STICKY_GLOWSTICK)
+			else if (Type == (int)EntityID.ItemID.STICKY_GLOWSTICK)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.7f, 0.8f, 1f));
 			}
-			else if (Type == (int)ID.JUNGLE_SPORES)
+			else if (Type == (int)EntityID.ItemID.JUNGLE_SPORES)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.55f, 0.75f, 0.6f));
 			}
-			else if (Type == (int)ID.GLOWING_MUSHROOM)
+			else if (Type == (int)EntityID.ItemID.GLOWING_MUSHROOM)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.15f, 0.45f, 0.9f));
 			}
-			else if (Type == (int)ID.FALLEN_STAR)
+			else if (Type == (int)EntityID.ItemID.FALLEN_STAR)
 			{
 				Lighting.AddLight((int)Position.X + Width >> 4, (int)Position.Y + (Height >> 1) >> 4, new Vector3(0.8f, 0.7f, 0.1f));
 				if (Main.Rand.Next(32) == 0)
@@ -10179,7 +9527,7 @@ namespace Terraria
 				}
 				else if (Main.Rand.Next(64) == 0)
 				{
-					Gore.NewGore(Position, new Vector2(Velocity.X * 0.2f, Velocity.Y * 0.2f), Main.Rand.Next(16, 18));
+					Gore.NewGore(Position, new Vector2(Velocity.X * 0.2f, Velocity.Y * 0.2f), Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
 				}
 			}
 			SpawnTime++;
@@ -10248,7 +9596,7 @@ namespace Terraria
 				ActiveItem->Position.Y = Y + (Height - ActiveItem->Height >> 1);
 				ActiveItem->IsWet = Collision.WetCollision(ref ActiveItem->Position, ActiveItem->Width, ActiveItem->Height);
 				ActiveItem->Velocity.X = Main.Rand.Next(-30, 31) * 0.1f;
-				if (Type == (int)ID.SOUL_OF_LIGHT || Type == (int)ID.SOUL_OF_NIGHT)
+				if (Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || Type == (int)EntityID.ItemID.SOUL_OF_NIGHT)
 				{
 					ActiveItem->Velocity.Y = Main.Rand.Next(-30, 31) * 0.1f;
 				}
@@ -10318,25 +9666,25 @@ namespace Terraria
 		{
 			if (Ammo <= 0)
 			{
-				return Type == (int)ID.WIRE;
+				return Type == (int)EntityID.ItemID.WIRE;
 			}
 			return true;
 		}
 
 		public bool CanBeAutoPlacedInEmptyAmmoSlot()
 		{
-			if (Type != (int)ID.SAND_BLOCK && Type != (int)ID.FALLEN_STAR && Type != (int)ID.GEL && Type != (int)ID.EBONSAND_BLOCK)
+			if (Type != (int)EntityID.ItemID.SAND_BLOCK && Type != (int)EntityID.ItemID.FALLEN_STAR && Type != (int)EntityID.ItemID.GEL && Type != (int)EntityID.ItemID.EBONSAND_BLOCK)
 			{
-				return Type != (int)ID.PEARLSAND_BLOCK;
+				return Type != (int)EntityID.ItemID.PEARLSAND_BLOCK;
 			}
 			return false;
 		}
 
 		public bool CanBePlacedInCoinSlot()
 		{
-			if (Type >= (int)ID.COPPER_COIN)
+			if (Type >= (int)EntityID.ItemID.COPPER_COIN)
 			{
-				return Type <= (int)ID.PLATINUM_COIN;
+				return Type <= (int)EntityID.ItemID.PLATINUM_COIN;
 			}
 			return false;
 		}

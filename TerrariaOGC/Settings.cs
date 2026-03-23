@@ -63,20 +63,20 @@ namespace Terraria
 			return Get(Subsection, Key).Length > 0;
 		}
 
-		/*internal void Remove(string Subsection, string Key)     // No use here but here it is if I need it
-        {
-            for (int i = 0; i < Keys.Count; i++)
-            {
-                if (Keys[i].Equals(Key) && Subsections[i].Equals(Subsection)) // Remove 'Subsections[i].Equals(subSection)' to remove just from a given key
-                {
-                    Subsections.RemoveAt(i);
-                    Keys.RemoveAt(i);
-                    Values.RemoveAt(i);
-                    Comments.RemoveAt(i);
-                    return;
-                }
-            }
-        }*/
+		/*internal void Remove(string Subsection, string Key)	// No use here but here it is if I need it
+		{
+			for (int i = 0; i < Keys.Count; i++)
+			{
+				if (Keys[i].Equals(Key) && Subsections[i].Equals(Subsection)) // Remove 'Subsections[i].Equals(subSection)' to remove just from a given key
+				{
+					Subsections.RemoveAt(i);
+					Keys.RemoveAt(i);
+					Values.RemoveAt(i);
+					Comments.RemoveAt(i);
+					return;
+				}
+			}
+		}*/
 
 		private void Load()
 		{

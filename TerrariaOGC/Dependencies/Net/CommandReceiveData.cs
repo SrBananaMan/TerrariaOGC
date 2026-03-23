@@ -4,7 +4,7 @@
     {
         internal byte[] data;
         internal long remoteUniqueIdentifier = -1;
-        internal NetworkGamer gamer;
+        // internal NetworkGamer gamer; Unused here
 
         public CommandReceiveData(long remoteUniqueIdentifier, byte[] data)
         {

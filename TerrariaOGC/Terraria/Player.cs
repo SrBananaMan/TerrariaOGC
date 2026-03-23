@@ -8,10 +8,6 @@ using Terraria.Achievements;
 using Terraria.CreateCharacter;
 using Terraria.Leaderboards;
 
-
-#if !USE_ORIGINAL_CODE
-#endif
-
 namespace Terraria
 {
 	public sealed class Player
@@ -58,19 +54,11 @@ namespace Terraria
 
 		public const int MaxNumHairs = 36;
 
-#if VERSION_101
-		public const int MaxNumArmorHead = 52;
+		public const int MaxNumArmorHead = (int)EntityID.ArmorHeadID.NUM_ARMOR_HEAD;
 
-		public const int MaxNumArmorBody = 33;
+		public const int MaxNumArmorBody = (int)EntityID.ArmorBodyID.NUM_ARMOR_BODY;
 
-		public const int MaxNumArmorLegs = 32;
-#else
-		public const int MaxNumArmorHead = 48;
-
-		public const int MaxNumArmorBody = 29;
-
-		public const int MaxNumArmorLegs = 28;
-#endif
+		public const int MaxNumArmorLegs = (int)EntityID.ArmorLegsID.NUM_ARMOR_LEGS;
 
 #if (!VERSION_INITIAL || IS_PATCHED)
 		private const int NetForceUpdateTimer = 96;
@@ -592,7 +580,7 @@ namespace Terraria
 
 		public short npcChatBubble = -1;
 
-		public BitArray itemsFound = new BitArray((int)Item.ID.NUM_TYPES);
+		public BitArray itemsFound = new BitArray((int)EntityID.ItemID.NUM_TYPES);
 
 		public BitArray craftingStationsFound = new BitArray(Main.MaxNumTilenames);
 
@@ -1093,8 +1081,8 @@ namespace Terraria
 					controlUseItem = false;
 					flag = true;
 				}
-				int num = Item.NewItem(XYWH.X, XYWH.Y, 20, 42, Inventory[SelectedItem].Type, 1, DoNotBroadcast: true);
-				if (!flag && Inventory[SelectedItem].Type == (int)Item.ID.TORCH && Inventory[SelectedItem].Stack > 1)
+				int num = Item.NewItem(XYWH.X, XYWH.Y, width, height, Inventory[SelectedItem].Type, 1, DoNotBroadcast: true);
+				if (!flag && Inventory[SelectedItem].Type == (int)EntityID.ItemID.TORCH && Inventory[SelectedItem].Stack > 1)
 				{
 					Inventory[SelectedItem].Stack--;
 				}
@@ -1164,11 +1152,11 @@ namespace Terraria
 			}
 		}
 
-		public void DelBuff(Buff.ID id)
+		public void DelBuff(EntityID.BuffID id)
 		{
 			for (int i = 0; i < MaxNumBuffs; i++)
 			{
-				if ((Buff.ID)buff[i].Type == id)
+				if ((EntityID.BuffID)buff[i].Type == id)
 				{
 					DelBuff(i);
 					break;
@@ -1178,7 +1166,7 @@ namespace Terraria
 
 		public int DelBuff(int b)
 		{
-			if (buff[b].Type == (int)Buff.ID.PET)
+			if (buff[b].Type == (int)EntityID.BuffID.PET)
 			{
 				pet = (sbyte)Pet.NONE;
 			}
@@ -1231,7 +1219,7 @@ namespace Terraria
 				if (Inventory[i].IsPotion)
 				{
 					potionDelay = potionDelayTime;
-					AddBuff((int)Buff.ID.POTION_DELAY, potionDelay);
+					AddBuff((int)EntityID.BuffID.POTION_DELAY, potionDelay);
 				}
 				statLife += Inventory[i].HealLife;
 				statMana += Inventory[i].HealMana;
@@ -1264,135 +1252,135 @@ namespace Terraria
 
 		public void ApplyProjectileBuffPvP(int type)
 		{
-			switch (type)
+			switch ((EntityID.ProjectileID)type)
 			{
-				case 2:
+				case EntityID.ProjectileID.FIRE_ARROW:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case 15:
+				case EntityID.ProjectileID.BALL_OF_FIRE:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 300, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 300, quiet: false);
 					}
 					break;
-				case 19:
+				case EntityID.ProjectileID.FLAMARANG:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case 33:
+				case EntityID.ProjectileID.THORN_CHAKRAM:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 420, quiet: false);
+						AddBuff((int)EntityID.BuffID.POISONED, 420, quiet: false);
 					}
 					break;
-				case 34:
+				case EntityID.ProjectileID.FLAMELASH:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 240, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 240, quiet: false);
 					}
 					break;
-				case 35:
+				case EntityID.ProjectileID.SUNFURY:
 					if (Main.Rand.Next(4) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case 54:
+				case EntityID.ProjectileID.POISONED_KNIFE:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 600, quiet: false);
+						AddBuff((int)EntityID.BuffID.POISONED, 600, quiet: false);
 					}
 					break;
-				case 63:
+				case EntityID.ProjectileID.THE_DAO_OF_POW:
 					if (Main.Rand.Next(3) != 0)
 					{
-						AddBuff((int)Buff.ID.CONFUSED, 120);
+						AddBuff((int)EntityID.BuffID.CONFUSED, 120);
 					}
 					break;
-				case 85:
-					AddBuff((int)Buff.ID.ON_FIRE, 1200, quiet: false);
+				case EntityID.ProjectileID.FLAMES:
+					AddBuff((int)EntityID.BuffID.ON_FIRE, 1200, quiet: false);
 					break;
-				case 95:
-				case 103:
-				case 104:
-					AddBuff((int)Buff.ID.ON_FIRE_2, 420);
+				case EntityID.ProjectileID.CURSED_FLAME_FRIENDLY:
+				case EntityID.ProjectileID.CURSED_ARROW:
+				case EntityID.ProjectileID.CURSED_BULLET:
+					AddBuff((int)EntityID.BuffID.ON_FIRE_2, 420);
 					break;
 			}
 		}
 
 		public void ApplyProjectileBuff(int type)
 		{
-			switch (type)
+			switch ((EntityID.ProjectileID)type)
 			{
-				case 55:
+				case EntityID.ProjectileID.STINGER:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 600);
+						AddBuff((int)EntityID.BuffID.POISONED, 600);
 					}
 					break;
-				case 44:
+				case EntityID.ProjectileID.DEMON_SICKLE:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.BLIND, 900);
+						AddBuff((int)EntityID.BuffID.BLIND, 900);
 					}
 					break;
-				case 82:
+				case EntityID.ProjectileID.FLAMING_ARROW:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 420);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 420);
 					}
 					break;
-				case 96:
-				case 101:
+				case EntityID.ProjectileID.CURSED_FLAME_HOSTILE:
+				case EntityID.ProjectileID.EYE_FIRE:
 					if (Main.Rand.Next(3) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE_2, 480);
+						AddBuff((int)EntityID.BuffID.ON_FIRE_2, 480);
 					}
 					break;
-				case 98:
-					AddBuff((int)Buff.ID.POISONED, 600);
+				case EntityID.ProjectileID.POISON_DART:
+					AddBuff((int)EntityID.BuffID.POISONED, 600);
 					break;
 			}
 		}
 
 		public void ApplyWeaponBuffPvP(int type)
 		{
-			switch (type)
+			switch ((EntityID.ItemID)type)
 			{
-				case (int)Item.ID.FIERY_GREATSWORD:
+				case EntityID.ItemID.FIERY_GREATSWORD:
 					if (Main.Rand.Next(2) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case (int)Item.ID.MOLTEN_PICKAXE:
+				case EntityID.ItemID.MOLTEN_PICKAXE:
 					if (Main.Rand.Next(10) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case (int)Item.ID.BLADE_OF_GRASS:
-				case (int)Item.ID.TONBOGIRI:
+				case EntityID.ItemID.BLADE_OF_GRASS:
+				case EntityID.ItemID.TONBOGIRI:
 					if (Main.Rand.Next(4) == 0)
 					{
-						AddBuff((int)Buff.ID.POISONED, 420, quiet: false);
+						AddBuff((int)EntityID.BuffID.POISONED, 420, quiet: false);
 					}
 					break;
-				case (int)Item.ID.MOLTEN_HAMAXE:
+				case EntityID.ItemID.MOLTEN_HAMAXE:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 180, quiet: false);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 180, quiet: false);
 					}
 					break;
-				case (int)Item.ID.TIZONA:
+				case EntityID.ItemID.TIZONA:
 					if (Main.Rand.Next(5) == 0)
 					{
-						AddBuff((int)Buff.ID.BLEED, 600, quiet: false);
+						AddBuff((int)EntityID.BuffID.BLEED, 600, quiet: false);
 					}
 					break;
 			}
@@ -1650,10 +1638,10 @@ namespace Terraria
 
 		public bool CanInteractWithNPC()
 		{
-			switch (Main.TileSet[tileInteractX, tileInteractY].Type)
+			switch ((EntityID.TileID)Main.TileSet[tileInteractX, tileInteractY].Type)
 			{
-				case 10:
-				case 11:
+				case EntityID.TileID.DOOR_CLOSED:
+				case EntityID.TileID.DOOR_OPEN:
 					return false;
 				default:
 					tileInteractX = 0;
@@ -2128,7 +2116,7 @@ namespace Terraria
 					{
 						continue;
 					}
-					if (isLocal() && buff[j].Type != (int)Buff.ID.WEREWOLF)
+					if (isLocal() && buff[j].Type != (int)EntityID.BuffID.WEREWOLF)
 					{
 						buff[j].Time--;
 						if (!buff[j].IsDebuff() && ++num17 == 5)
@@ -2136,70 +2124,70 @@ namespace Terraria
 							ui.SetTriggerState(Trigger.Has5Buffs);
 						}
 					}
-					switch ((Buff.ID)buff[j].Type)
+					switch ((EntityID.BuffID)buff[j].Type)
 					{
-						case Buff.ID.LAVA_IMMUNE:
+						case EntityID.BuffID.LAVA_IMMUNE:
 							lavaImmune = true;
 							fireWalk = true;
 							break;
-						case Buff.ID.LIFE_REGEN:
+						case EntityID.BuffID.LIFE_REGEN:
 							lifeRegen += 2;
 							break;
-						case Buff.ID.HASTE:
+						case EntityID.BuffID.HASTE:
 							moveSpeed += 0.25f;
 							break;
-						case Buff.ID.GILLS:
+						case EntityID.BuffID.GILLS:
 							gills = true;
 							break;
-						case Buff.ID.IRONSKIN:
+						case EntityID.BuffID.IRONSKIN:
 							StatDefense += 8;
 							break;
-						case Buff.ID.MANA_REGEN:
+						case EntityID.BuffID.MANA_REGEN:
 							manaRegenBuff = true;
 							break;
-						case Buff.ID.MAGIC_POWER:
+						case EntityID.BuffID.MAGIC_POWER:
 							magicDamage += 0.2f;
 							break;
-						case Buff.ID.SLOWFALL:
+						case EntityID.BuffID.SLOWFALL:
 							slowFall = true;
 							break;
-						case Buff.ID.FIND_TREASURE:
+						case EntityID.BuffID.FIND_TREASURE:
 							findTreasure = true;
 							break;
-						case Buff.ID.INVISIBLE:
+						case EntityID.BuffID.INVISIBLE:
 							invis = true;
 							break;
-						case Buff.ID.SHINE:
+						case EntityID.BuffID.SHINE:
 							Lighting.AddLight(XYWH.X + (width / 2) >> 4, XYWH.Y + (height / 2) >> 4, new Vector3(0.8f, 0.95f, 1f));
 							break;
-						case Buff.ID.NIGHTVISION:
+						case EntityID.BuffID.NIGHTVISION:
 							NightVision = true;
 							break;
-						case Buff.ID.ENEMY_SPAWNS:
+						case EntityID.BuffID.ENEMY_SPAWNS:
 							enemySpawns = true;
 							break;
-						case Buff.ID.THORNS:
+						case EntityID.BuffID.THORNS:
 							thorns = true;
 							break;
-						case Buff.ID.WATER_WALK:
+						case EntityID.BuffID.WATER_WALK:
 							waterWalk = true;
 							break;
-						case Buff.ID.RANGED_DAMAGE:
+						case EntityID.BuffID.RANGED_DAMAGE:
 							archery = true;
 							break;
-						case Buff.ID.DETECT_CREATURE:
+						case EntityID.BuffID.DETECT_CREATURE:
 							detectCreature = true;
 							break;
-						case Buff.ID.GRAVITY_CONTROL:
+						case EntityID.BuffID.GRAVITY_CONTROL:
 							gravControl = true;
 							break;
-						case Buff.ID.LIGHT_ORB:
+						case EntityID.BuffID.LIGHT_ORB:
 							{
 								lightOrb = true;
 								bool flag5 = true;
 								for (int k = 0; k < Projectile.MaxNumProjs; k++)
 								{
-									if (Main.ProjectileSet[k].type == 18 && Main.ProjectileSet[k].active != 0 && Main.ProjectileSet[k].owner == WhoAmI)
+									if (Main.ProjectileSet[k].type == (byte)EntityID.ProjectileID.SHADOW_ORB && Main.ProjectileSet[k].active != 0 && Main.ProjectileSet[k].owner == WhoAmI)
 									{
 										flag5 = false;
 										break;
@@ -2211,7 +2199,7 @@ namespace Terraria
 								}
 								break;
 							}
-						case Buff.ID.POISONED:
+						case EntityID.BuffID.POISONED:
 							poisoned = true;
 							if (Main.Rand.Next(52) == 0)
 							{
@@ -2225,30 +2213,30 @@ namespace Terraria
 							buffR *= 0.65f;
 							buffB *= 0.75f;
 							break;
-						case Buff.ID.POTION_DELAY:
+						case EntityID.BuffID.POTION_DELAY:
 							potionDelay = buff[j].Time;
 							break;
-						case Buff.ID.BLIND:
+						case EntityID.BuffID.BLIND:
 							blind = true;
 							buffG *= 0.65f;
 							buffR *= 0.7f;
 							break;
-						case Buff.ID.NO_ITEMS:
+						case EntityID.BuffID.NO_ITEMS:
 							noItems = true;
 							buffG *= 0.8f;
 							buffR *= 0.65f;
 							break;
-						case Buff.ID.ON_FIRE:
+						case EntityID.BuffID.ON_FIRE:
 							onFire = true;
 							FireEffect(6);
 							break;
-						case Buff.ID.DRUNK:
+						case EntityID.BuffID.DRUNK:
 							StatDefense -= 4;
 							meleeCrit += 2;
 							meleeDamage += 0.1f;
 							meleeSpeed += 0.1f;
 							break;
-						case Buff.ID.WELL_FED:
+						case EntityID.BuffID.WELL_FED:
 							StatDefense++;
 							meleeCrit++;
 							meleeDamage += 0.05f;
@@ -2259,13 +2247,13 @@ namespace Terraria
 							magicDamage += 0.05f;
 							moveSpeed += 0.1f;
 							break;
-						case Buff.ID.FAIRY:
+						case EntityID.BuffID.FAIRY:
 							{
 								fairy = true;
 								bool flag6 = true;
 								for (int l = 0; l < Projectile.MaxNumProjs; l++)
 								{
-									if (Main.ProjectileSet[l].active != 0 && Main.ProjectileSet[l].owner == WhoAmI && (Main.ProjectileSet[l].type == 72 || Main.ProjectileSet[l].type == 86 || Main.ProjectileSet[l].type == 87))
+									if (Main.ProjectileSet[l].active != 0 && Main.ProjectileSet[l].owner == WhoAmI && (Main.ProjectileSet[l].type == (byte)EntityID.ProjectileID.BLUE_FAIRY || Main.ProjectileSet[l].type == (byte)EntityID.ProjectileID.PINK_FAIRY || Main.ProjectileSet[l].type == (byte)EntityID.ProjectileID.GREEN_FAIRY))
 									{
 										flag6 = false;
 										break;
@@ -2277,20 +2265,20 @@ namespace Terraria
 									switch (num18)
 									{
 										case 0:
-											num18 = 72;
+											num18 = (byte)EntityID.ProjectileID.BLUE_FAIRY;
 											break;
 										case 1:
-											num18 = 86;
+											num18 = (byte)EntityID.ProjectileID.PINK_FAIRY;
 											break;
 										case 2:
-											num18 = 87;
+											num18 = (byte)EntityID.ProjectileID.GREEN_FAIRY;
 											break;
 									}
 									Projectile.NewProjectile(Position.X + (width / 2), Position.Y + (height / 2), 0f, 0f, num18, 0, 0f, WhoAmI);
 								}
 								break;
 							}
-						case Buff.ID.WEREWOLF:
+						case EntityID.BuffID.WEREWOLF:
 							if (wolfAcc && !merman && !Main.GameTime.DayTime && Main.GameTime.MoonPhase == 0)
 							{
 								wereWolf = true;
@@ -2305,13 +2293,13 @@ namespace Terraria
 								j = DelBuff(j);
 							}
 							break;
-						case Buff.ID.CLARAVOYANCE:
+						case EntityID.BuffID.CLARAVOYANCE:
 							magicCrit += 2;
 							magicDamage += 0.05f;
 							statManaMax2 += 20;
 							manaCost -= 0.02f;
 							break;
-						case Buff.ID.BLEED:
+						case EntityID.BuffID.BLEED:
 							bleed = true;
 							if (!IsDead && Main.Rand.Next(32) == 0)
 							{
@@ -2326,26 +2314,26 @@ namespace Terraria
 							buffG *= 0.9f;
 							buffB *= 0.9f;
 							break;
-						case Buff.ID.CONFUSED:
+						case EntityID.BuffID.CONFUSED:
 							confused = true;
 							break;
-						case Buff.ID.SLOW:
+						case EntityID.BuffID.SLOW:
 							slow = true;
 							break;
-						case Buff.ID.WEAK:
+						case EntityID.BuffID.WEAK:
 							meleeDamage -= 0.051f;
 							meleeSpeed -= 0.051f;
 							StatDefense -= 4;
 							moveSpeed -= 0.1f;
 							break;
-						case Buff.ID.SILENCE:
+						case EntityID.BuffID.SILENCE:
 							silence = true;
 							break;
-						case Buff.ID.BROKEN_ARMOR:
+						case EntityID.BuffID.BROKEN_ARMOR:
 							brokenArmor = true;
 							break;
-						case Buff.ID.HORRIFIED:
-							if (NPC.WoF >= 0 && Main.NPCSet[NPC.WoF].Type == (int)NPC.ID.WALL_OF_FLESH)
+						case EntityID.BuffID.HORRIFIED:
+							if (NPC.WoF >= 0 && Main.NPCSet[NPC.WoF].Type == (int)EntityID.NPCID.WALL_OF_FLESH)
 							{
 								IsHorrified = true;
 								buff[j].Time = 10;
@@ -2355,15 +2343,15 @@ namespace Terraria
 								j = DelBuff(j);
 							}
 							break;
-						case Buff.ID.TONGUED:
+						case EntityID.BuffID.TONGUED:
 							buff[j].Time = 10;
 							tongued = true;
 							break;
-						case Buff.ID.ON_FIRE_2:
+						case EntityID.BuffID.ON_FIRE_2:
 							onFire2 = true;
 							FireEffect(75);
 							break;
-						case Buff.ID.PET:
+						case EntityID.BuffID.PET:
 							if (pet >= 0)
 							{
 								buff[j].Time = 18000;
@@ -2382,7 +2370,7 @@ namespace Terraria
 					wings = 0;
 					merman = true;
 					accFlipper = true;
-					AddBuff((int)Buff.ID.MERFOLK, 2);
+					AddBuff((int)EntityID.BuffID.MERFOLK, 2);
 				}
 				else
 				{
@@ -2391,7 +2379,7 @@ namespace Terraria
 				accMerman = false;
 				if (wolfAcc && !merman && !wereWolf && !Main.GameTime.DayTime && Main.GameTime.MoonPhase == 0)
 				{
-					AddBuff((int)Buff.ID.WEREWOLF, 60);
+					AddBuff((int)EntityID.BuffID.WEREWOLF, 60);
 				}
 				wolfAcc = false;
 				if (isLocal())
@@ -2409,242 +2397,242 @@ namespace Terraria
 				{
 					StatDefense += armor[n].Defense;
 					lifeRegen += armor[n].LifeRegen;
-					switch ((Item.ID)armor[n].Type)
+					switch ((EntityID.ItemID)armor[n].Type)
 					{
-						case Item.ID.METEOR_HELMET:
-						case Item.ID.METEOR_SUIT:
-						case Item.ID.METEOR_LEGGINGS:
+						case EntityID.ItemID.METEOR_HELMET:
+						case EntityID.ItemID.METEOR_SUIT:
+						case EntityID.ItemID.METEOR_LEGGINGS:
 							magicDamage += 0.05f;
 							break;
-						case Item.ID.NECRO_HELMET:
-						case Item.ID.NECRO_BREASTPLATE:
-						case Item.ID.NECRO_GREAVES:
+						case EntityID.ItemID.NECRO_HELMET:
+						case EntityID.ItemID.NECRO_BREASTPLATE:
+						case EntityID.ItemID.NECRO_GREAVES:
 							rangedDamage += 0.05f;
 							break;
-						case Item.ID.WIZARD_HAT:
+						case EntityID.ItemID.WIZARD_HAT:
 							magicDamage += 0.15f;
 							break;
-						case Item.ID.BAND_OF_STARPOWER:
+						case EntityID.ItemID.BAND_OF_STARPOWER:
 							statManaMax2 += 20;
 							break;
-						case Item.ID.JUNGLE_HAT:
-						case Item.ID.JUNGLE_SHIRT:
-						case Item.ID.JUNGLE_PANTS:
+						case EntityID.ItemID.JUNGLE_HAT:
+						case EntityID.ItemID.JUNGLE_SHIRT:
+						case EntityID.ItemID.JUNGLE_PANTS:
 							magicCrit += 3;
 							statManaMax2 += 20;
 							break;
-						case Item.ID.SHADOW_GREAVES:
-						case Item.ID.SHADOW_SCALEMAIL:
-						case Item.ID.SHADOW_HELMET:
+						case EntityID.ItemID.SHADOW_GREAVES:
+						case EntityID.ItemID.SHADOW_SCALEMAIL:
+						case EntityID.ItemID.SHADOW_HELMET:
 							meleeSpeed += 0.07f;
 							break;
-						case Item.ID.COBALT_HAT:
+						case EntityID.ItemID.COBALT_HAT:
 							magicCrit += 9;
 							statManaMax2 += 40;
 							break;
-						case Item.ID.COBALT_HELMET:
+						case EntityID.ItemID.COBALT_HELMET:
 							moveSpeed += 0.07f;
 							meleeSpeed += 0.12f;
 							break;
-						case Item.ID.COBALT_MASK:
+						case EntityID.ItemID.COBALT_MASK:
 							rangedDamage += 0.1f;
 							rangedCrit += 6;
 							break;
-						case Item.ID.COBALT_BREASTPLATE:
+						case EntityID.ItemID.COBALT_BREASTPLATE:
 							magicCrit += 3;
 							meleeCrit += 3;
 							rangedCrit += 3;
 							break;
-						case Item.ID.COBALT_LEGGINGS:
+						case EntityID.ItemID.COBALT_LEGGINGS:
 							moveSpeed += 0.1f;
 							break;
-						case Item.ID.MYTHRIL_HOOD:
+						case EntityID.ItemID.MYTHRIL_HOOD:
 							magicDamage += 0.15f;
 							statManaMax2 += 60;
 							break;
-						case Item.ID.MYTHRIL_HELMET:
+						case EntityID.ItemID.MYTHRIL_HELMET:
 							meleeCrit += 5;
 							meleeDamage += 0.1f;
 							break;
-						case Item.ID.MYTHRIL_HAT:
+						case EntityID.ItemID.MYTHRIL_HAT:
 							rangedDamage += 0.12f;
 							rangedCrit += 7;
 							break;
-						case Item.ID.MYTHRIL_CHAINMAIL:
+						case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 							rangedDamage += 0.05f;
 							meleeDamage += 0.05f;
 							magicDamage += 0.05f;
 							break;
-						case Item.ID.MYTHRIL_GREAVES:
+						case EntityID.ItemID.MYTHRIL_GREAVES:
 							magicCrit += 3;
 							meleeCrit += 3;
 							rangedCrit += 3;
 							break;
-						case Item.ID.DIVING_HELMET:
+						case EntityID.ItemID.DIVING_HELMET:
 							accDivingHelm = true;
 							break;
-						case Item.ID.ADAMANTITE_HEADGEAR:
+						case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 							magicDamage += 0.11f;
 							magicCrit += 11;
 							statManaMax2 += 80;
 							break;
-						case Item.ID.ADAMANTITE_HELMET:
+						case EntityID.ItemID.ADAMANTITE_HELMET:
 							meleeCrit += 7;
 							meleeDamage += 0.14f;
 							break;
-						case Item.ID.ADAMANTITE_MASK:
+						case EntityID.ItemID.ADAMANTITE_MASK:
 							rangedDamage += 0.14f;
 							rangedCrit += 8;
 							break;
-						case Item.ID.ADAMANTITE_BREASTPLATE:
+						case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 							rangedDamage += 0.06f;
 							meleeDamage += 0.06f;
 							magicDamage += 0.06f;
 							break;
-						case Item.ID.ADAMANTITE_LEGGINGS:
+						case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 							magicCrit += 4;
 							meleeCrit += 4;
 							rangedCrit += 4;
 							moveSpeed += 0.05f;
 							break;
-						case Item.ID.HALLOWED_PLATE_MAIL:
+						case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 							magicCrit += 7;
 							meleeCrit += 7;
 							rangedCrit += 7;
 							break;
-						case Item.ID.HALLOWED_GREAVES:
+						case EntityID.ItemID.HALLOWED_GREAVES:
 							rangedDamage += 0.07f;
 							meleeDamage += 0.07f;
 							magicDamage += 0.07f;
 							moveSpeed += 0.08f;
 							break;
-						case Item.ID.HALLOWED_HELMET:
+						case EntityID.ItemID.HALLOWED_HELMET:
 							rangedDamage += 0.15f;
 							rangedCrit += 8;
 							break;
-						case Item.ID.HALLOWED_HEADGEAR:
+						case EntityID.ItemID.HALLOWED_HEADGEAR:
 							magicDamage += 0.12f;
 							magicCrit += 12;
 							statManaMax2 += 100;
 							break;
-						case Item.ID.HALLOWED_MASK:
+						case EntityID.ItemID.HALLOWED_MASK:
 							meleeCrit += 10;
 							meleeDamage += 0.1f;
 							meleeSpeed += 0.1f;
 							break;
-						case Item.ID.DRAGON_MASK:
+						case EntityID.ItemID.DRAGON_MASK:
 							meleeCrit += 15;
 							meleeDamage += 0.15f;
 							meleeSpeed += 0.15f;
 							break;
-						case Item.ID.DRAGON_BREASTPLATE:
+						case EntityID.ItemID.DRAGON_BREASTPLATE:
 							meleeCrit += 5;
 							meleeDamage += 0.05f;
 							break;
-						case Item.ID.DRAGON_GREAVES:
+						case EntityID.ItemID.DRAGON_GREAVES:
 							moveSpeed += 0.12f;
 							meleeSpeed += 0.02f;
 							break;
-						case Item.ID.TITAN_HELMET:
+						case EntityID.ItemID.TITAN_HELMET:
 							rangedDamage += 0.15f;
 							rangedCrit += 10;
 							freeAmmoChance += 5;
 							break;
-						case Item.ID.TITAN_MAIL:
+						case EntityID.ItemID.TITAN_MAIL:
 							rangedDamage += 0.05f;
 							rangedCrit += 10;
 							freeAmmoChance += 5;
 							break;
-						case Item.ID.TITAN_LEGGINGS:
+						case EntityID.ItemID.TITAN_LEGGINGS:
 							rangedDamage += 0.1f;
 							moveSpeed += 0.1f;
 							freeAmmoChance += 10;
 							break;
-						case Item.ID.SPECTRAL_HEADGEAR:
+						case EntityID.ItemID.SPECTRAL_HEADGEAR:
 							magicDamage += 0.15f;
 							magicCrit += 15;
 							statManaMax2 += 120;
 							break;
-						case Item.ID.SPECTRAL_ARMOR:
+						case EntityID.ItemID.SPECTRAL_ARMOR:
 							magicDamage += 0.05f;
 							magicCrit += 10;
 							manaCost -= 0.1f;
 							break;
-						case Item.ID.SPECTRAL_SUBLIGAR:
+						case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 							magicDamage += 0.1f;
 							moveSpeed += 0.1f;
 							statManaMax2 += 30;
 							break;
 					}
-					switch (armor[n].PrefixType)
+					switch ((EntityID.PrefixID)armor[n].PrefixType)
 					{
-						case 62:
+						case EntityID.PrefixID.HARD:
 							StatDefense++;
 							break;
-						case 63:
+						case EntityID.PrefixID.GUARDING:
 							StatDefense += 2;
 							break;
-						case 64:
+						case EntityID.PrefixID.ARMORED:
 							StatDefense += 3;
 							break;
-						case 65:
+						case EntityID.PrefixID.WARDING:
 							StatDefense += 4;
 							break;
-						case 66:
+						case EntityID.PrefixID.ARCANE:
 							statManaMax2 += 20;
 							break;
-						case 67:
+						case EntityID.PrefixID.PRECISE:
 							meleeCrit++;
 							rangedCrit++;
 							magicCrit++;
 							break;
-						case 68:
+						case EntityID.PrefixID.LUCKY:
 							meleeCrit += 2;
 							rangedCrit += 2;
 							magicCrit += 2;
 							break;
-						case 69:
+						case EntityID.PrefixID.JAGGED:
 							meleeDamage += 0.01f;
 							rangedDamage += 0.01f;
 							magicDamage += 0.01f;
 							break;
-						case 70:
+						case EntityID.PrefixID.SPIKED:
 							meleeDamage += 0.02f;
 							rangedDamage += 0.02f;
 							magicDamage += 0.02f;
 							break;
-						case 71:
+						case EntityID.PrefixID.ANGRY:
 							meleeDamage += 0.03f;
 							rangedDamage += 0.03f;
 							magicDamage += 0.03f;
 							break;
-						case 72:
+						case EntityID.PrefixID.MENACING:
 							meleeDamage += 0.04f;
 							rangedDamage += 0.04f;
 							magicDamage += 0.04f;
 							break;
-						case 73:
+						case EntityID.PrefixID.BRISK:
 							moveSpeed += 0.01f;
 							break;
-						case 74:
+						case EntityID.PrefixID.FLEETING:
 							moveSpeed += 0.02f;
 							break;
-						case 75:
+						case EntityID.PrefixID.HASTY2:
 							moveSpeed += 0.03f;
 							break;
-						case 76:
+						case EntityID.PrefixID.QUICK2:
 							moveSpeed += 0.04f;
 							break;
-						case 77:
+						case EntityID.PrefixID.WILD:
 							meleeSpeed += 0.01f;
 							break;
-						case 78:
+						case EntityID.PrefixID.RASH:
 							meleeSpeed += 0.02f;
 							break;
-						case 79:
+						case EntityID.PrefixID.INTREPID:
 							meleeSpeed += 0.03f;
 							break;
-						case 80:
+						case EntityID.PrefixID.VIOLENT:
 							meleeSpeed += 0.04f;
 							break;
 					}
@@ -2654,175 +2642,175 @@ namespace Terraria
 				legs = armor[2].LegSlot;
 				for (int num19 = 3; num19 < MaxNumArmor - 3; num19++)
 				{
-					switch ((Item.ID)armor[num19].Type)
+					switch ((EntityID.ItemID)armor[num19].Type)
 					{
-						case Item.ID.COPPER_WATCH:
+						case EntityID.ItemID.COPPER_WATCH:
 							if (accWatch < 1)
 							{
 								accWatch = 1;
 							}
 							break;
-						case Item.ID.SILVER_WATCH:
+						case EntityID.ItemID.SILVER_WATCH:
 							if (accWatch < 2)
 							{
 								accWatch = 2;
 							}
 							break;
-						case Item.ID.GOLD_WATCH:
+						case EntityID.ItemID.GOLD_WATCH:
 							accWatch = 3;
 							break;
-						case Item.ID.DEPTH_METER:
+						case EntityID.ItemID.DEPTH_METER:
 							accDepthMeter = true;
 							break;
-						case Item.ID.CLOUD_IN_A_BOTTLE:
+						case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 							doubleJump = true;
 							break;
-						case Item.ID.HERMES_BOOTS:
+						case EntityID.ItemID.HERMES_BOOTS:
 							num7 = 6f;
 							break;
-						case Item.ID.ROCKET_BOOTS:
+						case EntityID.ItemID.ROCKET_BOOTS:
 							rocketBoots = 1;
 							break;
-						case Item.ID.COBALT_SHIELD:
+						case EntityID.ItemID.COBALT_SHIELD:
 							noKnockback = true;
 							break;
-						case Item.ID.LUCKY_HORSESHOE:
+						case EntityID.ItemID.LUCKY_HORSESHOE:
 							noFallDmg = true;
 							break;
-						case Item.ID.SHINY_RED_BALLOON:
+						case EntityID.ItemID.SHINY_RED_BALLOON:
 							jumpBoost = true;
 							break;
-						case Item.ID.FLIPPER:
+						case EntityID.ItemID.FLIPPER:
 							accFlipper = true;
 							break;
-						case Item.ID.OBSIDIAN_SKULL:
+						case EntityID.ItemID.OBSIDIAN_SKULL:
 							fireWalk = true;
 							break;
-						case Item.ID.FERAL_CLAWS:
+						case EntityID.ItemID.FERAL_CLAWS:
 							meleeSpeed += 0.12f;
 							break;
-						case Item.ID.ANKLET_OF_THE_WIND:
+						case EntityID.ItemID.ANKLET_OF_THE_WIND:
 							moveSpeed += 0.1f;
 							break;
-						case Item.ID.NATURES_GIFT:
+						case EntityID.ItemID.NATURES_GIFT:
 							manaCost -= 0.06f;
 							break;
-						case Item.ID.GUIDE_VOODOO_DOLL:
+						case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 							killGuide = true;
 							break;
-						case Item.ID.AGLET:
+						case EntityID.ItemID.AGLET:
 							moveSpeed += 0.1f;
 							break;
-						case Item.ID.COMPASS:
+						case EntityID.ItemID.COMPASS:
 							accCompass = true;
 							break;
-						case Item.ID.DIVING_GEAR:
+						case EntityID.ItemID.DIVING_GEAR:
 							accFlipper = true;
 							accDivingHelm = true;
 							break;
-						case Item.ID.GPS:
+						case EntityID.ItemID.GPS:
 							accWatch = 3;
 							accDepthMeter = true;
 							accCompass = true;
 							break;
-						case Item.ID.OBSIDIAN_HORSESHOE:
+						case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 							noFallDmg = true;
 							fireWalk = true;
 							break;
-						case Item.ID.OBSIDIAN_SHIELD:
+						case EntityID.ItemID.OBSIDIAN_SHIELD:
 							noKnockback = true;
 							fireWalk = true;
 							break;
-						case Item.ID.CLOUD_IN_A_BALLOON:
+						case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 							jumpBoost = true;
 							doubleJump = true;
 							break;
-						case Item.ID.SPECTRE_BOOTS:
+						case EntityID.ItemID.SPECTRE_BOOTS:
 							num7 = 6f;
 							rocketBoots = 2;
 							break;
-						case Item.ID.TOOLBELT:
+						case EntityID.ItemID.TOOLBELT:
 							blockRange = 1;
 							break;
-						case Item.ID.MOON_CHARM:
+						case EntityID.ItemID.MOON_CHARM:
 							wolfAcc = true;
 							break;
-						case Item.ID.RULER:
+						case EntityID.ItemID.RULER:
 							rulerAcc = true;
 							break;
-						case Item.ID.SORCERER_EMBLEM:
+						case EntityID.ItemID.SORCERER_EMBLEM:
 							magicDamage += 0.15f;
 							break;
-						case Item.ID.WARRIOR_EMBLEM:
+						case EntityID.ItemID.WARRIOR_EMBLEM:
 							meleeDamage += 0.15f;
 							break;
-						case Item.ID.RANGER_EMBLEM:
+						case EntityID.ItemID.RANGER_EMBLEM:
 							rangedDamage += 0.15f;
 							break;
-						case Item.ID.DEMON_WINGS:
+						case EntityID.ItemID.DEMON_WINGS:
 							wings = 1;
 							break;
-						case Item.ID.ANGEL_WINGS:
+						case EntityID.ItemID.ANGEL_WINGS:
 							wings = 2;
 							break;
 #if !VERSION_INITIAL
-						case Item.ID.SPARKLY_WINGS:
+						case EntityID.ItemID.SPARKLY_WINGS:
 							wings = 3;
 							break;
 #endif
-						case Item.ID.NEPTUNES_SHELL:
+						case EntityID.ItemID.NEPTUNES_SHELL:
 							accMerman = true;
 							break;
-						case Item.ID.STAR_CLOAK:
+						case EntityID.ItemID.STAR_CLOAK:
 							starCloak = true;
 							break;
-						case Item.ID.PHILOSOPHERS_STONE:
+						case EntityID.ItemID.PHILOSOPHERS_STONE:
 							potionDelayTime = (ushort)Item.PotionDelayPhilosopher;
 							break;
-						case Item.ID.TITAN_GLOVE:
+						case EntityID.ItemID.TITAN_GLOVE:
 							kbGlove = true;
 							break;
-						case Item.ID.CROSS_NECKLACE:
+						case EntityID.ItemID.CROSS_NECKLACE:
 							longInvince = true;
 							break;
-						case Item.ID.MANA_FLOWER:
+						case EntityID.ItemID.MANA_FLOWER:
 							manaFlower = true;
 							manaCost -= 0.08f;
 							break;
-						case Item.ID.MUSIC_BOX:
+						case EntityID.ItemID.MUSIC_BOX:
 							if (isLocal() && Main.Rand.Next(18000) == 0 && Main.CurrentMusic != Main.Music.NUM_SONGS)
 							{
 								armor[num19].SetDefaults((int)Main.SongToMusicBox[(uint)Main.CurrentMusic]);
 							}
 							break;
-						case Item.ID.MUSIC_BOX_OVERWORLD_DAY:
-						case Item.ID.MUSIC_BOX_EERIE:
-						case Item.ID.MUSIC_BOX_NIGHT:
-						case Item.ID.MUSIC_BOX_TITLE:
-						case Item.ID.MUSIC_BOX_UNDERGROUND:
-						case Item.ID.MUSIC_BOX_BOSS1:
-						case Item.ID.MUSIC_BOX_JUNGLE:
-						case Item.ID.MUSIC_BOX_CORRUPTION:
-						case Item.ID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
-						case Item.ID.MUSIC_BOX_THE_HALLOW:
-						case Item.ID.MUSIC_BOX_BOSS2:
-						case Item.ID.MUSIC_BOX_UNDERGROUND_HALLOW:
-						case Item.ID.MUSIC_BOX_BOSS3:
-						case Item.ID.MUSIC_BOX_DESERT:
-						case Item.ID.MUSIC_BOX_SPACE:
-						case Item.ID.MUSIC_BOX_TUTORIAL:
-						case Item.ID.MUSIC_BOX_BOSS4:
-						case Item.ID.MUSIC_BOX_OCEAN:
-						case Item.ID.MUSIC_BOX_SNOW:
+						case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
+						case EntityID.ItemID.MUSIC_BOX_EERIE:
+						case EntityID.ItemID.MUSIC_BOX_NIGHT:
+						case EntityID.ItemID.MUSIC_BOX_TITLE:
+						case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
+						case EntityID.ItemID.MUSIC_BOX_BOSS1:
+						case EntityID.ItemID.MUSIC_BOX_JUNGLE:
+						case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
+						case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
+						case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
+						case EntityID.ItemID.MUSIC_BOX_BOSS2:
+						case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
+						case EntityID.ItemID.MUSIC_BOX_BOSS3:
+						case EntityID.ItemID.MUSIC_BOX_DESERT:
+						case EntityID.ItemID.MUSIC_BOX_SPACE:
+						case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
+						case EntityID.ItemID.MUSIC_BOX_BOSS4:
+						case EntityID.ItemID.MUSIC_BOX_OCEAN:
+						case EntityID.ItemID.MUSIC_BOX_SNOW:
 							if (isLocal() && Main.MusicBox < 0)
 							{
-								if (armor[num19].Type < (int)Item.ID.MUSIC_BOX_DESERT)
+								if (armor[num19].Type < (int)EntityID.ItemID.MUSIC_BOX_DESERT)
 								{
-									Main.MusicBox = armor[num19].Type - (int)Item.ID.MUSIC_BOX_OVERWORLD_DAY;
+									Main.MusicBox = armor[num19].Type - (int)EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY;
 								}
 								else
 								{
-									Main.MusicBox = armor[num19].Type - (int)Item.ID.TIZONA;
+									Main.MusicBox = armor[num19].Type - (int)EntityID.ItemID.TIZONA;
 								}
 							}
 							break;
@@ -2846,145 +2834,145 @@ namespace Terraria
 				}
 #endif
 
-				Lighting.AddLight(XYWH.X + 10 + (direction << 3) >> 4, XYWH.Y + 2 >> 4, (head == 11) ? new Vector3(0.92f, 0.8f, 0.75f) : new Vector3(0.2f, 0.2f, 0.2f));
+				Lighting.AddLight(XYWH.X + 10 + (direction << 3) >> 4, XYWH.Y + 2 >> 4, (head == (short)EntityID.ArmorHeadID.HEAD_MINING_HELMET) ? new Vector3(0.92f, 0.8f, 0.75f) : new Vector3(0.2f, 0.2f, 0.2f));
 				// Another lesser known Old-Gen console addition is a very weak shine potion effect being permanently applied to the player, which the above line is responsible for.
 				// Why? No clue, although in the PC version, where the user is often close enough to the screen, no light in a large area also obscures the player.
 				// As the console version is meant to be played from a further distance, I'm guessing it was a design choice so you could still locate the player, even while in complete darkness.
 				// Oddly enough, this did carry over to other 'Old-Gen' versions of the game, like the Mobile & 3DS version... where the user is even closer to the screen than on PC.
 
 				setBonus = null;
-				if ((head == 1 && body == 1 && legs == 1) || (head == 2 && body == 2 && legs == 2))
+				if ((head == (short)EntityID.ArmorHeadID.HEAD_COPPER_HELMET && body == (short)EntityID.ArmorBodyID.BODY_COPPER_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_COPPER_GREAVES) || (head == (short)EntityID.ArmorHeadID.HEAD_IRON_HELMET && body == (short)EntityID.ArmorBodyID.BODY_IRON_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_IRON_GREAVES))
 				{
 					setBonus = Lang.SetBonus(0);
 					StatDefense += 2;
 				}
-				else if ((head == 3 && body == 3 && legs == 3) || (head == 4 && body == 4 && legs == 4))
+				else if ((head == (short)EntityID.ArmorHeadID.HEAD_SILVER_HELMET && body == (short)EntityID.ArmorBodyID.BODY_SILVER_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_SILVER_GREAVES) || (head == (short)EntityID.ArmorHeadID.HEAD_GOLD_HELMET && body == (short)EntityID.ArmorBodyID.BODY_GOLD_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_GOLD_GREAVES))
 				{
 					setBonus = Lang.SetBonus(1);
 					StatDefense += 3;
 				}
-				else if (head == 5 && body == 5 && legs == 5)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_SHADOW_HELMET && body == (short)EntityID.ArmorBodyID.BODY_SHADOW_SCALEMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_SHADOW_GREAVES)
 				{
 					setBonus = Lang.SetBonus(2);
 					moveSpeed += 0.15f;
 				}
-				else if (head == 6 && body == 6 && legs == 6)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_METEOR_HELMET && body == (short)EntityID.ArmorBodyID.BODY_METEOR_SUIT && legs == (short)EntityID.ArmorLegsID.LEGS_METEOR_LEGGINGS)
 				{
 					setBonus = Lang.SetBonus(3);
 					spaceGun = true;
 				}
-				else if (head == 7 && body == 7 && legs == 7)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_NECRO_HELMET && body == (short)EntityID.ArmorBodyID.BODY_NECRO_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_NECRO_GREAVES)
 				{
 					setBonus = Lang.SetBonus(4);
 					freeAmmoChance += 20;
 				}
-				else if (head == 8 && body == 8 && legs == 8)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_JUNGLE_HAT && body == (short)EntityID.ArmorBodyID.BODY_JUNGLE_SHIRT && legs == (short)EntityID.ArmorLegsID.LEGS_JUNGLE_PANTS)
 				{
 					setBonus = Lang.SetBonus(5);
 					manaCost -= 0.16f;
 				}
-				else if (head == 9 && body == 9 && legs == 9)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_MOLTEN_HELMET && body == (short)EntityID.ArmorBodyID.BODY_MOLTEN_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_MOLTEN_GREAVES)
 				{
 					setBonus = Lang.SetBonus(6);
 					meleeDamage += 0.17f;
 				}
-				else if (head == 11 && body == 20 && legs == 19)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_MINING_HELMET && body == (short)EntityID.ArmorBodyID.BODY_MINING_SHIRT && legs == (short)EntityID.ArmorLegsID.LEGS_MINING_PANTS)
 				{
 					setBonus = Lang.SetBonus(7);
 					pickSpeed = 0.8f;
 				}
-				else if (body == 17 && legs == 16)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_COBALT_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_COBALT_LEGGINGS)
 				{
-					if (head == 29)
+					if (head == (short)EntityID.ArmorHeadID.HEAD_COBALT_HAT)
 					{
 						setBonus = Lang.SetBonus(8);
 						manaCost -= 0.14f;
 					}
-					else if (head == 30)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_COBALT_HELMET)
 					{
 						setBonus = Lang.SetBonus(9);
 						meleeSpeed += 0.15f;
 					}
-					else if (head == 31)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_COBALT_MASK)
 					{
 						setBonus = Lang.SetBonus(10);
 						freeAmmoChance += 20;
 					}
 				}
-				else if (body == 18 && legs == 17)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_MYTHRIL_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_MYTHRIL_GREAVES)
 				{
-					if (head == 32)
+					if (head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HOOD)
 					{
 						setBonus = Lang.SetBonus(11);
 						manaCost -= 0.17f;
 					}
-					else if (head == 33)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HELMET)
 					{
 						setBonus = Lang.SetBonus(12);
 						meleeCrit += 5;
 					}
-					else if (head == 34)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HAT)
 					{
 						setBonus = Lang.SetBonus(13);
 						freeAmmoChance += 20;
 					}
 				}
-				else if (body == 19 && legs == 18)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_ADAMANTITE_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_ADAMANTITE_LEGGINGS)
 				{
-					if (head == 35)
+					if (head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HEADGEAR)
 					{
 						setBonus = Lang.SetBonus(14);
 						manaCost -= 0.19f;
 					}
-					else if (head == 36)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HELMET)
 					{
 						setBonus = Lang.SetBonus(15);
 						meleeSpeed += 0.18f;
 						moveSpeed += 0.18f;
 					}
-					else if (head == 37)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_MASK)
 					{
 						setBonus = Lang.SetBonus(16);
 						freeAmmoChance += 25;
 					}
 				}
-				else if (body == 24 && legs == 23)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_HALLOWED_PLATE_MAIL && legs == (short)EntityID.ArmorLegsID.LEGS_HALLOWED_GREAVES)
 				{
-					if (head == 42)
+					if (head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HEADGEAR)
 					{
 						setBonus = Lang.SetBonus(17);
 						manaCost -= 0.2f;
 					}
-					else if (head == 43)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_MASK)
 					{
 						setBonus = Lang.SetBonus(18);
 						meleeSpeed += 0.19f;
 						moveSpeed += 0.19f;
 					}
-					else if (head == 41)
+					else if (head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HELMET)
 					{
 						setBonus = Lang.SetBonus(19);
 						freeAmmoChance += 25;
 					}
 				}
-				else if (head == 45 && body == 26 && legs == 25)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_DRAGON_MASK && body == (short)EntityID.ArmorBodyID.BODY_DRAGON_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_DRAGON_GREAVES)
 				{
 					setBonus = Lang.SetBonus(21);
 					meleeSpeed += 0.21f;
 					moveSpeed += 0.21f;
 				}
-				else if (head == 46 && body == 27 && legs == 26)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_TITAN_HELMET && body == (short)EntityID.ArmorBodyID.BODY_TITAN_MAIL && legs == (short)EntityID.ArmorLegsID.LEGS_TITAN_LEGGINGS)
 				{
 					setBonus = Lang.SetBonus(22);
 					freeAmmoChance += 28;
 				}
-				else if (head == 47 && body == 28 && legs == 27)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_SPECTRAL_HEADGEAR && body == (short)EntityID.ArmorBodyID.BODY_SPECTRAL_ARMOR && legs == (short)EntityID.ArmorLegsID.LEGS_SPECTRAL_SUBLIGAR)
 				{
 					setBonus = Lang.SetBonus(20);
 					manaCost -= 0.23f;
 				}
 #if VERSION_101
-				else if ((head == 50 && body == 31 && legs == 30) || (head == 51 && body == 32 && legs == 31))
+				else if ((head == (short)EntityID.ArmorHeadID.HEAD_WOOD_HELMET && body == (short)EntityID.ArmorBodyID.BODY_WOOD_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_WOOD_GREAVES) || (head == (short)EntityID.ArmorHeadID.HEAD_CACTUS_HELMET && body == (short)EntityID.ArmorBodyID.BODY_CACTUS_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_CACTUS_LEGGINGS))
 				{
 					setBonus = Lang.SetBonus(23);
 					StatDefense++;
@@ -3438,13 +3426,13 @@ namespace Terraria
 									ptr6->Velocity.X = ptr6->Velocity.X * 0.5f - velocity.X * 0.1f;
 									ptr6->Velocity.Y = ptr6->Velocity.Y * 0.5f - velocity.Y * 0.3f;
 								}
-								int num28 = Gore.NewGore(new Vector2(Position.X + 10f - 16f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next(11, 14));
+								int num28 = Gore.NewGore(new Vector2(Position.X + 10f - 16f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next((int)EntityID.GoreID.SMOKE_BLUE1, (int)EntityID.GoreID.SMOKE_BLUE3 + 1));
 								Main.GoreSet[num28].Velocity.X = Main.GoreSet[num28].Velocity.X * 0.1f - velocity.X * 0.1f;
 								Main.GoreSet[num28].Velocity.Y = Main.GoreSet[num28].Velocity.Y * 0.1f - velocity.Y * 0.05f;
-								num28 = Gore.NewGore(new Vector2(Position.X - 36f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next(11, 14));
+								num28 = Gore.NewGore(new Vector2(Position.X - 36f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next((int)EntityID.GoreID.SMOKE_BLUE1, (int)EntityID.GoreID.SMOKE_BLUE3 + 1));
 								Main.GoreSet[num28].Velocity.X = Main.GoreSet[num28].Velocity.X * 0.1f - velocity.X * 0.1f;
 								Main.GoreSet[num28].Velocity.Y = Main.GoreSet[num28].Velocity.Y * 0.1f - velocity.Y * 0.05f;
-								num28 = Gore.NewGore(new Vector2(Position.X + 20f + 4f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next(11, 14));
+								num28 = Gore.NewGore(new Vector2(Position.X + 20f + 4f, Position.Y + num26 - 16f), new Vector2(0f - velocity.X, 0f - velocity.Y), Main.Rand.Next((int)EntityID.GoreID.SMOKE_BLUE1, (int)EntityID.GoreID.SMOKE_BLUE3 + 1));
 								Main.GoreSet[num28].Velocity.X = Main.GoreSet[num28].Velocity.X * 0.1f - velocity.X * 0.1f;
 								Main.GoreSet[num28].Velocity.Y = Main.GoreSet[num28].Velocity.Y * 0.1f - velocity.Y * 0.05f;
 							}
@@ -3772,7 +3760,7 @@ namespace Terraria
 							{
 								if (isLocal() && (Inventory[SelectedItem].Type != 0 || itemAnimation <= 0))
 								{
-									if (ptr10->Type == (int)Item.ID.HEART)
+									if (ptr10->Type == (int)EntityID.ItemID.HEART)
 									{
 										Main.PlaySound(7, XYWH.X, XYWH.Y);
 										statLife += 20;
@@ -3785,7 +3773,7 @@ namespace Terraria
 										NetMessage.CreateMessage2(21, WhoAmI, num34);
 										NetMessage.SendMessage();
 									}
-									else if (ptr10->Type == (int)Item.ID.STAR)
+									else if (ptr10->Type == (int)EntityID.ItemID.STAR)
 									{
 										Main.PlaySound(7, XYWH.X, XYWH.Y);
 										statMana += 100;
@@ -3924,7 +3912,7 @@ namespace Terraria
 					}
 					if (flag10 && isLocal())
 					{
-						DelBuff(Buff.ID.TONGUED);
+						DelBuff(EntityID.BuffID.TONGUED);
 					}
 				}
 				if (isLocal())
@@ -3945,24 +3933,24 @@ namespace Terraria
 						{
 							if (XYWH.Y > (Main.MaxTilesY - 250) * 16 && XYWH.X > num42 - 1920 && XYWH.X < num42 + 1920)
 							{
-								AddBuff((int)Buff.ID.HORRIFIED, 10);
+								AddBuff((int)EntityID.BuffID.HORRIFIED, 10);
 								Main.PlaySound(4, Main.NPCSet[NPC.WoF].XYWH.X, Main.NPCSet[NPC.WoF].XYWH.Y, 10);
 							}
 						}
 						else if (XYWH.Y < (Main.MaxTilesY - 200) * 16)
 						{
-							AddBuff((int)Buff.ID.TONGUED, 10);
+							AddBuff((int)EntityID.BuffID.TONGUED, 10);
 						}
 						else if (Main.NPCSet[NPC.WoF].Direction < 0)
 						{
 							if (XYWH.X + (width / 2) > Main.NPCSet[NPC.WoF].XYWH.X + (Main.NPCSet[NPC.WoF].Width >> 1) + 40)
 							{
-								AddBuff((int)Buff.ID.TONGUED, 10);
+								AddBuff((int)EntityID.BuffID.TONGUED, 10);
 							}
 						}
 						else if (XYWH.X + (width / 2) < Main.NPCSet[NPC.WoF].XYWH.X + (Main.NPCSet[NPC.WoF].Width >> 1) - 40)
 						{
-							AddBuff((int)Buff.ID.TONGUED, 10);
+							AddBuff((int)EntityID.BuffID.TONGUED, 10);
 						}
 						if (tongued)
 						{
@@ -3970,7 +3958,7 @@ namespace Terraria
 							controlUseItem = false;
 							for (int num43 = 0; num43 < Projectile.MaxNumProjs; num43++)
 							{
-								if (Main.ProjectileSet[num43].active != 0 && Main.ProjectileSet[num43].owner == i && Main.ProjectileSet[num43].aiStyle == 7)
+								if (Main.ProjectileSet[num43].active != 0 && Main.ProjectileSet[num43].owner == i && Main.ProjectileSet[num43].aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 								{
 									Main.ProjectileSet[num43].Kill();
 								}
@@ -4032,116 +4020,116 @@ namespace Terraria
 								Main.NPCSet[num47].StrikeNPC(num50, 10f, num48);
 								NetMessage.SendNpcHurt(num47, num50, 10.0, num48);
 							}
-							if (Main.NPCSet[num47].NetID == -6)
+							if (Main.NPCSet[num47].NetID == (short)EntityID.NPCID.BLACK_SLIME)
 							{
 								if (Main.Rand.Next(4) == 0)
 								{
-									AddBuff((int)Buff.ID.BLIND, 900);
+									AddBuff((int)EntityID.BuffID.BLIND, 900);
 								}
 							}
 							else
 							{
-								switch ((NPC.ID)Main.NPCSet[num47].Type)
+								switch ((EntityID.NPCID)Main.NPCSet[num47].Type)
 								{
-									case NPC.ID.CORRUPT_SLIME:
-									case NPC.ID.SHADOW_SLIME:
+									case EntityID.NPCID.CORRUPT_SLIME:
+									case EntityID.NPCID.SHADOW_SLIME:
 										if (Main.Rand.Next(4) == 0)
 										{
-											AddBuff((int)Buff.ID.BLIND, 900);
+											AddBuff((int)EntityID.BuffID.BLIND, 900);
 										}
 										break;
-									case NPC.ID.DARK_MUMMY:
-									case NPC.ID.SHADOW_MUMMY:
+									case EntityID.NPCID.DARK_MUMMY:
+									case EntityID.NPCID.SHADOW_MUMMY:
 										if (Main.Rand.Next(4) == 0)
 										{
-											AddBuff((int)Buff.ID.BLIND, 900);
+											AddBuff((int)EntityID.BuffID.BLIND, 900);
 										}
 										else if (Main.Rand.Next(5) == 0)
 										{
-											AddBuff((int)Buff.ID.SILENCE, 420);
+											AddBuff((int)EntityID.BuffID.SILENCE, 420);
 										}
 										break;
-									case NPC.ID.METEOR_HEAD:
-									case NPC.ID.BURNING_SPHERE:
+									case EntityID.NPCID.METEOR_HEAD:
+									case EntityID.NPCID.BURNING_SPHERE:
 										if (Main.Rand.Next(3) == 0)
 										{
-											AddBuff((int)Buff.ID.ON_FIRE, 420);
+											AddBuff((int)EntityID.BuffID.ON_FIRE, 420);
 										}
 										break;
-									case NPC.ID.CURSED_SKULL:
-									case NPC.ID.CURSED_HAMMER:
-									case NPC.ID.ENCHANTED_SWORD:
-									case NPC.ID.DRAGON_SKULL:
+									case EntityID.NPCID.CURSED_SKULL:
+									case EntityID.NPCID.CURSED_HAMMER:
+									case EntityID.NPCID.ENCHANTED_SWORD:
+									case EntityID.NPCID.DRAGON_SKULL:
 										if (Main.Rand.Next(3) == 0)
 										{
-											AddBuff((int)Buff.ID.NO_ITEMS, 240);
+											AddBuff((int)EntityID.BuffID.NO_ITEMS, 240);
 										}
 										break;
-									case NPC.ID.SHADOW_HAMMER:
+									case EntityID.NPCID.SHADOW_HAMMER:
 										if (Main.Rand.Next(4) == 0)
 										{
-											AddBuff((int)Buff.ID.BLIND, 900);
+											AddBuff((int)EntityID.BuffID.BLIND, 900);
 										}
 										else if (Main.Rand.Next(3) == 0)
 										{
-											AddBuff((int)Buff.ID.NO_ITEMS, 240);
+											AddBuff((int)EntityID.BuffID.NO_ITEMS, 240);
 										}
 										break;
-									case NPC.ID.ANGLER_FISH:
-									case NPC.ID.WEREWOLF:
+									case EntityID.NPCID.ANGLER_FISH:
+									case EntityID.NPCID.WEREWOLF:
 										if (Main.Rand.Next(8) == 0)
 										{
-											AddBuff((int)Buff.ID.BLEED, 2700);
+											AddBuff((int)EntityID.BuffID.BLEED, 2700);
 										}
 										break;
-									case NPC.ID.PIXIE:
+									case EntityID.NPCID.PIXIE:
 										if (Main.Rand.Next(10) == 0)
 										{
-											AddBuff((int)Buff.ID.SILENCE, 420);
+											AddBuff((int)EntityID.BuffID.SILENCE, 420);
 										}
 										else if (Main.Rand.Next(8) == 0)
 										{
-											AddBuff((int)Buff.ID.SLOW, 900);
+											AddBuff((int)EntityID.BuffID.SLOW, 900);
 										}
 										break;
-									case NPC.ID.GREEN_JELLYFISH:
+									case EntityID.NPCID.GREEN_JELLYFISH:
 										if (Main.Rand.Next(5) == 0)
 										{
-											AddBuff((int)Buff.ID.SILENCE, 420);
+											AddBuff((int)EntityID.BuffID.SILENCE, 420);
 										}
 										break;
-									case NPC.ID.MUMMY:
-									case NPC.ID.WRAITH:
+									case EntityID.NPCID.MUMMY:
+									case EntityID.NPCID.WRAITH:
 										if (Main.Rand.Next(8) == 0)
 										{
-											AddBuff((int)Buff.ID.SLOW, 900);
+											AddBuff((int)EntityID.BuffID.SLOW, 900);
 										}
 										break;
-									case NPC.ID.LIGHT_MUMMY:
-									case NPC.ID.GIANT_BAT:
-									case NPC.ID.CLOWN:
-									case NPC.ID.SPECTRAL_MUMMY:
+									case EntityID.NPCID.LIGHT_MUMMY:
+									case EntityID.NPCID.GIANT_BAT:
+									case EntityID.NPCID.CLOWN:
+									case EntityID.NPCID.SPECTRAL_MUMMY:
 										if (Main.Rand.Next(12) == 0)
 										{
-											AddBuff((int)Buff.ID.CONFUSED, 420);
+											AddBuff((int)EntityID.BuffID.CONFUSED, 420);
 										}
 										break;
-									case NPC.ID.ARMORED_SKELETON:
+									case EntityID.NPCID.ARMORED_SKELETON:
 										if (Main.Rand.Next(6) == 0)
 										{
-											AddBuff((int)Buff.ID.BROKEN_ARMOR, 18000);
+											AddBuff((int)EntityID.BuffID.BROKEN_ARMOR, 18000);
 										}
 										break;
-									case NPC.ID.VILE_SPIT:
+									case EntityID.NPCID.VILE_SPIT:
 										if (Main.Rand.Next(20) == 0)
 										{
-											AddBuff((int)Buff.ID.WEAK, 18000);
+											AddBuff((int)EntityID.BuffID.WEAK, 18000);
 										}
 										break;
-									case NPC.ID.TOXIC_SLUDGE:
+									case EntityID.NPCID.TOXIC_SLUDGE:
 										if (Main.Rand.Next(2) == 0)
 										{
-											AddBuff((int)Buff.ID.POISONED, 600);
+											AddBuff((int)EntityID.BuffID.POISONED, 600);
 										}
 										break;
 								}
@@ -4238,7 +4226,7 @@ namespace Terraria
 							grapCount = 0;
 							for (int num58 = 0; num58 < Projectile.MaxNumProjs; num58++)
 							{
-								if (Main.ProjectileSet[num58].owner == i && Main.ProjectileSet[num58].aiStyle == 7 && Main.ProjectileSet[num58].active != 0)
+								if (Main.ProjectileSet[num58].owner == i && Main.ProjectileSet[num58].aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK && Main.ProjectileSet[num58].active != 0)
 								{
 									Main.ProjectileSet[num58].Kill();
 								}
@@ -4319,11 +4307,11 @@ namespace Terraria
 					stickyBreak = 0;
 				}
 				bool flag11 = Collision.DrownCollision(ref Position, width, height, gravDir);
-				if (armor[0].Type == (int)Item.ID.FISH_BOWL)
+				if (armor[0].Type == (int)EntityID.ItemID.FISH_BOWL)
 				{
 					flag11 = true;
 				}
-				if (Inventory[SelectedItem].Type == (int)Item.ID.BREATHING_REED)
+				if (Inventory[SelectedItem].Type == (int)EntityID.ItemID.BREATHING_REED)
 				{
 					try
 					{
@@ -4354,7 +4342,7 @@ namespace Terraria
 					{
 						breathCD++;
 						int num62 = 7;
-						if (Inventory[SelectedItem].Type == (int)Item.ID.BREATHING_REED)
+						if (Inventory[SelectedItem].Type == (int)EntityID.ItemID.BREATHING_REED)
 						{
 							num62 *= 2;
 						}
@@ -4396,7 +4384,7 @@ namespace Terraria
 				if (flag11 && Main.Rand.Next(20) == 0 && !lavaWet)
 				{
 					int num63 = ((gravDir == -1) ? (num63 = height - 12) : 0);
-					if (Inventory[SelectedItem].Type == (int)Item.ID.BREATHING_REED)
+					if (Inventory[SelectedItem].Type == (int)EntityID.ItemID.BREATHING_REED)
 					{
 						Main.DustSet.NewDust(XYWH.X + 10 * direction + 4, XYWH.Y + num63 - 54 * gravDir, width - 8, 8, 34, 0.0, 0.0, 0, default, 1.2f);
 					}
@@ -4415,7 +4403,7 @@ namespace Terraria
 				{
 					if (!lavaImmune && !immune && isLocal())
 					{
-						AddBuff((int)Buff.ID.ON_FIRE, 420);
+						AddBuff((int)EntityID.BuffID.ON_FIRE, 420);
 						Hurt(80, 0, pvp: false, quiet: false, Lang.DeathMsgPtr(-1, 0, 0, 2));
 					}
 					lavaWet = true;
@@ -4424,7 +4412,7 @@ namespace Terraria
 				{
 					if (onFire && !lavaWet)
 					{
-						DelBuff(Buff.ID.ON_FIRE);
+						DelBuff(EntityID.BuffID.ON_FIRE);
 					}
 					if (!IsWet)
 					{
@@ -4792,20 +4780,20 @@ namespace Terraria
 					return false;
 				}
 				int type = ptr->Type;
-				switch (type)
+				switch ((EntityID.TileID)type)
 				{
-					case 4:
-					case 13:
-					case 33:
-					case 49:
+					case EntityID.TileID.TORCH:
+					case EntityID.TileID.BOTTLE:
+					case EntityID.TileID.CANDLE:
+					case EntityID.TileID.WATER_CANDLE:
 						return !ui.UsingSmartCursor;
-					case 10:
+					case EntityID.TileID.DOOR_CLOSED:
 						return WorldGen.CanOpenDoor(num, num2);
-					case 11:
+					case EntityID.TileID.DOOR_OPEN:
 						return WorldGen.CanCloseDoor(num, num2);
-					case 21:
-					case 29:
-					case 97:
+					case EntityID.TileID.CHEST:
+					case EntityID.TileID.PIGGYBANK:
+					case EntityID.TileID.SAFE:
 						if (TalkNPC == -1)
 						{
 							int num3 = -1;
@@ -4813,12 +4801,12 @@ namespace Terraria
 							int frameY = ptr->FrameY;
 							num -= (frameX2 / 18) & 1;
 							num2 -= frameY / 18;
-							switch (type)
+							switch ((EntityID.TileID)type)
 							{
-								case 29:
+								case EntityID.TileID.PIGGYBANK:
 									num3 = -2;
 									break;
-								case 97:
+								case EntityID.TileID.SAFE:
 									num3 = -3;
 									break;
 							}
@@ -4832,10 +4820,10 @@ namespace Terraria
 								bool flag = false;
 								if ((frameX2 >= 72 && frameX2 <= 106) || (frameX2 >= 144 && frameX2 <= 178))
 								{
-									int num4 = 327;
+									int num4 = (int)EntityID.ItemID.GOLDEN_KEY;
 									if (frameX2 >= 144 && frameX2 <= 178)
 									{
-										num4 = 329;
+										num4 = (int)EntityID.ItemID.SHADOW_KEY;
 									}
 									flag = true;
 									for (int i = 0; i < MaxNumInventory; i++)
@@ -4854,17 +4842,17 @@ namespace Terraria
 							return num3 != -1;
 						}
 						return false;
-					case 50:
+					case EntityID.TileID.BOOK:
 						return !ui.UsingSmartCursor && ptr->FrameX == 90;
-					case 55:
-					case 85:
+					case EntityID.TileID.SIGN:
+					case EntityID.TileID.TOMBSTONE:
 						return true;
-					case 79:
+					case EntityID.TileID.BED:
 						return true;
-					case 104:
-					case 125:
+					case EntityID.TileID.GRANDFATHERS_CLOCK:
+					case EntityID.TileID.CRYSTAL_BALL:
 						return true;
-					case 128:
+					case EntityID.TileID.MANNEQUIN:
 						{
 							int frameX = ptr->FrameX;
 							frameX %= 100;
@@ -4879,10 +4867,10 @@ namespace Terraria
 							}
 							return false;
 						}
-					case 132:
-					case 136:
-					case 139:
-					case 144:
+					case EntityID.TileID.LEVER:
+					case EntityID.TileID.SWITCH:
+					case EntityID.TileID.MUSIC_BOX:
+					case EntityID.TileID.TIMER:
 						return true;
 				}
 			}
@@ -4898,17 +4886,17 @@ namespace Terraria
 				return false;
 			}
 			int type = Main.TileSet[num, num2].Type;
-			switch (type)
+			switch ((EntityID.TileID)type)
 			{
-				case 4:
-				case 13:
-				case 33:
-				case 49:
+				case EntityID.TileID.TORCH:
+				case EntityID.TileID.BOTTLE:
+				case EntityID.TileID.CANDLE:
+				case EntityID.TileID.WATER_CANDLE:
 					WorldGen.KillTile(num, num2);
 					NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, num, num2, 0);
 					NetMessage.SendMessage();
 					return true;
-				case 10:
+				case EntityID.TileID.DOOR_CLOSED:
 					{
 						int num10 = WorldGen.OpenDoor(num, num2, direction);
 						if (num10 != 0)
@@ -4920,7 +4908,7 @@ namespace Terraria
 						}
 						return false;
 					}
-				case 11:
+				case EntityID.TileID.DOOR_OPEN:
 					if (WorldGen.CloseDoor(num, num2))
 					{
 						ui.TotalDoorsClosed++;
@@ -4929,9 +4917,9 @@ namespace Terraria
 						return true;
 					}
 					return false;
-				case 21:
-				case 29:
-				case 97:
+				case EntityID.TileID.CHEST:
+				case EntityID.TileID.PIGGYBANK:
+				case EntityID.TileID.SAFE:
 					if (TalkNPC == -1)
 					{
 						int num5 = -1;
@@ -4939,26 +4927,26 @@ namespace Terraria
 						int frameY = Main.TileSet[num, num2].FrameY;
 						num -= (frameX2 / 18) & 1;
 						num2 -= frameY / 18;
-						switch (type)
+						switch ((EntityID.TileID)type)
 						{
-							case 29:
+							case EntityID.TileID.PIGGYBANK:
 								num5 = -2;
 								break;
-							case 97:
+							case EntityID.TileID.SAFE:
 								num5 = -3;
 								break;
 							default:
 								if (frameX2 >= 216)
 								{
-									ui.chestText = Lang.ItemName(348);
+									ui.chestText = Lang.ItemName((int)EntityID.ItemID.TRASH_CAN);
 								}
 								else if (frameX2 >= 180)
 								{
-									ui.chestText = Lang.ItemName(343);
+									ui.chestText = Lang.ItemName((int)EntityID.ItemID.BARREL);
 								}
 								else
 								{
-									ui.chestText = Lang.ItemName(48);
+									ui.chestText = Lang.ItemName((int)EntityID.ItemID.CHEST);
 								}
 								break;
 						}
@@ -4982,10 +4970,10 @@ namespace Terraria
 							bool flag = false;
 							if ((frameX2 >= 72 && frameX2 <= 106) || (frameX2 >= 144 && frameX2 <= 178))
 							{
-								int num6 = 327;
+								int num6 = (int)EntityID.ItemID.GOLDEN_KEY;
 								if (frameX2 >= 144 && frameX2 <= 178)
 								{
-									num6 = 329;
+									num6 = (int)EntityID.ItemID.SHADOW_KEY;
 								}
 								flag = true;
 								for (int i = 0; i < MaxNumInventory; i++)
@@ -4994,7 +4982,7 @@ namespace Terraria
 									{
 										continue;
 									}
-									if (num6 != 329)
+									if (num6 != (int)EntityID.ItemID.SHADOW_KEY)
 									{
 										Inventory[i].Stack--;
 										if (Inventory[i].Stack <= 0)
@@ -5039,14 +5027,14 @@ namespace Terraria
 						}
 					}
 					return false;
-				case 50:
+				case EntityID.TileID.BOOK:
 					if (Main.TileSet[num, num2].FrameX != 90)
 					{
 						return false;
 					}
-					goto case 4;
-				case 55:
-				case 85:
+					goto case EntityID.TileID.TORCH;
+				case EntityID.TileID.SIGN:
+				case EntityID.TileID.TOMBSTONE:
 					{
 						bool flag2 = true;
 						if (sign >= 0)
@@ -5079,7 +5067,7 @@ namespace Terraria
 								num -= (Main.TileSet[num, num2].FrameX / 18) & 1;
 								num2 -= Main.TileSet[num, num2].FrameY / 18;
 								type = Main.TileSet[num, num2].Type;
-								if (type == 55 || type == 85)
+								if (type == (int)EntityID.TileID.SIGN || type == (int)EntityID.TileID.TOMBSTONE)
 								{
 									NetMessage.CreateMessage3(46, WhoAmI, num, num2);
 									NetMessage.SendMessage();
@@ -5088,7 +5076,7 @@ namespace Terraria
 						}
 						return true;
 					}
-				case 79:
+				case EntityID.TileID.BED:
 					{
 						int num3 = num;
 						int num4 = num2;
@@ -5104,7 +5092,7 @@ namespace Terraria
 						}
 						return false;
 					}
-				case 104:
+				case EntityID.TileID.GRANDFATHERS_CLOCK:
 					{
 						string text = "AM";
 						double num7 = Main.GameTime.WorldTime;
@@ -5141,11 +5129,11 @@ namespace Terraria
 						Main.NewText(newText, 255, 240, 20);
 						return true;
 					}
-				case 125:
-					AddBuff((int)Buff.ID.CLARAVOYANCE, 36000);
+				case EntityID.TileID.CRYSTAL_BALL:
+					AddBuff((int)EntityID.BuffID.CLARAVOYANCE, 36000);
 					Main.PlaySound(2, XYWH.X, XYWH.Y, 4);
 					return true;
-				case 128:
+				case EntityID.TileID.MANNEQUIN:
 					{
 						int frameX = Main.TileSet[num, num2].FrameX;
 						frameX %= 100;
@@ -5164,14 +5152,14 @@ namespace Terraria
 						}
 						return false;
 					}
-				case 132:
-				case 136:
-				case 144:
+				case EntityID.TileID.LEVER:
+				case EntityID.TileID.SWITCH:
+				case EntityID.TileID.TIMER:
 					WorldGen.HitSwitch(num, num2);
 					NetMessage.CreateMessage2(59, num, num2);
 					NetMessage.SendMessage();
 					return true;
-				case 139:
+				case EntityID.TileID.MUSIC_BOX:
 					Main.PlaySound(28, x, y, 0);
 					WorldGen.SwitchMB(num, num2);
 					return true;
@@ -5244,7 +5232,7 @@ namespace Terraria
 					{
 						num2 = num3;
 					}
-					while (Inventory[num3].Type == (int)Item.ID.PLATINUM_COIN && Inventory[num3].Stack < Inventory[num3].MaxStack && num >= 1000000)
+					while (Inventory[num3].Type == (int)EntityID.ItemID.PLATINUM_COIN && Inventory[num3].Stack < Inventory[num3].MaxStack && num >= 1000000)
 					{
 						Inventory[num3].Stack++;
 						num -= 1000000;
@@ -5262,7 +5250,7 @@ namespace Terraria
 						flag = true;
 						continue;
 					}
-					Inventory[num2].SetDefaults((int)Item.ID.PLATINUM_COIN);
+					Inventory[num2].SetDefaults((int)EntityID.ItemID.PLATINUM_COIN);
 					num -= 1000000;
 				}
 			}
@@ -5275,7 +5263,7 @@ namespace Terraria
 					{
 						num4 = num5;
 					}
-					while (Inventory[num5].Type == (int)Item.ID.GOLD_COIN && Inventory[num5].Stack < Inventory[num5].MaxStack && num >= 10000)
+					while (Inventory[num5].Type == (int)EntityID.ItemID.GOLD_COIN && Inventory[num5].Stack < Inventory[num5].MaxStack && num >= 10000)
 					{
 						Inventory[num5].Stack++;
 						num -= 10000;
@@ -5293,7 +5281,7 @@ namespace Terraria
 						flag = true;
 						continue;
 					}
-					Inventory[num4].SetDefaults((int)Item.ID.GOLD_COIN);
+					Inventory[num4].SetDefaults((int)EntityID.ItemID.GOLD_COIN);
 					num -= 10000;
 				}
 			}
@@ -5306,7 +5294,7 @@ namespace Terraria
 					{
 						num6 = num7;
 					}
-					while (Inventory[num7].Type == (int)Item.ID.SILVER_COIN && Inventory[num7].Stack < Inventory[num7].MaxStack && num >= 100)
+					while (Inventory[num7].Type == (int)EntityID.ItemID.SILVER_COIN && Inventory[num7].Stack < Inventory[num7].MaxStack && num >= 100)
 					{
 						Inventory[num7].Stack++;
 						num -= 100;
@@ -5324,7 +5312,7 @@ namespace Terraria
 						flag = true;
 						continue;
 					}
-					Inventory[num6].SetDefaults((int)Item.ID.SILVER_COIN);
+					Inventory[num6].SetDefaults((int)EntityID.ItemID.SILVER_COIN);
 					num -= 100;
 				}
 			}
@@ -5337,7 +5325,7 @@ namespace Terraria
 					{
 						num8 = num9;
 					}
-					while (Inventory[num9].Type == (int)Item.ID.COPPER_COIN && Inventory[num9].Stack < Inventory[num9].MaxStack && num >= 1)
+					while (Inventory[num9].Type == (int)EntityID.ItemID.COPPER_COIN && Inventory[num9].Stack < Inventory[num9].MaxStack && num >= 1)
 					{
 						Inventory[num9].Stack++;
 						num--;
@@ -5355,7 +5343,7 @@ namespace Terraria
 						flag = true;
 						continue;
 					}
-					Inventory[num8].SetDefaults((int)Item.ID.COPPER_COIN);
+					Inventory[num8].SetDefaults((int)EntityID.ItemID.COPPER_COIN);
 					num--;
 				}
 			}
@@ -5384,19 +5372,19 @@ namespace Terraria
 			{
 				ref Item reference = ref array[i];
 				reference = Inventory[i];
-				if (Inventory[i].Type == (int)Item.ID.COPPER_COIN)
+				if (Inventory[i].Type == (int)EntityID.ItemID.COPPER_COIN)
 				{
 					num += Inventory[i].Stack;
 				}
-				if (Inventory[i].Type == (int)Item.ID.SILVER_COIN)
+				if (Inventory[i].Type == (int)EntityID.ItemID.SILVER_COIN)
 				{
 					num += Inventory[i].Stack * 100;
 				}
-				if (Inventory[i].Type == (int)Item.ID.GOLD_COIN)
+				if (Inventory[i].Type == (int)EntityID.ItemID.GOLD_COIN)
 				{
 					num += Inventory[i].Stack * 10000;
 				}
-				if (Inventory[i].Type == (int)Item.ID.PLATINUM_COIN)
+				if (Inventory[i].Type == (int)EntityID.ItemID.PLATINUM_COIN)
 				{
 					num += Inventory[i].Stack * 1000000;
 				}
@@ -5410,7 +5398,7 @@ namespace Terraria
 					{
 						for (int j = 0; j < NumInvSlots + NumCoinSlots; j++)
 						{
-							if (Inventory[j].Type != (int)Item.ID.PLATINUM_COIN)
+							if (Inventory[j].Type != (int)EntityID.ItemID.PLATINUM_COIN)
 							{
 								continue;
 							}
@@ -5429,7 +5417,7 @@ namespace Terraria
 					{
 						for (int k = 0; k < NumInvSlots + NumCoinSlots; k++)
 						{
-							if (Inventory[k].Type != (int)Item.ID.GOLD_COIN)
+							if (Inventory[k].Type != (int)EntityID.ItemID.GOLD_COIN)
 							{
 								continue;
 							}
@@ -5448,7 +5436,7 @@ namespace Terraria
 					{
 						for (int l = 0; l < NumInvSlots + NumCoinSlots; l++)
 						{
-							if (Inventory[l].Type != (int)Item.ID.SILVER_COIN)
+							if (Inventory[l].Type != (int)EntityID.ItemID.SILVER_COIN)
 							{
 								continue;
 							}
@@ -5467,7 +5455,7 @@ namespace Terraria
 					{
 						for (int m = 0; m < NumInvSlots + NumCoinSlots; m++)
 						{
-							if (Inventory[m].Type != (int)Item.ID.COPPER_COIN)
+							if (Inventory[m].Type != (int)EntityID.ItemID.COPPER_COIN)
 							{
 								continue;
 							}
@@ -5502,14 +5490,14 @@ namespace Terraria
 						{
 							for (int n = 0; n < MaxNumInventory; n++)
 							{
-								if (Inventory[n].Type == (int)Item.ID.PLATINUM_COIN && Inventory[n].Stack >= 1)
+								if (Inventory[n].Type == (int)EntityID.ItemID.PLATINUM_COIN && Inventory[n].Stack >= 1)
 								{
 									Inventory[n].Stack--;
 									if (Inventory[n].Stack == 0)
 									{
 										Inventory[n].Init();
 									}
-									Inventory[num3].SetDefaults((int)Item.ID.GOLD_COIN, 100);
+									Inventory[num3].SetDefaults((int)EntityID.ItemID.GOLD_COIN, 100);
 									flag = false;
 									break;
 								}
@@ -5519,14 +5507,14 @@ namespace Terraria
 						{
 							for (int num5 = 0; num5 < NumInvSlots + NumCoinSlots; num5++)
 							{
-								if (Inventory[num5].Type == (int)Item.ID.GOLD_COIN && Inventory[num5].Stack >= 1)
+								if (Inventory[num5].Type == (int)EntityID.ItemID.GOLD_COIN && Inventory[num5].Stack >= 1)
 								{
 									Inventory[num5].Stack--;
 									if (Inventory[num5].Stack == 0)
 									{
 										Inventory[num5].Init();
 									}
-									Inventory[num3].SetDefaults((int)Item.ID.SILVER_COIN, 100);
+									Inventory[num3].SetDefaults((int)EntityID.ItemID.SILVER_COIN, 100);
 									flag = false;
 									break;
 								}
@@ -5536,14 +5524,14 @@ namespace Terraria
 						{
 							for (int num6 = 0; num6 < NumInvSlots + NumCoinSlots; num6++)
 							{
-								if (Inventory[num6].Type == (int)Item.ID.SILVER_COIN && Inventory[num6].Stack >= 1)
+								if (Inventory[num6].Type == (int)EntityID.ItemID.SILVER_COIN && Inventory[num6].Stack >= 1)
 								{
 									Inventory[num6].Stack--;
 									if (Inventory[num6].Stack == 0)
 									{
 										Inventory[num6].Init();
 									}
-									Inventory[num3].SetDefaults((int)Item.ID.COPPER_COIN, 100);
+									Inventory[num3].SetDefaults((int)EntityID.ItemID.COPPER_COIN, 100);
 									flag = false;
 									break;
 								}
@@ -5557,14 +5545,14 @@ namespace Terraria
 						{
 							for (int num7 = 0; num7 < NumInvSlots + NumCoinSlots; num7++)
 							{
-								if (Inventory[num7].Type == (int)Item.ID.GOLD_COIN && Inventory[num7].Stack >= 1)
+								if (Inventory[num7].Type == (int)EntityID.ItemID.GOLD_COIN && Inventory[num7].Stack >= 1)
 								{
 									Inventory[num7].Stack--;
 									if (Inventory[num7].Stack == 0)
 									{
 										Inventory[num7].Init();
 									}
-									Inventory[num3].SetDefaults((int)Item.ID.SILVER_COIN, 100);
+									Inventory[num3].SetDefaults((int)EntityID.ItemID.SILVER_COIN, 100);
 									flag = false;
 									break;
 								}
@@ -5576,14 +5564,14 @@ namespace Terraria
 						}
 						for (int num8 = 0; num8 < NumInvSlots + NumCoinSlots; num8++)
 						{
-							if (Inventory[num8].Type == (int)Item.ID.PLATINUM_COIN && Inventory[num8].Stack >= 1)
+							if (Inventory[num8].Type == (int)EntityID.ItemID.PLATINUM_COIN && Inventory[num8].Stack >= 1)
 							{
 								Inventory[num8].Stack--;
 								if (Inventory[num8].Stack == 0)
 								{
 									Inventory[num8].Init();
 								}
-								Inventory[num3].SetDefaults((int)Item.ID.GOLD_COIN, 100);
+								Inventory[num3].SetDefaults((int)EntityID.ItemID.GOLD_COIN, 100);
 								flag = false;
 								break;
 							}
@@ -5625,21 +5613,21 @@ namespace Terraria
 							adjTile[type].i = true;
 
 							FoundCraftingStation(type);
-							switch (type)
+							switch ((EntityID.TileID)type)
 							{
-								case 77:
-									adjTile[17].i = true;
-									craftingStationsFound.Set(17, true);
+								case EntityID.TileID.HELLFORGE:
+									adjTile[(int)EntityID.TileID.FURNACE].i = true;
+									craftingStationsFound.Set((int)EntityID.TileID.FURNACE, true);
 									break;
-								case 133:
-									adjTile[17].i = true;
-									adjTile[77].i = true;
-									craftingStationsFound.Set(17, true);
-									craftingStationsFound.Set(77, true);
+								case EntityID.TileID.ADAMANTITE_FORGE:
+									adjTile[(int)EntityID.TileID.FURNACE].i = true;
+									adjTile[(int)EntityID.TileID.HELLFORGE].i = true;
+									craftingStationsFound.Set((int)EntityID.TileID.FURNACE, true);
+									craftingStationsFound.Set((int)EntityID.TileID.HELLFORGE, true);
 									break;
-								case 134:
-									adjTile[16].i = true;
-									craftingStationsFound.Set(16, true);
+								case EntityID.TileID.MYTHRIL_ANVIL:
+									adjTile[(int)EntityID.TileID.ANVIL].i = true;
+									craftingStationsFound.Set((int)EntityID.TileID.ANVIL, true);
 									break;
 							}
 						}
@@ -5670,15 +5658,15 @@ namespace Terraria
 			legs = armor[2].LegSlot;
 			if (merman)
 			{
-				head = 39;
-				legs = 21;
-				body = 22;
+				head = (short)EntityID.ArmorHeadID.HEAD_MERMAN;
+				body = (short)EntityID.ArmorBodyID.BODY_MERMAN;
+				legs = (short)EntityID.ArmorLegsID.LEGS_MERMAN;
 			}
 			else if (wereWolf)
 			{
-				legs = 20;
-				body = 21;
-				head = 38;
+				head = (short)EntityID.ArmorHeadID.HEAD_WEREWOLF;
+				body = (short)EntityID.ArmorBodyID.BODY_WEREWOLF;
+				legs = (short)EntityID.ArmorLegsID.LEGS_WEREWOLF;
 			}
 			else
 			{
@@ -5703,7 +5691,7 @@ namespace Terraria
 					ui.SetTriggerState(Trigger.AllVanitySlotsEquipped);
 				}
 			}
-			if (head == 5 && body == 5 && legs == 5)
+			if (head == (short)EntityID.ArmorHeadID.HEAD_SHADOW_HELMET && body == (short)EntityID.ArmorBodyID.BODY_SHADOW_SCALEMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_SHADOW_GREAVES)
 			{
 				if (Main.Rand.Next(16) == 0)
 				{
@@ -5714,7 +5702,7 @@ namespace Terraria
 			else
 			{
 				socialShadow = false;
-				if (head == 6 && body == 6 && legs == 6)
+				if (head == (short)EntityID.ArmorHeadID.HEAD_METEOR_HELMET && body == (short)EntityID.ArmorBodyID.BODY_METEOR_SUIT && legs == (short)EntityID.ArmorLegsID.LEGS_METEOR_LEGGINGS)
 				{
 					if (Math.Abs(velocity.X) + Math.Abs(velocity.Y) > 1f && !rocketFrame)
 					{
@@ -5732,11 +5720,11 @@ namespace Terraria
 						}
 					}
 				}
-				else if (head == 7 && body == 7 && legs == 7)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_NECRO_HELMET && body == (short)EntityID.ArmorBodyID.BODY_NECRO_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_NECRO_GREAVES)
 				{
 					boneArmor = true;
 				}
-				else if (head == 8 && body == 8 && legs == 8)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_JUNGLE_HAT && body == (short)EntityID.ArmorBodyID.BODY_JUNGLE_SHIRT && legs == (short)EntityID.ArmorLegsID.LEGS_JUNGLE_PANTS)
 				{
 					if (Math.Abs(velocity.X) + Math.Abs(velocity.Y) > 1f)
 					{
@@ -5748,7 +5736,7 @@ namespace Terraria
 						}
 					}
 				}
-				else if (head == 9 && body == 9 && legs == 9)
+				else if (head == (short)EntityID.ArmorHeadID.HEAD_MOLTEN_HELMET && body == (short)EntityID.ArmorBodyID.BODY_MOLTEN_BREASTPLATE && legs == (short)EntityID.ArmorLegsID.LEGS_MOLTEN_GREAVES)
 				{
 					if (Math.Abs(velocity.X) + Math.Abs(velocity.Y) > 1f && !rocketFrame)
 					{
@@ -5766,9 +5754,9 @@ namespace Terraria
 						}
 					}
 				}
-				else if (body == 18 && legs == 17)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_MYTHRIL_CHAINMAIL && legs == (short)EntityID.ArmorLegsID.LEGS_MYTHRIL_GREAVES)
 				{
-					if ((head == 32 || head == 33 || head == 34) && Main.Rand.Next(16) == 0)
+					if ((head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HOOD || head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HELMET || head == (short)EntityID.ArmorHeadID.HEAD_MYTHRIL_HAT) && Main.Rand.Next(16) == 0)
 					{
 						Dust* ptr4 = Main.DustSet.NewDust((int)(Position.X - velocity.X * 2f), (int)(Position.Y - velocity.Y * 2f) - 2, width, height, 43, 0.0, 0.0, 100, default, 0.3f);
 						if (ptr4 != null)
@@ -5779,7 +5767,7 @@ namespace Terraria
 						}
 					}
 				}
-				else if (body == 24 && legs == 23 && (head == 42 || head == 43 || head == 41) && (velocity.X != 0f || velocity.Y != 0f) && Main.Rand.Next(16) == 0)
+				else if (body == (short)EntityID.ArmorBodyID.BODY_HALLOWED_PLATE_MAIL && legs == (short)EntityID.ArmorLegsID.LEGS_HALLOWED_GREAVES && (head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HEADGEAR || head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_MASK || head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HELMET) && (velocity.X != 0f || velocity.Y != 0f) && Main.Rand.Next(16) == 0)
 				{
 					Dust* ptr5 = Main.DustSet.NewDust((int)(Position.X - velocity.X * 2f), (int)(Position.Y - velocity.Y * 2f) - 2, width, height, 43, 0.0, 0.0, 100, default, 0.3f);
 					if (ptr5 != null)
@@ -5835,7 +5823,7 @@ namespace Terraria
 				}
 				else if (Inventory[SelectedItem].UseStyle == 5)
 				{
-					if (Inventory[SelectedItem].Type == (int)Item.ID.BLOWPIPE)
+					if (Inventory[SelectedItem].Type == (int)EntityID.ItemID.BLOWPIPE)
 					{
 						bodyFrameY = 112;
 					}
@@ -6321,13 +6309,13 @@ namespace Terraria
 
 		public unsafe bool ItemSpace(Item* pNewItem)
 		{
-			Item.ID type = (Item.ID)pNewItem->Type;
-			if (type == Item.ID.HEART || type == Item.ID.STAR)
+			EntityID.ItemID type = (EntityID.ItemID)pNewItem->Type;
+			if (type == EntityID.ItemID.HEART || type == EntityID.ItemID.STAR)
 			{
 				return true;
 			}
 			int num = NumInvSlots;
-			if (type == Item.ID.COPPER_COIN || type == Item.ID.SILVER_COIN || type == Item.ID.GOLD_COIN || type == Item.ID.PLATINUM_COIN)
+			if (type == EntityID.ItemID.COPPER_COIN || type == EntityID.ItemID.SILVER_COIN || type == EntityID.ItemID.GOLD_COIN || type == EntityID.ItemID.PLATINUM_COIN)
 			{
 				num += NumCoinSlots;
 			}
@@ -6406,7 +6394,7 @@ namespace Terraria
 
 		public void DoCoins(int i)
 		{
-			if (Inventory[i].Stack != 100 || (Inventory[i].Type != (int)Item.ID.COPPER_COIN && Inventory[i].Type != (int)Item.ID.SILVER_COIN && Inventory[i].Type != (int)Item.ID.GOLD_COIN))
+			if (Inventory[i].Stack != 100 || (Inventory[i].Type != (int)EntityID.ItemID.COPPER_COIN && Inventory[i].Type != (int)EntityID.ItemID.SILVER_COIN && Inventory[i].Type != (int)EntityID.ItemID.GOLD_COIN))
 			{
 				return;
 			}
@@ -6650,28 +6638,28 @@ namespace Terraria
 						flag = true;
 					}
 				}
-				if (((Main.TileSet[tileTargetX, tileTargetY].IsActive == 0 && !flag) || Main.TileCut[Main.TileSet[tileTargetX, tileTargetY].Type] || createTile == 23 || createTile == 2 || createTile == 109 || createTile == 60 || createTile == 70) && itemTime == 0 && itemAnimation > 0 && controlUseItem)
+				if (((Main.TileSet[tileTargetX, tileTargetY].IsActive == 0 && !flag) || Main.TileCut[Main.TileSet[tileTargetX, tileTargetY].Type] || createTile == (int)EntityID.TileID.CORRUPT_GRASS || createTile == (int)EntityID.TileID.GRASS || createTile == (int)EntityID.TileID.HALLOWED_GRASS || createTile == (int)EntityID.TileID.JUNGLE_GRASS || createTile == (int)EntityID.TileID.MUSHROOM_GRASS) && itemTime == 0 && itemAnimation > 0 && controlUseItem)
 				{
 					bool flag2 = false;
-					switch (createTile)
+					switch ((EntityID.TileID)createTile)
 					{
-						case 2:
-						case 23:
-						case 109:
-							if (Main.TileSet[tileTargetX, tileTargetY].IsActive != 0 && Main.TileSet[tileTargetX, tileTargetY].Type == 0)
+						case EntityID.TileID.GRASS:
+						case EntityID.TileID.CORRUPT_GRASS:
+						case EntityID.TileID.HALLOWED_GRASS:
+							if (Main.TileSet[tileTargetX, tileTargetY].IsActive != 0 && Main.TileSet[tileTargetX, tileTargetY].Type == (int)EntityID.TileID.DIRT)
 							{
 								flag2 = true;
 							}
 							break;
-						case 60:
-						case 70:
-							if (Main.TileSet[tileTargetX, tileTargetY].IsActive != 0 && Main.TileSet[tileTargetX, tileTargetY].Type == 59)
+						case EntityID.TileID.JUNGLE_GRASS:
+						case EntityID.TileID.MUSHROOM_GRASS:
+							if (Main.TileSet[tileTargetX, tileTargetY].IsActive != 0 && Main.TileSet[tileTargetX, tileTargetY].Type == (int)EntityID.TileID.MUD)
 							{
 								flag2 = true;
 							}
 							break;
-						case 4:
-						case 136:
+						case EntityID.TileID.TORCH:
+						case EntityID.TileID.SWITCH:
 							{
 								int num = Main.TileSet[tileTargetX, tileTargetY + 1].Type;
 								int num2 = Main.TileSet[tileTargetX - 1, tileTargetY].Type;
@@ -6712,55 +6700,55 @@ namespace Terraria
 								{
 									flag2 = true;
 								}
-								else if (num2 >= 0 && (Main.TileSolidAndAttach[num2] || num2 == 124 || (num2 == 5 && num4 == 5 && num6 == 5)))
+								else if (num2 >= 0 && (Main.TileSolidAndAttach[num2] || num2 == (int)EntityID.TileID.WOODEN_BEAM || (num2 == (int)EntityID.TileID.TREE && num4 == (int)EntityID.TileID.TREE && num6 == (int)EntityID.TileID.TREE)))
 								{
 									flag2 = true;
 								}
-								else if (num3 >= 0 && (Main.TileSolidAndAttach[num3] || num3 == 124 || (num3 == 5 && num5 == 5 && num7 == 5)))
+								else if (num3 >= 0 && (Main.TileSolidAndAttach[num3] || num3 == (int)EntityID.TileID.WOODEN_BEAM || (num3 == (int)EntityID.TileID.TREE && num5 == (int)EntityID.TileID.TREE && num7 == (int)EntityID.TileID.TREE)))
 								{
 									flag2 = true;
 								}
 								break;
 							}
-						case 78:
-						case 98:
-						case 100:
+						case EntityID.TileID.CLAY_POT:
+						case EntityID.TileID.SKULL_LANTERN:
+						case EntityID.TileID.CANDELABRA:
 							if (Main.TileSet[tileTargetX, tileTargetY + 1].IsActive != 0 && (Main.TileSolid[Main.TileSet[tileTargetX, tileTargetY + 1].Type] || Main.TileTable[Main.TileSet[tileTargetX, tileTargetY + 1].Type]))
 							{
 								flag2 = true;
 							}
 							break;
-						case 13:
-						case 29:
-						case 33:
-						case 49:
-						case 50:
-						case 103:
+						case EntityID.TileID.BOTTLE:
+						case EntityID.TileID.PIGGYBANK:
+						case EntityID.TileID.CANDLE:
+						case EntityID.TileID.WATER_CANDLE:
+						case EntityID.TileID.BOOK:
+						case EntityID.TileID.BOWL:
 							if (Main.TileSet[tileTargetX, tileTargetY + 1].IsActive != 0 && Main.TileTable[Main.TileSet[tileTargetX, tileTargetY + 1].Type])
 							{
 								flag2 = true;
 							}
 							break;
-						case 51:
+						case EntityID.TileID.COBWEB:
 							if (Main.TileSet[tileTargetX + 1, tileTargetY].IsActive != 0 || Main.TileSet[tileTargetX + 1, tileTargetY].WallType > 0 || Main.TileSet[tileTargetX - 1, tileTargetY].IsActive != 0 || Main.TileSet[tileTargetX - 1, tileTargetY].WallType > 0 || Main.TileSet[tileTargetX, tileTargetY + 1].IsActive != 0 || Main.TileSet[tileTargetX, tileTargetY + 1].WallType > 0 || Main.TileSet[tileTargetX, tileTargetY - 1].IsActive != 0 || Main.TileSet[tileTargetX, tileTargetY - 1].WallType > 0)
 							{
 								flag2 = true;
 							}
 							break;
 						default:
-							if ((Main.TileSet[tileTargetX + 1, tileTargetY].IsActive != 0 && Main.TileSolid[Main.TileSet[tileTargetX + 1, tileTargetY].Type]) || Main.TileSet[tileTargetX + 1, tileTargetY].WallType > 0 || (Main.TileSet[tileTargetX - 1, tileTargetY].IsActive != 0 && Main.TileSolid[Main.TileSet[tileTargetX - 1, tileTargetY].Type]) || Main.TileSet[tileTargetX - 1, tileTargetY].WallType > 0 || (Main.TileSet[tileTargetX, tileTargetY + 1].IsActive != 0 && (Main.TileSolid[Main.TileSet[tileTargetX, tileTargetY + 1].Type] || Main.TileSet[tileTargetX, tileTargetY + 1].Type == 124)) || Main.TileSet[tileTargetX, tileTargetY + 1].WallType > 0 || (Main.TileSet[tileTargetX, tileTargetY - 1].IsActive != 0 && (Main.TileSolid[Main.TileSet[tileTargetX, tileTargetY - 1].Type] || Main.TileSet[tileTargetX, tileTargetY - 1].Type == 124)) || Main.TileSet[tileTargetX, tileTargetY - 1].WallType > 0)
+							if ((Main.TileSet[tileTargetX + 1, tileTargetY].IsActive != 0 && Main.TileSolid[Main.TileSet[tileTargetX + 1, tileTargetY].Type]) || Main.TileSet[tileTargetX + 1, tileTargetY].WallType > 0 || (Main.TileSet[tileTargetX - 1, tileTargetY].IsActive != 0 && Main.TileSolid[Main.TileSet[tileTargetX - 1, tileTargetY].Type]) || Main.TileSet[tileTargetX - 1, tileTargetY].WallType > 0 || (Main.TileSet[tileTargetX, tileTargetY + 1].IsActive != 0 && (Main.TileSolid[Main.TileSet[tileTargetX, tileTargetY + 1].Type] || Main.TileSet[tileTargetX, tileTargetY + 1].Type == (int)EntityID.TileID.WOODEN_BEAM)) || Main.TileSet[tileTargetX, tileTargetY + 1].WallType > 0 || (Main.TileSet[tileTargetX, tileTargetY - 1].IsActive != 0 && (Main.TileSolid[Main.TileSet[tileTargetX, tileTargetY - 1].Type] || Main.TileSet[tileTargetX, tileTargetY - 1].Type == (int)EntityID.TileID.WOODEN_BEAM)) || Main.TileSet[tileTargetX, tileTargetY - 1].WallType > 0)
 							{
 								flag2 = true;
 							}
 							break;
 					}
-					if (createTile >= 82 && createTile <= 84)
+					if (createTile >= (int)EntityID.TileID.DAYBLOOM_GROWING && createTile <= (int)EntityID.TileID.DAYBLOOM_BLOOMING)
 					{
 						flag2 = true;
 					}
 					if (Main.TileSet[tileTargetX, tileTargetY].IsActive != 0 && Main.TileCut[Main.TileSet[tileTargetX, tileTargetY].Type])
 					{
-						if (Main.TileSet[tileTargetX, tileTargetY + 1].Type != 78)
+						if (Main.TileSet[tileTargetX, tileTargetY + 1].Type != (int)EntityID.TileID.CLAY_POT)
 						{
 							if (WorldGen.KillTile(tileTargetX, tileTargetY))
 							{
@@ -6776,11 +6764,11 @@ namespace Terraria
 					if (flag2)
 					{
 						int num8 = Inventory[SelectedItem].PlaceStyle;
-						if (createTile == 141)
+						if (createTile == (int)EntityID.TileID.EXPLOSIVES)
 						{
 							num8 = Main.Rand.Next(2);
 						}
-						if (createTile == 128 || createTile == 137)
+						if (createTile == (int)EntityID.TileID.MANNEQUIN || createTile == (int)EntityID.TileID.TRAP)
 						{
 							num8 = ((direction >= 0) ? 1 : (-1));
 						}
@@ -6789,9 +6777,9 @@ namespace Terraria
 							itemTime = Inventory[SelectedItem].UseTime;
 							NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 1, tileTargetX, tileTargetY, createTile, num8);
 							NetMessage.SendMessage();
-							switch (createTile)
+							switch ((EntityID.TileID)createTile)
 							{
-								case 15:
+								case EntityID.TileID.CHAIR:
 									if (direction == 1)
 									{
 										Main.TileSet[tileTargetX, tileTargetY].FrameX += 18;
@@ -6799,11 +6787,11 @@ namespace Terraria
 									}
 									NetMessage.SendTileSquare(tileTargetX - 1, tileTargetY - 1, 3);
 									break;
-								case 19:
+								case EntityID.TileID.PLATFORM:
 									ui.TotalWoodPlatformsPlaced++;
 									break;
-								case 79:
-								case 90:
+								case EntityID.TileID.BED:
+								case EntityID.TileID.BATHTUB:
 									NetMessage.SendTileSquare(tileTargetX, tileTargetY, 5);
 									break;
 							}
@@ -6839,7 +6827,7 @@ namespace Terraria
 								num10++;
 								break;
 						}
-						if (Main.TileSet[num9, num10].WallType != 0)
+						if (Main.TileSet[num9, num10].WallType != (byte)EntityID.WallID.NONE)
 						{
 							continue;
 						}
@@ -6948,7 +6936,7 @@ namespace Terraria
 					}
 					int num2 = tileTargetX;
 					int num3 = tileTargetY;
-					if (Main.TileSet[num2, num3].IsActive != 0 && Main.TileSet[num2, num3].Type == 128)
+					if (Main.TileSet[num2, num3].IsActive != 0 && Main.TileSet[num2, num3].Type == (int)EntityID.TileID.MANNEQUIN)
 					{
 						int frameY = Main.TileSet[num2, num3].FrameY;
 						int num4 = 0;
@@ -7017,11 +7005,11 @@ namespace Terraria
 					}
 					if (flag)
 					{
-						if (ptr->Shoot == 85 || ptr->Shoot == 15 || ptr->Shoot == 34)
+						if (ptr->Shoot == (byte)EntityID.ProjectileID.FLAMES || ptr->Shoot == (byte)EntityID.ProjectileID.BALL_OF_FIRE || ptr->Shoot == (byte)EntityID.ProjectileID.FLAMELASH)
 						{
 							flag = !IsWet;
 						}
-						else if (ptr->Shoot == 6 || ptr->Shoot == 19 || ptr->Shoot == 33 || ptr->Shoot == 52)
+						else if (ptr->Shoot == (byte)EntityID.ProjectileID.ENCHANTED_BOOMERANG || ptr->Shoot == (byte)EntityID.ProjectileID.FLAMARANG || ptr->Shoot == (byte)EntityID.ProjectileID.THORN_CHAKRAM || ptr->Shoot == (byte)EntityID.ProjectileID.WOODEN_BOOMERANG)
 						{
 							for (int j = 0; j < Projectile.MaxNumProjs; j++)
 							{
@@ -7032,7 +7020,7 @@ namespace Terraria
 								}
 							}
 						}
-						else if (ptr->Shoot == 106)
+						else if (ptr->Shoot == (byte)EntityID.ProjectileID.LIGHT_DISC)
 						{
 							int num6 = 0;
 							for (int k = 0; k < Projectile.MaxNumProjs; k++)
@@ -7044,7 +7032,7 @@ namespace Terraria
 								}
 							}
 						}
-						else if (ptr->Shoot == 13 || ptr->Shoot == 32)
+						else if (ptr->Shoot == (byte)EntityID.ProjectileID.HOOK || ptr->Shoot == (byte)EntityID.ProjectileID.IVY_WHIP)
 						{
 							for (int l = 0; l < Projectile.MaxNumProjs; l++)
 							{
@@ -7055,11 +7043,11 @@ namespace Terraria
 								}
 							}
 						}
-						else if (ptr->Shoot == 73)
+						else if (ptr->Shoot == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 						{
 							for (int m = 0; m < Projectile.MaxNumProjs; m++)
 							{
-								if (Main.ProjectileSet[m].active != 0 && Main.ProjectileSet[m].owner == WhoAmI && Main.ProjectileSet[m].type == 74)
+								if (Main.ProjectileSet[m].active != 0 && Main.ProjectileSet[m].owner == WhoAmI && Main.ProjectileSet[m].type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED)
 								{
 									flag = false;
 									break;
@@ -7072,7 +7060,7 @@ namespace Terraria
 						if (potionDelay <= 0)
 						{
 							potionDelay = potionDelayTime;
-							AddBuff((int)Buff.ID.POTION_DELAY, potionDelay);
+							AddBuff((int)EntityID.BuffID.POTION_DELAY, potionDelay);
 						}
 						else
 						{
@@ -7086,7 +7074,7 @@ namespace Terraria
 					}
 					if (ptr->Mana > 0 && flag)
 					{
-						if (ptr->Type != (int)Item.ID.SPACE_GUN || !spaceGun)
+						if (ptr->Type != (int)EntityID.ItemID.SPACE_GUN || !spaceGun)
 						{
 							if (statMana >= (int)(ptr->Mana * manaCost))
 							{
@@ -7114,38 +7102,38 @@ namespace Terraria
 							AddBuff(ptr->BuffType, ptr->BuffTime);
 						}
 					}
-					if (isLocal() && ptr->BuffType == (int)Buff.ID.PET)
+					if (isLocal() && ptr->BuffType == (int)EntityID.BuffID.PET)
 					{
 						ApplyPetBuff(ptr->Type);
 					}
 					if (Main.GameTime.DayTime)
 					{
-						if (ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_EYE)
+						if (ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_EYE)
 						{
 							flag = false;
 						}
-						else if (ptr->Type == (int)Item.ID.MECHANICAL_EYE)
+						else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_EYE)
 						{
 							flag = false;
 						}
-						else if (ptr->Type == (int)Item.ID.MECHANICAL_WORM)
+						else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_WORM)
 						{
 							flag = false;
 						}
-						else if (ptr->Type == (int)Item.ID.MECHANICAL_SKULL)
+						else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_SKULL)
 						{
 							flag = false;
 						}
 					}
-					if (ptr->Type == (int)Item.ID.WORM_FOOD && !ZoneEvil)
+					if (ptr->Type == (int)EntityID.ItemID.WORM_FOOD && !ZoneEvil)
 					{
 						flag = false;
 					}
-					else if (flag && isLocal() && ptr->Shoot == 17)
+					else if (flag && isLocal() && ptr->Shoot == (byte)EntityID.ProjectileID.DIRT_BALL)
 					{
 						int num7 = ui.MouseX + CurrentView.ScreenPosition.X >> 4;
 						int num8 = ui.MouseY + CurrentView.ScreenPosition.Y >> 4;
-						if (Main.TileSet[num7, num8].IsActive != 0 && (Main.TileSet[num7, num8].Type == 0 || Main.TileSet[num7, num8].Type == 2 || Main.TileSet[num7, num8].Type == 23))
+						if (Main.TileSet[num7, num8].IsActive != 0 && (Main.TileSet[num7, num8].Type == (int)EntityID.TileID.DIRT || Main.TileSet[num7, num8].Type == (int)EntityID.TileID.GRASS || Main.TileSet[num7, num8].Type == (int)EntityID.TileID.CORRUPT_GRASS))
 						{
 							WorldGen.KillTile(num7, num8, KillToFail: false, EffectOnly: false, noItem: true);
 							if (Main.TileSet[num7, num8].IsActive == 0)
@@ -7210,7 +7198,7 @@ namespace Terraria
 							Main.PlaySound(2, XYWH.X, XYWH.Y, ptr->UseSound);
 						}
 					}
-					if (flag && (ptr->Shoot == 18 || ptr->Shoot == 72 || ptr->Shoot == 86 || ptr->Shoot == 87 || ptr->Shoot == 111))
+					if (flag && (ptr->Shoot == (byte)EntityID.ProjectileID.SHADOW_ORB || ptr->Shoot == (byte)EntityID.ProjectileID.BLUE_FAIRY || ptr->Shoot == (byte)EntityID.ProjectileID.PINK_FAIRY || ptr->Shoot == (byte)EntityID.ProjectileID.GREEN_FAIRY || ptr->Shoot == (byte)EntityID.ProjectileID.PET_BUNNY))
 					{
 						for (int num9 = 0; num9 < Projectile.MaxNumProjs; num9++)
 						{
@@ -7220,7 +7208,7 @@ namespace Terraria
 								{
 									Main.ProjectileSet[num9].Kill();
 								}
-								else if (ptr->Shoot == 72 && (Main.ProjectileSet[num9].type == 86 || Main.ProjectileSet[num9].type == 87))
+								else if (ptr->Shoot == (byte)EntityID.ProjectileID.BLUE_FAIRY && (Main.ProjectileSet[num9].type == (byte)EntityID.ProjectileID.PINK_FAIRY || Main.ProjectileSet[num9].type == (byte)EntityID.ProjectileID.GREEN_FAIRY))
 								{
 									Main.ProjectileSet[num9].Kill();
 								}
@@ -7367,7 +7355,7 @@ namespace Terraria
 				else if (ptr->HoldStyle == 1)
 				{
 					itemLocation.X = XYWH.X + (width / 2) + ((itemWidth >> 1) + 2) * direction;
-					if (ptr->Type == (int)Item.ID.GLOWSTICK || ptr->Type == (int)Item.ID.STICKY_GLOWSTICK)
+					if (ptr->Type == (int)EntityID.ItemID.GLOWSTICK || ptr->Type == (int)EntityID.ItemID.STICKY_GLOWSTICK)
 					{
 						itemLocation.X -= direction << 1;
 						itemLocation.Y += 4;
@@ -7399,19 +7387,19 @@ namespace Terraria
 				}
 				// BUG: Cursed Torches can be held underwater, but no light will be emitted from them until 1.03. For some reason when bringing over PC code, they buggered the handling code so cursed torches are included in the submersion check.
 #if VERSION_103 || VERSION_FINAL
-				if (((ptr->Type == (int)Item.ID.TORCH || (ptr->Type >= (int)Item.ID.BLUE_TORCH && ptr->Type <= (int)Item.ID.DEMON_TORCH)) && !IsWet) || ptr->Type == (int)Item.ID.CURSED_TORCH)
+				if (((ptr->Type == (int)EntityID.ItemID.TORCH || (ptr->Type >= (int)EntityID.ItemID.BLUE_TORCH && ptr->Type <= (int)EntityID.ItemID.DEMON_TORCH)) && !IsWet) || ptr->Type == (int)EntityID.ItemID.CURSED_TORCH)
 #else
-				if ((ptr->Type == (int)Item.ID.TORCH || ptr->Type == (int)Item.ID.CURSED_TORCH || (ptr->Type >= (int)Item.ID.BLUE_TORCH && ptr->Type <= (int)Item.ID.DEMON_TORCH)) && !IsWet)
+				if ((ptr->Type == (int)EntityID.ItemID.TORCH || ptr->Type == (int)EntityID.ItemID.CURSED_TORCH || (ptr->Type >= (int)EntityID.ItemID.BLUE_TORCH && ptr->Type <= (int)EntityID.ItemID.DEMON_TORCH)) && !IsWet)
 #endif
 				{
 					int num14 = 0;
-					if (ptr->Type == (int)Item.ID.CURSED_TORCH)
+					if (ptr->Type == (int)EntityID.ItemID.CURSED_TORCH)
 					{
 						num14 = 8;
 					}
-					else if (ptr->Type >= (int)Item.ID.BLUE_TORCH)
+					else if (ptr->Type >= (int)EntityID.ItemID.BLUE_TORCH)
 					{
-						num14 = ptr->Type - (int)Item.ID.BLUE_TORCH - 1;
+						num14 = ptr->Type - (int)EntityID.ItemID.BLUE_TORCH - 1;
 					}
 					Vector3 rgb;
 					switch (num14)
@@ -7479,7 +7467,7 @@ namespace Terraria
 						Lighting.AddLight((int)(itemLocation.X + 12 + velocity.X) >> 4, (int)(itemLocation.Y - 14 + velocity.Y) >> 4, rgb);
 					}
 				}
-				if (ptr->Type == (int)Item.ID.CANDLE && !IsWet)
+				if (ptr->Type == (int)EntityID.ItemID.CANDLE && !IsWet)
 				{
 					int upperBound2 = 20;
 					if (itemAnimation > 0)
@@ -7503,7 +7491,7 @@ namespace Terraria
 						Lighting.AddLight((int)(itemLocation.X + 6 + velocity.X) >> 4, itemLocation.Y - 14 >> 4, new Vector3(1f, 0.95f, 0.8f));
 					}
 				}
-				else if (ptr->Type == (int)Item.ID.WATER_CANDLE && !IsWet)
+				else if (ptr->Type == (int)EntityID.ItemID.WATER_CANDLE && !IsWet)
 				{
 					int upperBound3 = 10;
 					if (itemAnimation > 0)
@@ -7527,7 +7515,7 @@ namespace Terraria
 						Lighting.AddLight((int)(itemLocation.X + 6 + velocity.X) >> 4, itemLocation.Y - 14 >> 4, new Vector3(0.3f, 0.3f, 0.75f));
 					}
 				}
-				if (ptr->Type == (int)Item.ID.GLOWSTICK)
+				if (ptr->Type == (int)EntityID.ItemID.GLOWSTICK)
 				{
 					if (direction == -1)
 					{
@@ -7538,7 +7526,7 @@ namespace Terraria
 						Lighting.AddLight((int)(itemLocation.X + 6 + velocity.X) >> 4, itemLocation.Y - 14 >> 4, new Vector3(0.7f, 1f, 0.8f));
 					}
 				}
-				else if (ptr->Type == (int)Item.ID.STICKY_GLOWSTICK)
+				else if (ptr->Type == (int)EntityID.ItemID.STICKY_GLOWSTICK)
 				{
 					if (direction == -1)
 					{
@@ -7560,17 +7548,17 @@ namespace Terraria
 					{
 						int num16 = ptr->Shoot;
 						float num17 = ptr->ShootSpeed;
-						if (ptr->IsMelee && num16 != 25 && num16 != 26 && num16 != 35)
+						if (ptr->IsMelee && num16 != (byte)EntityID.ProjectileID.BALL_O_HURT && num16 != (byte)EntityID.ProjectileID.BLUE_MOON && num16 != (byte)EntityID.ProjectileID.SUNFURY)
 						{
 							num17 /= meleeSpeed;
 						}
-						if (num16 == 13 || num16 == 32)
+						if (num16 == (byte)EntityID.ProjectileID.HOOK || num16 == (byte)EntityID.ProjectileID.IVY_WHIP)
 						{
 							grappling[0] = -1;
 							grapCount = 0;
 							for (int num18 = 0; num18 < Projectile.MaxNumProjs; num18++)
 							{
-								if (Main.ProjectileSet[num18].type == 13 && Main.ProjectileSet[num18].active != 0 && Main.ProjectileSet[num18].owner == i)
+								if (Main.ProjectileSet[num18].type == (byte)EntityID.ProjectileID.HOOK && Main.ProjectileSet[num18].active != 0 && Main.ProjectileSet[num18].owner == i)
 								{
 									Main.ProjectileSet[num18].Kill();
 								}
@@ -7610,16 +7598,16 @@ namespace Terraria
 								{
 									num16 = Inventory[num21].Shoot;
 								}
-								if (num16 == 42)
+								if (num16 == (byte)EntityID.ProjectileID.SAND_BALL_GUN)
 								{
-									if (Inventory[num21].Type == (int)Item.ID.EBONSAND_BLOCK)
+									if (Inventory[num21].Type == (int)EntityID.ItemID.EBONSAND_BLOCK)
 									{
-										num16 = 65;
+										num16 = (byte)EntityID.ProjectileID.EBONSAND_BALL_GUN;
 										num19 += 5;
 									}
-									else if (Inventory[num21].Type == (int)Item.ID.PEARLSAND_BLOCK)
+									else if (Inventory[num21].Type == (int)EntityID.ItemID.PEARLSAND_BLOCK)
 									{
-										num16 = 68;
+										num16 = (byte)EntityID.ProjectileID.PEARL_SAND_BALL_GUN;
 										num19 += 5;
 									}
 								}
@@ -7638,7 +7626,7 @@ namespace Terraria
 									num19 += num19 / 5;
 								}
 								num20 += Inventory[num21].Knockback;
-								if ((ptr->Type != (int)Item.ID.MINISHARK || Main.Rand.Next(3) != 0) && (ptr->Type != (int)Item.ID.MEGASHARK || Main.Rand.Next(2) != 0) && (ptr->Type != (int)Item.ID.CLOCKWORK_ASSAULT_RIFLE || itemAnimation >= ptr->UseAnimation - 2) && Main.Rand.Next(100) >= freeAmmoChance && (num16 != 85 || itemAnimation >= itemAnimationMax - 6) && --Inventory[num21].Stack <= 0)
+								if ((ptr->Type != (int)EntityID.ItemID.MINISHARK || Main.Rand.Next(3) != 0) && (ptr->Type != (int)EntityID.ItemID.MEGASHARK || Main.Rand.Next(2) != 0) && (ptr->Type != (int)EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE || itemAnimation >= ptr->UseAnimation - 2) && Main.Rand.Next(100) >= freeAmmoChance && (num16 != 85 || itemAnimation >= itemAnimationMax - 6) && --Inventory[num21].Stack <= 0)
 								{
 									Inventory[num21].Init();
 								}
@@ -7650,26 +7638,26 @@ namespace Terraria
 						}
 						switch (num16)
 						{
-							case 72:
+							case (byte)EntityID.ProjectileID.BLUE_FAIRY:
 								{
 									int num26 = Main.Rand.Next(3);
 									if (num26 != 0)
 									{
-										num16 = num26 + 85;
+										num16 = num26 + (byte)EntityID.ProjectileID.PINK_FAIRY - 1;
 									}
 									break;
 								}
-							case 73:
+							case (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE:
 								{
 									for (int num25 = 0; num25 < Projectile.MaxNumProjs; num25++)
 									{
 										if (Main.ProjectileSet[num25].active != 0 && Main.ProjectileSet[num25].owner == i)
 										{
-											if (Main.ProjectileSet[num25].type == 73)
+											if (Main.ProjectileSet[num25].type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 											{
-												num16 = 74;
+												num16 = (byte)EntityID.ProjectileID.DUAL_HOOK_RED;
 											}
-											else if (Main.ProjectileSet[num25].type == 74)
+											else if (Main.ProjectileSet[num25].type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED)
 											{
 												flag2 = false;
 												break;
@@ -7685,32 +7673,32 @@ namespace Terraria
 							{
 								num20 *= 1.7f;
 							}
-							if (ptr->Type == (int)Item.ID.MOLTEN_FURY)
+							if (ptr->Type == (int)EntityID.ItemID.MOLTEN_FURY)
 							{
-								if (num16 == 1)
+								if (num16 == (byte)EntityID.ProjectileID.WOODEN_ARROW_FRIENDLY)
 								{
-									num16 = 2;
+									num16 = (byte)EntityID.ProjectileID.FIRE_ARROW;
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.SHARANGA)
+							else if (ptr->Type == (int)EntityID.ItemID.SHARANGA)
 							{
-								num16 = 113;
+								num16 = (byte)EntityID.ProjectileID.SPECTRAL_ARROW;
 							}
-							else if (ptr->Type == (int)Item.ID.VULCAN_REPEATER)
+							else if (ptr->Type == (int)EntityID.ItemID.VULCAN_REPEATER)
 							{
-								num16 = 114;
+								num16 = (byte)EntityID.ProjectileID.VULCAN_BOLT;
 							}
 							itemTime = ptr->UseTime;
 							direction = (sbyte)((ui.MouseX + CurrentView.ScreenPosition.X > XYWH.X + 10) ? 1 : (-1));
 							Vector2 vector = new Vector2(Position.X + (width / 2), Position.Y + (height / 2));
-							switch (num16)
+							switch ((EntityID.ProjectileID)num16)
 							{
-								case 9:
+								case EntityID.ProjectileID.STARFURY:
 									vector.X += Main.Rand.Next(601) * -direction;
 									vector.Y += -300 - Main.Rand.Next(100);
 									num20 = 0f;
 									break;
-								case 51:
+								case EntityID.ProjectileID.SEED:
 									vector.Y -= 6 * gravDir;
 									break;
 							}
@@ -7723,11 +7711,11 @@ namespace Terraria
 							num28 *= num29;
 							switch (num16)
 							{
-								case 12:
+								case (byte)EntityID.ProjectileID.FALLING_STAR:
 									vector.X += num27 * 3f;
 									vector.Y += num28 * 3f;
 									break;
-								case 17:
+								case (byte)EntityID.ProjectileID.DIRT_BALL:
 									vector.X = ui.MouseX + CurrentView.ScreenPosition.X;
 									vector.Y = ui.MouseY + CurrentView.ScreenPosition.Y;
 									break;
@@ -7740,7 +7728,7 @@ namespace Terraria
 								NetMessage.CreateMessage1(41, WhoAmI);
 								NetMessage.SendMessage();
 							}
-							if (num16 == 76)
+							if (num16 == (byte)EntityID.ProjectileID.QUARTER_NOTE)
 							{
 								num16 += Main.Rand.Next(3);
 								num30 /= (Main.ResolutionHeight / 2);
@@ -7769,13 +7757,13 @@ namespace Terraria
 									NetMessage.SendProjectile(num33);
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.MINISHARK || ptr->Type == (int)Item.ID.MEGASHARK)
+							else if (ptr->Type == (int)EntityID.ItemID.MINISHARK || ptr->Type == (int)EntityID.ItemID.MEGASHARK)
 							{
 								float speedX = num27 + Main.Rand.Next(-40, 41) * 0.01f;
 								float speedY = num28 + Main.Rand.Next(-40, 41) * 0.01f;
 								Projectile.NewProjectile(vector.X, vector.Y, speedX, speedY, num16, num19, num20, i);
 							}
-							else if (ptr->Type == (int)Item.ID.CRYSTAL_STORM)
+							else if (ptr->Type == (int)EntityID.ItemID.CRYSTAL_STORM)
 							{
 								float num34 = num27;
 								float num35 = num28;
@@ -7783,7 +7771,7 @@ namespace Terraria
 								num35 += Main.Rand.Next(-40, 41) * 0.04f;
 								Projectile.NewProjectile(vector.X, vector.Y, num34, num35, num16, num19, num20, i);
 							}
-							else if (ptr->Type == (int)Item.ID.SHOTGUN)
+							else if (ptr->Type == (int)EntityID.ItemID.SHOTGUN)
 							{
 								for (int num36 = 0; num36 < 4; num36++)
 								{
@@ -7794,7 +7782,7 @@ namespace Terraria
 									Projectile.NewProjectile(vector.X, vector.Y, num37, num38, num16, num19, num20, i);
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.CLOCKWORK_ASSAULT_RIFLE)
+							else if (ptr->Type == (int)EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE)
 							{
 								float num39 = num27;
 								float num40 = num28;
@@ -7814,10 +7802,10 @@ namespace Terraria
 								}
 								Projectile.NewProjectile(vector.X, vector.Y, num39, num40, num16, num19, num20, i);
 							}
-							else if (ptr->BuffType != (int)Buff.ID.PET)
+							else if (ptr->BuffType != (int)EntityID.BuffID.PET)
 							{
 								int num41 = Projectile.NewProjectile(vector.X, vector.Y, num27, num28, num16, num19, num20, i);
-								if (num41 >= 0 && num16 == 80)
+								if (num41 >= 0 && num16 == (byte)EntityID.ProjectileID.ICE_BLOCK)
 								{
 									Main.ProjectileSet[num41].ai0 = tileTargetX;
 									Main.ProjectileSet[num41].ai1 = tileTargetY;
@@ -7831,16 +7819,16 @@ namespace Terraria
 							NetMessage.SendMessage();
 						}
 					}
-					if (isLocal() && (ptr->Type == (int)Item.ID.WRENCH || ptr->Type == (int)Item.ID.WIRE_CUTTER) && itemAnimation > 0 && itemTime == 0 && controlUseItem)
+					if (isLocal() && (ptr->Type == (int)EntityID.ItemID.WRENCH || ptr->Type == (int)EntityID.ItemID.WIRE_CUTTER) && itemAnimation > 0 && itemTime == 0 && controlUseItem)
 					{
 						int i2 = tileTargetX;
 						int j2 = tileTargetY;
-						if (ptr->Type == (int)Item.ID.WRENCH)
+						if (ptr->Type == (int)EntityID.ItemID.WRENCH)
 						{
 							int num42 = -1;
 							for (int num43 = 0; num43 < MaxNumInventory; num43++)
 							{
-								if (Inventory[num43].Stack > 0 && Inventory[num43].Type == (int)Item.ID.WIRE)
+								if (Inventory[num43].Stack > 0 && Inventory[num43].Type == (int)EntityID.ItemID.WIRE)
 								{
 									num42 = num43;
 									break;
@@ -7873,7 +7861,7 @@ namespace Terraria
 							NetMessage.SendMessage();
 						}
 					}
-					if (itemAnimation > 0 && itemTime == 0 && (ptr->Type == (int)Item.ID.BELL || ptr->Type == (int)Item.ID.HARP))
+					if (itemAnimation > 0 && itemTime == 0 && (ptr->Type == (int)EntityID.ItemID.BELL || ptr->Type == (int)EntityID.ItemID.HARP))
 					{
 						itemTime = ptr->UseTime;
 						Vector2 vector2 = new Vector2(Position.X + (width / 2), Position.Y + (height / 2));
@@ -7895,14 +7883,14 @@ namespace Terraria
 							num46 = 1f;
 						}
 						Main.HarpNote = num46;
-						int style = ((ptr->Type == (int)Item.ID.BELL) ? 35 : 26);
+						int style = ((ptr->Type == (int)EntityID.ItemID.BELL) ? 35 : 26);
 						Main.PlaySound(2, XYWH.X, XYWH.Y, style);
 						NetMessage.CreateMessage1(58, WhoAmI);
 						NetMessage.SendMessage();
 					}
-					if (ptr->Type >= (int)Item.ID.EMPTY_BUCKET && ptr->Type <= (int)Item.ID.LAVA_BUCKET && itemTime == 0 && itemAnimation > 0 && controlUseItem)
+					if (ptr->Type >= (int)EntityID.ItemID.EMPTY_BUCKET && ptr->Type <= (int)EntityID.ItemID.LAVA_BUCKET && itemTime == 0 && itemAnimation > 0 && controlUseItem)
 					{
-						if (ptr->Type == (int)Item.ID.EMPTY_BUCKET)
+						if (ptr->Type == (int)EntityID.ItemID.EMPTY_BUCKET)
 						{
 							int lava = Main.TileSet[tileTargetX, tileTargetY].Lava;
 							int num47 = 0;
@@ -7921,11 +7909,11 @@ namespace Terraria
 								int lava2 = Main.TileSet[tileTargetX, tileTargetY].Lava;
 								if (Main.TileSet[tileTargetX, tileTargetY].Lava == 0)
 								{
-									ptr->SetDefaults((int)Item.ID.WATER_BUCKET);
+									ptr->SetDefaults((int)EntityID.ItemID.WATER_BUCKET);
 								}
 								else
 								{
-									ptr->SetDefaults((int)Item.ID.LAVA_BUCKET);
+									ptr->SetDefaults((int)EntityID.ItemID.LAVA_BUCKET);
 								}
 								Main.PlaySound(19, XYWH.X, XYWH.Y);
 								itemTime = ptr->UseTime;
@@ -7971,7 +7959,7 @@ namespace Terraria
 						}
 						else if (Main.TileSet[tileTargetX, tileTargetY].Liquid < 200 && (Main.TileSet[tileTargetX, tileTargetY].IsActive == 0 || !Main.TileSolidNotSolidTop[Main.TileSet[tileTargetX, tileTargetY].Type]))
 						{
-							if (ptr->Type == (int)Item.ID.LAVA_BUCKET)
+							if (ptr->Type == (int)EntityID.ItemID.LAVA_BUCKET)
 							{
 								if (Main.TileSet[tileTargetX, tileTargetY].Liquid == 0 || Main.TileSet[tileTargetX, tileTargetY].Lava != 0)
 								{
@@ -7979,7 +7967,7 @@ namespace Terraria
 									Main.TileSet[tileTargetX, tileTargetY].Lava = 32;
 									Main.TileSet[tileTargetX, tileTargetY].Liquid = byte.MaxValue;
 									WorldGen.SquareTileFrame(tileTargetX, tileTargetY);
-									ptr->SetDefaults((int)Item.ID.EMPTY_BUCKET);
+									ptr->SetDefaults((int)EntityID.ItemID.EMPTY_BUCKET);
 									itemTime = ptr->UseTime;
 									NetMessage.SendWater(tileTargetX, tileTargetY);
 								}
@@ -7990,7 +7978,7 @@ namespace Terraria
 								Main.TileSet[tileTargetX, tileTargetY].Lava = 0;
 								Main.TileSet[tileTargetX, tileTargetY].Liquid = byte.MaxValue;
 								WorldGen.SquareTileFrame(tileTargetX, tileTargetY);
-								ptr->SetDefaults((int)Item.ID.EMPTY_BUCKET);
+								ptr->SetDefaults((int)EntityID.ItemID.EMPTY_BUCKET);
 								itemTime = ptr->UseTime;
 								NetMessage.SendWater(tileTargetX, tileTargetY);
 							}
@@ -8033,37 +8021,37 @@ namespace Terraria
 								{
 									hitTile = 100;
 								}
-								if (type != 27)
+								if (type != (int)EntityID.TileID.SUNFLOWER)
 								{
 									if (Main.TileHammer[type])
 									{
 										flag3 = false;
-										switch (type)
+										switch ((EntityID.TileID)type)
 										{
-											case 48:
+											case EntityID.TileID.SPIKE:
 												hitTile += (short)(ptr->HammerPower >> 1);
 												break;
-											case 129:
+											case EntityID.TileID.CRYSTAL_SHARD:
 												hitTile += (short)(ptr->HammerPower << 1);
 												break;
 											default:
 												hitTile = (short)(hitTile + ptr->HammerPower);
 												break;
 										}
-										if (tileTargetY > Main.RockLayer && type == 77 && ptr->HammerPower < 60)
+										if (tileTargetY > Main.RockLayer && type == (int)EntityID.TileID.HELLFORGE && ptr->HammerPower < 60)
 										{
 											hitTile = 0;
 										}
 										if (ptr->HammerPower > 0)
 										{
-											if (type == 26 && (ptr->HammerPower < 80 || !Main.InHardMode))
+											if (type == (int)EntityID.TileID.DEMON_ALTAR && (ptr->HammerPower < 80 || !Main.InHardMode))
 											{
 												hitTile = 0;
 												Hurt(statLife >> 1, -direction, pvp: false, quiet: false, Lang.DeathMsgPtr());
 											}
 											if (hitTile >= 100)
 											{
-												if (Main.NetMode == (byte)NetModeSetting.CLIENT && type == 21)
+												if (Main.NetMode == (byte)NetModeSetting.CLIENT && type == (int)EntityID.TileID.CHEST)
 												{
 													WorldGen.KillTile(tileTargetX, tileTargetY, KillToFail: true);
 													NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, tileTargetX, tileTargetY, 1);
@@ -8090,13 +8078,13 @@ namespace Terraria
 									{
 										if (ptr->AxePower > 0)
 										{
-											switch (type)
+											switch ((EntityID.TileID)type)
 											{
-												case 30:
-												case 124:
+												case EntityID.TileID.WOOD:
+												case EntityID.TileID.WOODEN_BEAM:
 													hitTile += (short)(ptr->AxePower * 5);
 													break;
-												case 80:
+												case EntityID.TileID.CACTUS:
 													hitTile += (short)(ptr->AxePower * 3);
 													break;
 												default:
@@ -8106,7 +8094,7 @@ namespace Terraria
 											if (hitTile >= 100)
 											{
 												hitTile = 0;
-												if (type == 5)
+												if (type == (int)EntityID.TileID.TREE)
 												{
 													ui.TotalChopsTaken++;
 													WorldGen.woodSpawned = 0;
@@ -8115,7 +8103,7 @@ namespace Terraria
 												WorldGen.KillTile(tileTargetX, tileTargetY);
 												NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, tileTargetX, tileTargetY, 0);
 												NetMessage.SendMessage();
-												if (type == 5)
+												if (type == (int)EntityID.TileID.TREE)
 												{
 													ui.Statistics.IncreaseWoodStat(WorldGen.woodSpawned);
 												}
@@ -8132,54 +8120,54 @@ namespace Terraria
 									else if (ptr->PickPower > 0)
 									{
 										// The code below is accurate to what is present in the console-releases, however it has been rearranged for ease of reading (matches PC). See below for accounted difference.
-										switch (type)
+										switch ((EntityID.TileID)type)
 										{
-											case 25:
-											case 37:
-											case 41:
-											case 43:
-											case 44:
-											case 58:
-											case 107:
-											case 117:
+											case EntityID.TileID.EBONSTONE:
+											case EntityID.TileID.METEORITE:
+											case EntityID.TileID.BLUE_BRICK:
+											case EntityID.TileID.GREEN_BRICK:
+											case EntityID.TileID.PINK_BRICK:
+											case EntityID.TileID.HELLSTONE:
+											case EntityID.TileID.COBALT_ORE:
+											case EntityID.TileID.PEARLSTONE:
 												hitTile += (short)(ptr->PickPower >> 1);
 												break;
-											case 108:
+											case EntityID.TileID.MYTHRIL_ORE:
 												hitTile += (short)(ptr->PickPower / 3);
 												break;
-											case 111:
+											case EntityID.TileID.ADAMANTITE_ORE:
 												hitTile += (short)(ptr->PickPower >> 2);
 												break;
 											default:
 												hitTile += ptr->PickPower;
 												break;
 										}
-										switch (type)
+										switch ((EntityID.TileID)type)
 										{
-											case 22:
+											case EntityID.TileID.DEMONITE_ORE:
 												if (tileTargetY > Main.WorldSurface && ptr->PickPower < 55)
 												{
 													hitTile = 0;
 												}
 												break;
-											case 25:
-											case 56:
-											case 58:
-											case 117:
+											case EntityID.TileID.EBONSTONE:
+											case EntityID.TileID.OBSIDIAN:
+											case EntityID.TileID.HELLSTONE:
+											case EntityID.TileID.PEARLSTONE:
 												if (ptr->PickPower < 65)
 												{
 													hitTile = 0;
 												}
 												break;
-											case 37:
+											case EntityID.TileID.METEORITE:
 												if (ptr->PickPower < 55)
 												{
 													hitTile = 0;
 												}
 												break;
-											case 41:
-											case 43:
-											case 44:
+											case EntityID.TileID.BLUE_BRICK:
+											case EntityID.TileID.GREEN_BRICK:
+											case EntityID.TileID.PINK_BRICK:
 #if !VERSION_INITIAL
 												if (ptr->PickPower < 65)
 												{
@@ -8196,77 +8184,77 @@ namespace Terraria
 												}
 #endif
 												break;
-											case 107:
+											case EntityID.TileID.COBALT_ORE:
 												if (ptr->PickPower < 100)
 												{
 													hitTile = 0;
 												}
 												break;
-											case 108:
+											case EntityID.TileID.MYTHRIL_ORE:
 												if (ptr->PickPower < 110)
 												{
 													hitTile = 0;
 												}
 												break;
-											case 111:
+											case EntityID.TileID.ADAMANTITE_ORE:
 												if (ptr->PickPower < 120)
 												{
 													hitTile = 0;
 												}
 												break;
 										}
-										switch (type)
+										switch ((EntityID.TileID)type)
 										{
-											case 0:
-											case 40:
-											case 53:
-											case 57:
-											case 59:
-											case 123:
+											case EntityID.TileID.DIRT:
+											case EntityID.TileID.CLAY:
+											case EntityID.TileID.SAND:
+											case EntityID.TileID.ASH:
+											case EntityID.TileID.MUD:
+											case EntityID.TileID.SILT:
 												// In the console-releases, this is actually multiplied by 2, however this is due to these instructions being placed after the initial switch and its associated default.
 												hitTile += ptr->PickPower;
 												break;
 										}
-										if (hitTile >= 100 && (type == 2 || type == 23 || type == 60 || type == 70 || type == 109))
+										if (hitTile >= 100 && (type == (int)EntityID.TileID.GRASS || type == (int)EntityID.TileID.CORRUPT_GRASS || type == (int)EntityID.TileID.JUNGLE_GRASS || type == (int)EntityID.TileID.MUSHROOM_GRASS || type == (int)EntityID.TileID.HALLOWED_GRASS))
 										{
 											hitTile = 0;
 										}
 										if (hitTile >= 100)
 										{
-											switch (type)
+											switch ((EntityID.TileID)type)
 											{
-												case 0:
-												case 1:
-												case 53:
-												case 57:
-												case 58:
-												case 59:
-												case 112:
-												case 116:
-												case 123:
-												case 147:
+												case EntityID.TileID.DIRT:
+												case EntityID.TileID.STONE:
+												case EntityID.TileID.SAND:
+												case EntityID.TileID.ASH:
+												case EntityID.TileID.HELLSTONE:
+												case EntityID.TileID.MUD:
+												case EntityID.TileID.EBONSAND:
+												case EntityID.TileID.PEARLSAND:
+												case EntityID.TileID.SILT:
+												case EntityID.TileID.SNOW:
 													ui.Statistics.IncreaseStat(StatisticEntry.Soils);
 													break;
-												case 7:
+												case EntityID.TileID.COPPER_ORE:
 													ui.TotalCopperObtained++;
 													ui.Statistics.IncreaseStat(StatisticEntry.Ore);
 													break;
-												case 6:
-												case 8:
-												case 9:
-												case 22:
-												case 56:
-												case 107:
-												case 108:
-												case 111:
+												case EntityID.TileID.IRON_ORE:
+												case EntityID.TileID.GOLD_ORE:
+												case EntityID.TileID.SILVER_ORE:
+												case EntityID.TileID.DEMONITE_ORE:
+												case EntityID.TileID.OBSIDIAN:
+												case EntityID.TileID.COBALT_ORE:
+												case EntityID.TileID.MYTHRIL_ORE:
+												case EntityID.TileID.ADAMANTITE_ORE:
 													ui.Statistics.IncreaseStat(StatisticEntry.Ore);
 													break;
-												case 63:
-												case 64:
-												case 65:
-												case 66:
-												case 67:
-												case 68:
+												case EntityID.TileID.SAPPHIRE:
+												case EntityID.TileID.RUBY:
+												case EntityID.TileID.EMERALD:
+												case EntityID.TileID.TOPAZ:
+												case EntityID.TileID.AMETHYST:
+												case EntityID.TileID.DIAMOND:
 													ui.Statistics.IncreaseStat(StatisticEntry.Gems);
 													break;
 											}
@@ -8292,7 +8280,7 @@ namespace Terraria
 						}
 						int num54 = tileTargetX;
 						int num55 = tileTargetY;
-						if ((Main.TileSet[num54, num55].WallType == 0 || !WorldGen.CanKillWall(num54, num55)) && Main.TileSet[num54, num55].IsActive == 0)
+						if ((Main.TileSet[num54, num55].WallType == (byte)EntityID.WallID.NONE || !WorldGen.CanKillWall(num54, num55)) && Main.TileSet[num54, num55].IsActive == 0)
 						{
 							int num56 = -1;
 							if (((ui.MouseX + CurrentView.ScreenPosition.X) & 0xF) < 8)
@@ -8324,7 +8312,7 @@ namespace Terraria
 								}
 							}
 						}
-						if (flag3 && Main.TileSet[num54, num55].WallType > 0 && toolTime == 0 && itemAnimation > 0 && controlUseItem && ptr->HammerPower > 0 && WorldGen.CanKillWall(num54, num55))
+						if (flag3 && Main.TileSet[num54, num55].WallType > (int)EntityID.WallID.NONE && toolTime == 0 && itemAnimation > 0 && controlUseItem && ptr->HammerPower > 0 && WorldGen.CanKillWall(num54, num55))
 						{
 							if (hitTileX != num54 || hitTileY != num55)
 							{
@@ -8348,7 +8336,7 @@ namespace Terraria
 							itemTime = (byte)(ptr->UseTime >> 1);
 						}
 					}
-					if (ptr->Type == (int)Item.ID.LIFE_CRYSTAL)
+					if (ptr->Type == (int)EntityID.ItemID.LIFE_CRYSTAL)
 					{
 						if (itemTime == 0 && itemAnimation > 0 && StatLifeMax < 400)
 						{
@@ -8362,7 +8350,7 @@ namespace Terraria
 							ui.SetTriggerState(Trigger.MaxHealthAndMana);
 						}
 					}
-					else if (ptr->Type == (int)Item.ID.MANA_CRYSTAL)
+					else if (ptr->Type == (int)EntityID.ItemID.MANA_CRYSTAL)
 					{
 						if (itemTime == 0 && itemAnimation > 0 && statManaMax < 200)
 						{
@@ -8435,14 +8423,14 @@ namespace Terraria
 					}
 					if (!flag4)
 					{
-						if (ptr->Type == (int)Item.ID.DEMON_BOW || ptr->Type == (int)Item.ID.WAR_AXE_OF_THE_NIGHT || ptr->Type == (int)Item.ID.LIGHTS_BANE || ptr->Type == (int)Item.ID.NIGHTMARE_PICKAXE || ptr->Type == (int)Item.ID.THE_BREAKER)
+						if (ptr->Type == (int)EntityID.ItemID.DEMON_BOW || ptr->Type == (int)EntityID.ItemID.WAR_AXE_OF_THE_NIGHT || ptr->Type == (int)EntityID.ItemID.LIGHTS_BANE || ptr->Type == (int)EntityID.ItemID.NIGHTMARE_PICKAXE || ptr->Type == (int)EntityID.ItemID.THE_BREAKER)
 						{
 							if (Main.Rand.Next(18) == 0)
 							{
 								Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 14, direction * 2, 0.0, 150, default, 1.3f);
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.NIGHTS_EDGE)
+						else if (ptr->Type == (int)EntityID.ItemID.NIGHTS_EDGE)
 						{
 							if (Main.Rand.Next(6) == 0)
 							{
@@ -8455,7 +8443,7 @@ namespace Terraria
 								ptr2->Velocity *= 0.5f;
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.STARFURY)
+						else if (ptr->Type == (int)EntityID.ItemID.STARFURY)
 						{
 							if (Main.Rand.Next(6) == 0)
 							{
@@ -8463,10 +8451,10 @@ namespace Terraria
 							}
 							if (Main.Rand.Next(12) == 0)
 							{
-								Gore.NewGore(new Vector2(rectangle.X, rectangle.Y), default, Main.Rand.Next(16, 18));
+								Gore.NewGore(new Vector2(rectangle.X, rectangle.Y), default, Main.Rand.Next((int)EntityID.GoreID.FALLEN_STAR_PARTICLE1, (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2 + 1));
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.BLADE_OF_GRASS || ptr->Type == (int)Item.ID.STAFF_OF_REGROWTH)
+						else if (ptr->Type == (int)EntityID.ItemID.BLADE_OF_GRASS || ptr->Type == (int)EntityID.ItemID.STAFF_OF_REGROWTH)
 						{
 							Dust* ptr3 = Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 40, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, 0, default, 1.2f);
 							if (ptr3 != null)
@@ -8474,7 +8462,7 @@ namespace Terraria
 								ptr3->NoGravity = true;
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.FIERY_GREATSWORD)
+						else if (ptr->Type == (int)EntityID.ItemID.FIERY_GREATSWORD)
 						{
 							Dust* ptr4 = Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 6, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, 100, default, 2.5);
 							if (ptr4 != null)
@@ -8484,7 +8472,7 @@ namespace Terraria
 								ptr4->Velocity.Y *= 2f;
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.MOLTEN_PICKAXE || ptr->Type == (int)Item.ID.MOLTEN_HAMAXE)
+						else if (ptr->Type == (int)EntityID.ItemID.MOLTEN_PICKAXE || ptr->Type == (int)EntityID.ItemID.MOLTEN_HAMAXE)
 						{
 							Dust* ptr5 = Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 6, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, 100, default, 1.9f);
 							if (ptr5 != null)
@@ -8492,7 +8480,7 @@ namespace Terraria
 								ptr5->NoGravity = true;
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.MURAMASA)
+						else if (ptr->Type == (int)EntityID.ItemID.MURAMASA)
 						{
 							Dust* ptr6 = Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 29, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, 100, default, 2f);
 							if (ptr6 != null)
@@ -8502,7 +8490,7 @@ namespace Terraria
 								ptr6->Velocity.Y *= 0.5f;
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.PWNHAMMER || ptr->Type == (int)Item.ID.EXCALIBUR)
+						else if (ptr->Type == (int)EntityID.ItemID.PWNHAMMER || ptr->Type == (int)EntityID.ItemID.EXCALIBUR)
 						{
 							if (Main.Rand.Next(4) == 0)
 							{
@@ -8525,11 +8513,11 @@ namespace Terraria
 								}
 							}
 						}
-						else if (ptr->Type >= (int)Item.ID.BLUE_PHASEBLADE && ptr->Type <= (int)Item.ID.YELLOW_PHASEBLADE)
+						else if (ptr->Type >= (int)EntityID.ItemID.BLUE_PHASEBLADE && ptr->Type <= (int)EntityID.ItemID.YELLOW_PHASEBLADE)
 						{
-							Lighting.AddLight(RGB: (ptr->Type == (int)Item.ID.BLUE_PHASEBLADE) ? new Vector3(0.05f, 0.25f, 0.6f) : ((ptr->Type == (int)Item.ID.RED_PHASEBLADE) ? new Vector3(0.5f, 0.1f, 0.05f) : ((ptr->Type == (int)Item.ID.GREEN_PHASEBLADE) ? new Vector3(0.05f, 0.5f, 0.1f) : ((ptr->Type == (int)Item.ID.PURPLE_PHASEBLADE) ? new Vector3(0.4f, 0.05f, 0.5f) : ((ptr->Type != (int)Item.ID.WHITE_PHASEBLADE) ? new Vector3(0.45f, 0.45f, 0.05f) : new Vector3(0.4f, 0.45f, 0.5f))))), LightX: (int)(itemLocation.X + 6 + velocity.X) >> 4, LightY: itemLocation.Y - 14 >> 4);
+							Lighting.AddLight(RGB: (ptr->Type == (int)EntityID.ItemID.BLUE_PHASEBLADE) ? new Vector3(0.05f, 0.25f, 0.6f) : ((ptr->Type == (int)EntityID.ItemID.RED_PHASEBLADE) ? new Vector3(0.5f, 0.1f, 0.05f) : ((ptr->Type == (int)EntityID.ItemID.GREEN_PHASEBLADE) ? new Vector3(0.05f, 0.5f, 0.1f) : ((ptr->Type == (int)EntityID.ItemID.PURPLE_PHASEBLADE) ? new Vector3(0.4f, 0.05f, 0.5f) : ((ptr->Type != (int)EntityID.ItemID.WHITE_PHASEBLADE) ? new Vector3(0.45f, 0.45f, 0.05f) : new Vector3(0.4f, 0.45f, 0.5f))))), LightX: (int)(itemLocation.X + 6 + velocity.X) >> 4, LightY: itemLocation.Y - 14 >> 4);
 						}
-						else if (ptr->Type == (int)Item.ID.TIZONA)
+						else if (ptr->Type == (int)EntityID.ItemID.TIZONA)
 						{
 							Dust* ptr9 = Main.DustSet.NewDust(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 6, velocity.X * 0.2f + direction * 3, velocity.Y * 0.2f, Main.Rand.Next(61, 62), default, 2.5f);
 							if (ptr9 != null)
@@ -8555,7 +8543,7 @@ namespace Terraria
 							{
 								for (int num66 = num63; num66 < num64; num66++)
 								{
-									if (Main.TileCut[Main.TileSet[num65, num66].Type] && Main.TileSet[num65, num66 + 1].Type != 78)
+									if (Main.TileCut[Main.TileSet[num65, num66].Type] && Main.TileSet[num65, num66 + 1].Type != (int)EntityID.TileID.CLAY_POT)
 									{
 										WorldGen.KillTile(num65, num66);
 										NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 0, num65, num66, 0);
@@ -8566,7 +8554,7 @@ namespace Terraria
 							for (int num67 = 0; num67 < NPC.MaxNumNPCs; num67++)
 							{
 								NPC nPC = Main.NPCSet[num67];
-								if (nPC.Active == 0 || nPC.Immunities[i] != 0 || attackCD != 0 || nPC.DontTakeDamage || (nPC.IsFriendly && (nPC.Type != (int)NPC.ID.GUIDE || !killGuide)) || !rectangle.Intersects(nPC.XYWH) || (!nPC.HasNoTileCollide && !Collision.CanHit(ref XYWH, ref nPC.XYWH)))
+								if (nPC.Active == 0 || nPC.Immunities[i] != 0 || attackCD != 0 || nPC.DontTakeDamage || (nPC.IsFriendly && (nPC.Type != (int)EntityID.NPCID.GUIDE || !killGuide)) || !rectangle.Intersects(nPC.XYWH) || (!nPC.HasNoTileCollide && !Collision.CanHit(ref XYWH, ref nPC.XYWH)))
 								{
 									continue;
 								}
@@ -8579,12 +8567,12 @@ namespace Terraria
 								{
 									StatisticEntry statisticEntryFromNetID = Statistics.GetStatisticEntryFromNetID(nPC.NetID);
 									ui.Statistics.IncreaseStat(statisticEntryFromNetID);
-									if (nPC.Type == (int)NPC.ID.SLIME)
+									if (nPC.Type == (int)EntityID.NPCID.SLIME)
 									{
 										ui.TotalDeadSlimes++;
 									}
 #if !USE_ORIGINAL_CODE
-									if (nPC.Type == (int)NPC.ID.GUIDE)
+									if (nPC.Type == (int)EntityID.NPCID.GUIDE)
 									{
 										ui.SetTriggerState(Trigger.Homicidal);
 									}
@@ -8645,7 +8633,7 @@ namespace Terraria
 					}
 					if (isLocal())
 					{
-						if (ptr->Type == (int)Item.ID.GOBLIN_BATTLE_STANDARD)
+						if (ptr->Type == (int)EntityID.ItemID.GOBLIN_BATTLE_STANDARD)
 						{
 							itemTime = ptr->UseTime;
 							Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
@@ -8663,7 +8651,7 @@ namespace Terraria
 								NetMessage.SendMessage();
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.SNOW_GLOBE)
+						else if (ptr->Type == (int)EntityID.ItemID.SNOW_GLOBE)
 						{
 							itemTime = ptr->UseTime;
 							Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
@@ -8681,12 +8669,12 @@ namespace Terraria
 								NetMessage.SendMessage();
 							}
 						}
-						else if (ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_EYE || ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_SKULL || ptr->Type == (int)Item.ID.WORM_FOOD || ptr->Type == (int)Item.ID.MECHANICAL_EYE || ptr->Type == (int)Item.ID.MECHANICAL_WORM || ptr->Type == (int)Item.ID.MECHANICAL_SKULL || ptr->Type == (int)Item.ID.SLIME_CROWN)
+						else if (ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_EYE || ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL || ptr->Type == (int)EntityID.ItemID.WORM_FOOD || ptr->Type == (int)EntityID.ItemID.MECHANICAL_EYE || ptr->Type == (int)EntityID.ItemID.MECHANICAL_WORM || ptr->Type == (int)EntityID.ItemID.MECHANICAL_SKULL || ptr->Type == (int)EntityID.ItemID.SLIME_CROWN)
 						{
 							bool flag7 = false;
 							for (int num71 = 0; num71 < NPC.MaxNumNPCs; num71++)
 							{
-								if (Main.NPCSet[num71].Active != 0 && ((ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_EYE && Main.NPCSet[num71].Type == (int)NPC.ID.EYE_OF_CTHULHU) || (ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_SKULL && Main.NPCSet[num71].Type == (int)NPC.ID.OCRAM) || (ptr->Type == (int)Item.ID.WORM_FOOD && Main.NPCSet[num71].Type == (int)NPC.ID.EATER_OF_WORLDS_HEAD) || (ptr->Type == (int)Item.ID.SLIME_CROWN && Main.NPCSet[num71].Type == (int)NPC.ID.KING_SLIME) || (ptr->Type == (int)Item.ID.MECHANICAL_EYE && Main.NPCSet[num71].Type == (int)NPC.ID.RETINAZER) || (ptr->Type == (int)Item.ID.MECHANICAL_EYE && Main.NPCSet[num71].Type == (int)NPC.ID.SPAZMATISM) || (ptr->Type == (int)Item.ID.MECHANICAL_WORM && Main.NPCSet[num71].Type == (int)NPC.ID.THE_DESTROYER_HEAD) || (ptr->Type == (int)Item.ID.MECHANICAL_SKULL && Main.NPCSet[num71].Type == (int)NPC.ID.PRIME_CANNON))) // The cannon?
+								if (Main.NPCSet[num71].Active != 0 && ((ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_EYE && Main.NPCSet[num71].Type == (int)EntityID.NPCID.EYE_OF_CTHULHU) || (ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL && Main.NPCSet[num71].Type == (int)EntityID.NPCID.OCRAM) || (ptr->Type == (int)EntityID.ItemID.WORM_FOOD && Main.NPCSet[num71].Type == (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD) || (ptr->Type == (int)EntityID.ItemID.SLIME_CROWN && Main.NPCSet[num71].Type == (int)EntityID.NPCID.KING_SLIME) || (ptr->Type == (int)EntityID.ItemID.MECHANICAL_EYE && Main.NPCSet[num71].Type == (int)EntityID.NPCID.RETINAZER) || (ptr->Type == (int)EntityID.ItemID.MECHANICAL_EYE && Main.NPCSet[num71].Type == (int)EntityID.NPCID.SPAZMATISM) || (ptr->Type == (int)EntityID.ItemID.MECHANICAL_WORM && Main.NPCSet[num71].Type == (int)EntityID.NPCID.THE_DESTROYER_HEAD) || (ptr->Type == (int)EntityID.ItemID.MECHANICAL_SKULL && Main.NPCSet[num71].Type == (int)EntityID.NPCID.PRIME_CANNON))) // The cannon?
 								{
 									flag7 = true;
 									break;
@@ -8696,21 +8684,21 @@ namespace Terraria
 							{
 								itemTime = ptr->UseTime;
 							}
-							else if (ptr->Type == (int)Item.ID.SLIME_CROWN)
+							else if (ptr->Type == (int)EntityID.ItemID.SLIME_CROWN)
 							{
 								itemTime = ptr->UseTime;
 								Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 								if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 								{
-									NPC.SpawnOnPlayer(this, (int)NPC.ID.KING_SLIME);
+									NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.KING_SLIME);
 								}
 								else
 								{
-									NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.KING_SLIME);
+									NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.KING_SLIME);
 									NetMessage.SendMessage();
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_EYE)
+							else if (ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_EYE)
 							{
 								if (!Main.GameTime.DayTime)
 								{
@@ -8718,16 +8706,16 @@ namespace Terraria
 									Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 									{
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.EYE_OF_CTHULHU);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.EYE_OF_CTHULHU);
 									}
 									else
 									{
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.EYE_OF_CTHULHU);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.EYE_OF_CTHULHU);
 										NetMessage.SendMessage();
 									}
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.SUSPICIOUS_LOOKING_SKULL)
+							else if (ptr->Type == (int)EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL)
 							{
 								if (!Main.GameTime.DayTime && Main.InHardMode)
 								{
@@ -8735,16 +8723,16 @@ namespace Terraria
 									Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 									{
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.OCRAM);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.OCRAM);
 									}
 									else
 									{
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.OCRAM);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.OCRAM);
 										NetMessage.SendMessage();
 									}
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.WORM_FOOD)
+							else if (ptr->Type == (int)EntityID.ItemID.WORM_FOOD)
 							{
 								if (ZoneEvil)
 								{
@@ -8752,16 +8740,16 @@ namespace Terraria
 									Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 									{
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.EATER_OF_WORLDS_HEAD);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD);
 									}
 									else
 									{
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.EATER_OF_WORLDS_HEAD);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD);
 										NetMessage.SendMessage();
 									}
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.MECHANICAL_EYE)
+							else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_EYE)
 							{
 								if (!Main.GameTime.DayTime)
 								{
@@ -8769,19 +8757,19 @@ namespace Terraria
 									Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 									{
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.RETINAZER);
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.SPAZMATISM);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.RETINAZER);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.SPAZMATISM);
 									}
 									else
 									{
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.RETINAZER);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.RETINAZER);
 										NetMessage.SendMessage();
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.SPAZMATISM);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.SPAZMATISM);
 										NetMessage.SendMessage();
 									}
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.MECHANICAL_WORM)
+							else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_WORM)
 							{
 								if (!Main.GameTime.DayTime)
 								{
@@ -8789,33 +8777,33 @@ namespace Terraria
 									Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 									if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 									{
-										NPC.SpawnOnPlayer(this, (int)NPC.ID.THE_DESTROYER_HEAD);
+										NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.THE_DESTROYER_HEAD);
 									}
 									else
 									{
-										NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.THE_DESTROYER_HEAD);
+										NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.THE_DESTROYER_HEAD);
 										NetMessage.SendMessage();
 									}
 								}
 							}
-							else if (ptr->Type == (int)Item.ID.MECHANICAL_SKULL && !Main.GameTime.DayTime)
+							else if (ptr->Type == (int)EntityID.ItemID.MECHANICAL_SKULL && !Main.GameTime.DayTime)
 							{
 								itemTime = ptr->UseTime;
 								Main.PlaySound(15, XYWH.X, XYWH.Y, 0);
 								if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 								{
-									NPC.SpawnOnPlayer(this, (int)NPC.ID.SKELETRON_PRIME);
+									NPC.SpawnOnPlayer(this, (int)EntityID.NPCID.SKELETRON_PRIME);
 								}
 								else
 								{
-									NetMessage.CreateMessage2(61, WhoAmI, (int)NPC.ID.SKELETRON_PRIME);
+									NetMessage.CreateMessage2(61, WhoAmI, (int)EntityID.NPCID.SKELETRON_PRIME);
 									NetMessage.SendMessage();
 								}
 							}
 						}
 					}
 				}
-				if (ptr->Type == (int)Item.ID.MAGIC_MIRROR && itemAnimation > 0)
+				if (ptr->Type == (int)EntityID.ItemID.MAGIC_MIRROR && itemAnimation > 0)
 				{
 					if (itemTime == 0)
 					{
@@ -8831,7 +8819,7 @@ namespace Terraria
 						grapCount = 0;
 						for (int num73 = 0; num73 < Projectile.MaxNumProjs; num73++)
 						{
-							if (Main.ProjectileSet[num73].active != 0 && Main.ProjectileSet[num73].owner == i && Main.ProjectileSet[num73].aiStyle == 7)
+							if (Main.ProjectileSet[num73].active != 0 && Main.ProjectileSet[num73].owner == i && Main.ProjectileSet[num73].aiStyle == (byte)EntityID.ProjStyleID.GRAPPLING_HOOK)
 							{
 								Main.ProjectileSet[num73].Kill();
 							}
@@ -8874,7 +8862,7 @@ namespace Terraria
 				{
 					ptr->Init();
 				}
-				if (SelectedItem == 48 && itemAnimation != 0)
+				if (SelectedItem == 48 && itemAnimation != 0)	// 48 is Trash
 				{
 					ui.mouseItem = *ptr;
 				}
@@ -8965,7 +8953,7 @@ namespace Terraria
 		{
 			for (int i = 0; i < MaxNumInventory + 1; i++)
 			{
-				if (Inventory[i].Type > 0 && Inventory[i].NetID != -13 && Inventory[i].NetID != -15 && Inventory[i].NetID != -16)
+				if (Inventory[i].Type > 0 && Inventory[i].NetID != (short)EntityID.ItemID.COPPER_PICKAXE && Inventory[i].NetID != (short)EntityID.ItemID.COPPER_SHORTSWORD && Inventory[i].NetID != (short)EntityID.ItemID.COPPER_AXE)
 				{
 					int num = Item.NewItem(XYWH.X, XYWH.Y, width, height, Inventory[i].Type);
 					Main.ItemSet[num].NetDefaults(Inventory[i].NetID, Inventory[i].Stack);
@@ -9061,7 +9049,7 @@ namespace Terraria
 			{
 				return false;
 			}
-			if (Main.TileSet[x, y - 1].IsActive == 0 || Main.TileSet[x, y - 1].Type != 79)
+			if (Main.TileSet[x, y - 1].IsActive == 0 || Main.TileSet[x, y - 1].Type != (int)EntityID.TileID.BED)
 			{
 				return false;
 			}
@@ -9245,219 +9233,168 @@ namespace Terraria
 						cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
 						binaryWriter.Seek(2, SeekOrigin.Begin);
 						binaryWriter.Write(cRC.GetValue());
-						Main.ShowSaveIcon();
-						try
-						{
-							if (!ui.TestStorageSpace("Characters", playerPath, (int)memoryStream.Length))
-							{
-								result = false;
-							}
-							else
-							{
-								using (StorageContainer storageContainer = ui.OpenPlayerStorage("Characters"))
-								{
-									using (Stream stream = storageContainer.OpenFile(playerPath, FileMode.Create))
-									{
-										stream.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-										stream.Close();
-									}
-								}
-							}
-						}
-						catch (IOException)
-						{
-							ui.WriteError();
-							result = false;
-						}
-						catch (Exception)
-						{
-						}
-						binaryWriter.Close();
-						Main.HideSaveIcon();
-						return result;
 #else
-						if (Main.PlayerDataVersion == 6)
+						binaryWriter.Write((short)Main.PlayerDataVersion);
+						binaryWriter.Write(0u);
+						binaryWriter.Write(CharacterName);
+						binaryWriter.Write(difficulty);
+						binaryWriter.Write(hair);
+						binaryWriter.Write(male);
+						binaryWriter.Write(statLife);
+						binaryWriter.Write(StatLifeMax);
+						binaryWriter.Write(statMana);
+						binaryWriter.Write(statManaMax);
+						binaryWriter.Write(hairColor.R);
+						binaryWriter.Write(hairColor.G);
+						binaryWriter.Write(hairColor.B);
+						binaryWriter.Write(skinColor.R);
+						binaryWriter.Write(skinColor.G);
+						binaryWriter.Write(skinColor.B);
+						binaryWriter.Write(eyeColor.R);
+						binaryWriter.Write(eyeColor.G);
+						binaryWriter.Write(eyeColor.B);
+						binaryWriter.Write(shirtColor.R);
+						binaryWriter.Write(shirtColor.G);
+						binaryWriter.Write(shirtColor.B);
+						binaryWriter.Write(underShirtColor.R);
+						binaryWriter.Write(underShirtColor.G);
+						binaryWriter.Write(underShirtColor.B);
+						binaryWriter.Write(pantsColor.R);
+						binaryWriter.Write(pantsColor.G);
+						binaryWriter.Write(pantsColor.B);
+						binaryWriter.Write(shoeColor.R);
+						binaryWriter.Write(shoeColor.G);
+						binaryWriter.Write(shoeColor.B);
+						lock (this)
 						{
-							binaryWriter.Write((short)Main.PlayerDataVersion);
-							binaryWriter.Write(0u);
-							binaryWriter.Write(CharacterName);
-							binaryWriter.Write(difficulty);
-							binaryWriter.Write(hair);
-							binaryWriter.Write(male);
-							binaryWriter.Write(statLife);
-							binaryWriter.Write(StatLifeMax);
-							binaryWriter.Write(statMana);
-							binaryWriter.Write(statManaMax);
-							binaryWriter.Write(hairColor.R);
-							binaryWriter.Write(hairColor.G);
-							binaryWriter.Write(hairColor.B);
-							binaryWriter.Write(skinColor.R);
-							binaryWriter.Write(skinColor.G);
-							binaryWriter.Write(skinColor.B);
-							binaryWriter.Write(eyeColor.R);
-							binaryWriter.Write(eyeColor.G);
-							binaryWriter.Write(eyeColor.B);
-							binaryWriter.Write(shirtColor.R);
-							binaryWriter.Write(shirtColor.G);
-							binaryWriter.Write(shirtColor.B);
-							binaryWriter.Write(underShirtColor.R);
-							binaryWriter.Write(underShirtColor.G);
-							binaryWriter.Write(underShirtColor.B);
-							binaryWriter.Write(pantsColor.R);
-							binaryWriter.Write(pantsColor.G);
-							binaryWriter.Write(pantsColor.B);
-							binaryWriter.Write(shoeColor.R);
-							binaryWriter.Write(shoeColor.G);
-							binaryWriter.Write(shoeColor.B);
-							lock (this)
+							for (int i = 0; i < MaxNumArmor; i++)
 							{
-								for (int i = 0; i < MaxNumArmor; i++)
+								binaryWriter.Write(armor[i].NetID);
+
+								if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
 								{
-									binaryWriter.Write(armor[i].NetID);
-									binaryWriter.Write(armor[i].PrefixType);
-								}
-								for (int j = 0; j < MaxNumInventory; j++)
-								{
-									binaryWriter.Write(Inventory[j].NetID);
-									binaryWriter.Write(Inventory[j].Stack);
-									binaryWriter.Write(Inventory[j].PrefixType);
-								}
-								for (int k = 0; k < Chest.MaxNumItems; k++)
-								{
-									binaryWriter.Write(bank.ItemSet[k].NetID);
-									binaryWriter.Write(bank.ItemSet[k].Stack);
-									binaryWriter.Write(bank.ItemSet[k].PrefixType);
-								}
-								for (int l = 0; l < Chest.MaxNumItems; l++)
-								{
-									binaryWriter.Write(safe.ItemSet[l].NetID);
-									binaryWriter.Write(safe.ItemSet[l].Stack);
-									binaryWriter.Write(safe.ItemSet[l].PrefixType);
-								}
-								for (int m = 0; m < MaxNumBuffs; m++)
-								{
-									binaryWriter.Write(buff[m].Type);
-									binaryWriter.Write(buff[m].Time);
-								}
-							}
-							binaryWriter.Write(pet);
-							int num = itemsFound.Length + 7 >> 3;
-							byte[] array = new byte[num];
-							itemsFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-							num = 43;
-							RecipesFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-							recipesNew.CopyTo(array, 0);
-							binaryWriter.Write(array, 0, num);
-							num = 17;
-							craftingStationsFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-						}
-						else if (Main.PlayerDataVersion == 8)
-						{
-							binaryWriter.Write((short)Main.PlayerDataVersion);
-							binaryWriter.Write(0u);
-							binaryWriter.Write(CharacterName);
-							binaryWriter.Write(difficulty);
-							binaryWriter.Write(hair);
-							binaryWriter.Write(male);
-							binaryWriter.Write(statLife);
-							binaryWriter.Write(StatLifeMax);
-							binaryWriter.Write(statMana);
-							binaryWriter.Write(statManaMax);
-							binaryWriter.Write(hairColor.R);
-							binaryWriter.Write(hairColor.G);
-							binaryWriter.Write(hairColor.B);
-							binaryWriter.Write(skinColor.R);
-							binaryWriter.Write(skinColor.G);
-							binaryWriter.Write(skinColor.B);
-							binaryWriter.Write(eyeColor.R);
-							binaryWriter.Write(eyeColor.G);
-							binaryWriter.Write(eyeColor.B);
-							binaryWriter.Write(shirtColor.R);
-							binaryWriter.Write(shirtColor.G);
-							binaryWriter.Write(shirtColor.B);
-							binaryWriter.Write(underShirtColor.R);
-							binaryWriter.Write(underShirtColor.G);
-							binaryWriter.Write(underShirtColor.B);
-							binaryWriter.Write(pantsColor.R);
-							binaryWriter.Write(pantsColor.G);
-							binaryWriter.Write(pantsColor.B);
-							binaryWriter.Write(shoeColor.R);
-							binaryWriter.Write(shoeColor.G);
-							binaryWriter.Write(shoeColor.B);
-							lock (this)
-							{
-								for (int i = 0; i < MaxNumArmor; i++)
-								{
-									binaryWriter.Write(armor[i].NetID);
 									if (armor[i].NetID != 0)
 									{
 										binaryWriter.Write(armor[i].PrefixType);
 									}
 								}
-								for (int j = 0; j < MaxNumInventory; j++)
+								else
 								{
-									binaryWriter.Write(Inventory[j].NetID);
+									binaryWriter.Write(armor[i].PrefixType);
+								}
+							}
+
+							for (int j = 0; j < MaxNumInventory; j++)
+							{
+								binaryWriter.Write(Inventory[j].NetID);
+
+								if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
+								{
 									if (Inventory[j].NetID != 0)
 									{
 										binaryWriter.Write(Inventory[j].Stack);
 										binaryWriter.Write(Inventory[j].PrefixType);
 									}
 								}
-								for (int k = 0; k < Chest.MaxNumItems; k++)
+								else
 								{
-									binaryWriter.Write(bank.ItemSet[k].NetID);
+									binaryWriter.Write(Inventory[j].Stack);
+									binaryWriter.Write(Inventory[j].PrefixType);
+								}
+							}
+
+							for (int k = 0; k < Chest.MaxNumItems; k++)
+							{
+								binaryWriter.Write(bank.ItemSet[k].NetID);
+
+								if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
+								{
 									if (bank.ItemSet[k].NetID != 0)
 									{
 										binaryWriter.Write(bank.ItemSet[k].Stack);
 										binaryWriter.Write(bank.ItemSet[k].PrefixType);
 									}
 								}
-								for (int l = 0; l < Chest.MaxNumItems; l++)
+								else
 								{
-									binaryWriter.Write(safe.ItemSet[l].NetID);
+									binaryWriter.Write(bank.ItemSet[k].Stack);
+									binaryWriter.Write(bank.ItemSet[k].PrefixType);
+								}
+							}
+
+							for (int l = 0; l < Chest.MaxNumItems; l++)
+							{
+								binaryWriter.Write(safe.ItemSet[l].NetID);
+
+								if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
+								{
 									if (safe.ItemSet[l].NetID != 0)
 									{
 										binaryWriter.Write(safe.ItemSet[l].Stack);
 										binaryWriter.Write(safe.ItemSet[l].PrefixType);
 									}
 								}
-								for (int m = 0; m < MaxNumBuffs; m++)
+								else
 								{
-									binaryWriter.Write((byte)buff[m].Type);
-									binaryWriter.Write(buff[m].Time);
+									binaryWriter.Write(safe.ItemSet[l].Stack);
+									binaryWriter.Write(safe.ItemSet[l].PrefixType);
 								}
 							}
-							binaryWriter.Write(pet);
+
+							for (int m = 0; m < MaxNumBuffs; m++)
+							{
+								if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
+								{
+									binaryWriter.Write((byte)buff[m].Type);
+								}
+								else
+								{
+									binaryWriter.Write(buff[m].Type);
+								}
+
+								binaryWriter.Write(buff[m].Time);
+							}
+						}
+						binaryWriter.Write(pet);
 
 #if !VERSION_INITIAL
+						if (Main.PlayerDataVersion >= (int)EntityID.PlayerID.V101)
+						{
 							binaryWriter.Write(PlayerQuickAccess[0]);
 							binaryWriter.Write(PlayerQuickAccess[1]);
 							binaryWriter.Write(PlayerQuickAccess[2]);
 							binaryWriter.Write(PlayerQuickAccess[3]);
+						}
 #endif
 
-							int num = 82;   // itemsFound.Length + 7 >> 3;
-							byte[] array = new byte[num];
-							itemsFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-							num = 45;
-							RecipesFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-							recipesNew.CopyTo(array, 0);
-							binaryWriter.Write(array, 0, num);
-							num = 19;
-							craftingStationsFound.CopyTo(array, 0);
-							binaryWriter.Write((ushort)num);
-							binaryWriter.Write(array, 0, num);
-						}
+						// The way the game stores data about these long arrays (length being the # of items, # of recipes, or the highest ID of a crafting station) is by compressing them down to an 8-bit structure.
+						// In essence, it means for each 8 elements (item, recipe, or TileID) in one of these arrays, whether they are toggled or not is determined by a single byte between 0 to F, massively saving space.
+						// This is unique to Console/Mobile, due to the crafting system used in these versions needing memory.
+
+						// For the initial versions, I don't why they made a equation like the one below, as the max number of items (632) is wholly divisible by 8, and if we exclude the console-exclusives, it still doesn't work with the '+ 7'.
+#if USE_ORIGINAL_CODE
+						int num = (itemsFound.Length + 7) >> 3;
+#else
+						int num = (itemsFound.Length >> 3) + (itemsFound.Length % 8 > 0 ? 1 : 0);
+#endif
+						byte[] array = new byte[num];
+						itemsFound.CopyTo(array, 0);
+						binaryWriter.Write((ushort)num);
+						binaryWriter.Write(array, 0, num);
+
+						// Don't know how to explain these 3 though, as their values were initially hard-coded.
+						num = (RecipesFound.Length >> 3) + (RecipesFound.Length % 8 > 0 ? 1 : 0);
+						RecipesFound.CopyTo(array, 0);
+						binaryWriter.Write((ushort)num);
+						binaryWriter.Write(array, 0, num);
+						recipesNew.CopyTo(array, 0);
+						binaryWriter.Write(array, 0, num);
+
+						num = (craftingStationsFound.Length >> 3) + (craftingStationsFound.Length % 8 > 0 ? 1 : 0);
+						craftingStationsFound.CopyTo(array, 0);
+						binaryWriter.Write((ushort)num);
+						binaryWriter.Write(array, 0, num);
+
 						for (int n = 0; n < 200; n++)
 						{
 							if (spN[n] == null)
@@ -9470,10 +9407,15 @@ namespace Terraria
 							binaryWriter.Write(spI[n]);
 							binaryWriter.Write(spN[n]);
 						}
-						CRC32 cRC = new CRC32();
-						cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
-						binaryWriter.Seek(2, SeekOrigin.Begin);
-						binaryWriter.Write(cRC.GetValue());
+
+						if (Main.PlayerDataVersion < (int)EntityID.PlayerID.V101)
+						{
+							CRC32 cRC = new CRC32();
+							cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
+							binaryWriter.Seek(2, SeekOrigin.Begin);
+							binaryWriter.Write(cRC.GetValue());
+						}
+#endif
 						Main.ShowSaveIcon();
 						try
 						{
@@ -9498,345 +9440,14 @@ namespace Terraria
 							ui.WriteError();
 							result = false;
 						}
-						catch (Exception)
-						{
-						}
 						binaryWriter.Close();
 						Main.HideSaveIcon();
 						return result;
-#endif
 					}
 				}
 			}
 			return result;
 		}
-
-#if !USE_ORIGINAL_CODE
-		public void LoadOld(BinaryReader binaryReader, MemoryStream memoryStream, int num) // Taken partially from Mobile 1.2
-		{
-			CRC32 cRC = new CRC32();
-			cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
-			if (cRC.GetValue() != binaryReader.ReadUInt32())
-			{
-				throw new InvalidOperationException("Invalid CRC32");
-			}
-			if (num <= 6)
-			{
-				CharacterName = binaryReader.ReadString();
-				difficulty = binaryReader.ReadByte();
-				hair = binaryReader.ReadByte();
-				male = binaryReader.ReadBoolean();
-				statLife = binaryReader.ReadInt16();
-				StatLifeMax = binaryReader.ReadInt16();
-				if (StatLifeMax > 400)
-				{
-					StatLifeMax = 400;
-				}
-				if (statLife > StatLifeMax)
-				{
-					statLife = StatLifeMax;
-				}
-				statMana = binaryReader.ReadInt16();
-				statManaMax = binaryReader.ReadInt16();
-				if (statManaMax > 200)
-				{
-					statManaMax = 200;
-				}
-				if (statMana > 400)
-				{
-					statMana = 400;
-				}
-				if (num == 4)
-				{
-					binaryReader.ReadUInt32();
-				}
-				hairColor.R = binaryReader.ReadByte();
-				hairColor.G = binaryReader.ReadByte();
-				hairColor.B = binaryReader.ReadByte();
-				skinColor.R = binaryReader.ReadByte();
-				skinColor.G = binaryReader.ReadByte();
-				skinColor.B = binaryReader.ReadByte();
-				eyeColor.R = binaryReader.ReadByte();
-				eyeColor.G = binaryReader.ReadByte();
-				eyeColor.B = binaryReader.ReadByte();
-				shirtColor.R = binaryReader.ReadByte();
-				shirtColor.G = binaryReader.ReadByte();
-				shirtColor.B = binaryReader.ReadByte();
-				underShirtColor.R = binaryReader.ReadByte();
-				underShirtColor.G = binaryReader.ReadByte();
-				underShirtColor.B = binaryReader.ReadByte();
-				pantsColor.R = binaryReader.ReadByte();
-				pantsColor.G = binaryReader.ReadByte();
-				pantsColor.B = binaryReader.ReadByte();
-				shoeColor.R = binaryReader.ReadByte();
-				shoeColor.G = binaryReader.ReadByte();
-				shoeColor.B = binaryReader.ReadByte();
-				for (int i = 0; i < MaxNumArmor; i++)
-				{
-					int num2 = binaryReader.ReadInt16();
-					int pre = binaryReader.ReadByte();
-					if (num2 == 0)
-					{
-						armor[i].Init();
-						continue;
-					}
-					armor[i].NetDefaults(num2);
-					armor[i].SetPrefix(pre);
-					itemsFound.Set(armor[i].Type, value: true);
-				}
-				for (int j = 0; j < MaxNumInventory; j++)
-				{
-					int num3 = binaryReader.ReadInt16();
-					int stack = binaryReader.ReadInt16();
-					int pre2 = binaryReader.ReadByte();
-					if (num3 == 0)
-					{
-						Inventory[j].Init();
-						continue;
-					}
-					Inventory[j].NetDefaults(num3, stack);
-					Inventory[j].SetPrefix(pre2);
-					itemsFound.Set(Inventory[j].Type, value: true);
-				}
-				for (int k = 0; k < Chest.MaxNumItems; k++)
-				{
-					int num4 = binaryReader.ReadInt16();
-					int stack2 = binaryReader.ReadInt16();
-					int pre3 = binaryReader.ReadByte();
-					if (num4 == 0)
-					{
-						bank.ItemSet[k].Init();
-						continue;
-					}
-					bank.ItemSet[k].NetDefaults(num4, stack2);
-					bank.ItemSet[k].SetPrefix(pre3);
-					itemsFound.Set(bank.ItemSet[k].Type, value: true);
-				}
-				for (int l = 0; l < Chest.MaxNumItems; l++)
-				{
-					int num5 = binaryReader.ReadInt16();
-					int stack3 = binaryReader.ReadInt16();
-					int pre4 = binaryReader.ReadByte();
-					if (num5 == 0)
-					{
-						safe.ItemSet[l].Init();
-						continue;
-					}
-					safe.ItemSet[l].NetDefaults(num5, stack3);
-					safe.ItemSet[l].SetPrefix(pre4);
-					itemsFound.Set(safe.ItemSet[l].Type, value: true);
-				}
-				for (int m = 0; m < MaxNumBuffs; m++)
-				{
-					buff[m].Type = binaryReader.ReadUInt16();
-					buff[m].Time = binaryReader.ReadUInt16();
-				}
-				pet = binaryReader.ReadSByte();
-				int count = binaryReader.ReadUInt16();
-				itemsFound = new BitArray(binaryReader.ReadBytes(count));
-				count = binaryReader.ReadUInt16();
-				RecipesFound = new BitArray(binaryReader.ReadBytes(count));
-				recipesNew = new BitArray(binaryReader.ReadBytes(count));
-				count = binaryReader.ReadUInt16();
-				craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
-				if (itemsFound.Length < Item.MaxNumItemTypes)
-				{
-					itemsFound.Length = Item.MaxNumItemTypes;
-				}
-				if (RecipesFound.Length < Recipe.MaxNumRecipes)
-				{
-					RecipesFound.Length = Recipe.MaxNumRecipes;
-				}
-				if (recipesNew.Length < Recipe.MaxNumRecipes)
-				{
-					recipesNew.Length = Recipe.MaxNumRecipes;
-				}
-				if (craftingStationsFound.Length < Main.MaxNumTilenames)
-				{
-					craftingStationsFound.Length = Main.MaxNumTilenames;
-				}
-				for (int n = 0; n < 200; n++)
-				{
-					int num6 = binaryReader.ReadInt16();
-					if (num6 == -1)
-					{
-						break;
-					}
-					spX[n] = (short)num6;
-					spY[n] = binaryReader.ReadInt16();
-					spI[n] = binaryReader.ReadInt32();
-					spN[n] = binaryReader.ReadString();
-				}
-			}
-			else if (num == 8)
-			{
-				CharacterName = binaryReader.ReadString();
-				difficulty = binaryReader.ReadByte();
-				hair = binaryReader.ReadByte();
-				male = binaryReader.ReadBoolean();
-				statLife = binaryReader.ReadInt16();
-				StatLifeMax = binaryReader.ReadInt16();
-				if (StatLifeMax > 400)
-				{
-					StatLifeMax = 400;
-				}
-				if (statLife > StatLifeMax)
-				{
-					statLife = StatLifeMax;
-				}
-				statMana = binaryReader.ReadInt16();
-				statManaMax = binaryReader.ReadInt16();
-				if (statManaMax > 200)
-				{
-					statManaMax = 200;
-				}
-				if (statMana > 400)
-				{
-					statMana = 400;
-				}
-				hairColor.R = binaryReader.ReadByte();
-				hairColor.G = binaryReader.ReadByte();
-				hairColor.B = binaryReader.ReadByte();
-				skinColor.R = binaryReader.ReadByte();
-				skinColor.G = binaryReader.ReadByte();
-				skinColor.B = binaryReader.ReadByte();
-				eyeColor.R = binaryReader.ReadByte();
-				eyeColor.G = binaryReader.ReadByte();
-				eyeColor.B = binaryReader.ReadByte();
-				shirtColor.R = binaryReader.ReadByte();
-				shirtColor.G = binaryReader.ReadByte();
-				shirtColor.B = binaryReader.ReadByte();
-				underShirtColor.R = binaryReader.ReadByte();
-				underShirtColor.G = binaryReader.ReadByte();
-				underShirtColor.B = binaryReader.ReadByte();
-				pantsColor.R = binaryReader.ReadByte();
-				pantsColor.G = binaryReader.ReadByte();
-				pantsColor.B = binaryReader.ReadByte();
-				shoeColor.R = binaryReader.ReadByte();
-				shoeColor.G = binaryReader.ReadByte();
-				shoeColor.B = binaryReader.ReadByte();
-				for (int i = 0; i < MaxNumArmor; i++)
-				{
-					int num2 = binaryReader.ReadInt16();
-
-					if (num2 != 0)
-					{
-						int pre = binaryReader.ReadByte();
-						armor[i].NetDefaults(num2);
-						armor[i].SetPrefix(pre);
-						itemsFound.Set(armor[i].Type, value: true);
-					}
-					else
-					{
-						armor[i].Init();
-					}
-				}
-				for (int j = 0; j < MaxNumInventory; j++)
-				{
-					int num3 = binaryReader.ReadInt16();
-
-					if (num3 != 0)
-					{
-						int stack = binaryReader.ReadInt16();
-						int pre2 = binaryReader.ReadByte();
-						Inventory[j].NetDefaults(num3, stack);
-						Inventory[j].SetPrefix(pre2);
-						itemsFound.Set(Inventory[j].Type, value: true);
-					}
-					else
-					{
-						Inventory[j].Init();
-					}
-				}
-				for (int k = 0; k < Chest.MaxNumItems; k++)
-				{
-					int num4 = binaryReader.ReadInt16();
-
-					if (num4 != 0)
-					{
-						int stack2 = binaryReader.ReadInt16();
-						int pre3 = binaryReader.ReadByte();
-						bank.ItemSet[k].NetDefaults(num4, stack2);
-						bank.ItemSet[k].SetPrefix(pre3);
-						itemsFound.Set(bank.ItemSet[k].Type, value: true);
-					}
-					else
-					{
-						bank.ItemSet[k].Init();
-					}
-				}
-				for (int l = 0; l < Chest.MaxNumItems; l++)
-				{
-					int num5 = binaryReader.ReadInt16();
-					if (num5 != 0)
-					{
-						int stack3 = binaryReader.ReadInt16();
-						int pre4 = binaryReader.ReadByte();
-						safe.ItemSet[l].NetDefaults(num5, stack3);
-						safe.ItemSet[l].SetPrefix(pre4);
-						itemsFound.Set(safe.ItemSet[l].Type, value: true);
-					}
-					else
-					{
-						safe.ItemSet[l].Init();
-					}
-				}
-				for (int m = 0; m < MaxNumBuffs; m++)
-				{
-					buff[m].Type = binaryReader.ReadByte();
-					buff[m].Time = binaryReader.ReadUInt16();
-				}
-				pet = binaryReader.ReadSByte();
-#if VERSION_101
-				PlayerQuickAccess[0] = binaryReader.ReadSByte();
-				PlayerQuickAccess[1] = binaryReader.ReadSByte();
-				PlayerQuickAccess[2] = binaryReader.ReadSByte();
-				PlayerQuickAccess[3] = binaryReader.ReadSByte();
-#endif
-				int count = binaryReader.ReadUInt16();
-				itemsFound = new BitArray(binaryReader.ReadBytes(count));
-				count = binaryReader.ReadUInt16();
-				RecipesFound = new BitArray(binaryReader.ReadBytes(count));
-				recipesNew = new BitArray(binaryReader.ReadBytes(count));
-				count = binaryReader.ReadUInt16();
-				craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
-				if (itemsFound.Length < Item.MaxNumItemTypes)
-				{
-					itemsFound.Length = Item.MaxNumItemTypes;
-				}
-				if (RecipesFound.Length < Recipe.MaxNumRecipes)
-				{
-					RecipesFound.Length = Recipe.MaxNumRecipes;
-				}
-				if (recipesNew.Length < Recipe.MaxNumRecipes)
-				{
-					recipesNew.Length = Recipe.MaxNumRecipes;
-				}
-				if (craftingStationsFound.Length < Main.MaxNumTilenames)
-				{
-					craftingStationsFound.Length = Main.MaxNumTilenames;
-				}
-				for (int n = 0; n < 200; n++)
-				{
-					int num6 = binaryReader.ReadInt16();
-					if (num6 == -1)
-					{
-						break;
-					}
-					spX[n] = (short)num6;
-					spY[n] = binaryReader.ReadInt16();
-					spI[n] = binaryReader.ReadInt32();
-					spN[n] = binaryReader.ReadString();
-				}
-			}
-			else
-			{
-				throw new InvalidOperationException("Invalid version");
-			}
-			binaryReader.Close();
-		}
-#endif
-
 
 		public void Load(StorageContainer c, string playerPath)
 		{
@@ -9852,12 +9463,12 @@ namespace Terraria
 						stream.Close();
 						using (BinaryReader binaryReader = new BinaryReader(memoryStream))
 						{
-							int num = binaryReader.ReadInt16();
-							if (num > Main.PlayerDataVersion)
+							int version = binaryReader.ReadInt16();
+							if (version > Main.PlayerDataVersion)
 							{
 								throw new InvalidOperationException("Invalid version");
 							}
-							if (num >= Main.PlayerDataVersion)
+							if (version >= Main.PlayerDataVersion)	// What?? Surely it was meant to be <=
 							{
 								CRC32 cRC = new CRC32();
 								cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
@@ -9890,7 +9501,7 @@ namespace Terraria
 							{
 								statMana = 400;
 							}
-							if (num == 4)
+							if (version == 4)
 							{
 								binaryReader.ReadUInt32();
 							}
@@ -9975,11 +9586,11 @@ namespace Terraria
 								buff[m].Type = binaryReader.ReadUInt16();
 								buff[m].Time = binaryReader.ReadUInt16();
 							}
-							if (num >= 1)
+							if (version >= 1)
 							{
 								pet = binaryReader.ReadSByte();
 							}
-							if (num >= 2)
+							if (version >= 2)
 							{
 								int count = binaryReader.ReadUInt16();
 								itemsFound = new BitArray(binaryReader.ReadBytes(count));
@@ -9990,7 +9601,7 @@ namespace Terraria
 								count = binaryReader.ReadUInt16();
 								RecipesFound = new BitArray(binaryReader.ReadBytes(count));
 								recipesNew = new BitArray(binaryReader.ReadBytes(count));
-								if (num >= 3)
+								if (version >= 3)
 								{
 									count = binaryReader.ReadUInt16();
 									craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
@@ -10024,354 +9635,303 @@ namespace Terraria
 						stream.Close();
 						using (BinaryReader binaryReader = new BinaryReader(memoryStream))
 						{
-							int num = binaryReader.ReadInt16();
-							if (num > Main.PlayerDataVersion)
+							int version = binaryReader.ReadInt16();
+							if (version > Main.PlayerDataVersion)
 							{
-								throw new InvalidOperationException("Invalid version");
+								// Previously was an InvalidOperationException.
+								throw new NotSupportedException("Invalid version");
 							}
-
-							if (num < Main.PlayerDataVersion)
+							if (version <= (int)EntityID.PlayerID.INITIAL)
 							{
-								LoadOld(binaryReader, memoryStream, num);
+								CRC32 cRC = new CRC32();
+								cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
+								if (cRC.GetValue() != binaryReader.ReadUInt32())
+								{
+									throw new InvalidOperationException("Invalid CRC32");
+								}
 							}
 							else
 							{
-								if (num >= Main.PlayerDataVersion) // Checking for greater values after eliminating them in the segment above, nice one.
-								{
-									CRC32 cRC = new CRC32();
-									cRC.Update(memoryStream.GetBuffer(), 6, (int)memoryStream.Length - 6);
-									if (cRC.GetValue() != binaryReader.ReadUInt32())
-									{
-										throw new InvalidOperationException("Invalid CRC32");
-									}
-								}
+								binaryReader.ReadUInt32();
 
-								if (num <= 6)
+							}
+							CharacterName = binaryReader.ReadString();
+							difficulty = binaryReader.ReadByte();
+							hair = binaryReader.ReadByte();
+							male = binaryReader.ReadBoolean();
+							statLife = binaryReader.ReadInt16();
+							StatLifeMax = binaryReader.ReadInt16();
+							if (StatLifeMax > 400)
+							{
+								StatLifeMax = 400;
+							}
+							if (statLife > StatLifeMax)
+							{
+								statLife = StatLifeMax;
+							}
+							statMana = binaryReader.ReadInt16();
+							statManaMax = binaryReader.ReadInt16();
+							if (statManaMax > 200)
+							{
+								statManaMax = 200;
+							}
+							if (statMana > 400)
+							{
+								statMana = 400;
+							}
+							if (version == 4)
+							{
+								binaryReader.ReadUInt32();
+							}
+							hairColor.R = binaryReader.ReadByte();
+							hairColor.G = binaryReader.ReadByte();
+							hairColor.B = binaryReader.ReadByte();
+							skinColor.R = binaryReader.ReadByte();
+							skinColor.G = binaryReader.ReadByte();
+							skinColor.B = binaryReader.ReadByte();
+							eyeColor.R = binaryReader.ReadByte();
+							eyeColor.G = binaryReader.ReadByte();
+							eyeColor.B = binaryReader.ReadByte();
+							shirtColor.R = binaryReader.ReadByte();
+							shirtColor.G = binaryReader.ReadByte();
+							shirtColor.B = binaryReader.ReadByte();
+							underShirtColor.R = binaryReader.ReadByte();
+							underShirtColor.G = binaryReader.ReadByte();
+							underShirtColor.B = binaryReader.ReadByte();
+							pantsColor.R = binaryReader.ReadByte();
+							pantsColor.G = binaryReader.ReadByte();
+							pantsColor.B = binaryReader.ReadByte();
+							shoeColor.R = binaryReader.ReadByte();
+							shoeColor.G = binaryReader.ReadByte();
+							shoeColor.B = binaryReader.ReadByte();
+
+							for (int i = 0; i < MaxNumArmor; i++)
+							{
+								int num2 = binaryReader.ReadInt16();
+								int pre;
+								if (version >= (int)EntityID.PlayerID.V101)
 								{
-									CharacterName = binaryReader.ReadString();
-									difficulty = binaryReader.ReadByte();
-									hair = binaryReader.ReadByte();
-									male = binaryReader.ReadBoolean();
-									statLife = binaryReader.ReadInt16();
-									StatLifeMax = binaryReader.ReadInt16();
-									if (StatLifeMax > 400)
+									if (num2 != 0)
 									{
-										StatLifeMax = 400;
-									}
-									if (statLife > StatLifeMax)
-									{
-										statLife = StatLifeMax;
-									}
-									statMana = binaryReader.ReadInt16();
-									statManaMax = binaryReader.ReadInt16();
-									if (statManaMax > 200)
-									{
-										statManaMax = 200;
-									}
-									if (statMana > 400)
-									{
-										statMana = 400;
-									}
-									if (num == 4) // Prototype Information
-									{
-										binaryReader.ReadUInt32();
-									}
-									hairColor.R = binaryReader.ReadByte();
-									hairColor.G = binaryReader.ReadByte();
-									hairColor.B = binaryReader.ReadByte();
-									skinColor.R = binaryReader.ReadByte();
-									skinColor.G = binaryReader.ReadByte();
-									skinColor.B = binaryReader.ReadByte();
-									eyeColor.R = binaryReader.ReadByte();
-									eyeColor.G = binaryReader.ReadByte();
-									eyeColor.B = binaryReader.ReadByte();
-									shirtColor.R = binaryReader.ReadByte();
-									shirtColor.G = binaryReader.ReadByte();
-									shirtColor.B = binaryReader.ReadByte();
-									underShirtColor.R = binaryReader.ReadByte();
-									underShirtColor.G = binaryReader.ReadByte();
-									underShirtColor.B = binaryReader.ReadByte();
-									pantsColor.R = binaryReader.ReadByte();
-									pantsColor.G = binaryReader.ReadByte();
-									pantsColor.B = binaryReader.ReadByte();
-									shoeColor.R = binaryReader.ReadByte();
-									shoeColor.G = binaryReader.ReadByte();
-									shoeColor.B = binaryReader.ReadByte();
-									for (int i = 0; i < MaxNumArmor; i++)
-									{
-										int num2 = binaryReader.ReadInt16();
-										int pre = binaryReader.ReadByte();
-										if (num2 == 0)
-										{
-											armor[i].Init();
-											continue;
-										}
-										armor[i].NetDefaults(num2);
-										armor[i].SetPrefix(pre);
-										itemsFound.Set(armor[i].Type, value: true);
-									}
-									for (int j = 0; j < MaxNumInventory; j++)
-									{
-										int num3 = binaryReader.ReadInt16();
-										int stack = binaryReader.ReadInt16();
-										int pre2 = binaryReader.ReadByte();
-										if (num3 == 0)
-										{
-											Inventory[j].Init();
-											continue;
-										}
-										Inventory[j].NetDefaults(num3, stack);
-										Inventory[j].SetPrefix(pre2);
-										itemsFound.Set(Inventory[j].Type, value: true);
-									}
-									for (int k = 0; k < Chest.MaxNumItems; k++)
-									{
-										int num4 = binaryReader.ReadInt16();
-										int stack2 = binaryReader.ReadInt16();
-										int pre3 = binaryReader.ReadByte();
-										if (num4 == 0)
-										{
-											bank.ItemSet[k].Init();
-											continue;
-										}
-										bank.ItemSet[k].NetDefaults(num4, stack2);
-										bank.ItemSet[k].SetPrefix(pre3);
-										itemsFound.Set(bank.ItemSet[k].Type, value: true);
-									}
-									for (int l = 0; l < Chest.MaxNumItems; l++)
-									{
-										int num5 = binaryReader.ReadInt16();
-										int stack3 = binaryReader.ReadInt16();
-										int pre4 = binaryReader.ReadByte();
-										if (num5 == 0)
-										{
-											safe.ItemSet[l].Init();
-											continue;
-										}
-										safe.ItemSet[l].NetDefaults(num5, stack3);
-										safe.ItemSet[l].SetPrefix(pre4);
-										itemsFound.Set(safe.ItemSet[l].Type, value: true);
-									}
-									for (int m = 0; m < MaxNumBuffs; m++)
-									{
-										buff[m].Type = binaryReader.ReadUInt16();
-										buff[m].Time = binaryReader.ReadUInt16();
-									}
-									if (num >= 1) // Prototype Information; Pets were added first it seems.
-									{
-										pet = binaryReader.ReadSByte();
-									}
-									if (num >= 2) // Prototype Information; After pets, it looks like crafting memory was implemented.
-									{
-										int count = binaryReader.ReadUInt16();
-										itemsFound = new BitArray(binaryReader.ReadBytes(count));
-										if (itemsFound.Length < Item.MaxNumItemTypes)
-										{
-											itemsFound.Length = Item.MaxNumItemTypes;
-										}
-										count = binaryReader.ReadUInt16();
-										RecipesFound = new BitArray(binaryReader.ReadBytes(count));
-										recipesNew = new BitArray(binaryReader.ReadBytes(count));
-										if (num >= 3) // Prototype Information
-										{
-											count = binaryReader.ReadUInt16();
-											craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
-										}
-										else
-										{
-											InitKnownCraftingStations();
-										}
+										pre = binaryReader.ReadByte();
 									}
 									else
 									{
-										InitKnownItems();
-									}
-									for (int n = 0; n < 200; n++)
-									{
-										int num6 = binaryReader.ReadInt16();
-										if (num6 == -1)
-										{
-											break;
-										}
-										spX[n] = (short)num6;
-										spY[n] = binaryReader.ReadInt16();
-										spI[n] = binaryReader.ReadInt32();
-										spN[n] = binaryReader.ReadString();
-									}
-								}
-								else if (num == 8)
-								{
-									CharacterName = binaryReader.ReadString();
-									difficulty = binaryReader.ReadByte();
-									hair = binaryReader.ReadByte();
-									male = binaryReader.ReadBoolean();
-									statLife = binaryReader.ReadInt16();
-									StatLifeMax = binaryReader.ReadInt16();
-									if (StatLifeMax > 400)
-									{
-										StatLifeMax = 400;
-									}
-									if (statLife > StatLifeMax)
-									{
-										statLife = StatLifeMax;
-									}
-									statMana = binaryReader.ReadInt16();
-									statManaMax = binaryReader.ReadInt16();
-									if (statManaMax > 200)
-									{
-										statManaMax = 200;
-									}
-									if (statMana > 400)
-									{
-										statMana = 400;
-									}
-									hairColor.R = binaryReader.ReadByte();
-									hairColor.G = binaryReader.ReadByte();
-									hairColor.B = binaryReader.ReadByte();
-									skinColor.R = binaryReader.ReadByte();
-									skinColor.G = binaryReader.ReadByte();
-									skinColor.B = binaryReader.ReadByte();
-									eyeColor.R = binaryReader.ReadByte();
-									eyeColor.G = binaryReader.ReadByte();
-									eyeColor.B = binaryReader.ReadByte();
-									shirtColor.R = binaryReader.ReadByte();
-									shirtColor.G = binaryReader.ReadByte();
-									shirtColor.B = binaryReader.ReadByte();
-									underShirtColor.R = binaryReader.ReadByte();
-									underShirtColor.G = binaryReader.ReadByte();
-									underShirtColor.B = binaryReader.ReadByte();
-									pantsColor.R = binaryReader.ReadByte();
-									pantsColor.G = binaryReader.ReadByte();
-									pantsColor.B = binaryReader.ReadByte();
-									shoeColor.R = binaryReader.ReadByte();
-									shoeColor.G = binaryReader.ReadByte();
-									shoeColor.B = binaryReader.ReadByte();
-									for (int i = 0; i < MaxNumArmor; i++)
-									{
-										int num2 = binaryReader.ReadInt16();
-
-										if (num2 != 0)
-										{
-											int pre = binaryReader.ReadByte();
-											armor[i].NetDefaults(num2);
-											armor[i].SetPrefix(pre);
-											itemsFound.Set(armor[i].Type, value: true);
-										}
-										else
-										{
-											armor[i].Init();
-										}
-									}
-									for (int j = 0; j < MaxNumInventory; j++)
-									{
-										int num3 = binaryReader.ReadInt16();
-
-										if (num3 != 0)
-										{
-											int stack = binaryReader.ReadInt16();
-											int pre2 = binaryReader.ReadByte();
-											Inventory[j].NetDefaults(num3, stack);
-											Inventory[j].SetPrefix(pre2);
-											itemsFound.Set(Inventory[j].Type, value: true);
-										}
-										else
-										{
-											Inventory[j].Init();
-										}
-									}
-									for (int k = 0; k < Chest.MaxNumItems; k++)
-									{
-										int num4 = binaryReader.ReadInt16();
-
-										if (num4 != 0)
-										{
-											int stack2 = binaryReader.ReadInt16();
-											int pre3 = binaryReader.ReadByte();
-											bank.ItemSet[k].NetDefaults(num4, stack2);
-											bank.ItemSet[k].SetPrefix(pre3);
-											itemsFound.Set(bank.ItemSet[k].Type, value: true);
-										}
-										else
-										{
-											bank.ItemSet[k].Init();
-										}
-									}
-									for (int l = 0; l < Chest.MaxNumItems; l++)
-									{
-										int num5 = binaryReader.ReadInt16();
-										if (num5 != 0)
-										{
-											int stack3 = binaryReader.ReadInt16();
-											int pre4 = binaryReader.ReadByte();
-											safe.ItemSet[l].NetDefaults(num5, stack3);
-											safe.ItemSet[l].SetPrefix(pre4);
-											itemsFound.Set(safe.ItemSet[l].Type, value: true);
-										}
-										else
-										{
-											safe.ItemSet[l].Init();
-										}
-									}
-									for (int m = 0; m < MaxNumBuffs; m++)
-									{
-										buff[m].Type = binaryReader.ReadByte();
-										buff[m].Time = binaryReader.ReadUInt16();
-									}
-									pet = binaryReader.ReadSByte();
-#if VERSION_101
-									PlayerQuickAccess[0] = binaryReader.ReadSByte();
-									PlayerQuickAccess[1] = binaryReader.ReadSByte();
-									PlayerQuickAccess[2] = binaryReader.ReadSByte();
-									PlayerQuickAccess[3] = binaryReader.ReadSByte();
-#endif
-									int count = binaryReader.ReadUInt16();
-									itemsFound = new BitArray(binaryReader.ReadBytes(count));
-									count = binaryReader.ReadUInt16();
-									RecipesFound = new BitArray(binaryReader.ReadBytes(count));
-									recipesNew = new BitArray(binaryReader.ReadBytes(count));
-									count = binaryReader.ReadUInt16();
-									craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
-									if (itemsFound.Length < Item.MaxNumItemTypes)
-									{
-										itemsFound.Length = Item.MaxNumItemTypes;
-									}
-									if (RecipesFound.Length < Recipe.MaxNumRecipes)
-									{
-										RecipesFound.Length = Recipe.MaxNumRecipes;
-									}
-									if (recipesNew.Length < Recipe.MaxNumRecipes)
-									{
-										recipesNew.Length = Recipe.MaxNumRecipes;
-									}
-									if (craftingStationsFound.Length < Main.MaxNumTilenames)
-									{
-										craftingStationsFound.Length = Main.MaxNumTilenames;
-									}
-									for (int n = 0; n < 200; n++)
-									{
-										int num6 = binaryReader.ReadInt16();
-										if (num6 == -1)
-										{
-											break;
-										}
-										spX[n] = (short)num6;
-										spY[n] = binaryReader.ReadInt16();
-										spI[n] = binaryReader.ReadInt32();
-										spN[n] = binaryReader.ReadString();
+										armor[i].Init();
+										continue;
 									}
 								}
 								else
 								{
-									throw new InvalidOperationException("Invalid version");
+									pre = binaryReader.ReadByte();
+									if (num2 == 0)
+									{
+										armor[i].Init();
+										continue;
+									}
 								}
-								binaryReader.Close();
+								armor[i].NetDefaults(num2);
+								armor[i].SetPrefix(pre);
+								itemsFound.Set(armor[i].Type, value: true);
 							}
+
+							for (int j = 0; j < MaxNumInventory; j++)
+							{
+								int num3 = binaryReader.ReadInt16();
+								int stack;
+								int pre2;
+								if (version >= (int)EntityID.PlayerID.V101)
+								{
+									if (num3 != 0)
+									{
+										stack = binaryReader.ReadInt16();
+										pre2 = binaryReader.ReadByte();
+									}
+									else
+									{
+										Inventory[j].Init();
+										continue;
+									}
+								}
+								else
+								{
+									stack = binaryReader.ReadInt16();
+									pre2 = binaryReader.ReadByte();
+									if (num3 == 0)
+									{
+										Inventory[j].Init();
+										continue;
+									}
+								}
+								Inventory[j].NetDefaults(num3, stack);
+								Inventory[j].SetPrefix(pre2);
+								itemsFound.Set(Inventory[j].Type, value: true);
+							}
+
+							for (int k = 0; k < Chest.MaxNumItems; k++)
+							{
+								int num4 = binaryReader.ReadInt16();
+								int stack2;
+								int pre3;
+								if (version >= (int)EntityID.PlayerID.V101)
+								{
+									if (num4 != 0)
+									{
+										stack2 = binaryReader.ReadInt16();
+										pre3 = binaryReader.ReadByte();
+									}
+									else
+									{
+										bank.ItemSet[k].Init();
+										continue;
+									}
+								}
+								else
+								{
+									stack2 = binaryReader.ReadInt16();
+									pre3 = binaryReader.ReadByte();
+									if (num4 == 0)
+									{
+										bank.ItemSet[k].Init();
+										continue;
+									}
+								}
+								bank.ItemSet[k].NetDefaults(num4, stack2);
+								bank.ItemSet[k].SetPrefix(pre3);
+								itemsFound.Set(bank.ItemSet[k].Type, value: true);
+							}
+
+							for (int l = 0; l < Chest.MaxNumItems; l++)
+							{
+								int num5 = binaryReader.ReadInt16();
+								int stack3;
+								int pre4;
+								if (version >= (int)EntityID.PlayerID.V101)
+								{
+									if (num5 != 0)
+									{
+										stack3 = binaryReader.ReadInt16();
+										pre4 = binaryReader.ReadByte();
+									}
+									else
+									{
+										safe.ItemSet[l].Init();
+										continue;
+									}
+								}
+								else
+								{
+									stack3 = binaryReader.ReadInt16();
+									pre4 = binaryReader.ReadByte();
+									if (num5 == 0)
+									{
+										safe.ItemSet[l].Init();
+										continue;
+									}
+								}
+								safe.ItemSet[l].NetDefaults(num5, stack3);
+								safe.ItemSet[l].SetPrefix(pre4);
+								itemsFound.Set(safe.ItemSet[l].Type, value: true);
+							}
+
+							for (int m = 0; m < MaxNumBuffs; m++)
+							{
+								if (version >= (int)EntityID.PlayerID.V101)
+								{
+									buff[m].Type = binaryReader.ReadByte();
+								}
+								else
+								{
+									buff[m].Type = binaryReader.ReadUInt16();
+								}
+								buff[m].Time = binaryReader.ReadUInt16();
+							}
+
+							if (version >= 1)
+							{
+								pet = binaryReader.ReadSByte();
+							}
+
+#if !VERSION_INITIAL
+							if (version >= (int)EntityID.PlayerID.V101)
+							{
+								for (int d = 0; d < 4; d++)
+								{
+									PlayerQuickAccess[d] = binaryReader.ReadSByte();
+								}
+							}
+#endif
+
+							if (version >= 2)
+							{
+								int count = binaryReader.ReadUInt16();
+								itemsFound = new BitArray(binaryReader.ReadBytes(count));
+								if (itemsFound.Length < Item.MaxNumItemTypes)
+								{
+									itemsFound.Length = Item.MaxNumItemTypes;
+								}
+
+								count = binaryReader.ReadUInt16();
+								RecipesFound = new BitArray(binaryReader.ReadBytes(count));
+								recipesNew = new BitArray(binaryReader.ReadBytes(count));
+
+#if !USE_ORIGINAL_CODE
+								// We don't need a 2nd check for recipesNew, since its length is set the same as RecipesFound.
+								if (RecipesFound.Length < Recipe.MaxNumRecipes)
+								{
+									RecipesFound.Length = Recipe.MaxNumRecipes;
+									recipesNew.Length = Recipe.MaxNumRecipes;
+								}
+#endif
+
+								if (version >= 3)
+								{
+									count = binaryReader.ReadUInt16();
+									craftingStationsFound = new BitArray(binaryReader.ReadBytes(count));
+#if !USE_ORIGINAL_CODE
+									if (craftingStationsFound.Length < Main.MaxNumTilenames)
+									{
+										craftingStationsFound.Length = Main.MaxNumTilenames;
+									}
+#endif
+								}
+								else
+								{
+									InitKnownCraftingStations();
+								}
+							}
+							else
+							{
+								InitKnownItems();
+							}
+							for (int n = 0; n < 200; n++)
+							{
+								int num6 = binaryReader.ReadInt16();
+								if (num6 == -1)
+								{
+									break;
+								}
+								spX[n] = (short)num6;
+								spY[n] = binaryReader.ReadInt16();
+								spI[n] = binaryReader.ReadInt32();
+								spN[n] = binaryReader.ReadString();
+							}
+							binaryReader.Close();
 						}
 #endif
 					}
 				}
 				PlayerFrame();
 			}
+#if !USE_ORIGINAL_CODE
+			catch (NotSupportedException)
+			{
+				Main.ShowSaveIcon();
+				Name = "Unsupported";
+				difficulty = (byte)CreateCharacter.Difficulty.INVALID;
+				Main.HideSaveIcon();
+			}
+#endif
 			catch
 			{
 				Main.ShowSaveIcon();
@@ -10400,7 +9960,7 @@ namespace Terraria
 			{
 				for (int i = 0; i < MaxNumInventory; i++)
 				{
-					if (Inventory[i].Shoot == 13 || Inventory[i].Shoot == 32 || Inventory[i].Shoot == 73)
+					if (Inventory[i].Shoot == (byte)EntityID.ProjectileID.HOOK || Inventory[i].Shoot == (byte)EntityID.ProjectileID.IVY_WHIP || Inventory[i].Shoot == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 					{
 						num = i;
 						break;
@@ -10409,12 +9969,12 @@ namespace Terraria
 				if (num >= 0)
 				{
 					int shoot = Inventory[num].Shoot;
-					if (shoot == 73)
+					if (shoot == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 					{
 						int num2 = 0;
 						for (int j = 0; j < Projectile.MaxNumProjs; j++)
 						{
-							if ((Main.ProjectileSet[j].type == 73 || Main.ProjectileSet[j].type == 74) && Main.ProjectileSet[j].active != 0 && Main.ProjectileSet[j].owner == WhoAmI && ++num2 > 1)
+							if ((Main.ProjectileSet[j].type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE || Main.ProjectileSet[j].type == (byte)EntityID.ProjectileID.DUAL_HOOK_RED) && Main.ProjectileSet[j].active != 0 && Main.ProjectileSet[j].owner == WhoAmI && ++num2 > 1)
 							{
 								num = -1;
 								break;
@@ -10456,27 +10016,27 @@ namespace Terraria
 			float knockBack = Inventory[num].Knockback;
 			switch (num2)
 			{
-				case 13:
-				case 32:
+				case (byte)EntityID.ProjectileID.HOOK:
+				case (byte)EntityID.ProjectileID.IVY_WHIP:
 					{
 						grappling[0] = -1;
 						grapCount = 0;
 						for (int j = 0; j < Projectile.MaxNumProjs; j++)
 						{
-							if (Main.ProjectileSet[j].active != 0 && Main.ProjectileSet[j].owner == WhoAmI && Main.ProjectileSet[j].type == 13)
+							if (Main.ProjectileSet[j].active != 0 && Main.ProjectileSet[j].owner == WhoAmI && Main.ProjectileSet[j].type == (byte)EntityID.ProjectileID.HOOK)
 							{
 								Main.ProjectileSet[j].Kill();
 							}
 						}
 						break;
 					}
-				case 73:
+				case (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE:
 					{
 						for (int i = 0; i < Projectile.MaxNumProjs; i++)
 						{
-							if (Main.ProjectileSet[i].active != 0 && Main.ProjectileSet[i].owner == WhoAmI && Main.ProjectileSet[i].type == 73)
+							if (Main.ProjectileSet[i].active != 0 && Main.ProjectileSet[i].owner == WhoAmI && Main.ProjectileSet[i].type == (byte)EntityID.ProjectileID.DUAL_HOOK_BLUE)
 							{
-								num2 = 74;
+								num2 = (byte)EntityID.ProjectileID.DUAL_HOOK_RED;
 								break;
 							}
 						}
@@ -10518,7 +10078,7 @@ namespace Terraria
 #if !USE_ORIGINAL_CODE
 			if (Main.CollectorsEditionPC)
 			{
-				Inventory[3].SetDefaults((int)Item.ID.PET_SPAWN_1);
+				Inventory[3].SetDefaults((int)EntityID.ItemID.PET_SPAWN_1);
 			}
 #endif
 			InitKnownItems();
@@ -10527,13 +10087,13 @@ namespace Terraria
 
 		public void InitKnownItems()
 		{
-			itemsFound.Set((int)Item.ID.WOOD, value: true);
-			itemsFound.Set((int)Item.ID.GEL, value: true);
-			itemsFound.Set((int)Item.ID.STONE_BLOCK, value: true);
-			itemsFound.Set((int)Item.ID.DIRT_BLOCK, value: true);
-			itemsFound.Set((int)Item.ID.LENS, value: true);
-			itemsFound.Set((int)Item.ID.BOTTLE, value: true);
-			itemsFound.Set((int)Item.ID.ROTTEN_CHUNK, value: true);
+			itemsFound.Set((int)EntityID.ItemID.WOOD, value: true);
+			itemsFound.Set((int)EntityID.ItemID.GEL, value: true);
+			itemsFound.Set((int)EntityID.ItemID.STONE_BLOCK, value: true);
+			itemsFound.Set((int)EntityID.ItemID.DIRT_BLOCK, value: true);
+			itemsFound.Set((int)EntityID.ItemID.LENS, value: true);
+			itemsFound.Set((int)EntityID.ItemID.BOTTLE, value: true);
+			itemsFound.Set((int)EntityID.ItemID.ROTTEN_CHUNK, value: true);
 		}
 
 		public void InitKnownCraftingStations()
@@ -10634,18 +10194,19 @@ namespace Terraria
 		{
 			int num = XYWH.X + (width / 2) - CurrentView.ScreenPosition.X;
 			int num2 = XYWH.Y + (height / 2) - CurrentView.ScreenPosition.Y;
+
 			fixed (Item* ptr = &Inventory[SelectedItem])
 			{
 				Vector2 right = ui.PadState.ThumbSticks.Right;
 				Vector2 vector = right;
-				bool flag = right.LengthSquared() <= (1f / 64f);
+				bool flag = right.LengthSquared() <= 1f / 64f;
 				if (!flag)
 				{
 					vector.Normalize();
 				}
 				Vector2 left = ui.PadState.ThumbSticks.Left;
 				Vector2 vector2 = left;
-				bool flag2 = left.LengthSquared() <= (1f / 64f);
+				bool flag2 = left.LengthSquared() <= 1f / 64f;
 				if (!flag2)
 				{
 					vector2.Normalize();
@@ -10674,86 +10235,17 @@ namespace Terraria
 					int num4 = ptr->TileBoost + blockRange;
 					Vector2 vector3 = new Vector2((0f - controlDir.Y) * 16f, controlDir.X * 16f);
 					int num5 = XYWH.X;
-					int num6 = XYWH.Y + 21;
+					int num6 = XYWH.Y + (height / 2);
 					if (controlDir.X >= 0f)
 					{
-						num5 += 20;
+						num5 += width;
 					}
 					double num7 = num5;
 					double num8 = num6;
-#if (!IS_PATCHED && VERSION_INITIAL)
-					for (int num9 = 2; num9 >= 0; num9--)
-                    {
-                        double num10 = num7 * 0.0625;
-                        double num11 = num8 * 0.0625;
-                        int num12 = (int)num10 + (5 + num4) * ((!(this.controlDir.X < 0f)) ? 1 : (-1));
-                        int num13 = (int)num11 + (5 + num4) * ((!(this.controlDir.Y < 0f)) ? 1 : (-1));
-                        while (true)
-                        {
-                            int num14 = (int)num10;
-                            int num15 = (int)num11;
-                            int type = Main.TileSet[num14, num15].Type;
-                            bool flag3 = (ptr->AxePower > 0 && Main.TileAxe[type]) || (ptr->HammerPower > 0 && (Main.TileHammer[type] || (Main.TileSet[num14, num15].WallType > 0 && WorldGen.CanKillWall(num14, num15))));
-                            if (flag3 || ((ptr->PickPower > 0 || ptr->CreateTile >= 0) && Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type]) || (ptr->CreateWall >= 0 && Main.TileSet[num14, num15].WallType == 0))
-                            {
-                                if (flag3)
-                                {
-                                    if (Main.TileAxe[type] && (!Main.TileAxe[Main.TileSet[num14, num15 - 1].Type] || !Main.TileAxe[Main.TileSet[num14, num15 - 2].Type]))
-                                    {
-                                        num14--;
-                                        if (!Main.TileAxe[Main.TileSet[num14, num15].Type] || !Main.TileAxe[Main.TileSet[num14, num15 - 1].Type] || !Main.TileAxe[Main.TileSet[num14, num15 - 2].Type])
-                                        {
-                                            num14 += 2;
-                                            if (!Main.TileAxe[Main.TileSet[num14, num15].Type] || !Main.TileAxe[Main.TileSet[num14, num15 - 1].Type] || !Main.TileAxe[Main.TileSet[num14, num15 - 2].Type])
-                                            {
-                                                num14--;
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (ptr->PickPower > 0)
-                                {
-                                    if (Main.TileAxe[type] || Main.TileHammer[type] || !WorldGen.CanKillTile(num14, num15))
-                                    {
-                                        goto IL_055d;
-                                    }
-                                }
-                                else if (ptr->CreateTile >= 0)
-                                {
-                                    num14 = (int)(num10 - (double)this.controlDir.X);
-                                    if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
-                                    {
-                                        num14 = (int)num10;
-                                        num15 = (int)(num11 - (double)this.controlDir.Y);
-                                        if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
-                                        {
-                                            num14 = (int)(num10 - (double)this.controlDir.X);
-                                            if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
-                                            {
-                                                num14 = (int)num10;
-                                                num15 = (int)num11;
-                                                goto IL_055d;
-                                            }
-                                        }
-                                    }
-                                    int j = num15;
-                                    if (!WorldGen.CanPlaceTile(num14, ref j, ptr->CreateTile, -1))
-                                    {
-                                        num14 = (int)num10;
-                                        num15 = (int)num11;
-                                        goto IL_055d;
-                                    }
-                                }
-                                this.smartLocation[num3].X = (num14 << 4) + 8;
-                                this.smartLocation[num3].Y = (num15 << 4) + 8;
-                                num3++;
-                                break;
-                            }
-#else
 					for (int num9 = 2; num9 >= 0; num9--)
 					{
-						double num10 = num7 * 0.0625;
-						double num11 = num8 * 0.0625;
+						double num10 = num7 / 16;
+						double num11 = num8 / 16;
 						int num12 = (int)num10 + (5 + num4) * ((!(controlDir.X < 0f)) ? 1 : (-1));
 						int num13 = (int)num11 + (5 + num4) * ((!(controlDir.Y < 0f)) ? 1 : (-1));
 						while (true)
@@ -10767,6 +10259,8 @@ namespace Terraria
 							int num16 = Main.TileSet[num14, num15].IsActive;
 							int type = Main.TileSet[num14, num15].Type;
 							bool flag3 = (ptr->AxePower > 0 && num16 != 0 && Main.TileAxe[type]) || (ptr->HammerPower > 0 && ((num16 != 0 && Main.TileHammer[type]) || (Main.TileSet[num14, num15].WallType > 0 && WorldGen.CanKillWall(num14, num15))));
+							bool flag4 = false;
+
 							if (flag3 || ((ptr->PickPower > 0 || ptr->CreateTile >= 0) && num16 != 0 && Main.TileSolid[type]) || (ptr->CreateWall >= 0 && Main.TileSet[num14, num15].WallType == 0))
 							{
 								if (flag3)
@@ -10783,110 +10277,114 @@ namespace Terraria
 											}
 										}
 									}
+									flag4 = true;
 								}
-								else
+								else if (num16 != 0)
 								{
-									if (num16 == 0)
-									{
-										goto IL_055d;
-									}
 									if (ptr->PickPower > 0)
 									{
-										if (Main.TileAxe[type] || Main.TileHammer[type] || !WorldGen.CanKillTile(num14, num15))
+										if (!Main.TileAxe[type] && !Main.TileHammer[type] && WorldGen.CanKillTile(num14, num15))
 										{
-											goto IL_055d;
+											flag4 = true;
 										}
 									}
 									else if (ptr->CreateTile >= 0)
 									{
-										num14 = (int)(num10 - controlDir.X);
-										if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
+										num14 = (int)(num10 - (double)controlDir.X);
+										if (Main.TileSet[num14, num15].IsActive != 0 || Main.TileSolid[type])
 										{
 											num14 = (int)num10;
-											num15 = (int)(num11 - controlDir.Y);
-											if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
+											num15 = (int)(num11 - (double)controlDir.Y);
+											if (Main.TileSet[num14, num15].IsActive != 0 || Main.TileSolid[type])
 											{
-												num14 = (int)(num10 - controlDir.X);
+												num14 = (int)(num10 - (double)controlDir.X);
 												if (Main.TileSet[num14, num15].IsActive != 0 && Main.TileSolid[type])
 												{
 													num14 = (int)num10;
 													num15 = (int)num11;
-													goto IL_055d;
 												}
 											}
 										}
-										int j = num15;
-										if (!WorldGen.CanPlaceTile(num14, ref j, ptr->CreateTile, -1))
+
+										if (num14 != (int)num10 || num15 != (int)num11)
 										{
-											num14 = (int)num10;
-											num15 = (int)num11;
-											goto IL_055d;
+											int j = num15;
+											if (WorldGen.CanPlaceTile(num14, ref j, ptr->CreateTile, -1))
+											{
+												flag4 = true;
+											}
+											else
+											{
+												num14 = (int)num10;
+												num15 = (int)num11;
+											}
 										}
 									}
 								}
-								smartLocation[num3].X = (num14 << 4) + 8;
-								smartLocation[num3].Y = (num15 << 4) + 8;
-								num3++;
-								break;
+
+								if (flag4)
+								{
+									smartLocation[num3].X = (num14 << 4) + 8;
+									smartLocation[num3].Y = (num15 << 4) + 8;
+									num3++;
+									break;
+								}
 							}
-#endif
-							goto IL_055d;
-						IL_055d:
 							if (num14 == num12 || num15 == num13)
 							{
 								break;
 							}
-							num10 += controlDir.X;
-							num11 += controlDir.Y;
+							num10 += (double)controlDir.X;
+							num11 += (double)controlDir.Y;
 						}
 						if (num9 == 1)
 						{
-							num7 -= vector3.X;
-							num8 -= vector3.Y;
-							num7 -= vector3.X;
-							num8 -= vector3.Y;
+							num7 -= (double)vector3.X;
+							num8 -= (double)vector3.Y;
+							num7 -= (double)vector3.X;
+							num8 -= (double)vector3.Y;
 						}
 						else
 						{
-							num7 += vector3.X;
-							num8 += vector3.Y;
+							num7 += (double)vector3.X;
+							num8 += (double)vector3.Y;
 						}
 					}
 					if (num3 > 0)
 					{
-						int num16 = 0;
+						int num17 = 0;
 						if (num3 > 1)
 						{
-							int num17 = num5;
-							int num18 = num6;
-							if (ptr->CreateTile == 4)
+							int num18 = num5;
+							int num19 = num6;
+							if (ptr->CreateTile == (short)EntityID.TileID.TORCH)
 							{
-								num17 += (int)(controlDir.X * 256f);
-								num18 += (int)(controlDir.Y * 256f);
+								num18 += (int)(controlDir.X * 256f);
+								num19 += (int)(controlDir.Y * 256f);
 							}
 							else if (ptr->PickPower <= 0 && ptr->HammerPower <= 0 && ptr->CreateWall < 0 && ptr->CreateTile < 0 && ptr->AxePower > 0)
 							{
-								num18 += 42;
+								num19 += 42;
 							}
-							int num19 = num17 - smartLocation[0].X;
-							int num20 = num18 - smartLocation[0].Y;
-							int num21 = num19 * num19 + num20 * num20;
-							int num22 = 1;
+							int num20 = num18 - smartLocation[0].X;
+							int num21 = num19 - smartLocation[0].Y;
+							int num22 = num20 * num20 + num21 * num21;
+							int num23 = 1;
 							do
 							{
-								num19 = num17 - smartLocation[num22].X;
-								num20 = num18 - smartLocation[num22].Y;
-								int num23 = num19 * num19 + num20 * num20;
-								if (num23 < num21)
+								num20 = num18 - smartLocation[num23].X;
+								num21 = num19 - smartLocation[num23].Y;
+								int num24 = num20 * num20 + num21 * num21;
+								if (num24 < num22)
 								{
-									num21 = num23;
-									num16 = num22;
+									num22 = num24;
+									num17 = num23;
 								}
 							}
-							while (++num22 < num3);
+							while (++num23 < num3);
 						}
-						num = smartLocation[num16].X - CurrentView.ScreenPosition.X;
-						num2 = smartLocation[num16].Y - CurrentView.ScreenPosition.Y;
+						num = smartLocation[num17].X - CurrentView.ScreenPosition.X;
+						num2 = smartLocation[num17].Y - CurrentView.ScreenPosition.Y;
 					}
 					else
 					{
@@ -11104,7 +10602,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.SKIN_LEGS, ref pos, legFrameY, 54, c, legRotation, ref pivot2, spriteEffects);
 				}
 				pos = new Vector2((int)(Position.X - drawView.ScreenPosition.X - 20f + 10f), (int)(Position.Y - drawView.ScreenPosition.Y + 42f - 56f + 4f)) + legPosition + pivot;
-				if (legs > 0 && legs < MaxNumArmorLegs)
+				if (legs > (short)EntityID.ArmorLegsID.LEGS_NORMAL && legs < MaxNumArmorLegs)
 				{
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARMOR_LEGS_1 - 1 + legs, ref pos, legFrameY, 54, newColor3, legRotation, ref pivot, spriteEffects);
 				}
@@ -11125,11 +10623,11 @@ namespace Terraria
 				pos.Y = XYWH.Y - drawView.ScreenPosition.Y + 42 - 56 + 4 + 28;
 				pos.X += bodyPosition.X;
 				pos.Y += bodyPosition.Y;
-				if (body > 0 && body < MaxNumArmorBody)
+				if (body > (short)EntityID.ArmorBodyID.BODY_NORMAL && body < MaxNumArmorBody)
 				{
 					int id = (male ? (int)_sheetSprites.ID.ARMOR_BODY_1 - 1 : (int)_sheetSprites.ID.EYE_LASER) + body;
 					SpriteSheet<_sheetSprites>.DrawRotated(id, ref pos, bodyFrameY, 54, newColor2, bodyRotation, ref pivot2, spriteEffects);
-					if (!invis && ((body >= 10 && body <= 16) || body == 20))
+					if (!invis && ((body >= (short)EntityID.ArmorBodyID.BODY_TUXEDO_SHIRT && body <= (short)EntityID.ArmorBodyID.BODY_THE_DOCTORS_SHIRT) || body == (short)EntityID.ArmorBodyID.BODY_MINING_SHIRT))
 					{
 						SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_HANDS, ref pos, bodyFrameY, 54, newColor12, bodyRotation, ref pivot2, spriteEffects);
 					}
@@ -11153,13 +10651,13 @@ namespace Terraria
 			pos.Y = XYWH.Y - drawView.ScreenPosition.Y + 42 - 56 + 4;
 			pos.X += headPosition.X + pivot3.X;
 			pos.Y += headPosition.Y + pivot3.Y;
-			if (!invis && head != 38)
+			if (!invis && head != (short)EntityID.ArmorHeadID.HEAD_WEREWOLF)
 			{
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_HEAD, ref pos, bodyFrameY, 54, newColor11, headRotation, ref pivot3, spriteEffects);
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_EYE_WHITES, ref pos, bodyFrameY, 54, newColor4, headRotation, ref pivot3, spriteEffects);
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_EYES, ref pos, bodyFrameY, 54, newColor9, headRotation, ref pivot3, spriteEffects);
 			}
-			if (head == 10 || head == 12 || head == 28)
+			if (head == (short)EntityID.ArmorHeadID.HEAD_GOGGLES || head == (short)EntityID.ArmorHeadID.HEAD_SUNGLASSES || head == (short)EntityID.ArmorHeadID.HEAD_MIME_MASK)
 			{
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARMOR_HEAD_1 - 1 + head, ref pos, bodyFrameY, 54, newColor, headRotation, ref pivot3, spriteEffects);
 				if (!invis)
@@ -11173,7 +10671,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_HAIR_1 + hair, ref pos, num3, 54, newColor10, headRotation, ref pivot3, spriteEffects);
 				}
 			}
-			else if (((head >= 14 && head <= 16) || head == 18 || head == 21 || (head >= 24 && head <= 26) || head == 40 || head == 44) && !invis)
+			else if (((head >= (short)EntityID.ArmorHeadID.HEAD_WIZARD_HAT && head <= (short)EntityID.ArmorHeadID.HEAD_SUMMER_HAT) || head == (short)EntityID.ArmorHeadID.HEAD_PLUMBERS_HAT || head == (short)EntityID.ArmorHeadID.HEAD_ARCHAEOLOGISTS_HAT || (head >= (short)EntityID.ArmorHeadID.HEAD_RED_HAT && head <= (short)EntityID.ArmorHeadID.HEAD_GOLD_CROWN) || head == (short)EntityID.ArmorHeadID.HEAD_CLOWN_HAT || head == (short)EntityID.ArmorHeadID.HEAD_SANTA_HAT) && !invis)
 			{
 				int num4 = bodyFrameY;
 				num4 -= 336;
@@ -11183,7 +10681,7 @@ namespace Terraria
 				}
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_HAIRALT_1 + hair, ref pos, num4, 54, newColor10, headRotation, ref pivot3, spriteEffects);
 			}
-			if (head == 23)
+			if (head == (short)EntityID.ArmorHeadID.HEAD_JUNGLE_ROSE)
 			{
 				int num5 = bodyFrameY;
 				num5 -= 336;
@@ -11197,7 +10695,7 @@ namespace Terraria
 				}
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARMOR_HEAD_1 - 1 + head, ref pos, num5, 54, newColor, headRotation, ref pivot3, spriteEffects);
 			}
-			else if (head == 14)
+			else if (head == (short)EntityID.ArmorHeadID.HEAD_WIZARD_HAT)
 			{
 				int num6 = bodyFrameY;
 				int num7 = 56;
@@ -11242,7 +10740,7 @@ namespace Terraria
 				pos.Y += num8;
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARMOR_HEAD_14, ref pos, num6, num7, newColor, headRotation, ref pivot3, spriteEffects);
 			}
-			else if (head > 0 && head < MaxNumArmorHead && head != 28)
+			else if (head > (short)EntityID.ArmorHeadID.HEAD_NORMAL && head < MaxNumArmorHead && head != (short)EntityID.ArmorHeadID.HEAD_MIME_MASK)
 			{
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARMOR_HEAD_1 - 1 + head, ref pos, bodyFrameY, 54, newColor, headRotation, ref pivot3, spriteEffects);
 			}
@@ -11284,83 +10782,83 @@ namespace Terraria
 							Vector2 centerPivot = SpriteSheet<_sheetSprites>.GetCenterPivot(num10);
 							pivot4.X = ((direction == -1) ? (num12 + num11) : (-num12));
 							pivot4.Y = centerPivot.Y;
-							switch ((Item.ID)type)
+							switch ((EntityID.ItemID)type)
 							{
-								case Item.ID.FLINTLOCK_PISTOL:
+								case EntityID.ItemID.FLINTLOCK_PISTOL:
 									centerPivot.Y += 2 * gravDir;
 									break;
-								case Item.ID.MUSKET:
+								case EntityID.ItemID.MUSKET:
 									num12 = -5;
 									break;
-								case Item.ID.MINISHARK:
+								case EntityID.ItemID.MINISHARK:
 									num12 = -5;
 									centerPivot.Y -= 2 * gravDir;
 									break;
-								case Item.ID.SHOTGUN:
+								case EntityID.ItemID.SHOTGUN:
 									num12 = -2;
 									centerPivot.Y += gravDir;
 									break;
-								case Item.ID.MEGASHARK:
+								case EntityID.ItemID.MEGASHARK:
 									num12 = -7;
 									centerPivot.Y -= 2 * gravDir;
 									break;
-								case Item.ID.FLAMETHROWER:
+								case EntityID.ItemID.FLAMETHROWER:
 									num12 = 0;
 									centerPivot.Y -= 2 * gravDir;
 									break;
-								case Item.ID.MAGICAL_HARP:
-								case Item.ID.HARP:
+								case EntityID.ItemID.MAGICAL_HARP:
+								case EntityID.ItemID.HARP:
 									num12 = -2;
 									break;
-								case Item.ID.CLOCKWORK_ASSAULT_RIFLE:
+								case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 									num12 = 0;
 									centerPivot.Y -= 2 * gravDir;
 									break;
-								case Item.ID.LASER_RIFLE:
+								case EntityID.ItemID.LASER_RIFLE:
 									num12 = 0;
 									centerPivot.Y += 3 * gravDir;
 									break;
-								case Item.ID.COBALT_REPEATER:
-								case Item.ID.MYTHRIL_REPEATER:
-								case Item.ID.ADAMANTITE_REPEATER:
-								case Item.ID.HALLOWED_REPEATER:
+								case EntityID.ItemID.COBALT_REPEATER:
+								case EntityID.ItemID.MYTHRIL_REPEATER:
+								case EntityID.ItemID.ADAMANTITE_REPEATER:
+								case EntityID.ItemID.HALLOWED_REPEATER:
 									num12 = -2;
 									centerPivot.Y -= 2 * gravDir;
 									break;
-								case Item.ID.STAR_CANNON:
+								case EntityID.ItemID.STAR_CANNON:
 									num12 = -5;
 									centerPivot.Y += 4 * gravDir;
 									break;
-								case Item.ID.BOTTLED_WATER:
+								case EntityID.ItemID.BOTTLED_WATER:
 									num12 = 4;
 									centerPivot.Y += 4 * gravDir;
 									break;
-								case Item.ID.SPACE_GUN:
+								case EntityID.ItemID.SPACE_GUN:
 									num12 = 4;
 									centerPivot.Y += 2 * gravDir;
 									break;
-								case Item.ID.AQUA_SCEPTER:
+								case EntityID.ItemID.AQUA_SCEPTER:
 									num12 = 6;
 									centerPivot.Y += 2 * gravDir;
 									break;
-								case Item.ID.HARPOON:
+								case EntityID.ItemID.HARPOON:
 									num12 = -8;
 									break;
-								case Item.ID.HANDGUN:
-								case Item.ID.PHOENIX_BLASTER:
+								case EntityID.ItemID.HANDGUN:
+								case EntityID.ItemID.PHOENIX_BLASTER:
 									num12 = 2;
 									centerPivot.Y += 4 * gravDir;
 									break;
-								case Item.ID.WATER_BOLT:
-								case Item.ID.DEMON_SCYTHE:
+								case EntityID.ItemID.WATER_BOLT:
+								case EntityID.ItemID.DEMON_SCYTHE:
 									num12 = 4;
 									centerPivot.Y += 4 * gravDir;
 									break;
-								case Item.ID.SANDGUN:
+								case EntityID.ItemID.SANDGUN:
 									num12 = 0;
 									centerPivot.Y += 2 * gravDir;
 									break;
-								case Item.ID.BLOWPIPE:
+								case EntityID.ItemID.BLOWPIPE:
 									num12 = 6;
 									centerPivot.Y -= 6 * gravDir;
 									break;
@@ -11385,7 +10883,7 @@ namespace Terraria
 						}
 						else
 						{
-							if (type == (int)Item.ID.BELL || type == (int)Item.ID.FAIRY_BELL)
+							if (type == (int)EntityID.ItemID.BELL || type == (int)EntityID.ItemID.FAIRY_BELL)
 							{
 								spriteEffects2 = ((gravDir == 1) ? ((direction != 1) ? (SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically) : SpriteEffects.FlipVertically) : ((direction != 1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None));
 							}
@@ -11403,10 +10901,10 @@ namespace Terraria
 			pos.Y = XYWH.Y - drawView.ScreenPosition.Y + height - 28 + 4;
 			pos.X += bodyPosition.X;
 			pos.Y += bodyPosition.Y;
-			if (body > 0 && body < MaxNumArmorBody)
+			if (body > (short)EntityID.ArmorBodyID.BODY_NORMAL && body < MaxNumArmorBody)
 			{
 				SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ARM_BONE_2 + body, ref pos, bodyFrameY, 54, newColor2, bodyRotation, ref pivot2, spriteEffects);
-				if (!invis && ((body >= 10 && body <= 16) || body == 20))
+				if (!invis && ((body >= (short)EntityID.ArmorBodyID.BODY_TUXEDO_SHIRT && body <= (short)EntityID.ArmorBodyID.BODY_THE_DOCTORS_SHIRT) || body == (short)EntityID.ArmorBodyID.BODY_MINING_SHIRT))
 				{
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.PLAYER_HAIRALT_36 + 1, ref pos, bodyFrameY, 54, newColor12, bodyRotation, ref pivot2, spriteEffects);
 				}
@@ -11560,7 +11058,7 @@ namespace Terraria
 			{
 				return false;
 			}
-			if (Main.TutorialState == Tutorial.CRAFT_TORCH && r.CraftedItem.Type != 8)
+			if (Main.TutorialState == Tutorial.CRAFT_TORCH && r.CraftedItem.Type != (short)EntityID.ItemID.TORCH)
 			{
 				return false;
 			}
@@ -11634,7 +11132,7 @@ namespace Terraria
 				}
 				if (itemType == Projectile.petItem[pet])
 				{
-					DelBuff(Buff.ID.PET);
+					DelBuff(EntityID.BuffID.PET);
 					return;
 				}
 			}
@@ -11649,7 +11147,7 @@ namespace Terraria
 			{
 				ui.SetTriggerState(Trigger.SpawnedAllPets);
 			}
-			AddBuff((int)Buff.ID.PET, 3600);
+			AddBuff((int)EntityID.BuffID.PET, 3600);
 		}
 
 		private void SpawnPet()
@@ -11711,7 +11209,7 @@ namespace Terraria
 			if (ui.TriggerCheckEnabled(Trigger.UsedAllCraftingStations))
 			{
 				craftingStationsFound.Set(type, true);
-				if (craftingStationsFound.Get(133) && craftingStationsFound.Get(134) && craftingStationsFound.Get(101) && craftingStationsFound.Get(114) && craftingStationsFound.Get(106) && craftingStationsFound.Get(96) && craftingStationsFound.Get(94) && craftingStationsFound.Get(86) && craftingStationsFound.Get(26) && craftingStationsFound.Get(13) && craftingStationsFound.Get(15) && craftingStationsFound.Get(18))
+				if (craftingStationsFound.Get((int)EntityID.TileID.ADAMANTITE_FORGE) && craftingStationsFound.Get((int)EntityID.TileID.MYTHRIL_ANVIL) && craftingStationsFound.Get((int)EntityID.TileID.BOOKCASE) && craftingStationsFound.Get((int)EntityID.TileID.TINKERERS_WORKSHOP) && craftingStationsFound.Get((int)EntityID.TileID.SAWMILL) && craftingStationsFound.Get((int)EntityID.TileID.COOKING_POT) && craftingStationsFound.Get((int)EntityID.TileID.KEG) && craftingStationsFound.Get((int)EntityID.TileID.LOOM) && craftingStationsFound.Get((int)EntityID.TileID.DEMON_ALTAR) && craftingStationsFound.Get((int)EntityID.TileID.BOTTLE) && craftingStationsFound.Get((int)EntityID.TileID.CHAIR) && craftingStationsFound.Get((int)EntityID.TileID.WORK_BENCH))
 				{
 					ui.SetTriggerState(Trigger.UsedAllCraftingStations);
 				}

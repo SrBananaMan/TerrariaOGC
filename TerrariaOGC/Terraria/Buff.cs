@@ -2,55 +2,9 @@ namespace Terraria
 {
 	public struct Buff
 	{
-		public enum ID
-		{
-			NONE,
-			LAVA_IMMUNE,
-			LIFE_REGEN,
-			HASTE, // Haste? It's not even like the Minecraft haste potion, it's just a speed boost... which is haste, yes I know, but still.
-			GILLS,
-			IRONSKIN,
-			MANA_REGEN,
-			MAGIC_POWER,
-			SLOWFALL,
-			FIND_TREASURE,
-			INVISIBLE,
-			SHINE,
-			NIGHTVISION,
-			ENEMY_SPAWNS,
-			THORNS,
-			WATER_WALK,
-			RANGED_DAMAGE,
-			DETECT_CREATURE,
-			GRAVITY_CONTROL,
-			LIGHT_ORB,
-			POISONED,
-			POTION_DELAY,
-			BLIND,
-			NO_ITEMS,
-			ON_FIRE,
-			DRUNK,
-			WELL_FED,
-			FAIRY,
-			WEREWOLF,
-			CLARAVOYANCE, // Ah yes, Claravoyance.
-			BLEED,
-			CONFUSED,
-			SLOW,
-			WEAK,
-			MERFOLK,
-			SILENCE,
-			BROKEN_ARMOR,
-			HORRIFIED,
-			TONGUED,
-			ON_FIRE_2, // Cursed Inferno.
-			PET,
-			NUM_TYPES
-		}
+		public const int MaxNumBuffs = (int)EntityID.BuffID.NUM_BUFFS;
 
-		public const int MaxNumBuffs = (int)ID.NUM_TYPES;
-
-		public const int MaxNumBuffStrings = 46;
+		public const int MaxNumBuffStrings = (int)EntityID.BuffID.NUM_BUFFS + 5;	// All the potential buff types, including the Pet Guinea Pig and the 5 alternatives.
 
 		public static string[] BuffName = new string[MaxNumBuffStrings];
 
@@ -64,11 +18,11 @@ namespace Terraria
 		{
 			switch (Type)
 			{
-				case (int)ID.POISONED:
-				case (int)ID.ON_FIRE:
-				case (int)ID.BLEED:
-				case (int)ID.CONFUSED:
-				case (int)ID.ON_FIRE_2:
+				case (int)EntityID.BuffID.POISONED:
+				case (int)EntityID.BuffID.ON_FIRE:
+				case (int)EntityID.BuffID.BLEED:
+				case (int)EntityID.BuffID.CONFUSED:
+				case (int)EntityID.BuffID.ON_FIRE_2:
 					return true;
 				default:
 					return false;
@@ -79,23 +33,23 @@ namespace Terraria
 		{
 			switch (type)
 			{
-				case (int)ID.POISONED:
-				case (int)ID.POTION_DELAY:
-				case (int)ID.BLIND:
-				case (int)ID.NO_ITEMS:
-				case (int)ID.ON_FIRE:
-				case (int)ID.DRUNK:
-				case (int)ID.WEREWOLF: // Apparently this and merfolk are debuffs???
-				case (int)ID.BLEED:
-				case (int)ID.CONFUSED:
-				case (int)ID.SLOW:
-				case (int)ID.WEAK:
-				case (int)ID.MERFOLK:
-				case (int)ID.SILENCE:
-				case (int)ID.BROKEN_ARMOR:
-				case (int)ID.HORRIFIED:
-				case (int)ID.TONGUED:
-				case (int)ID.ON_FIRE_2:
+				case (int)EntityID.BuffID.POISONED:
+				case (int)EntityID.BuffID.POTION_DELAY:
+				case (int)EntityID.BuffID.BLIND:
+				case (int)EntityID.BuffID.NO_ITEMS:
+				case (int)EntityID.BuffID.ON_FIRE:
+				case (int)EntityID.BuffID.DRUNK:
+				case (int)EntityID.BuffID.WEREWOLF: // Apparently this and merfolk are debuffs???
+				case (int)EntityID.BuffID.BLEED:
+				case (int)EntityID.BuffID.CONFUSED:
+				case (int)EntityID.BuffID.SLOW:
+				case (int)EntityID.BuffID.WEAK:
+				case (int)EntityID.BuffID.MERFOLK:
+				case (int)EntityID.BuffID.SILENCE:
+				case (int)EntityID.BuffID.BROKEN_ARMOR:
+				case (int)EntityID.BuffID.HORRIFIED:
+				case (int)EntityID.BuffID.TONGUED:
+				case (int)EntityID.BuffID.ON_FIRE_2:
 					return true;
 				default:
 					return false;
@@ -111,21 +65,21 @@ namespace Terraria
 		{
 			switch (Type)
 			{
-				case (int)ID.POISONED:
-				case (int)ID.POTION_DELAY:
-				case (int)ID.BLIND:
-				case (int)ID.NO_ITEMS:
-				case (int)ID.ON_FIRE:
-				case (int)ID.DRUNK:
-				case (int)ID.BLEED:
-				case (int)ID.CONFUSED:
-				case (int)ID.SLOW:
-				case (int)ID.WEAK:
-				case (int)ID.SILENCE:
-				case (int)ID.BROKEN_ARMOR:
-				case (int)ID.HORRIFIED:
-				case (int)ID.TONGUED:
-				case (int)ID.ON_FIRE_2:
+				case (int)EntityID.BuffID.POISONED:
+				case (int)EntityID.BuffID.POTION_DELAY:
+				case (int)EntityID.BuffID.BLIND:
+				case (int)EntityID.BuffID.NO_ITEMS:
+				case (int)EntityID.BuffID.ON_FIRE:
+				case (int)EntityID.BuffID.DRUNK:
+				case (int)EntityID.BuffID.BLEED:
+				case (int)EntityID.BuffID.CONFUSED:
+				case (int)EntityID.BuffID.SLOW:
+				case (int)EntityID.BuffID.WEAK:
+				case (int)EntityID.BuffID.SILENCE:
+				case (int)EntityID.BuffID.BROKEN_ARMOR:
+				case (int)EntityID.BuffID.HORRIFIED:
+				case (int)EntityID.BuffID.TONGUED:
+				case (int)EntityID.BuffID.ON_FIRE_2:
 					return Time > 0;
 				default:
 					return false;

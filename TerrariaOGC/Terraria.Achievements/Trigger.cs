@@ -32,7 +32,7 @@ namespace Terraria.Achievements
 		PlacedLotsOfWires,
 		WentDownAndUpWithoutDyingOrWarping,
 		InTheSky,
-#if !USE_ORIGINAL_CODE
+#if !USE_ORIGINAL_CODE	// These could not be recovered, so they were made based off of the Achievement enum.
 		BackForSeconds,
 		CouldThisBeHeaven,
 		LeapTallBuildingInSingleBound,
@@ -41,7 +41,7 @@ namespace Terraria.Achievements
 		GoneIn60Seconds,
 		OldFashioned,
 		Homicidal,
-		MadLad,
+		MadLad,	// Hence this name here.
 #endif
 		NumTriggers
 	}

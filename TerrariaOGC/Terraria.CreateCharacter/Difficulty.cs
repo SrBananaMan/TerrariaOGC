@@ -5,6 +5,9 @@ namespace Terraria.CreateCharacter
 		SOFTCORE,
 		MEDIUMCORE,
 		HARDCORE,
-		DIFFICULTY_COUNT
+		DIFFICULTY_COUNT,
+#if !USE_ORIGINAL_CODE
+		INVALID = 67
+#endif
 	}
 }

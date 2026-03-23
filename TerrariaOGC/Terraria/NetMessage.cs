@@ -2048,25 +2048,25 @@ namespace Terraria
 									SendMessage(sender);
 								}
 							}
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.MERCHANT);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.MERCHANT);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.NURSE);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.NURSE);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.ARMS_DEALER);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.ARMS_DEALER);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.DRYAD);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.DRYAD);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.GUIDE);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.GUIDE);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.DEMOLITIONIST);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.DEMOLITIONIST);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.CLOTHIER);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.CLOTHIER);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.GOBLIN_TINKERER);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.GOBLIN_TINKERER);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.WIZARD);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.WIZARD);
 							SendMessage(sender);
-							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)NPC.ID.MECHANIC);
+							CreateMessage1((int)SendDataId.SERVER_NPC_NAMES, (int)EntityID.NPCID.MECHANIC);
 							SendMessage(sender);
 							CreateMessage0((int)SendDataId.SERVER_GOOD_EVIL_STATUS);
 							SendMessage(sender);
@@ -3056,7 +3056,7 @@ namespace Terraria
 						int num2 = ((BinaryReader)(object)PacketIn).ReadByte();
 						Player player = Main.PlayerSet[num2];
 						Main.HarpNote = ((BinaryReader)(object)PacketIn).ReadSingle();
-						Main.PlaySound(2, player.XYWH.X, player.XYWH.Y, (player.Inventory[player.SelectedItem].Type == (int)Item.ID.BELL) ? 35 : 26);
+						Main.PlaySound(2, player.XYWH.X, player.XYWH.Y, (player.Inventory[player.SelectedItem].Type == (int)EntityID.ItemID.BELL) ? 35 : 26);
 						break;
 					}
 				case 59:

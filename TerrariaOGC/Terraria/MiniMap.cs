@@ -388,7 +388,7 @@ namespace Terraria
 										TileG = (TileColour >> 8) & 0xFF;
 										TileR = (TileColour >> 16) & 0xFF;
 									}
-									else if (TileIdx->WallType == 0)
+									else if (TileIdx->WallType == (byte)EntityID.WallID.NONE)
 									{
 										if (VertIdx < Main.WorldSurface)
 										{

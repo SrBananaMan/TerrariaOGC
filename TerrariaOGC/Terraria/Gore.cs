@@ -4,7 +4,7 @@ namespace Terraria
 {
 	public struct Gore
 	{
-		public const int MaxNumGoreTypes = 175;
+		public const int MaxNumGoreTypes = (int)EntityID.GoreID.NUM_TYPES;
 
 		public const int MaxNumGore = 128;
 
@@ -39,7 +39,7 @@ namespace Terraria
 
 		public void Update()
 		{
-			if (Type == 11 || Type == 12 || Type == 13 || Type == 61 || Type == 62 || Type == 63 || Type == 99 || (Type >= 191 && Type <= 193))
+			if ((Type >= (int)EntityID.GoreID.SMOKE_BLUE1 && Type <= (int)EntityID.GoreID.SMOKE_BLUE3) || (Type >= (int)EntityID.GoreID.SMOKE_WHITE1 && Type <= (int)EntityID.GoreID.SMOKE_WHITE3) || Type == (int)EntityID.GoreID.SMOKE_BLACK)
 			{
 				Velocity.Y *= 0.98f;
 				Velocity.X *= 0.98f;
@@ -50,7 +50,20 @@ namespace Terraria
 					return;
 				}
 			}
-			else if (Type == 16 || Type == 17)
+#if VERSION_101
+			else if (Type >= (int)EntityID.GoreID.SMOKE_PURPLE1 && Type <= (int)EntityID.GoreID.SMOKE_PURPLE3)
+			{
+				Velocity.Y *= 0.98f;
+				Velocity.X *= 0.98f;
+				Scale -= 0.007f;
+				if (Scale < 0.1f)
+				{
+					Active = 0;
+					return;
+				}
+			}
+#endif
+			else if (Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE1 || Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2)
 			{
 				Velocity.Y *= 0.98f;
 				Velocity.X *= 0.98f;
@@ -107,12 +120,12 @@ namespace Terraria
 			{
 				float BaseColour = Light * Scale;
 				Vector3 RGB = new Vector3(BaseColour, BaseColour, BaseColour);
-				if (Type == 16)
+				if (Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE1)
 				{
 					RGB.Y *= 0.8f;
 					RGB.Z *= 0.3f;
 				}
-				else if (Type == 17)
+				else if (Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2)
 				{
 					RGB.X *= 0.3f;
 					RGB.Y *= 0.6f;
@@ -133,7 +146,7 @@ namespace Terraria
 				ActiveGore->Type = (byte)Type;
 				ActiveGore->Active = 1;
 				ActiveGore->Rotation = 0f;
-				if (Type == 16 || Type == 17)
+				if (Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE1 || Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2)
 				{
 					ActiveGore->Sticky = false;
 					ActiveGore->Alpha = 100;
@@ -141,7 +154,7 @@ namespace Terraria
 					ActiveGore->Light = 1f;
 					return GoreIdx;
 				}
-				if ((Type >= 11 && Type <= 13) || (Type >= 61 && Type <= 63) || Type == 99 || (Type >= 191 && Type <= 193))
+				if ((Type >= (int)EntityID.GoreID.SMOKE_BLUE1 && Type <= (int)EntityID.GoreID.SMOKE_BLUE3) || (Type >= (int)EntityID.GoreID.SMOKE_WHITE1 && Type <= (int)EntityID.GoreID.SMOKE_WHITE3) || Type == (int)EntityID.GoreID.SMOKE_BLACK)
 				{
 					ActiveGore->Sticky = false;
 				}
@@ -153,10 +166,14 @@ namespace Terraria
 				ActiveGore->Scale = (float)Scale;
 				ActiveGore->Alpha = 0;
 				ActiveGore->Light = 0f;
-				if (Type >= 191 && Type <= 193)
+
+#if VERSION_101
+				if (Type >= (int)EntityID.GoreID.SMOKE_PURPLE1 && Type <= (int)EntityID.GoreID.SMOKE_PURPLE3)
 				{
 					ActiveGore->Alpha = 100;
+					ActiveGore->Sticky = false;
 				}
+#endif
 			}
 			return GoreIdx;
 		}
@@ -171,7 +188,7 @@ namespace Terraria
 			int R;
 			int G;
 			int B;
-			if (Type == 16 || Type == 17)
+			if (Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE1 || Type == (int)EntityID.GoreID.FALLEN_STAR_PARTICLE2)
 			{
 				R = GoreColour.R;
 				G = GoreColour.G;

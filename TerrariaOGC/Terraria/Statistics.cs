@@ -26,66 +26,66 @@ namespace Terraria
 		public static StatisticEntry GetStatisticEntryFromNetID(short NetID)
 		{
 			StatisticEntry NPCEntry = StatisticEntry.Unknown;
-			switch (NetID)
+			switch ((EntityID.NPCID)NetID)
 			{
-				case (int)NPC.ID.SLIME:
+				case EntityID.NPCID.SLIME:
 					NPCEntry = StatisticEntry.BlueSlime;
 					break;
-				case -1:
+				case EntityID.NPCID.SLIMELING:
 					NPCEntry = StatisticEntry.Slimeling;
 					break;
-				case -2:
+				case EntityID.NPCID.SLIMER2:
 					NPCEntry = StatisticEntry.Slimer;
 					break;
-				case -3:
+				case EntityID.NPCID.GREEN_SLIME:
 					NPCEntry = StatisticEntry.GreenSlime;
 					break;
-				case -4:
+				case EntityID.NPCID.PINKY:
 					NPCEntry = StatisticEntry.Pinky;
 					break;
-				case -5:
+				case EntityID.NPCID.BABY_SLIME:
 					NPCEntry = StatisticEntry.BabySlime;
 					break;
-				case -6:
+				case EntityID.NPCID.BLACK_SLIME:
 					NPCEntry = StatisticEntry.BlackSlime;
 					break;
-				case -7:
+				case EntityID.NPCID.PURPLE_SLIME:
 					NPCEntry = StatisticEntry.PurpleSlime;
 					break;
-				case -8:
+				case EntityID.NPCID.RED_SLIME:
 					NPCEntry = StatisticEntry.RedSlime;
 					break;
-				case -9:
+				case EntityID.NPCID.YELLOW_SLIME:
 					NPCEntry = StatisticEntry.YellowSlime;
 					break;
-				case -10:
+				case EntityID.NPCID.JUNGLE_SLIME:
 					NPCEntry = StatisticEntry.JungleSlime;
 					break;
-				case -18:
+				case EntityID.NPCID.SLIMELING2:
 					NPCEntry = StatisticEntry.Slimeling;
 					break;
-				case (int)NPC.ID.MOTHER_SLIME:
+				case EntityID.NPCID.MOTHER_SLIME:
 					NPCEntry = StatisticEntry.MotherSlime;
 					break;
-				case (int)NPC.ID.LAVA_SLIME:
+				case EntityID.NPCID.LAVA_SLIME:
 					NPCEntry = StatisticEntry.LavaSlime;
 					break;
-				case (int)NPC.ID.CORRUPT_SLIME:
+				case EntityID.NPCID.CORRUPT_SLIME:
 					NPCEntry = StatisticEntry.CorruptSlime;
 					break;
-				case (int)NPC.ID.TOXIC_SLUDGE:
+				case EntityID.NPCID.TOXIC_SLUDGE:
 					NPCEntry = StatisticEntry.ToxicSludge;
 					break;
-				case (int)NPC.ID.SLIMER:
+				case EntityID.NPCID.SLIMER:
 					NPCEntry = StatisticEntry.Slimer;
 					break;
-				case (int)NPC.ID.SHADOW_SLIME:
+				case EntityID.NPCID.SHADOW_SLIME:
 					NPCEntry = StatisticEntry.ShadowSlime;
 					break;
-				case (int)NPC.ID.ILLUMINANT_SLIME:
+				case EntityID.NPCID.ILLUMINANT_SLIME:
 					NPCEntry = StatisticEntry.IlluminantSlime;
 					break;
-				case (int)NPC.ID.DUNGEON_SLIME:
+				case EntityID.NPCID.DUNGEON_SLIME:
 					NPCEntry = StatisticEntry.DungeonSlime;
 					break;
 			}
@@ -95,36 +95,36 @@ namespace Terraria
 		public static StatisticEntry GetBossStatisticEntryFromNetID(short NetID)
 		{
 			StatisticEntry BossEntry = StatisticEntry.Unknown;
-			switch ((NPC.ID)NetID)
+			switch ((EntityID.NPCID)NetID)
 			{
-				case NPC.ID.KING_SLIME:
+				case EntityID.NPCID.KING_SLIME:
 					BossEntry = StatisticEntry.KingSlime;
 					break;
-				case NPC.ID.EYE_OF_CTHULHU:
+				case EntityID.NPCID.EYE_OF_CTHULHU:
 					BossEntry = StatisticEntry.EyeOfCthulhu;
 					break;
-				case NPC.ID.EATER_OF_WORLDS_HEAD:
-				case NPC.ID.EATER_OF_WORLDS_BODY:
-				case NPC.ID.EATER_OF_WORLDS_TAIL:
+				case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+				case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+				case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 					BossEntry = StatisticEntry.EaterOfWorlds;
 					break;
-				case NPC.ID.SKELETRON_HEAD:
+				case EntityID.NPCID.SKELETRON_HEAD:
 					BossEntry = StatisticEntry.Skeletron;
 					break;
-				case NPC.ID.WALL_OF_FLESH:
+				case EntityID.NPCID.WALL_OF_FLESH:
 					BossEntry = StatisticEntry.WallOfFlesh;
 					break;
-				case NPC.ID.RETINAZER:
-				case NPC.ID.SPAZMATISM:
+				case EntityID.NPCID.RETINAZER:
+				case EntityID.NPCID.SPAZMATISM:
 					BossEntry = StatisticEntry.TheTwins;
 					break;
-				case NPC.ID.THE_DESTROYER_HEAD:
+				case EntityID.NPCID.THE_DESTROYER_HEAD:
 					BossEntry = StatisticEntry.TheDestroyer;
 					break;
-				case NPC.ID.SKELETRON_PRIME:
+				case EntityID.NPCID.SKELETRON_PRIME:
 					BossEntry = StatisticEntry.SkeletronPrime;
 					break;
-				case NPC.ID.OCRAM:
+				case EntityID.NPCID.OCRAM:
 					BossEntry = StatisticEntry.Ocram;
 					break;
 			}

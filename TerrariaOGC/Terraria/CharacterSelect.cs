@@ -9,9 +9,9 @@ namespace Terraria
 	{
 		private const int MaxCharacters = UI.MAX_LOAD_PLAYERS;
 
-		private static sbyte hoveredCharacter;
+		private static Player[] LoadedPlayers = UI.MainUI.loadPlayer;
 
-		private static readonly string[] CharacterNames = new string[MaxCharacters];
+		private static sbyte hoveredCharacter;
 
 		private static bool WaitNeeded = false;
 
@@ -22,21 +22,15 @@ namespace Terraria
 				WaitNeeded = true;
 			}
 
-			for (int l = 0; l < UI.MAX_LOAD_PLAYERS; l++)
+			if (UI.MainUI.loadPlayerPath[hoveredCharacter] != null && LoadedPlayers[hoveredCharacter].difficulty != (byte)CreateCharacter.Difficulty.INVALID)
 			{
-				if (l < UI.MainUI.numLoadPlayers)
-				{
-					CharacterNames[l] = UI.MainUI.loadPlayer[l].CharacterName;
-				}
-				else
-				{
-					CharacterNames[l] = null;
-				}
+				UI.MainUI.showPlayer = hoveredCharacter;
 			}
 
 			if (UI.MainUI.IsBackButtonTriggered() && (Netplay.gamersWhoReceivedInvite.Count < 2 || !Netplay.gamersWhoReceivedInvite.Contains(UI.MainUI.SignedInGamer)))
 			{
 				Netplay.gamersWhoReceivedInvite.Remove(UI.MainUI.SignedInGamer);
+				Main.PlaySound(11);
 				if (Netplay.gamersWhoReceivedInvite.Count == 0)
 				{
 					Netplay.isJoiningRemoteInvite = false;
@@ -48,48 +42,44 @@ namespace Terraria
 				}
 				UI.MainUI.SetMenu(MenuMode.TITLE, rememberPrevious: false, reset: true);
 			}
-
-			if (UI.MainUI.IsButtonTriggered(Buttons.A))
+			else
 			{
-				SelectCharacter();
-			}
+				if (UI.MainUI.IsButtonTriggered(Buttons.A) && LoadedPlayers[hoveredCharacter].difficulty != (byte)CreateCharacter.Difficulty.INVALID)
+				{
+					UI.MainUI.selectedPlayer = hoveredCharacter;
+					Main.PlaySound(10);
+					SelectCharacter();
+				}
 
-			if (hoveredCharacter >= 0 && hoveredCharacter < UI.MainUI.numLoadPlayers)
-			{
-				if (UI.MainUI.IsButtonTriggered(Buttons.X))
+				if (UI.MainUI.IsButtonTriggered(Buttons.X) && UI.MainUI.loadPlayerPath[hoveredCharacter] != null)
 				{
 					UI.MainUI.selectedPlayer = hoveredCharacter;
 					Main.PlaySound(10);
 					UI.MainUI.SetMenu(MenuMode.CONFIRM_DELETE_CHARACTER);
 				}
-				else
-				{
-					UI.MainUI.showPlayer = hoveredCharacter;
-				}
 			}
 		}
 
-		public static void UpdateCursor(int dx, int dy)
-		{
-			if (dx != 0 || dy != 0)
+		public static void UpdateCursor(int dy)
+		{   
+			// This function doesn't appear to exist, as the code is implanted in UpdateMouse() directly.
+			// I just did it for consistency with current code. A few other functions also get this treatment.
+
+			if (dy != 0)
 			{
 				Main.PlaySound(12);
+				dy += hoveredCharacter;
+				if (dy < 0)
+				{
+					dy += MaxCharacters;
+				}
+				else if (dy >= MaxCharacters)
+				{
+					dy -= MaxCharacters;
+				}
+				hoveredCharacter = (sbyte)dy;
 			}
-			if (dy == 0)
-			{
-				return;
-			}
-			dy += hoveredCharacter;
-			if (dy < 0)
-			{
-				dy += MaxCharacters;
-			}
-			else if (dy >= MaxCharacters)
-			{
-				dy -= MaxCharacters;
-			}
-			hoveredCharacter = (sbyte)dy;
-			return;
+			return;		
 		}
 
 		public static void Draw(WorldView view)
@@ -130,7 +120,7 @@ namespace Terraria
 					alpha2 = UI.MouseTextBrightness;
 					texId2 = (int)_sheetSprites.ID.INVENTORY_BACK10;
 				}
-				else if (CharacterNames[k] == null)
+				else if (UI.MainUI.loadPlayerPath[k] == null)
 				{
 					alpha2 = 212;
 					texId2 = (int)_sheetSprites.ID.INVENTORY_BACK;
@@ -143,18 +133,29 @@ namespace Terraria
 
 			for (int l = 0; l < MaxCharacters; l++)
 			{
-				string NameOrEmpty = CharacterNames[l] ?? Lang.MenuText[79];
-				Color NameColour = (CharacterNames[l] == null) ? new Color(200, 200, 220, 255) : new Color(255, 255, 255, 255);
+				string NameOrEmpty = (UI.MainUI.loadPlayerPath[l] == null) ? Lang.MenuText[79] : (LoadedPlayers[l].difficulty == (byte)CreateCharacter.Difficulty.INVALID) ? LoadedPlayers[l].Name : LoadedPlayers[l].CharacterName;
 
-				switch (UI.MainUI.loadPlayer[l].difficulty) // ADDITION: 1.01 and above made character select akin to the world select, but unfortunately, it packed up colouring for different difficulties in exchange.
+				Color NameColour = new Color(255, 255, 255, 255);
+
+				if (UI.MainUI.loadPlayerPath[l] == null)
 				{
-					// In TerrariaOGC, it has returned.
-					case 1: // Mediumcore
-						NameColour = new Color(UI.mcColorR, UI.mcColorG, UI.mcColorB);
-						break;
-					case 2: // Hardcore
-						NameColour = new Color(UI.hcColorR, UI.hcColorG, UI.hcColorB);
-						break;
+					NameColour = new Color(200, 200, 220, 255);
+				}
+				else
+				{
+					switch ((CreateCharacter.Difficulty)LoadedPlayers[l].difficulty) // ADDITION: 1.01 and above made character select akin to the world select, but unfortunately, it packed up colouring for different difficulties in exchange.
+					{
+						// In TerrariaOGC, it has returned.
+						case CreateCharacter.Difficulty.MEDIUMCORE:
+							NameColour = new Color(UI.mcColorR, UI.mcColorG, UI.mcColorB);
+							break;
+						case CreateCharacter.Difficulty.HARDCORE:
+							NameColour = new Color(UI.hcColorR, UI.hcColorG, UI.hcColorB);
+							break;
+						case CreateCharacter.Difficulty.INVALID:
+							NameColour = new Color(120, 120, 120);
+							break;
+					}
 				}
 
 				UI.DrawStringCC(UI.BoldSmallFont, NameOrEmpty, rect.Center.X, rect.Center.Y, NameColour);
@@ -164,18 +165,19 @@ namespace Terraria
 
 		public static void ControlDescription(StringBuilder strBuilder)
 		{
-			if (CharacterNames[hoveredCharacter] == null)
+			if (UI.MainUI.loadPlayerPath[hoveredCharacter] == null)
 			{
 				strBuilder.Append(Lang.Controls(Lang.CONTROLS.CREATE_CHARACTER));
+				strBuilder.Append(' ');
 			}
-			else
+			else if (LoadedPlayers[hoveredCharacter].difficulty != (byte)CreateCharacter.Difficulty.INVALID)
 			{
 				strBuilder.Append(Lang.Controls(Lang.CONTROLS.SELECT));
+				strBuilder.Append(' ');
 			}
-			strBuilder.Append(' ');
 			strBuilder.Append(Lang.Controls(Lang.CONTROLS.BACK));
 			strBuilder.Append(' ');
-			if (CharacterNames[hoveredCharacter] != null)
+			if (UI.MainUI.loadPlayerPath[hoveredCharacter] != null)
 			{
 				strBuilder.Append(Lang.MenuText[17]);
 				strBuilder.Append(' ');
@@ -184,11 +186,9 @@ namespace Terraria
 
 		private static void SelectCharacter()
 		{
-			Main.PlaySound(10);
-			if (CharacterNames[hoveredCharacter] != null)
+			if (UI.MainUI.loadPlayerPath[hoveredCharacter] != null)
 			{
-				UI.MainUI.selectedPlayer = hoveredCharacter;
-				UI.MainUI.SetPlayer(UI.MainUI.loadPlayer[hoveredCharacter].DeepCopy());
+				UI.MainUI.SetPlayer(LoadedPlayers[hoveredCharacter].DeepCopy());
 				UI.MainUI.playerPathName = UI.MainUI.loadPlayerPath[hoveredCharacter];
 
 				if (Netplay.isJoiningRemoteInvite)
@@ -207,18 +207,15 @@ namespace Terraria
 			}
 			else
 			{
-				Player[] PlayerArray = UI.MainUI.loadPlayer;
-				sbyte PlayerLoadNumber = UI.MainUI.numLoadPlayers;
-
-				PlayerArray[PlayerLoadNumber] = new Player();
-				PlayerArray[PlayerLoadNumber].CharacterName = UI.MainUI.SignedInGamer.Gamertag;
-				PlayerArray[PlayerLoadNumber].Inventory[0].SetDefaults("Copper Shortsword");
-				PlayerArray[PlayerLoadNumber].Inventory[0].SetPrefix(-1);
-				PlayerArray[PlayerLoadNumber].Inventory[1].SetDefaults("Copper Pickaxe");
-				PlayerArray[PlayerLoadNumber].Inventory[1].SetPrefix(-1);
-				PlayerArray[PlayerLoadNumber].Inventory[2].SetDefaults("Copper Axe");
-				PlayerArray[PlayerLoadNumber].Inventory[2].SetPrefix(-1);
-				UI.MainUI.CreateCharacterGUI.ApplyDefaultAttributes(PlayerArray[PlayerLoadNumber]);
+				LoadedPlayers[hoveredCharacter] = new Player();
+				LoadedPlayers[hoveredCharacter].CharacterName = UI.MainUI.SignedInGamer.Gamertag;
+				LoadedPlayers[hoveredCharacter].Inventory[0].SetDefaults("Copper Shortsword");
+				LoadedPlayers[hoveredCharacter].Inventory[0].SetPrefix(-1);
+				LoadedPlayers[hoveredCharacter].Inventory[1].SetDefaults("Copper Pickaxe");
+				LoadedPlayers[hoveredCharacter].Inventory[1].SetPrefix(-1);
+				LoadedPlayers[hoveredCharacter].Inventory[2].SetDefaults("Copper Axe");
+				LoadedPlayers[hoveredCharacter].Inventory[2].SetPrefix(-1);
+				UI.MainUI.CreateCharacterGUI.ApplyDefaultAttributes(LoadedPlayers[hoveredCharacter]);
 				UI.MainUI.SetMenu(MenuMode.CREATE_CHARACTER);
 			}
 		}

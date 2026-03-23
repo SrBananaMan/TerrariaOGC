@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Threading;
 using Terraria.Achievements;
 using Terraria.Leaderboards;
+using static Terraria.Tile;
 
 namespace Terraria
 {
@@ -626,7 +627,7 @@ namespace Terraria
 
 		public byte petSpawnMask;
 
-		private BitArray armorFound = new BitArray((int)Item.ID.NUM_TYPES);
+		private BitArray armorFound = new BitArray((int)EntityID.ItemID.NUM_TYPES);
 
 		private readonly List<ulong> blacklist = new List<ulong>();
 
@@ -930,7 +931,7 @@ namespace Terraria
 			{
 				menuItemScale[num] = 0.8f;
 			}
-			for (int num2 = 4; num2 >= 0; num2--)
+			for (int num2 = MAX_LOAD_PLAYERS - 1; num2 >= 0; num2--)
 			{
 				loadPlayer[num2] = new Player();
 			}
@@ -1160,9 +1161,9 @@ namespace Terraria
 			LoadFonts(Content);
 
 #if USE_ORIGINAL_CODE && (!VERSION_INITIAL || IS_PATCHED) // Here for archival purposes; Can't be used.
-            FontSmallOutlineFull = Content.Load<SpriteFont>("Fonts/small2"); // But... why?
-            FontSmallOutlineFull.Spacing = -5f;
-            FontSmallOutlineFull.LineSpacing = 22;
+			FontSmallOutlineFull = Content.Load<SpriteFont>("Fonts/small2"); // But... why?
+			FontSmallOutlineFull.Spacing = -5f;
+			FontSmallOutlineFull.LineSpacing = 22;
 #endif
 		}
 
@@ -1747,12 +1748,12 @@ namespace Terraria
 					uiCoords = MENU_TITLE_COORDS;
 					return;
 #if VERSION_INITIAL
-			case MenuMode.CHARACTER_SELECT:
-				uiWidth = MENU_SELECT_W;
-				uiHeight = MENU_SELECT_H;
-				uiCoords = MENU_SELECT_COORDS;
-				initCharacterSelectCoordinates();
-				return;
+				case MenuMode.CHARACTER_SELECT:
+					uiWidth = MENU_SELECT_W;
+					uiHeight = MENU_SELECT_H;
+					uiCoords = MENU_SELECT_COORDS;
+					initCharacterSelectCoordinates();
+					return;
 #endif
 				case MenuMode.CONFIRM_LEAVE_CREATE_CHARACTER:
 				case MenuMode.CONFIRM_DELETE_CHARACTER:
@@ -2348,7 +2349,7 @@ namespace Terraria
 						if (!Guide.IsVisible)
 						{
 #if USE_ORIGINAL_CODE
-                            bool flag2;
+							bool flag2;
 							do
 							{
 								flag2 = false;
@@ -2516,7 +2517,7 @@ namespace Terraria
 					if (!Guide.IsVisible)
 					{
 #if USE_ORIGINAL_CODE
-                        bool flag3;
+						bool flag3;
 						do
 						{
 							flag3 = false;
@@ -2697,6 +2698,14 @@ namespace Terraria
 						menuString[l] = loadPlayer[l].CharacterName;
 						menuHC[l] = loadPlayer[l].difficulty;
 						MENU_SELECT_COORDS[l].X = ViewportHalfWidth;
+
+#if !USE_ORIGINAL_CODE
+						if (loadPlayer[l].difficulty == (byte)CreateCharacter.Difficulty.INVALID)
+						{
+							menuString[l] = "Unsupported";
+							menuHC[l] = 3; // Greys out the name.
+						}
+#endif
 					}
 					else
 					{
@@ -2741,8 +2750,10 @@ namespace Terraria
 				}
 				else if (selectedMenu >= 0)
 				{
+					
+
+#if USE_ORIGINAL_CODE
 					Terraria.Main.PlaySound(10);
-					selectedPlayer = selectedMenu;
 					SetPlayer(loadPlayer[selectedPlayer].DeepCopy());
 					playerPathName = loadPlayerPath[selectedPlayer];
 					if (Netplay.isJoiningRemoteInvite)
@@ -2758,6 +2769,28 @@ namespace Terraria
 					{
 						SetMenu(MenuMode.WORLD_SELECT);
 					}
+#else
+					if (loadPlayer[focusMenu].difficulty != (byte)CreateCharacter.Difficulty.INVALID)
+					{
+						selectedPlayer = selectedMenu;
+						Terraria.Main.PlaySound(10);
+						SetPlayer(loadPlayer[selectedPlayer].DeepCopy());
+						playerPathName = loadPlayerPath[selectedPlayer];
+						if (Netplay.isJoiningRemoteInvite)
+						{
+							SetMenu(MenuMode.NETPLAY);
+							statusText = Lang.MenuText[75];
+						}
+						else if (this != MainUI)
+						{
+							SetMenu(MenuMode.WAITING_SCREEN);
+						}
+						else
+						{
+							SetMenu(MenuMode.WORLD_SELECT);
+						}
+					}
+#endif
 				}
 				else if (focusMenu >= 0 && focusMenu < numLoadPlayers)
 				{
@@ -2770,6 +2803,12 @@ namespace Terraria
 					else
 					{
 						showPlayer = focusMenu;
+#if !USE_ORIGINAL_CODE
+						if (loadPlayer[focusMenu].difficulty == (byte)CreateCharacter.Difficulty.INVALID)
+						{
+							showPlayer = -1;
+						}
+#endif
 					}
 				}
 #else
@@ -2778,8 +2817,11 @@ namespace Terraria
 			}
 			else if (CurMenuMode == MenuMode.CREATE_CHARACTER)
 			{
-				Player player = loadPlayer[numLoadPlayers];
-				CreateCharacterGUI.Update(player);
+#if VERSION_INITIAL
+				CreateCharacterGUI.Update(loadPlayer[numLoadPlayers]);
+#else
+				CreateCharacterGUI.Update(loadPlayer[selectedPlayer]);
+#endif
 			}
 			else if (CurMenuMode == MenuMode.CONFIRM_LEAVE_CREATE_CHARACTER)
 			{
@@ -2799,7 +2841,11 @@ namespace Terraria
 			}
 			else if (CurMenuMode == MenuMode.NAME_CHARACTER)
 			{
+#if VERSION_INITIAL
 				string characterName = loadPlayer[numLoadPlayers].CharacterName;
+#else
+				string characterName = loadPlayer[selectedPlayer].CharacterName;
+#endif
 				string text = GetInputText(characterName, Lang.MenuText[53], Lang.MenuText[45], validate: false).UserText;
 				numMenuItems = 0;
 				if (inputTextEnter)
@@ -2815,6 +2861,7 @@ namespace Terraria
 						{
 							text = text.Substring(0, 16);
 						}
+#if VERSION_INITIAL
 						Player player2 = loadPlayer[numLoadPlayers];
 						player2.CharacterName = text;
 						player2.ui = this;
@@ -2824,6 +2871,16 @@ namespace Terraria
 						selectedPlayer = numLoadPlayers;
 						showPlayer = numLoadPlayers;
 						uiY = numLoadPlayers;
+#else
+						Player player2 = loadPlayer[selectedPlayer];
+						player2.CharacterName = text;
+						player2.ui = this;
+						loadPlayerPath[selectedPlayer] = nextLoadPlayer();
+						player2.Save(loadPlayerPath[selectedPlayer]);
+						PrevMenu(-2);
+						//selectedPlayer = numLoadPlayers;
+						showPlayer = selectedPlayer;
+#endif
 						MENU_SELECT_COORDS[uiY].X = ViewportHalfWidth;
 						numLoadPlayers++;
 					}
@@ -2832,13 +2889,21 @@ namespace Terraria
 			else if (CurMenuMode == MenuMode.CONFIRM_DELETE_CHARACTER)
 			{
 #if VERSION_INITIAL
-				menuString[0] = Lang.MenuText[46] + loadPlayer[selectedPlayer].Name + "?";
-#else
-				menuString[0] = Lang.MenuText[46] + loadPlayer[selectedPlayer].CharacterName + "?";
-#endif
-				// Here lies a problem; As we can see, the above string is made by getting the text "Delete", appending the character name, and then adding a question mark.
+				// Here lies a problem; As we can see, the above string is made by getting the text "Delete", appending the name, and then adding a question mark.
 				// Simple? No, since .name is a parameter that has the majority of one setting, the gamertag (or on PS3, the PSN name), and as such, very few references to the actual character name is seen in-game.
 				// Instead, if we use .characterName or set the .name property to the .characterName, this will reference the character's name, rather than the player's. I will be preferring the former when we use it.
+				menuString[0] = Lang.MenuText[46] + loadPlayer[selectedPlayer].Name + "?";
+#else
+
+				if (loadPlayer[selectedPlayer].difficulty == (byte)CreateCharacter.Difficulty.INVALID)
+				{
+					menuString[0] = Lang.MenuText[46] + loadPlayer[selectedPlayer].Name + "?";
+				}
+				else
+				{
+					menuString[0] = Lang.MenuText[46] + loadPlayer[selectedPlayer].CharacterName + "?";
+				}
+#endif
 
 				noFocus[0] = true;
 				menuString[1] = Lang.MenuText[104];
@@ -3212,7 +3277,7 @@ namespace Terraria
 				else if (IsButtonTriggered(Buttons.X) && SignedInGamer.Privileges.AllowPurchaseContent && !Guide.IsVisible)
 				{
 #if USE_ORIGINAL_CODE
-                    bool flag4;
+					bool flag4;
 					do
 					{
 						flag4 = false;
@@ -3806,7 +3871,7 @@ namespace Terraria
 			}
 			Main.PlaySound(10);
 #if USE_ORIGINAL_CODE
-            bool flag;
+			bool flag;
 			do
 			{
 				flag = false;
@@ -4052,17 +4117,30 @@ namespace Terraria
 						break;
 					case MenuMode.CHARACTER_SELECT:
 #if VERSION_INITIAL
-					Terraria.Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.SELECT));
-					if (Netplay.gamersWhoReceivedInvite.Count < 2 || !Netplay.gamersWhoReceivedInvite.Contains(SignedInGamer))
-					{
-						Terraria.Main.StrBuilder.Append(' ');
-						Terraria.Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.BACK));
-					}
-					if (focusMenu < numLoadPlayers)
-					{
-						Terraria.Main.StrBuilder.Append(' ');
-						Terraria.Main.StrBuilder.Append(Lang.MenuText[17]); // Delete
-					}
+						Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.SELECT));
+						if (Netplay.gamersWhoReceivedInvite.Count < 2 || !Netplay.gamersWhoReceivedInvite.Contains(SignedInGamer))
+						{
+							Main.StrBuilder.Append(' ');
+							Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.BACK));
+						}
+
+#if !USE_ORIGINAL_CODE
+						if (uiY != 5 && loadPlayer[uiY].difficulty == (byte)CreateCharacter.Difficulty.INVALID)
+						{
+							Main.StrBuilder.Remove(0, 8);
+						}
+						if (uiY != 5 && focusMenu < numLoadPlayers)
+						{
+							Main.StrBuilder.Append(' ');
+							Main.StrBuilder.Append(Lang.MenuText[17]); // Delete
+						}
+#else
+						if (focusMenu < numLoadPlayers)
+						{
+							Main.StrBuilder.Append(' ');
+							Main.StrBuilder.Append(Lang.MenuText[17]); // Delete
+						}
+#endif
 #else
 						CharacterSelect.ControlDescription(Main.StrBuilder);
 #endif
@@ -4123,35 +4201,19 @@ namespace Terraria
 #if !USE_ORIGINAL_CODE
 			if (CurMenuMode == MenuMode.WELCOME) // ADDITION: To make use of the version string provided and to assist with identifying built versions, this code will draw a version string.
 			{
-				string GameVersion;
 				// All version strings all start with X360, which is due to TerrariaOGC being based off of that version, with the PS3, HD, and version changes being added from what I have decompiled.
-
-				switch (Main.VersionNumber) // Yeah, the IDE thinks it unnecessary, but whenever the user changes the version being built, it will adapt on-the-fly.
-				{
-					case "Xbox360 v0.7.6":
-						GameVersion = "X360 1.0 - Initial";
-						break;
-
-					case "Xbox360 v0.7.8":
-						GameVersion = "X360 1.0 - Patched";
-						break;
-
-					case "Xbox360 v1.01": // This and below are entirely custom, since versions past Patched 1.0 no longer included the version number string, indicating it was removed entirely.
-						GameVersion = "X360 1.01";
-						break;
-
-					case "Xbox360 v1.03":
-						GameVersion = "X360 1.03";
-						break;
-
-					case "Xbox360 v1.09":
-						GameVersion = "X360 1.09";
-						break;
-
-					default:
-						GameVersion = "Custom";
-						break;
-				}
+#if VERSION_INITIAL && !IS_PATCHED
+				string GameVersion = "X360 1.0 - Initial";
+#elif VERSION_INITIAL && IS_PATCHED
+				string GameVersion = "X360 1.0 - Patched";
+#elif VERSION_101
+				// This and below are entirely custom, since versions past Patched 1.0 no longer included the version number string, indicating it was removed entirely.
+				string GameVersion = "X360 1.01";
+#elif VERSION_103
+				string GameVersion = "X360 1.03";
+#else
+				string GameVersion = "X360 1.09";
+#endif
 
 				string Version = $"Version: {GameVersion}";
 				Vector2 OGCVector = BoldSmallFont.MeasureString(Main.OGCVersion);
@@ -4292,7 +4354,7 @@ namespace Terraria
 				int x = 32 + CurrentView.SafeAreaOffsetLeft + k * 38;
 				int num15 = 76 + CurrentView.SafeAreaOffsetTop;
 				int num16 = 141 + type;
-				if (type == (int)Buff.ID.PET)
+				if (type == (int)EntityID.BuffID.PET)
 				{
 					num16 += ActivePlayer.pet;
 				}
@@ -4301,7 +4363,7 @@ namespace Terraria
 				int x = (int)(32 * Main.ScreenMultiplier) + CurrentView.SafeAreaOffsetLeft + k * (int)(38 * Main.ScreenMultiplier);
 				int num15 = (int)(76 * Main.ScreenMultiplier) + CurrentView.SafeAreaOffsetTop;
 				int num16 = (int)_sheetSprites.ID.BUFF_1 - 1 + type;
-				if (type == (int)Buff.ID.PET)
+				if (type == (int)EntityID.BuffID.PET)
 				{
 					num16 += ActivePlayer.pet;
 				}
@@ -4314,7 +4376,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawScaled(num16, x, num15, Main.ScreenMultiplier, c);
 				}
 #endif
-				if (type != (int)Buff.ID.WEREWOLF && type != (int)Buff.ID.MERFOLK && type != (int)Buff.ID.HORRIFIED && type != (int)Buff.ID.TONGUED && type != (int)Buff.ID.PET)
+				if (type != (int)EntityID.BuffID.WEREWOLF && type != (int)EntityID.BuffID.MERFOLK && type != (int)EntityID.BuffID.HORRIFIED && type != (int)EntityID.BuffID.TONGUED && type != (int)EntityID.BuffID.PET)
 				{
 					int num17 = ActivePlayer.buff[k].Time / 60;
 					Main.StrBuilder.Length = 0;
@@ -4574,7 +4636,7 @@ namespace Terraria
 			if (Main.ScreenHeightPtr == 0)
 			{
 				num *= inventoryScale; // BUG: In the initial and patched 1.0 versions, items were incorrectly scaled due to limiting post-scale, which you can see if you get a mushroom in your hotbar and compare between 1.0 and 1.01.
-			}                               // Moving the *= to after the 1.25f limit fixes this, leading to items being more uniform with their scaled appearance in the inventory, hotbar, etc.
+			}							   // Moving the *= to after the 1.25f limit fixes this, leading to items being more uniform with their scaled appearance in the inventory, hotbar, etc.
 			if (num > 1.25f)
 			{
 				num = 1.25f;
@@ -4669,12 +4731,12 @@ namespace Terraria
 				}
 				DrawStringScaled(ItemStackFont, num3.ToStringLookup(), new Vector2((float)(x + FONT_STACK_X_OFFSET) + 10f * inventoryScale, (float)y + 26f * inventoryScale), itemColor, default(Vector2), inventoryScale + 0.1f);
 			}
-			else if (item.Type == (int)Item.ID.WRENCH)
+			else if (item.Type == (int)EntityID.ItemID.WRENCH)
 			{
 				int num4 = 0;
 				for (int j = 0; j < ActivePlayer.Inventory.Length - 1; j++)
 				{
-					if (ActivePlayer.Inventory[j].Type == (int)Item.ID.WIRE)
+					if (ActivePlayer.Inventory[j].Type == (int)EntityID.ItemID.WIRE)
 					{
 						num4 += ActivePlayer.Inventory[j].Stack;
 					}
@@ -4702,12 +4764,12 @@ namespace Terraria
 				}
 				DrawStringScaled(ItemStackFont, num3.ToStringLookup(), new Vector2(x + FONT_STACK_X_OFFSET + 10f * inventoryScale, y + 26f * inventoryScale), itemColor, default, StringScale + 0.1f);
 			}
-			else if (item.Type == (int)Item.ID.WRENCH)
+			else if (item.Type == (int)EntityID.ItemID.WRENCH)
 			{
 				int num4 = 0;
 				for (int j = 0; j < ActivePlayer.Inventory.Length - 1; j++)
 				{
-					if (ActivePlayer.Inventory[j].Type == (int)Item.ID.WIRE)
+					if (ActivePlayer.Inventory[j].Type == (int)EntityID.ItemID.WIRE)
 					{
 						num4 += ActivePlayer.Inventory[j].Stack;
 					}
@@ -4936,11 +4998,11 @@ namespace Terraria
 						continue;
 					}
 					int type = nPC.Type;
-					if (type == (int)NPC.ID.MIMIC && Main.NPCSet[j].AI0 == 0f)
+					if (type == (int)EntityID.NPCID.MIMIC && Main.NPCSet[j].AI0 == 0f)
 					{
 						continue;
 					}
-					if ((type >= (int)NPC.ID.WYVERN_HEAD && type <= (int)NPC.ID.WYVERN_TAIL) || (type >= (int)NPC.ID.ARCH_WYVERN_HEAD && type <= (int)NPC.ID.ARCH_WYVERN_TAIL))
+					if ((type >= (int)EntityID.NPCID.WYVERN_HEAD && type <= (int)EntityID.NPCID.WYVERN_TAIL) || (type >= (int)EntityID.NPCID.ARCH_WYVERN_HEAD && type <= (int)EntityID.NPCID.ARCH_WYVERN_TAIL))
 					{
 						value2.X = nPC.XYWH.X + (nPC.Width >> 1) - 32;
 						value2.Y = nPC.XYWH.Y + (nPC.Height >> 1) - 32;
@@ -5255,9 +5317,32 @@ namespace Terraria
 						return;
 					}
 #if !VERSION_INITIAL
+					/*if (CurMenuMode == MenuMode.CHARACTER_SELECT)
+					{
+						if (num2 != 0)
+						{
+							Main.PlaySound(12);
+							num2 += hoveredCharacter;
+							if (num2 < 0)
+							{
+								hoveredCharacter = num2 + UI.MAX_LOAD_PLAYERS;
+								LoadPlayers();
+							}
+							else
+							{
+								if (num2 >= MaxCharacters)
+								{
+									num2 -= MaxCharacters;
+								}
+								hoveredCharacter = num2;
+								LoadPlayers();
+							}
+						}
+						return;
+					}*/
 					if (CurMenuMode == MenuMode.CHARACTER_SELECT)
 					{
-						CharacterSelect.UpdateCursor(num, num2);
+						CharacterSelect.UpdateCursor(num2);
 						return;
 					}
 #endif
@@ -5575,7 +5660,7 @@ namespace Terraria
 			if (gamer == null)
 			{
 #if USE_ORIGINAL_CODE
-                ShowSignInPortal();
+				ShowSignInPortal();
 #else
 				SignedInGamer = new SignedInGamer(Main.Gamertag); // ADDITION: Having the gamer set here depending on the settings will allow us to proceed.
 				InitPlayerStorage();
@@ -5982,10 +6067,13 @@ namespace Terraria
 		{
 			if (HasPlayerStorage())
 			{
+				numLoadPlayers = 0;
+
 				try
 				{
-					using (StorageContainer storageContainer = OpenPlayerStorage("Characters"))
+					using (StorageContainer storageContainer = UI.MainUI.OpenPlayerStorage("Characters"))
 					{
+#if VERSION_INITIAL
 						while (true)
 						{
 							bool flag = true;
@@ -6032,6 +6120,31 @@ namespace Terraria
 
 							break;
 						}
+#else
+						for (int j = 0; j < MAX_LOAD_PLAYERS; j++)
+						{
+							string text = "player" + (j + 1).ToStringLookup() + ".plr";
+							if (storageContainer.FileExists(text))
+							{
+								loadPlayerPath[j] = text;
+								loadPlayer[j].Load(storageContainer, text);
+								if (loadPlayer[j].Name == null)
+								{
+									MessageBox.Show(controller, Lang.MenuText[9], Lang.MenuText[12], new string[1]
+									{
+										Lang.MenuText[90]
+									});
+									break;
+								}
+								numLoadPlayers++;
+							}
+							else
+							{
+								loadPlayerPath[j] = null;
+								loadPlayer[j] = new Player();
+							}
+						}
+#endif
 					}
 				}
 				catch (IOException)
@@ -6064,6 +6177,46 @@ namespace Terraria
 			{
 				using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
 				{
+#if USE_ORIGINAL_CODE
+					binaryWriter.Write(Main.SettingsDataVersion);
+					binaryWriter.Write(0u);
+					binaryWriter.Write(SoundVolume);
+					binaryWriter.Write(MusicVolume);
+					binaryWriter.Write(autoSave);
+					binaryWriter.Write(ShowItemText);
+					binaryWriter.Write(alternateGrappleControls);
+					byte[] buffer = Statistics.Serialize();
+					binaryWriter.Write(buffer);
+					binaryWriter.Write(totalSteps);
+					binaryWriter.Write(TotalOrePicked);
+					binaryWriter.Write(TotalBarsCrafted);
+					binaryWriter.Write(TotalAnvilCrafting);
+					binaryWriter.Write(totalWires);
+					binaryWriter.Write(totalAirTime);
+					binaryWriter.Write(petSpawnMask);
+					int num = armorFound.Length + 7 >> 3;
+					byte[] array = new byte[num];
+					armorFound.CopyTo(array, 0);
+					binaryWriter.Write((ushort)num);
+					binaryWriter.Write(array, 0, num);
+					binaryWriter.Write(IsOnline);
+					binaryWriter.Write(IsInviteOnly);
+					num = blacklist.Count;
+					int num2 = num;
+					if (num > 65535)
+					{
+						num = 65535;
+					}
+					binaryWriter.Write((ushort)num);
+					for (int i = num2 - num; i < num2; i++)
+					{
+						binaryWriter.Write(blacklist[i]);
+					}
+					CRC32 cRC = new CRC32();
+					cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
+					binaryWriter.Seek(4, SeekOrigin.Begin);
+					binaryWriter.Write(cRC.GetValue());
+#else
 					binaryWriter.Write(Main.SettingsDataVersion);
 					binaryWriter.Write(0u);
 					binaryWriter.Write(SoundVolume);
@@ -6088,10 +6241,11 @@ namespace Terraria
 					binaryWriter.Write(IsOnline);
 					binaryWriter.Write(IsInviteOnly);
 
-#if VERSION_101
-					binaryWriter.Write(IsOnline); // This is not what is written but 1.01 accounts for 2 new booleans; I currently do not know what they are.
-					binaryWriter.Write(IsInviteOnly);
-#endif
+					if (Main.SettingsDataVersion >= (int)EntityID.SettingsID.V101)
+					{
+						binaryWriter.Write(IsOnline); // This is not what is written but 1.01 accounts for 2 new booleans; I currently do not know what they are.
+						binaryWriter.Write(IsInviteOnly);
+					}
 
 					num = blacklist.Count;
 					int num2 = num;
@@ -6104,10 +6258,14 @@ namespace Terraria
 					{
 						binaryWriter.Write(blacklist[i]);
 					}
-					CRC32 cRC = new CRC32();
-					cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
-					binaryWriter.Seek(4, SeekOrigin.Begin);
-					binaryWriter.Write(cRC.GetValue());
+					if (Main.SettingsDataVersion <= (int)EntityID.SettingsID.INITIAL)
+					{
+						CRC32 cRC = new CRC32();
+						cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
+						binaryWriter.Seek(4, SeekOrigin.Begin);
+						binaryWriter.Write(cRC.GetValue());
+					}
+#endif
 					Main.ShowSaveIcon();
 					try
 					{
@@ -6157,12 +6315,13 @@ namespace Terraria
 									stream.Close();
 									using (BinaryReader binaryReader = new BinaryReader(memoryStream))
 									{
+#if USE_ORIGINAL_CODE
 										int num = binaryReader.ReadInt32();
 										if (num > Main.SettingsDataVersion)
 										{
 											throw new InvalidOperationException("Invalid version");
 										}
-										if (num >= 4) // Like the Player saving, this went through revisions in development too. Here, we can see the CRC being added.
+										if (num >= 4)
 										{
 											CRC32 cRC = new CRC32();
 											cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
@@ -6176,7 +6335,7 @@ namespace Terraria
 										autoSave = binaryReader.ReadBoolean();
 										ShowItemText = binaryReader.ReadBoolean();
 										alternateGrappleControls = binaryReader.ReadBoolean();
-										if (num <= 3) // Rev 4 appeared to add saved alternative controls.
+										if (num <= 3)
 										{
 											alternateGrappleControls = false;
 										}
@@ -6189,9 +6348,9 @@ namespace Terraria
 										int count = Statistics.CalculateSerialisationSize();
 										byte[] stream2 = binaryReader.ReadBytes(count);
 										Statistics.Deserialize(stream2);
-										if (num >= 2) // Rev 2 appears to have added online play settings.
+										if (num >= 2)
 										{
-											if (num >= 3) // Rev 3 appears to have added achievements.
+											if (num >= 3)
 											{
 												totalSteps = binaryReader.ReadUInt32();
 												TotalOrePicked = binaryReader.ReadUInt32();
@@ -6202,22 +6361,17 @@ namespace Terraria
 												petSpawnMask = binaryReader.ReadByte();
 												int count2 = binaryReader.ReadUInt16();
 												armorFound = new BitArray(binaryReader.ReadBytes(count2));
-												if (armorFound.Length < (int)Item.ID.NUM_TYPES)
+												if (armorFound.Length < (int)EntityID.ItemID.NUM_TYPES)
 												{
-													armorFound.Length = (int)Item.ID.NUM_TYPES;
+													armorFound.Length = (int)EntityID.ItemID.NUM_TYPES;
 												}
 											}
 											IsOnline = binaryReader.ReadBoolean();
 											IsInviteOnly = binaryReader.ReadBoolean();
 										}
 
-#if VERSION_101
-										binaryReader.ReadBoolean(); // See SaveSettings() for why this is here.
-										binaryReader.ReadBoolean();
-#endif
-
 										blacklist.Clear();
-										if (num >= 5) // The initial release appears to have added blacklisting.
+										if (num >= 5)
 										{
 											int num2 = binaryReader.ReadUInt16();
 											blacklist.Capacity = num2 + 4;
@@ -6227,6 +6381,84 @@ namespace Terraria
 												num2--;
 											}
 										}
+#else
+										int num = binaryReader.ReadInt32();
+										if (num > Main.SettingsDataVersion)
+										{
+											throw new InvalidOperationException("Invalid version");
+										}
+										if (num == 4 || num == (int)EntityID.SettingsID.INITIAL)
+										{
+											CRC32 cRC = new CRC32();
+											cRC.Update(memoryStream.GetBuffer(), 8, (int)memoryStream.Length - 8);
+											if (cRC.GetValue() != binaryReader.ReadUInt32())
+											{
+												throw new InvalidOperationException("Invalid CRC32");
+											}
+										}
+										else
+										{
+											binaryReader.ReadUInt32(); // Something interesting to note, which applies to the player and world files as well, is that the PS3 version omits the CRC filler entirely, while the X360 version keeps the empty UInt.
+											// If I had to guess, it would be to stop cross-platform saves, since a miscalculation like that leads to an exception and halts loading.
+										}
+										SoundVolume = binaryReader.ReadSingle();
+										MusicVolume = binaryReader.ReadSingle();
+										autoSave = binaryReader.ReadBoolean();
+										ShowItemText = binaryReader.ReadBoolean();
+										alternateGrappleControls = binaryReader.ReadBoolean();
+										if (num <= 3)
+										{
+											alternateGrappleControls = false;
+										}
+										UpdateAlternateGrappleControls();
+										if (this == MainUI)
+										{
+											Main.MusicVolume = MusicVolume;
+											Main.SoundVolume = SoundVolume;
+										}
+										int count = Statistics.CalculateSerialisationSize();
+										byte[] stream2 = binaryReader.ReadBytes(count);
+										Statistics.Deserialize(stream2);
+										if (num >= 2)
+										{
+											if (num >= 3)
+											{
+												totalSteps = binaryReader.ReadUInt32();
+												TotalOrePicked = binaryReader.ReadUInt32();
+												TotalBarsCrafted = binaryReader.ReadUInt32();
+												TotalAnvilCrafting = binaryReader.ReadUInt32();
+												totalWires = binaryReader.ReadUInt32();
+												totalAirTime = binaryReader.ReadUInt32();
+												petSpawnMask = binaryReader.ReadByte();
+												int count2 = binaryReader.ReadUInt16();
+												armorFound = new BitArray(binaryReader.ReadBytes(count2));
+												if (armorFound.Length < (int)EntityID.ItemID.NUM_TYPES)
+												{
+													armorFound.Length = (int)EntityID.ItemID.NUM_TYPES;
+												}
+											}
+											IsOnline = binaryReader.ReadBoolean();
+											IsInviteOnly = binaryReader.ReadBoolean();
+										}
+
+										if (num >= (int)EntityID.SettingsID.V101)
+										{
+											binaryReader.ReadBoolean(); // See SaveSettings() for why this is here.
+											binaryReader.ReadBoolean();
+										}
+
+										blacklist.Clear();
+										if (num >= 5)
+										{
+											int num2 = binaryReader.ReadUInt16();
+											blacklist.Capacity = num2 + 4;
+											while (num2 > 0)
+											{
+												blacklist.Add(binaryReader.ReadUInt64());
+												num2--;
+											}
+										}
+#endif
 										binaryReader.Close();
 									}
 								}
@@ -6237,7 +6469,7 @@ namespace Terraria
 							Main.ShowSaveIcon();
 							flag = false;
 							storageContainer.DeleteFile("config.dat");
-							armorFound = new BitArray((int)Item.ID.NUM_TYPES);
+							armorFound = new BitArray((int)EntityID.ItemID.NUM_TYPES);
 							Main.HideSaveIcon();
 						}
 						catch (Exception)
@@ -6291,13 +6523,18 @@ namespace Terraria
 				Main.HideSaveIcon();
 			}
 			numLoadPlayers--;
+
+#if VERSION_INITIAL
 			loadPlayer[i] = loadPlayer[numLoadPlayers];
 			loadPlayerPath[i] = loadPlayerPath[numLoadPlayers];
+#else
+			loadPlayer[i] = new Player();
+			loadPlayerPath[i] = null;
+#endif
 		}
 
 		private string nextLoadPlayer()
 		{
-			int num = 0;
 			string result = null;
 			if (HasPlayerStorage())
 			{
@@ -6305,6 +6542,15 @@ namespace Terraria
 				{
 					using (StorageContainer storageContainer = OpenPlayerStorage("Characters"))
 					{
+#if VERSION_101
+						result = "player" + (selectedPlayer + 1) + ".plr";
+						if (!storageContainer.FileExists(result))
+						{
+							return result;
+						}
+						return null;
+#else
+						int num = 0;
 						do
 						{
 							num++;
@@ -6312,6 +6558,7 @@ namespace Terraria
 						}
 						while (storageContainer.FileExists(result));
 						return result;
+#endif
 					}
 				}
 				catch (IOException)
@@ -6687,7 +6934,7 @@ namespace Terraria
 					Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.EQUIP));
 					Main.StrBuilder.Append(' ');
 				}
-				if (toolTip.Type >= (int)Item.ID.BLUE_PRESENT && toolTip.Type <= (int)Item.ID.YELLOW_PRESENT)
+				if (toolTip.Type >= (int)EntityID.ItemID.BLUE_PRESENT && toolTip.Type <= (int)EntityID.ItemID.YELLOW_PRESENT)
 				{
 					Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.OPEN));
 					Main.StrBuilder.Append(' ');
@@ -7111,11 +7358,11 @@ namespace Terraria
 			bool flag9 = false;
 			for (int i = 0; i < Player.MaxNumInventory; i++)
 			{
-				if (ActivePlayer.Inventory[i].PickPower > 0 && ActivePlayer.Inventory[i].NetID != -13)
+				if (ActivePlayer.Inventory[i].PickPower > 0 && ActivePlayer.Inventory[i].NetID != (short)EntityID.ItemID.COPPER_PICKAXE)
 				{
 					flag3 = false;
 				}
-				else if (ActivePlayer.Inventory[i].AxePower > 0 && ActivePlayer.Inventory[i].NetID != -16)
+				else if (ActivePlayer.Inventory[i].AxePower > 0 && ActivePlayer.Inventory[i].NetID != (short)EntityID.ItemID.COPPER_AXE)
 				{
 					flag3 = false;
 				}
@@ -7123,31 +7370,31 @@ namespace Terraria
 				{
 					flag3 = false;
 				}
-				switch ((Item.ID)ActivePlayer.Inventory[i].Type)
+				switch ((EntityID.ItemID)ActivePlayer.Inventory[i].Type)
 				{
-					case Item.ID.IRON_ORE:
-					case Item.ID.COPPER_ORE:
-					case Item.ID.GOLD_ORE:
-					case Item.ID.SILVER_ORE:
+					case EntityID.ItemID.IRON_ORE:
+					case EntityID.ItemID.COPPER_ORE:
+					case EntityID.ItemID.GOLD_ORE:
+					case EntityID.ItemID.SILVER_ORE:
 						flag4 = true;
 						break;
-					case Item.ID.GOLD_BAR:
-					case Item.ID.COPPER_BAR:
-					case Item.ID.SILVER_BAR:
-					case Item.ID.IRON_BAR:
+					case EntityID.ItemID.GOLD_BAR:
+					case EntityID.ItemID.COPPER_BAR:
+					case EntityID.ItemID.SILVER_BAR:
+					case EntityID.ItemID.IRON_BAR:
 						flag5 = true;
 						break;
-					case Item.ID.FALLEN_STAR:
+					case EntityID.ItemID.FALLEN_STAR:
 						flag6 = true;
 						break;
-					case Item.ID.LENS:
+					case EntityID.ItemID.LENS:
 						flag7 = true;
 						break;
-					case Item.ID.ROTTEN_CHUNK:
-					case Item.ID.WORM_FOOD:
+					case EntityID.ItemID.ROTTEN_CHUNK:
+					case EntityID.ItemID.WORM_FOOD:
 						flag8 = true;
 						break;
-					case Item.ID.GRAPPLING_HOOK:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						flag9 = true;
 						break;
 				}
@@ -7165,33 +7412,33 @@ namespace Terraria
 			{
 				if (Main.NPCSet[j].Active != 0)
 				{
-					switch ((NPC.ID)Main.NPCSet[j].Type)
+					switch ((EntityID.NPCID)Main.NPCSet[j].Type)
 					{
-						case NPC.ID.MERCHANT:
+						case EntityID.NPCID.MERCHANT:
 							flag10 = true;
 							break;
-						case NPC.ID.NURSE:
+						case EntityID.NPCID.NURSE:
 							flag11 = true;
 							break;
-						case NPC.ID.ARMS_DEALER:
+						case EntityID.NPCID.ARMS_DEALER:
 							flag13 = true;
 							break;
-						case NPC.ID.DRYAD:
+						case EntityID.NPCID.DRYAD:
 							flag12 = true;
 							break;
-						case NPC.ID.GOBLIN_TINKERER:
+						case EntityID.NPCID.GOBLIN_TINKERER:
 							flag17 = true;
 							break;
-						case NPC.ID.CLOTHIER:
+						case EntityID.NPCID.CLOTHIER:
 							flag18 = true;
 							break;
-						case NPC.ID.MECHANIC:
+						case EntityID.NPCID.MECHANIC:
 							flag15 = true;
 							break;
-						case NPC.ID.DEMOLITIONIST:
+						case EntityID.NPCID.DEMOLITIONIST:
 							flag14 = true;
 							break;
-						case NPC.ID.WIZARD:
+						case EntityID.NPCID.WIZARD:
 							flag16 = true;
 							break;
 					}
@@ -7489,28 +7736,28 @@ namespace Terraria
 			{
 				focusText = Lang.InterfaceText[48];
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.DRYAD)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.DRYAD)
 			{
 				focusText = Lang.InterfaceText[28];
 				focusText3 = Lang.InterfaceText[49];
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GOBLIN_TINKERER)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 			{
 				focusText = Lang.InterfaceText[28];
 				focusText3 = Lang.InterfaceText[19];
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.MERCHANT || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.ARMS_DEALER || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.DEMOLITIONIST || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.CLOTHIER || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.WIZARD || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.MECHANIC || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.SANTA_CLAUS)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.MERCHANT || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.ARMS_DEALER || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.DEMOLITIONIST || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.CLOTHIER || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.WIZARD || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.MECHANIC || Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.SANTA_CLAUS)
 			{
 				focusText = Lang.InterfaceText[28];
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.OLD_MAN)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.OLD_MAN)
 			{
 				if (!Main.GameTime.DayTime)
 				{
 					focusText = Lang.InterfaceText[50];
 				}
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GUIDE)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GUIDE)
 			{
 				focusText = Lang.InterfaceText[51];
 				if (!Main.IsTutorial())
@@ -7518,7 +7765,7 @@ namespace Terraria
 					focusText3 = Lang.InterfaceText[25];
 				}
 			}
-			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.NURSE)
+			else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.NURSE)
 			{
 				focusText = Lang.InterfaceText[54];
 				for (int i = 0; i < Player.MaxNumBuffs; i++)
@@ -7641,7 +7888,7 @@ namespace Terraria
 						editSign = true;
 						ClearInput();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.MERCHANT)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.MERCHANT)
 					{
 						npcChatText = null;
 						npcShop = 1;
@@ -7649,7 +7896,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.ARMS_DEALER)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.ARMS_DEALER)
 					{
 						npcChatText = null;
 						npcShop = 2;
@@ -7657,7 +7904,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.MECHANIC)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.MECHANIC)
 					{
 						npcChatText = null;
 						npcShop = 8;
@@ -7665,7 +7912,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.SANTA_CLAUS)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.SANTA_CLAUS)
 					{
 						npcChatText = null;
 						npcShop = 9;
@@ -7673,7 +7920,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.OLD_MAN)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.OLD_MAN)
 					{
 						if (Main.NetMode != (byte)NetModeSetting.CLIENT)
 						{
@@ -7686,7 +7933,7 @@ namespace Terraria
 						}
 						npcChatText = null;
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.DRYAD)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.DRYAD)
 					{
 						npcChatText = null;
 						npcShop = 3;
@@ -7694,7 +7941,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.DEMOLITIONIST)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.DEMOLITIONIST)
 					{
 						npcChatText = null;
 						npcShop = 4;
@@ -7702,7 +7949,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.CLOTHIER)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.CLOTHIER)
 					{
 						npcChatText = null;
 						npcShop = 5;
@@ -7710,7 +7957,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GOBLIN_TINKERER)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 					{
 						npcChatText = null;
 						npcShop = 6;
@@ -7718,7 +7965,7 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.WIZARD)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.WIZARD)
 					{
 						npcChatText = null;
 						npcShop = 7;
@@ -7726,12 +7973,12 @@ namespace Terraria
 						Main.PlaySound(12);
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GUIDE)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GUIDE)
 					{
 						Main.PlaySound(12);
 						HelpText();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.NURSE)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.NURSE)
 					{
 						Main.PlaySound(12);
 						if (num2 > 0)
@@ -7808,12 +8055,12 @@ namespace Terraria
 				}
 				else if (ActivePlayer.TalkNPC >= 0)
 				{
-					if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.DRYAD)
+					if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.DRYAD)
 					{
 						Main.PlaySound(12);
 						npcChatText = Lang.DryadEvilGood();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GUIDE)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GUIDE)
 					{
 						npcChatText = null;
 						Main.PlaySound(12);
@@ -7821,7 +8068,7 @@ namespace Terraria
 						GuideItem.Init();
 						OpenInventory();
 					}
-					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)NPC.ID.GOBLIN_TINKERER)
+					else if (Main.NPCSet[ActivePlayer.TalkNPC].Type == (int)EntityID.NPCID.GOBLIN_TINKERER)
 					{
 						npcChatText = null;
 						Main.PlaySound(12);
@@ -8222,17 +8469,17 @@ namespace Terraria
 			{
 				if (gpPrevState.IsButtonUp(BTN_INVENTORY_ACTION))
 				{
-					if (ActivePlayer.Inventory[num2].Type >= (int)Item.ID.BLUE_PRESENT && ActivePlayer.Inventory[num2].Type <= (int)Item.ID.YELLOW_PRESENT)
+					if (ActivePlayer.Inventory[num2].Type >= (int)EntityID.ItemID.BLUE_PRESENT && ActivePlayer.Inventory[num2].Type <= (int)EntityID.ItemID.YELLOW_PRESENT)
 					{
 						Main.PlaySound(7);
 						stackSplit = 30;
 						int num5 = Main.Rand.Next(14);
 						if (num5 == 0 && Main.InHardMode)
 						{
-							ActivePlayer.Inventory[num2].SetDefaults((int)Item.ID.SNOW_GLOBE);
+							ActivePlayer.Inventory[num2].SetDefaults((int)EntityID.ItemID.SNOW_GLOBE);
 							return;
 						}
-						ActivePlayer.Inventory[num2].SetDefaults((num5 <= 7) ? (int)Item.ID.CANDY_CANE_BLOCK : (int)Item.ID.GREEN_CANDY_CANE_BLOCK);
+						ActivePlayer.Inventory[num2].SetDefaults((num5 <= 7) ? (int)EntityID.ItemID.CANDY_CANE_BLOCK : (int)EntityID.ItemID.GREEN_CANDY_CANE_BLOCK);
 						ActivePlayer.Inventory[num2].Stack = (short)Main.Rand.Next(20, 50);
 					}
 					else if (ActivePlayer.Inventory[num2].IsEquipable())
@@ -8554,7 +8801,7 @@ namespace Terraria
 			Color c = new Color(alpha, alpha, alpha, alpha);
 #if USE_ORIGINAL_CODE
 			SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.DPAD, x, y, color); // This draws the D-Pad graphic from the actual spritesheet; Later versions had this as a separate file.
-#else       // 1080p mode uses a larger sprite but since we are assuming X360 assets, this is the best we can do.                                                                                                            
+#else	   // 1080p mode uses a larger sprite but since we are assuming X360 assets, this is the best we can do.																											
 			int xOff = 56;
 			switch (Main.ScreenHeightPtr)
 			{
@@ -9289,7 +9536,7 @@ namespace Terraria
 #if VERSION_FINAL
 			// 1.09 code goes here
 #elif VERSION_103
-			inventoryScale = Main.ScreenMultiplier * 0.8571429f; // Why this precise? Idk.
+			inventoryScale = Main.ScreenMultiplier * (6 / 7); // 6-7... this comment was written 11/2025.
 			int Offset = (int)(56 * Main.ScreenMultiplier);
 			int num = INVENTORY_X;
 			int y = INVENTORY_Y;
@@ -9373,11 +9620,11 @@ namespace Terraria
 					}
 					DrawInventoryItem(num3, BuffX, y, Color.White);
 				}
-                else
-                {
+				else
+				{
 					DrawStringCC(fontSmall, (buffholder + 1).ToString(), (int)(BuffX + 26f * inventoryScale), (int)(y + 26f * inventoryScale), new Color(40, 64, 40, 32));
 				}
-                num += Offset - (int)(8f * Main.ScreenMultiplier);
+				num += Offset - (int)(8f * Main.ScreenMultiplier);
 			}
 			Main.SpriteBatch.End();
 			Main.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, view.screenProjection);
@@ -9478,7 +9725,7 @@ namespace Terraria
 					DrawInventoryCursor(num, y, inventoryScale);
 					toolTip.Init();
 					extraInfo = ((!Buff.IsDebuff(num2)) ? "<f c='#C0FFC0'>" : "<f c='#FFC0C0'>");
-					if (num2 == (int)Buff.ID.PET)
+					if (num2 == (int)EntityID.BuffID.PET)
 					{
 						num2 += ActivePlayer.pet;
 					}
@@ -9493,7 +9740,7 @@ namespace Terraria
 				if (num2 > 0)
 				{
 					int num3 = (int)_sheetSprites.ID.BUFF_1 - 1 + num2;
-					if (num2 == (int)Buff.ID.PET)
+					if (num2 == (int)EntityID.BuffID.PET)
 					{
 						num3 += ActivePlayer.pet;
 					}
@@ -10000,7 +10247,7 @@ namespace Terraria
 						if (j == 1)
 						{
 							craftingRecipeScrollY *= craftingRecipeScrollMul;
-							if (Math.Abs(craftingRecipeScrollY) < 0.0178571437f)
+							if (Math.Abs(craftingRecipeScrollY) < (1f / 56f))
 							{
 								craftingRecipeScrollY = 0f;
 							}
@@ -10029,7 +10276,7 @@ namespace Terraria
 								if (j == 0)
 								{
 									craftingRecipeScrollX *= craftingRecipeScrollMul;
-									if (Math.Abs(craftingRecipeScrollX) < 0.0178571437f)
+									if (Math.Abs(craftingRecipeScrollX) < (1f / 56f))
 									{
 										craftingRecipeScrollX = 0f;
 									}
@@ -10092,9 +10339,9 @@ namespace Terraria
 									else
 									{
 										color = new Color(cursorAlpha, cursorAlpha, cursorAlpha, cursorAlpha);
-										SpriteSheet<_sheetTiles>.Draw(23, num12 + 56 - 16, num7 + 12, color, (float)((double)Main.FrameCounter * (1.0 / (8.0 * Math.PI))), (float)(0.8 + Math.Sin((double)Main.FrameCounter * (1.0 / (16.0 * Math.PI))) * 0.2));
-										SpriteSheet<_sheetTiles>.Draw(23, num12 + 28, num7 + 28, color, (float)((double)Main.FrameCounter * (1.0 / (6.0 * Math.PI))), (float)(0.6 + Math.Sin((double)Main.FrameCounter * (1.0 / (24.0 * Math.PI))) * 0.4));
-										SpriteSheet<_sheetTiles>.Draw(23, num12 + 28 - 12, num7 + 28 - 8, color, (float)((double)Main.FrameCounter * 0.079577471545947673), (float)(0.7 + Math.Sin((double)Main.FrameCounter * (1.0 / (32.0 * Math.PI))) * 0.3));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + 40, num7 + 12, color, (float)(Main.FrameCounter * (1f / (8f * Math.PI))), (float)(0.8f + Math.Sin(Main.FrameCounter * (1f / (16f * Math.PI))) * 0.2f));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + 28, num7 + 28, color, (float)(Main.FrameCounter * (1f / (6f * Math.PI))), (float)(0.6f + Math.Sin(Main.FrameCounter * (1f / (24f * Math.PI))) * 0.4f));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + 16, num7 + 20, color, (float)(Main.FrameCounter * (1f / (4f * Math.PI))), (float)(0.7f + Math.Sin(Main.FrameCounter * (1f / (32f * Math.PI))) * 0.3f));
 									}
 								}
 								num12 += 56;
@@ -10349,7 +10596,7 @@ namespace Terraria
 						if (j == 1)
 						{
 							craftingRecipeScrollY *= craftingRecipeScrollMul;
-							if (Math.Abs(craftingRecipeScrollY) < 0.0178571437f)
+							if (Math.Abs(craftingRecipeScrollY) < (1f / 56f))
 							{
 								craftingRecipeScrollY = 0f;
 							}
@@ -10378,7 +10625,7 @@ namespace Terraria
 								if (j == 0)
 								{
 									craftingRecipeScrollX *= craftingRecipeScrollMul;
-									if (Math.Abs(craftingRecipeScrollX) < 0.0178571437f)
+									if (Math.Abs(craftingRecipeScrollX) < (1f / 56f))
 									{
 										craftingRecipeScrollX = 0f;
 									}
@@ -10441,9 +10688,9 @@ namespace Terraria
 									else
 									{
 										color = new Color(cursorAlpha, cursorAlpha, cursorAlpha, cursorAlpha);
-										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(40 * Main.ScreenMultiplier), num7 + (int)(12 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * (1.0 / (8.0 * Math.PI))), (float)(0.8 + Math.Sin(Main.FrameCounter * (1.0 / (16.0 * Math.PI))) * 0.2));
-										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(28 * Main.ScreenMultiplier), num7 + (int)(28 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * (1.0 / (6.0 * Math.PI))), (float)(0.6 + Math.Sin(Main.FrameCounter * (1.0 / (24.0 * Math.PI))) * 0.4));
-										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(16 * Main.ScreenMultiplier), num7 + (int)(20 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * 0.079577471545947673), (float)(0.7 + Math.Sin(Main.FrameCounter * (1.0 / (32.0 * Math.PI))) * 0.3));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(40 * Main.ScreenMultiplier), num7 + (int)(12 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * (1f / (8f * Math.PI))), (float)(0.8f + Math.Sin(Main.FrameCounter * (1f / (16f * Math.PI))) * 0.2f));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(28 * Main.ScreenMultiplier), num7 + (int)(28 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * (1f / (6f * Math.PI))), (float)(0.6f + Math.Sin(Main.FrameCounter * (1f / (24f * Math.PI))) * 0.4f));
+										SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.STAR_4, num12 + (int)(16 * Main.ScreenMultiplier), num7 + (int)(20 * Main.ScreenMultiplier), color, (float)(Main.FrameCounter * (1f / (4f * Math.PI))), (float)(0.7f + Math.Sin(Main.FrameCounter * (1f / (32f * Math.PI))) * 0.3f));
 									}
 								}
 								num12 += Base;
@@ -10923,27 +11170,27 @@ namespace Terraria
 			string text2;
 			if (toolTip.Type > 0)
 			{
-				switch (toolTip.Rarity)
+				switch ((EntityID.RarityID)toolTip.Rarity)
 				{
-					case -1:
+					case EntityID.RarityID.GREY:
 						Main.StrBuilder.Append("<f c='#828282'>");
 						break;
-					case 1:
+					case EntityID.RarityID.BLUE:
 						Main.StrBuilder.Append("<f c='#9696FF'>");
 						break;
-					case 2:
+					case EntityID.RarityID.GREEN:
 						Main.StrBuilder.Append("<f c='#96FF96'>");
 						break;
-					case 3:
+					case EntityID.RarityID.ORANGE:
 						Main.StrBuilder.Append("<f c='#FFC896'>");
 						break;
-					case 4:
+					case EntityID.RarityID.LIGHT_RED:
 						Main.StrBuilder.Append("<f c='#FF9696'>");
 						break;
-					case 5:
+					case EntityID.RarityID.PINK:
 						Main.StrBuilder.Append("<f c='#FF96FF'>");
 						break;
-					case 6:
+					case EntityID.RarityID.LIGHT_PURPLE:
 						Main.StrBuilder.Append("<f c='#D2A0FF'>");
 						break;
 					default:
@@ -11051,7 +11298,7 @@ namespace Terraria
 				}
 				if (toolTip.CreateWall > 0 || toolTip.CreateTile >= 0)
 				{
-					if (toolTip.Type != (int)Item.ID.STAFF_OF_REGROWTH)
+					if (toolTip.Type != (int)EntityID.ItemID.STAFF_OF_REGROWTH)
 					{
 						Main.StrBuilder.Append("¤ ");
 						Main.StrBuilder.Append(Lang.TipText[33]);
@@ -11243,7 +11490,7 @@ namespace Terraria
 						Main.StrBuilder.Append(Lang.TipText[31]);
 						Main.StrBuilder.Append('\n');
 					}
-					if (toolTip.Mana > 0 && (toolTip.Type != (int)Item.ID.SPACE_GUN || !ActivePlayer.spaceGun))
+					if (toolTip.Mana > 0 && (toolTip.Type != (int)EntityID.ItemID.SPACE_GUN || !ActivePlayer.spaceGun))
 					{
 						Main.StrBuilder.Append("¤ ");
 						Main.StrBuilder.Append(Lang.TipText[32]);
@@ -11398,99 +11645,99 @@ namespace Terraria
 							Main.StrBuilder.Append(Lang.TipText[45]);
 							Main.StrBuilder.Append("</f>\n");
 						}
-						switch (toolTip.PrefixType)
+						switch ((EntityID.PrefixID)toolTip.PrefixType)
 						{
-							case 62:
+							case EntityID.PrefixID.HARD:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+1");
 								Main.StrBuilder.Append(Lang.TipText[25]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 63:
+							case EntityID.PrefixID.GUARDING:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+2");
 								Main.StrBuilder.Append(Lang.TipText[25]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 64:
+							case EntityID.PrefixID.ARMORED:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+3");
 								Main.StrBuilder.Append(Lang.TipText[25]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 65:
+							case EntityID.PrefixID.WARDING:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+4");
 								Main.StrBuilder.Append(Lang.TipText[25]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 66:
+							case EntityID.PrefixID.ARCANE:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+20");
 								Main.StrBuilder.Append(Lang.TipText[31]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 67:
+							case EntityID.PrefixID.PRECISE:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+1");
 								Main.StrBuilder.Append(Lang.TipText[5]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 68:
+							case EntityID.PrefixID.LUCKY:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+2");
 								Main.StrBuilder.Append(Lang.TipText[5]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 69:
+							case EntityID.PrefixID.JAGGED:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+1");
 								Main.StrBuilder.Append(Lang.TipText[39]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 70:
+							case EntityID.PrefixID.SPIKED:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+2");
 								Main.StrBuilder.Append(Lang.TipText[39]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 71:
+							case EntityID.PrefixID.ANGRY:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+3");
 								Main.StrBuilder.Append(Lang.TipText[39]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 72:
+							case EntityID.PrefixID.MENACING:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+4");
 								Main.StrBuilder.Append(Lang.TipText[39]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 73:
+							case EntityID.PrefixID.BRISK:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+1");
 								Main.StrBuilder.Append(Lang.TipText[46]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 74:
+							case EntityID.PrefixID.FLEETING:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+2");
 								Main.StrBuilder.Append(Lang.TipText[46]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 75:
+							case EntityID.PrefixID.HASTY2:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+3");
 								Main.StrBuilder.Append(Lang.TipText[46]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 76:
+							case EntityID.PrefixID.QUICK2:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+4");
 								Main.StrBuilder.Append(Lang.TipText[46]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 77:
+							case EntityID.PrefixID.WILD:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+1");
 								Main.StrBuilder.Append(Lang.TipText[47]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 78:
+							case EntityID.PrefixID.RASH:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+2");
 								Main.StrBuilder.Append(Lang.TipText[47]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 79:
+							case EntityID.PrefixID.INTREPID:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+3");
 								Main.StrBuilder.Append(Lang.TipText[47]);
 								Main.StrBuilder.Append("</f>\n");
 								break;
-							case 80:
+							case EntityID.PrefixID.VIOLENT:
 								Main.StrBuilder.Append("¤ <f c='#78BE78'>+4");
 								Main.StrBuilder.Append(Lang.TipText[47]);
 								Main.StrBuilder.Append("</f>\n");
@@ -12291,7 +12538,7 @@ LAB_8212b7a8:
 
 #if !USE_ORIGINAL_CODE
 				bool AllArmorsFound = true; // Revised how this is structured compared to the original code. The original was a fucking mess.
-				foreach (Item.ID ArmorID in Item.ArmorIDs)
+				foreach (EntityID.ItemID ArmorID in Item.ArmorIDs)
 				{
 					if (!armorFound.Get((int)ArmorID))
 					{

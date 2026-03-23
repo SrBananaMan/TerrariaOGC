@@ -650,61 +650,74 @@ namespace Terraria
 					{
 						if (TileIdx->IsActive != 0)
 						{
-							int TileType = TileIdx->Type;
-							if (TileType == 32 || TileType == 37 || TileType == 48 || TileType == 53 || TileType == 57 || TileType == 58 || TileType == 69 || TileType == 76 || TileType == 112 || TileType == 116 || TileType == 123)
+							EntityID.TileID TileType = (EntityID.TileID)TileIdx->Type;
+							switch (TileType)
 							{
-								float XVar = X << 4;
-								float YVar = Y << 4;
-								int Damage = 0;
-								switch (TileType)
-								{
-									case 32:
-									case 69:
-									case 80:
-										if ((Position.X + Width) > XVar && Position.X < XVar + 16 && (Position.Y + Height) > YVar && Position.Y < YVar + 16.01f)
-										{
-											Damage = 10;
-											switch (TileType)
+								case EntityID.TileID.CORRUPTION_THORN:
+								case EntityID.TileID.METEORITE:
+								case EntityID.TileID.SPIKE:
+								case EntityID.TileID.SAND:
+								case EntityID.TileID.ASH:	// Wild how the code still accounts for ash blocks, which would go alongside the sands and silt due to it's falling projectile, which is virtually unused since before the initial console versions.
+								case EntityID.TileID.HELLSTONE:
+								case EntityID.TileID.JUNGLE_THORN:
+								case EntityID.TileID.HELLSTONE_BRICK:
+								case EntityID.TileID.EBONSAND:
+								case EntityID.TileID.PEARLSAND:
+								case EntityID.TileID.SILT:
+									float XVar = X << 4;
+									float YVar = Y << 4;
+									int Damage = 0;
+									switch (TileType)
+									{
+										case EntityID.TileID.CORRUPTION_THORN:
+										case EntityID.TileID.JUNGLE_THORN:
+										case EntityID.TileID.CACTUS:	// Same deal as the ash block, since before the release of the console versions, cactus could harm players. This has not been the case since PC 1.1.
+											if ((Position.X + Width) > XVar && Position.X < XVar + 16 && (Position.Y + Height) > YVar && Position.Y < YVar + 16.01f)
 											{
-												case 69:
-													Damage = 17;
-													break;
-												case 80:
-													Damage = 6;
-													break;
+												Damage = 10;
+												switch (TileType)
+												{
+													case EntityID.TileID.JUNGLE_THORN:
+														Damage = 17;
+														break;
+													case EntityID.TileID.CACTUS:
+														Damage = 6;
+														break;
+												}
+												if ((TileType == EntityID.TileID.CORRUPTION_THORN || TileType == EntityID.TileID.JUNGLE_THORN) && WorldGen.KillTile(X, Y))
+												{
+													NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 4, X, Y, 0);
+													NetMessage.SendMessage();
+												}
+												return Damage;
 											}
-											if ((TileType == 32 || TileType == 69) && WorldGen.KillTile(X, Y))
+											break;
+										case EntityID.TileID.SAND:
+										// case EntityID.TileID.ASH:
+										case EntityID.TileID.EBONSAND:
+										case EntityID.TileID.PEARLSAND:
+										case EntityID.TileID.SILT:
+											if ((Position.X + Width - 2) >= XVar && (Position.X + 2) <= XVar + 16 && (Position.Y + Height - 2) >= YVar && (Position.Y + 2f) <= YVar + 16)
 											{
-												NetMessage.CreateMessage5((int)NetMessageId.MSG_WORLD_CHANGED, 4, X, Y, 0);
-												NetMessage.SendMessage();
+												return 20;
 											}
-											return Damage;
-										}
-										break;
-									case 53:
-									case 112:
-									case 116:
-									case 123:
-										if ((Position.X + Width - 2) >= XVar && (Position.X + 2) <= XVar + 16 && (Position.Y + Height - 2) >= YVar && (Position.Y + 2f) <= YVar + 16)
-										{
-											return 20;
-										}
-										break;
-									default:
-										if ((Position.X + Width) >= XVar && Position.X <= XVar + 16 && (Position.Y + Height) >= YVar && Position.Y <= YVar + 16.01f)
-										{
-											if (TileType == 48)
+											break;
+										default:
+											if ((Position.X + Width) >= XVar && Position.X <= XVar + 16 && (Position.Y + Height) >= YVar && Position.Y <= YVar + 16.01f)
 											{
-												Damage = 40;
+												if (TileType == EntityID.TileID.SPIKE)
+												{
+													Damage = 40;
+												}
+												else if (!DontBurnPlayer && (TileType == EntityID.TileID.METEORITE || TileType == EntityID.TileID.HELLSTONE || TileType == EntityID.TileID.HELLSTONE_BRICK))
+												{
+													Damage = 20;
+												}
+												return Damage;
 											}
-											else if (!DontBurnPlayer && (TileType == 37 || TileType == 58 || TileType == 76))
-											{
-												Damage = 20;
-											}
-											return Damage;
-										}
-										break;
-								}
+											break;
+									}
+									break;
 							}
 						}
 						TileIdx++;
@@ -743,7 +756,7 @@ namespace Terraria
 					Tile* TileIdx = CreatedTile + (X * Main.LargeWorldH + MinY);
 					for (int Y = MinY; Y < MaxY; Y++)
 					{
-						if (TileIdx->Type == 135 && TileIdx->IsActive != 0)
+						if (TileIdx->Type == (int)EntityID.TileID.PRESSURE_PLATE && TileIdx->IsActive != 0)
 						{
 							float XVar = X << 4;
 							float YVar = (Y << 4) + 12;

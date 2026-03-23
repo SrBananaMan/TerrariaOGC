@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using static Terraria.Tile;
 
 namespace Terraria
@@ -822,41 +823,59 @@ namespace Terraria
 				}
 				bool flag = false;
 				bool flag2 = false;
-				if (player.legs == 25)
+#if !VERSION_FINAL
+				// BUG: It is not until the 1.04-09 where the Dragon and Titan armour have their vanity effects apply only if the whole set is worn, otherwise only the legpieces are required for an effect to be present.
+				if (player.legs == (short)EntityID.ArmorLegsID.LEGS_DRAGON_GREAVES)
 				{
 					flag = true;
 				}
-				else if (player.head == 5 && player.body == 5 && player.legs == 5)
-				{
-					flag = true;
-				}
-				else if (player.head == 7 && player.body == 7 && player.legs == 7)
-				{
-					flag = true;
-				}
-				else if (player.head == 22 && player.body == 14 && player.legs == 14)
-				{
-					flag = true;
-				}
-				else if (player.body == 17 && player.legs == 16 && (player.head == 29 || player.head == 30 || player.head == 31))
-				{
-					flag = true;
-				}
-				if (player.legs == 26)
+				if (player.legs == (short)EntityID.ArmorLegsID.LEGS_TITAN_LEGGINGS)
 				{
 					flag2 = true;
 				}
-				else if (player.body == 19 && player.legs == 18)
+#else
+				if (player.head == (short)EntityID.ArmorHeadID.HEAD_DRAGON_MASK && player.body == (short)EntityID.ArmorBodyID.BODY_DRAGON_BREASTPLATE && player.legs == (short)EntityID.ArmorLegsID.LEGS_DRAGON_GREAVES)
 				{
-					if (player.head == 35 || player.head == 36 || player.head == 37)
+					flag = true;
+				}
+				else if (player.head == (short)EntityID.ArmorHeadID.HEAD_TITAN_HELMET && player.body == (short)EntityID.ArmorBodyID.BODY_TITAN_MAIL && player.legs == (short)EntityID.ArmorLegsID.LEGS_TITAN_LEGGINGS)
+				{
+					flag2 = true;
+				}
+#endif
+				else if (player.head == (short)EntityID.ArmorHeadID.HEAD_SHADOW_HELMET && player.body == (short)EntityID.ArmorBodyID.BODY_SHADOW_SCALEMAIL && player.legs == (short)EntityID.ArmorLegsID.LEGS_SHADOW_GREAVES)
+				{
+					flag = true;
+				}
+				else if (player.head == (short)EntityID.ArmorHeadID.HEAD_NECRO_HELMET && player.body == (short)EntityID.ArmorBodyID.BODY_NECRO_BREASTPLATE && player.legs == (short)EntityID.ArmorLegsID.LEGS_NECRO_GREAVES)
+				{
+					flag = true;
+				}
+				else if (player.head == (short)EntityID.ArmorHeadID.HEAD_NINJA_HOOD && player.body == (short)EntityID.ArmorBodyID.BODY_NINJA_SHIRT && player.legs == (short)EntityID.ArmorLegsID.LEGS_NINJA_PANTS)
+				{
+					flag = true;
+				}
+				else if (player.body == (short)EntityID.ArmorBodyID.BODY_COBALT_BREASTPLATE && player.legs == (short)EntityID.ArmorLegsID.LEGS_COBALT_LEGGINGS)
+				{
+					if (player.head == (short)EntityID.ArmorHeadID.HEAD_COBALT_HAT || player.head == (short)EntityID.ArmorHeadID.HEAD_COBALT_HELMET || player.head == (short)EntityID.ArmorHeadID.HEAD_COBALT_MASK)
+					{
+						flag = true;
+					}
+				}
+				else if (player.body == (short)EntityID.ArmorBodyID.BODY_ADAMANTITE_BREASTPLATE && player.legs == (short)EntityID.ArmorLegsID.LEGS_ADAMANTITE_LEGGINGS)
+				{
+					if (player.head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HEADGEAR || player.head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_HELMET || player.head == (short)EntityID.ArmorHeadID.HEAD_ADAMANTITE_MASK)
 					{
 						flag2 = true;
 					}
 				}
-				else if (player.body == 24 && player.legs == 23 && (player.head == 41 || player.head == 42 || player.head == 43))
+				else if (player.body == (short)EntityID.ArmorBodyID.BODY_HALLOWED_PLATE_MAIL && player.legs == (short)EntityID.ArmorLegsID.LEGS_HALLOWED_GREAVES)
 				{
-					flag2 = true;
-					flag = true;
+					if (player.head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HEADGEAR || player.head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_HELMET || player.head == (short)EntityID.ArmorHeadID.HEAD_HALLOWED_MASK)
+					{
+						flag = true;
+						flag2 = true;
+					}
 				}
 				if (flag2)
 				{
@@ -930,7 +949,7 @@ namespace Terraria
 							int x = num2 + (ptr2->Width >> 1) >> 4;
 							int y = num3 + (ptr2->Height >> 1) >> 4;
 							Color colorUnsafe = Lighting.GetColorUnsafe(x, y);
-							if ((ptr2->CanBePlacedInCoinSlot() || ptr2->Type == (int)Item.ID.HEART || ptr2->Type == (int)Item.ID.MANA_CRYSTAL) && Main.HasFocus && colorUnsafe.R > 60)
+							if ((ptr2->CanBePlacedInCoinSlot() || ptr2->Type == (int)EntityID.ItemID.HEART || ptr2->Type == (int)EntityID.ItemID.MANA_CRYSTAL) && Main.HasFocus && colorUnsafe.R > 60)
 							{
 								float num5 = Main.Rand.Next(500) - (Math.Abs(ptr2->Velocity.X) + Math.Abs(ptr2->Velocity.Y)) * 10f;
 								if (num5 < colorUnsafe.R * 0.02f)
@@ -946,7 +965,7 @@ namespace Terraria
 							float rot = ptr2->Velocity.X * 0.2f;
 							float num6 = 1f;
 							Color alpha = ptr2->GetAlpha(colorUnsafe);
-							if (ptr2->Type == (int)Item.ID.HEART || ptr2->Type == (int)Item.ID.STAR)
+							if (ptr2->Type == (int)EntityID.ItemID.HEART || ptr2->Type == (int)EntityID.ItemID.STAR)
 							{
 								num6 = UI.PulseScale * 0.25f + 0.75f;
 								alpha.R = (byte)(alpha.R * num6);
@@ -954,7 +973,7 @@ namespace Terraria
 								alpha.B = (byte)(alpha.B * num6);
 								alpha.A = (byte)(alpha.A * num6);
 							}
-							else if (ptr2->Type == (int)Item.ID.SOUL_OF_LIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_NIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_FRIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_MIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_SIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_FLIGHT || ptr2->Type == (int)Item.ID.SOUL_OF_BLIGHT)
+							else if (ptr2->Type == (int)EntityID.ItemID.SOUL_OF_LIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_NIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_FRIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_MIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_SIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_FLIGHT || ptr2->Type == (int)EntityID.ItemID.SOUL_OF_BLIGHT)
 							{
 								num6 = UI.PulseScale;
 								alpha.R = (byte)(alpha.R * num6);
@@ -978,7 +997,7 @@ namespace Terraria
 
 		private unsafe void DrawBlack()
 		{
-			float num = (WorldTime.TileColorFore.X + WorldTime.TileColorFore.Y + WorldTime.TileColorFore.Z) * (142f / (339f * (float)Math.PI));
+			float num = (WorldTime.TileColorFore.X + WorldTime.TileColorFore.Y + WorldTime.TileColorFore.Z) * (2f / 15f);
 			Rectangle dest = default;
 			dest.X = 32 + (FirstTileX << 4) - ScreenPosition.X;
 			dest.Width = 16 * (16 / _sheetTiles.Source[(int)_sheetTiles.ID.BLACK_TILE].Width);
@@ -998,7 +1017,7 @@ namespace Terraria
 					{
 						float num4 = Lighting.BrightnessUnsafe(i, num3);
 #if VERSION_101
-						if (num4 < num && (num4 == 0f || ptr2->Liquid == 0 || (ptr2->WallType < 32 && ptr2->IsActive != 0 && Main.TileSolidNotSolidTop[ptr2->Type])))
+						if (num4 < num && (num4 == 0f || ptr2->Liquid == 0 || (ptr2->WallType < (int)EntityID.WallID.PURPLE_STAINED_GLASS && ptr2->IsActive != 0 && Main.TileSolidNotSolidTop[ptr2->Type])))
 #else
 						if (num4 < num && (num4 == 0f || ptr2->Liquid == 0 || (ptr2->IsActive != 0 && Main.TileSolidNotSolidTop[ptr2->Type])))
 #endif
@@ -1058,7 +1077,7 @@ namespace Terraria
 							s.Height = 32;
 							pos.X = num * 16 - ScreenPosition.X - 8 + 32;
 							pos.Y = num2 * 16 - ScreenPosition.Y - 8 + 32;
-							if (SMOOTH_LIGHT && wall != 21 && !WorldGen.SolidTile(num, num2))
+							if (SMOOTH_LIGHT && wall != (int)EntityID.WallID.GLASS && !WorldGen.SolidTile(num, num2))
 							{
 								if (color.R > gfx || color.G > gfx * 1.1 || color.B > gfx * 1.2)
 								{
@@ -1525,7 +1544,7 @@ namespace Terraria
 			}
 			if (WorldTime.DayTime)
 			{
-				int id = ((ui.CurMenuType == MenuType.MAIN || ui.ActivePlayer.head != 12) ? (int)_sheetTiles.ID.SUN : (int)_sheetTiles.ID.SUN2);
+				int id = ((ui.CurMenuType == MenuType.MAIN || ui.ActivePlayer.head != (short)EntityID.ArmorHeadID.HEAD_SUNGLASSES) ? (int)_sheetTiles.ID.SUN : (int)_sheetTiles.ID.SUN2);
 				SpriteSheet<_sheetTiles>.Draw(id, num9, WorldTime.celestialY + BackgroundTop, WorldTime.celestialColor, WorldTime.celestialRotation, WorldTime.celestialScale);
 			}
 			else
@@ -2242,11 +2261,11 @@ namespace Terraria
 			float num4 = 0f;
 			if (HolyTiles > EvilTiles)
 			{
-				num4 = HolyTiles * 0.00125f;
+				num4 = HolyTiles / 800f;
 			}
 			else if (EvilTiles > HolyTiles)
 			{
-				num4 = EvilTiles * 0.00125f;
+				num4 = EvilTiles / 800f;
 			}
 			if (num4 > 1f)
 			{
@@ -2384,7 +2403,7 @@ namespace Terraria
 									s2.Y = m;
 									if (colorUnsafe.R > 0 || colorUnsafe.G > 0 || colorUnsafe.B > 0)
 									{
-										if (SMOOTH_LIGHT && (colorUnsafe.R > 226 || colorUnsafe.G > 248.6f || colorUnsafe.B > 271.2f) && ptr2->IsActive == 0 && (ptr2->WallType == 0 || ptr2->WallType == 21))
+										if (SMOOTH_LIGHT && (colorUnsafe.R > 226 || colorUnsafe.G > 248.6f || colorUnsafe.B > 271.2f) && ptr2->IsActive == 0 && (ptr2->WallType == (int)EntityID.WallID.NONE || ptr2->WallType == (int)EntityID.WallID.GLASS))
 										{
 											s2.Width = 4;
 											s2.Height = 4;
@@ -2651,7 +2670,7 @@ namespace Terraria
 								Color colorUnsafe2 = Lighting.GetColorUnsafe(num29, num32);
 								bool flag3 = false;
 								int wall = Main.TileSet[num29, num32].WallType;
-								if (wall == 0 || wall == 21 || Main.TileSet[num29 - 1, num32].WallType == 0 || Main.TileSet[num29 - 1, num32].WallType == 21 || Main.TileSet[num29 + 1, num32].WallType == 0 || Main.TileSet[num29 + 1, num32].WallType == 21)
+								if (wall == (int)EntityID.WallID.NONE || wall == (int)EntityID.WallID.GLASS || Main.TileSet[num29 - 1, num32].WallType == (byte)EntityID.WallID.NONE || Main.TileSet[num29 - 1, num32].WallType == (int)EntityID.WallID.GLASS || Main.TileSet[num29 + 1, num32].WallType == (byte)EntityID.WallID.NONE || Main.TileSet[num29 + 1, num32].WallType == (int)EntityID.WallID.GLASS)
 								{
 									flag3 = true;
 								}
@@ -2861,7 +2880,7 @@ namespace Terraria
 								Color colorUnsafe3 = Lighting.GetColorUnsafe(num47, num48);
 								bool flag4 = false;
 								int wall2 = Main.TileSet[num47, num48].WallType;
-								if (wall2 == 0 || wall2 == 21 || Main.TileSet[num47 - 1, num48].WallType == 0 || Main.TileSet[num47 - 1, num48].WallType == 21 || Main.TileSet[num47 + 1, num48].WallType == 0 || Main.TileSet[num47 + 1, num48].WallType == 21)
+								if (wall2 == (int)EntityID.WallID.NONE || wall2 == (int)EntityID.WallID.GLASS || Main.TileSet[num47 - 1, num48].WallType == (byte)EntityID.WallID.NONE || Main.TileSet[num47 - 1, num48].WallType == (int)EntityID.WallID.GLASS || Main.TileSet[num47 + 1, num48].WallType == (byte)EntityID.WallID.NONE || Main.TileSet[num47 + 1, num48].WallType == (int)EntityID.WallID.GLASS)
 								{
 									flag4 = true;
 								}
@@ -3099,14 +3118,14 @@ namespace Terraria
 			int num;
 			int num2;
 			int num3;
-			switch (type)
+			switch ((EntityID.TileID)type)
 			{
-				case 25:
+				case EntityID.TileID.EBONSTONE:
 					num = newColor.R * 243 >> 8;
 					num2 = newColor.G * 217 >> 8;
 					num3 = newColor.B * 281 >> 8;
 					break;
-				case 117:
+				case EntityID.TileID.PEARLSTONE:
 					num = newColor.R * 281 >> 8;
 					num2 = newColor.G;
 					num3 = newColor.B * 307 >> 8;
@@ -3429,40 +3448,40 @@ namespace Terraria
 								Flags flags = ((ptr3 == ptr2) ? Flags.SELECTED : Flags.NEARBY);
 								if ((ptr3->CurrentFlags & flags) != flags)
 								{
-									switch (ptr3->Type)
+									switch ((EntityID.TileID)ptr3->Type)
 									{
-										case 4:
-										case 13:
-										case 33:
-										case 49:
-										case 50:
-										case 136:
-										case 144:
+										case EntityID.TileID.TORCH:
+										case EntityID.TileID.BOTTLE:
+										case EntityID.TileID.CANDLE:
+										case EntityID.TileID.WATER_CANDLE:
+										case EntityID.TileID.BOOK:
+										case EntityID.TileID.SWITCH:
+										case EntityID.TileID.TIMER:
 											ptr3->CurrentFlags |= flags;
 											break;
-										case 11:
-										case 128:
+										case EntityID.TileID.DOOR_OPEN:
+										case EntityID.TileID.MANNEQUIN:
 											Highlight2x3(ptr3, flags);
 											break;
-										case 10:
+										case EntityID.TileID.DOOR_CLOSED:
 											Highlight1x3(ptr3, flags);
 											break;
-										case 21:
-										case 55:
-										case 85:
-										case 97:
-										case 125:
-										case 132:
-										case 139:
+										case EntityID.TileID.CHEST:
+										case EntityID.TileID.SIGN:
+										case EntityID.TileID.TOMBSTONE:
+										case EntityID.TileID.SAFE:
+										case EntityID.TileID.CRYSTAL_BALL:
+										case EntityID.TileID.LEVER:
+										case EntityID.TileID.MUSIC_BOX:
 											Highlight2x2(ptr3, flags);
 											break;
-										case 29:
+										case EntityID.TileID.PIGGYBANK:
 											Highlight2x1(ptr3, flags);
 											break;
-										case 79:
+										case EntityID.TileID.BED:
 											Highlight4x2(ptr3, flags);
 											break;
-										case 104:
+										case EntityID.TileID.GRANDFATHERS_CLOCK:
 											Highlight2x5(ptr3, flags);
 											break;
 									}
@@ -3497,16 +3516,16 @@ namespace Terraria
 						int num9 = 16;
 						s.X = ptr4->FrameX;
 						s.Y = ptr4->FrameY;
-						switch (num7)
+						switch ((EntityID.TileID)num7)
 						{
-							case 3:
-							case 24:
-							case 61:
-							case 71:
-							case 110:
+							case EntityID.TileID.SHORT_GRASS_PLANTS:
+							case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							case EntityID.TileID.SHORT_JUNGLE_PLANTS:
+							case EntityID.TileID.GLOWING_MUSHROOM:
+							case EntityID.TileID.SHORT_HALLOWED_PLANTS:
 								height = 20;
 								break;
-							case 4:
+							case EntityID.TileID.TORCH:
 								num9 = 20;
 								height = 20;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
@@ -3514,12 +3533,12 @@ namespace Terraria
 									s.Y += 396;
 								}
 								break;
-							case 5:
+							case EntityID.TileID.TREE:
 								num9 = 20;
 								height = 20;
 								break;
-							case 10:
-							case 11:
+							case EntityID.TileID.DOOR_CLOSED:
+							case EntityID.TileID.DOOR_OPEN:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 108;
@@ -3529,13 +3548,13 @@ namespace Terraria
 									s.Y += 54;
 								}
 								break;
-							case 13:
+							case EntityID.TileID.BOTTLE:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 36;
 								}
 								break;
-							case 29:
+							case EntityID.TileID.PIGGYBANK:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 36;
@@ -3545,7 +3564,7 @@ namespace Terraria
 									s.Y += 18;
 								}
 								break;
-							case 21:
+							case EntityID.TileID.CHEST:
 								height = 18;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
@@ -3556,8 +3575,8 @@ namespace Terraria
 									s.Y += 38;
 								}
 								break;
-							case 33:
-							case 49:
+							case EntityID.TileID.CANDLE:
+							case EntityID.TileID.WATER_CANDLE:
 								num8 = -4;
 								height = 20;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
@@ -3565,30 +3584,30 @@ namespace Terraria
 									s.Y += 44;
 								}
 								break;
-							case 50:
+							case EntityID.TileID.BOOK:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 32;
 								}
 								break;
-							case 73:
-							case 74:
-							case 113:
+							case EntityID.TileID.TALL_GRASS_PLANTS:
+							case EntityID.TileID.TALL_JUNGLE_PLANTS:
+							case EntityID.TileID.TALL_HALLOWED_PLANTS:
 								num8 = -12;
 								height = 32;
 								break;
-							case 78:
-							case 105:
-							case 142:
-							case 143:
+							case EntityID.TileID.CLAY_POT:
+							case EntityID.TileID.STATUE:
+							case EntityID.TileID.PUMP_IN:
+							case EntityID.TileID.PUMP_OUT:
 								num8 = 2;
 								break;
-							case 81:
+							case EntityID.TileID.CORAL:
 								num8 = -8;
 								num9 = 24;
 								height = 26;
 								break;
-							case 85:
+							case EntityID.TileID.TOMBSTONE:
 								num8 = 2;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
@@ -3599,7 +3618,7 @@ namespace Terraria
 									s.Y += 36;
 								}
 								break;
-							case 104:
+							case EntityID.TileID.GRANDFATHERS_CLOCK:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 176;
@@ -3609,8 +3628,8 @@ namespace Terraria
 									s.Y += 88;
 								}
 								break;
-							case 97:
-							case 125:
+							case EntityID.TileID.SAFE:
+							case EntityID.TileID.CRYSTAL_BALL:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 68;
@@ -3620,7 +3639,7 @@ namespace Terraria
 									s.Y += 34;
 								}
 								break;
-							case 128:
+							case EntityID.TileID.MANNEQUIN:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 104;
@@ -3630,7 +3649,7 @@ namespace Terraria
 									s.Y += 52;
 								}
 								break;
-							case 132:
+							case EntityID.TileID.LEVER:
 								num8 = 2;
 								height = 18;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
@@ -3642,14 +3661,14 @@ namespace Terraria
 									s.Y += 36;
 								}
 								break;
-							case 135:
+							case EntityID.TileID.PRESSURE_PLATE:
 								num8 = 2;
 								height = 18;
 								break;
-							case 55:
-							case 79:
-							case 136:
-							case 144:
+							case EntityID.TileID.SIGN:
+							case EntityID.TileID.BED:
+							case EntityID.TileID.SWITCH:
+							case EntityID.TileID.TIMER:
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
 									s.Y += 72;
@@ -3659,23 +3678,23 @@ namespace Terraria
 									s.Y += 36;
 								}
 								break;
-							case 14:
-							case 15:
-							case 16:
-							case 17:
-							case 18:
-							case 20:
-							case 26:
-							case 27:
-							case 32:
-							case 69:
-							case 72:
-							case 77:
-							case 80:
-							case 124:
+							case EntityID.TileID.TABLE:
+							case EntityID.TileID.CHAIR:
+							case EntityID.TileID.ANVIL:
+							case EntityID.TileID.FURNACE:
+							case EntityID.TileID.WORK_BENCH:
+							case EntityID.TileID.SAPLING:
+							case EntityID.TileID.DEMON_ALTAR:
+							case EntityID.TileID.SUNFLOWER:
+							case EntityID.TileID.CORRUPTION_THORN:
+							case EntityID.TileID.JUNGLE_THORN:
+							case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
+							case EntityID.TileID.HELLFORGE:
+							case EntityID.TileID.CACTUS:
+							case EntityID.TileID.WOODEN_BEAM:
 								height = 18;
 								break;
-							case 139:
+							case EntityID.TileID.MUSIC_BOX:
 								num8 = 2;
 								if ((ptr4->CurrentFlags & Flags.SELECTED) != 0)
 								{
@@ -3689,9 +3708,9 @@ namespace Terraria
 						}
 
 #if VERSION_101
-						if (num7 == 12 || num7 == 31)
+						if (num7 == (int)EntityID.TileID.LIFE_CRYSTAL || num7 == (int)EntityID.TileID.SHADOW_ORB)
 						{
-							if (num7 == 12)
+							if (num7 == (int)EntityID.TileID.LIFE_CRYSTAL)
 							{
 								s.Y += Main.HeartCrystalFrame * 36;
 							}
@@ -3701,12 +3720,12 @@ namespace Terraria
 							}
 						}
 
-						if (num7 == 17 || num7 == 77)
+						if (num7 == (int)EntityID.TileID.FURNACE || num7 == (int)EntityID.TileID.HELLFORGE)
 						{
 							s.Y += Main.FurnaceFrame * 38;
 						}
 
-						if (num7 == 150)
+						if (num7 == (int)EntityID.TileID.CAMPFIRE)
 						{
 							s.Y += Main.CampfireFrame * 36;
 							num8 = 2;
@@ -3719,14 +3738,14 @@ namespace Terraria
 						pos.Y = (num6 << 4) - ScreenPosition.Y + num8 + 32;
 						if (Player.findTreasure)
 						{
-							switch (num7)
+							switch ((EntityID.TileID)num7)
 							{
-								case 12:
-								case 21:
-								case 28:
-								case 82:
-								case 83:
-								case 84:
+								case EntityID.TileID.LIFE_CRYSTAL:
+								case EntityID.TileID.CHEST:
+								case EntityID.TileID.POT:
+								case EntityID.TileID.DAYBLOOM_GROWING:
+								case EntityID.TileID.DAYBLOOM_MATURE:
+								case EntityID.TileID.DAYBLOOM_BLOOMING:
 									if (newColor.R < UI.MouseTextBrightness >> 1)
 									{
 										newColor.R = (byte)(UI.MouseTextBrightness >> 1);
@@ -3753,9 +3772,9 @@ namespace Terraria
 									break;
 							}
 						}
-						switch (num7)
+						switch ((EntityID.TileID)num7)
 						{
-							case 4:
+							case EntityID.TileID.TORCH:
 								if (ptr4->FrameX < 66 && Main.Rand.Next(40) == 0)
 								{
 									int num11 = ptr4->FrameY / 22;
@@ -3785,53 +3804,53 @@ namespace Terraria
 									}
 								}
 								break;
-							case 24:
-							case 32:
+							case EntityID.TileID.SHORT_CORRUPT_PLANTS:
+							case EntityID.TileID.CORRUPTION_THORN:
 								if (Main.Rand.Next(500) == 0)
 								{
 									dustLocal.NewDust(i * 16, num6 * 16, 16, 16, 14);
 								}
 								break;
-							case 26:
-							case 31:
+							case EntityID.TileID.DEMON_ALTAR:
+							case EntityID.TileID.SHADOW_ORB:
 								if (Main.Rand.Next(20) == 0)
 								{
 									dustLocal.NewDust(i * 16, num6 * 16, 16, 16, 14, 0.0, 0.0, 100);
 								}
 								break;
-							case 33:
+							case EntityID.TileID.CANDLE:
 								if (ptr4->FrameX == 0 && Main.Rand.Next(40) == 0)
 								{
 									dustLocal.NewDust(i * 16 + 4, num6 * 16 - 4, 4, 4, 6, 0.0, 0.0, 100);
 								}
 								break;
-							case 34:
-							case 35:
-							case 36:
+							case EntityID.TileID.CHANDELIER:
+							case EntityID.TileID.JACK_O_LANTERN:
+							case EntityID.TileID.PRESENT:
 								if ((ptr4->FrameX == 0 || ptr4->FrameX == 36) && ptr4->FrameY == 18 && Main.Rand.Next(40) == 0)
 								{
 									dustLocal.NewDust(i * 16, num6 * 16 + 2, 14, 6, 6, 0.0, 0.0, 100);
 								}
 								break;
-							case 49:
+							case EntityID.TileID.WATER_CANDLE:
 								if (Main.Rand.Next(20) == 0)
 								{
 									dustLocal.NewDust(i * 16 + 4, num6 * 16 - 4, 4, 4, 29, 0.0, 0.0, 100);
 								}
 								break;
-							case 93:
+							case EntityID.TileID.TIKI_TORCH:
 								if (ptr4->FrameX == 0 && ptr4->FrameY == 0 && Main.Rand.Next(40) == 0)
 								{
 									dustLocal.NewDust(i * 16 + 4, num6 * 16 + 2, 4, 4, 6, 0.0, 0.0, 100);
 								}
 								break;
-							case 98:
+							case EntityID.TileID.SKULL_LANTERN:
 								if (ptr4->FrameX == 0 && ptr4->FrameY == 0 && Main.Rand.Next(40) == 0)
 								{
 									dustLocal.NewDust(i * 16 + 12, num6 * 16 + 2, 4, 4, 6, 0.0, 0.0, 100);
 								}
 								break;
-							case 100:
+							case EntityID.TileID.CANDELABRA:
 								if (ptr4->FrameY != 0 || ptr4->FrameX >= 36 || Main.Rand.Next(40) != 0)
 								{
 									break;
@@ -3856,7 +3875,7 @@ namespace Terraria
 									dustLocal.NewDust(i * 16, num6 * 16 + 2, 4, 4, 6, 0.0, 0.0, 100);
 								}
 								break;
-							case 61:
+							case EntityID.TileID.SHORT_JUNGLE_PLANTS:
 								{
 									if (ptr4->FrameX != 144)
 									{
@@ -3876,16 +3895,16 @@ namespace Terraria
 									newColor.A = b2;
 									break;
 								}
-							case 71:
-							case 72:
+							case EntityID.TileID.GLOWING_MUSHROOM:
+							case EntityID.TileID.GIANT_GLOWING_MUSHROOM:
 								if (Main.Rand.Next(500) == 0)
 								{
 									dustLocal.NewDust(i * 16, num6 * 16, 16, 16, 41, 0.0, 0.0, 250, default, 0.8f);
 								}
 								break;
-							case 17:
-							case 77:
-							case 133:
+							case EntityID.TileID.FURNACE:
+							case EntityID.TileID.HELLFORGE:
+							case EntityID.TileID.ADAMANTITE_FORGE:
 								if (Main.Rand.Next(40) == 0 && ptr4->FrameX == 18 && ptr4->FrameY == 18)
 								{
 									dustLocal.NewDust(i * 16 + 2, num6 * 16, 8, 6, 6, 0.0, 0.0, 100);
@@ -3893,7 +3912,7 @@ namespace Terraria
 								break;
 
 #if !VERSION_INITIAL
-							case 150:
+							case EntityID.TileID.CAMPFIRE:
 								if (Main.Rand.Next(2) == 0 && ptr4->FrameY == 0)
 								{
 									Dust* ptrD = dustLocal.NewDust(i * 16, num6 * 16 - 4, 8, 8, 31, 0, 0, 100);
@@ -3953,7 +3972,7 @@ namespace Terraria
 										num10 = newColor.B;
 									}
 									num10 /= 30;
-									if (Main.Rand.Next(Main.TileShine[num7]) < num10 && (num7 != 21 || (ptr4->FrameX >= 36 && ptr4->FrameX < 180)))
+									if (Main.Rand.Next(Main.TileShine[num7]) < num10 && (num7 != (int)EntityID.TileID.CHEST || (ptr4->FrameX >= 36 && ptr4->FrameX < 180)))
 									{
 										Dust* ptr6 = dustLocal.NewDust(i * 16, num6 * 16, 16, 16, 43, 0.0, 0.0, 254, default, 0.5);
 										if (ptr6 != null)
@@ -3965,18 +3984,18 @@ namespace Terraria
 									break;
 								}
 						}
-						if ((num7 == 5 && ptr4->FrameY >= 198 && ptr4->FrameX >= 22) || (num7 == 128 && ptr4->FrameX >= 100))
+						if ((num7 == (int)EntityID.TileID.TREE && ptr4->FrameY >= 198 && ptr4->FrameX >= 22) || (num7 == (int)EntityID.TileID.MANNEQUIN && ptr4->FrameX >= 100))
 						{
 							spec[num].X = (short)i;
 							spec[num].Y = (short)num6;
 							spec[num++].tileColor = newColor;
-							if (num7 == 128)
+							if (num7 == (int)EntityID.TileID.MANNEQUIN)
 							{
 								s.X %= 100;
 								SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.TILES_128, ref pos, ref s, newColor);
 							}
 						}
-						else if (num7 == 129)
+						else if (num7 == (int)EntityID.TileID.CRYSTAL_SHARD)
 						{
 							newColor.R = 200;
 							newColor.G = 200;
@@ -3990,7 +4009,7 @@ namespace Terraria
 							{
 								continue;
 							}
-							if (num7 == 72 && ptr4->FrameX >= 36)
+							if (num7 == (int)EntityID.TileID.GIANT_GLOWING_MUSHROOM && ptr4->FrameX >= 36)
 							{
 								int num12 = ptr4->FrameY / 18;
 								pos.X = i * 16 - ScreenPosition.X - 22 + 32;
@@ -4002,7 +4021,7 @@ namespace Terraria
 								SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.SHROOM_TOPS, ref pos, ref s, newColor);
 								continue;
 							}
-							if (num7 == 51)
+							if (num7 == (int)EntityID.TileID.COBWEB)
 							{
 								newColor.R >>= 1;
 								newColor.G >>= 1;
@@ -4011,24 +4030,24 @@ namespace Terraria
 								SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.TILES_0 + num7, ref pos, ref s, newColor);
 								continue;
 							}
-							if (num7 >= 82 && num7 <= 84)
+							if (num7 >= (int)EntityID.TileID.DAYBLOOM_GROWING && num7 <= (int)EntityID.TileID.DAYBLOOM_BLOOMING)
 							{
-								if (num7 > 82)
+								if (num7 > (int)EntityID.TileID.DAYBLOOM_GROWING)
 								{
 									int num13 = ptr4->FrameX / 18;
 									if (num13 == 0 && WorldTime.DayTime)
 									{
-										num7 = 84;
+										num7 = (int)EntityID.TileID.DAYBLOOM_BLOOMING;
 									}
 									else if (num13 == 1 && !WorldTime.DayTime)
 									{
-										num7 = 84;
+										num7 = (int)EntityID.TileID.DAYBLOOM_BLOOMING;
 									}
 									else if (num13 == 3 && WorldTime.IsBloodMoon)
 									{
-										num7 = 84;
+										num7 = (int)EntityID.TileID.DAYBLOOM_BLOOMING;
 									}
-									if (num7 == 84)
+									if (num7 == (int)EntityID.TileID.DAYBLOOM_BLOOMING)
 									{
 										switch (num13)
 										{
@@ -4076,8 +4095,8 @@ namespace Terraria
 													Dust* ptr12 = dustLocal.NewDust(i * 16, num6 * 16, 16, 8, 16);
 													if (ptr12 != null)
 													{
-														ptr12->Velocity.X *= 0.333333343f;
-														ptr12->Velocity.Y *= 0.333333343f;
+														ptr12->Velocity.X /= 3f;
+														ptr12->Velocity.Y /= 3f;
 														ptr12->Velocity.Y -= 0.7f;
 														ptr12->Alpha = 50;
 														ptr12->Scale *= 0.1f;
@@ -4108,7 +4127,7 @@ namespace Terraria
 								SpriteSheet<_sheetTiles>.Draw((int)_sheetTiles.ID.TILES_0 + num7, ref pos, ref s, newColor);
 								continue;
 							}
-							if (num7 == 80)
+							if (num7 == (int)EntityID.TileID.CACTUS)
 							{
 								bool flag = false;
 								bool flag2 = false;
@@ -4127,13 +4146,13 @@ namespace Terraria
 								}
 								int num15 = num6;
 								bool flag3 = false;
-								if (Main.TileSet[num14, num15].Type == 80 && Main.TileSet[num14, num15].IsActive != 0)
+								if (Main.TileSet[num14, num15].Type == (int)EntityID.TileID.CACTUS && Main.TileSet[num14, num15].IsActive != 0)
 								{
 									flag3 = true;
 								}
 								while (Main.TileSet[num14, num15].IsActive == 0 || !Main.TileSolid[Main.TileSet[num14, num15].Type] || !flag3)
 								{
-									if (Main.TileSet[num14, num15].Type == 80 && Main.TileSet[num14, num15].IsActive != 0)
+									if (Main.TileSet[num14, num15].Type == (int)EntityID.TileID.CACTUS && Main.TileSet[num14, num15].IsActive != 0)
 									{
 										flag3 = true;
 									}
@@ -4143,11 +4162,11 @@ namespace Terraria
 										break;
 									}
 								}
-								if (Main.TileSet[num14, num15].Type == 112)
+								if (Main.TileSet[num14, num15].Type == (int)EntityID.TileID.EBONSAND)
 								{
 									flag = true;
 								}
-								else if (Main.TileSet[num14, num15].Type == 116)
+								else if (Main.TileSet[num14, num15].Type == (int)EntityID.TileID.PEARLSAND)
 								{
 									flag2 = true;
 								}
@@ -4157,7 +4176,7 @@ namespace Terraria
 							}
 							bool flag4 = Main.TileShine2[num7];
 							int id2 = (int)_sheetTiles.ID.TILES_0 + num7;
-							if (SMOOTH_LIGHT && Main.TileSolid[num7] && num7 != 137)
+							if (SMOOTH_LIGHT && Main.TileSolid[num7] && num7 != (int)EntityID.TileID.TRAP)
 							{
 								if (newColor.R > gfx || newColor.G > gfx * 1.1 || newColor.B > gfx * 1.2)
 								{
@@ -4326,7 +4345,7 @@ namespace Terraria
 							}
 							if (SMOOTH_LIGHT && flag4)
 							{
-								if (num7 == 21)
+								if (num7 == (int)EntityID.TileID.CHEST)
 								{
 									if (ptr4->FrameX >= 36 && ptr4->FrameX < 178)
 									{
@@ -4339,9 +4358,9 @@ namespace Terraria
 								}
 							}
 							SpriteSheet<_sheetTiles>.Draw(id2, ref pos, ref s, newColor);
-							switch (num7)
+							switch ((EntityID.TileID)num7)
 							{
-								case 139:
+								case EntityID.TileID.MUSIC_BOX:
 									newColor.R = 200;
 									newColor.G = 200;
 									newColor.B = 200;
@@ -4353,7 +4372,7 @@ namespace Terraria
 									// It is even worse for the exclusive music boxes since there isn't even a glowmask sprite for them, meaning all sprites for those placed music boxes are ruined.
 									// What could fix it? Changing the source rectangle to always reflect the original dimensions, even if highlighted/selected, and then add glowmask sprites for the exclusive music boxes.
 									break;
-								case 144:
+								case EntityID.TileID.TIMER:
 									newColor.R = 200;
 									newColor.G = 200;
 									newColor.B = 200;
@@ -4392,7 +4411,7 @@ namespace Terraria
 				pos2.Y = 32 + y * 16 - ScreenPosition.Y;
 				fixed (Tile* ptr14 = &Main.TileSet[x, y])
 				{
-					if (ptr14->Type == 128)
+					if (ptr14->Type == (int)EntityID.TileID.MANNEQUIN)
 					{
 						int num18 = ptr14->FrameY / 18;
 						int frameX = ptr14->FrameX;
@@ -4441,24 +4460,24 @@ namespace Terraria
 						int num23 = ((y + 100 >= Main.MaxTilesY) ? (Main.MaxTilesY - y) : 100);
 						for (int m = 0; m < num23; m++)
 						{
-							switch (ptr14[m].Type)
+							switch ((EntityID.TileID)ptr14[m].Type)
 							{
-								case 2:
+								case EntityID.TileID.GRASS:
 									num21 = 0;
 									break;
-								case 23:
+								case EntityID.TileID.CORRUPT_GRASS:
 									num21 = 1;
 									break;
-								case 60:
+								case EntityID.TileID.JUNGLE_GRASS:
 									num21 = 2;
 									s2.Width = 114;
 									s2.Height = 96;
 									num22 = 48;
 									break;
-								case 147:
+								case EntityID.TileID.SNOW:
 									num21 = 4;
 									break;
-								case 109:
+								case EntityID.TileID.HALLOWED_GRASS:
 									num21 = 3;
 									num20 += x % 3 * 3;
 									s2.Height = 140;
@@ -4489,21 +4508,21 @@ namespace Terraria
 						int num25 = ((y + 100 >= Main.MaxTilesY) ? (Main.MaxTilesY - y) : 100);
 						for (int n = 0; n < num25; n++)
 						{
-							switch (ptr14[n + (Main.LargeWorldH)].Type)
+							switch ((EntityID.TileID)ptr14[n + (Main.LargeWorldH)].Type)
 							{
-								case 2:
+								case EntityID.TileID.GRASS:
 									num24 = 0;
 									break;
-								case 23:
+								case EntityID.TileID.CORRUPT_GRASS:
 									num24 = 1;
 									break;
-								case 60:
+								case EntityID.TileID.JUNGLE_GRASS:
 									num24 = 2;
 									break;
-								case 147:
+								case EntityID.TileID.SNOW:
 									num24 = 4;
 									break;
-								case 109:
+								case EntityID.TileID.HALLOWED_GRASS:
 									num24 = 3;
 									s2.Y += x % 3 * 126;
 									break;
@@ -4537,21 +4556,21 @@ namespace Terraria
 						int num27 = ((y + 100 >= Main.MaxTilesY) ? (Main.MaxTilesY - y) : 100);
 						for (int num28 = 0; num28 < num27; num28++)
 						{
-							switch (ptr14[num28 - (Main.LargeWorldH)].Type)
+							switch ((EntityID.TileID)ptr14[num28 - (Main.LargeWorldH)].Type)
 							{
-								case 2:
+								case EntityID.TileID.GRASS:
 									num26 = 0;
 									break;
-								case 23:
+								case EntityID.TileID.CORRUPT_GRASS:
 									num26 = 1;
 									break;
-								case 60:
+								case EntityID.TileID.JUNGLE_GRASS:
 									num26 = 2;
 									break;
-								case 147:
+								case EntityID.TileID.SNOW:
 									num26 = 4;
 									break;
-								case 109:
+								case EntityID.TileID.HALLOWED_GRASS:
 									num26 = 3;
 									s2.Y += x % 3 * 126;
 									break;
@@ -4600,28 +4619,28 @@ namespace Terraria
 						s.X = ptr2->FrameX;
 						s.Y = ptr2->FrameY;
 						s.Width = 16;
-						s.Height = ((type == 137 || type == 138) ? 18 : 16);
+						s.Height = ((type == (int)EntityID.TileID.TRAP || type == (int)EntityID.TileID.BOULDER) ? 18 : 16);
 						pos.X = num3 * 16 - ScreenPosition.X + 32;
 						pos.Y = num4 * 16 - ScreenPosition.Y + 32;
 						Color newColor = Lighting.GetColorUnsafe(num3, num4);
 						if (Player.findTreasure)
 						{
-							switch (type)
+							switch ((EntityID.TileID)type)
 							{
-								case 6:
-								case 7:
-								case 8:
-								case 9:
-								case 22:
-								case 63:
-								case 64:
-								case 65:
-								case 66:
-								case 67:
-								case 68:
-								case 107:
-								case 108:
-								case 111:
+								case EntityID.TileID.IRON_ORE:
+								case EntityID.TileID.COPPER_ORE:
+								case EntityID.TileID.GOLD_ORE:
+								case EntityID.TileID.SILVER_ORE:
+								case EntityID.TileID.DEMONITE_ORE:
+								case EntityID.TileID.SAPPHIRE:
+								case EntityID.TileID.RUBY:
+								case EntityID.TileID.EMERALD:
+								case EntityID.TileID.TOPAZ:
+								case EntityID.TileID.AMETHYST:
+								case EntityID.TileID.DIAMOND:
+								case EntityID.TileID.COBALT_ORE:
+								case EntityID.TileID.MYTHRIL_ORE:
+								case EntityID.TileID.ADAMANTITE_ORE:
 									if (newColor.R < UI.MouseTextBrightness >> 1)
 									{
 										newColor.R = (byte)(UI.MouseTextBrightness >> 1);
@@ -4648,27 +4667,27 @@ namespace Terraria
 									break;
 							}
 						}
-						switch (type)
+						switch ((EntityID.TileID)type)
 						{
-							case 22:
+							case EntityID.TileID.DEMONITE_ORE:
 								if (Main.Rand.Next(400) == 0)
 								{
 									dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 14);
 								}
 								goto default;
-							case 25:
+							case EntityID.TileID.EBONSTONE:
 								if (Main.Rand.Next(700) == 0)
 								{
 									dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 14);
 								}
 								break;
-							case 23:
+							case EntityID.TileID.CORRUPT_GRASS:
 								if (Main.Rand.Next(500) == 0)
 								{
 									dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 14);
 								}
 								break;
-							case 37:
+							case EntityID.TileID.METEORITE:
 								if (Main.Rand.Next(250) == 0)
 								{
 									Dust* ptr6 = dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 6, 0.0, 0.0, 0, default, Main.Rand.Next(3));
@@ -4678,8 +4697,8 @@ namespace Terraria
 									}
 								}
 								break;
-							case 58:
-							case 76:
+							case EntityID.TileID.HELLSTONE:
+							case EntityID.TileID.HELLSTONE_BRICK:
 								if (Main.Rand.Next(250) == 0)
 								{
 									Dust* ptr4 = dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 6, 0.0, 0.0, 0, default, Main.Rand.Next(3));
@@ -4690,7 +4709,7 @@ namespace Terraria
 									}
 								}
 								break;
-							case 112:
+							case EntityID.TileID.EBONSAND:
 								if (Main.Rand.Next(700) == 0)
 								{
 									dustLocal.NewDust(num3 * 16, num4 * 16, 16, 16, 14);
@@ -4871,7 +4890,7 @@ namespace Terraria
 						}
 						bool flag6 = Main.TileShine2[type];
 						int id = (int)_sheetTiles.ID.TILES_0 + type;
-						if (SMOOTH_LIGHT && type != 11 && type != 137)
+						if (SMOOTH_LIGHT && type != (int)EntityID.TileID.DOOR_OPEN && type != (int)EntityID.TileID.TRAP)
 						{
 							if (newColor.R > gfx || newColor.G > gfx * 1.1 || newColor.B > gfx * 1.2)
 							{
@@ -5375,12 +5394,12 @@ namespace Terraria
 				{
 					continue;
 				}
-				if ((type == (int)NPC.ID.RETINAZER || type == (int)NPC.ID.SPAZMATISM) && !flag)
+				if ((type == (int)EntityID.NPCID.RETINAZER || type == (int)EntityID.NPCID.SPAZMATISM) && !flag)
 				{
 					flag = true;
 					for (int i = 0; i < NPC.MaxNumNPCs; i++)
 					{
-						if (Main.NPCSet[i].Active == 0 || num == i || (Main.NPCSet[i].Type != (int)NPC.ID.RETINAZER && Main.NPCSet[i].Type != (int)NPC.ID.SPAZMATISM))
+						if (Main.NPCSet[i].Active == 0 || num == i || (Main.NPCSet[i].Type != (int)EntityID.NPCID.RETINAZER && Main.NPCSet[i].Type != (int)EntityID.NPCID.SPAZMATISM))
 						{
 							continue;
 						}
@@ -5422,7 +5441,7 @@ namespace Terraria
 				{
 					continue;
 				}
-				if (type == (int)NPC.ID.CLINGER)
+				if (type == (int)EntityID.NPCID.CLINGER)
 				{
 					bool flag3 = true;
 					Vector2 vector2 = new Vector2(Main.NPCSet[num].Position.X + (Main.NPCSet[num].Width >> 1), Main.NPCSet[num].Position.Y + (Main.NPCSet[num].Height >> 1));
@@ -5455,7 +5474,7 @@ namespace Terraria
 					}
 					while (flag4);
 				}
-				else if (Main.NPCSet[num].AIStyle == 13)
+				else if (Main.NPCSet[num].AIStyle == (byte)EntityID.NPCStyleID.PLANT)
 				{
 					Vector2 vector3 = new Vector2(Main.NPCSet[num].Position.X + (Main.NPCSet[num].Width >> 1), Main.NPCSet[num].Position.Y + (Main.NPCSet[num].Height >> 1));
 					float num12 = Main.NPCSet[num].AI0 * 16f + 8f - vector3.X;
@@ -5483,7 +5502,7 @@ namespace Terraria
 					}
 					while (flag5);
 				}
-				if (type == (int)NPC.ID.SKELETRON_HAND)
+				if (type == (int)EntityID.NPCID.SKELETRON_HAND)
 				{
 					Vector2 vector4 = new Vector2(Main.NPCSet[num].Position.X + (Main.NPCSet[num].Width >> 1) - 5f * Main.NPCSet[num].AI0, Main.NPCSet[num].Position.Y + 20f);
 					for (int j = 0; j < 2; j++)
@@ -5527,7 +5546,7 @@ namespace Terraria
 						}
 					}
 				}
-				if (Main.NPCSet[num].AIStyle >= 33 && Main.NPCSet[num].AIStyle <= 36)
+				if (Main.NPCSet[num].AIStyle >= (byte)EntityID.NPCStyleID.SKELETRON_PRIME_SAW && Main.NPCSet[num].AIStyle <= (byte)EntityID.NPCStyleID.SKELETRON_PRIME_LASER)
 				{
 					Vector2 vector5 = new Vector2(Main.NPCSet[num].Position.X + (Main.NPCSet[num].Width >> 1) - 5f * Main.NPCSet[num].AI0, Main.NPCSet[num].Position.Y + 20f);
 					for (int k = 0; k < 2; k++)
@@ -5571,7 +5590,7 @@ namespace Terraria
 						}
 					}
 				}
-				else if (Main.NPCSet[num].AIStyle == 20)
+				else if (Main.NPCSet[num].AIStyle == (byte)EntityID.NPCStyleID.SPIKE_BALL)
 				{
 					Vector2 vector6 = new Vector2(Main.NPCSet[num].Position.X + (Main.NPCSet[num].Width >> 1), Main.NPCSet[num].Position.Y + (Main.NPCSet[num].Height >> 1));
 					float num21 = Main.NPCSet[num].AI1 - vector6.X;
@@ -5605,7 +5624,7 @@ namespace Terraria
 					SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.SPIKE_BASE, ref pos, Lighting.GetColor((int)Main.NPCSet[num].AI1 >> 4, (int)Main.NPCSet[num].AI2 >> 4), num23 - 0.75f);
 				}
 				Color newColor = Lighting.GetColor(Main.NPCSet[num].XYWH.X + (Main.NPCSet[num].Width >> 1) >> 4, Main.NPCSet[num].XYWH.Y + (Main.NPCSet[num].Height >> 1) >> 4);
-				if (behindTiles && type != (int)NPC.ID.WALL_OF_FLESH && type != (int)NPC.ID.WALL_OF_FLESH_EYE)
+				if (behindTiles && type != (int)EntityID.NPCID.WALL_OF_FLESH && type != (int)EntityID.NPCID.WALL_OF_FLESH_EYE)
 				{
 					int num25 = Main.NPCSet[num].XYWH.X - 8 >> 4;
 					int num26 = Main.NPCSet[num].XYWH.X + Main.NPCSet[num].Width + 8 >> 4;
@@ -5666,7 +5685,7 @@ namespace Terraria
 				}
 				switch (type)
 				{
-					case (int)NPC.ID.KING_SLIME:
+					case (int)EntityID.NPCID.KING_SLIME:
 						{
 							Vector2 vector8 = default;
 							vector8.Y = 0f - Main.NPCSet[num].Velocity.Y;
@@ -5689,7 +5708,7 @@ namespace Terraria
 							SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.NINJA, ref pos, newColor, rotCenter4);
 							break;
 						}
-					case (int)NPC.ID.DUNGEON_SLIME:
+					case (int)EntityID.NPCID.DUNGEON_SLIME:
 						{
 							Vector2 vector7 = default;
 							vector7.Y = Main.NPCSet[num].Velocity.Y * -0.3f;
@@ -5712,12 +5731,12 @@ namespace Terraria
 							SpriteSheet<_sheetSprites>.DrawRotated((int)_sheetSprites.ID.ITEM_327, ref pos, newColor, rotCenter3);
 							break;
 						}
-					case (int)NPC.ID.ANTLION:
-					case (int)NPC.ID.ALBINO_ANTLION:
+					case (int)EntityID.NPCID.ANTLION:
+					case (int)EntityID.NPCID.ALBINO_ANTLION:
 						{
 							pos.X = Main.NPCSet[num].Position.X - ScreenPosition.X + (Main.NPCSet[num].Width >> 1);
 							pos.Y = Main.NPCSet[num].Position.Y - ScreenPosition.Y + Main.NPCSet[num].Height + 14f;
-							int id = ((type == (int)NPC.ID.ANTLION) ? (int)_sheetSprites.ID.ANTLIONBODY : (int)_sheetSprites.ID.ALBINOANTLIONBODY);
+							int id = ((type == (int)EntityID.NPCID.ANTLION) ? (int)_sheetSprites.ID.ANTLIONBODY : (int)_sheetSprites.ID.ALBINOANTLIONBODY);
 							SpriteSheet<_sheetSprites>.DrawRotated(id, ref pos, newColor, (0f - Main.NPCSet[num].Rotation) * 0.3f);
 							break;
 						}
@@ -5728,16 +5747,16 @@ namespace Terraria
 				Vector2 pivot = default;
 				pivot.X = width >> 1;
 				pivot.Y = Main.NPCSet[num].FrameHeight >> 1;
-				switch ((NPC.ID)type)
+				switch ((EntityID.NPCID)type)
 				{
-					case NPC.ID.WIZARD:
-					case NPC.ID.MECHANIC:
+					case EntityID.NPCID.WIZARD:
+					case EntityID.NPCID.MECHANIC:
 						num30 = 2f;
 						break;
-					case NPC.ID.EYE_OF_CTHULHU:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						pivot.Y = 107f;
 						break;
-					case NPC.ID.OCRAM:
+					case EntityID.NPCID.OCRAM:
 						// BUG: In all versions of Old-gen Console, Ocram has a major issue with his hitbox and sprite display.
 						// The issue is that Ocram will rarely be aligned with his hitbox due to a variety of inconsistencies as the programmer copied a lot from the EoC.
 
@@ -5746,120 +5765,120 @@ namespace Terraria
 						// Changing his dimensions, and the pivot value all go towards fixing this issue.
 						// pivot.Y -= 5f;
 						break;
-					case NPC.ID.EATER_OF_SOULS:
-					case NPC.ID.EATER_OF_WORLDS_HEAD:
-					case NPC.ID.EATER_OF_WORLDS_BODY:
-					case NPC.ID.EATER_OF_WORLDS_TAIL:
-					case NPC.ID.BONE_SERPENT_HEAD:
-					case NPC.ID.BONE_SERPENT_BODY:
-					case NPC.ID.BONE_SERPENT_TAIL:
+					case EntityID.NPCID.EATER_OF_SOULS:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						num31 = 26f;
 						break;
-					case NPC.ID.GIANT_WORM_HEAD:
-					case NPC.ID.GIANT_WORM_BODY:
-					case NPC.ID.GIANT_WORM_TAIL:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						num31 = 8f;
 						break;
-					case NPC.ID.HARPY:
+					case EntityID.NPCID.HARPY:
 						num31 = 32f;
 						break;
-					case NPC.ID.CAVE_BAT:
-					case NPC.ID.JUNGLE_BAT:
+					case EntityID.NPCID.CAVE_BAT:
+					case EntityID.NPCID.JUNGLE_BAT:
 						num31 = 4f;
 						break;
-					case NPC.ID.HELLBAT:
+					case EntityID.NPCID.HELLBAT:
 						num31 = 10f;
 						break;
-					case NPC.ID.DEMON:
-					case NPC.ID.SHARK:
-					case NPC.ID.VOODOO_DEMON:
+					case EntityID.NPCID.DEMON:
+					case EntityID.NPCID.SHARK:
+					case EntityID.NPCID.VOODOO_DEMON:
 						num31 = 14f;
 						break;
-					case NPC.ID.BLUE_JELLYFISH:
-					case NPC.ID.PINK_JELLYFISH:
-					case NPC.ID.GREEN_JELLYFISH:
+					case EntityID.NPCID.BLUE_JELLYFISH:
+					case EntityID.NPCID.PINK_JELLYFISH:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						num31 = 4f;
 						pivot.Y += 4f;
 						break;
-					case NPC.ID.ANTLION:
+					case EntityID.NPCID.ANTLION:
 						num31 = 4f;
 						pivot.Y += 8f;
 						break;
-					case NPC.ID.SPIKE_BALL:
+					case EntityID.NPCID.SPIKE_BALL:
 						num31 = -4f;
 						break;
-					case NPC.ID.BLAZING_WHEEL:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						num31 = -2f;
 						break;
-					case NPC.ID.CURSED_HAMMER:
-					case NPC.ID.ENCHANTED_SWORD:
+					case EntityID.NPCID.CURSED_HAMMER:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						num31 = 20f;
 						break;
-					case NPC.ID.DEVOURER_HEAD:
-					case NPC.ID.DEVOURER_BODY:
-					case NPC.ID.DEVOURER_TAIL:
-					case NPC.ID.DIGGER_HEAD:
-					case NPC.ID.DIGGER_BODY:
-					case NPC.ID.DIGGER_TAIL:
-					case NPC.ID.SEEKER_HEAD:
-					case NPC.ID.SEEKER_BODY:
-					case NPC.ID.SEEKER_TAIL:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						num31 = 13f;
 						break;
-					case NPC.ID.WYVERN_HEAD:
-					case NPC.ID.WYVERN_LEGS:
-					case NPC.ID.WYVERN_BODY1:
-					case NPC.ID.WYVERN_BODY2:
-					case NPC.ID.WYVERN_BODY3:
-					case NPC.ID.WYVERN_TAIL:
-					case NPC.ID.ARCH_WYVERN_HEAD:
-					case NPC.ID.ARCH_WYVERN_LEGS:
-					case NPC.ID.ARCH_WYVERN_BODY1:
-					case NPC.ID.ARCH_WYVERN_BODY2:
-					case NPC.ID.ARCH_WYVERN_BODY3:
-					case NPC.ID.ARCH_WYVERN_TAIL:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						num31 = 56f;
 						break;
-					case NPC.ID.CORRUPTOR:
+					case EntityID.NPCID.CORRUPTOR:
 						num31 = 14f;
 						break;
-					case NPC.ID.RETINAZER:
-					case NPC.ID.SPAZMATISM:
+					case EntityID.NPCID.RETINAZER:
+					case EntityID.NPCID.SPAZMATISM:
 						pivot = new Vector2(55f, 107f);
 						num31 = 30f;
 						break;
-					case NPC.ID.THE_DESTROYER_HEAD:
-					case NPC.ID.THE_DESTROYER_BODY:
-					case NPC.ID.THE_DESTROYER_TAIL:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						num31 = 30f;
 						break;
 				}
 				num31 *= Main.NPCSet[num].Scale;
 				pos = new Vector2(Main.NPCSet[num].Position.X - ScreenPosition.X + (Main.NPCSet[num].Width >> 1) - width * Main.NPCSet[num].Scale * 0.5f + pivot.X * Main.NPCSet[num].Scale, Main.NPCSet[num].Position.Y - ScreenPosition.Y + Main.NPCSet[num].Height - Main.NPCSet[num].FrameHeight * Main.NPCSet[num].Scale + 4f + pivot.Y * Main.NPCSet[num].Scale + num31 + num30);
-				if (Main.NPCSet[num].AIStyle == 10 || type == 72)
+				if (Main.NPCSet[num].AIStyle == (byte)EntityID.NPCStyleID.CURSED_SKULL || type == (byte)EntityID.NPCID.BLAZING_WHEEL)
 				{
 					newColor = Color.White;
 				}
 				SpriteEffects e = ((Main.NPCSet[num].SpriteDirection == 1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
-				switch ((NPC.ID)type)
+				switch ((EntityID.NPCID)type)
 				{
-					case NPC.ID.CURSED_HAMMER:
-					case NPC.ID.ENCHANTED_SWORD:
-					case NPC.ID.SHADOW_HAMMER:
+					case EntityID.NPCID.CURSED_HAMMER:
+					case EntityID.NPCID.ENCHANTED_SWORD:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.NPC_1 - 1 + type, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, Color.White, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						continue;
 					default:
-						if (type < (int)NPC.ID.ARCH_WYVERN_HEAD || type > (int)NPC.ID.ARCH_WYVERN_TAIL)
+						if (type < (int)EntityID.NPCID.ARCH_WYVERN_HEAD || type > (int)EntityID.NPCID.ARCH_WYVERN_TAIL)
 						{
 							break;
 						}
-						goto case NPC.ID.WYVERN_HEAD;
-					case NPC.ID.WYVERN_HEAD:
-					case NPC.ID.WYVERN_LEGS:
-					case NPC.ID.WYVERN_BODY1:
-					case NPC.ID.WYVERN_BODY2:
-					case NPC.ID.WYVERN_BODY3:
-					case NPC.ID.WYVERN_TAIL:
+						goto case EntityID.NPCID.WYVERN_HEAD;
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						{
 							c = Main.NPCSet[num].GetAlpha(newColor);
 							byte b = (byte)((WorldTime.tileColor.R + WorldTime.tileColor.G + WorldTime.tileColor.B) / 3);
@@ -5879,9 +5898,9 @@ namespace Terraria
 							continue;
 						}
 				}
-				switch ((NPC.ID)type)
+				switch ((EntityID.NPCID)type)
 				{
-					case NPC.ID.CORRUPTOR:
+					case EntityID.NPCID.CORRUPTOR:
 						{
 							for (int m = 1; m < 6; m += 2)
 							{
@@ -5895,15 +5914,15 @@ namespace Terraria
 							}
 							break;
 						}
-					case NPC.ID.RETINAZER:
-					case NPC.ID.SPAZMATISM:
-					case NPC.ID.SKELETRON_PRIME:
-					case NPC.ID.PRIME_CANNON:
-					case NPC.ID.PRIME_SAW:
-					case NPC.ID.PRIME_VICE:
-					case NPC.ID.PRIME_LASER:
-					case NPC.ID.PROBE:
-					case NPC.ID.POSSESSED_ARMOR:
+					case EntityID.NPCID.RETINAZER:
+					case EntityID.NPCID.SPAZMATISM:
+					case EntityID.NPCID.SKELETRON_PRIME:
+					case EntityID.NPCID.PRIME_CANNON:
+					case EntityID.NPCID.PRIME_SAW:
+					case EntityID.NPCID.PRIME_VICE:
+					case EntityID.NPCID.PRIME_LASER:
+					case EntityID.NPCID.PROBE:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						{
 							for (int num32 = 9; num32 >= 0; num32 -= 2)
 							{
@@ -5930,26 +5949,26 @@ namespace Terraria
 					c.PackedValue = 0x46FAFAFAu;
 					SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.CONFUSE, ref pos2, c, Main.NPCSet[num].Velocity.X * -0.05f, UI.PulseScale + 0.2f);
 				}
-				switch ((NPC.ID)type)
+				switch ((EntityID.NPCID)type)
 				{
-					case NPC.ID.RETINAZER:
+					case EntityID.NPCID.RETINAZER:
 						c.PackedValue = 0xFFFFFFu;
 						SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.EYE_LASER, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						continue;
-					case NPC.ID.PROBE:
+					case EntityID.NPCID.PROBE:
 						c.PackedValue = 0xFFFFFFu;
 						SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.PROBE, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						continue;
-					case NPC.ID.SKELETRON_PRIME:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						c.PackedValue = 0xC8C8C8u;
 						SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.BONE_EYES, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						continue;
-					case NPC.ID.PRIME_LASER:
+					case EntityID.NPCID.PRIME_LASER:
 						c.PackedValue = 0xC8C8C8u;
 						SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.BONE_LASER, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						continue;
-					case NPC.ID.CHAOS_ELEMENTAL:
-					case NPC.ID.SPECTRAL_ELEMENTAL:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						{
 							for (int n = 1; n < Main.NPCSet[num].OldPos.Length; n++)
 							{
@@ -5962,20 +5981,20 @@ namespace Terraria
 							}
 							continue;
 						}
-					case NPC.ID.THE_DESTROYER_HEAD:
-					case NPC.ID.THE_DESTROYER_BODY:
-					case NPC.ID.THE_DESTROYER_TAIL:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						if (newColor.PackedValue != 0xFF000000)
 						{
 							c.PackedValue = 0xFFFFFFu;
-							SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.DEST1 + type - (int)NPC.ID.THE_DESTROYER_HEAD, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
+							SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.DEST1 + type - (int)EntityID.NPCID.THE_DESTROYER_HEAD, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, c, Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 						}
 						continue;
 				}
-				switch ((NPC.ID)type)
+				switch ((EntityID.NPCID)type)
 				{
-					case NPC.ID.ILLUMINANT_BAT:
-					case NPC.ID.ILLUMINANT_SLIME:
+					case EntityID.NPCID.ILLUMINANT_BAT:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						{
 							for (int num34 = 1; num34 < Main.NPCSet[num].OldPos.Length; num34++)
 							{
@@ -5988,7 +6007,7 @@ namespace Terraria
 							}
 							break;
 						}
-					case NPC.ID.WRAITH:
+					case EntityID.NPCID.WRAITH:
 						{
 							SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.WRAITH_EYES, ref pos, Main.NPCSet[num].FrameY, Main.NPCSet[num].FrameHeight, new Color(255, 255, 255, 255), Main.NPCSet[num].Rotation, ref pivot, Main.NPCSet[num].Scale, e);
 							for (int num33 = 1; num33 < 10; num33++)
@@ -6047,7 +6066,7 @@ namespace Terraria
 			float num6 = NPC.WoFBottom - NPC.WoFTop;
 			for (int j = 0; j < NPC.MaxNumNPCs; j++)
 			{
-				if (Main.NPCSet[j].Active == 0 || Main.NPCSet[j].AIStyle != 29)
+				if (Main.NPCSet[j].Active == 0 || Main.NPCSet[j].AIStyle != (byte)EntityID.NPCStyleID.WALL_OF_FLESH_TENTACLE)
 				{
 					continue;
 				}
@@ -6154,7 +6173,7 @@ namespace Terraria
 		{
 			for (int i = 0; i < NPC.MaxNumNPCs; i++)
 			{
-				if (Main.NPCSet[i].Active == 0 || !Main.NPCSet[i].IsTownNPC || Main.NPCSet[i].IsHomeless || Main.NPCSet[i].HomeTileX <= 0 || Main.NPCSet[i].HomeTileY <= 0 || Main.NPCSet[i].Type == (int)NPC.ID.OLD_MAN)
+				if (Main.NPCSet[i].Active == 0 || !Main.NPCSet[i].IsTownNPC || Main.NPCSet[i].IsHomeless || Main.NPCSet[i].HomeTileX <= 0 || Main.NPCSet[i].HomeTileY <= 0 || Main.NPCSet[i].Type == (int)EntityID.NPCID.OLD_MAN)
 				{
 					continue;
 				}
@@ -6169,7 +6188,7 @@ namespace Terraria
 					}
 				}
 				int num2 = 18;
-				if (Main.TileSet[homeTileX, num].Type == 19)
+				if (Main.TileSet[homeTileX, num].Type == (int)EntityID.TileID.PLATFORM)
 				{
 					num2 -= 8;
 				}

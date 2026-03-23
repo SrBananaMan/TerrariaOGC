@@ -142,7 +142,7 @@ namespace Terraria
 			}
 			else if (WorldTime > 45900f)
 			{
-				float num2 = 1f - (WorldTime / dayLength - 0.85f) * 6.66666651f;
+				float num2 = 1f - (WorldTime / dayLength - 0.85f) * (20f / 3f);
 				intermediateCelestialColor.R = (byte)(num2 * 120f + 55f);
 				intermediateCelestialColor.G = (byte)(num2 * 100f + 25f);
 				intermediateCelestialColor.B = (byte)(num2 * 120f + 55f);
@@ -152,7 +152,7 @@ namespace Terraria
 			}
 			else if (WorldTime > 37800f)
 			{
-				float num2 = 1f - (WorldTime / dayLength - 0.7f) * 6.66666651f;
+				float num2 = 1f - (WorldTime / dayLength - 0.7f) * (20f / 3f);
 				intermediateCelestialColor.R = (byte)(num2 * 80f + 175f);
 				intermediateCelestialColor.G = (byte)(num2 * 130f + 125f);
 				intermediateCelestialColor.B = (byte)(num2 * 100f + 155f);

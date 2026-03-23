@@ -252,7 +252,7 @@ namespace Terraria.Leaderboards
 					UI.DrawStringScaled(FontSmallOutline, RankText, Vector, Color.White, Pivot, 1f);
 
 					Vector.X = GamertagX;
-                    string UserGamertag = Row.Gamertag;
+					string UserGamertag = Row.Gamertag;
 					Pivot = UI.MeasureString(FontSmallOutline, UserGamertag);
 					Pivot.X = (int)Pivot.X >> 1;
 					Pivot.Y = (int)Pivot.Y >> 1;

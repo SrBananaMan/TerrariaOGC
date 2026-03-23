@@ -37,8 +37,9 @@ namespace Terraria
 			}
 		}
 
-		public static void UpdateCursor(int XCoord, int YCoord)
+		public static void UpdateCursor(int dx, int dy)
 		{
+			// Bringing over dx, just to never reference it.
 			if (!UI.MainUI.CanPlayOnline())
 			{
 				UI.MainUI.IsOnline = false;
@@ -46,7 +47,7 @@ namespace Terraria
 			}
 			else
 			{
-				if (YCoord == 0)
+				if (dy == 0)
 				{
 					return;
 				}
@@ -54,7 +55,7 @@ namespace Terraria
 				int YPlacement = CursorY;
 				do
 				{
-					YPlacement += YCoord;
+					YPlacement += dy;
 					if (YPlacement < 0)
 					{
 						YPlacement = 2;

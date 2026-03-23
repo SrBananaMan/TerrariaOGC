@@ -73,7 +73,7 @@ namespace Terraria
 
 		public static int ResolutionHeight;
 
-		internal const string OGCVersion = "TerrariaOGC v1.01";
+		internal const string OGCVersion = "TerrariaOGC v1.02";
 #endif
 
 		public const int SmallWorldW = 4200;
@@ -104,48 +104,55 @@ namespace Terraria
 
 		public const int MaxNumMusic = (int)Music.NUM_SONGS;
 
-		public const int OldWorldDataVersion = 46;
+		public const int OldWorldDataVersion = (byte)EntityID.WorldID.OLD;
 
-#if (IS_PATCHED)
-		public const int PlayerDataVersion = 6;
+#if (VERSION_INITIAL || USE_ORIGINAL_CODE)
+		public const int PlayerDataVersion = (byte)EntityID.PlayerID.INITIAL;
 
-		public const int SettingsDataVersion = 5;
+		public const int SettingsDataVersion = (byte)EntityID.SettingsID.INITIAL;
 
-		public const int NewWorldDataVersion = 49;
+		public const int NewWorldDataVersion = (byte)EntityID.WorldID.INITIAL;
 
+#if !IS_PATCHED
+		public const int NetworkVersion = 1;
+
+		public const string VersionNumber = "Xbox360 v0.7.6";
+#else
 		public const int NetworkVersion = 2; // Not bothering with network version or related code, Network is inoperable currently anyway, so we can worry about this later.
 
 		public const string VersionNumber = "Xbox360 v0.7.8"; // Initially unused, but now used for a version string in UI.cs; Discarding the v0.7.x since initial version still reported 1.0
-#elif (VERSION_INITIAL)
-		public const int PlayerDataVersion = 6;
+#endif
 
-		public const int SettingsDataVersion = 5;
+#elif VERSION_101
+		public const int PlayerDataVersion = (byte)EntityID.PlayerID.V101;
 
-		public const int NewWorldDataVersion = 49;
+		public const int SettingsDataVersion = (byte)EntityID.SettingsID.V101;
 
-		public const int NETWORK_VERSION = 1;
+		public const int NewWorldDataVersion = (byte)EntityID.WorldID.V101;
 
-		public const string VersionNumber = "Xbox360 v0.7.6";
-#elif (VERSION_101)
-		public const int PlayerDataVersion = 8;
-
-		public const int SettingsDataVersion = 6;
-
-		public const int NewWorldDataVersion = 50;
-
-		public const int NETWORK_VERSION = 3;
+		public const int NetworkVersion = 3;
 
 		public const string VersionNumber = "Xbox360 v1.01";
-#elif (VERSION_103)
-		public const int PlayerDataVersion = 12;
 
-		public const int NETWORK_VERSION = 3;
+#elif VERSION_103
+		public const int PlayerDataVersion = (byte)EntityID.PlayerID.V103;
+
+		public const int SettingsDataVersion = (byte)EntityID.SettingsID.V103;
+
+		public const int NewWorldDataVersion = (byte)EntityID.WorldID.V103;
+
+		public const int NetworkVersion = 3;
 
 		public const string VersionNumber = "Xbox360 v1.03";
-#elif (VERSION_FINAL)
-		public const int PlayerDataVersion = 21;
 
-		public const int NETWORK_VERSION = 3;
+#elif VERSION_FINAL
+		public const int PlayerDataVersion = (byte)EntityID.PlayerID.FINAL;
+
+		public const int SettingsDataVersion = (byte)EntityID.SettingsID.FINAL;
+
+		public const int NewWorldDataVersion = (byte)EntityID.WorldID.FINAL;
+
+		public const int NetworkVersion = 3;
 
 		public const string VersionNumber = "Xbox360 v1.09";
 #endif
@@ -168,15 +175,14 @@ namespace Terraria
 
 		public const int SectionHeight = 30;
 
-#if VERSION_101
-		public const int MaxNumTilesets = 151; // Just +1 for campfires.
-		public const int MaxNumWallTypes = 38;
-#else
-		public const int MaxNumTilesets = 150;
-		public const int MaxNumWallTypes = 32;
-#endif
+		public const int MaxNumTilesets = (int)EntityID.TileID.NUM_TILESETS;
 
-		public const int MaxNumTilenames = 135; // Highest crafting station ID
+		public const int MaxNumWallTypes = (int)EntityID.WallID.NUM_WALLS;
+
+		public const int MaxNumTilenames = 135; // Bit misleading, as its for the highest crafting station ID.
+												// In v1.0 and v1.01, it is the Mythril Anvil.
+												// In v1.03, it is the Autohammer.
+												// In v1.09, it is the Honey Dispenser.
 
 		public const int MaxNumCombatText = 32;
 
@@ -290,44 +296,44 @@ namespace Terraria
 #endif
 		};
 
-		public static readonly Item.ID[] SongToMusicBox = new Item.ID[MaxNumMusic]
+		public static readonly EntityID.ItemID[] SongToMusicBox = new EntityID.ItemID[MaxNumMusic]
 		{
-			Item.ID.MUSIC_BOX_OVERWORLD_DAY,
-			Item.ID.MUSIC_BOX_EERIE,
-			Item.ID.MUSIC_BOX_NIGHT,
-			Item.ID.MUSIC_BOX_UNDERGROUND,
-			Item.ID.MUSIC_BOX_BOSS1,
-			Item.ID.MUSIC_BOX_TITLE,
-			Item.ID.MUSIC_BOX_JUNGLE,
-			Item.ID.MUSIC_BOX_CORRUPTION,
-			Item.ID.MUSIC_BOX_THE_HALLOW,
-			Item.ID.MUSIC_BOX_UNDERGROUND_CORRUPTION,
-			Item.ID.MUSIC_BOX_UNDERGROUND_HALLOW,
-			Item.ID.MUSIC_BOX_BOSS2,
-			Item.ID.MUSIC_BOX_BOSS3,
-			Item.ID.MUSIC_BOX_DESERT,
-			Item.ID.MUSIC_BOX_SPACE,
-			Item.ID.MUSIC_BOX_TUTORIAL,
-			Item.ID.MUSIC_BOX_BOSS4,
-			Item.ID.MUSIC_BOX_OCEAN,
-			Item.ID.MUSIC_BOX_SNOW,
+			EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY,
+			EntityID.ItemID.MUSIC_BOX_EERIE,
+			EntityID.ItemID.MUSIC_BOX_NIGHT,
+			EntityID.ItemID.MUSIC_BOX_UNDERGROUND,
+			EntityID.ItemID.MUSIC_BOX_BOSS1,
+			EntityID.ItemID.MUSIC_BOX_TITLE,
+			EntityID.ItemID.MUSIC_BOX_JUNGLE,
+			EntityID.ItemID.MUSIC_BOX_CORRUPTION,
+			EntityID.ItemID.MUSIC_BOX_THE_HALLOW,
+			EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION,
+			EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW,
+			EntityID.ItemID.MUSIC_BOX_BOSS2,
+			EntityID.ItemID.MUSIC_BOX_BOSS3,
+			EntityID.ItemID.MUSIC_BOX_DESERT,
+			EntityID.ItemID.MUSIC_BOX_SPACE,
+			EntityID.ItemID.MUSIC_BOX_TUTORIAL,
+			EntityID.ItemID.MUSIC_BOX_BOSS4,
+			EntityID.ItemID.MUSIC_BOX_OCEAN,
+			EntityID.ItemID.MUSIC_BOX_SNOW,
 #if VERSION_103 || VERSION_FINAL
-			Item.ID.MUSIC_BOX_PLANTERA,
-			Item.ID.MUSIC_BOX_BOSS5,
-			Item.ID.MUSIC_BOX_CRIMSON,
-			Item.ID.MUSIC_BOX_RAIN,
-			Item.ID.MUSIC_BOX_ALTERNATE_DAY,
-			Item.ID.MUSIC_BOX_DUNGEON,
-			Item.ID.MUSIC_BOX_ECLIPSE,
-			Item.ID.MUSIC_BOX_PUMPKIN_MOON,
-			Item.ID.MUSIC_BOX_ICE,
-			Item.ID.MUSIC_BOX_LIHZAHRD,
-			Item.ID.MUSIC_BOX_RAIN, // This one won't actually be used since it is the rain sfx.
-			Item.ID.MUSIC_BOX_ALTERNATE_UNDERGROUND,
-			Item.ID.MUSIC_BOX_MUSHROOMS,
+			EntityID.ItemID.MUSIC_BOX_PLANTERA,
+			EntityID.ItemID.MUSIC_BOX_BOSS5,
+			EntityID.ItemID.MUSIC_BOX_CRIMSON,
+			EntityID.ItemID.MUSIC_BOX_RAIN,
+			EntityID.ItemID.MUSIC_BOX_ALTERNATE_DAY,
+			EntityID.ItemID.MUSIC_BOX_DUNGEON,
+			EntityID.ItemID.MUSIC_BOX_ECLIPSE,
+			EntityID.ItemID.MUSIC_BOX_PUMPKIN_MOON,
+			EntityID.ItemID.MUSIC_BOX_ICE,
+			EntityID.ItemID.MUSIC_BOX_LIHZAHRD,
+			EntityID.ItemID.MUSIC_BOX_RAIN, // This one won't actually be used since it is the rain sfx.
+			EntityID.ItemID.MUSIC_BOX_ALTERNATE_UNDERGROUND,
+			EntityID.ItemID.MUSIC_BOX_MUSHROOMS,
 #if VERSION_FINAL
-			Item.ID.MUSIC_BOX_FROST_MOON,
-			Item.ID.MUSIC_BOX_UNDERGROUND_CRIMSON
+			EntityID.ItemID.MUSIC_BOX_FROST_MOON,
+			EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CRIMSON
 #endif
 #endif
 		};
@@ -738,7 +744,7 @@ namespace Terraria
 			Settings ExistingSettings = new Settings(SettingsFile);
 
 			ExistingSettings.Set("Game", "Gamertag", "Terrarian", "Sets the username of the player, since this is typically given by the console.");
-			ExistingSettings.Set("Game", "TrialActive", "True", "Determines if trial mode is active; Included for archival/legal purposes, as this is not the full version.");
+			ExistingSettings.Set("Game", "TrialActive", "True", "Determines if trial mode is active; Included for archival/legal purposes, as this is not the full version by default.");
 			ExistingSettings.Set("Game", "PSMode", "False", "Determines whether the game will run in 'PlayStation 3' mode, rather than 'Xbox 360' mode.\n; This will change the font, controller, D-Pad, and button sprites used in game.");
 			ExistingSettings.Set("Game", "TouchpadButton", "False", "If you want the game to account for a touchpad button, enable this setting. This will not change the controller labels in-game.\n; This will only function if PSMode is enabled and is akin to the PS4 control scheme.");
 			ExistingSettings.Set("Game", "UnlockAllRecipes", "False");
@@ -746,7 +752,7 @@ namespace Terraria
 			ExistingSettings.Set("Display", "ScreenHeight", "0", "This setting will determine the rendering height in pixels, allowing for upscaling from the original 540p.\n; There are 3 options: (0) 540p, (1) 720p, or (2) 1080p.");
 			ExistingSettings.Set("Display", "ShowFPS", "False");
 			ExistingSettings.Set("Display", "StartFullscreen", "False", "Determines if the game is started in full-screen mode; This will not upscale, but stretch the current resolution to the display's max.\n; You can also toggle full-screen mode in-game by pressing 'F'.");
-			ExistingSettings.Set("Display", "ZoomLevel", "0", "Sets how zoomed in the camera will be during initial gameplay; This must be a floating-point number between 0 and 1.\n; You can adjust this in-game by pressing '+' or '-'.");
+			ExistingSettings.Set("Display", "ZoomLevel", "0", "Sets how zoomed in the camera will be during initial gameplay; This must be a floating-point number between 0 and 1.\n; You can adjust this in-game by pressing '+' or '-', or the trigger buttons when paused.");
 			ExistingSettings.Set("Display", "AlwaysOnWatch", "False", "Determines whether the information of the 3rd-tier Watch accessory will always active in-game.");
 			ExistingSettings.Set("Display", "AlwaysOnDepth", "False", "Determines whether the information of the Depth Meter accessory will always active in-game.");
 			ExistingSettings.Set("Display", "AlwaysOnCompass", "False", "Determines whether the information of the Compass accessory will always active in-game.");
@@ -802,602 +808,135 @@ namespace Terraria
 			GameTime.reset(1f);
 			NPC.ClearNames();
 			NPC.SetNames();
-			TileShine2[6] = true;
-			TileShine2[7] = true;
-			TileShine2[8] = true;
-			TileShine2[9] = true;
-			TileShine2[12] = true;
-			TileShine2[21] = true;
-			TileShine2[22] = true;
-			TileShine2[25] = true;
-			TileShine2[45] = true;
-			TileShine2[46] = true;
-			TileShine2[47] = true;
-			TileShine2[63] = true;
-			TileShine2[64] = true;
-			TileShine2[65] = true;
-			TileShine2[66] = true;
-			TileShine2[67] = true;
-			TileShine2[68] = true;
-			TileShine2[107] = true;
-			TileShine2[108] = true;
-			TileShine2[111] = true;
-			TileShine2[117] = true;
-			TileShine2[121] = true;
-			TileShine2[122] = true;
-			TileShine[6] = 1150;
-			TileShine[7] = 1100;
-			TileShine[8] = 1000;
-			TileShine[9] = 1050;
-			TileShine[12] = 1000;
-			TileShine[21] = 1200;
-			TileShine[22] = 1150;
-			TileShine[45] = 1900;
-			TileShine[46] = 2000;
-			TileShine[47] = 2100;
-			TileShine[63] = 900;
-			TileShine[64] = 900;
-			TileShine[65] = 900;
-			TileShine[66] = 900;
-			TileShine[67] = 900;
-			TileShine[68] = 900;
-			TileShine[107] = 950;
-			TileShine[108] = 900;
-			TileShine[109] = 9000;
-			TileShine[110] = 9000;
-			TileShine[111] = 850;
-			TileShine[116] = 9000;
-			TileShine[117] = 9000;
-			TileShine[118] = 8000;
-			TileShine[121] = 1850;
-			TileShine[122] = 1800;
-			TileShine[125] = 600;
-			TileShine[129] = 300;
-			TileHammer[141] = true;
-			TileHammer[4] = true;
-			TileHammer[10] = true;
-			TileHammer[11] = true;
-			TileHammer[12] = true;
-			TileHammer[13] = true;
-			TileHammer[14] = true;
-			TileHammer[15] = true;
-			TileHammer[16] = true;
-			TileHammer[17] = true;
-			TileHammer[18] = true;
-			TileHammer[19] = true;
-			TileHammer[21] = true;
-			TileHammer[26] = true;
-			TileHammer[28] = true;
-			TileHammer[29] = true;
-			TileHammer[31] = true;
-			TileHammer[33] = true;
-			TileHammer[34] = true;
-			TileHammer[35] = true;
-			TileHammer[36] = true;
-			TileHammer[42] = true;
-			TileHammer[48] = true;
-			TileHammer[49] = true;
-			TileHammer[50] = true;
-			TileHammer[54] = true;
-			TileHammer[55] = true;
-			TileHammer[77] = true;
-			TileHammer[78] = true;
-			TileHammer[79] = true;
-			TileHammer[81] = true;
-			TileHammer[85] = true;
-			TileHammer[86] = true;
-			TileHammer[87] = true;
-			TileHammer[88] = true;
-			TileHammer[89] = true;
-			TileHammer[90] = true;
-			TileHammer[91] = true;
-			TileHammer[92] = true;
-			TileHammer[93] = true;
-			TileHammer[94] = true;
-			TileHammer[95] = true;
-			TileHammer[96] = true;
-			TileHammer[97] = true;
-			TileHammer[98] = true;
-			TileHammer[99] = true;
-			TileHammer[100] = true;
-			TileHammer[101] = true;
-			TileHammer[102] = true;
-			TileHammer[103] = true;
-			TileHammer[104] = true;
-			TileHammer[105] = true;
-			TileHammer[106] = true;
-			TileHammer[114] = true;
-			TileHammer[125] = true;
-			TileHammer[126] = true;
-			TileHammer[128] = true;
-			TileHammer[129] = true;
-			TileHammer[132] = true;
-			TileHammer[133] = true;
-			TileHammer[134] = true;
-			TileHammer[135] = true;
-			TileHammer[136] = true;
-			TileFrameImportant[139] = true;
-			TileHammer[139] = true;
-			TileLighted[149] = true;
-			TileFrameImportant[149] = true;
-			TileHammer[149] = true;
-			TileFrameImportant[142] = true;
-			TileHammer[142] = true;
-			TileFrameImportant[143] = true;
-			TileHammer[143] = true;
-			TileFrameImportant[144] = true;
-			TileHammer[144] = true;
-			TileStone[131] = true;
-			TileFrameImportant[136] = true;
-			TileFrameImportant[137] = true;
-			TileFrameImportant[138] = true;
-			TileBlockLight[137] = true;
-			TileSolid[137] = true;
-			TileBlockLight[145] = true;
-			TileSolid[145] = true;
-			TileMergeDirt[145] = true;
-			TileBlockLight[146] = true;
-			TileSolid[146] = true;
-			TileMergeDirt[146] = true;
-			TileBlockLight[147] = true;
-			TileSolid[147] = true;
-			TileMergeDirt[147] = true;
-			TileBlockLight[148] = true;
-			TileSolid[148] = true;
-			TileMergeDirt[148] = true;
-			TileBlockLight[138] = true;
-			TileSolid[138] = true;
-			TileBlockLight[140] = true;
-			TileSolid[140] = true;
-			TileAxe[5] = true;
-			TileAxe[30] = true;
-			TileAxe[72] = true;
-			TileAxe[80] = true;
-			TileAxe[124] = true;
-			TileLighted[4] = true;
-			TileLighted[17] = true;
-			TileLighted[19] = true;
-			TileLighted[22] = true;
-			TileLighted[26] = true;
-			TileLighted[31] = true;
-			TileLighted[33] = true;
-			TileLighted[34] = true;
-			TileLighted[35] = true;
-			TileLighted[36] = true;
-			TileLighted[37] = true;
-			TileLighted[42] = true;
-			TileLighted[49] = true;
-			TileLighted[58] = true;
-			TileLighted[61] = true;
-			TileLighted[70] = true;
-			TileLighted[71] = true;
-			TileLighted[72] = true;
-			TileLighted[76] = true;
-			TileLighted[77] = true;
-			TileLighted[83] = true;
-			TileLighted[84] = true;
-			TileLighted[92] = true;
-			TileLighted[93] = true;
-			TileLighted[95] = true;
-			TileLighted[98] = true;
-			TileLighted[100] = true;
-			TileLighted[109] = true;
-			TileLighted[125] = true;
-			TileLighted[126] = true;
-			TileLighted[129] = true;
-			TileLighted[133] = true;
-			TileLighted[140] = true;
-			TileMergeDirt[1] = true;
-			TileMergeDirt[6] = true;
-			TileMergeDirt[7] = true;
-			TileMergeDirt[8] = true;
-			TileMergeDirt[9] = true;
-			TileMergeDirt[22] = true;
-			TileMergeDirt[25] = true;
-			TileMergeDirt[30] = true;
-			TileMergeDirt[37] = true;
-			TileMergeDirt[38] = true;
-			TileMergeDirt[39] = true;
-			TileMergeDirt[40] = true;
-			TileMergeDirt[41] = true;
-			TileMergeDirt[43] = true;
-			TileMergeDirt[44] = true;
-			TileMergeDirt[45] = true;
-			TileMergeDirt[46] = true;
-			TileMergeDirt[47] = true;
-			TileMergeDirt[53] = true;
-			TileMergeDirt[56] = true;
-			TileMergeDirt[107] = true;
-			TileMergeDirt[108] = true;
-			TileMergeDirt[111] = true;
-			TileMergeDirt[112] = true;
-			TileMergeDirt[116] = true;
-			TileMergeDirt[117] = true;
-			TileMergeDirt[123] = true;
-			TileMergeDirt[140] = true;
-			TileMergeDirt[122] = true;
-			TileMergeDirt[121] = true;
-			TileMergeDirt[120] = true;
-			TileMergeDirt[119] = true;
-			TileMergeDirt[118] = true;
-			TileFrameImportant[3] = true;
-			TileFrameImportant[4] = true;
-			TileFrameImportant[5] = true;
-			TileFrameImportant[10] = true;
-			TileFrameImportant[11] = true;
-			TileFrameImportant[12] = true;
-			TileFrameImportant[13] = true;
-			TileFrameImportant[14] = true;
-			TileFrameImportant[15] = true;
-			TileFrameImportant[16] = true;
-			TileFrameImportant[17] = true;
-			TileFrameImportant[18] = true;
-			TileFrameImportant[20] = true;
-			TileFrameImportant[21] = true;
-			TileFrameImportant[24] = true;
-			TileFrameImportant[26] = true;
-			TileFrameImportant[27] = true;
-			TileFrameImportant[28] = true;
-			TileFrameImportant[29] = true;
-			TileFrameImportant[31] = true;
-			TileFrameImportant[33] = true;
-			TileFrameImportant[34] = true;
-			TileFrameImportant[35] = true;
-			TileFrameImportant[36] = true;
-			TileFrameImportant[42] = true;
-			TileFrameImportant[50] = true;
-			TileFrameImportant[55] = true;
-			TileFrameImportant[61] = true;
-			TileFrameImportant[71] = true;
-			TileFrameImportant[72] = true;
-			TileFrameImportant[73] = true;
-			TileFrameImportant[74] = true;
-			TileFrameImportant[77] = true;
-			TileFrameImportant[78] = true;
-			TileFrameImportant[79] = true;
-			TileFrameImportant[81] = true;
-			TileFrameImportant[82] = true;
-			TileFrameImportant[83] = true;
-			TileFrameImportant[84] = true;
-			TileFrameImportant[85] = true;
-			TileFrameImportant[86] = true;
-			TileFrameImportant[87] = true;
-			TileFrameImportant[88] = true;
-			TileFrameImportant[89] = true;
-			TileFrameImportant[90] = true;
-			TileFrameImportant[91] = true;
-			TileFrameImportant[92] = true;
-			TileFrameImportant[93] = true;
-			TileFrameImportant[94] = true;
-			TileFrameImportant[95] = true;
-			TileFrameImportant[96] = true;
-			TileFrameImportant[97] = true;
-			TileFrameImportant[98] = true;
-			TileFrameImportant[99] = true;
-			TileFrameImportant[101] = true;
-			TileFrameImportant[102] = true;
-			TileFrameImportant[103] = true;
-			TileFrameImportant[104] = true;
-			TileFrameImportant[105] = true;
-			TileFrameImportant[100] = true;
-			TileFrameImportant[106] = true;
-			TileFrameImportant[110] = true;
-			TileFrameImportant[113] = true;
-			TileFrameImportant[114] = true;
-			TileFrameImportant[125] = true;
-			TileFrameImportant[126] = true;
-			TileFrameImportant[128] = true;
-			TileFrameImportant[129] = true;
-			TileFrameImportant[132] = true;
-			TileFrameImportant[133] = true;
-			TileFrameImportant[134] = true;
-			TileFrameImportant[135] = true;
-			TileFrameImportant[141] = true;
-			TileCut[3] = true;
-			TileCut[24] = true;
-			TileCut[28] = true;
-			TileCut[32] = true;
-			TileCut[51] = true;
-			TileCut[52] = true;
-			TileCut[61] = true;
-			TileCut[62] = true;
-			TileCut[69] = true;
-			TileCut[71] = true;
-			TileCut[73] = true;
-			TileCut[74] = true;
-			TileCut[82] = true;
-			TileCut[83] = true;
-			TileCut[84] = true;
-			TileCut[110] = true;
-			TileCut[113] = true;
-			TileCut[115] = true;
-			TileLavaDeath[104] = true;
-			TileLavaDeath[110] = true;
-			TileLavaDeath[113] = true;
-			TileLavaDeath[115] = true;
-			TileSolid[127] = true;
-			TileSolid[130] = true;
-			TileBlockLight[130] = true;
-			TileSolid[107] = true;
-			TileBlockLight[107] = true;
-			TileSolid[108] = true;
-			TileBlockLight[108] = true;
-			TileSolid[111] = true;
-			TileBlockLight[111] = true;
-			TileSolid[109] = true;
-			TileBlockLight[109] = true;
-			TileSolid[110] = false;
-			TileNoAttach[110] = true;
-			TileNoFail[110] = true;
-			TileSolid[112] = true;
-			TileBlockLight[112] = true;
-			TileSolid[116] = true;
-			TileBlockLight[116] = true;
-			TileSolid[117] = true;
-			TileBlockLight[117] = true;
-			TileSolid[123] = true;
-			TileBlockLight[123] = true;
-			TileSolid[118] = true;
-			TileBlockLight[118] = true;
-			TileSolid[119] = true;
-			TileBlockLight[119] = true;
-			TileSolid[120] = true;
-			TileBlockLight[120] = true;
-			TileSolid[121] = true;
-			TileBlockLight[121] = true;
-			TileSolid[122] = true;
-			TileBlockLight[122] = true;
-			TileBlockLight[115] = true;
-			TileSolid[0] = true;
-			TileBlockLight[0] = true;
-			TileSolid[1] = true;
-			TileBlockLight[1] = true;
-			TileSolid[2] = true;
-			TileBlockLight[2] = true;
-			TileSolid[3] = false;
-			TileNoAttach[3] = true;
-			TileNoFail[3] = true;
-			TileSolid[4] = false;
-			TileNoAttach[4] = true;
-			TileNoFail[4] = true;
-			TileNoFail[24] = true;
-			TileSolid[5] = false;
-			TileSolid[6] = true;
-			TileBlockLight[6] = true;
-			TileSolid[7] = true;
-			TileBlockLight[7] = true;
-			TileSolid[8] = true;
-			TileBlockLight[8] = true;
-			TileSolid[9] = true;
-			TileBlockLight[9] = true;
-			TileBlockLight[10] = true;
-			TileSolid[10] = true;
-			TileNoAttach[10] = true;
-			TileBlockLight[10] = true;
-			TileSolid[11] = false;
-			TileSolidTop[19] = true;
-			TileSolid[19] = true;
-			TileSolid[22] = true;
-			TileSolid[23] = true;
-			TileSolid[25] = true;
-			TileSolid[30] = true;
-			TileNoFail[32] = true;
-			TileBlockLight[32] = true;
-			TileSolid[37] = true;
-			TileBlockLight[37] = true;
-			TileSolid[38] = true;
-			TileBlockLight[38] = true;
-			TileSolid[39] = true;
-			TileBlockLight[39] = true;
-			TileSolid[40] = true;
-			TileBlockLight[40] = true;
-			TileSolid[41] = true;
-			TileBlockLight[41] = true;
-			TileSolid[43] = true;
-			TileBlockLight[43] = true;
-			TileSolid[44] = true;
-			TileBlockLight[44] = true;
-			TileSolid[45] = true;
-			TileBlockLight[45] = true;
-			TileSolid[46] = true;
-			TileBlockLight[46] = true;
-			TileSolid[47] = true;
-			TileBlockLight[47] = true;
-			TileSolid[48] = true;
-			TileBlockLight[48] = true;
-			TileSolid[53] = true;
-			TileBlockLight[53] = true;
-			TileSolid[54] = true;
-			TileBlockLight[52] = true;
-			TileSolid[56] = true;
-			TileBlockLight[56] = true;
-			TileSolid[57] = true;
-			TileBlockLight[57] = true;
-			TileSolid[58] = true;
-			TileBlockLight[58] = true;
-			TileSolid[59] = true;
-			TileBlockLight[59] = true;
-			TileSolid[60] = true;
-			TileBlockLight[60] = true;
-			TileSolid[63] = true;
-			TileBlockLight[63] = true;
-			TileStone[63] = true;
-			TileStone[130] = true;
-			TileSolid[64] = true;
-			TileBlockLight[64] = true;
-			TileStone[64] = true;
-			TileSolid[65] = true;
-			TileBlockLight[65] = true;
-			TileStone[65] = true;
-			TileSolid[66] = true;
-			TileBlockLight[66] = true;
-			TileStone[66] = true;
-			TileSolid[67] = true;
-			TileBlockLight[67] = true;
-			TileStone[67] = true;
-			TileSolid[68] = true;
-			TileBlockLight[68] = true;
-			TileStone[68] = true;
-			TileSolid[75] = true;
-			TileBlockLight[75] = true;
-			TileSolid[76] = true;
-			TileBlockLight[76] = true;
-			TileSolid[70] = true;
-			TileBlockLight[70] = true;
-			TileNoFail[50] = true;
-			TileNoAttach[50] = true;
-			TileDungeon[41] = true;
-			TileDungeon[43] = true;
-			TileDungeon[44] = true;
-			TileBlockLight[30] = true;
-			TileBlockLight[25] = true;
-			TileBlockLight[23] = true;
-			TileBlockLight[22] = true;
-			TileBlockLight[62] = true;
-			TileSolidTop[18] = true;
-			TileSolidTop[14] = true;
-			TileSolidTop[16] = true;
-			TileSolidTop[114] = true;
-			TileNoAttach[13] = true;
-			TileNoAttach[14] = true;
-			TileNoAttach[15] = true;
-			TileNoAttach[16] = true;
-			TileNoAttach[17] = true;
-			TileNoAttach[18] = true;
-			TileNoAttach[19] = true;
-			TileNoAttach[21] = true;
-			TileNoAttach[20] = true;
-			TileNoAttach[27] = true;
-			TileNoAttach[114] = true;
-			TileTable[14] = true;
-			TileTable[18] = true;
-			TileTable[19] = true;
-			TileTable[114] = true;
-			TileNoAttach[86] = true;
-			TileNoAttach[87] = true;
-			TileNoAttach[88] = true;
-			TileNoAttach[89] = true;
-			TileNoAttach[90] = true;
-			TileLavaDeath[86] = true;
-			TileLavaDeath[87] = true;
-			TileLavaDeath[88] = true;
-			TileLavaDeath[89] = true;
-			TileLavaDeath[125] = true;
-			TileLavaDeath[126] = true;
-			TileLavaDeath[101] = true;
-			TileTable[101] = true;
-			TileNoAttach[101] = true;
-			TileLavaDeath[102] = true;
-			TileNoAttach[102] = true;
-			TileNoAttach[94] = true;
-			TileNoAttach[95] = true;
-			TileNoAttach[96] = true;
-			TileNoAttach[97] = true;
-			TileNoAttach[98] = true;
-			TileNoAttach[99] = true;
-			TileLavaDeath[94] = true;
-			TileLavaDeath[95] = true;
-			TileLavaDeath[96] = true;
-			TileLavaDeath[97] = true;
-			TileLavaDeath[98] = true;
-			TileLavaDeath[99] = true;
-			TileLavaDeath[100] = true;
-			TileLavaDeath[103] = true;
-			TileTable[87] = true;
-			TileTable[88] = true;
-			TileSolidTop[87] = true;
-			TileSolidTop[88] = true;
-			TileSolidTop[101] = true;
-			TileNoAttach[91] = true;
-			TileLavaDeath[91] = true;
-			TileNoAttach[92] = true;
-			TileLavaDeath[92] = true;
-			TileNoAttach[93] = true;
-			TileLavaDeath[93] = true;
-			TileWaterDeath[4] = true;
-			TileWaterDeath[51] = true;
-			TileWaterDeath[93] = true;
-			TileWaterDeath[98] = true;
-			TileLavaDeath[3] = true;
-			TileLavaDeath[5] = true;
-			TileLavaDeath[10] = true;
-			TileLavaDeath[11] = true;
-			TileLavaDeath[12] = true;
-			TileLavaDeath[13] = true;
-			TileLavaDeath[14] = true;
-			TileLavaDeath[15] = true;
-			TileLavaDeath[16] = true;
-			TileLavaDeath[17] = true;
-			TileLavaDeath[18] = true;
-			TileLavaDeath[19] = true;
-			TileLavaDeath[20] = true;
-			TileLavaDeath[27] = true;
-			TileLavaDeath[28] = true;
-			TileLavaDeath[29] = true;
-			TileLavaDeath[32] = true;
-			TileLavaDeath[33] = true;
-			TileLavaDeath[34] = true;
-			TileLavaDeath[35] = true;
-			TileLavaDeath[36] = true;
-			TileLavaDeath[42] = true;
-			TileLavaDeath[49] = true;
-			TileLavaDeath[50] = true;
-			TileLavaDeath[52] = true;
-			TileLavaDeath[55] = true;
-			TileLavaDeath[61] = true;
-			TileLavaDeath[62] = true;
-			TileLavaDeath[69] = true;
-			TileLavaDeath[71] = true;
-			TileLavaDeath[72] = true;
-			TileLavaDeath[73] = true;
-			TileLavaDeath[74] = true;
-			TileLavaDeath[79] = true;
-			TileLavaDeath[80] = true;
-			TileLavaDeath[81] = true;
-			TileLavaDeath[106] = true;
 
-#if VERSION_101
-			TileLighted[150] = true;
-			TileFrameImportant[150] = true;
-#endif
+			foreach (var i in EntityID.Shine2Tiles)
+				TileShine2[(short)i] = true;
 
-			WallHouse[1] = true;
-			WallHouse[4] = true;
-			WallHouse[5] = true;
-			WallHouse[6] = true;
-			WallHouse[10] = true;
-			WallHouse[11] = true;
-			WallHouse[12] = true;
-			WallHouse[16] = true;
-			WallHouse[17] = true;
-			WallHouse[18] = true;
-			WallHouse[19] = true;
-			WallHouse[20] = true;
-			WallHouse[21] = true;
-			WallHouse[22] = true;
-			WallHouse[23] = true;
-			WallHouse[24] = true;
-			WallHouse[25] = true;
-			WallHouse[26] = true;
-			WallHouse[27] = true;
-			WallHouse[29] = true;
-			WallHouse[30] = true;
-			WallHouse[31] = true;
+			TileShine[(short)EntityID.TileID.IRON_ORE] = 1150;
+			TileShine[(short)EntityID.TileID.COPPER_ORE] = 1100;
+			TileShine[(short)EntityID.TileID.GOLD_ORE] = 1000;
+			TileShine[(short)EntityID.TileID.SILVER_ORE] = 1050;
+			TileShine[(short)EntityID.TileID.LIFE_CRYSTAL] = 1000;
+			TileShine[(short)EntityID.TileID.CHEST] = 1200;
+			TileShine[(short)EntityID.TileID.DEMONITE_ORE] = 1150;
+			TileShine[(short)EntityID.TileID.GOLD_BRICK] = 1900;
+			TileShine[(short)EntityID.TileID.SILVER_BRICK] = 2000;
+			TileShine[(short)EntityID.TileID.COPPER_BRICK] = 2100;
+			TileShine[(short)EntityID.TileID.SAPPHIRE] = 900;
+			TileShine[(short)EntityID.TileID.RUBY] = 900;
+			TileShine[(short)EntityID.TileID.EMERALD] = 900;
+			TileShine[(short)EntityID.TileID.TOPAZ] = 900;
+			TileShine[(short)EntityID.TileID.AMETHYST] = 900;
+			TileShine[(short)EntityID.TileID.DIAMOND] = 900;
+			TileShine[(short)EntityID.TileID.COBALT_ORE] = 950;
+			TileShine[(short)EntityID.TileID.MYTHRIL_ORE] = 900;
+			TileShine[(short)EntityID.TileID.HALLOWED_GRASS] = 9000;
+			TileShine[(short)EntityID.TileID.SHORT_HALLOWED_PLANTS] = 9000;
+			TileShine[(short)EntityID.TileID.ADAMANTITE_ORE] = 850;
+			TileShine[(short)EntityID.TileID.PEARLSAND] = 9000;
+			TileShine[(short)EntityID.TileID.PEARLSTONE] = 9000;
+			TileShine[(short)EntityID.TileID.PEARLSTONE_BRICK] = 8000;
+			TileShine[(short)EntityID.TileID.COBALT_BRICK] = 1850;
+			TileShine[(short)EntityID.TileID.MYTHRIL_BRICK] = 1800;
+			TileShine[(short)EntityID.TileID.CRYSTAL_BALL] = 600;
+			TileShine[(short)EntityID.TileID.CRYSTAL_SHARD] = 300;
+
+			foreach (var i in EntityID.HammerTiles)
+			{
+				TileHammer[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.FrameImportantTiles)
+			{
+				TileFrameImportant[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.LightedTiles)
+			{
+				TileLighted[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.StoneTiles)
+			{
+				TileStone[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.BlockLightTiles)
+			{
+				TileBlockLight[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.SolidTiles)
+			{
+				TileSolid[(short)i] = true;
+			}
+			TileSolid[(short)EntityID.TileID.SHORT_GRASS_PLANTS] = false;
+			TileSolid[(short)EntityID.TileID.TORCH] = false;
+			TileSolid[(short)EntityID.TileID.TREE] = false;
+			TileSolid[(short)EntityID.TileID.DOOR_OPEN] = false;
+			TileSolid[(short)EntityID.TileID.SHORT_HALLOWED_PLANTS] = false;
+
+			foreach (var i in EntityID.MergeDirtTiles)
+			{
+				TileMergeDirt[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.AxeTiles)
+			{
+				TileAxe[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.CutTiles)
+			{
+				TileCut[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.LavaDeathTiles)
+			{
+				TileLavaDeath[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.WaterDeathTiles)
+			{
+				TileWaterDeath[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.NoAttachTiles)
+			{
+				TileNoAttach[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.NoFailTiles)
+			{
+				TileNoFail[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.DungeonTiles)
+			{
+				TileDungeon[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.SolidTopTiles)
+			{
+				TileSolidTop[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.TableTiles)
+			{
+				TileTable[(short)i] = true;
+			}
+
+			foreach (var i in EntityID.HouseWalls)
+			{
+				WallHouse[(short)i] = true;
+			}
+
 			for (int TilesetIdx = MaxNumTilesets - 1; TilesetIdx >= 0; TilesetIdx--)
 			{
 				TileSolidNotSolidTop[TilesetIdx] = TileSolid[TilesetIdx] & !TileSolidTop[TilesetIdx];
 				TileSolidAndAttach[TilesetIdx] = TileSolid[TilesetIdx] & !TileNoAttach[TilesetIdx];
 			}
-			TileNoFail[32] = true;
-			TileNoFail[61] = true;
-			TileNoFail[69] = true;
-			TileNoFail[73] = true;
-			TileNoFail[74] = true;
-			TileNoFail[82] = true;
-			TileNoFail[83] = true;
-			TileNoFail[84] = true;
-			TileNoFail[110] = true;
-			TileNoFail[113] = true;
+
 			for (int TilesetIdx = 0; TilesetIdx < MaxNumTilesets; TilesetIdx++)
 			{
 				if (TileSolid[TilesetIdx])
@@ -1405,8 +944,9 @@ namespace Terraria
 					TileNoSunLight[TilesetIdx] = true;
 				}
 			}
-			TileNoSunLight[19] = false;
-			TileNoSunLight[11] = true;
+			TileNoSunLight[(short)EntityID.TileID.PLATFORM] = false;
+			TileNoSunLight[(short)EntityID.TileID.DOOR_OPEN] = true;
+
 			DustSet.Init();
 			for (int j = 0; j < MaxNumItems + 1; j++)
 			{
@@ -1435,7 +975,7 @@ namespace Terraria
 			{
 				CombatTextSet[CbtTextIdx].Init();
 			}
-			Terraria.Recipe.SetupRecipes();
+			Recipe.SetupRecipes();
 			for (int LineIdx = 0; LineIdx < MaxNumChatLines; LineIdx++)
 			{
 				ChatLineSet[LineIdx].Init();
@@ -1462,7 +1002,7 @@ namespace Terraria
 		{
 			UI.Initialize(this);
 			WorldView.Initialize(GraphicsDevice);
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				UIInstance[Instance] = new UI();
 				if (Instance == 0)
@@ -1501,7 +1041,7 @@ namespace Terraria
 			((Collection<IGameComponent>)(object)Components).Add(new GamerServicesComponent(this));
 #if USE_ORIGINAL_CODE
 			SignedInGamer.add_SignedIn((EventHandler<SignedInEventArgs>)SignedInGamer_SignedIn);
-            SignedInGamer.add_SignedOut((EventHandler<SignedOutEventArgs>)SignedInGamer_SignedOut);
+			SignedInGamer.add_SignedOut((EventHandler<SignedOutEventArgs>)SignedInGamer_SignedOut);
 			NetworkSession.add_InviteAccepted((EventHandler<InviteAcceptedEventArgs>)Netplay.NetworkSession_InviteAccepted);
 #else
 			SpecialCheck();
@@ -1676,7 +1216,7 @@ namespace Terraria
 				else
 				{
 					bool InMenu = true;
-					for (int Instance = 0; Instance < 4; Instance++)
+					for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 					{
 						if (UIInstance[Instance].CurMenuType != 0)
 						{
@@ -1717,10 +1257,10 @@ namespace Terraria
 							int NPCType = NPCSet[NPCIdx].Type;
 							switch (NPCType)
 							{
-								case (int)NPC.ID.THE_DESTROYER_HEAD:
-								case (int)NPC.ID.SNOWMAN_GANGSTA:
-								case (int)NPC.ID.MISTER_STABBY:
-								case (int)NPC.ID.SNOW_BALLA:
+								case (int)EntityID.NPCID.THE_DESTROYER_HEAD:
+								case (int)EntityID.NPCID.SNOWMAN_GANGSTA:
+								case (int)EntityID.NPCID.MISTER_STABBY:
+								case (int)EntityID.NPCID.SNOW_BALLA:
 									GameArea.X = NPCSet[NPCIdx].XYWH.X + (NPCSet[NPCIdx].Width >> 1) - (Area / 2);
 									GameArea.Y = NPCSet[NPCIdx].XYWH.Y + (NPCSet[NPCIdx].Height >> 1) - (Area / 2);
 									CurrentView.ViewArea.Intersects(ref GameArea, out InArea);
@@ -1733,10 +1273,10 @@ namespace Terraria
 								default:
 									switch (NPCType)
 									{
-										case (int)NPC.ID.WALL_OF_FLESH: // For some reason it checks if both the eyes and the mouth of the WoF are active... like as if they can be separated.
-										case (int)NPC.ID.WALL_OF_FLESH_EYE: // Interesting since literally 17 lines up is a case where only The Destroyer's head is checked, rather than each segment.
-										case (int)NPC.ID.RETINAZER:
-										case (int)NPC.ID.SPAZMATISM:
+										case (int)EntityID.NPCID.WALL_OF_FLESH: // For some reason it checks if both the eyes and the mouth of the WoF are active... like as if they can be separated.
+										case (int)EntityID.NPCID.WALL_OF_FLESH_EYE: // Interesting since literally 17 lines up is a case where only The Destroyer's head is checked, rather than each segment.
+										case (int)EntityID.NPCID.RETINAZER:
+										case (int)EntityID.NPCID.SPAZMATISM:
 											GameArea.X = NPCSet[NPCIdx].XYWH.X + (NPCSet[NPCIdx].Width >> 1) - (Area / 2);
 											GameArea.Y = NPCSet[NPCIdx].XYWH.Y + (NPCSet[NPCIdx].Height >> 1) - (Area / 2);
 											CurrentView.ViewArea.Intersects(ref GameArea, out InArea);
@@ -1746,8 +1286,8 @@ namespace Terraria
 											}
 											BossMusic = 2;
 											break;
-										case (int)NPC.ID.EYE_OF_CTHULHU: // Console Exclusive: If an Eye of Cthulhu is active, play the Ocram music
-										case (int)NPC.ID.OCRAM:
+										case (int)EntityID.NPCID.EYE_OF_CTHULHU: // Console Exclusive: If an Eye of Cthulhu is active, play the Ocram music
+										case (int)EntityID.NPCID.OCRAM:
 											GameArea.X = NPCSet[NPCIdx].XYWH.X + (NPCSet[NPCIdx].Width >> 1) - (Area / 2);
 											GameArea.Y = NPCSet[NPCIdx].XYWH.Y + (NPCSet[NPCIdx].Height >> 1) - (Area / 2);
 											CurrentView.ViewArea.Intersects(ref GameArea, out InArea);
@@ -1758,7 +1298,7 @@ namespace Terraria
 											BossMusic = 4;
 											break;
 										default:
-											if (!NPCSet[NPCIdx].IsBoss && (NPCType < (int)NPC.ID.EATER_OF_WORLDS_HEAD || NPCType > (int)NPC.ID.EATER_OF_WORLDS_TAIL) && (NPCType < (int)NPC.ID.GOBLIN_PEON || NPCType > (int)NPC.ID.GOBLIN_SORCERER) && NPCType != (int)NPC.ID.GOBLIN_ARCHER) // Checks for the EoW's segments (again, like they can be separated) or the Goblin Army.
+											if (!NPCSet[NPCIdx].IsBoss && (NPCType < (int)EntityID.NPCID.EATER_OF_WORLDS_HEAD || NPCType > (int)EntityID.NPCID.EATER_OF_WORLDS_TAIL) && (NPCType < (int)EntityID.NPCID.GOBLIN_PEON || NPCType > (int)EntityID.NPCID.GOBLIN_SORCERER) && NPCType != (int)EntityID.NPCID.GOBLIN_ARCHER) // Checks for the EoW's segments (again, like they can be separated) or the Goblin Army.
 											{
 												continue;
 											}
@@ -1867,7 +1407,7 @@ namespace Terraria
 							}
 						}
 						int Instance = 0;
-						while (MusicBox < 0 && Instance < 4)
+						while (MusicBox < 0 && Instance < UIInstance.Length)
 						{
 							if (UIInstance[Instance].CurrentView != null)
 							{
@@ -2000,7 +1540,7 @@ namespace Terraria
 					InitializePostSplash();
 					return;
 			}
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				UIInstance[Instance].UpdateGamePad();
 			}
@@ -2008,7 +1548,7 @@ namespace Terraria
 			{
 				UpdateTutorial();
 			}
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				UIInstance[Instance].Update();
 			}
@@ -2139,7 +1679,7 @@ namespace Terraria
 				if (UI.MainUI.CurMenuType == MenuType.PAUSE)
 				{
 					bool Paused = true;
-					for (int Instance = 0; Instance < 4; Instance++)
+					for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 					{
 						if (UIInstance[Instance].CurMenuType == MenuType.NONE)
 						{
@@ -2156,7 +1696,7 @@ namespace Terraria
 			}
 			else if (CheckWorldId)
 			{
-				for (int Instance = 0; Instance < 4; Instance++)
+				for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 				{
 					UI ActiveUI = UIInstance[Instance];
 					if (ActiveUI.CurrentView != null && ActiveUI.CurMenuType == MenuType.NONE)
@@ -2178,7 +1718,7 @@ namespace Terraria
 					ChatLineSet[LineIdx].ShowTime--;
 				}
 			}
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				if (UIInstance[Instance].CurrentView != null && UIInstance[Instance].CurMenuType == MenuType.MAIN)
 				{
@@ -2445,7 +1985,7 @@ namespace Terraria
 			Position.X = ResolutionWidth - SplashTextures[SplashLogo].Width >> 1;
 			Position.Y = ResolutionHeight - SplashTextures[SplashLogo].Height >> 1;
 			SpriteBatch.Draw(SplashTextures[SplashLogo], Position, new Color(FadeVal, FadeVal, FadeVal, FadeVal));
-#else       // But since I'm allowing for greater screen resolutions, we draw with a rectangle, which will display perfectly on 540p, or stretch with higher resolutions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+#else	   // But since I'm allowing for greater screen resolutions, we draw with a rectangle, which will display perfectly on 540p, or stretch with higher resolutions.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							
 			SpriteBatch.Draw(SplashTextures[SplashLogo], new Rectangle(0, 0, ResolutionWidth, ResolutionHeight), new Color(FadeVal, FadeVal, FadeVal, FadeVal));
 #endif
 		}
@@ -2474,11 +2014,11 @@ namespace Terraria
 			FPSCount++;
 #endif
 			RenderCount++;
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				UIInstance[Instance].PrepareDraw(RenderCount);
 			}
-			if (RenderCount > 4)
+			if (RenderCount > UIInstance.Length)
 			{
 				RenderCount = 0;
 				Lighting.TempLightCount = 0;
@@ -2486,13 +2026,13 @@ namespace Terraria
 			GraphicsDevice.SetRenderTarget(null);
 			GraphicsDevice.Clear(default);
 			base.Draw(GTime);
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				UIInstance[Instance].Draw();
 			}
 			WorldView.RestoreViewport();
 			SpriteBatch.Begin();
-			for (int Instance = 0; Instance < 4; Instance++)
+			for (int Instance = 0; Instance < UIInstance.Length; Instance++)
 			{
 				if (UIInstance[Instance].CurMenuType != 0)
 				{
@@ -2777,11 +2317,11 @@ namespace Terraria
 
 			switch (ScreenHeightPtr)
 			{
-				case 1:
+				case ScreenHeights.HD:
 					PosX = 66;
 					PosY = 620;
 					break;
-				case 2:
+				case ScreenHeights.FHD:
 					PosX = 98;
 					PosY = 980;
 					SpaceMult = 50;
@@ -2791,7 +2331,7 @@ namespace Terraria
 			float ChatX = PosX + 6;
 			int ChatY = PosY - 1;
 
-			if (ScreenHeightPtr == 2)
+			if (ScreenHeightPtr == ScreenHeights.FHD)
 			{
 				ChatY = PosY + 6;
 			}
@@ -2806,7 +2346,7 @@ namespace Terraria
 						LineWidth = FontSize.X;
 					}
 					YOffset++;
-                }
+				}
 			}
 			if (YOffset == 0 || LineWidth == 0f)
 			{
@@ -2986,7 +2526,7 @@ namespace Terraria
 					Player CurrentPlayer = PlayerSet[PlayerIdx];
 					if (CurrentPlayer.Active != 0 && !CurrentPlayer.IsDead && CurrentPlayer.XYWH.Y < WorldSurfacePixels)
 					{
-						NPC.SpawnOnPlayer(CurrentPlayer, (int)NPC.ID.EYE_OF_CTHULHU);
+						NPC.SpawnOnPlayer(CurrentPlayer, (int)EntityID.NPCID.EYE_OF_CTHULHU);
 						WorldGen.ToSpawnEye = false;
 						break;
 					}
@@ -3043,7 +2583,7 @@ namespace Terraria
 						Volume = 1f - Distance / (ResolutionWidth * (2f / 3f));
 
 						// Something interesting to note is that these distance calculations with the volume are different compared to the PC version. This leads to some inaccuracies between versions when it comes to sound.
-						// One of the most notable instances of this, is the roar of the Dungeon Guardian which ends up being rather quiet, if not inaudible, on Console compared to PC.
+						// One of the most notable instances of this, is with the roar of the Dungeon Guardian, which ends up being rather quiet, if not inaudible, on Console compared to PC.
 						// My test with a sound volume of 100 resulted in the Guardian's roar being close to 0.045. As you can expect, this makes the surprise far more effective since you do not know if they even spawn until its too late.
 
 						if (Volume > 1f)
@@ -3402,7 +2942,7 @@ namespace Terraria
 					{
 						int TileX = (int)ActivePlayer.Position.X + 10 >> 4;
 						int TileY = (int)ActivePlayer.Position.Y + 42 >> 4;
-						if (TileSet[TileX, TileY - 1].Type == 19 || TileSet[TileX - 1, TileY - 1].Type == 19 || TileSet[TileX + 1, TileY - 1].Type == 19)
+						if (TileSet[TileX, TileY - 1].Type == (int)EntityID.TileID.PLATFORM || TileSet[TileX - 1, TileY - 1].Type == (int)EntityID.TileID.PLATFORM || TileSet[TileX + 1, TileY - 1].Type == (int)EntityID.TileID.PLATFORM)
 						{
 							NextTutorial();
 						}
@@ -3413,7 +2953,7 @@ namespace Terraria
 					{
 						int TileX = (int)ActivePlayer.Position.X + 10 >> 4;
 						int TileY = (int)ActivePlayer.Position.Y + 42 >> 4;
-						if (TileSet[TileX, TileY + 1].Type == 19 || TileSet[TileX - 1, TileY + 1].Type == 19 || TileSet[TileX + 1, TileY + 1].Type == 19)
+						if (TileSet[TileX, TileY + 1].Type == (int)EntityID.TileID.PLATFORM || TileSet[TileX - 1, TileY + 1].Type == (int)EntityID.TileID.PLATFORM || TileSet[TileX + 1, TileY + 1].Type == (int)EntityID.TileID.PLATFORM)
 						{
 							NextTutorial();
 						}
@@ -3442,13 +2982,13 @@ namespace Terraria
 				case Tutorial.SWORD_ATTACK:
 					if (UI.MainUI.TotalDeadSlimes > TutorialVar)
 					{
-						Item.NewItem((int)ActivePlayer.Position.X, (int)ActivePlayer.Position.Y, 1, 1, (int)Item.ID.GEL);
+						Item.NewItem((int)ActivePlayer.Position.X, (int)ActivePlayer.Position.Y, 1, 1, (int)EntityID.ItemID.GEL);
 						NextTutorial();
 					}
 					else if (TutorialVar2 != 0 && --TutorialVar2 == 0)
 					{
 						TutorialVar2 = 900;
-						int SlimeIdx = NPC.NewNPC(ActivePlayer.XYWH.X - (ResolutionWidth / 2), ActivePlayer.XYWH.Y - ResolutionHeight, (int)NPC.ID.SLIME);
+						int SlimeIdx = NPC.NewNPC(ActivePlayer.XYWH.X - (ResolutionWidth / 2), ActivePlayer.XYWH.Y - ResolutionHeight, (int)EntityID.NPCID.SLIME);
 						NPCSet[SlimeIdx].SetDefaults("Green Slime");
 					}
 					break;
@@ -3533,7 +3073,7 @@ namespace Terraria
 					}
 					break;
 				case Tutorial.SELECT_PLATFORM:
-					if (TutorialInputDelay == 0 && ActivePlayer.Inventory[ActivePlayer.SelectedItem].Type == (int)Item.ID.WOOD_PLATFORM)
+					if (TutorialInputDelay == 0 && ActivePlayer.Inventory[ActivePlayer.SelectedItem].Type == (int)EntityID.ItemID.WOOD_PLATFORM)
 					{
 						NextTutorial();
 					}
@@ -3621,7 +3161,7 @@ namespace Terraria
 						{
 							for (int TileY = PlayerY - 5; TileY < PlayerY + 5; TileY++)
 							{
-								if (TileSet[TileX, TileY].Type == 18)
+								if (TileSet[TileX, TileY].Type == (int)EntityID.TileID.WORK_BENCH)
 								{
 									NextTutorial((TutorialState != Tutorial.CRAFT_WORKBENCH) ? 1 : 2);
 									return;
@@ -3632,13 +3172,13 @@ namespace Terraria
 					}
 				case Tutorial.CRAFT_DOOR:
 				case Tutorial.CRAFT_DOOR_EXTRA_INFO:
-					if (TutorialInputDelay == 0 && ActivePlayer.HasItemInInventory((int)Item.ID.WOODEN_DOOR))
+					if (TutorialInputDelay == 0 && ActivePlayer.HasItemInInventory((int)EntityID.ItemID.WOODEN_DOOR))
 					{
 						NextTutorial((TutorialState != Tutorial.CRAFT_DOOR) ? 1 : 2);
 					}
 					break;
 				case Tutorial.PLACE_DOOR:
-					if ((FrameCounter & 31) == 0 && WorldGen.StartSpaceCheck(TutorialHouse.X, TutorialHouse.Y) && (WorldGen.HouseTile[10] || WorldGen.HouseTile[11]))
+					if ((FrameCounter & 31) == 0 && WorldGen.StartSpaceCheck(TutorialHouse.X, TutorialHouse.Y) && (WorldGen.HouseTile[(int)EntityID.TileID.DOOR_CLOSED] || WorldGen.HouseTile[(int)EntityID.TileID.DOOR_OPEN]))
 					{
 						NextTutorial();
 					}
@@ -3818,7 +3358,7 @@ namespace Terraria
 					{
 						for (int NPCIdx = NPC.MaxNumNPCs - 1; NPCIdx >= 0; NPCIdx--)
 						{
-							if (NPCSet[NPCIdx].Type == (int)NPC.ID.SLIME && NPCSet[NPCIdx].Active != 0)
+							if (NPCSet[NPCIdx].Type == (int)EntityID.NPCID.SLIME && NPCSet[NPCIdx].Active != 0)
 							{
 								NPCSet[NPCIdx].HitEffect(0, 999);
 								NPCSet[NPCIdx].Active = 0;
@@ -3859,7 +3399,7 @@ namespace Terraria
 				case Tutorial.WOOD_PLATFORM:
 					TutorialVar = UI.MainUI.TotalWoodPlatformsCrafted;
 #if VERSION_103 || VERSION_FINAL
-				TutorialVar2 = 720; // Altered bc platform recipe
+					TutorialVar2 = 720; // Altered bc platform recipe
 #else
 					TutorialVar2 = 600;
 #endif
@@ -3889,14 +3429,14 @@ namespace Terraria
 					TutText = Lang.TutorialLocale(State - 1) + TutText;
 					break;
 				case Tutorial.CRAFT_WORKBENCH:
-					if (ActivePlayer.CountInventory((int)Item.ID.WOOD) < 10)
+					if (ActivePlayer.CountInventory((int)EntityID.ItemID.WOOD) < 10)
 					{
 						TutorialState = State + 1;
 						TutText += Lang.TutorialLocale(TutorialState);
 					}
 					break;
 				case Tutorial.CRAFT_DOOR:
-					if (ActivePlayer.CountInventory((int)Item.ID.WOOD) < 6)
+					if (ActivePlayer.CountInventory((int)EntityID.ItemID.WOOD) < 6)
 					{
 						TutorialState = State + 1;
 						TutText += Lang.TutorialLocale(TutorialState);
@@ -3908,7 +3448,7 @@ namespace Terraria
 					break;
 				case Tutorial.CRAFT_WALL:
 					TutorialVar = UI.MainUI.TotalWallsCrafted;
-					if (ActivePlayer.CountInventory((int)Item.ID.WOOD) < 6)
+					if (ActivePlayer.CountInventory((int)EntityID.ItemID.WOOD) < 6)
 					{
 						TutorialState = State + 1;
 						TutText += Lang.TutorialLocale(TutorialState);

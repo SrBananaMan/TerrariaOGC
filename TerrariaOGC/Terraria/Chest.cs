@@ -175,173 +175,173 @@ namespace Terraria
 			switch (Type)
 			{
 				case 1:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.MINING_HELMET);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.PIGGY_BANK);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.IRON_ANVIL);
-					ItemSet[ItemIdx++].NetDefaults(-13); // Copper Pickaxe
-					ItemSet[ItemIdx++].NetDefaults(-16); // Copper Axe
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.TORCH);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.LESSER_HEALING_POTION);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.MINING_HELMET);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.PIGGY_BANK);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.IRON_ANVIL);
+					ItemSet[ItemIdx++].NetDefaults((int)EntityID.ItemID.COPPER_PICKAXE);
+					ItemSet[ItemIdx++].NetDefaults((int)EntityID.ItemID.COPPER_AXE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.TORCH);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.LESSER_HEALING_POTION);
 					if (CurrentPlayer != null && CurrentPlayer.statManaMax >= 200)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.LESSER_MANA_POTION);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.LESSER_MANA_POTION);
 					}
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.WOODEN_ARROW);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SHURIKEN);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.WOODEN_ARROW);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SHURIKEN);
 					if (Main.GameTime.IsBloodMoon)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.THROWING_KNIFE);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.THROWING_KNIFE);
 					}
 					if (!Main.GameTime.DayTime)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GLOWSTICK);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GLOWSTICK);
 					}
 					if (NPC.HasDownedBoss3)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SAFE);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SAFE);
 					}
 					if (Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.DISCO_BALL);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.DISCO_BALL);
 					}
 					break;
 				case 2:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.MUSKET_BALL);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.MUSKET_BALL);
 					if (Main.GameTime.IsBloodMoon || Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SILVER_BULLET);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SILVER_BULLET);
 					}
 					if ((NPC.HasDownedBoss2 && !Main.GameTime.DayTime) || Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.UNHOLY_ARROW);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.UNHOLY_ARROW);
 					}
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FLINTLOCK_PISTOL);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.MINISHARK);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FLINTLOCK_PISTOL);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.MINISHARK);
 					if (!Main.GameTime.DayTime)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.ILLEGAL_GUN_PARTS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.ILLEGAL_GUN_PARTS);
 					}
 					if (Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SHOTGUN);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SHOTGUN);
 					}
 					break;
 				case 3:
 					if (Main.GameTime.IsBloodMoon)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.VILE_POWDER);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.CORRUPT_SEEDS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.VILE_POWDER);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.CORRUPT_SEEDS);
 					}
 					else
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.PURIFICATION_POWDER);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GRASS_SEEDS);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SUNFLOWER);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.PURIFICATION_POWDER);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GRASS_SEEDS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SUNFLOWER);
 					}
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.ACORN);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.DIRT_ROD);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.ACORN);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.DIRT_ROD);
 					if (Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.HALLOWED_SEEDS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.HALLOWED_SEEDS);
 					}
 #if !VERSION_INITIAL
 					if (Main.InHardMode && Main.GameTime.IsBloodMoon)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SPARKLY_WINGS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SPARKLY_WINGS);
 					}
 #endif
 					break;
 				case 4:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GRENADE);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.BOMB);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.DYNAMITE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GRENADE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.BOMB);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.DYNAMITE);
 					if (Main.InHardMode)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.HELLFIRE_ARROW);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.HELLFIRE_ARROW);
 					}
 					break;
 				case 5:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.BLACK_DYE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.BLACK_THREAD);
 					if (Main.GameTime.DayTime)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SUMMER_HAT);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SUMMER_HAT);
 					}
 					if (Main.GameTime.MoonPhase == 0)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.PLUMBERS_SHIRT);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.PLUMBERS_PANTS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.PLUMBERS_SHIRT);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.PLUMBERS_PANTS);
 					}
 					else if (Main.GameTime.MoonPhase == 1)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.THE_DOCTORS_SHIRT);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.THE_DOCTORS_PANTS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.THE_DOCTORS_SHIRT);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.THE_DOCTORS_PANTS);
 					}
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FAMILIAR_SHIRT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FAMILIAR_PANTS);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FAMILIAR_WIG);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FAMILIAR_SHIRT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FAMILIAR_PANTS);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FAMILIAR_WIG);
 					if (NPC.HasDownedClown)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.CLOWN_HAT);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.CLOWN_SHIRT);
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.CLOWN_PANTS);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.CLOWN_HAT);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.CLOWN_SHIRT);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.CLOWN_PANTS);
 					}
 					if (Main.GameTime.IsBloodMoon)
 					{
-						ItemSet[ItemIdx++].SetDefaults((int)Item.ID.MIME_MASK);
+						ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.MIME_MASK);
 					}
 #if !VERSION_INITIAL
 					if (Main.GameTime.IsBloodMoon)
 					{
 						if (CurrentPlayer.male)
 						{
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GEORGES_HAT);
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GEORGES_SUIT);
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GEORGES_PANTS);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GEORGES_HAT);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GEORGES_TUXEDO_SHIRT);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GEORGES_TUXEDO_PANTS);
 						}
 						else
 						{
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FABULOUS_RIBBON);
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FABULOUS_DRESS);
-							ItemSet[ItemIdx++].SetDefaults((int)Item.ID.FABULOUS_SLIPPERS);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FABULOUS_RIBBON);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FABULOUS_TUTU);
+							ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.FABULOUS_SLIPPERS);
 						}
 					}
 #endif
 					break;
 				case 6:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.ROCKET_BOOTS);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.RULER);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.TINKERERS_WORKSHOP);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GRAPPLING_HOOK);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.TOOLBELT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SPIKY_BALL);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.ROCKET_BOOTS);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.RULER);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.TINKERERS_WORKSHOP);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GRAPPLING_HOOK);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.TOOLBELT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SPIKY_BALL);
 					break;
 				case 7:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.CRYSTAL_BALL);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.ICE_ROD);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GREATER_MANA_POTION);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.BELL);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.HARP);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SPELL_TOME);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.MUSIC_BOX);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.CRYSTAL_BALL);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.ICE_ROD);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GREATER_MANA_POTION);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.BELL);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.HARP);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SPELL_TOME);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.MUSIC_BOX);
 					break;
 				case 8:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.WRENCH);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.WIRE_CUTTER);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.WIRE);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.LEVER);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SWITCH);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.RED_PRESSURE_PLATE);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GREEN_PRESSURE_PLATE);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GRAY_PRESSURE_PLATE);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.BROWN_PRESSURE_PLATE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.WRENCH);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.WIRE_CUTTER);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.WIRE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.LEVER);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SWITCH);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.RED_PRESSURE_PLATE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GREEN_PRESSURE_PLATE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GRAY_PRESSURE_PLATE);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.BROWN_PRESSURE_PLATE);
 					break;
 				case 9:
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SANTA_HAT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SANTA_SHIRT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.SANTA_PANTS);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.RED_LIGHT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.GREEN_LIGHT);
-					ItemSet[ItemIdx++].SetDefaults((int)Item.ID.BLUE_LIGHT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SANTA_HAT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SANTA_SHIRT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.SANTA_PANTS);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.RED_LIGHT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.GREEN_LIGHT);
+					ItemSet[ItemIdx++].SetDefaults((int)EntityID.ItemID.BLUE_LIGHT);
 					break;
 			}
 		}
@@ -351,7 +351,7 @@ namespace Terraria
 			for (int ItemIdx = 0; ItemIdx < MaxNumItems; ItemIdx++)
 			{
 #if !VERSION_INITIAL
-				if (ItemSet[ItemIdx].Stack != ItemSet[ItemIdx].MaxStack || ItemSet[ItemIdx].Type < (int)Item.ID.COPPER_COIN || ItemSet[ItemIdx].Type > (int)Item.ID.GOLD_COIN)
+				if (ItemSet[ItemIdx].Stack != ItemSet[ItemIdx].MaxStack || ItemSet[ItemIdx].Type < (int)EntityID.ItemID.COPPER_COIN || ItemSet[ItemIdx].Type > (int)EntityID.ItemID.GOLD_COIN)
 #else
 				// BUG: This checks if the coins need conversion (have a stack of 100) and if they are actually coins. This is so the rest of the code can upgrade those coins to the next tier.
 				// The problem is that !Item.CanBePlacedInCoinSlot() will also allow for platinum coins to pass, and since the next ID is a fallen star, any stacks over 100 convert to a fallen star.

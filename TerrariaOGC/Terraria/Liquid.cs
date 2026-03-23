@@ -813,7 +813,7 @@ namespace Terraria
 					return;
 				}
 				int TileID = CurrentTile->Type;
-				if ((TileID != 4 || CurrentTile->FrameY != 176) && (Main.TileWaterDeath[TileID] || (CurrentTile->Lava != 0 && Main.TileLavaDeath[TileID])))
+				if ((TileID != (int)EntityID.TileID.TORCH || CurrentTile->FrameY != 176) && (Main.TileWaterDeath[TileID] || (CurrentTile->Lava != 0 && Main.TileLavaDeath[TileID])))
 				{
 					if (WorldGen.Gen)
 					{
@@ -858,7 +858,7 @@ namespace Terraria
 				{
 					Main.TileSet[TileX, TileY].Liquid = 0;
 					Main.TileSet[TileX, TileY].Lava = 0;
-					WorldGen.PlaceTile(TileX, TileY, 56, ToMute: true, IsForced: true);
+					WorldGen.PlaceTile(TileX, TileY, (int)EntityID.TileID.OBSIDIAN, ToMute: true, IsForced: true);
 					WorldGen.SquareTileFrame(TileX, TileY);
 					if (Main.NetMode == (byte)NetModeSetting.SERVER)
 					{
@@ -871,7 +871,7 @@ namespace Terraria
 				Main.TileSet[TileX, TileY].Liquid = 0;
 				Main.TileSet[TileX, TileY].Lava = 0;
 				Main.TileSet[TileX, TileY + 1].Liquid = 0;
-				WorldGen.PlaceTile(TileX, TileY + 1, 56, ToMute: true, IsForced: true);
+				WorldGen.PlaceTile(TileX, TileY + 1, (int)EntityID.TileID.OBSIDIAN, ToMute: true, IsForced: true);
 				WorldGen.SquareTileFrame(TileX, TileY + 1);
 				if (Main.NetMode == (byte)NetModeSetting.SERVER)
 				{
@@ -939,21 +939,21 @@ namespace Terraria
 								{
 									continue;
 								}
-								switch (Main.TileSet[TileX, TileY].Type)
+								switch ((EntityID.TileID)Main.TileSet[TileX, TileY].Type)
 								{
-									case 2:
-									case 23:
-									case 109:
-										Main.TileSet[TileX, TileY].Type = 0;
+									case EntityID.TileID.GRASS:
+									case EntityID.TileID.CORRUPT_GRASS:
+									case EntityID.TileID.HALLOWED_GRASS:
+										Main.TileSet[TileX, TileY].Type = (int)EntityID.TileID.DIRT;
 										WorldGen.SquareTileFrame(TileX, TileY);
 										if (Main.NetMode == (byte)NetModeSetting.SERVER)
 										{
 											NetMessage.SendTileSquare(LiquidX, LiquidY, 3);
 										}
 										break;
-									case 60:
-									case 70:
-										Main.TileSet[TileX, TileY].Type = 59;
+									case EntityID.TileID.JUNGLE_GRASS:
+									case EntityID.TileID.MUSHROOM_GRASS:
+										Main.TileSet[TileX, TileY].Type = (int)EntityID.TileID.MUD;
 										WorldGen.SquareTileFrame(TileX, TileY);
 										if (Main.NetMode == (byte)NetModeSetting.SERVER)
 										{
@@ -974,7 +974,7 @@ namespace Terraria
 				Main.Liquid[LiquidIdx].X = Main.Liquid[NumLiquids].X;
 				Main.Liquid[LiquidIdx].Y = Main.Liquid[NumLiquids].Y;
 				Main.Liquid[LiquidIdx].Kill = Main.Liquid[NumLiquids].Kill;
-				if (ActiveTile->Type >= 82 && ActiveTile->Type <= 84)
+				if (ActiveTile->Type >= (int)EntityID.TileID.DAYBLOOM_GROWING && ActiveTile->Type <= (int)EntityID.TileID.DAYBLOOM_BLOOMING)
 				{
 					WorldGen.CheckAlch(LiquidX, LiquidY);
 				}

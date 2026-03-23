@@ -966,7 +966,7 @@ namespace Terraria
 #endif
 
 
-		public static readonly string[] ProjectileNames = new string[120]
+		public static readonly string[] ProjectileNames = new string[Projectile.MaxNumProjTypes]
 		{
 			null,
 			"Wooden Arrow",
@@ -1001,7 +1001,11 @@ namespace Terraria
 			"Grenade",
 			"Sand Ball",
 			"Ivy Whip",
+#if VERSION_FINAL
+			"Thorn Chakram",
+#else
 			"Thorn Chakrum",
+#endif
 			"Flamelash",
 			"Sunfury",
 			"Meteor Shot",
@@ -1986,14 +1990,14 @@ namespace Terraria
 
 		public static string NPCDialog(Player CurrentPlayer, int QuoteID)
 		{
-			string MerchantName = NPC.TypeNames[(int)NPC.ID.MERCHANT];
-			string NurseName = NPC.TypeNames[(int)NPC.ID.NURSE];
-			string GuideName = NPC.TypeNames[(int)NPC.ID.GUIDE];
-			string DealerName = NPC.TypeNames[(int)NPC.ID.ARMS_DEALER];
-			string DryadName = NPC.TypeNames[(int)NPC.ID.DRYAD];
-			string DemoName = NPC.TypeNames[(int)NPC.ID.DEMOLITIONIST];
-			string GoblinName = NPC.TypeNames[(int)NPC.ID.GOBLIN_TINKERER];
-			string MechanicName = NPC.TypeNames[(int)NPC.ID.MECHANIC];
+			string MerchantName = NPC.TypeNames[(int)EntityID.NPCID.MERCHANT];
+			string NurseName = NPC.TypeNames[(int)EntityID.NPCID.NURSE];
+			string GuideName = NPC.TypeNames[(int)EntityID.NPCID.GUIDE];
+			string DealerName = NPC.TypeNames[(int)EntityID.NPCID.ARMS_DEALER];
+			string DryadName = NPC.TypeNames[(int)EntityID.NPCID.DRYAD];
+			string DemoName = NPC.TypeNames[(int)EntityID.NPCID.DEMOLITIONIST];
+			string GoblinName = NPC.TypeNames[(int)EntityID.NPCID.GOBLIN_TINKERER];
+			string MechanicName = NPC.TypeNames[(int)EntityID.NPCID.MECHANIC];
 			string PlayerName = CurrentPlayer.Name;
 
 #if !VERSION_INITIAL
@@ -4622,3620 +4626,1989 @@ namespace Terraria
 		{
 			if (LangOption <= (int)ID.ENGLISH)
 			{
-#if VERSION_INITIAL
-				switch (l)
+				switch ((EntityID.NPCID)l)
 				{
-				case -18:
-				case -1:
-					return "Slimeling";
-				case -2:
-					return "Slimer";
-				case -3:
-					return "Green Slime";
-				case -4:
-					return "Pinky";
-				case -5:
-					return "Baby Slime";
-				case -6:
-					return "Black Slime";
-				case -7:
-					return "Purple Slime";
-				case -8:
-					return "Red Slime";
-				case -9:
-					return "Yellow Slime";
-				case -10:
-					return "Jungle Slime";
-				case -11:
-					return "Little Eater";
-				case -12:
-					return "Big Eater";
-				case -13:
-					return "Short Bones";
-				case -14:
-					return "Big Boned";
-				case -15:
-					return "Heavy Skeleton";
-				case -16:
-					return "Little Stinger";
-				case -17:
-					return "Big Stinger";
-				case 1:
-					return "Blue Slime";
-				case 2:
-					return "Demon Eye";
-				case 3:
-					return "Zombie";
-				case 4:
-					return "Eye of Cthulhu";
-				case 5:
-					return "Servant of Cthulhu";
-				case 6:
-					return "Eater of Souls";
-				case 7:
-				case 8:
-				case 9:
-					return "Devourer";
-				case 10:
-				case 11:
-				case 12:
-					return "Giant Worm";
-				case 13:
-				case 14:
-				case 15:
-					return "Eater of Worlds";
-				case 16:
-					return "Mother Slime";
-				case 17:
-					return "Merchant";
-				case 18:
-					return "Nurse";
-				case 19:
-					return "Arms Dealer";
-				case 20:
-					return "Dryad";
-				case 21:
-					return "Skeleton";
-				case 22:
-					return "Guide";
-				case 23:
-					return "Meteor Head";
-				case 24:
-					return "Fire Imp";
-				case 25:
-					return "Burning Sphere";
-				case 26:
-					return "Goblin Peon";
-				case 27:
-					return "Goblin Thief";
-				case 28:
-					return "Goblin Warrior";
-				case 29:
-					return "Goblin Sorcerer";
-				case 30:
-					return "Chaos Ball";
-				case 31:
-					return "Angry Bones";
-				case 32:
-					return "Dark Caster";
-				case 33:
-					return "Water Sphere";
-				case 34:
-					return "Cursed Skull";
-				case 35:
-				case 36:
-					return "Skeletron";
-				case 37:
-					return "Old Man";
-				case 38:
-					return "Demolitionist";
-				case 39:
-				case 40:
-				case 41:
-					return "Bone Serpent";
-				case 42:
-					return "Hornet";
-				case 43:
-					return "Man Eater";
-				case 44:
-					return "Undead Miner";
-				case 45:
-					return "Tim";
-				case 46:
-					return "Bunny";
-				case 47:
-					return "Corrupt Bunny";
-				case 48:
-					return "Harpy";
-				case 49:
-					return "Cave Bat";
-				case 50:
-					return "King Slime";
-				case 51:
-					return "Jungle Bat";
-				case 52:
-					return "Doctor Bones";
-				case 53:
-					return "The Groom";
-				case 54:
-					return "Clothier";
-				case 55:
-					return "Goldfish";
-				case 56:
-					return "Snatcher";
-				case 57:
-					return "Corrupt Goldfish";
-				case 58:
-					return "Piranha";
-				case 59:
-					return "Lava Slime";
-				case 60:
-					return "Hellbat";
-				case 61:
-					return "Vulture";
-				case 62:
-					return "Demon";
-				case 63:
-					return "Blue Jellyfish";
-				case 64:
-					return "Pink Jellyfish";
-				case 65:
-					return "Shark";
-				case 66:
-					return "Voodoo Demon";
-				case 67:
-					return "Crab";
-				case 68:
-					return "Dungeon Guardian";
-				case 69:
-					return "Antlion";
-				case 70:
-					return "Spike Ball";
-				case 71:
-					return "Dungeon Slime";
-				case 72:
-					return "Blazing Wheel";
-				case 73:
-					return "Goblin Scout";
-				case 74:
-					return "Bird";
-				case 75:
-					return "Pixie";
-				case 77:
-					return "Armored Skeleton";
-				case 78:
-					return "Mummy";
-				case 79:
-					return "Dark Mummy";
-				case 80:
-					return "Light Mummy";
-				case 81:
-					return "Corrupt Slime";
-				case 82:
-					return "Wraith";
-				case 83:
-					return "Cursed Hammer";
-				case 84:
-					return "Enchanted Sword";
-				case 85:
-					return "Mimic";
-				case 86:
-					return "Unicorn";
-				case 87:
-				case 88:
-				case 89:
-				case 90:
-				case 91:
-				case 92:
-					return "Wyvern";
-				case 93:
-					return "Giant Bat";
-				case 94:
-					return "Corruptor";
-				case 95:
-				case 96:
-				case 97:
-					return "Digger";
-				case 98:
-				case 99:
-				case 100:
-					return "World Feeder";
-				case 101:
-					return "Clinger";
-				case 102:
-					return "Angler Fish";
-				case 103:
-					return "Green Jellyfish";
-				case 104:
-					return "Werewolf";
-				case 105:
-					return "Bound Goblin";
-				case 106:
-					return "Bound Wizard";
-				case 107:
-					return "Goblin Tinkerer";
-				case 108:
-					return "Wizard";
-				case 109:
-					return "Clown";
-				case 110:
-					return "Skeleton Archer";
-				case 111:
-					return "Goblin Archer";
-				case 112:
-					return "Vile Spit";
-				case 113:
-				case 114:
-					return "Wall of Flesh";
-				case 115:
-				case 116:
-					return "The Hungry";
-				case 117:
-				case 118:
-				case 119:
-					return "Leech";
-				case 120:
-					return "Chaos Elemental";
-				case 121:
-					return "Slimer";
-				case 122:
-					return "Gastropod";
-				case 123:
-					return "Bound Mechanic";
-				case 124:
-					return "Mechanic";
-				case 125:
-					return "Retinazer";
-				case 126:
-					return "Spazmatism";
-				case 127:
-					return "Skeletron Prime";
-				case 128:
-					return "Prime Cannon";
-				case 129:
-					return "Prime Saw";
-				case 130:
-					return "Prime Vice";
-				case 131:
-					return "Prime Laser";
-				case 132:
-					return "Zombie";
-				case 133:
-					return "Wandering Eye";
-				case 134:
-				case 135:
-				case 136:
-					return "The Destroyer";
-				case 137:
-					return "Illuminant Bat";
-				case 138:
-					return "Illuminant Slime";
-				case 139:
-					return "Probe";
-				case 140:
-					return "Possessed Armor";
-				case 141:
-					return "Toxic Sludge";
-				case 142:
-					return "Santa Claus";
-				case 143:
-					return "Snowman Gangsta";
-				case 144:
-					return "Mister Stabby";
-				case 145:
-					return "Snow Balla";
-				case 147:
-					return "Albino Antlion";
-				case 148:
-					return "Orca";
-				case 149:
-					return "Vampire Miner";
-				case 150:
-					return "Shadow Slime";
-				case 151:
-					return "Shadow Hammer";
-				case 152:
-					return "Shadow Mummy";
-				case 153:
-					return "Spectral Gastropod";
-				case 154:
-					return "Spectral Elemental";
-				case 155:
-					return "Spectral Mummy";
-				case 156:
-					return "Dragon Snatcher";
-				case 157:
-					return "Dragon Hornet";
-				case 158:
-					return "Dragon Skull";
-				case 159:
-				case 160:
-				case 161:
-				case 162:
-				case 163:
-				case 164:
-					return "Arch Wyvern";
-				case 165:
-					return "Arch Demon";
-				case 166:
-					return "Ocram";
-				case 167:
-					return "Servant of Ocram";
-				default:
-					return "";
-				}
-#else
-				switch (l)
-				{
-					case -18:
-					case -1:
+					case EntityID.NPCID.SLIMELING2:
+					case EntityID.NPCID.SLIMELING:
 						return "Slimeling";
-					case -2:
+					case EntityID.NPCID.SLIMER2:
 						return "Slimer";
-					case -3:
+					case EntityID.NPCID.GREEN_SLIME:
 						return "Green Slime";
-					case -4:
+					case EntityID.NPCID.PINKY:
 						return "Pinky";
-					case -5:
+					case EntityID.NPCID.BABY_SLIME:
 						return "Baby Slime";
-					case -6:
+					case EntityID.NPCID.BLACK_SLIME:
 						return "Black Slime";
-					case -7:
+					case EntityID.NPCID.PURPLE_SLIME:
 						return "Purple Slime";
-					case -8:
+					case EntityID.NPCID.RED_SLIME:
 						return "Red Slime";
-					case -9:
+					case EntityID.NPCID.YELLOW_SLIME:
 						return "Yellow Slime";
-					case -10:
+					case EntityID.NPCID.JUNGLE_SLIME:
 						return "Jungle Slime";
-					case -11:
-					case -12:
+#if VERSION_101
+					case EntityID.NPCID.LITTLE_EATER:
+					case EntityID.NPCID.BIG_EATER:
 						return "Eater of Souls";
-					case -13:
-					case -14:
+					case EntityID.NPCID.SHORT_BONES:
+					case EntityID.NPCID.BIG_BONED:
 						return "Angry Bones";
-					case -15:
+					case EntityID.NPCID.HEAVY_SKELETON:
 						return "Armored Skeleton";
-					case -16:
-					case -17:
+					case EntityID.NPCID.LITTLE_STINGER:
+					case EntityID.NPCID.BIG_STINGER:
 						return "Hornet";
-					case -26:
-					case -27:
-					case -28:
-					case -29:
-					case -30:
-					case -31:
-					case -32:
-					case -33:
-					case -34:
-					case -35:
-					case -36:
-					case -37:
-					case -44:
-					case -45:
+					case EntityID.NPCID.SMALL_ZOMBIE:
+					case EntityID.NPCID.BIG_ZOMBIE:
+					case EntityID.NPCID.SMALL_BALD_ZOMBIE:
+					case EntityID.NPCID.BIG_BALD_ZOMBIE:
+					case EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.BIG_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SMALL_SLIMED_ZOMBIE:
+					case EntityID.NPCID.BIG_SLIMED_ZOMBIE:
+					case EntityID.NPCID.SMALL_SWAMP_ZOMBIE:
+					case EntityID.NPCID.BIG_SWAMP_ZOMBIE:
+					case EntityID.NPCID.SMALL_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.BIG_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.SMALL_FEMALE_ZOMBIE:
+					case EntityID.NPCID.BIG_FEMALE_ZOMBIE:
 						return "Zombie";
-					case -38:
-					case -39:
-					case -40:
-					case -41:
-					case -42:
-					case -43:
+					case EntityID.NPCID.CATARACT_EYE2:
+					case EntityID.NPCID.SLEEPY_EYE2:
+					case EntityID.NPCID.DIALATED_EYE2:
+					case EntityID.NPCID.GREEN_EYE2:
+					case EntityID.NPCID.PURPLE_EYE2:
+					case EntityID.NPCID.DEMON_EYE2:
 						return "Demon Eye";
-					case 1:
+#else
+					case EntityID.NPCID.LITTLE_EATER:
+						return "Little Eater";
+					case EntityID.NPCID.BIG_EATER:
+						return "Big Eater";
+					case EntityID.NPCID.SHORT_BONES:
+						return "Short Bones";
+					case EntityID.NPCID.BIG_BONED:
+						return "Big Boned";
+					case EntityID.NPCID.HEAVY_SKELETON:
+						return "Heavy Skeleton";
+					case EntityID.NPCID.LITTLE_STINGER:
+						return "Little Stinger";
+					case EntityID.NPCID.BIG_STINGER:
+						return "Big Stinger";
+#endif
+					case EntityID.NPCID.SLIME:
 						return "Blue Slime";
-					case 2:
+					case EntityID.NPCID.DEMON_EYE:
 						return "Demon Eye";
-					case 3:
+					case EntityID.NPCID.ZOMBIE:
 						return "Zombie";
-					case 4:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						return "Eye of Cthulhu";
-					case 5:
+					case EntityID.NPCID.SERVANT_OF_CTHULHU:
 						return "Servant of Cthulhu";
-					case 6:
+					case EntityID.NPCID.EATER_OF_SOULS:
 						return "Eater of Souls";
-					case 7:
-					case 8:
-					case 9:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
 						return "Devourer";
-					case 10:
-					case 11:
-					case 12:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						return "Giant Worm";
-					case 13:
-					case 14:
-					case 15:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						return "Eater of Worlds";
-					case 16:
+					case EntityID.NPCID.MOTHER_SLIME:
 						return "Mother Slime";
-					case 17:
+					case EntityID.NPCID.MERCHANT:
 						return "Merchant";
-					case 18:
+					case EntityID.NPCID.NURSE:
 						return "Nurse";
-					case 19:
+					case EntityID.NPCID.ARMS_DEALER:
 						return "Arms Dealer";
-					case 20:
+					case EntityID.NPCID.DRYAD:
 						return "Dryad";
-					case 21:
+					case EntityID.NPCID.SKELETON:
 						return "Skeleton";
-					case 22:
+					case EntityID.NPCID.GUIDE:
 						return "Guide";
-					case 23:
+					case EntityID.NPCID.METEOR_HEAD:
 						return "Meteor Head";
-					case 24:
+					case EntityID.NPCID.FIRE_IMP:
 						return "Fire Imp";
-					case 25:
+					case EntityID.NPCID.BURNING_SPHERE:
 						return "Burning Sphere";
-					case 26:
+					case EntityID.NPCID.GOBLIN_PEON:
 						return "Goblin Peon";
-					case 27:
+					case EntityID.NPCID.GOBLIN_THIEF:
 						return "Goblin Thief";
-					case 28:
+					case EntityID.NPCID.GOBLIN_WARRIOR:
 						return "Goblin Warrior";
-					case 29:
+					case EntityID.NPCID.GOBLIN_SORCERER:
 						return "Goblin Sorcerer";
-					case 30:
+					case EntityID.NPCID.CHAOS_BALL:
 						return "Chaos Ball";
-					case 31:
+					case EntityID.NPCID.BONES:
 						return "Angry Bones";
-					case 32:
+					case EntityID.NPCID.DARK_CASTER:
 						return "Dark Caster";
-					case 33:
+					case EntityID.NPCID.WATER_SPHERE:
 						return "Water Sphere";
-					case 34:
+					case EntityID.NPCID.CURSED_SKULL:
 						return "Cursed Skull";
-					case 35:
-					case 36:
+					case EntityID.NPCID.SKELETRON_HEAD:
+					case EntityID.NPCID.SKELETRON_HAND:
 						return "Skeletron";
-					case 37:
+					case EntityID.NPCID.OLD_MAN:
 						return "Old Man";
-					case 38:
+					case EntityID.NPCID.DEMOLITIONIST:
 						return "Demolitionist";
-					case 39:
-					case 40:
-					case 41:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						return "Bone Serpent";
-					case 42:
+					case EntityID.NPCID.HORNET:
 						return "Hornet";
-					case 43:
+					case EntityID.NPCID.MAN_EATER:
 						return "Man Eater";
-					case 44:
+					case EntityID.NPCID.UNDEAD_MINER:
 						return "Undead Miner";
-					case 45:
+					case EntityID.NPCID.TIM:
 						return "Tim";
-					case 46:
+					case EntityID.NPCID.BUNNY:
 						return "Bunny";
-					case 47:
+					case EntityID.NPCID.CORRUPT_BUNNY:
 						return "Corrupt Bunny";
-					case 48:
+					case EntityID.NPCID.HARPY:
 						return "Harpy";
-					case 49:
+					case EntityID.NPCID.CAVE_BAT:
 						return "Cave Bat";
-					case 50:
+					case EntityID.NPCID.KING_SLIME:
 						return "King Slime";
-					case 51:
+					case EntityID.NPCID.JUNGLE_BAT:
 						return "Jungle Bat";
-					case 52:
+					case EntityID.NPCID.DOCTOR_BONES:
 						return "Doctor Bones";
-					case 53:
+					case EntityID.NPCID.THE_GROOM:
 						return "The Groom";
-					case 54:
+					case EntityID.NPCID.CLOTHIER:
 						return "Clothier";
-					case 55:
+					case EntityID.NPCID.GOLDFISH:
 						return "Goldfish";
-					case 56:
+					case EntityID.NPCID.SNATCHER:
 						return "Snatcher";
-					case 57:
+					case EntityID.NPCID.CORRUPT_GOLDFISH:
 						return "Corrupt Goldfish";
-					case 58:
+					case EntityID.NPCID.PIRANHA:
 						return "Piranha";
-					case 59:
+					case EntityID.NPCID.LAVA_SLIME:
 						return "Lava Slime";
-					case 60:
+					case EntityID.NPCID.HELLBAT:
 						return "Hellbat";
-					case 61:
+					case EntityID.NPCID.VULTURE:
 						return "Vulture";
-					case 62:
+					case EntityID.NPCID.DEMON:
 						return "Demon";
-					case 63:
+					case EntityID.NPCID.BLUE_JELLYFISH:
 						return "Blue Jellyfish";
-					case 64:
+					case EntityID.NPCID.PINK_JELLYFISH:
 						return "Pink Jellyfish";
-					case 65:
+					case EntityID.NPCID.SHARK:
 						return "Shark";
-					case 66:
+					case EntityID.NPCID.VOODOO_DEMON:
 						return "Voodoo Demon";
-					case 67:
+					case EntityID.NPCID.CRAB:
 						return "Crab";
-					case 68:
+					case EntityID.NPCID.DUNGEON_GUARDIAN:
 						return "Dungeon Guardian";
-					case 69:
+					case EntityID.NPCID.ANTLION:
 						return "Antlion";
-					case 70:
+					case EntityID.NPCID.SPIKE_BALL:
 						return "Spike Ball";
-					case 71:
+					case EntityID.NPCID.DUNGEON_SLIME:
 						return "Dungeon Slime";
-					case 72:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						return "Blazing Wheel";
-					case 73:
+					case EntityID.NPCID.GOBLIN_SCOUT:
 						return "Goblin Scout";
-					case 74:
+					case EntityID.NPCID.BIRD:
 						return "Bird";
-					case 75:
+					case EntityID.NPCID.PIXIE:
 						return "Pixie";
-					case 77:
+					case EntityID.NPCID.ARMORED_SKELETON:
 						return "Armored Skeleton";
-					case 78:
+					case EntityID.NPCID.MUMMY:
 						return "Mummy";
-					case 79:
+					case EntityID.NPCID.DARK_MUMMY:
 						return "Dark Mummy";
-					case 80:
+					case EntityID.NPCID.LIGHT_MUMMY:
 						return "Light Mummy";
-					case 81:
+					case EntityID.NPCID.CORRUPT_SLIME:
 						return "Corrupt Slime";
-					case 82:
+					case EntityID.NPCID.WRAITH:
 						return "Wraith";
-					case 83:
+					case EntityID.NPCID.CURSED_HAMMER:
 						return "Cursed Hammer";
-					case 84:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						return "Enchanted Sword";
-					case 85:
+					case EntityID.NPCID.MIMIC:
 						return "Mimic";
-					case 86:
+					case EntityID.NPCID.UNICORN:
 						return "Unicorn";
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						return "Wyvern";
-					case 93:
+					case EntityID.NPCID.GIANT_BAT:
 						return "Giant Bat";
-					case 94:
+					case EntityID.NPCID.CORRUPTOR:
 						return "Corruptor";
-					case 95:
-					case 96:
-					case 97:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
 						return "Digger";
-					case 98:
-					case 99:
-					case 100:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						return "World Feeder";
-					case 101:
+					case EntityID.NPCID.CLINGER:
 						return "Clinger";
-					case 102:
+					case EntityID.NPCID.ANGLER_FISH:
 						return "Angler Fish";
-					case 103:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						return "Green Jellyfish";
-					case 104:
+					case EntityID.NPCID.WEREWOLF:
 						return "Werewolf";
-					case 105:
+					case EntityID.NPCID.BOUND_GOBLIN:
 						return "Bound Goblin";
-					case 106:
+					case EntityID.NPCID.BOUND_WIZARD:
 						return "Bound Wizard";
-					case 107:
+					case EntityID.NPCID.GOBLIN_TINKERER:
 						return "Goblin Tinkerer";
-					case 108:
+					case EntityID.NPCID.WIZARD:
 						return "Wizard";
-					case 109:
+					case EntityID.NPCID.CLOWN:
 						return "Clown";
-					case 110:
+					case EntityID.NPCID.SKELETON_ARCHER:
 						return "Skeleton Archer";
-					case 111:
+					case EntityID.NPCID.GOBLIN_ARCHER:
 						return "Goblin Archer";
-					case 112:
+					case EntityID.NPCID.VILE_SPIT:
 						return "Vile Spit";
-					case 113:
-					case 114:
+					case EntityID.NPCID.WALL_OF_FLESH:
+					case EntityID.NPCID.WALL_OF_FLESH_EYE:
 						return "Wall of Flesh";
-					case 115:
-					case 116:
+					case EntityID.NPCID.THE_HUNGRY:
+					case EntityID.NPCID.THE_HUNGRY_II:
 						return "The Hungry";
-					case 117:
-					case 118:
-					case 119:
+					case EntityID.NPCID.LEECH_HEAD:
+					case EntityID.NPCID.LEECH_BODY:
+					case EntityID.NPCID.LEECH_TAIL:
 						return "Leech";
-					case 120:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
 						return "Chaos Elemental";
-					case 121:
+					case EntityID.NPCID.SLIMER:
 						return "Slimer";
-					case 122:
+					case EntityID.NPCID.GASTROPOD:
 						return "Gastropod";
-					case 123:
+					case EntityID.NPCID.BOUND_MECHANIC:
 						return "Bound Mechanic";
-					case 124:
+					case EntityID.NPCID.MECHANIC:
 						return "Mechanic";
-					case 125:
+					case EntityID.NPCID.RETINAZER:
 						return "Retinazer";
-					case 126:
+					case EntityID.NPCID.SPAZMATISM:
 						return "Spazmatism";
-					case 127:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						return "Skeletron Prime";
-					case 128:
+					case EntityID.NPCID.PRIME_CANNON:
 						return "Prime Cannon";
-					case 129:
+					case EntityID.NPCID.PRIME_SAW:
 						return "Prime Saw";
-					case 130:
+					case EntityID.NPCID.PRIME_VICE:
 						return "Prime Vice";
-					case 131:
+					case EntityID.NPCID.PRIME_LASER:
 						return "Prime Laser";
-					case 132:
+					case EntityID.NPCID.BALD_ZOMBIE:
 						return "Zombie";
-					case 133:
+					case EntityID.NPCID.WANDERING_EYE:
 						return "Wandering Eye";
-					case 134:
-					case 135:
-					case 136:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						return "The Destroyer";
-					case 137:
+					case EntityID.NPCID.ILLUMINANT_BAT:
 						return "Illuminant Bat";
-					case 138:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						return "Illuminant Slime";
-					case 139:
+					case EntityID.NPCID.PROBE:
 						return "Probe";
-					case 140:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						return "Possessed Armor";
-					case 141:
+					case EntityID.NPCID.TOXIC_SLUDGE:
 						return "Toxic Sludge";
-					case 142:
+					case EntityID.NPCID.SANTA_CLAUS:
 						return "Santa Claus";
-					case 143:
+					case EntityID.NPCID.SNOWMAN_GANGSTA:
 						return "Snowman Gangsta";
-					case 144:
+					case EntityID.NPCID.MISTER_STABBY:
 						return "Mister Stabby";
-					case 145:
+					case EntityID.NPCID.SNOW_BALLA:
 						return "Snow Balla";
-					case 147:
+					case EntityID.NPCID.ALBINO_ANTLION:
 						return "Albino Antlion";
-					case 148:
+					case EntityID.NPCID.ORKA:
 						return "Orca";
-					case 149:
+					case EntityID.NPCID.VAMPIRE_MINER:
 						return "Vampire Miner";
-					case 150:
+					case EntityID.NPCID.SHADOW_SLIME:
 						return "Shadow Slime";
-					case 151:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						return "Shadow Hammer";
-					case 152:
+					case EntityID.NPCID.SHADOW_MUMMY:
 						return "Shadow Mummy";
-					case 153:
+					case EntityID.NPCID.SPECTRAL_GASTROPOD:
 						return "Spectral Gastropod";
-					case 154:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						return "Spectral Elemental";
-					case 155:
+					case EntityID.NPCID.SPECTRAL_MUMMY:
 						return "Spectral Mummy";
-					case 156:
+					case EntityID.NPCID.DRAGON_SNATCHER:
 						return "Dragon Snatcher";
-					case 157:
+					case EntityID.NPCID.DRAGON_HORNET:
 						return "Dragon Hornet";
-					case 158:
+					case EntityID.NPCID.DRAGON_SKULL:
 						return "Dragon Skull";
-					case 159:
-					case 160:
-					case 161:
-					case 162:
-					case 163:
-					case 164:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						return "Arch Wyvern";
-					case 165:
+					case EntityID.NPCID.ARCH_DEMON:
 						return "Arch Demon";
-					case 166:
+					case EntityID.NPCID.OCRAM:
 						return "Ocram";
-					case 167:
+					case EntityID.NPCID.SERVANT_OF_OCRAM:
 						return "Servant of Ocram";
-					case 168:
-					case 169:
-					case 170:
-					case 171:
-					case 172:
+#if VERSION_101
+					case EntityID.NPCID.CATARACT_EYE:
+					case EntityID.NPCID.SLEEPY_EYE:
+					case EntityID.NPCID.DIALATED_EYE:
+					case EntityID.NPCID.GREEN_EYE:
+					case EntityID.NPCID.PURPLE_EYE:
 						return "Demon Eye";
-					case 173:
-					case 174:
-					case 175:
-					case 176:
-					case 177:
-					case 178:
-					case 179:
+					case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SLIMED_ZOMBIE:
+					case EntityID.NPCID.SWAMP_ZOMBIE:
+					case EntityID.NPCID.TWIGGY_ZOMBIE:
+					case EntityID.NPCID.FEMALE_ZOMBIE:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 						return "Zombie";
+#endif
 					default:
 						return "";
 				}
-#endif
 			}
 			if (LangOption == (int)ID.GERMAN)
 			{
-#if VERSION_INITIAL
-				switch (l)
+				switch ((EntityID.NPCID)l)
 				{
-				case -18:
-				case -1:
-					return "Schleimling";
-				case -2:
-					return "Flugschleimi";
-				case -3:
-					return "Grüner Schleim";
-				case -4:
-					return "Pinky";
-				case -5:
-					return "Schleimbaby";
-				case -6:
-					return "Schwarzer Schleim";
-				case -7:
-					return "Lila Schleim";
-				case -8:
-					return "Roter Schleim";
-				case -9:
-					return "Gelber Schleim";
-				case -10:
-					return "Dschungelschleim";
-				case -11:
-					return "Minifresser";
-				case -12:
-					return "Maxifresser";
-				case -13:
-					return "Kleinknochen";
-				case -14:
-					return "Großknochen";
-				case -15:
-					return "Mammutskelett";
-				case -16:
-					return "Minihornisse";
-				case -17:
-					return "Riesenhornisse";
-				case 1:
-					return "Blauer Schleim";
-				case 2:
-					return "Dämonenauge";
-				case 3:
-					return "Zombie";
-				case 4:
-					return "Auge von Cthulhu";
-				case 5:
-					return "Diener von Cthulhu";
-				case 6:
-					return "Seelenfresser";
-				case 7:
-				case 8:
-				case 9:
-					return "Verschlinger";
-				case 10:
-				case 11:
-				case 12:
-					return "Riesenwurm";
-				case 13:
-				case 14:
-				case 15:
-					return "Weltenfresser";
-				case 16:
-					return "Schleimmami";
-				case 17:
-					return "Händler";
-				case 18:
-					return "Krankenschwester";
-				case 19:
-					return "Waffenhändler";
-				case 20:
-					return "Dryade";
-				case 21:
-					return "Skelett";
-				case 22:
-					return "Fremdenführer";
-				case 23:
-					return "Meteorenkopf";
-				case 24:
-					return "Feuer-Imp";
-				case 25:
-					return "Flammenkugel";
-				case 26:
-					return "Goblin-Arbeiter";
-				case 27:
-					return "Goblin-Dieb";
-				case 28:
-					return "Goblin-Krieger";
-				case 29:
-					return "Goblin-Hexer";
-				case 30:
-					return "Chaoskugel";
-				case 31:
-					return "Wutknochen";
-				case 32:
-					return "Düstermagier";
-				case 33:
-					return "Wasserkugel";
-				case 34:
-					return "Fluchschädel";
-				case 35:
-				case 36:
-					return "Skeletron";
-				case 37:
-					return "Greis";
-				case 38:
-					return "Sprengmeister";
-				case 39:
-				case 40:
-				case 41:
-					return "Knochenschlange";
-				case 42:
-					return "Hornisse";
-				case 43:
-					return "Menschenfresser";
-				case 44:
-					return "Untoter Minenarbeiter";
-				case 45:
-					return "Tim";
-				case 46:
-					return "Hase";
-				case 47:
-					return "Verderbnishase";
-				case 48:
-					return "Harpyie";
-				case 49:
-					return "Höhlenfledermaus";
-				case 50:
-					return "Schleimkönig";
-				case 51:
-					return "Dschungelfledermaus";
-				case 52:
-					return "Doktor Bones";
-				case 53:
-					return "Bräutigam";
-				case 54:
-					return "Schneider";
-				case 55:
-					return "Goldfisch";
-				case 56:
-					return "Schnapper";
-				case 57:
-					return "Verderbnisgoldfisch";
-				case 58:
-					return "Piranha";
-				case 59:
-					return "Lavaschleim";
-				case 60:
-					return "Höllenfledermaus";
-				case 61:
-					return "Geier";
-				case 62:
-					return "Dämon";
-				case 63:
-					return "Blauqualle";
-				case 64:
-					return "Pinkqualle";
-				case 65:
-					return "Hai";
-				case 66:
-					return "Voodoo-Dämon";
-				case 67:
-					return "Krabbe";
-				case 68:
-					return "Verlies-Wächter";
-				case 69:
-					return "Ameisenlöwe";
-				case 70:
-					return "Nagelball";
-				case 71:
-					return "Verliesschleim";
-				case 72:
-					return "Flammenrad";
-				case 73:
-					return "Goblin-Späher";
-				case 74:
-					return "Vogel";
-				case 75:
-					return "Pixie";
-				case 77:
-					return "Gepanzertes Skelett";
-				case 78:
-					return "Mumie";
-				case 79:
-					return "Dunkle Mumie";
-				case 80:
-					return "Helle Mumie";
-				case 81:
-					return "Verderbnisschleimi";
-				case 82:
-					return "Monstergeist";
-				case 83:
-					return "Verfluchter Hammer";
-				case 84:
-					return "Verzaubertes Schwert";
-				case 85:
-					return "Mimic";
-				case 86:
-					return "Einhorn";
-				case 87:
-				case 88:
-				case 89:
-				case 90:
-				case 91:
-				case 92:
-					return "Lindwurm";
-				case 93:
-					return "Riesenfledermaus";
-				case 94:
-					return "Verderber";
-				case 95:
-				case 96:
-				case 97:
-					return "Gräber";
-				case 98:
-				case 99:
-				case 100:
-					return "Weltspeiser";
-				case 101:
-					return "Klette";
-				case 102:
-					return "Seeteufel";
-				case 103:
-					return "Grüne Qualle";
-				case 104:
-					return "Werwolf";
-				case 105:
-					return "Gebundener Goblin";
-				case 106:
-					return "Gebundener Zauberer";
-				case 107:
-					return "Goblin-Tüftler";
-				case 108:
-					return "Zauberer";
-				case 109:
-					return "Clown";
-				case 110:
-					return "Skelettbogenschütze";
-				case 111:
-					return "Goblin-Bogenschütze";
-				case 112:
-					return "Ekelspeichel";
-				case 113:
-				case 114:
-					return "Fleischwand";
-				case 115:
-				case 116:
-					return "Fressmaul";
-				case 117:
-				case 118:
-				case 119:
-					return "Blutegel";
-				case 120:
-					return "Chaos Elementar";
-				case 121:
-					return "Flugschleim";
-				case 122:
-					return "Bauchfüßler";
-				case 123:
-					return "Gebundene Mechanikerin";
-				case 124:
-					return "Mechanikerin";
-				case 125:
-					return "Retinazer";
-				case 126:
-					return "Spazmatism";
-				case 127:
-					return "Skeletron Prime";
-				case 128:
-					return "Super-Kanone";
-				case 129:
-					return "Super-Säge";
-				case 130:
-					return "Super-Zange";
-				case 131:
-					return "Super-Laser";
-				case 132:
-					return "Zombie";
-				case 133:
-					return "Wanderndes Auge";
-				case 134:
-				case 135:
-				case 136:
-					return "Der Zerstörer";
-				case 137:
-					return "Leuchtfledermaus";
-				case 138:
-					return "Leuchtender Schleim";
-				case 139:
-					return "Sonde";
-				case 140:
-					return "Geisterrüstung";
-				case 141:
-					return "Giftiger Schlamm";
-				case 142:
-					return "Weihnachtsmann";
-				case 143:
-					return "Gangster Schneemann";
-				case 144:
-					return "Herr Stabby";
-				case 145:
-					return "Schnee Balla";
-				case 147:
-					return "Albino Ameisenlöwe";
-				case 148:
-					return "Orca";
-				case 149:
-					return "Vampire Miner";
-				case 150:
-					return "Schattenschleim";
-				case 151:
-					return "Schattenhammer";
-				case 152:
-					return "Schattenmumie";
-				case 153:
-					return "Gespenstischer Bauchfüßler";
-				case 154:
-					return "Spectral Elemental";
-				case 155:
-					return "Gespenstische Mumie";
-				case 156:
-					return "Drachen-Schnapper";
-				case 157:
-					return "Drachenhornisse";
-				case 158:
-					return "Drachenschädel";
-				case 159:
-				case 160:
-				case 161:
-				case 162:
-				case 163:
-				case 164:
-					return "Erz-Lindwurm";
-				case 165:
-					return "Erz-Dämon";
-				case 166:
-					return "Ocram";
-				case 167:
-					return "Diener von Ocram";
-				default:
-					return "";
-				}
-#else
-				switch (l)
-				{
-					case -18:
-					case -1:
+					case EntityID.NPCID.SLIMELING2:
+					case EntityID.NPCID.SLIMELING:
 						return "Schleimling";
-					case -2:
+					case EntityID.NPCID.SLIMER2:
 						return "Flugschleimi";
-					case -3:
+					case EntityID.NPCID.GREEN_SLIME:
 						return "Grüner Schleim";
-					case -4:
+					case EntityID.NPCID.PINKY:
 						return "Pinky";
-					case -5:
+					case EntityID.NPCID.BABY_SLIME:
 						return "Schleimbaby";
-					case -6:
+					case EntityID.NPCID.BLACK_SLIME:
 						return "Schwarzer Schleim";
-					case -7:
+					case EntityID.NPCID.PURPLE_SLIME:
 						return "Lila Schleim";
-					case -8:
+					case EntityID.NPCID.RED_SLIME:
 						return "Roter Schleim";
-					case -9:
+					case EntityID.NPCID.YELLOW_SLIME:
 						return "Gelber Schleim";
-					case -10:
+					case EntityID.NPCID.JUNGLE_SLIME:
 						return "Dschungelschleim";
-					case -11:
-					case -12:
+#if VERSION_101
+					case EntityID.NPCID.LITTLE_EATER:
+					case EntityID.NPCID.BIG_EATER:
 						return "Seelenfresser";
-					case -13:
-					case -14:
+					case EntityID.NPCID.SHORT_BONES:
+					case EntityID.NPCID.BIG_BONED:
 						return "Wutknochen";
-					case -15:
+					case EntityID.NPCID.HEAVY_SKELETON:
 						return "Gepanzertes Skelett";
-					case -16:
-					case -17:
+					case EntityID.NPCID.LITTLE_STINGER:
+					case EntityID.NPCID.BIG_STINGER:
 						return "Hornisse";
-					case -26:
-					case -27:
-					case -28:
-					case -29:
-					case -30:
-					case -31:
-					case -32:
-					case -33:
-					case -34:
-					case -35:
-					case -36:
-					case -37:
-					case -44:
-					case -45:
+					case EntityID.NPCID.SMALL_ZOMBIE:
+					case EntityID.NPCID.BIG_ZOMBIE:
+					case EntityID.NPCID.SMALL_BALD_ZOMBIE:
+					case EntityID.NPCID.BIG_BALD_ZOMBIE:
+					case EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.BIG_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SMALL_SLIMED_ZOMBIE:
+					case EntityID.NPCID.BIG_SLIMED_ZOMBIE:
+					case EntityID.NPCID.SMALL_SWAMP_ZOMBIE:
+					case EntityID.NPCID.BIG_SWAMP_ZOMBIE:
+					case EntityID.NPCID.SMALL_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.BIG_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.SMALL_FEMALE_ZOMBIE:
+					case EntityID.NPCID.BIG_FEMALE_ZOMBIE:
 						return "Zombie";
-					case -38:
-					case -39:
-					case -40:
-					case -41:
-					case -42:
-					case -43:
+					case EntityID.NPCID.CATARACT_EYE2:
+					case EntityID.NPCID.SLEEPY_EYE2:
+					case EntityID.NPCID.DIALATED_EYE2:
+					case EntityID.NPCID.GREEN_EYE2:
+					case EntityID.NPCID.PURPLE_EYE2:
+					case EntityID.NPCID.DEMON_EYE2:
 						return "Dämonenauge";
-					case 1:
+#else
+					case EntityID.NPCID.LITTLE_EATER:
+						return "Minifresser";
+					case EntityID.NPCID.BIG_EATER:
+						return "Maxifresser";
+					case EntityID.NPCID.SHORT_BONES:
+						return "Kleinknochen";
+					case EntityID.NPCID.BIG_BONED:
+						return "Großknochen";
+					case EntityID.NPCID.HEAVY_SKELETON:
+						return "Mammutskelett";
+					case EntityID.NPCID.LITTLE_STINGER:
+						return "Minihornisse";
+					case EntityID.NPCID.BIG_STINGER:
+						return "Riesenhornisse";
+#endif
+					case EntityID.NPCID.SLIME:
 						return "Blauer Schleim";
-					case 2:
+					case EntityID.NPCID.DEMON_EYE:
 						return "Dämonenauge";
-					case 3:
+					case EntityID.NPCID.ZOMBIE:
 						return "Zombie";
-					case 4:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						return "Auge von Cthulhu";
-					case 5:
+					case EntityID.NPCID.SERVANT_OF_CTHULHU:
 						return "Diener von Cthulhu";
-					case 6:
+					case EntityID.NPCID.EATER_OF_SOULS:
 						return "Seelenfresser";
-					case 7:
-					case 8:
-					case 9:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
 						return "Verschlinger";
-					case 10:
-					case 11:
-					case 12:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						return "Riesenwurm";
-					case 13:
-					case 14:
-					case 15:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						return "Weltenfresser";
-					case 16:
+					case EntityID.NPCID.MOTHER_SLIME:
 						return "Schleimmami";
-					case 17:
+					case EntityID.NPCID.MERCHANT:
 						return "Händler";
-					case 18:
+					case EntityID.NPCID.NURSE:
 						return "Krankenschwester";
-					case 19:
+					case EntityID.NPCID.ARMS_DEALER:
 						return "Waffenhändler";
-					case 20:
+					case EntityID.NPCID.DRYAD:
 						return "Dryade";
-					case 21:
+					case EntityID.NPCID.SKELETON:
 						return "Skelett";
-					case 22:
+					case EntityID.NPCID.GUIDE:
 						return "Fremdenführer";
-					case 23:
+					case EntityID.NPCID.METEOR_HEAD:
 						return "Meteorenkopf";
-					case 24:
+					case EntityID.NPCID.FIRE_IMP:
 						return "Feuer-Imp";
-					case 25:
+					case EntityID.NPCID.BURNING_SPHERE:
 						return "Flammenkugel";
-					case 26:
+					case EntityID.NPCID.GOBLIN_PEON:
 						return "Goblin-Arbeiter";
-					case 27:
+					case EntityID.NPCID.GOBLIN_THIEF:
 						return "Goblin-Dieb";
-					case 28:
+					case EntityID.NPCID.GOBLIN_WARRIOR:
 						return "Goblin-Krieger";
-					case 29:
+					case EntityID.NPCID.GOBLIN_SORCERER:
 						return "Goblin-Hexer";
-					case 30:
+					case EntityID.NPCID.CHAOS_BALL:
 						return "Chaoskugel";
-					case 31:
+					case EntityID.NPCID.BONES:
 						return "Wutknochen";
-					case 32:
+					case EntityID.NPCID.DARK_CASTER:
 						return "Düstermagier";
-					case 33:
+					case EntityID.NPCID.WATER_SPHERE:
 						return "Wasserkugel";
-					case 34:
+					case EntityID.NPCID.CURSED_SKULL:
 						return "Fluchschädel";
-					case 35:
-					case 36:
+					case EntityID.NPCID.SKELETRON_HEAD:
+					case EntityID.NPCID.SKELETRON_HAND:
 						return "Skeletron";
-					case 37:
+					case EntityID.NPCID.OLD_MAN:
 						return "Greis";
-					case 38:
+					case EntityID.NPCID.DEMOLITIONIST:
 						return "Sprengmeister";
-					case 39:
-					case 40:
-					case 41:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						return "Knochenschlange";
-					case 42:
+					case EntityID.NPCID.HORNET:
 						return "Hornisse";
-					case 43:
+					case EntityID.NPCID.MAN_EATER:
 						return "Menschenfresser";
-					case 44:
+					case EntityID.NPCID.UNDEAD_MINER:
 						return "Untoter Minenarbeiter";
-					case 45:
+					case EntityID.NPCID.TIM:
 						return "Tim";
-					case 46:
+					case EntityID.NPCID.BUNNY:
 						return "Hase";
-					case 47:
+					case EntityID.NPCID.CORRUPT_BUNNY:
 						return "Verderbnishase";
-					case 48:
+					case EntityID.NPCID.HARPY:
 						return "Harpyie";
-					case 49:
+					case EntityID.NPCID.CAVE_BAT:
 						return "Höhlenfledermaus";
-					case 50:
+					case EntityID.NPCID.KING_SLIME:
 						return "Schleimkönig";
-					case 51:
+					case EntityID.NPCID.JUNGLE_BAT:
 						return "Dschungelfledermaus";
-					case 52:
+					case EntityID.NPCID.DOCTOR_BONES:
 						return "Doktor Bones";
-					case 53:
+					case EntityID.NPCID.THE_GROOM:
 						return "Bräutigam";
-					case 54:
+					case EntityID.NPCID.CLOTHIER:
 						return "Schneider";
-					case 55:
+					case EntityID.NPCID.GOLDFISH:
 						return "Goldfisch";
-					case 56:
+					case EntityID.NPCID.SNATCHER:
 						return "Schnapper";
-					case 57:
+					case EntityID.NPCID.CORRUPT_GOLDFISH:
 						return "Verderbnisgoldfisch";
-					case 58:
+					case EntityID.NPCID.PIRANHA:
 						return "Piranha";
-					case 59:
+					case EntityID.NPCID.LAVA_SLIME:
 						return "Lavaschleim";
-					case 60:
+					case EntityID.NPCID.HELLBAT:
 						return "Höllenfledermaus";
-					case 61:
+					case EntityID.NPCID.VULTURE:
 						return "Geier";
-					case 62:
+					case EntityID.NPCID.DEMON:
 						return "Dämon";
-					case 63:
+					case EntityID.NPCID.BLUE_JELLYFISH:
 						return "Blauqualle";
-					case 64:
+					case EntityID.NPCID.PINK_JELLYFISH:
 						return "Pinkqualle";
-					case 65:
+					case EntityID.NPCID.SHARK:
 						return "Hai";
-					case 66:
+					case EntityID.NPCID.VOODOO_DEMON:
 						return "Voodoo-Dämon";
-					case 67:
+					case EntityID.NPCID.CRAB:
 						return "Krabbe";
-					case 68:
+					case EntityID.NPCID.DUNGEON_GUARDIAN:
 						return "Verlies-Wächter";
-					case 69:
+					case EntityID.NPCID.ANTLION:
 						return "Ameisenlöwe";
-					case 70:
+					case EntityID.NPCID.SPIKE_BALL:
 						return "Nagelball";
-					case 71:
+					case EntityID.NPCID.DUNGEON_SLIME:
 						return "Verliesschleim";
-					case 72:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						return "Flammenrad";
-					case 73:
+					case EntityID.NPCID.GOBLIN_SCOUT:
 						return "Goblin-Späher";
-					case 74:
+					case EntityID.NPCID.BIRD:
 						return "Vogel";
-					case 75:
+					case EntityID.NPCID.PIXIE:
 						return "Pixie";
-					case 77:
+					case EntityID.NPCID.ARMORED_SKELETON:
 						return "Gepanzertes Skelett";
-					case 78:
+					case EntityID.NPCID.MUMMY:
 						return "Mumie";
-					case 79:
+					case EntityID.NPCID.DARK_MUMMY:
 						return "Dunkle Mumie";
-					case 80:
+					case EntityID.NPCID.LIGHT_MUMMY:
 						return "Helle Mumie";
-					case 81:
+					case EntityID.NPCID.CORRUPT_SLIME:
 						return "Verderbnisschleimi";
-					case 82:
+					case EntityID.NPCID.WRAITH:
 						return "Monstergeist";
-					case 83:
+					case EntityID.NPCID.CURSED_HAMMER:
 						return "Verfluchter Hammer";
-					case 84:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						return "Verzaubertes Schwert";
-					case 85:
+					case EntityID.NPCID.MIMIC:
 						return "Mimic";
-					case 86:
+					case EntityID.NPCID.UNICORN:
 						return "Einhorn";
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						return "Lindwurm";
-					case 93:
+					case EntityID.NPCID.GIANT_BAT:
 						return "Riesenfledermaus";
-					case 94:
+					case EntityID.NPCID.CORRUPTOR:
 						return "Verderber";
-					case 95:
-					case 96:
-					case 97:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
 						return "Gräber";
-					case 98:
-					case 99:
-					case 100:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						return "Weltspeiser";
-					case 101:
+					case EntityID.NPCID.CLINGER:
 						return "Klette";
-					case 102:
+					case EntityID.NPCID.ANGLER_FISH:
 						return "Seeteufel";
-					case 103:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						return "Grüne Qualle";
-					case 104:
+					case EntityID.NPCID.WEREWOLF:
 						return "Werwolf";
-					case 105:
+					case EntityID.NPCID.BOUND_GOBLIN:
 						return "Gebundener Goblin";
-					case 106:
+					case EntityID.NPCID.BOUND_WIZARD:
 						return "Gebundener Zauberer";
-					case 107:
+					case EntityID.NPCID.GOBLIN_TINKERER:
 						return "Goblin-Tüftler";
-					case 108:
+					case EntityID.NPCID.WIZARD:
 						return "Zauberer";
-					case 109:
+					case EntityID.NPCID.CLOWN:
 						return "Clown";
-					case 110:
+					case EntityID.NPCID.SKELETON_ARCHER:
 						return "Skelettbogenschütze";
-					case 111:
+					case EntityID.NPCID.GOBLIN_ARCHER:
 						return "Goblin-Bogenschütze";
-					case 112:
+					case EntityID.NPCID.VILE_SPIT:
 						return "Ekelspeichel";
-					case 113:
-					case 114:
+					case EntityID.NPCID.WALL_OF_FLESH:
+					case EntityID.NPCID.WALL_OF_FLESH_EYE:
 						return "Fleischwand";
-					case 115:
-					case 116:
+					case EntityID.NPCID.THE_HUNGRY:
+					case EntityID.NPCID.THE_HUNGRY_II:
 						return "Fressmaul";
-					case 117:
-					case 118:
-					case 119:
+					case EntityID.NPCID.LEECH_HEAD:
+					case EntityID.NPCID.LEECH_BODY:
+					case EntityID.NPCID.LEECH_TAIL:
 						return "Blutegel";
-					case 120:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
 						return "Chaos Elementar";
-					case 121:
+					case EntityID.NPCID.SLIMER:
 						return "Flugschleim";
-					case 122:
+					case EntityID.NPCID.GASTROPOD:
 						return "Bauchfüßler";
-					case 123:
+					case EntityID.NPCID.BOUND_MECHANIC:
 						return "Gebundene Mechanikerin";
-					case 124:
+					case EntityID.NPCID.MECHANIC:
 						return "Mechanikerin";
-					case 125:
+					case EntityID.NPCID.RETINAZER:
 						return "Retinazer";
-					case 126:
+					case EntityID.NPCID.SPAZMATISM:
 						return "Spazmatism";
-					case 127:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						return "Skeletron Prime";
-					case 128:
+					case EntityID.NPCID.PRIME_CANNON:
 						return "Super-Kanone";
-					case 129:
+					case EntityID.NPCID.PRIME_SAW:
 						return "Super-Säge";
-					case 130:
+					case EntityID.NPCID.PRIME_VICE:
 						return "Super-Zange";
-					case 131:
+					case EntityID.NPCID.PRIME_LASER:
 						return "Super-Laser";
-					case 132:
+					case EntityID.NPCID.BALD_ZOMBIE:
 						return "Zombie";
-					case 133:
+					case EntityID.NPCID.WANDERING_EYE:
 						return "Wanderndes Auge";
-					case 134:
-					case 135:
-					case 136:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						return "Der Zerstörer";
-					case 137:
+					case EntityID.NPCID.ILLUMINANT_BAT:
 						return "Leuchtfledermaus";
-					case 138:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						return "Leuchtender Schleim";
-					case 139:
+					case EntityID.NPCID.PROBE:
 						return "Sonde";
-					case 140:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						return "Geisterrüstung";
-					case 141:
+					case EntityID.NPCID.TOXIC_SLUDGE:
 						return "Giftiger Schlamm";
-					case 142:
+					case EntityID.NPCID.SANTA_CLAUS:
 						return "Weihnachtsmann";
-					case 143:
+					case EntityID.NPCID.SNOWMAN_GANGSTA:
 						return "Gangster Schneemann";
-					case 144:
+					case EntityID.NPCID.MISTER_STABBY:
 						return "Herr Stabby";
-					case 145:
+					case EntityID.NPCID.SNOW_BALLA:
 						return "Schnee Balla";
-					case 147:
+					case EntityID.NPCID.ALBINO_ANTLION:
 						return "Albino Ameisenlöwe";
-					case 148:
+					case EntityID.NPCID.ORKA:
 						return "Orca";
-					case 149:
+					case EntityID.NPCID.VAMPIRE_MINER:
 						return "Vampire Miner";
-					case 150:
+					case EntityID.NPCID.SHADOW_SLIME:
 						return "Schattenschleim";
-					case 151:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						return "Schattenhammer";
-					case 152:
+					case EntityID.NPCID.SHADOW_MUMMY:
 						return "Schattenmumie";
-					case 153:
+					case EntityID.NPCID.SPECTRAL_GASTROPOD:
 						return "Gespenstischer Bauchfüßler";
-					case 154:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						return "Spectral Elemental";
-					case 155:
+					case EntityID.NPCID.SPECTRAL_MUMMY:
 						return "Gespenstische Mumie";
-					case 156:
+					case EntityID.NPCID.DRAGON_SNATCHER:
 						return "Drachen-Schnapper";
-					case 157:
+					case EntityID.NPCID.DRAGON_HORNET:
 						return "Drachenhornisse";
-					case 158:
+					case EntityID.NPCID.DRAGON_SKULL:
 						return "Drachenschädel";
-					case 159:
-					case 160:
-					case 161:
-					case 162:
-					case 163:
-					case 164:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						return "Erz-Lindwurm";
-					case 165:
+					case EntityID.NPCID.ARCH_DEMON:
 						return "Erz-Dämon";
-					case 166:
+					case EntityID.NPCID.OCRAM:
 						return "Ocram";
-					case 167:
+					case EntityID.NPCID.SERVANT_OF_OCRAM:
 						return "Diener von Ocram";
-					case 168:
-					case 169:
-					case 170:
-					case 171:
-					case 172:
+#if VERSION_101
+					case EntityID.NPCID.CATARACT_EYE:
+					case EntityID.NPCID.SLEEPY_EYE:
+					case EntityID.NPCID.DIALATED_EYE:
+					case EntityID.NPCID.GREEN_EYE:
+					case EntityID.NPCID.PURPLE_EYE:
 						return "Dämonenauge";
-					case 173:
-					case 174:
-					case 175:
-					case 176:
-					case 177:
-					case 178:
-					case 179:
+					case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SLIMED_ZOMBIE:
+					case EntityID.NPCID.SWAMP_ZOMBIE:
+					case EntityID.NPCID.TWIGGY_ZOMBIE:
+					case EntityID.NPCID.FEMALE_ZOMBIE:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 						return "Zombie";
+#endif
 					default:
 						return "";
 				}
-#endif
 			}
 			if (LangOption == (int)ID.ITALIAN)
 			{
-#if VERSION_INITIAL
-				switch (l)
+				switch ((EntityID.NPCID)l)
 				{
-				case -18:
-				case -1:
-					return "Slimeling";
-				case -2:
-					return "Slimer";
-				case -3:
-					return "Slime verde";
-				case -4:
-					return "Mignolo";
-				case -5:
-					return "Slime baby";
-				case -6:
-					return "Slime nero";
-				case -7:
-					return "Slime viola";
-				case -8:
-					return "Slime rosso";
-				case -9:
-					return "Slime giallo";
-				case -10:
-					return "Slime della giungla";
-				case -11:
-					return "Piccolo mangiatore";
-				case -12:
-					return "Grande mangiatore";
-				case -13:
-					return "Ossa corte";
-				case -14:
-					return "Disossato";
-				case -15:
-					return "Scheletro pesante";
-				case -16:
-					return "Vespa piccola";
-				case -17:
-					return "Vespa grande";
-				case 1:
-					return "Slime blu";
-				case 2:
-					return "Occhio del Demone";
-				case 3:
-					return "Zombie";
-				case 4:
-					return "Occhio di Cthulhu";
-				case 5:
-					return "Servo di Cthulhu";
-				case 6:
-					return "Mangiatore di anime";
-				case 7:
-				case 8:
-				case 9:
-					return "Divoratore";
-				case 10:
-				case 11:
-				case 12:
-					return "Verme gigante";
-				case 13:
-				case 14:
-				case 15:
-					return "Mangiatore di mondi";
-				case 16:
-					return "Slime madre";
-				case 17:
-					return "Mercante";
-				case 18:
-					return "Infermiera";
-				case 19:
-					return "Mercante di armi";
-				case 20:
-					return "Driade";
-				case 21:
-					return "Scheletro";
-				case 22:
-					return "Guida";
-				case 23:
-					return "Testa di meteorite";
-				case 24:
-					return "Diavoletto di fuoco";
-				case 25:
-					return "Sfera infuocata";
-				case 26:
-					return "Goblin operaio";
-				case 27:
-					return "Goblin ladro";
-				case 28:
-					return "Goblin guerriero";
-				case 29:
-					return "Goblin stregone";
-				case 30:
-					return "Palla del caos";
-				case 31:
-					return "Ossa arrabbiate";
-				case 32:
-					return "Lanciatore oscuro";
-				case 33:
-					return "Sfera d'acqua";
-				case 34:
-					return "Teschio maledetto";
-				case 35:
-				case 36:
-					return "Skeletron";
-				case 37:
-					return "Vecchio";
-				case 38:
-					return "Esperto in demolizioni";
-				case 39:
-				case 40:
-				case 41:
-					return "Serpente di ossa";
-				case 42:
-					return "Calabrone";
-				case 43:
-					return "Mangiauomini";
-				case 44:
-					return "Minatore non-morto";
-				case 45:
-					return "Tim";
-				case 46:
-					return "Coniglio";
-				case 47:
-					return "Coniglio corrotto";
-				case 48:
-					return "Arpia";
-				case 49:
-					return "Pipistrello della caverna";
-				case 50:
-					return "Slime re";
-				case 51:
-					return "Pipistrello della giungla";
-				case 52:
-					return "Dottor ossa";
-				case 53:
-					return "Lo sposo";
-				case 54:
-					return "Mercante di abiti";
-				case 55:
-					return "Pesce rosso";
-				case 56:
-					return "Pianta afferratrice";
-				case 57:
-					return "Pesce rosso corrotto";
-				case 58:
-					return "Piranha";
-				case 59:
-					return "Slime di lava";
-				case 60:
-					return "Pipistrello dell'inferno";
-				case 61:
-					return "Avvoltoio";
-				case 62:
-					return "Demone";
-				case 63:
-					return "Medusa blu";
-				case 64:
-					return "Medusa rosa";
-				case 65:
-					return "Squalo";
-				case 66:
-					return "Demone voodoo";
-				case 67:
-					return "Granchio";
-				case 68:
-					return "Guardiano della Dungeon";
-				case 69:
-					return "Formicaleone";
-				case 70:
-					return "Sfera con spuntoni";
-				case 71:
-					return "Slime della Dungeon";
-				case 72:
-					return "Ruota ardente";
-				case 73:
-					return "Goblin ricognitore";
-				case 74:
-					return "Uccello";
-				case 75:
-					return "Folletto";
-				case 76:
-					return "";
-				case 77:
-					return "Scheletro corazzato";
-				case 78:
-					return "Mummia";
-				case 79:
-					return "Mummia oscura";
-				case 80:
-					return "Mummia chiara";
-				case 81:
-					return "Slime corrotto";
-				case 82:
-					return "Fantasma";
-				case 83:
-					return "Martello maledetto";
-				case 84:
-					return "Spada incantata";
-				case 85:
-					return "Sosia";
-				case 86:
-					return "Unicorno";
-				case 87:
-				case 88:
-				case 89:
-				case 90:
-				case 91:
-				case 92:
-					return "Viverna";
-				case 93:
-					return "Pipistrello gigante";
-				case 94:
-					return "Corruttore";
-				case 95:
-				case 96:
-				case 97:
-					return "Scavatore";
-				case 98:
-				case 99:
-				case 100:
-					return "Alimentatore del mondo";
-				case 101:
-					return "Appiccicoso";
-				case 102:
-					return "Rana pescatrice";
-				case 103:
-					return "Medusa verde";
-				case 104:
-					return "Lupo mannaro";
-				case 105:
-					return "Goblin legato";
-				case 106:
-					return "Stregone legato";
-				case 107:
-					return "Goblin inventore";
-				case 108:
-					return "Stregone";
-				case 109:
-					return "Clown";
-				case 110:
-					return "Scheletro arciere";
-				case 111:
-					return "Goblin arciere";
-				case 112:
-					return "Bava disgustosa";
-				case 113:
-				case 114:
-					return "Muro di carne";
-				case 115:
-				case 116:
-					return "L'Affamato";
-				case 117:
-				case 118:
-				case 119:
-					return "Sanguisuga";
-				case 120:
-					return "Elementale del caos";
-				case 121:
-					return "Slimer";
-				case 122:
-					return "Gasteropodo";
-				case 123:
-					return "Meccanico legato";
-				case 124:
-					return "Meccanico";
-				case 125:
-					return "Retinazer";
-				case 126:
-					return "Spazmatism";
-				case 127:
-					return "Skeletron primario";
-				case 128:
-					return "Cannone primario";
-				case 129:
-					return "Sega primaria";
-				case 130:
-					return "Morsa primaria";
-				case 131:
-					return "Laser primario";
-				case 132:
-					return "Zombie";
-				case 133:
-					return "Occhio errante";
-				case 134:
-				case 135:
-				case 136:
-					return "Il Distruttore";
-				case 137:
-					return "Pipistrello illuminante";
-				case 138:
-					return "Slime illuminante";
-				case 139:
-					return "Sonda";
-				case 140:
-					return "Armatura posseduta";
-				case 141:
-					return "Fango tossico";
-				case 142:
-					return "Babbo Natale";
-				case 143:
-					return "Pupazzo di neve Gangsta";
-				case 144:
-					return "Signor Stabby";
-				case 145:
-					return "Neve Balla";
-				case 147:
-					return "Formicaleone albino";
-				case 148:
-					return "Orca";
-				case 149:
-					return "Minatore vampiro";
-				case 150:
-					return "Slime ombra";
-				case 151:
-					return "Mummia ombra";
-				case 152:
-					return "Shadow Mummy";
-				case 153:
-					return "Gasteropode spettrale";
-				case 154:
-					return "Elementale spettrale";
-				case 155:
-					return "Mummia spettrale";
-				case 156:
-					return "Pianta afferratrice del Drago";
-				case 157:
-					return "Calabrone del Drago";
-				case 158:
-					return "Teschio del Drago";
-				case 159:
-				case 160:
-				case 161:
-				case 162:
-				case 163:
-				case 164:
-					return "Arciviverna";
-				case 165:
-					return "Arcidiavolo";
-				case 166:
-					return "Ocram";
-				case 167:
-					return "Servo di Ocram";
-				default:
-					return "";
-				}
-#else
-				switch (l)
-				{
-					case -18:
-					case -1:
+					case EntityID.NPCID.SLIMELING2:
+					case EntityID.NPCID.SLIMELING:
 						return "Slimeling";
-					case -2:
+					case EntityID.NPCID.SLIMER2:
 						return "Slimer";
-					case -3:
+					case EntityID.NPCID.GREEN_SLIME:
 						return "Slime verde";
-					case -4:
+					case EntityID.NPCID.PINKY:
 						return "Mignolo";
-					case -5:
+					case EntityID.NPCID.BABY_SLIME:
 						return "Slime baby";
-					case -6:
+					case EntityID.NPCID.BLACK_SLIME:
 						return "Slime nero";
-					case -7:
+					case EntityID.NPCID.PURPLE_SLIME:
 						return "Slime viola";
-					case -8:
+					case EntityID.NPCID.RED_SLIME:
 						return "Slime rosso";
-					case -9:
+					case EntityID.NPCID.YELLOW_SLIME:
 						return "Slime giallo";
-					case -10:
+					case EntityID.NPCID.JUNGLE_SLIME:
 						return "Slime della giungla";
-					case -11:
-					case -12:
+#if VERSION_101
+					case EntityID.NPCID.LITTLE_EATER:
+					case EntityID.NPCID.BIG_EATER:
 						return "Mangiatore di anime";
-					case -13:
-					case -14:
+					case EntityID.NPCID.SHORT_BONES:
+					case EntityID.NPCID.BIG_BONED:
 						return "Ossa arrabbiate";
-					case -15:
+					case EntityID.NPCID.HEAVY_SKELETON:
 						return "Scheletro corazzato";
-					case -16:
-					case -17:
+					case EntityID.NPCID.LITTLE_STINGER:
+					case EntityID.NPCID.BIG_STINGER:
 						return "Calabrone";
-					case -26:
-					case -27:
-					case -28:
-					case -29:
-					case -30:
-					case -31:
-					case -32:
-					case -33:
-					case -34:
-					case -35:
-					case -36:
-					case -37:
-					case -44:
-					case -45:
+					case EntityID.NPCID.SMALL_ZOMBIE:
+					case EntityID.NPCID.BIG_ZOMBIE:
+					case EntityID.NPCID.SMALL_BALD_ZOMBIE:
+					case EntityID.NPCID.BIG_BALD_ZOMBIE:
+					case EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.BIG_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SMALL_SLIMED_ZOMBIE:
+					case EntityID.NPCID.BIG_SLIMED_ZOMBIE:
+					case EntityID.NPCID.SMALL_SWAMP_ZOMBIE:
+					case EntityID.NPCID.BIG_SWAMP_ZOMBIE:
+					case EntityID.NPCID.SMALL_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.BIG_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.SMALL_FEMALE_ZOMBIE:
+					case EntityID.NPCID.BIG_FEMALE_ZOMBIE:
 						return "Zombie";
-					case -38:
-					case -39:
-					case -40:
-					case -41:
-					case -42:
-					case -43:
+					case EntityID.NPCID.CATARACT_EYE2:
+					case EntityID.NPCID.SLEEPY_EYE2:
+					case EntityID.NPCID.DIALATED_EYE2:
+					case EntityID.NPCID.GREEN_EYE2:
+					case EntityID.NPCID.PURPLE_EYE2:
+					case EntityID.NPCID.DEMON_EYE2:
 						return "Occhio del Demone";
-					case 1:
+#else
+					case EntityID.NPCID.LITTLE_EATER:
+						return "Piccolo mangiatore";
+					case EntityID.NPCID.BIG_EATER:
+						return "Grande mangiatore";
+					case EntityID.NPCID.SHORT_BONES:
+						return "Ossa corte";
+					case EntityID.NPCID.BIG_BONED:
+						return "Disossato";
+					case EntityID.NPCID.HEAVY_SKELETON:
+						return "Scheletro pesante";
+					case EntityID.NPCID.LITTLE_STINGER:
+						return "Vespa piccola";
+					case EntityID.NPCID.BIG_STINGER:
+						return "Vespa grande";
+#endif
+					case EntityID.NPCID.SLIME:
 						return "Slime blu";
-					case 2:
+					case EntityID.NPCID.DEMON_EYE:
 						return "Occhio del Demone";
-					case 3:
+					case EntityID.NPCID.ZOMBIE:
 						return "Zombie";
-					case 4:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						return "Occhio di Cthulhu";
-					case 5:
+					case EntityID.NPCID.SERVANT_OF_CTHULHU:
 						return "Servo di Cthulhu";
-					case 6:
+					case EntityID.NPCID.EATER_OF_SOULS:
 						return "Mangiatore di anime";
-					case 7:
-					case 8:
-					case 9:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
 						return "Divoratore";
-					case 10:
-					case 11:
-					case 12:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						return "Verme gigante";
-					case 13:
-					case 14:
-					case 15:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						return "Mangiatore di mondi";
-					case 16:
+					case EntityID.NPCID.MOTHER_SLIME:
 						return "Slime madre";
-					case 17:
+					case EntityID.NPCID.MERCHANT:
 						return "Mercante";
-					case 18:
+					case EntityID.NPCID.NURSE:
 						return "Infermiera";
-					case 19:
+					case EntityID.NPCID.ARMS_DEALER:
 						return "Mercante di armi";
-					case 20:
+					case EntityID.NPCID.DRYAD:
 						return "Driade";
-					case 21:
+					case EntityID.NPCID.SKELETON:
 						return "Scheletro";
-					case 22:
+					case EntityID.NPCID.GUIDE:
 						return "Guida";
-					case 23:
+					case EntityID.NPCID.METEOR_HEAD:
 						return "Testa di meteorite";
-					case 24:
+					case EntityID.NPCID.FIRE_IMP:
 						return "Diavoletto di fuoco";
-					case 25:
+					case EntityID.NPCID.BURNING_SPHERE:
 						return "Sfera infuocata";
-					case 26:
+					case EntityID.NPCID.GOBLIN_PEON:
 						return "Goblin operaio";
-					case 27:
+					case EntityID.NPCID.GOBLIN_THIEF:
 						return "Goblin ladro";
-					case 28:
+					case EntityID.NPCID.GOBLIN_WARRIOR:
 						return "Goblin guerriero";
-					case 29:
+					case EntityID.NPCID.GOBLIN_SORCERER:
 						return "Goblin stregone";
-					case 30:
+					case EntityID.NPCID.CHAOS_BALL:
 						return "Palla del caos";
-					case 31:
+					case EntityID.NPCID.BONES:
 						return "Ossa arrabbiate";
-					case 32:
+					case EntityID.NPCID.DARK_CASTER:
 						return "Lanciatore oscuro";
-					case 33:
+					case EntityID.NPCID.WATER_SPHERE:
 						return "Sfera d'acqua";
-					case 34:
+					case EntityID.NPCID.CURSED_SKULL:
 						return "Teschio maledetto";
-					case 35:
-					case 36:
+					case EntityID.NPCID.SKELETRON_HEAD:
+					case EntityID.NPCID.SKELETRON_HAND:
 						return "Skeletron";
-					case 37:
+					case EntityID.NPCID.OLD_MAN:
 						return "Vecchio";
-					case 38:
+					case EntityID.NPCID.DEMOLITIONIST:
 						return "Esperto in demolizioni";
-					case 39:
-					case 40:
-					case 41:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						return "Serpente di ossa";
-					case 42:
+					case EntityID.NPCID.HORNET:
 						return "Calabrone";
-					case 43:
+					case EntityID.NPCID.MAN_EATER:
 						return "Mangiauomini";
-					case 44:
+					case EntityID.NPCID.UNDEAD_MINER:
 						return "Minatore non-morto";
-					case 45:
+					case EntityID.NPCID.TIM:
 						return "Tim";
-					case 46:
+					case EntityID.NPCID.BUNNY:
 						return "Coniglio";
-					case 47:
+					case EntityID.NPCID.CORRUPT_BUNNY:
 						return "Coniglio corrotto";
-					case 48:
+					case EntityID.NPCID.HARPY:
 						return "Arpia";
-					case 49:
+					case EntityID.NPCID.CAVE_BAT:
 						return "Pipistrello della caverna";
-					case 50:
+					case EntityID.NPCID.KING_SLIME:
 						return "Slime re";
-					case 51:
+					case EntityID.NPCID.JUNGLE_BAT:
 						return "Pipistrello della giungla";
-					case 52:
+					case EntityID.NPCID.DOCTOR_BONES:
 						return "Dottor ossa";
-					case 53:
+					case EntityID.NPCID.THE_GROOM:
 						return "Lo sposo";
-					case 54:
+					case EntityID.NPCID.CLOTHIER:
 						return "Mercante di abiti";
-					case 55:
+					case EntityID.NPCID.GOLDFISH:
 						return "Pesce rosso";
-					case 56:
+					case EntityID.NPCID.SNATCHER:
 						return "Pianta afferratrice";
-					case 57:
+					case EntityID.NPCID.CORRUPT_GOLDFISH:
 						return "Pesce rosso corrotto";
-					case 58:
+					case EntityID.NPCID.PIRANHA:
 						return "Piranha";
-					case 59:
+					case EntityID.NPCID.LAVA_SLIME:
 						return "Slime di lava";
-					case 60:
+					case EntityID.NPCID.HELLBAT:
 						return "Pipistrello dell'inferno";
-					case 61:
+					case EntityID.NPCID.VULTURE:
 						return "Avvoltoio";
-					case 62:
+					case EntityID.NPCID.DEMON:
 						return "Demone";
-					case 63:
+					case EntityID.NPCID.BLUE_JELLYFISH:
 						return "Medusa blu";
-					case 64:
+					case EntityID.NPCID.PINK_JELLYFISH:
 						return "Medusa rosa";
-					case 65:
+					case EntityID.NPCID.SHARK:
 						return "Squalo";
-					case 66:
+					case EntityID.NPCID.VOODOO_DEMON:
 						return "Demone voodoo";
-					case 67:
+					case EntityID.NPCID.CRAB:
 						return "Granchio";
-					case 68:
+					case EntityID.NPCID.DUNGEON_GUARDIAN:
 						return "Guardiano della Dungeon";
-					case 69:
+					case EntityID.NPCID.ANTLION:
 						return "Formicaleone";
-					case 70:
+					case EntityID.NPCID.SPIKE_BALL:
 						return "Sfera con spuntoni";
-					case 71:
+					case EntityID.NPCID.DUNGEON_SLIME:
 						return "Slime della Dungeon";
-					case 72:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						return "Ruota ardente";
-					case 73:
+					case EntityID.NPCID.GOBLIN_SCOUT:
 						return "Goblin ricognitore";
-					case 74:
+					case EntityID.NPCID.BIRD:
 						return "Uccello";
-					case 75:
+					case EntityID.NPCID.PIXIE:
 						return "Folletto";
-					case 76:
+					case EntityID.NPCID.XXX_UNUSED_XXX:
 						return "";
-					case 77:
+					case EntityID.NPCID.ARMORED_SKELETON:
 						return "Scheletro corazzato";
-					case 78:
+					case EntityID.NPCID.MUMMY:
 						return "Mummia";
-					case 79:
+					case EntityID.NPCID.DARK_MUMMY:
 						return "Mummia oscura";
-					case 80:
+					case EntityID.NPCID.LIGHT_MUMMY:
 						return "Mummia chiara";
-					case 81:
+					case EntityID.NPCID.CORRUPT_SLIME:
 						return "Slime corrotto";
-					case 82:
+					case EntityID.NPCID.WRAITH:
 						return "Fantasma";
-					case 83:
+					case EntityID.NPCID.CURSED_HAMMER:
 						return "Martello maledetto";
-					case 84:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						return "Spada incantata";
-					case 85:
+					case EntityID.NPCID.MIMIC:
 						return "Sosia";
-					case 86:
+					case EntityID.NPCID.UNICORN:
 						return "Unicorno";
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						return "Viverna";
-					case 93:
+					case EntityID.NPCID.GIANT_BAT:
 						return "Pipistrello gigante";
-					case 94:
+					case EntityID.NPCID.CORRUPTOR:
 						return "Corruttore";
-					case 95:
-					case 96:
-					case 97:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
 						return "Scavatore";
-					case 98:
-					case 99:
-					case 100:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						return "Alimentatore del mondo";
-					case 101:
+					case EntityID.NPCID.CLINGER:
 						return "Appiccicoso";
-					case 102:
+					case EntityID.NPCID.ANGLER_FISH:
 						return "Rana pescatrice";
-					case 103:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						return "Medusa verde";
-					case 104:
+					case EntityID.NPCID.WEREWOLF:
 						return "Lupo mannaro";
-					case 105:
+					case EntityID.NPCID.BOUND_GOBLIN:
 						return "Goblin legato";
-					case 106:
+					case EntityID.NPCID.BOUND_WIZARD:
 						return "Stregone legato";
-					case 107:
+					case EntityID.NPCID.GOBLIN_TINKERER:
 						return "Goblin inventore";
-					case 108:
+					case EntityID.NPCID.WIZARD:
 						return "Stregone";
-					case 109:
+					case EntityID.NPCID.CLOWN:
 						return "Clown";
-					case 110:
+					case EntityID.NPCID.SKELETON_ARCHER:
 						return "Scheletro arciere";
-					case 111:
+					case EntityID.NPCID.GOBLIN_ARCHER:
 						return "Goblin arciere";
-					case 112:
+					case EntityID.NPCID.VILE_SPIT:
 						return "Bava disgustosa";
-					case 113:
-					case 114:
+					case EntityID.NPCID.WALL_OF_FLESH:
+					case EntityID.NPCID.WALL_OF_FLESH_EYE:
 						return "Muro di carne";
-					case 115:
-					case 116:
+					case EntityID.NPCID.THE_HUNGRY:
+					case EntityID.NPCID.THE_HUNGRY_II:
 						return "L'Affamato";
-					case 117:
-					case 118:
-					case 119:
+					case EntityID.NPCID.LEECH_HEAD:
+					case EntityID.NPCID.LEECH_BODY:
+					case EntityID.NPCID.LEECH_TAIL:
 						return "Sanguisuga";
-					case 120:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
 						return "Elementale del caos";
-					case 121:
+					case EntityID.NPCID.SLIMER:
 						return "Slimer";
-					case 122:
+					case EntityID.NPCID.GASTROPOD:
 						return "Gasteropodo";
-					case 123:
+					case EntityID.NPCID.BOUND_MECHANIC:
 						return "Meccanico legato";
-					case 124:
+					case EntityID.NPCID.MECHANIC:
 						return "Meccanico";
-					case 125:
+					case EntityID.NPCID.RETINAZER:
 						return "Retinazer";
-					case 126:
+					case EntityID.NPCID.SPAZMATISM:
 						return "Spazmatism";
-					case 127:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						return "Skeletron primario";
-					case 128:
+					case EntityID.NPCID.PRIME_CANNON:
 						return "Cannone primario";
-					case 129:
+					case EntityID.NPCID.PRIME_SAW:
 						return "Sega primaria";
-					case 130:
+					case EntityID.NPCID.PRIME_VICE:
 						return "Morsa primaria";
-					case 131:
+					case EntityID.NPCID.PRIME_LASER:
 						return "Laser primario";
-					case 132:
+					case EntityID.NPCID.BALD_ZOMBIE:
 						return "Zombie";
-					case 133:
+					case EntityID.NPCID.WANDERING_EYE:
 						return "Occhio errante";
-					case 134:
-					case 135:
-					case 136:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						return "Il Distruttore";
-					case 137:
+					case EntityID.NPCID.ILLUMINANT_BAT:
 						return "Pipistrello illuminante";
-					case 138:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						return "Slime illuminante";
-					case 139:
+					case EntityID.NPCID.PROBE:
 						return "Sonda";
-					case 140:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						return "Armatura posseduta";
-					case 141:
+					case EntityID.NPCID.TOXIC_SLUDGE:
 						return "Fango tossico";
-					case 142:
+					case EntityID.NPCID.SANTA_CLAUS:
 						return "Babbo Natale";
-					case 143:
+					case EntityID.NPCID.SNOWMAN_GANGSTA:
 						return "Pupazzo di neve Gangsta";
-					case 144:
+					case EntityID.NPCID.MISTER_STABBY:
 						return "Signor Stabby";
-					case 145:
+					case EntityID.NPCID.SNOW_BALLA:
 						return "Neve Balla";
-					case 147:
+					case EntityID.NPCID.ALBINO_ANTLION:
 						return "Formicaleone albino";
-					case 148:
+					case EntityID.NPCID.ORKA:
 						return "Orca";
-					case 149:
+					case EntityID.NPCID.VAMPIRE_MINER:
 						return "Minatore vampiro";
-					case 150:
+					case EntityID.NPCID.SHADOW_SLIME:
 						return "Slime ombra";
-					case 151:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						return "Mummia ombra";
-					case 152:
+					case EntityID.NPCID.SHADOW_MUMMY:
 						return "Shadow Mummy";
-					case 153:
+					case EntityID.NPCID.SPECTRAL_GASTROPOD:
 						return "Gasteropode spettrale";
-					case 154:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						return "Elementale spettrale";
-					case 155:
+					case EntityID.NPCID.SPECTRAL_MUMMY:
 						return "Mummia spettrale";
-					case 156:
+					case EntityID.NPCID.DRAGON_SNATCHER:
 						return "Pianta afferratrice del Drago";
-					case 157:
+					case EntityID.NPCID.DRAGON_HORNET:
 						return "Calabrone del Drago";
-					case 158:
+					case EntityID.NPCID.DRAGON_SKULL:
 						return "Teschio del Drago";
-					case 159:
-					case 160:
-					case 161:
-					case 162:
-					case 163:
-					case 164:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						return "Arciviverna";
-					case 165:
+					case EntityID.NPCID.ARCH_DEMON:
 						return "Arcidiavolo";
-					case 166:
+					case EntityID.NPCID.OCRAM:
 						return "Ocram";
-					case 167:
+					case EntityID.NPCID.SERVANT_OF_OCRAM:
 						return "Servo di Ocram";
-					case 168:
-					case 169:
-					case 170:
-					case 171:
-					case 172:
+#if VERSION_101
+					case EntityID.NPCID.CATARACT_EYE:
+					case EntityID.NPCID.SLEEPY_EYE:
+					case EntityID.NPCID.DIALATED_EYE:
+					case EntityID.NPCID.GREEN_EYE:
+					case EntityID.NPCID.PURPLE_EYE:
 						return "Occhio del Demone";
-					case 173:
-					case 174:
-					case 175:
-					case 176:
-					case 177:
-					case 178:
-					case 179:
+					case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SLIMED_ZOMBIE:
+					case EntityID.NPCID.SWAMP_ZOMBIE:
+					case EntityID.NPCID.TWIGGY_ZOMBIE:
+					case EntityID.NPCID.FEMALE_ZOMBIE:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 						return "Zombie";
+#endif
 					default:
 						return "";
 				}
-#endif
 			}
 			if (LangOption == (int)ID.FRENCH)
 			{
-#if VERSION_INITIAL
-				switch (l)
+				switch ((EntityID.NPCID)l)
 				{
-				case -18:
-				case -1:
-					return "Slimeling";
-				case -2:
-					return "Slimer";
-				case -3:
-					return "Slime vert";
-				case -4:
-					return "Pinky";
-				case -5:
-					return "Bébé slime";
-				case -6:
-					return "Slime noir";
-				case -7:
-					return "Slime violet";
-				case -8:
-					return "Slime rouge";
-				case -9:
-					return "Slime jaune";
-				case -10:
-					return "Slime de la jungle";
-				case -11:
-					return "Petit dévoreur";
-				case -12:
-					return "Grand dévoreur";
-				case -13:
-					return "Petit squelette";
-				case -14:
-					return "Grand squelette";
-				case -15:
-					return "Squelette lourd";
-				case -16:
-					return "Petit frelon";
-				case -17:
-					return "Gros frelon";
-				case 1:
-					return "Slime bleu";
-				case 2:
-					return "Œil de démon";
-				case 3:
-					return "Zombie";
-				case 4:
-					return "Œil de Cthulhu";
-				case 5:
-					return "Servant de Cthulhu";
-				case 6:
-					return "Dévoreur d'âmes";
-				case 7:
-				case 8:
-				case 9:
-					return "Dévoreur";
-				case 10:
-				case 11:
-				case 12:
-					return "Ver géant";
-				case 13:
-				case 14:
-				case 15:
-					return "Dévoreur de mondes";
-				case 16:
-					return "Mère slime";
-				case 17:
-					return "Marchand";
-				case 18:
-					return "Infirmière";
-				case 19:
-					return "Marchand d'armes";
-				case 20:
-					return "Dryade";
-				case 21:
-					return "Squelette";
-				case 22:
-					return "Guide";
-				case 23:
-					return "Tête de météorite";
-				case 24:
-					return "Diablotin de feu";
-				case 25:
-					return "Sphère brûlante";
-				case 26:
-					return "Péon gobelin";
-				case 27:
-					return "Voleur gobelin";
-				case 28:
-					return "Guerrier gobelin";
-				case 29:
-					return "Sorcier gobelin";
-				case 30:
-					return "Boule de chaos";
-				case 31:
-					return "Squelette furieux";
-				case 32:
-					return "Magicien noir";
-				case 33:
-					return "Sphère d'eau";
-				case 34:
-					return "Crâne maudit";
-				case 35:
-					return "Squeletron";
-				case 36:
-					return "Squeletron";
-				case 37:
-					return "Vieil homme";
-				case 38:
-					return "Démolisseur";
-				case 39:
-				case 40:
-				case 41:
-					return "Serpent d'os";
-				case 42:
-					return "Frelon";
-				case 43:
-					return "Mangeur d'hommes";
-				case 44:
-					return "Mineur mort-vivant";
-				case 45:
-					return "Tim";
-				case 46:
-					return "Lapin";
-				case 47:
-					return "Lapin corrompu";
-				case 48:
-					return "Harpie";
-				case 49:
-					return "Chauve-souris";
-				case 50:
-					return "Roi slime";
-				case 51:
-					return "Chauve-souris de la jungle";
-				case 52:
-					return "Docteur Bones";
-				case 53:
-					return "Le jeune marié";
-				case 54:
-					return "Tailleur";
-				case 55:
-					return "Poisson rouge";
-				case 56:
-					return "Ravisseur";
-				case 57:
-					return "Poisson rouge corrompu";
-				case 58:
-					return "Piranha";
-				case 59:
-					return "Slime de l'enfer";
-				case 60:
-					return "Chauve-souris de l'enfer";
-				case 61:
-					return "Vautour";
-				case 62:
-					return "Démon";
-				case 63:
-					return "Méduse bleue";
-				case 64:
-					return "Méduse rose";
-				case 65:
-					return "Requin";
-				case 66:
-					return "Démon vaudou";
-				case 67:
-					return "Crabe";
-				case 68:
-					return "Gardien du donjon";
-				case 69:
-					return "Fourmilion";
-				case 70:
-					return "Boule piquante";
-				case 71:
-					return "Slime des donjons";
-				case 72:
-					return "Roue de feu";
-				case 73:
-					return "Scout gobelin";
-				case 74:
-					return "Oiseau";
-				case 75:
-					return "Lutin";
-				case 76:
-					return "";
-				case 77:
-					return "Squelette en armure";
-				case 78:
-					return "Momie";
-				case 79:
-					return "Momie de l'ombre";
-				case 80:
-					return "Momie de lumière";
-				case 81:
-					return "Slime corrompu";
-				case 82:
-					return "Spectre";
-				case 83:
-					return "Marteau maudit";
-				case 84:
-					return "Épée enchantée";
-				case 85:
-					return "Imitateur";
-				case 86:
-					return "Licorne";
-				case 87:
-				case 88:
-				case 89:
-				case 90:
-				case 91:
-				case 92:
-					return "Wyverne";
-				case 93:
-					return "Chauve-souris géante";
-				case 94:
-					return "Corrupteur";
-				case 95:
-				case 96:
-				case 97:
-					return "Fouisseur";
-				case 98:
-				case 99:
-				case 100:
-					return "Nourricier";
-				case 101:
-					return "Accrocheur";
-				case 102:
-					return "Baudroie";
-				case 103:
-					return "Méduse verte";
-				case 104:
-					return "Loup-garou";
-				case 105:
-					return "Gobelin attaché";
-				case 106:
-					return "Magicien attaché";
-				case 107:
-					return "Gobelin bricoleur";
-				case 108:
-					return "Magicien";
-				case 109:
-					return "Clown";
-				case 110:
-					return "Archer squelette";
-				case 111:
-					return "Archer gobelin";
-				case 112:
-					return "Immonde crachat";
-				case 113:
-				case 114:
-					return "Mur de chair";
-				case 115:
-				case 116:
-					return "L'affamé";
-				case 117:
-				case 118:
-				case 119:
-					return "Sangsue";
-				case 120:
-					return "Élémentaire du chaos";
-				case 121:
-					return "Slimer";
-				case 122:
-					return "Gastropode";
-				case 123:
-					return "Mécanicienne attachée";
-				case 124:
-					return "Mécanicienne";
-				case 125:
-					return "Rétinazer";
-				case 126:
-					return "Spazmatisme";
-				case 127:
-					return "Skeletron Prime";
-				case 128:
-					return "Canon primaire";
-				case 129:
-					return "Scie primaire";
-				case 130:
-					return "Étau principal";
-				case 131:
-					return "Laser principal";
-				case 132:
-					return "Zombie";
-				case 133:
-					return "Œil vagabond";
-				case 134:
-				case 135:
-				case 136:
-					return "Le destructeur";
-				case 137:
-					return "Chauve-souris illuminée";
-				case 138:
-					return "Slime illuminé";
-				case 139:
-					return "Sonde";
-				case 140:
-					return "Armure possédée";
-				case 141:
-					return "Boue toxique";
-				case 142:
-					return "Père Noël";
-				case 143:
-					return "Snowman Gangsta";
-				case 144:
-					return "Monsieur Stabby";
-				case 145:
-					return "Neige Balla";
-				case 147:
-					return "Fourmilion albinos";
-				case 148:
-					return "Orca";
-				case 149:
-					return "Mineur vampire";
-				case 150:
-					return "Slime de l'ombre";
-				case 151:
-					return "Marteau de l'ombre";
-				case 152:
-					return "Momie de l'ombre";
-				case 153:
-					return "Gastropode spectral";
-				case 154:
-					return "Élémentaire spectral";
-				case 155:
-					return "Momie spectrale";
-				case 156:
-					return "Dragon ravisseur";
-				case 157:
-					return "Frelon dragon";
-				case 158:
-					return "Crâne de dragon";
-				case 159:
-				case 160:
-				case 161:
-				case 162:
-				case 163:
-				case 164:
-					return "Arche Wyvern";
-				case 165:
-					return "Arche démon";
-				case 166:
-					return "Ocram";
-				case 167:
-					return "Serviteur d'Ocram";
-				default:
-					return "";
-				}
-#else
-				switch (l)
-				{
-					case -18:
-					case -1:
+					case EntityID.NPCID.SLIMELING2:
+					case EntityID.NPCID.SLIMELING:
 						return "Slimeling";
-					case -2:
+					case EntityID.NPCID.SLIMER2:
 						return "Slimer";
-					case -3:
+					case EntityID.NPCID.GREEN_SLIME:
 						return "Slime vert";
-					case -4:
+					case EntityID.NPCID.PINKY:
 						return "Pinky";
-					case -5:
+					case EntityID.NPCID.BABY_SLIME:
 						return "Bébé slime";
-					case -6:
+					case EntityID.NPCID.BLACK_SLIME:
 						return "Slime noir";
-					case -7:
+					case EntityID.NPCID.PURPLE_SLIME:
 						return "Slime violet";
-					case -8:
+					case EntityID.NPCID.RED_SLIME:
 						return "Slime rouge";
-					case -9:
+					case EntityID.NPCID.YELLOW_SLIME:
 						return "Slime jaune";
-					case -10:
+					case EntityID.NPCID.JUNGLE_SLIME:
 						return "Slime de la jungle";
-					case -11:
-					case -12:
+#if VERSION_101
+					case EntityID.NPCID.LITTLE_EATER:
+					case EntityID.NPCID.BIG_EATER:
 						return "Dévoreur d'âmes";
-					case -13:
-					case -14:
+					case EntityID.NPCID.SHORT_BONES:
+					case EntityID.NPCID.BIG_BONED:
 						return "Squelette furieux";
-					case -15:
+					case EntityID.NPCID.HEAVY_SKELETON:
 						return "Squelette en armure";
-					case -16:
-					case -17:
+					case EntityID.NPCID.LITTLE_STINGER:
+					case EntityID.NPCID.BIG_STINGER:
 						return "Frelon";
-					case -26:
-					case -27:
-					case -28:
-					case -29:
-					case -30:
-					case -31:
-					case -32:
-					case -33:
-					case -34:
-					case -35:
-					case -36:
-					case -37:
-					case -44:
-					case -45:
+					case EntityID.NPCID.SMALL_ZOMBIE:
+					case EntityID.NPCID.BIG_ZOMBIE:
+					case EntityID.NPCID.SMALL_BALD_ZOMBIE:
+					case EntityID.NPCID.BIG_BALD_ZOMBIE:
+					case EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.BIG_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SMALL_SLIMED_ZOMBIE:
+					case EntityID.NPCID.BIG_SLIMED_ZOMBIE:
+					case EntityID.NPCID.SMALL_SWAMP_ZOMBIE:
+					case EntityID.NPCID.BIG_SWAMP_ZOMBIE:
+					case EntityID.NPCID.SMALL_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.BIG_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.SMALL_FEMALE_ZOMBIE:
+					case EntityID.NPCID.BIG_FEMALE_ZOMBIE:
 						return "Zombie";
-					case -38:
-					case -39:
-					case -40:
-					case -41:
-					case -42:
-					case -43:
+					case EntityID.NPCID.CATARACT_EYE2:
+					case EntityID.NPCID.SLEEPY_EYE2:
+					case EntityID.NPCID.DIALATED_EYE2:
+					case EntityID.NPCID.GREEN_EYE2:
+					case EntityID.NPCID.PURPLE_EYE2:
+					case EntityID.NPCID.DEMON_EYE2:
 						return "Œil de démon";
-					case 1:
+#else
+					case EntityID.NPCID.LITTLE_EATER:
+						return "Petit dévoreur";
+					case EntityID.NPCID.BIG_EATER:
+						return "Grand dévoreur";
+					case EntityID.NPCID.SHORT_BONES:
+						return "Petit squelette";
+					case EntityID.NPCID.BIG_BONED:
+						return "Grand squelette";
+					case EntityID.NPCID.HEAVY_SKELETON:
+						return "Squelette lourd";
+					case EntityID.NPCID.LITTLE_STINGER:
+						return "Petit frelon";
+					case EntityID.NPCID.BIG_STINGER:
+						return "Gros frelon";
+#endif
+					case EntityID.NPCID.SLIME:
 						return "Slime bleu";
-					case 2:
+					case EntityID.NPCID.DEMON_EYE:
 						return "Œil de démon";
-					case 3:
+					case EntityID.NPCID.ZOMBIE:
 						return "Zombie";
-					case 4:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						return "Œil de Cthulhu";
-					case 5:
+					case EntityID.NPCID.SERVANT_OF_CTHULHU:
 						return "Servant de Cthulhu";
-					case 6:
+					case EntityID.NPCID.EATER_OF_SOULS:
 						return "Dévoreur d'âmes";
-					case 7:
-					case 8:
-					case 9:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
 						return "Dévoreur";
-					case 10:
-					case 11:
-					case 12:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						return "Ver géant";
-					case 13:
-					case 14:
-					case 15:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						return "Dévoreur de mondes";
-					case 16:
+					case EntityID.NPCID.MOTHER_SLIME:
 						return "Mère slime";
-					case 17:
+					case EntityID.NPCID.MERCHANT:
 						return "Marchand";
-					case 18:
+					case EntityID.NPCID.NURSE:
 						return "Infirmière";
-					case 19:
+					case EntityID.NPCID.ARMS_DEALER:
 						return "Marchand d'armes";
-					case 20:
+					case EntityID.NPCID.DRYAD:
 						return "Dryade";
-					case 21:
+					case EntityID.NPCID.SKELETON:
 						return "Squelette";
-					case 22:
+					case EntityID.NPCID.GUIDE:
 						return "Guide";
-					case 23:
+					case EntityID.NPCID.METEOR_HEAD:
 						return "Tête de météorite";
-					case 24:
+					case EntityID.NPCID.FIRE_IMP:
 						return "Diablotin de feu";
-					case 25:
+					case EntityID.NPCID.BURNING_SPHERE:
 						return "Sphère brûlante";
-					case 26:
+					case EntityID.NPCID.GOBLIN_PEON:
 						return "Péon gobelin";
-					case 27:
+					case EntityID.NPCID.GOBLIN_THIEF:
 						return "Voleur gobelin";
-					case 28:
+					case EntityID.NPCID.GOBLIN_WARRIOR:
 						return "Guerrier gobelin";
-					case 29:
+					case EntityID.NPCID.GOBLIN_SORCERER:
 						return "Sorcier gobelin";
-					case 30:
+					case EntityID.NPCID.CHAOS_BALL:
 						return "Boule de chaos";
-					case 31:
+					case EntityID.NPCID.BONES:
 						return "Squelette furieux";
-					case 32:
+					case EntityID.NPCID.DARK_CASTER:
 						return "Magicien noir";
-					case 33:
+					case EntityID.NPCID.WATER_SPHERE:
 						return "Sphère d'eau";
-					case 34:
+					case EntityID.NPCID.CURSED_SKULL:
 						return "Crâne maudit";
-					case 35:
+					case EntityID.NPCID.SKELETRON_HEAD:
 						return "Squeletron";
-					case 36:
+					case EntityID.NPCID.SKELETRON_HAND:
 						return "Squeletron";
-					case 37:
+					case EntityID.NPCID.OLD_MAN:
 						return "Vieil homme";
-					case 38:
+					case EntityID.NPCID.DEMOLITIONIST:
 						return "Démolisseur";
-					case 39:
-					case 40:
-					case 41:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						return "Serpent d'os";
-					case 42:
+					case EntityID.NPCID.HORNET:
 						return "Frelon";
-					case 43:
+					case EntityID.NPCID.MAN_EATER:
 						return "Mangeur d'hommes";
-					case 44:
+					case EntityID.NPCID.UNDEAD_MINER:
 						return "Mineur mort-vivant";
-					case 45:
+					case EntityID.NPCID.TIM:
 						return "Tim";
-					case 46:
+					case EntityID.NPCID.BUNNY:
 						return "Lapin";
-					case 47:
+					case EntityID.NPCID.CORRUPT_BUNNY:
 						return "Lapin corrompu";
-					case 48:
+					case EntityID.NPCID.HARPY:
 						return "Harpie";
-					case 49:
+					case EntityID.NPCID.CAVE_BAT:
 						return "Chauve-souris";
-					case 50:
+					case EntityID.NPCID.KING_SLIME:
 						return "Roi slime";
-					case 51:
+					case EntityID.NPCID.JUNGLE_BAT:
 						return "Chauve-souris de la jungle";
-					case 52:
+					case EntityID.NPCID.DOCTOR_BONES:
 						return "Docteur Bones";
-					case 53:
+					case EntityID.NPCID.THE_GROOM:
 						return "Le jeune marié";
-					case 54:
+					case EntityID.NPCID.CLOTHIER:
 						return "Tailleur";
-					case 55:
+					case EntityID.NPCID.GOLDFISH:
 						return "Poisson rouge";
-					case 56:
+					case EntityID.NPCID.SNATCHER:
 						return "Ravisseur";
-					case 57:
+					case EntityID.NPCID.CORRUPT_GOLDFISH:
 						return "Poisson rouge corrompu";
-					case 58:
+					case EntityID.NPCID.PIRANHA:
 						return "Piranha";
-					case 59:
+					case EntityID.NPCID.LAVA_SLIME:
 						return "Slime de l'enfer";
-					case 60:
+					case EntityID.NPCID.HELLBAT:
 						return "Chauve-souris de l'enfer";
-					case 61:
+					case EntityID.NPCID.VULTURE:
 						return "Vautour";
-					case 62:
+					case EntityID.NPCID.DEMON:
 						return "Démon";
-					case 63:
+					case EntityID.NPCID.BLUE_JELLYFISH:
 						return "Méduse bleue";
-					case 64:
+					case EntityID.NPCID.PINK_JELLYFISH:
 						return "Méduse rose";
-					case 65:
+					case EntityID.NPCID.SHARK:
 						return "Requin";
-					case 66:
+					case EntityID.NPCID.VOODOO_DEMON:
 						return "Démon vaudou";
-					case 67:
+					case EntityID.NPCID.CRAB:
 						return "Crabe";
-					case 68:
+					case EntityID.NPCID.DUNGEON_GUARDIAN:
 						return "Gardien du donjon";
-					case 69:
+					case EntityID.NPCID.ANTLION:
 						return "Fourmilion";
-					case 70:
+					case EntityID.NPCID.SPIKE_BALL:
 						return "Boule piquante";
-					case 71:
+					case EntityID.NPCID.DUNGEON_SLIME:
 						return "Slime des donjons";
-					case 72:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						return "Roue de feu";
-					case 73:
+					case EntityID.NPCID.GOBLIN_SCOUT:
 						return "Scout gobelin";
-					case 74:
+					case EntityID.NPCID.BIRD:
 						return "Oiseau";
-					case 75:
+					case EntityID.NPCID.PIXIE:
 						return "Lutin";
-					case 76:
+					case EntityID.NPCID.XXX_UNUSED_XXX:
 						return "";
-					case 77:
+					case EntityID.NPCID.ARMORED_SKELETON:
 						return "Squelette en armure";
-					case 78:
+					case EntityID.NPCID.MUMMY:
 						return "Momie";
-					case 79:
+					case EntityID.NPCID.DARK_MUMMY:
 						return "Momie de l'ombre";
-					case 80:
+					case EntityID.NPCID.LIGHT_MUMMY:
 						return "Momie de lumière";
-					case 81:
+					case EntityID.NPCID.CORRUPT_SLIME:
 						return "Slime corrompu";
-					case 82:
+					case EntityID.NPCID.WRAITH:
 						return "Spectre";
-					case 83:
+					case EntityID.NPCID.CURSED_HAMMER:
 						return "Marteau maudit";
-					case 84:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						return "Épée enchantée";
-					case 85:
+					case EntityID.NPCID.MIMIC:
 						return "Imitateur";
-					case 86:
+					case EntityID.NPCID.UNICORN:
 						return "Licorne";
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						return "Wyverne";
-					case 93:
+					case EntityID.NPCID.GIANT_BAT:
 						return "Chauve-souris géante";
-					case 94:
+					case EntityID.NPCID.CORRUPTOR:
 						return "Corrupteur";
-					case 95:
-					case 96:
-					case 97:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
 						return "Fouisseur";
-					case 98:
-					case 99:
-					case 100:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						return "Nourricier";
-					case 101:
+					case EntityID.NPCID.CLINGER:
 						return "Accrocheur";
-					case 102:
+					case EntityID.NPCID.ANGLER_FISH:
 						return "Baudroie";
-					case 103:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						return "Méduse verte";
-					case 104:
+					case EntityID.NPCID.WEREWOLF:
 						return "Loup-garou";
-					case 105:
+					case EntityID.NPCID.BOUND_GOBLIN:
 						return "Gobelin attaché";
-					case 106:
+					case EntityID.NPCID.BOUND_WIZARD:
 						return "Magicien attaché";
-					case 107:
+					case EntityID.NPCID.GOBLIN_TINKERER:
 						return "Gobelin bricoleur";
-					case 108:
+					case EntityID.NPCID.WIZARD:
 						return "Magicien";
-					case 109:
+					case EntityID.NPCID.CLOWN:
 						return "Clown";
-					case 110:
+					case EntityID.NPCID.SKELETON_ARCHER:
 						return "Archer squelette";
-					case 111:
+					case EntityID.NPCID.GOBLIN_ARCHER:
 						return "Archer gobelin";
-					case 112:
+					case EntityID.NPCID.VILE_SPIT:
 						return "Immonde crachat";
-					case 113:
-					case 114:
+					case EntityID.NPCID.WALL_OF_FLESH:
+					case EntityID.NPCID.WALL_OF_FLESH_EYE:
 						return "Mur de chair";
-					case 115:
-					case 116:
+					case EntityID.NPCID.THE_HUNGRY:
+					case EntityID.NPCID.THE_HUNGRY_II:
 						return "L'affamé";
-					case 117:
-					case 118:
-					case 119:
+					case EntityID.NPCID.LEECH_HEAD:
+					case EntityID.NPCID.LEECH_BODY:
+					case EntityID.NPCID.LEECH_TAIL:
 						return "Sangsue";
-					case 120:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
 						return "Élémentaire du chaos";
-					case 121:
+					case EntityID.NPCID.SLIMER:
 						return "Slimer";
-					case 122:
+					case EntityID.NPCID.GASTROPOD:
 						return "Gastropode";
-					case 123:
+					case EntityID.NPCID.BOUND_MECHANIC:
 						return "Mécanicienne attachée";
-					case 124:
+					case EntityID.NPCID.MECHANIC:
 						return "Mécanicienne";
-					case 125:
+					case EntityID.NPCID.RETINAZER:
 						return "Rétinazer";
-					case 126:
+					case EntityID.NPCID.SPAZMATISM:
 						return "Spazmatisme";
-					case 127:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						return "Skeletron Prime";
-					case 128:
+					case EntityID.NPCID.PRIME_CANNON:
 						return "Canon primaire";
-					case 129:
+					case EntityID.NPCID.PRIME_SAW:
 						return "Scie primaire";
-					case 130:
+					case EntityID.NPCID.PRIME_VICE:
 						return "Étau principal";
-					case 131:
+					case EntityID.NPCID.PRIME_LASER:
 						return "Laser principal";
-					case 132:
+					case EntityID.NPCID.BALD_ZOMBIE:
 						return "Zombie";
-					case 133:
+					case EntityID.NPCID.WANDERING_EYE:
 						return "Œil vagabond";
-					case 134:
-					case 135:
-					case 136:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						return "Le destructeur";
-					case 137:
+					case EntityID.NPCID.ILLUMINANT_BAT:
 						return "Chauve-souris illuminée";
-					case 138:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						return "Slime illuminé";
-					case 139:
+					case EntityID.NPCID.PROBE:
 						return "Sonde";
-					case 140:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						return "Armure possédée";
-					case 141:
+					case EntityID.NPCID.TOXIC_SLUDGE:
 						return "Boue toxique";
-					case 142:
+					case EntityID.NPCID.SANTA_CLAUS:
 						return "Père Noël";
-					case 143:
+					case EntityID.NPCID.SNOWMAN_GANGSTA:
 						return "Snowman Gangsta";
-					case 144:
+					case EntityID.NPCID.MISTER_STABBY:
 						return "Monsieur Stabby";
-					case 145:
+					case EntityID.NPCID.SNOW_BALLA:
 						return "Neige Balla";
-					case 147:
+					case EntityID.NPCID.ALBINO_ANTLION:
 						return "Fourmilion albinos";
-					case 148:
+					case EntityID.NPCID.ORKA:
 						return "Orca";
-					case 149:
+					case EntityID.NPCID.VAMPIRE_MINER:
 						return "Mineur vampire";
-					case 150:
+					case EntityID.NPCID.SHADOW_SLIME:
 						return "Slime de l'ombre";
-					case 151:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						return "Marteau de l'ombre";
-					case 152:
+					case EntityID.NPCID.SHADOW_MUMMY:
 						return "Momie de l'ombre";
-					case 153:
+					case EntityID.NPCID.SPECTRAL_GASTROPOD:
 						return "Gastropode spectral";
-					case 154:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						return "Élémentaire spectral";
-					case 155:
+					case EntityID.NPCID.SPECTRAL_MUMMY:
 						return "Momie spectrale";
-					case 156:
+					case EntityID.NPCID.DRAGON_SNATCHER:
 						return "Dragon ravisseur";
-					case 157:
+					case EntityID.NPCID.DRAGON_HORNET:
 						return "Frelon dragon";
-					case 158:
+					case EntityID.NPCID.DRAGON_SKULL:
 						return "Crâne de dragon";
-					case 159:
-					case 160:
-					case 161:
-					case 162:
-					case 163:
-					case 164:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						return "Arche Wyvern";
-					case 165:
+					case EntityID.NPCID.ARCH_DEMON:
 						return "Arche démon";
-					case 166:
+					case EntityID.NPCID.OCRAM:
 						return "Ocram";
-					case 167:
+					case EntityID.NPCID.SERVANT_OF_OCRAM:
 						return "Serviteur d'Ocram";
-					case 168:
-					case 169:
-					case 170:
-					case 171:
-					case 172:
+#if VERSION_101
+					case EntityID.NPCID.CATARACT_EYE:
+					case EntityID.NPCID.SLEEPY_EYE:
+					case EntityID.NPCID.DIALATED_EYE:
+					case EntityID.NPCID.GREEN_EYE:
+					case EntityID.NPCID.PURPLE_EYE:
 						return "Œil de démon";
-					case 173:
-					case 174:
-					case 175:
-					case 176:
-					case 177:
-					case 178:
-					case 179:
+					case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SLIMED_ZOMBIE:
+					case EntityID.NPCID.SWAMP_ZOMBIE:
+					case EntityID.NPCID.TWIGGY_ZOMBIE:
+					case EntityID.NPCID.FEMALE_ZOMBIE:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 						return "Zombie";
+#endif
 					default:
 						return "";
 				}
-#endif
 			}
 			if (LangOption == (int)ID.SPANISH)
 			{
-#if VERSION_INITIAL
-				switch (l)
+				switch ((EntityID.NPCID)l)
 				{
-				case -18:
-				case -1:
-					return "Slimeling";
-				case -2:
-					return "Slimer";
-				case -3:
-					return "Slime verde";
-				case -4:
-					return "Slime rosa";
-				case -5:
-					return "Bebé slime";
-				case -6:
-					return "Slime negro";
-				case -7:
-					return "Slime morado";
-				case -8:
-					return "Slime rojo";
-				case -9:
-					return "Slime amarillo";
-				case -10:
-					return "Slime selvático";
-				case -11:
-					return "Pequeño devorador";
-				case -12:
-					return "Gran devorador";
-				case -13:
-					return "Pequeño huesitos";
-				case -14:
-					return "Gran huesitos";
-				case -15:
-					return "Esqueleto pesado";
-				case -16:
-					return "Avispa pequeña";
-				case -17:
-					return "Gran avispa";
-				case 1:
-					return "Slime azul";
-				case 2:
-					return "Ojo demoníaco";
-				case 3:
-					return "Zombi";
-				case 4:
-					return "Ojo Cthulhu";
-				case 5:
-					return "Siervo de Cthulhu";
-				case 6:
-					return "Devoraalmas";
-				case 7:
-				case 8:
-				case 9:
-					return "Gusano devorador";
-				case 10:
-				case 11:
-				case 12:
-					return "Gusano gigante";
-				case 13:
-				case 14:
-				case 15:
-					return "Devoramundos";
-				case 16:
-					return "Mamá slime";
-				case 17:
-					return "Mercader";
-				case 18:
-					return "Enfermera";
-				case 19:
-					return "Traficante de armas";
-				case 20:
-					return "Dríada";
-				case 21:
-					return "Esqueleto";
-				case 22:
-					return "Guía";
-				case 23:
-					return "Cabeza meteorito";
-				case 24:
-					return "Diablillo de fuego";
-				case 25:
-					return "Esfera ardiente";
-				case 26:
-					return "Duende peón";
-				case 27:
-					return "Duende ladrón";
-				case 28:
-					return "Duende guerrero";
-				case 29:
-					return "Duende hechicero";
-				case 30:
-					return "Bola del caos";
-				case 31:
-					return "Huesitos furioso";
-				case 32:
-					return "Mago siniestro";
-				case 33:
-					return "Esfera de agua";
-				case 34:
-					return "Cráneo maldito";
-				case 35:
-					return "Esqueletrón";
-				case 36:
-					return "Esqueletrón";
-				case 37:
-					return "Anciano";
-				case 38:
-					return "Demoledor";
-				case 39:
-				case 40:
-				case 41:
-					return "Esqueleto de serpiente";
-				case 42:
-					return "Avispón";
-				case 43:
-					return "Devorahombres";
-				case 44:
-					return "Minero zombi";
-				case 45:
-					return "Tim";
-				case 46:
-					return "Conejito";
-				case 47:
-					return "Conejito corrompido";
-				case 48:
-					return "Arpía";
-				case 49:
-					return "Murciélago de cueva";
-				case 50:
-					return "Rey slime";
-				case 51:
-					return "Murciélago de selva";
-				case 52:
-					return "Doctor Látigo";
-				case 53:
-					return "El novio zombi";
-				case 54:
-					return "Buhonero";
-				case 55:
-					return "Pececillo";
-				case 56:
-					return "Atrapadora";
-				case 57:
-					return "Pececillo corrompido";
-				case 58:
-					return "Piraña";
-				case 59:
-					return "Babosa de lava";
-				case 60:
-					return "Murciélago infernal";
-				case 61:
-					return "Buitre";
-				case 62:
-					return "Demonio";
-				case 63:
-					return "Medusa azul";
-				case 64:
-					return "Medusa rosa";
-				case 65:
-					return "Tiburón";
-				case 66:
-					return "Demonio vudú";
-				case 67:
-					return "Cangrejo";
-				case 68:
-					return "Guardián de la mazmorra";
-				case 69:
-					return "Hormiga león";
-				case 70:
-					return "Bola de pinchos";
-				case 71:
-					return "Slime de las mazmorras";
-				case 72:
-					return "Rueda ardiente";
-				case 73:
-					return "Duende explorador";
-				case 74:
-					return "Pájaro";
-				case 75:
-					return "Duendecillo";
-				case 77:
-					return "Esqueleto con armadura";
-				case 78:
-					return "Momia";
-				case 79:
-					return "Momia de la oscuridad";
-				case 80:
-					return "Momia de la luz";
-				case 81:
-					return "Slime corrompido";
-				case 82:
-					return "Espectro";
-				case 83:
-					return "Martillo maldito";
-				case 84:
-					return "Espada encantada";
-				case 85:
-					return "Cofre falso";
-				case 86:
-					return "Unicornio";
-				case 87:
-				case 88:
-				case 89:
-				case 90:
-				case 91:
-				case 92:
-					return "Guiverno";
-				case 93:
-					return "Murciélago gigante";
-				case 94:
-					return "Corruptor";
-				case 95:
-				case 96:
-				case 97:
-					return "Excavador";
-				case 98:
-				case 99:
-				case 100:
-					return "Tragamundos";
-				case 101:
-					return "Lapa";
-				case 102:
-					return "Pez abisal";
-				case 103:
-					return "Medusa verde";
-				case 104:
-					return "Hombre lobo";
-				case 105:
-					return "Duende cautivo";
-				case 106:
-					return "Mago cautivo";
-				case 107:
-					return "Duende chapucero";
-				case 108:
-					return "Mago";
-				case 109:
-					return "Payaso";
-				case 110:
-					return "Esqueleto arquero";
-				case 111:
-					return "Duende arquero";
-				case 112:
-					return "Escupitajo vil";
-				case 113:
-				case 114:
-					return "Muro carnoso";
-				case 115:
-				case 116:
-					return "El Famélico";
-				case 117:
-				case 118:
-				case 119:
-					return "Sanguijuela";
-				case 120:
-					return "Caos elemental";
-				case 121:
-					return "Slimer";
-				case 122:
-					return "Gasterópodo";
-				case 123:
-					return "Mecánico cautivo";
-				case 124:
-					return "Mecánico";
-				case 125:
-					return "Retinator";
-				case 126:
-					return "Espasmatizador";
-				case 127:
-					return "Esqueletrón mayor";
-				case 128:
-					return "Cañón mayor";
-				case 129:
-					return "Sierra mayor";
-				case 130:
-					return "Torno mayor";
-				case 131:
-					return "Láser mayor";
-				case 132:
-					return "Zombi";
-				case 133:
-					return "Ojo errante";
-				case 134:
-				case 135:
-				case 136:
-					return "El Destructor";
-				case 137:
-					return "Murciélago luminoso";
-				case 138:
-					return "Slime luminoso";
-				case 139:
-					return "Sonda";
-				case 140:
-					return "Armadura poseída";
-				case 141:
-					return "Fango tóxico";
-				case 142:
-					return "Papá Noel";
-				case 143:
-					return "Muñeco de nieve malote";
-				case 144:
-					return "Señor Stabby";
-				case 145:
-					return "Triunfador de nieve";
-				case 147:
-					return "Hormiga león albina";
-				case 148:
-					return "Orca";
-				case 149:
-					return "Minero vampiro";
-				case 150:
-					return "Slime sombrío";
-				case 151:
-					return "Martillo sombrío";
-				case 152:
-					return "Momia sombría";
-				case 153:
-					return "Gasterópodo espectral";
-				case 154:
-					return "Elemental espectral";
-				case 155:
-					return "Momia espectral";
-				case 156:
-					return "Raptor de dragones";
-				case 157:
-					return "Avispa dragón";
-				case 158:
-					return "Calavera de dragón";
-				case 159:
-				case 160:
-				case 161:
-				case 162:
-				case 163:
-				case 164:
-					return "Archiguiverno";
-				case 165:
-					return "Archidemonio";
-				case 166:
-					return "Ocram";
-				case 167:
-					return "Siervo de Ocram";
-				default:
-					return "";
-				}
-#else
-				switch (l)
-				{
-					case -18:
-					case -1:
+					case EntityID.NPCID.SLIMELING2:
+					case EntityID.NPCID.SLIMELING:
 						return "Slimeling";
-					case -2:
+					case EntityID.NPCID.SLIMER2:
 						return "Slimer";
-					case -3:
+					case EntityID.NPCID.GREEN_SLIME:
 						return "Slime verde";
-					case -4:
+					case EntityID.NPCID.PINKY:
 						return "Slime rosa";
-					case -5:
+					case EntityID.NPCID.BABY_SLIME:
 						return "Bebé slime";
-					case -6:
+					case EntityID.NPCID.BLACK_SLIME:
 						return "Slime negro";
-					case -7:
+					case EntityID.NPCID.PURPLE_SLIME:
 						return "Slime morado";
-					case -8:
+					case EntityID.NPCID.RED_SLIME:
 						return "Slime rojo";
-					case -9:
+					case EntityID.NPCID.YELLOW_SLIME:
 						return "Slime amarillo";
-					case -10:
+					case EntityID.NPCID.JUNGLE_SLIME:
 						return "Slime selvático";
-					case -11:
-					case -12:
+#if VERSION_101
+					case EntityID.NPCID.LITTLE_EATER:
+					case EntityID.NPCID.BIG_EATER:
 						return "Devoraalmas";
-					case -13:
-					case -14:
+					case EntityID.NPCID.SHORT_BONES:
+					case EntityID.NPCID.BIG_BONED:
 						return "Huesitos furioso";
-					case -15:
+					case EntityID.NPCID.HEAVY_SKELETON:
 						return "Esqueleto con armadura";
-					case -16:
-					case -17:
+					case EntityID.NPCID.LITTLE_STINGER:
+					case EntityID.NPCID.BIG_STINGER:
 						return "Avispón";
-					case -26:
-					case -27:
-					case -28:
-					case -29:
-					case -30:
-					case -31:
-					case -32:
-					case -33:
-					case -34:
-					case -35:
-					case -36:
-					case -37:
-					case -44:
-					case -45:
+					case EntityID.NPCID.SMALL_ZOMBIE:
+					case EntityID.NPCID.BIG_ZOMBIE:
+					case EntityID.NPCID.SMALL_BALD_ZOMBIE:
+					case EntityID.NPCID.BIG_BALD_ZOMBIE:
+					case EntityID.NPCID.SMALL_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.BIG_PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SMALL_SLIMED_ZOMBIE:
+					case EntityID.NPCID.BIG_SLIMED_ZOMBIE:
+					case EntityID.NPCID.SMALL_SWAMP_ZOMBIE:
+					case EntityID.NPCID.BIG_SWAMP_ZOMBIE:
+					case EntityID.NPCID.SMALL_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.BIG_TWIGGY_ZOMBIE:
+					case EntityID.NPCID.SMALL_FEMALE_ZOMBIE:
+					case EntityID.NPCID.BIG_FEMALE_ZOMBIE:
 						return "Zombi";
-					case -38:
-					case -39:
-					case -40:
-					case -41:
-					case -42:
-					case -43:
+					case EntityID.NPCID.CATARACT_EYE2:
+					case EntityID.NPCID.SLEEPY_EYE2:
+					case EntityID.NPCID.DIALATED_EYE2:
+					case EntityID.NPCID.GREEN_EYE2:
+					case EntityID.NPCID.PURPLE_EYE2:
+					case EntityID.NPCID.DEMON_EYE2:
 						return "Ojo demoníaco";
-					case 1:
+#else
+					case EntityID.NPCID.LITTLE_EATER:
+						return "Pequeño devorador";
+					case EntityID.NPCID.BIG_EATER:
+						return "Gran devorador";
+					case EntityID.NPCID.SHORT_BONES:
+						return "Pequeño huesitos";
+					case EntityID.NPCID.BIG_BONED:
+						return "Gran huesitos";
+					case EntityID.NPCID.HEAVY_SKELETON:
+						return "Esqueleto pesado";
+					case EntityID.NPCID.LITTLE_STINGER:
+						return "Avispa pequeña";
+					case EntityID.NPCID.BIG_STINGER:
+						return "Gran avispa";
+#endif
+					case EntityID.NPCID.SLIME:
 						return "Slime azul";
-					case 2:
+					case EntityID.NPCID.DEMON_EYE:
 						return "Ojo demoníaco";
-					case 3:
+					case EntityID.NPCID.ZOMBIE:
 						return "Zombi";
-					case 4:
+					case EntityID.NPCID.EYE_OF_CTHULHU:
 						return "Ojo Cthulhu";
-					case 5:
+					case EntityID.NPCID.SERVANT_OF_CTHULHU:
 						return "Siervo de Cthulhu";
-					case 6:
+					case EntityID.NPCID.EATER_OF_SOULS:
 						return "Devoraalmas";
-					case 7:
-					case 8:
-					case 9:
+					case EntityID.NPCID.DEVOURER_HEAD:
+					case EntityID.NPCID.DEVOURER_BODY:
+					case EntityID.NPCID.DEVOURER_TAIL:
 						return "Gusano devorador";
-					case 10:
-					case 11:
-					case 12:
+					case EntityID.NPCID.GIANT_WORM_HEAD:
+					case EntityID.NPCID.GIANT_WORM_BODY:
+					case EntityID.NPCID.GIANT_WORM_TAIL:
 						return "Gusano gigante";
-					case 13:
-					case 14:
-					case 15:
+					case EntityID.NPCID.EATER_OF_WORLDS_HEAD:
+					case EntityID.NPCID.EATER_OF_WORLDS_BODY:
+					case EntityID.NPCID.EATER_OF_WORLDS_TAIL:
 						return "Devoramundos";
-					case 16:
+					case EntityID.NPCID.MOTHER_SLIME:
 						return "Mamá slime";
-					case 17:
+					case EntityID.NPCID.MERCHANT:
 						return "Mercader";
-					case 18:
+					case EntityID.NPCID.NURSE:
 						return "Enfermera";
-					case 19:
+					case EntityID.NPCID.ARMS_DEALER:
 						return "Traficante de armas";
-					case 20:
+					case EntityID.NPCID.DRYAD:
 						return "Dríada";
-					case 21:
+					case EntityID.NPCID.SKELETON:
 						return "Esqueleto";
-					case 22:
+					case EntityID.NPCID.GUIDE:
 						return "Guía";
-					case 23:
+					case EntityID.NPCID.METEOR_HEAD:
 						return "Cabeza meteorito";
-					case 24:
+					case EntityID.NPCID.FIRE_IMP:
 						return "Diablillo de fuego";
-					case 25:
+					case EntityID.NPCID.BURNING_SPHERE:
 						return "Esfera ardiente";
-					case 26:
+					case EntityID.NPCID.GOBLIN_PEON:
 						return "Duende peón";
-					case 27:
+					case EntityID.NPCID.GOBLIN_THIEF:
 						return "Duende ladrón";
-					case 28:
+					case EntityID.NPCID.GOBLIN_WARRIOR:
 						return "Duende guerrero";
-					case 29:
+					case EntityID.NPCID.GOBLIN_SORCERER:
 						return "Duende hechicero";
-					case 30:
+					case EntityID.NPCID.CHAOS_BALL:
 						return "Bola del caos";
-					case 31:
+					case EntityID.NPCID.BONES:
 						return "Huesitos furioso";
-					case 32:
+					case EntityID.NPCID.DARK_CASTER:
 						return "Mago siniestro";
-					case 33:
+					case EntityID.NPCID.WATER_SPHERE:
 						return "Esfera de agua";
-					case 34:
+					case EntityID.NPCID.CURSED_SKULL:
 						return "Cráneo maldito";
-					case 35:
+					case EntityID.NPCID.SKELETRON_HEAD:
 						return "Esqueletrón";
-					case 36:
+					case EntityID.NPCID.SKELETRON_HAND:
 						return "Esqueletrón";
-					case 37:
+					case EntityID.NPCID.OLD_MAN:
 						return "Anciano";
-					case 38:
+					case EntityID.NPCID.DEMOLITIONIST:
 						return "Demoledor";
-					case 39:
-					case 40:
-					case 41:
+					case EntityID.NPCID.BONE_SERPENT_HEAD:
+					case EntityID.NPCID.BONE_SERPENT_BODY:
+					case EntityID.NPCID.BONE_SERPENT_TAIL:
 						return "Esqueleto de serpiente";
-					case 42:
+					case EntityID.NPCID.HORNET:
 						return "Avispón";
-					case 43:
+					case EntityID.NPCID.MAN_EATER:
 						return "Devorahombres";
-					case 44:
+					case EntityID.NPCID.UNDEAD_MINER:
 						return "Minero zombi";
-					case 45:
+					case EntityID.NPCID.TIM:
 						return "Tim";
-					case 46:
+					case EntityID.NPCID.BUNNY:
 						return "Conejito";
-					case 47:
+					case EntityID.NPCID.CORRUPT_BUNNY:
 						return "Conejito corrompido";
-					case 48:
+					case EntityID.NPCID.HARPY:
 						return "Arpía";
-					case 49:
+					case EntityID.NPCID.CAVE_BAT:
 						return "Murciélago de cueva";
-					case 50:
+					case EntityID.NPCID.KING_SLIME:
 						return "Rey slime";
-					case 51:
+					case EntityID.NPCID.JUNGLE_BAT:
 						return "Murciélago de selva";
-					case 52:
+					case EntityID.NPCID.DOCTOR_BONES:
 						return "Doctor Látigo";
-					case 53:
+					case EntityID.NPCID.THE_GROOM:
 						return "El novio zombi";
-					case 54:
+					case EntityID.NPCID.CLOTHIER:
 						return "Buhonero";
-					case 55:
+					case EntityID.NPCID.GOLDFISH:
 						return "Pececillo";
-					case 56:
+					case EntityID.NPCID.SNATCHER:
 						return "Atrapadora";
-					case 57:
+					case EntityID.NPCID.CORRUPT_GOLDFISH:
 						return "Pececillo corrompido";
-					case 58:
+					case EntityID.NPCID.PIRANHA:
 						return "Piraña";
-					case 59:
+					case EntityID.NPCID.LAVA_SLIME:
 						return "Babosa de lava";
-					case 60:
+					case EntityID.NPCID.HELLBAT:
 						return "Murciélago infernal";
-					case 61:
+					case EntityID.NPCID.VULTURE:
 						return "Buitre";
-					case 62:
+					case EntityID.NPCID.DEMON:
 						return "Demonio";
-					case 63:
+					case EntityID.NPCID.BLUE_JELLYFISH:
 						return "Medusa azul";
-					case 64:
+					case EntityID.NPCID.PINK_JELLYFISH:
 						return "Medusa rosa";
-					case 65:
+					case EntityID.NPCID.SHARK:
 						return "Tiburón";
-					case 66:
+					case EntityID.NPCID.VOODOO_DEMON:
 						return "Demonio vudú";
-					case 67:
+					case EntityID.NPCID.CRAB:
 						return "Cangrejo";
-					case 68:
+					case EntityID.NPCID.DUNGEON_GUARDIAN:
 						return "Guardián de la mazmorra";
-					case 69:
+					case EntityID.NPCID.ANTLION:
 						return "Hormiga león";
-					case 70:
+					case EntityID.NPCID.SPIKE_BALL:
 						return "Bola de pinchos";
-					case 71:
+					case EntityID.NPCID.DUNGEON_SLIME:
 						return "Slime de las mazmorras";
-					case 72:
+					case EntityID.NPCID.BLAZING_WHEEL:
 						return "Rueda ardiente";
-					case 73:
+					case EntityID.NPCID.GOBLIN_SCOUT:
 						return "Duende explorador";
-					case 74:
+					case EntityID.NPCID.BIRD:
 						return "Pájaro";
-					case 75:
+					case EntityID.NPCID.PIXIE:
 						return "Duendecillo";
-					case 77:
+					case EntityID.NPCID.ARMORED_SKELETON:
 						return "Esqueleto con armadura";
-					case 78:
+					case EntityID.NPCID.MUMMY:
 						return "Momia";
-					case 79:
+					case EntityID.NPCID.DARK_MUMMY:
 						return "Momia de la oscuridad";
-					case 80:
+					case EntityID.NPCID.LIGHT_MUMMY:
 						return "Momia de la luz";
-					case 81:
+					case EntityID.NPCID.CORRUPT_SLIME:
 						return "Slime corrompido";
-					case 82:
+					case EntityID.NPCID.WRAITH:
 						return "Espectro";
-					case 83:
+					case EntityID.NPCID.CURSED_HAMMER:
 						return "Martillo maldito";
-					case 84:
+					case EntityID.NPCID.ENCHANTED_SWORD:
 						return "Espada encantada";
-					case 85:
+					case EntityID.NPCID.MIMIC:
 						return "Cofre falso";
-					case 86:
+					case EntityID.NPCID.UNICORN:
 						return "Unicornio";
-					case 87:
-					case 88:
-					case 89:
-					case 90:
-					case 91:
-					case 92:
+					case EntityID.NPCID.WYVERN_HEAD:
+					case EntityID.NPCID.WYVERN_LEGS:
+					case EntityID.NPCID.WYVERN_BODY1:
+					case EntityID.NPCID.WYVERN_BODY2:
+					case EntityID.NPCID.WYVERN_BODY3:
+					case EntityID.NPCID.WYVERN_TAIL:
 						return "Guiverno";
-					case 93:
+					case EntityID.NPCID.GIANT_BAT:
 						return "Murciélago gigante";
-					case 94:
+					case EntityID.NPCID.CORRUPTOR:
 						return "Corruptor";
-					case 95:
-					case 96:
-					case 97:
+					case EntityID.NPCID.DIGGER_HEAD:
+					case EntityID.NPCID.DIGGER_BODY:
+					case EntityID.NPCID.DIGGER_TAIL:
 						return "Excavador";
-					case 98:
-					case 99:
-					case 100:
+					case EntityID.NPCID.SEEKER_HEAD:
+					case EntityID.NPCID.SEEKER_BODY:
+					case EntityID.NPCID.SEEKER_TAIL:
 						return "Tragamundos";
-					case 101:
+					case EntityID.NPCID.CLINGER:
 						return "Lapa";
-					case 102:
+					case EntityID.NPCID.ANGLER_FISH:
 						return "Pez abisal";
-					case 103:
+					case EntityID.NPCID.GREEN_JELLYFISH:
 						return "Medusa verde";
-					case 104:
+					case EntityID.NPCID.WEREWOLF:
 						return "Hombre lobo";
-					case 105:
+					case EntityID.NPCID.BOUND_GOBLIN:
 						return "Duende cautivo";
-					case 106:
+					case EntityID.NPCID.BOUND_WIZARD:
 						return "Mago cautivo";
-					case 107:
+					case EntityID.NPCID.GOBLIN_TINKERER:
 						return "Duende chapucero";
-					case 108:
+					case EntityID.NPCID.WIZARD:
 						return "Mago";
-					case 109:
+					case EntityID.NPCID.CLOWN:
 						return "Payaso";
-					case 110:
+					case EntityID.NPCID.SKELETON_ARCHER:
 						return "Esqueleto arquero";
-					case 111:
+					case EntityID.NPCID.GOBLIN_ARCHER:
 						return "Duende arquero";
-					case 112:
+					case EntityID.NPCID.VILE_SPIT:
 						return "Escupitajo vil";
-					case 113:
-					case 114:
+					case EntityID.NPCID.WALL_OF_FLESH:
+					case EntityID.NPCID.WALL_OF_FLESH_EYE:
 						return "Muro carnoso";
-					case 115:
-					case 116:
+					case EntityID.NPCID.THE_HUNGRY:
+					case EntityID.NPCID.THE_HUNGRY_II:
 						return "El Famélico";
-					case 117:
-					case 118:
-					case 119:
+					case EntityID.NPCID.LEECH_HEAD:
+					case EntityID.NPCID.LEECH_BODY:
+					case EntityID.NPCID.LEECH_TAIL:
 						return "Sanguijuela";
-					case 120:
+					case EntityID.NPCID.CHAOS_ELEMENTAL:
 						return "Caos elemental";
-					case 121:
+					case EntityID.NPCID.SLIMER:
 						return "Slimer";
-					case 122:
+					case EntityID.NPCID.GASTROPOD:
 						return "Gasterópodo";
-					case 123:
+					case EntityID.NPCID.BOUND_MECHANIC:
 						return "Mecánico cautivo";
-					case 124:
+					case EntityID.NPCID.MECHANIC:
 						return "Mecánico";
-					case 125:
+					case EntityID.NPCID.RETINAZER:
 						return "Retinator";
-					case 126:
+					case EntityID.NPCID.SPAZMATISM:
 						return "Espasmatizador";
-					case 127:
+					case EntityID.NPCID.SKELETRON_PRIME:
 						return "Esqueletrón mayor";
-					case 128:
+					case EntityID.NPCID.PRIME_CANNON:
 						return "Cañón mayor";
-					case 129:
+					case EntityID.NPCID.PRIME_SAW:
 						return "Sierra mayor";
-					case 130:
+					case EntityID.NPCID.PRIME_VICE:
 						return "Torno mayor";
-					case 131:
+					case EntityID.NPCID.PRIME_LASER:
 						return "Láser mayor";
-					case 132:
+					case EntityID.NPCID.BALD_ZOMBIE:
 						return "Zombi";
-					case 133:
+					case EntityID.NPCID.WANDERING_EYE:
 						return "Ojo errante";
-					case 134:
-					case 135:
-					case 136:
+					case EntityID.NPCID.THE_DESTROYER_HEAD:
+					case EntityID.NPCID.THE_DESTROYER_BODY:
+					case EntityID.NPCID.THE_DESTROYER_TAIL:
 						return "El Destructor";
-					case 137:
+					case EntityID.NPCID.ILLUMINANT_BAT:
 						return "Murciélago luminoso";
-					case 138:
+					case EntityID.NPCID.ILLUMINANT_SLIME:
 						return "Slime luminoso";
-					case 139:
+					case EntityID.NPCID.PROBE:
 						return "Sonda";
-					case 140:
+					case EntityID.NPCID.POSSESSED_ARMOR:
 						return "Armadura poseída";
-					case 141:
+					case EntityID.NPCID.TOXIC_SLUDGE:
 						return "Fango tóxico";
-					case 142:
+					case EntityID.NPCID.SANTA_CLAUS:
 						return "Papá Noel";
-					case 143:
+					case EntityID.NPCID.SNOWMAN_GANGSTA:
 						return "Muñeco de nieve malote";
-					case 144:
+					case EntityID.NPCID.MISTER_STABBY:
 						return "Señor Stabby";
-					case 145:
+					case EntityID.NPCID.SNOW_BALLA:
 						return "Triunfador de nieve";
-					case 147:
+					case EntityID.NPCID.ALBINO_ANTLION:
 						return "Hormiga león albina";
-					case 148:
+					case EntityID.NPCID.ORKA:
 						return "Orca";
-					case 149:
+					case EntityID.NPCID.VAMPIRE_MINER:
 						return "Minero vampiro";
-					case 150:
+					case EntityID.NPCID.SHADOW_SLIME:
 						return "Slime sombrío";
-					case 151:
+					case EntityID.NPCID.SHADOW_HAMMER:
 						return "Martillo sombrío";
-					case 152:
+					case EntityID.NPCID.SHADOW_MUMMY:
 						return "Momia sombría";
-					case 153:
+					case EntityID.NPCID.SPECTRAL_GASTROPOD:
 						return "Gasterópodo espectral";
-					case 154:
+					case EntityID.NPCID.SPECTRAL_ELEMENTAL:
 						return "Elemental espectral";
-					case 155:
+					case EntityID.NPCID.SPECTRAL_MUMMY:
 						return "Momia espectral";
-					case 156:
+					case EntityID.NPCID.DRAGON_SNATCHER:
 						return "Raptor de dragones";
-					case 157:
+					case EntityID.NPCID.DRAGON_HORNET:
 						return "Avispa dragón";
-					case 158:
+					case EntityID.NPCID.DRAGON_SKULL:
 						return "Calavera de dragón";
-					case 159:
-					case 160:
-					case 161:
-					case 162:
-					case 163:
-					case 164:
+					case EntityID.NPCID.ARCH_WYVERN_HEAD:
+					case EntityID.NPCID.ARCH_WYVERN_LEGS:
+					case EntityID.NPCID.ARCH_WYVERN_BODY1:
+					case EntityID.NPCID.ARCH_WYVERN_BODY2:
+					case EntityID.NPCID.ARCH_WYVERN_BODY3:
+					case EntityID.NPCID.ARCH_WYVERN_TAIL:
 						return "Archiguiverno";
-					case 165:
+					case EntityID.NPCID.ARCH_DEMON:
 						return "Archidemonio";
-					case 166:
+					case EntityID.NPCID.OCRAM:
 						return "Ocram";
-					case 167:
+					case EntityID.NPCID.SERVANT_OF_OCRAM:
 						return "Siervo de Ocram";
-					case 168:
-					case 169:
-					case 170:
-					case 171:
-					case 172:
+#if VERSION_101
+					case EntityID.NPCID.CATARACT_EYE:
+					case EntityID.NPCID.SLEEPY_EYE:
+					case EntityID.NPCID.DIALATED_EYE:
+					case EntityID.NPCID.GREEN_EYE:
+					case EntityID.NPCID.PURPLE_EYE:
 						return "Ojo demoníaco";
-					case 173:
-					case 174:
-					case 175:
-					case 176:
-					case 177:
-					case 178:
-					case 179:
+					case EntityID.NPCID.PINCUSHION_ZOMBIE:
+					case EntityID.NPCID.SLIMED_ZOMBIE:
+					case EntityID.NPCID.SWAMP_ZOMBIE:
+					case EntityID.NPCID.TWIGGY_ZOMBIE:
+					case EntityID.NPCID.FEMALE_ZOMBIE:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM:
+					case EntityID.NPCID.ZOMBIE_MUSHROOM_HAT:
 						return "Zombi";
+#endif
 					default:
 						return "";
 				}
-#endif
 			}
 			return null;
 		}
@@ -8244,2356 +6617,2360 @@ namespace Terraria
 		{
 			if (LangOption <= (int)ID.ENGLISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Can mine Meteorite";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Provides light";
-					case 15:
-					case 16:
-					case 17:
+					case EntityID.ItemID.COPPER_WATCH:
+					case EntityID.ItemID.SILVER_WATCH:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Tells the time";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Shows depth";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "'Both tasty and flammable'";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Permanently increases maximum life by 20";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Used for smelting ore";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Used to craft items from metal bars";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Used for basic crafting";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Summons the Eye of Cthulhu";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Slowly regenerates life";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Gaze in the mirror to return home";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Allows the holder to double jump";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "The wearer can run super fast";
-					case 56:
-					case 57:
+					case EntityID.ItemID.DEMONITE_ORE:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "'Pulsing with dark energy'";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Summons a vile thorn";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Causes stars to rain from the sky";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Cleanses the corruption";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Removes the Hallow";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "'Looks tasty!'";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Summons the Eater of Worlds";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Disappears after the sunrise";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "'Get over here!'";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Provides light when worn";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "33% chance to not consume ammo";
-					case 100:
-					case 101:
-					case 102:
+					case EntityID.ItemID.SHADOW_GREAVES:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "7% increased melee speed";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Able to mine Hellstone";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Permanently increases maximum mana by 20";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Increases maximum mana by 20";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Throws balls of fire";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Casts a controllable missile";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Magically moves dirt";
 
 #if VERSION_INITIAL
-				case 115:
-					return "Creates a magical orb of light";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Creates a magical orb of light";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Creates a magical shadow orb";
 #endif
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "'Warm to the touch'";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Sometimes dropped by Skeletons and Piranha";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Lights wooden arrows ablaze";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "'It's made out of fire!'";
-					case 123:
-					case 124:
-					case 125:
+					case EntityID.ItemID.METEOR_HELMET:
+					case EntityID.ItemID.METEOR_SUIT:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "5% increased magic damage";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Allows flight";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Holding this may attract unwanted attention";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "'It contains strange symbols'";
-					case 151:
-					case 152:
-					case 153:
+					case EntityID.ItemID.NECRO_HELMET:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "4% increased ranged damage.";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Grants immunity to knockback";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Sprays out a shower of water";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Negates fall damage";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Increases jump height";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Casts a slow moving bolt of water";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "A small explosion that will destroy some tiles";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "A large explosion that will destroy most tiles";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "A small explosion that will not destroy tiles";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "'Hot to the touch'";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "'Because not drowning is kinda nice'";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Grants the ability to swim";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Grants immunity to fire blocks";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Shoots fallen stars";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "'It's pretty, oh so pretty'";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "12% increased melee speed";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "10% increased movement speed";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Creates grass on dirt";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "'May annoy others'";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Summons a controllable ball of fire";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Grows plants";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "6% reduced mana usage";
-					case 228:
-					case 229:
-					case 230:
+					case EntityID.ItemID.JUNGLE_HAT:
+					case EntityID.ItemID.JUNGLE_SHIRT:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Increases maximum mana by 20";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "'Tossing may be difficult.'";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "'Makes you look cool!'";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "15% increased magic damage";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "'It's smiling, might be a good snack'";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "'This is a good idea!'";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "'You are a terrible person.'";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Greatly extends underwater breathing";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Casts a demon scythe";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Allows the collection of seeds for ammo";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Works when wet";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "For use with Blowpipe";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "5% increased movement speed";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Provides immunity to lava";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Provides life regeneration";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "25% increased movement speed";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Breathe water instead of air";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Increase defense by 8";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Increased mana regeneration";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "20% increased magic damage";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Slows falling speed";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Shows the location of treasure and ore";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Grants invisibility";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Emits an aura of light";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Increases night vision";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Increases enemy spawn rate";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Attackers also take damage";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Allows the ability to walk on water";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "20% increased arrow speed and damage";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Shows the location of enemies";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Allows the control of gravity";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "'Banned in most places'";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Opens one Gold Chest";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Opens all Shadow Chests";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Used for crafting cloth";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Used for brewing ale";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Minor improvements to all stats";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Summons a Goblin Army";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Used for advanced wood crafting";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Strong enough to destroy Demon Altars";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Increases maximum mana by 40";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "7% increased movement speed";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "10% increased ranged damage";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Increases maximum mana by 60";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "5% increased melee critical strike chance";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "12% increased ranged damage";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Can mine Mythril";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Can mine Adamantite";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Has a chance to confuse";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Shows horizontal position";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Grants the ability to swim";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Shows position";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Negates fall damage";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Grants immunity to knockback";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Allows the combining of some accessories";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Allows the holder to double jump";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Increases maximum mana by 80";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "7% increased melee critical strike chance";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "14% increased ranged damage";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "6% increased damage";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "4% increased critical strike chance";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Allows flight";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Increases block placement range";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Spreads the Hallow to some blocks";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Spreads the corruption to some blocks";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Summons a magical fairy";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Three round burst";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Turns the holder into a werewolf on full moons";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Creates a grid on screen for block placement";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "15% increased magic damage";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "15% increased melee damage";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "15% increased ranged damage";
-					case 492:
-					case 493:
+					case EntityID.ItemID.DEMON_WINGS:
+					case EntityID.ItemID.ANGEL_WINGS:
 #if VERSION_101
-					case 632: // This entry is for the Fabulous Ribbon, which is completely untrue; I'm not gonna check the others for something incorrect so only English will have this.
-					case 638:
+					case EntityID.ItemID.FABULOUS_RIBBON: // This is actually defined for the ribbon, and it is completely untrue; Only English will have this due to its erroneous nature.
+					case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 						return "Allows flight and slow fall";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Casts a controllable rainbow";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Summons a block of ice";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Transforms the holder into merfolk when entering water";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Uses gel for ammo";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Places wire";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Removes wire";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Creates several crystal shards on impact";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Summons falling stars on impact";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "A magical returning dagger";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Summons rapid fire crystal shards";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Summons unholy fire balls";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "'The essence of light creatures'";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "'The essence of dark creatures'";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "'Not even water can put the flame out'";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Can be placed in water";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Used to smelt adamantite ore";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Used to craft items from mythril and adamantite bars";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "'Sharp and magical!'";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "'Sometimes carried by creatures in corrupt deserts'";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "'Sometimes carried by creatures in light deserts'";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Activates when stepped on";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Can be enchanted";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Causes stars to fall when injured";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "50% chance to not consume ammo";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Fires a spread of bullets";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Reduces the cooldown of healing potions";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Increases melee knockback";
-					case 541:
-					case 542:
-					case 543:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Activates when stepped on";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Summons The Twins";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "'The essence of pure terror'";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "'The essence of the destroyer'";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "'The essence of omniscient watchers'";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "7% increased critical strike chance";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "7% increased damage";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "15% increased ranged damage";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Increases length of invincibility after taking damage";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "8% reduced mana usage";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Summons Destroyer";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Summons Skeletron Prime";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Increases maximum mana by 100";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "10% increased melee damage and critical strike chance";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Summons King Slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Stacks up to 5";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "'The essence of powerful flying creatures'";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Has a chance to record songs";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "'Not to be confused with a hamsaw'";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explodes when activated";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Sends water to outlet pumps";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Receives water from inlet pumps";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Activates every second";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Activates every 3 seconds";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Activates every 5 seconds";
-					case 599:
-					case 600:
-					case 601:
+					case EntityID.ItemID.BLUE_PRESENT:
+					case EntityID.ItemID.GREEN_PRESENT:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Press " + RightTrigger + " to open";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Summons the Frost Legion";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Summons a pet guinea pig";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "15% increased melee damage and critical strike chance";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "15% increased ranged damage, 5% chance to not consume ammo";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Increases maximum mana by 120";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "10% increased critical strike chance";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "5% increased ranged damage, 5% chance to not consume ammo";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "5% increased magical damage, 10% reduced mana use";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "12% increased movement speed";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10% increased movement speed and ranged damage";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "10% increased movement speed and magical damage";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Has a chance to cause bleeding";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "A legendary Japanese spear coated in venom";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Transforms any suitable ammo into Spectral Arrows";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Transforms any suitable ammo into Vulcan Bolts";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Summons Ocram";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "'The essence of infected creatures'";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Summons a pet slime";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Summons a pet tiphia";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Summons a pet bat";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Summons a pet werewolf";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Summons a pet zombie";
 #if VERSION_101
-					case 633:
-					case 635:
-					case 637:
+					case EntityID.ItemID.GEORGES_HAT:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Oh myyyyy!";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Life regen is increased when near a campfire";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.GERMAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Kann Meteorite abbauen";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Verströmt Licht";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Zeigt die Zeit an";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Zeigt die Zeit an";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Zeigt die Zeit an";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Zeigt die Tiefe an";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "'Lecker und brennbar'";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Erhöht dauerhaft die maximale Lebensspanne um 20";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Wird für die Verhüttung von Erz verwendet";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Wird verwendet, um Items aus Metallbarren herzustellen";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Wird zur einfachen Herstellung verwendet";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Ruft das Auge von Cthulhu herbei";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Belebt langsam wieder";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Ein Blick in den Spiegel bringt einen zurück nach Hause";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Berechtigt den Inhaber zum Doppelsprung";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Der Träger kann superschnell rennen";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "'Durchpulst von dunkler Energie'";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "'Durchpulst von dunkler Energie'";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Ruft einen Ekeldorn herbei";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Lässt Sterne vom Himmel regnen";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Reinigt das Verderben";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Entfernt das Heilige";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "'Sieht lecker aus!'";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Ruft den Weltenfresser herbei";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Verschwindet nach Sonnenaufgang";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "'Komm hier rüber!'";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Verströmt beim Tragen Licht";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "33%ige Chance, keine Munition zu verbrauchen";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Um 7% erhoehtes Nahkampftempo";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Um 7% erhoehtes Nahkampftempo";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Um 7% erhoehtes Nahkampftempo";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Kann Höllenstein abbauen";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Erhöht maximales Mana um 20";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Erhöht die maximale Mana um 20";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Schießt Feuerbälle ab";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Wirft eine steuerbare Rakete aus";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Bewegt magisch Dreck";
 #if VERSION_INITIAL
-				case 115:
-					return "Erschafft eine magische Lichtkugel";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Erschafft eine magische Lichtkugel";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Erschafft eine magische Schattenkugel";
 #endif
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "'Fühlt sich warm an'";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Fällt mitunter von Skeletten und Piranhas herab";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Entfacht lodernde Holzpfeile";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "'Ist ganz aus Feuer!'";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Um 5% erhoehter magischer Schaden";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Um 5% erhoehter magischer Schaden";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Um 5% erhöhter magischer Schaden";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Lässt fliegen";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Kann unerwünschte Aufmerksamkeit erwecken";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "'Es enthält seltsame Symbole'";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Um 4% erhöhter Fernkampf-Schaden";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Um 4% erhöhter Fernkampf-Schaden";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Um 4% erhöhter Fernkampf-Schaden";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Macht immun gegen Rückstoß";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Versprüht eine Wasserdusche";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Hebt Sturzschaden auf";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Vergrößert die Sprunghöhe";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Wirft einen sich langsam bewegenden Wasserbolzen aus";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Eine kleine Explosion, die einige Felder zerstören wird";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Eine große Explosion, die die meisten Felder zerstört";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Eine kleine Explosion, die keine Felder zerstört";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "'Heiß, heiß, heiß!'";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "'Ganz nett, nicht ertrinken zu müssen'";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Befähigt zum Schwimmen";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Macht immun gegen Feuer-Blöcke";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Schießt Sternschnuppen herunter";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "'Oh, ist das hübsch!'";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Um 12% erhöhtes Nahkampftempo";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Um 10% erhöhtes Bewegungstempo";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Lässt Gras auf Schmutz wachsen";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "'Kann Ärger erregen'";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Ruft einen steuerbaren Feuerball herbei";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Lässt Pflanzen wachsen";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Um 6% reduzierte Mana-Nutzung";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Erhoeht die maximale Mana um 20";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Erhoeht die maximale Mana um 20";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Erhöht die maximale Mana um 20";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "'Werfen könnte schwierig werden.'";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "'Damit siehst du cool aus!'";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Um 15% erhöhter magischer Schaden";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "'Er lächelt - vielleicht schmeckt er auch gut...'";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "'Das ist eine gute Idee!'";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "'Du bist ein schrecklicher Mensch.'";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Verleiht deutlich mehr Atemluft unter Wasser";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Wirft eine Dämonensense aus";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Zum Erstellen einer Saatsammlung als Munition";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Funktioniert bei Naesse";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Zur Verwendung im Blasrohr";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Um 5% erhöhtes Bewegungstempo";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Macht immun gegen Lava";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Belebt wieder";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Erhöht Bewegungstempo um 25%";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Wasser statt Luft atmen";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Erhöht die Abwehr um 8";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Erhöhte Mana-Wiederherstellung";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Erhöht magischen Schaden um 20%";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Verlangsamt das Sturztempo";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Zeigt den Fundort von Schätzen und Erz";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Macht unsichtbar";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Verströmt eine Aura aus Licht";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Erhöht die Nachtsicht";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Erhöht Feind-Spawnquote";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Auch die Angreifer erleiden Schaden";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Befähigt, auf dem Wasser zu gehen";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Erhöht Pfeiltempo und Schaden um 20%";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Zeigt die Position von Feinden";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Zur Steuerung der Schwerkraft";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "'An den meisten Orten verboten'";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Öffnet eine Goldtruhe";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Öffnet alle Schattentruhen";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Verwendet für die Herstellung von Kleidung";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Zum Bierbrauen";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Geringe Anhebung aller Werte";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Ruft eine Goblin-Armee herbei";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Für fortgeschrittene Holzherstellung";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Stark genug, um Dämonenaltäre zu zerstören";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Erhöht die maximale Mana um 40";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Um 7% erhöhtes Bewegungstempo";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Um 10% erhöhter Fernkampfschaden";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Erhöht die maximale Mana um 60";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Um 5% erhöhte kritische Nahkampf-Trefferchance";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Um 12% erhöhter Fernkampf-Schaden";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Kann Mithril abbauen";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Kann Adamantit abbauen";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Kann Verwirrung stiften";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Zeigt horizontale Position";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Befähigt zum Schwimmen";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Zeigt Position an";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Hebt Sturzschaden auf";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Macht immun gegen Rückstoß";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Ermöglicht die Kombination von Zubehör";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Berechtigt den Inhaber zum Doppelsprung";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Erhöht die maximale Mana um 80";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Um 7% erhöhte kritische Nahkampf-Trefferchance";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Um 14% erhöhter Fernkampfschaden";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Um 6% erhöhter Schaden";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Um 4% erhöhte kritische Trefferchance";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Lässt fliegen";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Erweitert den Platzierbereich von Blöcken";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Verspritzt Heil auf einige Blöcke";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Verteilt Verderben auf einige Blöcke";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Ruft eine magische Fee herbei";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Dreifachschuss";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Verwandelt den Inhaber bei Vollmond in einen Werwolf";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Erstellt ein Raster auf dem Bildschirm zum Platzieren der Blöcke";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Um 15% erhöhter magischer Schaden";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Um 15% erhöhter Nahkampfschaden";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Um 15% erhöhter Fernkampfschaden";
-					case 492:
+#if VERSION_INITIAL
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Ermoeglicht Flug und langsamen Fall";
-					case 493:
+#else
+					case EntityID.ItemID.DEMON_WINGS:
+#endif
+					case EntityID.ItemID.ANGEL_WINGS:
 #if VERSION_101
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 						return "Ermöglicht Flug und langsamen Fall";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Wirft einen steuerbaren Regenbogen aus";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Ruft einen Eisblock herbei";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Verwandelt den Besitzer beim Hineingehen ins Wasser in Meermenschen";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Verwendet Glibber als Munition";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Platziert Kabel";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Entfernt Kabel";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Erzeugt beim Aufprall mehrere Kristallscherben";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Ruft beim Aufprall Sternschnuppen herbei";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Ein Dolch, der magisch zurückkehrt";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Ruft schnelle Feuerkristallscherben herbei";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Ruft unheilige Feuerbälle herbei";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "'Die Essenz von Lichtkreaturen'";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "'Die Essenz von Finsterkreaturen'";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "'Nicht einmal Wasser löscht diese Flamme'";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Kann in Wasser platziert werden";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Zum Schmelzen von Adamantiterz";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Zur Herstellung von Items aus Mithril- und Adamantitbarren";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "'Scharf und magisch!'";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "'Kreaturen in verderbten Wüsten tragen sie mitunter'";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "'Werden mitunter von Kreaturen in Lichtwüsten getragen'";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Wird beim Betreten aktiviert";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Zum Zaubern";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Lässt Sterne bei Verletzung herabfallen";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "50%ige Chance, keine Munition zu verbrauchen";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Feuert einen Kugelregen ab";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Verringert die Abklingzeit von Heiltränken";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Erhöht Nahkampf-Rückstoss";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Wird beim Betreten aktiviert";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Wird beim Betreten aktiviert";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Wird beim Betreten aktiviert";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Ruft die Zwillinge herbei";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "'Die Essenz reinen Schreckens'";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "'Die Essenz des Zerstörers'";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "'Die Essenz der allwissenden Beobachter'";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Um 7% erhöhte kritische Trefferchance";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Um 7% erhöhter Schaden";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Um 15% erhöhter Fernkampfschaden";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Verlängert die Unbesiegbarkeit nach erlittenem Schaden";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Um 8% reduzierte Mananutzung";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Ruft den Zerstörer";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Ruft Skeletron Prime herbei";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Erhöht die maximale Mana um 100";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Nahkampfschaden und kritische Trefferchance um 10% erhöht";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Ruft Schleimkönig herbei";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Kann bis zu 5 stapeln";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "'Essenz mächtiger fliegender Kreaturen'";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Kann Songs aufzeichnen";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "'Nicht mit einer Hamsäge zu verwechseln'";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explodiert bei Aktivierung";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Sendet Wasser zu Auslasspumpen";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Empfängt Wasser von Einlasspumpen";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Aktiviert jede Sekunde";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Aktiviert alle 3 Sekunden";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Aktiviert alle 5 Sekunden";
-					case 599:
-					case 600:
-					case 601:
+					case EntityID.ItemID.BLUE_PRESENT:
+					case EntityID.ItemID.GREEN_PRESENT:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Drücke " + RightTrigger + " zum Öffnen";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Beschwört die Frost Legion";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Ruft ein Haustier-Meerschweinchen herbei";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Nahkampfschaden und kritische Trefferchance um 15% erhöht";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Um 15% erhöhter Fernkampf-Schaden, 5%ige Chance, keine Munition zu verbrauchen";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Erhöht maximales Mana um 120";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Kritische Trefferchance um 10% erhöht";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Um 5% erhöhter Fernkampf-Schaden, 5%ige Chance, keine Munition zu verbrauchen";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Um 5% erhöhter Magieschaden, um 10% reduzierte Mana-Nutzung";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Um 10% erhöhtes Bewegungstempo";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Um 10% erhöhtes Bewegungstempo und Fernkampf-Schaden";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Um 10% erhöhtes Bewegungstempo und Magieschaden";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Kann Blutungen verursachen";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Ein legendärer japanischer Speer, der in Gift getaucht wurde";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Verwandelt jede passende Munition in Spektralpfeile";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Verwandelt jede passende Munition in Vulkanbolzen";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Ruft Ocram herbei";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "'Die Essenz von infizierten Kreaturen'";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Ruft einen Haustier-Schleim herbei";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Ruft eine Haustier-Tiphia herbei";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Ruft eine Haustier-Fledermaus herbei";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Ruft einen Haustier-Werwolf herbei";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Ruft einen Haustier-Zombie herbei";
 #if VERSION_101
-					case 633:
-					case 635:
-					case 637:
+					case EntityID.ItemID.GEORGES_HAT:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Ach, herrje...";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Schnellere Wiederbelebung in der Nähe eines Lagerfeuers";
-						// This erroneous translation refers to faster reviving, rather than faster healing; It does neither.
+						// This erroneous translation refers to faster reviving, rather than faster healing; It does neither in v1.01.
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.ITALIAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Può estrarre meteorite";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Fornisce luce";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Indica il tempo";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Indica il tempo";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Indica il tempo";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Mostra la profondità";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "'Sia gustoso che infiammabile'";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Aumenta in maniera permanente la vita massima di 20";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Utilizzato per fondere i minerali";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Utilizzato per creare oggetti dalle barre di metallo";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Utilizzato per la creazione di base";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Evoca l'Occhio di Cthulhu";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Rigenera la vita lentamente";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Guarda nello specchio per tornare a casa";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Permette il salto doppio";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Colui che li indossa può correre velocissimo";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "'Pulsa di energia oscura'";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "'Pulsa di energia oscura'";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Evoca una spina vile";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Fa piovere le stelle dal cielo";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Ripulisce la corruzione";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Rimuove il consacrato";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "'Gustoso!'";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Evoca il Mangiatore di Mondi";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Sparisce dopo l'alba";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "'Vieni qui!'";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Fa luce una volta indossato";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "33% di possibilità di non consumare munizioni";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Velocità del corpo a corpo aumentata del 7%";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Velocità del corpo a corpo aumentata del 7%";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Velocità del corpo a corpo aumentata del 7%";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "In grado di estrarre la pietra infernale";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Aumenta in maniera permanente il mana massimo di 20";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Aumenta il mana massimo di 20";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Tira palle di fuoco";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Scaglia un missile guidato";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Muovi magicamente la terra";
 #if VERSION_INITIAL
-				case 115:
-					return "Crea una sfera di luce magica";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Crea una sfera di luce magica";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Crea un'orbita d'ombra magica";
 #endif
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "'Calda al tocco'";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Lanciato a volte da Scheletri e Piranha";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Incendia le frecce di legno";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "'Creato dal fuoco!'";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Danno magico aumentato del 5%";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Danno magico aumentato del 5%";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Danno magico aumentato del 5%";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Permettono di volare";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Avere questo oggetto potrebbe attirare attenzione non desiderata";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "'Contiene simboli strani'";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Danno boomerang aumentato del 4%";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Danno boomerang aumentato del 4%";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Danno boomerang aumentato del 4%";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Permette immunità allo spintone";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Spruzza una cascata d'acqua";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Annulla i danni da caduta";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Aumenta l'altezza del salto";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Lancia un dardo di acqua lento";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Una piccola esplosione che distruggerà alcune mattonelle";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Una grande esplosione che distruggerà molte mattonelle";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Una piccola esplosione che non distruggerà mattonelle";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "'Calda al tocco'";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "'Perché non annegare è alquanto piacevole'";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Abilita al nuoto";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Permette immunità ai blocchi di fuoco";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Spara stelle cadenti";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "'Graziosa, oh com'è graziosa'";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Velocità del corpo a corpo aumentata del 12%";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Velocità di movimento aumentata del 10%";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Crea erba dalla terra";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "'Può disturbare gli altri'";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Evoca una palla di fuoco guidata";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Fa crescere le piante";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Consumo mana ridotto del 6%";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Aumenta il mana massimo di 20";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Aumenta il mana massimo di 20";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Aumenta il mana massimo di 20";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "'Lanciare potrebbe essere difficile.'";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "'Migliora il tuo look!'";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Danno magico aumentato del 15%";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "'Sta ridendo, potrebbe essere uno spuntino appetitoso'";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "'Buona idea!'";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "'Sei una persona terribile.'";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Aumenta moltissimo il respiro sott'acqua";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Evoca una falce demoniaca";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Permette la raccolta di semi come munizioni";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Funziona da bagnato";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Da utilizzare con la Cerbottana";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Velocità di movimento aumentata del 5%";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Fornisce immunità alla lava";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Rigenera la vita";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Velocità di movimento aumentata del 25%";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Respira acqua invece di aria";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Aumenta la difesa di 8";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Aumenta la rigenerazione del mana";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Danno magico aumentato del 20%";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Velocità di caduta lenta";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Mostra l'ubicazione di tesori e dei minerali";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Rende invisibili";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Emette un'aura di luce";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Migliora la visione notturna";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Aumenta il ritmo di generazone dei nemici";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Anche gli aggressori subiscono danni";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Consente di camminare sull'acqua";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Velocità e danni della freccia aumentati del 20%";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Mostra la posizione dei nemici";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Permette il controllo della gravità";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "'Bandita in molti luoghi'";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Apre una Cassa d'oro";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Apre tutte le Casse ombra";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Utilizzato per creare abiti";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Utilizzato per produrre birra";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Migliorie minori a tutti i parametri";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Evoca un Esercito dei Goblin";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Utilizzata per una lavorazione del legno avanzata";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Abbastanza forte per distruggere gli Altari dei demoni";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Aumenta il mana massimo di 40";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Velocità di movimento aumentata del 7%";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Danno boomerang aumentato del 10%";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Aumenta il mana massimo di 60";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Possibilità di colpo critico nel corpo a corpo aumentata del 5%";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Danno boomerang aumentato del 12%";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Può estrarre Mitrilio";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Può estrarre Adamantio";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Può confondere";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Mostra posizione orizzontale";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Abilita al nuoto";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Mostra posizione";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Annulla i danni da caduta";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Permette immunità allo spintone";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Permette la combinazione di alcuni accessori";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Permette il salto doppio";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Aumenta il mana massimo di 80";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Possibilità di colpo critico nel corpo a corpo aumentata del 7%";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Danno boomerang aumentato del 14%";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Danno aumentato del 6%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Possibilità di colpo critico aumetata del 4%";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Permettono di volare";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Aumenta la possibilità di posizionamento dei blocchi";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Spruzza acquasanta su alcuni blocchi";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Diffonde la corruzione su alcuni blocchi";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Evoca una fata magica";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Tre raffiche";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Durante la luna piena trasforma il portatore in un lupo mannaro";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Crea una griglia sullo schermo per posizionare i blocchi";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Danno magico aumentato del 15%";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Danno da mischia aumentato del 15%";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Danno boomerang aumentato del 15%";
-					case 492:
-					case 493:
+					case EntityID.ItemID.DEMON_WINGS:
+					case EntityID.ItemID.ANGEL_WINGS:
 #if VERSION_101
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 						return "Permettono il volo e la caduta lenta";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Genera un arcobaleno guidato";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Evoca un blocco di ghiaccio";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Trasforma il portatore in Tritone quando entra in acqua";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Utilizza la gelatina come munizione";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Posiziona i cavi";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Rimuove i cavi";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Crea svariati frammenti di cristallo all'impatto";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Evoca stelle cadenti all'impatto";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Un pugnale magico che ritorna";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Evoca veloci frammenti di cristallo infuocati";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Evoca sfere di fuoco profane";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "'L'essenza delle creature della luce'";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "'L'essenza delle creature oscure'";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "'Neanche l'acqua può spegnere la fiamma'";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Può essere messa in acqua";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Utilizzata per fondere il minerale adamantio";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Utilizzata per creare oggetti da barre di mitrilio e adamantio";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "'Appuntito e magico!'";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "'A volte portato dalle creature nei deserti corrotti'";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "'A volte portato dalle creature nei deserti di luce'";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Si attiva quando calpestata";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Può essere incantato";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Causa la caduta delle stelle quando colpito";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "50% di possibilità di non consumare munizioni";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Spara una rosa di proiettili";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Riduce la ricarica della pozione curativa";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Aumenta lo spintone nel corpo a corpo";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Si attiva quando calpestata";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Si attiva quando calpestata";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Si attiva quando calpestata";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Evoca i Gemelli";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "'L'essenza del terrore puro'";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "'L'essenza del distruttore'";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "'L'essenza degli osservatori onniscienti'";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Possibilità di colpo critico aumentata del 7%";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Danno aumentato del 7%";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Danno boomerang aumentato del 15%";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Aumenta la durata dell'invincibilità dopo aver subito danni";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Consumo mana ridotto del 8%";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Evoca il Distruttore";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Evoca lo Skeletron primario";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Aumenta il mana massimo di 100";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Possibilità di danno da mischia critico aumentate del 10%";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Evoca lo Slime re";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Raccoglie fino a 5";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "'L'essenza delle potenti creature volanti'";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Ha una possibilità di registrare canzoni";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "'Da non confondere con il Segartello'";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Esplodono quando attivati";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Invia acqua alle pompe esterne";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Riceve acqua dalle pompe interne";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Si attiva ogni secondo";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Si attiva ogni 3 secondi";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Si attiva ogni 5 secondi";
-					case 599:
-					case 600:
-					case 601:
+					case EntityID.ItemID.BLUE_PRESENT:
+					case EntityID.ItemID.GREEN_PRESENT:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Premi " + RightTrigger + " per aprire";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Evoca la Legione gelo";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Evoca un porcellino d'India ";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Danno da mischia e possibilità di colpo critico aumentati del 15%";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Danno boomerang aumentato del 15%, 5% di possibilità di non consumare munizioni";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Aumenta il mana massimo di 120";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Possibilità di colpo critico aumentata del 10%";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Danno boomerang aumentato del 5%, 5% di possibilità di non consumare munizioni";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Danno magico aumentato del 5%, consumo del mana ridotto del 10%";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Velocità di movimento aumentata del 12%";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Velocità di movimento e danno boomerang aumentati del 10%";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Velocità di movimento e danno magico aumentati del 10%";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Ha la possibilità di provocare un sanguinamento";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Una leggendaria lancia giapponese ricoperta di veleno";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Trasforma qualsiasi munizione adatta in Frecce spettrali";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Trasforma qualsiasi munizione adatta in Balestre vulcaniche";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Evoca Ocram";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "'L'essenza delle creature contaminate'";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Evoca uno slime";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Evoca una vespa";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Evoca un pipistrello";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Evoca un lupo mannaro";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Evoca uno zombie";
 #if VERSION_101
-					case 633:
-					case 635:
-					case 637:
+					case EntityID.ItemID.GEORGES_HAT:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Divino!";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "La rigenerazione vita aumenta vicino a un fuoco di bivacco";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.FRENCH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Permet d'extraire la météorite";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Procure de la lumière";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Donne l'heure";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Donne l'heure";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Donne l'heure";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Indique la profondeur";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "'À la fois savoureux et inflammable'";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Augmente le maximum de vie de 20 de façon permanente";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Utilisé pour fondre le minerai";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Permet de forger des objets à partir de métal";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Utilisé pour l'artisanat de base";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Invoque l'œil de Cthulhu";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Régénère lentement la vie";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Fixer le miroir pour regagner son foyer";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Permet de faire un double saut";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Le porteur peur courir super vite";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "'Vibre d'une énergie sombre'";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "'Vibre d'une énergie sombre'";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Invoque une vileronce";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Provoque une pluie d'étoiles";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Purifie la corruption";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Corrompt la sainteté";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "'Ça a l'air bon !'";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Invoque le dévoreur de mondes";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Disparaît au coucher du soleil";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "«\u00a0Viens ici\u00a0!\u00a0»";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Procure de la lumière lorsqu'il est porté";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "33 % de chance de n'utiliser aucune munition";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Vitesse de mêlée augmentée de 7 %";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Vitesse de mêlée augmentée de 7 %";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Vitesse de mêlée augmentée de 7 %";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Permet d'extraire de la pierre de l'enfer";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Augmente le maximum de mana de 20 de façon permanente";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Augmente le maximum de mana de 20";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Lance des boules de feu";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Lance un missile contrôlable";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Déplace la terre par magie";
 #if VERSION_INITIAL
-				case 115:
-					return "Crée un orbe magique de lumière";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Crée un orbe magique de lumière";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Crée un orbe d'ombre magique";
 #endif
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "'Chaude au toucher'";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Trouvé parfois sur les squelettes et les piranhas";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Transforme les flèches en bois tirées en flèches enflammées";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "'Elle pète le feu !'";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Dégâts magiques augmentés de 5\u00a0%";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Dégâts magiques augmentés de 5\u00a0%";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Dégâts magiques augmentés de 5\u00a0%";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Permet de voler";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Cet objet peut attirer une attention non désirée";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "«\u00a0Il contient d'étranges symboles\u00a0»";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Dégâts à distance augmentés de 4 %";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Dégâts à distance augmentés de 4 %";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Dégâts à distance augmentés de 4 %";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Annule tout effet de recul";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Lance de l'eau en continu";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Annule les dégâts de chute";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Augmente la hauteur des sauts";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Invoque une boule d'eau se déplaçant lentement";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Une petite explosion détruisant quelques blocs";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Une grosse explosion détruisant la plupart des blocs";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Une petite explosion ne détruisant pas de blocs";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "'Chaude au toucher'";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "'Ne pas se noyer, c'est quand même cool !'";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Permet de nager";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Permet de résister aux blocs de feu";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Tire des étoiles filantes";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "'Comme c'est joli !'";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Vitesse de mêlée augmentée de 12\u00a0%";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Vitesse de déplacement augmentée de 10\u00a0%";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Fait pousser de l'herbe sur la terre";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "'Peut être incommodant'";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Invoque une boule de feu contrôlable";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Fait pousser les plantes";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Réduit le coût de mana de 6\u00a0%";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Augmente le maximum de mana de 20";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Augmente le maximum de mana de 20";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Augmente le maximum de mana de 20";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "'Peut s'avérer difficile à lancer'";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "'Pour un look de star !'";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Dégâts magiques augmentés de 15\u00a0%";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "'Il sourit, ça ferait un casse-croûte sympa.'";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "'Super idée !'";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "'Vous êtes vraiment terrible.'";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Améliore grandement la respiration sous l'eau";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Lance une faux de démon";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Permet de récupérer des graines comme munitions";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Fonctionne même humide";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Utilisable avec la sarbacane";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "La vitesse de déplacement est augmentée de 5 %";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Procure l'immunité à la lave";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Régénère la vie";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Augmente la vitesse de déplacement de 25 %";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Permet de respirer sous l'eau comme dans l'air";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Augmente la défense de 8";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Régénération de mana augmentée";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Dégâts magiques augmentés de 20\u00a0%";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Réduit la vitesse de chute";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Indique l'emplacement des trésors et du minerai";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Procure l'invisibilité";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Émet une aura de lumière";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Augmente la vision nocturne";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Augmente la fréquence d'apparition des ennemis";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Les attaquants subissent aussi des dégâts";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Permet de marcher sur l'eau";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Vitesse des flèches et leurs dégâts augmentés de 20\u00a0%";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Indique l'emplacement des ennemis";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Permet de contrôler la gravité";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "'Interdit quasiment partout'";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Ouvre un coffre d'or";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Ouvre tous les coffres sombres";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Utilisé pour la fabrication de vêtements";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Utilisé pour brasser la bière.";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Amélioration mineure de toutes les stats.";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Invoque une armée de gobelins";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Permet un travail avancé du bois";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Suffisamment puissant pour détruire les autels de démon";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Augmente le maximum de mana de 40";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Vitesse de déplacement augmentée de 7\u00a0%";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Dégâts à distance augmentés de 10\u00a0%";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Augmente le maximum de mana de 60";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Chance de coup critique de mêlée augmentée de 5\u00a0%";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Dégâts à distance augmentés de 12\u00a0%";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Permet d'extraire du mythril";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Permet d'extraire de l'adamantine";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Peut étourdir les ennemis";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Indique la position horizontale";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Permet de nager";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Indique la position";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Annule les dégâts de chute";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Annule tout effet de recul";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Permet de combiner certains accessoires";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Permet de faire un double saut";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Augmente le maximum de mana de 80";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Chance de coup critique de mêlée augmentée de 7\u00a0%";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Dégâts à distance augmentés de 14\u00a0%";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Dégâts augmentés de 6\u00a0%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Chance de coup critique augmentée de 4\u00a0%";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Permet de voler";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Permet de construire un bloc plus loin";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Purifie certains blocs";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Corrompt certains blocs";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Invoque une fée magique";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Tire des rafales de trois coups";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Transforme le porteur en loup-garou à la pleine lune";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Crée une grille à l'écran pour le placement des blocs";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Dégâts magiques augmentés de 15\u00a0%";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Dégâts de mêlée augmentés de 15\u00a0%";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Dégâts à distance augmentés de 15 %";
-					case 492:
-					case 493:
+					case EntityID.ItemID.DEMON_WINGS:
+					case EntityID.ItemID.ANGEL_WINGS:
 #if VERSION_101
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 						return "Permet de voler et de ralentir la chute";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Lance un arc-en-ciel contrôlable";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Invoque un bloc de glace";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Transforme le porteur en sirène lorsqu'il entre dans l'eau";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Utilise du gel comme carburant";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Joint les câbles";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Coupe les câbles";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Crée plusieurs éclats de cristal à l'impact";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Invoque des étoiles déchues à l'impact";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Une dague qui revient magiquement à son possesseur";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Invoque des éclats rapides de cristal de feu";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Invoque des boules de feu maudites";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "«\u00a0L'essence des créatures de lumière\u00a0»";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "«\u00a0L'essence des créatures sombres\u00a0»";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "«\u00a0Même l'eau ne peut l'éteindre\u00a0»";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Peut être placée dans l'eau";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Utilisée pour fondre le minerai d'adamantine";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Utilisée pour forger des objets avec du mythril et de l'adamantite";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "«\u00a0Magique et coupante\u00a0»";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "«\u00a0Porté parfois par les créatures dans le désert corrompu\u00a0»";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "«\u00a0Porté parfois par les créatures dans le désert de lumière\u00a0»";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "S'active en marchant dessus";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Peut être enchanté";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Des étoiles tombent lorsque le porteur est blessé";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "50 % de chance de n'utiliser aucune munition";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Disperse une salve de balles";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Réduit le temps d'utilisation entre les potions de soin";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Accroît le recul en mêlée";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "S'active en marchant dessus";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "S'active en marchant dessus";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "S'active en marchant dessus";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Invoque les Jumeaux";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "«\u00a0L'essence de la terreur pure\u00a0»";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "«\u00a0L'essence du destructeur\u00a0»";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "«\u00a0L'essence des observateurs omniscients\u00a0»";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Chance de coup critique augmentée de 7\u00a0%";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Dégâts augmentés de 7 %";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Dégâts à distance augmentés de 15 %";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Augmente la durée d'invincibilité après avoir subi des dégâts";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Utilisation de mana réduite de 8 %";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Invoque le destructeur";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Invoque le Skeletron Prime";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Augmente le maximum de mana de 100";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Chance de coup critique et dégâts de mêlée augmentés de 10\u00a0%";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Invoque le roi slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Possibilité d'en empiler jusqu'à 5";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "«\u00a0L'essence des puissantes créatures volantes\u00a0»";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "A une chance d'enregistrer un morceau";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "«\u00a0À ne pas confondre avec le marteau-scie\u00a0»";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explosent lorsqu'ils sont activés";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Envoie de l'eau aux sorties de pompage";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Reçoit de l'eau des postes de pompage";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "S'active chaque seconde";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "S'active toutes les 3 secondes";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "S'active toutes les 5 secondes";
-					case 599:
-					case 600:
-					case 601:
+					case EntityID.ItemID.BLUE_PRESENT:
+					case EntityID.ItemID.GREEN_PRESENT:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Appuyez sur" + RightTrigger + "pour ouvrir";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Invoque la Légion gel";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Invoque un cochon d'Inde de compagnie";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Dégâts de mêlée et chance de coup critique, augmentés de 15\u00a0%";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Dégâts à distance augmentés de 15\u00a0%, 5\u00a0% de chance de n'utiliser aucune munition";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Maximum de mana augmenté de 120";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Chance de coup critique augmentée de 10\u00a0%";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Dégâts à distance augmentés de 5\u00a0%, 5\u00a0% de chance de n'utiliser aucune munition";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Dégâts magiques augmentés de 5\u00a0%, utilisation du mana réduite de 10\u00a0%";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Vitesse de déplacement augmentée de 12\u00a0%";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Vitesse de déplacement et dégâts à distance augmentés de 10\u00a0%";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Vitesse de déplacement et dégâts magiques augmentés de 10\u00a0%";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "A une chance de provoquer des saignements";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Une lance japonaise légendaire couverte de venin";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Transforme toute munition appropriée en flèches spectrales";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Transforme toute munition appropriée en traits de Vulcain";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Invoque Ocram";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "L'essence de créatures infectes";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Invoque un slime de compagnie";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Invoque un tiphia de compagnie";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Invoque une chauve-souris de compagnie";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Invoque un loup-garou de compagnie";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Invoque un zombie de compagnie";
 #if VERSION_101
-					case 633:
-					case 635:
-					case 637:
-						return "Ouh la la"; // lol
-					case 639:
+					case EntityID.ItemID.GEORGES_HAT:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
+						return "Ouh la la"; // Wait, really?
+					case EntityID.ItemID.CAMPFIRE:
 						return "La régénération augmente à proximité des feux de camp";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.SPANISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Permite excavar meteoritos";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Da luz";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Da la hora";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Da la hora";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Da la hora";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Indica la profundidad";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Sabroso a la par que inflamable";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Aumenta el nivel máximo de vida en 20 de forma permanente";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Se usa para fundir mineral";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Se usa para fabricar objetos con lingotes de metal";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Se usa para creaciones básicas";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Invoca al Ojo de Cthulhu";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Regenera la vida poco a poco";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Al mirarte en él regresarás a tu hogar";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Su portador puede realizar dobles saltos";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Permite correr superrápido";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "La energía oscura fluye en su interior";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "La energía oscura fluye en su interior";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Lanza una espina vil";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Hace que lluevan estrellas del cielo";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Limpia la corrupción";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Devuelve el territorio sagrado a la normalidad";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "¡Qué delicia!";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Invoca al Devoramundos";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Desaparece al amanecer";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "'¡Te atrapé!'";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Da luz a su portador";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Probabilidad del 33% de no gastar munición";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Aumenta un 7% la velocidad de los ataques cuerpo a cuerpo";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Aumenta un 7% la velocidad de los ataques cuerpo a cuerpo";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Aumenta un 7% la velocidad de los ataques cuerpo a cuerpo";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Permite excavar la piedra infernal";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Aumenta el maná máximo en 20 de forma permanente";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Aumenta el maná máximo en 20";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Arroja bolas de fuego";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Lanza un proyectil dirigido";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Desplaza la tierra por arte de magia";
 #if VERSION_INITIAL
-				case 115:
-					return "Crea un orbe mágico de luz";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Crea un orbe mágico de luz";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Crea un orbe sombrío mágico";
 #endif
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Caliente al tacto";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "A veces lo sueltan esqueletos y pirañas";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Enciende las flechas de madera";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "'¡Hecha de fuego!'";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Aumenta el daño de los ataques mágicos en un 5%";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Aumenta el daño de los ataques mágicos en un 5%";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Aumenta el daño de los ataques mágicos en un 5%";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Permite volar";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Su portador llamará la atención de los indeseables";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "'Contiene extraños símbolos'";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Aumenta el daño de los ataques a distancia en un 4%";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Aumenta el daño de los ataques a distancia en un 4%";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Aumenta el daño de los ataques a distancia en un 4%";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Anula el retroceso";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Lanza un chorro de agua";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Anula el daño al caer";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Aumenta la altura de los saltos";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Lanza un proyectil de agua a baja velocidad";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Pequeña explosión capaz de romper varios ladrillos";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Gran explosión capaz de romper casi todos los ladrillos";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Pequeña explosión que no rompe ningún ladrillo";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Caliente al tacto";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "'Está bien eso de no ahogarse'";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Permite nadar";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Ofrece inmunidad ante los bloques de fuego";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Dispara estrellas fugaces";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "'Hermosa, muy hermosa'";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Aumenta un 12% la velocidad en el cuerpo a cuerpo";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Aumenta en un 10% la velocidad de movimiento";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Genera césped sobre la tierra";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "'Una molestia para los demás'";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Lanza una bola de fuego dirigida";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Cultiva plantas";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Reduce el uso de maná en un 6%";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Aumenta el maná máximo en 20";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Aumenta el maná máximo en 20";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Aumenta el maná máximo en 20";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "'Puede costar lanzarla'";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "'¡Te quedan muy bien!'";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Aumenta el daño de los ataques mágicos en un 15%";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Sonríe y además es un buen aperitivo";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "'¡Una buena idea!'";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "'Eres mala persona'";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Permite respirar bajo el agua mucho más tiempo";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Lanza una guadaña demoníaca";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Permite recoger semillas como munición";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Funciona con humedad";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Para la cerbatana";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Aumenta en un 5% la velocidad de movimiento";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Ofrece inmunidad ante la lava";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Regenera la vida";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Aumenta en un 25% la velocidad de movimiento";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Permite respirar agua en lugar de aire";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Aumenta la defensa en 8";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Aumenta la regeneración de maná";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Aumenta el daño de los ataques mágicos en un 20%";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Disminuye la velocidad de caída";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Muestra la ubicación de tesoros y minerales";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Proporciona invisibilidad";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Emite un aura de luz";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Mejora la visión nocturna";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Aumenta la velocidad de regeneración del enemigo";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Los atacantes también sufren daños";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Permite caminar sobre el agua";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Aumenta en un 20% la velocidad de las flechas y el daño que causan";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Muestra la ubicación de los enemigos";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Permite controlar la gravedad";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "'Prohibidos en casi todas partes'";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Abre un cofre de oro";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Abre todos los cofres de las sombras";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Se usa para confeccionar ropa";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Se usa para elaborar cerveza";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Proporciona pequeñas mejoras a todas las estadísticas";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Invoca a un ejército de duendes";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Se usa para fabricar artículos de madera avanzados";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Lo bastante sólido para destruir los altares demoníacos";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Aumenta el maná máximo en 40";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Aumenta en un 7% la velocidad de movimiento";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Aumenta el daño de los ataques a distancia en un 10%";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Aumenta el maná máximo en 60";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Aumenta un 5% la probabilidad de ataque crítico en el cuerpo a cuerpo";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Aumenta el daño de los ataques a distancia en un 12%";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Permite extraer mithril";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Permite extraer adamantita";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Puede llegar a confundir";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Indica el horizonte";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Permite nadar";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Indica la posición";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Anula el daño al caer";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Anula el retroceso";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Permite combinar varios accesorios";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Su portador puede realizar dobles saltos";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Aumenta el maná máximo en 80";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Aumenta un 7% la probabilidad de ataque crítico en el cuerpo a cuerpo";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Aumenta el daño de los ataques a distancia en un 14%";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Aumenta el daño de los ataques en un 6%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Aumenta la probabilidad de conseguir ataques críticos en un 4%";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Permite volar";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Aumenta la distancia de colocación de bloques";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Convierte los bloques cercanos en bloques sagrados";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Extiende la corrupción a algunos bloques";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Invoca a una hada mágica";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Dispara tres ráfagas";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Convierte a su portador en hombre lobo durante la luna llena";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Dibuja una rejilla en pantalla para colocar los bloques";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Aumenta el daño de los ataques mágicos en un 15%";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Aumenta el daño de los ataques cuerpo a cuerpo en un 15%";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Aumenta el daño de los ataques a distancia en un 15%";
-					case 492:
-					case 493:
+					case EntityID.ItemID.DEMON_WINGS:
+					case EntityID.ItemID.ANGEL_WINGS:
 #if VERSION_101
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 #endif
 						return "Permite volar y caer lentamente";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Lanza un arco iris dirigido";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Invoca un bloque de hielo";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Transforma a su portador en un tritón al sumergirse en el agua";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Utiliza gel como munición";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Permite colocar alambre";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Permite cortar alambre";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Crea varios fragmentos de cristal al impactar";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Invoca estrellas fugaces al impactar";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Una daga mágica que vuelve al arrojarse";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Lanza fragmentos de cristal a toda velocidad";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Lanza bolas de fuego impuras";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "La esencia de las criaturas de la luz";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "La esencia de las criaturas de la oscuridad";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Ni siquiera el agua puede apagarla";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Se puede meter en el agua";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Se usa para fundir mineral de adamantita";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Se usa para fabricar objetos con lingotes de mithril y adamantita";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "'¡Puntiagudo y mágico!'";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "A veces lo llevan las criaturas de los desiertos corrompidos";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "A veces lo llevan las criaturas de los desiertos de luz";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Se activa al pisarla";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Se puede hechizar";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Hace que las estrellas caigan al recibir heridas";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Probabilidad del 50% de no gastar munición";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Dispara una ráfaga dispersa de balas";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Reduce el tiempo de espera para usar pociones curativas";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Aumenta el retroceso en el cuerpo a cuerpo";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Se activa al pisarla";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Se activa al pisarla";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Se activa al pisarla";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Invoca a los Gemelos";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "La esencia del terror en estado puro";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "La esencia del Destructor";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "La esencia de los observadores omniscientes";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Aumenta la probabilidad de conseguir ataques críticos en un 7%";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Aumenta el daño de los ataques en un 7%";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Aumenta el daño a de los ataques a distancia en un 15%";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Aumenta el tiempo de invencibilidad tras recibir daños";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Reduce el uso de maná en un 8%";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Invoca al Destructor";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Invoca al Esqueletrón mayor";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Aumenta el maná máximo en 100";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Aumenta en un 10% el daño de los ataques cuerpo a cuerpo y la posibilidad de causar ataques críticos";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Invoca al rey slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "No apilar más de 5";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "La esencia de poderosas criaturas que vuelan";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Permite grabar canciones";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "No confundir con un cuchillo jamonero";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explota al activarse";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Envía agua a los colectores de salida";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Recibe agua de los colectores de entrada";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Se activa cada segundo";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Se activa cada 3 segundos";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Se activa cada 5 segundos";
-					case 599:
-					case 600:
-					case 601:
+					case EntityID.ItemID.BLUE_PRESENT:
+					case EntityID.ItemID.GREEN_PRESENT:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Pulsa " + RightTrigger + " para abrir";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Convoca a la Legión del hielo";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Invoca a un conejillo de Indias de mascota";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "15% de aumento en daño por ataque en grupo y posibilidad de ataque mortal";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "15% de aumento de daño a distancia, 5% de posibilidad de no gastar munición";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Aumenta el maná máximo en 120";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "10% de aumento en posibilidad de ataque mortal";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "5% de aumento de daño a distancia, 5% de posibilidad de no gastar munición";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "5% de aumento en daño por magia, 10% de reducción en uso de maná";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "12% de aumento en la velocidad de movimiento";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10% de aumento en la velocidad de movimiento y el daño a distancia";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "10% de aumento en la velocidad de movimiento y el daño por magia";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tiene la posibilidad de causar hemorragia";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Una legendaria lanza japonesa empapada de veneno";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Transforma cualquier munición adecuada en flechas espectrales";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Transforma cualquier munición adecuada en relámpagos volcánicos";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Invoca a Ocram";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "'La esencia de las criaturas infectadas'";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Invoca a un slime mascota";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Invoca a una avispa mascota";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Invoca a un murciélago mascota";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Invoca a un hombre lobo mascota";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Invoca a un zombi mascota";
 #if VERSION_101
-					case 633:
-					case 635:
-					case 637:
+					case EntityID.ItemID.GEORGES_HAT:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "La repera";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "La regeneración de vida es mayor junto a una hoguera";
 #endif
 				}
@@ -10605,451 +8982,451 @@ namespace Terraria
 		{
 			if (LangOption <= (int)ID.ENGLISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "'Forged with the fury of heaven'";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "'Half shark, half gun, completely awesome.'";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "3% increased magic critical strike chance";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "3% increased magic critical strike chance";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "3% increased magic critical strike chance";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "9% increased magic critical strike chance";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "12% increased melee speed";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "6% increased ranged critical strike chance";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "3% increased critical strike chance";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "10% increased movement speed";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "15% increased magic damage";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "10% increased melee damage";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "7% increased ranged critical strike chance";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "5% increased damage";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "3% increased critical strike chance";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "'Find your inner pieces'";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Greatly extends underwater breathing";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Tells the time";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Grants immunity to fire blocks";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Grants immunity to fire blocks";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Increases jump height";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "11% increased magic damage and critical strike chance";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "14% increased melee damage";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "8% increased ranged critical strike chance";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "5% increased movement speed";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "The wearer can run super fast";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Only the first shot consumes ammo";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "'Minishark's older brother'";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "8% increased movement speed";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "8% increased ranged critical strike chance";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Automatically use mana potions when needed";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "12% increased magic damage and critical strike chance";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "10% increased melee speed";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "15% increased critical strike chance";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "10% increased ranged critical strike chance";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "15% increased magic damage and critical strike chance";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "5% increased melee damage";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "10% increased ranged critical strike chance";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "10% increased magic critical strike chance";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "2% increased melee speed";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10% chance to not consume ammo";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Increases maximum mana by 30";
 				}
 			}
 			else if (LangOption == (int)ID.GERMAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "'Geschmiedet mit Himmelswut'";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "'Halb Hai, halb Pistole - einfach toll!'";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Um 3% erhöhte kritische Magietrefferchance";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Um 3% erhöhte kritische Magietrefferchance";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Um 3% erhöhte kritische Magietrefferchance";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Um 9% erhöhte kritische Magietrefferchance";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Um 12% erhöhtes Nahkampftempo";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Um 6% erhöhte kritische Fernkampf-Trefferchance";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Um 3% erhöhte kritische Trefferchance";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Um 10% erhöhtes Bewegungstempo";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Um 15% erhöhter magischer Schaden";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Um 10% erhöhter Nahkampfschaden";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Um 7% erhöhte kritische Fernkampf-Trefferchance";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Um 5% erhöhter Schaden";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Um 3% erhöhte kritische Trefferchance";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "'Sammle dich!'";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Verleiht deutlich mehr Atemluft unter Wasser";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Zeigt die Zeit an";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Macht immun gegen Feuer-Blöcke";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Macht immun gegen Feuer-Blöcke";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Vergrössert die Sprunghöhe";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Magischer Schaden und kritische Trefferchance um 11% erhöht";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Um 14% erhöhter Nahkampfschaden";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Um 8% erhöhte kritische Fernkampf-Trefferchance";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Um 5% erhöhtes Bewegungstempo";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Der Träger kann superschnell rennen";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Nur der erste Schuss verbraucht Munition ";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "'Minihais großer Bruder'";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Um 8% erhöhtes Bewegungstempo";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Um 8% erhöhte kritische Fernkampf-Trefferchance";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Bei Bedarf automatisch Manatränke verwenden";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Magischer Schaden und kritische Trefferchance um 12% erhöht";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Um 10% erhöhtes Nahkampftempo";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Kritische Trefferchance um 15% erhöht";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Um 10% erhöhte kritische Fernkampf-Trefferchance";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Magieschaden und kritische Trefferchance um 15% erhöht";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Um 5% erhöhter Nahkampfschaden";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Um 10% erhöhte kritische Fernkampf-Trefferchance";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "10% erhöhte Chance auf kritischen Magietreffer";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Um 2% erhöhtes Nahkampftempo";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10%ige Chance, keine Munition zu verbrauchen";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Erhöht maximales Mana um 30";
 				}
 			}
 			else if (LangOption == (int)ID.ITALIAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "'Forgiato con la furia del cielo'";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "'Mezzo squalo, mezza arma, assolutamente terrificante.'";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Aumenta la possibilità di colpo critico magico del 3%";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Aumenta la possibilità di colpo critico magico del 3%";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Aumenta la possibilità di colpo critico magico del 3%";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Possibilità colpo critico magico aumentate del 9%";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Velocità del corpo a corpo aumentata del 12%";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Possibilità di colpo critico magico aumentata del 6%";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Possibilità di colpo critico aumentata del 3%";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Velocità di movimento aumentata del 10%";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Danno magico aumentato del 15%";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Danno da mischia aumentato del 10%";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Possibilità di colpo critico a distanza aumentata del 7%";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Danno aumentato del 5%";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Possibilità di colpo critico aumentata del 3%";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "'Trova i pezzi interni'";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Aumenta moltissimo il respiro sott'acqua";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Indica il tempo";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Permette immunità ai blocchi di fuoco";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Permette immunità ai blocchi di fuoco";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Aumenta l'altezza del salto";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Possibilità di colpo critico e danno magico aumentate del 11%";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Danno da mischia aumentato del 14%";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Possibilità di colpo critico a distanza aumentata dell'8%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Velocità di movimento aumentata del 5%";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Colui che li indossa può correre velocissimo";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Solo il primo colpo consuma munizioni";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "'Fratello maggiore del Minishark'";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Velocità di movimento aumentata del 8%";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Possibilità di colpo critico a distanza aumentata dell'8%";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Utilizza le pozioni mana automaticamente in caso di bisogno";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Possibilità di danno magico e colpo critico aumentate del 12%";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Velocità del corpo a corpo aumentata del 10%";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Possibilità di colpo critico aumentata del 15%";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Possibilità di colpo critico boomerang aumentata del 10%";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Possibilità di colpo critico e del danno magico aumentati del 15%";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Danno da mischia aumentato del 5%";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Possibilità di colpo critico boomerang aumentata del 10%";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Possibilità di colpo critico magico aumentata del 10%";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Velocità del corpo a corpo aumentata del 2%";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10% di possibilità di non consumare munizioni";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Aumenta il mana massimo di 30";
 				}
 			}
 			else if (LangOption == (int)ID.FRENCH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "'Forgée dans la furie du ciel'";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "'Moitié requin, moitié fusil, c'est de la balle !'";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Chance de coup critique magique augmentée de 3\u00a0%";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Chance de coup critique magique augmentée de 3\u00a0%";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Chance de coup critique magique augmentée de 3\u00a0%";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Chance de coup critique magique augmentée de 9\u00a0%";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Vitesse de mêlée augmentée de 12\u00a0%";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Chance de coup critique à distance augmentée de 6\u00a0%";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Chance de coup critique augmentée de 3\u00a0%";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Vitesse de déplacement augmentée de 10\u00a0%";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Dégâts magiques augmentés de 15\u00a0%";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Dégâts de mêlée  augmentés de 10\u00a0%";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Chance de coup critique à distance augmentée de 7\u00a0%";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Dégâts augmentés de 5\u00a0%";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Chance de coup critique augmentée de 3\u00a0%";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "«\u00a0Pour trouver la paix intérieure\u00a0»";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Améliore grandement la respiration sous l'eau";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Donne l'heure";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Permet de résister aux blocs de feu";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Permet de résister aux blocs de feu";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Augmente la hauteur des sauts";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Dégâts magiques et chance de coup critique augmentés de 11\u00a0%";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Dégâts de mêlée augmentés de 14\u00a0%";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Chance de coup critique à distance augmentée de 8\u00a0%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Vitesse de déplacement augmentée de 5\u00a0%";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Le porteur peur courir super vite";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Seul le premier tir utilise des munitions";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "'La version améliorée du minishark'";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Vitesse de mouvement augmentée de 8 %";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Chance de coup critique à distance augmentée de 8\u00a0%";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Utilise des potions de mana automatiquement si besoin";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Chance de coup critique et dégâts magiques augmentés de 12\u00a0%";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Vitesse de mêlée augmentée de 10 %";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Chance de coup critique augmentée de 15\u00a0%";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Chance de coup critique à distance augmentée de 10\u00a0%";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Dégâts magiques et chance de coup critique augmentés de 15\u00a0%";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Dégâts de mêlée augmentés de 5\u00a0%";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Chance de coup critique à distance augmentée de 10\u00a0%";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Chance de coup critique magique augmentée de 10\u00a0%";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Vitesse de mêlée augmentée de 2\u00a0%";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10\u00a0% de chance de n'utiliser aucune munition";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Maximum de mana augmenté de 30";
 				}
 			}
 			else if (LangOption == (int)ID.SPANISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "'Forjada por la furia del cielo'";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "'Mitad tiburón, mitad arma; realmente asombroso'";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Aumenta la probabilidad de ataque mágico crítico en un 3%";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Aumenta la probabilidad de ataque mágico crítico en un 3%";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Aumenta la probabilidad de ataque mágico crítico en un 3%";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Aumenta la probabilidad de ataque mágico crítico en un 9%";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Aumenta un 12% la velocidad de los ataques cuerpo a cuerpo";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Aumenta la probabilidad de ataque a distancia crítico en un 6%";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Aumenta la probabilidad de conseguir ataques críticos en un 3%";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Aumenta en un 10% la velocidad de movimiento";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Aumenta el daño de los ataques mágicos en un 15%";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Aumenta el daño de los ataques cuerpo a cuerpo en un 10%";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Aumenta la probabilidad de ataque a distancia crítico en un 7%";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Aumenta el daño en un 5%";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Aumenta la probabilidad de conseguir ataques críticos en un 3%";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Busca en tu interior";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Permite respirar bajo el agua mucho más tiempo";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "Da la hora";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Ofrece inmunidad ante los bloques de fuego";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Ofrece inmunidad ante los bloques de fuego";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Aumenta la altura de los saltos";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Aumenta en un 11% el daño de los ataques mágicos y la posibilidad de causar ataques críticos";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Aumenta el daño de los ataques cuerpo a cuerpo en un 14%";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Aumenta la probabilidad de ataque a distancia crítico en un 8%";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Aumenta en un 5% la velocidad de movimiento";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Permite correr superrápido";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Solo gasta munición el primer disparo";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "'El hermano mayor del minitiburón'";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Aumenta en un 8% la velocidad de movimiento";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Aumenta la probabilidad de ataque a distancia crítico en un 8%";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Usa de forma automática pociones de maná cuando se necesitan";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Aumenta en un 12% el daño de los ataques mágicos y la posibilidad de causar ataques críticos";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Aumenta en un 10% la velocidad de los ataques cuerpo a cuerpo";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "15% de aumento en posibilidad de ataque mortal";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "10% de aumento en posibilidad de ataque mortal a distancia";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "15% de aumento en daño por magia y posibilidad de ataque mortal";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "5% de aumento en daño por ataque en grupo";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "10% de aumento en posibilidad de ataque mortal a distancia";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "10% de aumento en posibilidad de ataque mágico mortal";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "2% de aumento en la velocidad de ataque en grupo";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "10% de posibilidad de no gastar munición";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Aumenta el maná máximo en 30";
 				}
 			}
@@ -11060,2751 +9437,2751 @@ namespace Terraria
 		{
 			if (LangOption <= (int)ID.ENGLISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Gold Pickaxe";
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						return "Gold Broadsword";
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						return "Gold Shortsword";
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						return "Gold Axe";
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						return "Gold Hammer";
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						return "Gold Bow";
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						return "Silver Pickaxe";
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						return "Silver Broadsword";
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						return "Silver Shortsword";
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						return "Silver Axe";
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						return "Silver Hammer";
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						return "Silver Bow";
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						return "Copper Pickaxe";
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						return "Copper Broadsword";
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						return "Copper Shortsword";
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						return "Copper Axe";
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						return "Copper Hammer";
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						return "Copper Bow";
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						return "Blue Phasesaber";
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						return "Red Phasesaber";
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						return "Green Phasesaber";
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						return "Purple Phasesaber";
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						return "White Phasesaber";
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						return "Yellow Phasesaber";
-					case 1:
+					case EntityID.ItemID.IRON_PICKAXE:
 						return "Iron Pickaxe";
-					case 2:
+					case EntityID.ItemID.DIRT_BLOCK:
 						return "Dirt Block";
-					case 3:
+					case EntityID.ItemID.STONE_BLOCK:
 						return "Stone Block";
-					case 4:
+					case EntityID.ItemID.IRON_BROADSWORD:
 						return "Iron Broadsword";
-					case 5:
+					case EntityID.ItemID.MUSHROOM:
 						return "Mushroom";
-					case 6:
+					case EntityID.ItemID.IRON_SHORTSWORD:
 						return "Iron Shortsword";
-					case 7:
+					case EntityID.ItemID.IRON_HAMMER:
 						return "Iron Hammer";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Torch";
-					case 9:
+					case EntityID.ItemID.WOOD:
 						return "Wood";
-					case 10:
+					case EntityID.ItemID.IRON_AXE:
 						return "Iron Axe";
-					case 11:
+					case EntityID.ItemID.IRON_ORE:
 						return "Iron Ore";
-					case 12:
+					case EntityID.ItemID.COPPER_ORE:
 						return "Copper Ore";
-					case 13:
+					case EntityID.ItemID.GOLD_ORE:
 						return "Gold Ore";
-					case 14:
+					case EntityID.ItemID.SILVER_ORE:
 						return "Silver Ore";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Copper Watch";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Silver Watch";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Gold Watch";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Depth Meter";
-					case 19:
+					case EntityID.ItemID.GOLD_BAR:
 						return "Gold Bar";
-					case 20:
+					case EntityID.ItemID.COPPER_BAR:
 						return "Copper Bar";
-					case 21:
+					case EntityID.ItemID.SILVER_BAR:
 						return "Silver Bar";
-					case 22:
+					case EntityID.ItemID.IRON_BAR:
 						return "Iron Bar";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Gel";
-					case 24:
+					case EntityID.ItemID.WOODEN_SWORD:
 						return "Wooden Sword";
-					case 25:
+					case EntityID.ItemID.WOODEN_DOOR:
 						return "Wooden Door";
-					case 26:
+					case EntityID.ItemID.STONE_WALL:
 						return "Stone Wall";
-					case 27:
+					case EntityID.ItemID.ACORN:
 						return "Acorn";
-					case 28:
+					case EntityID.ItemID.LESSER_HEALING_POTION:
 						return "Lesser Healing Potion";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Life Crystal";
-					case 30:
+					case EntityID.ItemID.DIRT_WALL:
 						return "Dirt Wall";
-					case 31:
+					case EntityID.ItemID.BOTTLE:
 						return "Bottle";
-					case 32:
+					case EntityID.ItemID.WOODEN_TABLE:
 						return "Wooden Table";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Furnace";
-					case 34:
+					case EntityID.ItemID.WOODEN_CHAIR:
 						return "Wooden Chair";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Iron Anvil";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Work Bench";
-					case 37:
+					case EntityID.ItemID.GOGGLES:
 						return "Goggles";
-					case 38:
+					case EntityID.ItemID.LENS:
 						return "Lens";
-					case 39:
+					case EntityID.ItemID.WOODEN_BOW:
 						return "Wooden Bow";
-					case 40:
+					case EntityID.ItemID.WOODEN_ARROW:
 						return "Wooden Arrow";
-					case 41:
+					case EntityID.ItemID.FLAMING_ARROW:
 						return "Flaming Arrow";
-					case 42:
+					case EntityID.ItemID.SHURIKEN:
 						return "Shuriken";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Suspicious Looking Eye";
-					case 44:
+					case EntityID.ItemID.DEMON_BOW:
 						return "Demon Bow";
-					case 45:
+					case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 						return "War Axe of the Night";
-					case 46:
+					case EntityID.ItemID.LIGHTS_BANE:
 						return "Light's Bane";
-					case 47:
+					case EntityID.ItemID.UNHOLY_ARROW:
 						return "Unholy Arrow";
-					case 48:
+					case EntityID.ItemID.CHEST:
 						return "Chest";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Band of Regeneration";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Magic Mirror";
-					case 51:
+					case EntityID.ItemID.JESTERS_ARROW:
 						return "Jester's Arrow";
-					case 52:
+					case EntityID.ItemID.ANGEL_STATUE:
 						return "Angel Statue";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Cloud in a Bottle";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Hermes Boots";
-					case 55:
+					case EntityID.ItemID.ENCHANTED_BOOMERANG:
 						return "Enchanted Boomerang";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "Demonite Ore";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "Demonite Bar";
-					case 58:
+					case EntityID.ItemID.HEART:
 						return "Heart";
-					case 59:
+					case EntityID.ItemID.CORRUPT_SEEDS:
 						return "Corrupt Seeds";
-					case 60:
+					case EntityID.ItemID.VILE_MUSHROOM:
 						return "Vile Mushroom";
-					case 61:
+					case EntityID.ItemID.EBONSTONE_BLOCK:
 						return "Ebonstone Block";
-					case 62:
+					case EntityID.ItemID.GRASS_SEEDS:
 						return "Grass Seeds";
-					case 63:
+					case EntityID.ItemID.SUNFLOWER:
 						return "Sunflower";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Vilethorn";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Starfury";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Purification Powder";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Vile Powder";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "Rotten Chunk";
-					case 69:
+					case EntityID.ItemID.WORM_TOOTH:
 						return "Worm Tooth";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Worm Food";
-					case 71:
+					case EntityID.ItemID.COPPER_COIN:
 						return "Copper Coin";
-					case 72:
+					case EntityID.ItemID.SILVER_COIN:
 						return "Silver Coin";
-					case 73:
+					case EntityID.ItemID.GOLD_COIN:
 						return "Gold Coin";
-					case 74:
+					case EntityID.ItemID.PLATINUM_COIN:
 						return "Platinum Coin";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Fallen Star";
-					case 76:
+					case EntityID.ItemID.COPPER_GREAVES:
 						return "Copper Greaves";
-					case 77:
+					case EntityID.ItemID.IRON_GREAVES:
 						return "Iron Greaves";
-					case 78:
+					case EntityID.ItemID.SILVER_GREAVES:
 						return "Silver Greaves";
-					case 79:
+					case EntityID.ItemID.GOLD_GREAVES:
 						return "Gold Greaves";
-					case 80:
+					case EntityID.ItemID.COPPER_CHAINMAIL:
 						return "Copper Chainmail";
-					case 81:
+					case EntityID.ItemID.IRON_CHAINMAIL:
 						return "Iron Chainmail";
-					case 82:
+					case EntityID.ItemID.SILVER_CHAINMAIL:
 						return "Silver Chainmail";
-					case 83:
+					case EntityID.ItemID.GOLD_CHAINMAIL:
 						return "Gold Chainmail";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "Grappling Hook";
-					case 85:
+					case EntityID.ItemID.CHAIN:
 						return "Iron Chain";
-					case 86:
+					case EntityID.ItemID.SHADOW_SCALE:
 						return "Shadow Scale";
-					case 87:
+					case EntityID.ItemID.PIGGY_BANK:
 						return "Piggy Bank";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Mining Helmet";
-					case 89:
+					case EntityID.ItemID.COPPER_HELMET:
 						return "Copper Helmet";
-					case 90:
+					case EntityID.ItemID.IRON_HELMET:
 						return "Iron Helmet";
-					case 91:
+					case EntityID.ItemID.SILVER_HELMET:
 						return "Silver Helmet";
-					case 92:
+					case EntityID.ItemID.GOLD_HELMET:
 						return "Gold Helmet";
-					case 93:
+					case EntityID.ItemID.WOOD_WALL:
 						return "Wood Wall";
-					case 94:
+					case EntityID.ItemID.WOOD_PLATFORM:
 						return "Wood Platform";
-					case 95:
+					case EntityID.ItemID.FLINTLOCK_PISTOL:
 						return "Flintlock Pistol";
-					case 96:
+					case EntityID.ItemID.MUSKET:
 						return "Musket";
-					case 97:
+					case EntityID.ItemID.MUSKET_BALL:
 						return "Musket Ball";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Minishark";
-					case 99:
+					case EntityID.ItemID.IRON_BOW:
 						return "Iron Bow";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Shadow Greaves";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Shadow Scalemail";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Shadow Helmet";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Nightmare Pickaxe";
-					case 104:
+					case EntityID.ItemID.THE_BREAKER:
 						return "The Breaker";
-					case 105:
+					case EntityID.ItemID.CANDLE:
 						return "Candle";
-					case 106:
+					case EntityID.ItemID.COPPER_CHANDELIER:
 						return "Copper Chandelier";
-					case 107:
+					case EntityID.ItemID.SILVER_CHANDELIER:
 						return "Silver Chandelier";
-					case 108:
+					case EntityID.ItemID.GOLD_CHANDELIER:
 						return "Gold Chandelier";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Mana Crystal";
-					case 110:
+					case EntityID.ItemID.LESSER_MANA_POTION:
 						return "Lesser Mana Potion";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Band of Starpower";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Flower of Fire";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Magic Missile";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Dirt Rod";
 #if VERSION_INITIAL
-				case 115:
-					return "Orb of Light"; // Funny part about this is that only the item name and tooltip are changed. Buff icon, name, and the actual orb that follows you is still for the Orb of Light.
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Orb of Light"; // Funny part about this is that only the item name and tooltip are changed. Buff icon, name, and the actual orb that follows you is still for the Orb of Light.
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Shadow Orb";
 #endif
-					case 116:
+					case EntityID.ItemID.METEORITE:
 						return "Meteorite";
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Meteorite Bar";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Hook";
-					case 119:
+					case EntityID.ItemID.FLAMARANG:
 						return "Flamarang";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Molten Fury";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "Fiery Greatsword";
-					case 122:
+					case EntityID.ItemID.MOLTEN_PICKAXE:
 						return "Molten Pickaxe";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Meteor Helmet";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Meteor Suit";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Meteor Leggings";
-					case 126:
+					case EntityID.ItemID.BOTTLED_WATER:
 						return "Bottled Water";
-					case 127:
+					case EntityID.ItemID.SPACE_GUN:
 						return "Space Gun";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Rocket Boots";
-					case 129:
+					case EntityID.ItemID.GRAY_BRICK:
 						return "Gray Brick";
-					case 130:
+					case EntityID.ItemID.GRAY_BRICK_WALL:
 						return "Gray Brick Wall";
-					case 131:
+					case EntityID.ItemID.RED_BRICK:
 						return "Red Brick";
-					case 132:
+					case EntityID.ItemID.RED_BRICK_WALL:
 						return "Red Brick Wall";
-					case 133:
+					case EntityID.ItemID.CLAY_BLOCK:
 						return "Clay Block";
-					case 134:
+					case EntityID.ItemID.BLUE_BRICK:
 						return "Blue Brick";
-					case 135:
+					case EntityID.ItemID.BLUE_BRICK_WALL:
 						return "Blue Brick Wall";
-					case 136:
+					case EntityID.ItemID.CHAIN_LANTERN:
 						return "Chain Lantern";
-					case 137:
+					case EntityID.ItemID.GREEN_BRICK:
 						return "Green Brick";
-					case 138:
+					case EntityID.ItemID.GREEN_BRICK_WALL:
 						return "Green Brick Wall";
-					case 139:
+					case EntityID.ItemID.PINK_BRICK:
 						return "Pink Brick";
-					case 140:
+					case EntityID.ItemID.PINK_BRICK_WALL:
 						return "Pink Brick Wall";
-					case 141:
+					case EntityID.ItemID.GOLD_BRICK:
 						return "Gold Brick";
-					case 142:
+					case EntityID.ItemID.GOLD_BRICK_WALL:
 						return "Gold Brick Wall";
-					case 143:
+					case EntityID.ItemID.SILVER_BRICK:
 						return "Silver Brick";
-					case 144:
+					case EntityID.ItemID.SILVER_BRICK_WALL:
 						return "Silver Brick Wall";
-					case 145:
+					case EntityID.ItemID.COPPER_BRICK:
 						return "Copper Brick";
-					case 146:
+					case EntityID.ItemID.COPPER_BRICK_WALL:
 						return "Copper Brick Wall";
-					case 147:
+					case EntityID.ItemID.SPIKE:
 						return "Spike";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Water Candle";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "Book";
-					case 150:
+					case EntityID.ItemID.COBWEB:
 						return "Cobweb";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Necro Helmet";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Necro Breastplate";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Necro Greaves";
-					case 154:
+					case EntityID.ItemID.BONE:
 						return "Bone";
-					case 155:
+					case EntityID.ItemID.MURAMASA:
 						return "Muramasa";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Cobalt Shield";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Aqua Scepter";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Lucky Horseshoe";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Shiny Red Balloon";
-					case 160:
+					case EntityID.ItemID.HARPOON:
 						return "Harpoon";
-					case 161:
+					case EntityID.ItemID.SPIKY_BALL:
 						return "Spiky Ball";
-					case 162:
+					case EntityID.ItemID.BALL_O_HURT:
 						return "Ball O' Hurt";
-					case 163:
+					case EntityID.ItemID.BLUE_MOON:
 						return "Blue Moon";
-					case 164:
+					case EntityID.ItemID.HANDGUN:
 						return "Handgun";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Water Bolt";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Bomb";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Dynamite";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Grenade";
-					case 169:
+					case EntityID.ItemID.SAND_BLOCK:
 						return "Sand Block";
-					case 170:
+					case EntityID.ItemID.GLASS:
 						return "Glass";
-					case 171:
+					case EntityID.ItemID.SIGN:
 						return "Sign";
-					case 172:
+					case EntityID.ItemID.ASH_BLOCK:
 						return "Ash Block";
-					case 173:
+					case EntityID.ItemID.OBSIDIAN:
 						return "Obsidian";
-					case 174:
+					case EntityID.ItemID.HELLSTONE:
 						return "Hellstone";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Hellstone Bar";
-					case 176:
+					case EntityID.ItemID.MUD_BLOCK:
 						return "Mud Block";
-					case 177:
+					case EntityID.ItemID.SAPPHIRE:
 						return "Sapphire";
-					case 178:
+					case EntityID.ItemID.RUBY:
 						return "Ruby";
-					case 179:
+					case EntityID.ItemID.EMERALD:
 						return "Emerald";
-					case 180:
+					case EntityID.ItemID.TOPAZ:
 						return "Topaz";
-					case 181:
+					case EntityID.ItemID.AMETHYST:
 						return "Amethyst";
-					case 182:
+					case EntityID.ItemID.DIAMOND:
 						return "Diamond";
-					case 183:
+					case EntityID.ItemID.GLOWING_MUSHROOM:
 						return "Glowing Mushroom";
-					case 184:
+					case EntityID.ItemID.STAR:
 						return "Star";
-					case 185:
+					case EntityID.ItemID.IVY_WHIP:
 						return "Ivy Whip";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "Breathing Reed";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Flipper";
-					case 188:
+					case EntityID.ItemID.HEALING_POTION:
 						return "Healing Potion";
-					case 189:
+					case EntityID.ItemID.MANA_POTION:
 						return "Mana Potion";
-					case 190:
+					case EntityID.ItemID.BLADE_OF_GRASS:
 						return "Blade of Grass";
-					case 191:
+					case EntityID.ItemID.THORN_CHAKRAM:
 						return "Thorn Chakram";
-					case 192:
+					case EntityID.ItemID.OBSIDIAN_BRICK:
 						return "Obsidian Brick";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Obsidian Skull";
-					case 194:
+					case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 						return "Mushroom Grass Seeds";
-					case 195:
+					case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 						return "Jungle Grass Seeds";
-					case 196:
+					case EntityID.ItemID.WOODEN_HAMMER:
 						return "Wooden Hammer";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Star Cannon";
-					case 198:
+					case EntityID.ItemID.BLUE_PHASEBLADE:
 						return "Blue Phaseblade";
-					case 199:
+					case EntityID.ItemID.RED_PHASEBLADE:
 						return "Red Phaseblade";
-					case 200:
+					case EntityID.ItemID.GREEN_PHASEBLADE:
 						return "Green Phaseblade";
-					case 201:
+					case EntityID.ItemID.PURPLE_PHASEBLADE:
 						return "Purple Phaseblade";
-					case 202:
+					case EntityID.ItemID.WHITE_PHASEBLADE:
 						return "White Phaseblade";
-					case 203:
+					case EntityID.ItemID.YELLOW_PHASEBLADE:
 						return "Yellow Phaseblade";
-					case 204:
+					case EntityID.ItemID.METEOR_HAMAXE:
 						return "Meteor Hamaxe";
-					case 205:
+					case EntityID.ItemID.EMPTY_BUCKET:
 						return "Empty Bucket";
-					case 206:
+					case EntityID.ItemID.WATER_BUCKET:
 						return "Water Bucket";
-					case 207:
+					case EntityID.ItemID.LAVA_BUCKET:
 						return "Lava Bucket";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "Jungle Rose";
-					case 209:
+					case EntityID.ItemID.STINGER:
 						return "Stinger";
-					case 210:
+					case EntityID.ItemID.VINE:
 						return "Vine";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Feral Claws";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Anklet of the Wind";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Staff of Regrowth";
-					case 214:
+					case EntityID.ItemID.HELLSTONE_BRICK:
 						return "Hellstone Brick";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "Whoopie Cushion";
-					case 216:
+					case EntityID.ItemID.SHACKLE:
 						return "Shackle";
-					case 217:
+					case EntityID.ItemID.MOLTEN_HAMAXE:
 						return "Molten Hamaxe";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Flamelash";
-					case 219:
+					case EntityID.ItemID.PHOENIX_BLASTER:
 						return "Phoenix Blaster";
-					case 220:
+					case EntityID.ItemID.SUNFURY:
 						return "Sunfury";
-					case 221:
+					case EntityID.ItemID.HELLFORGE:
 						return "Hellforge";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Clay Pot";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Nature's Gift";
-					case 224:
+					case EntityID.ItemID.BED:
 						return "Bed";
-					case 225:
+					case EntityID.ItemID.SILK:
 						return "Silk";
-					case 226:
+					case EntityID.ItemID.LESSER_RESTORATION_POTION:
 						return "Lesser Restoration Potion";
-					case 227:
+					case EntityID.ItemID.RESTORATION_POTION:
 						return "Restoration Potion";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Jungle Hat";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Jungle Shirt";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Jungle Pants";
-					case 231:
+					case EntityID.ItemID.MOLTEN_HELMET:
 						return "Molten Helmet";
-					case 232:
+					case EntityID.ItemID.MOLTEN_BREASTPLATE:
 						return "Molten Breastplate";
-					case 233:
+					case EntityID.ItemID.MOLTEN_GREAVES:
 						return "Molten Greaves";
-					case 234:
+					case EntityID.ItemID.METEOR_SHOT:
 						return "Meteor Shot";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "Sticky Bomb";
-					case 236:
+					case EntityID.ItemID.BLACK_LENS:
 						return "Black Lens";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "Sunglasses";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Wizard Hat";
-					case 239:
+					case EntityID.ItemID.TOP_HAT:
 						return "Top Hat";
-					case 240:
+					case EntityID.ItemID.TUXEDO_SHIRT:
 						return "Tuxedo Shirt";
-					case 241:
+					case EntityID.ItemID.TUXEDO_PANTS:
 						return "Tuxedo Pants";
-					case 242:
+					case EntityID.ItemID.SUMMER_HAT:
 						return "Summer Hat";
-					case 243:
+					case EntityID.ItemID.BUNNY_HOOD:
 						return "Bunny Hood";
-					case 244:
+					case EntityID.ItemID.PLUMBERS_HAT:
 						return "Plumber's Hat";
-					case 245:
+					case EntityID.ItemID.PLUMBERS_SHIRT:
 						return "Plumber's Shirt";
-					case 246:
+					case EntityID.ItemID.PLUMBERS_PANTS:
 						return "Plumber's Pants";
-					case 247:
+					case EntityID.ItemID.HEROS_HAT:
 						return "Hero's Hat";
-					case 248:
+					case EntityID.ItemID.HEROS_SHIRT:
 						return "Hero's Shirt";
-					case 249:
+					case EntityID.ItemID.HEROS_PANTS:
 						return "Hero's Pants";
-					case 250:
+					case EntityID.ItemID.FISH_BOWL:
 						return "Fish Bowl";
-					case 251:
+					case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 						return "Archaeologist's Hat";
-					case 252:
+					case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 						return "Archaeologist's Jacket";
-					case 253:
+					case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 						return "Archaeologist's Pants";
 #if VERSION_INITIAL
-				case 254:
-					return "Black Dye";
-				case 255:
-					return "Purple Dye";
+					case EntityID.ItemID.BLACK_THREAD:
+						return "Black Dye";
+					case EntityID.ItemID.PURPLE_THREAD:
+						return "Purple Dye";
 #else
-					case 254:
+					case EntityID.ItemID.BLACK_THREAD:
 						return "Black Thread";
-					case 255:
+					case EntityID.ItemID.PURPLE_THREAD:
 						return "Purple Thread";
 #endif
 
-					case 256:
+					case EntityID.ItemID.NINJA_HOOD:
 						return "Ninja Hood";
-					case 257:
+					case EntityID.ItemID.NINJA_SHIRT:
 						return "Ninja Shirt";
-					case 258:
+					case EntityID.ItemID.NINJA_PANTS:
 						return "Ninja Pants";
-					case 259:
+					case EntityID.ItemID.LEATHER:
 						return "Leather";
-					case 260:
+					case EntityID.ItemID.RED_HAT:
 						return "Red Hat";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Goldfish";
-					case 262:
+					case EntityID.ItemID.ROBE:
 						return "Robe";
-					case 263:
+					case EntityID.ItemID.ROBOT_HAT:
 						return "Robot Hat";
-					case 264:
+					case EntityID.ItemID.GOLD_CROWN:
 						return "Gold Crown";
-					case 265:
+					case EntityID.ItemID.HELLFIRE_ARROW:
 						return "Hellfire Arrow";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "Sandgun";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "Guide Voodoo Doll";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Diving Helmet";
-					case 269:
+					case EntityID.ItemID.FAMILIAR_SHIRT:
 						return "Familiar Shirt";
-					case 270:
+					case EntityID.ItemID.FAMILIAR_PANTS:
 						return "Familiar Pants";
-					case 271:
+					case EntityID.ItemID.FAMILIAR_WIG:
 						return "Familiar Wig";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Demon Scythe";
-					case 273:
+					case EntityID.ItemID.NIGHTS_EDGE:
 						return "Night's Edge";
-					case 274:
+					case EntityID.ItemID.DARK_LANCE:
 						return "Dark Lance";
-					case 275:
+					case EntityID.ItemID.CORAL:
 						return "Coral";
-					case 276:
+					case EntityID.ItemID.CACTUS:
 						return "Cactus";
-					case 277:
+					case EntityID.ItemID.TRIDENT:
 						return "Trident";
-					case 278:
+					case EntityID.ItemID.SILVER_BULLET:
 						return "Silver Bullet";
-					case 279:
+					case EntityID.ItemID.THROWING_KNIFE:
 						return "Throwing Knife";
-					case 280:
+					case EntityID.ItemID.SPEAR:
 						return "Spear";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Blowpipe";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Glowstick";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Seed";
-					case 284:
+					case EntityID.ItemID.WOODEN_BOOMERANG:
 						return "Wooden Boomerang";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Aglet";
-					case 286:
+					case EntityID.ItemID.STICKY_GLOWSTICK:
 						return "Sticky Glowstick";
-					case 287:
+					case EntityID.ItemID.POISONED_KNIFE:
 						return "Poisoned Knife";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Obsidian Skin Potion";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Regeneration Potion";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Swiftness Potion";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Gills Potion";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Ironskin Potion";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Mana Regeneration Potion";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Magic Power Potion";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Featherfall Potion";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Spelunker Potion";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Invisibility Potion";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Shine Potion";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Night Owl Potion";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Battle Potion";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Thorns Potion";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Water Walking Potion";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Archery Potion";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Hunter Potion";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Gravitation Potion";
-					case 306:
+					case EntityID.ItemID.GOLD_CHEST:
 						return "Gold Chest";
-					case 307:
+					case EntityID.ItemID.DAYBLOOM_SEEDS:
 						return "Daybloom Seeds";
-					case 308:
+					case EntityID.ItemID.MOONGLOW_SEEDS:
 						return "Moonglow Seeds";
-					case 309:
+					case EntityID.ItemID.BLINKROOT_SEEDS:
 						return "Blinkroot Seeds";
-					case 310:
+					case EntityID.ItemID.DEATHWEED_SEEDS:
 						return "Deathweed Seeds";
-					case 311:
+					case EntityID.ItemID.WATERLEAF_SEEDS:
 						return "Waterleaf Seeds";
-					case 312:
+					case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 						return "Fireblossom Seeds";
-					case 313:
+					case EntityID.ItemID.DAYBLOOM:
 						return "Daybloom";
-					case 314:
+					case EntityID.ItemID.MOONGLOW:
 						return "Moonglow";
-					case 315:
+					case EntityID.ItemID.BLINKROOT:
 						return "Blinkroot";
-					case 316:
+					case EntityID.ItemID.DEATHWEED:
 						return "Deathweed";
-					case 317:
+					case EntityID.ItemID.WATERLEAF:
 						return "Waterleaf";
-					case 318:
+					case EntityID.ItemID.FIREBLOSSOM:
 						return "Fireblossom";
-					case 319:
+					case EntityID.ItemID.SHARK_FIN:
 						return "Shark Fin";
-					case 320:
+					case EntityID.ItemID.FEATHER:
 						return "Feather";
-					case 321:
+					case EntityID.ItemID.TOMBSTONE:
 						return "Tombstone";
-					case 322:
+					case EntityID.ItemID.MIME_MASK:
 						return "Mime Mask";
-					case 323:
+					case EntityID.ItemID.ANTLION_MANDIBLE:
 						return "Antlion Mandible";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "Illegal Gun Parts";
-					case 325:
+					case EntityID.ItemID.THE_DOCTORS_SHIRT:
 						return "The Doctor's Shirt";
-					case 326:
+					case EntityID.ItemID.THE_DOCTORS_PANTS:
 						return "The Doctor's Pants";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Golden Key";
-					case 328:
+					case EntityID.ItemID.SHADOW_CHEST:
 						return "Shadow Chest";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Shadow Key";
-					case 330:
+					case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 						return "Obsidian Brick Wall";
-					case 331:
+					case EntityID.ItemID.JUNGLE_SPORES:
 						return "Jungle Spores";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Loom";
-					case 333:
+					case EntityID.ItemID.PIANO:
 						return "Piano";
-					case 334:
+					case EntityID.ItemID.DRESSER:
 						return "Dresser";
-					case 335:
+					case EntityID.ItemID.BENCH:
 						return "Bench";
-					case 336:
+					case EntityID.ItemID.BATHTUB:
 						return "Bathtub";
-					case 337:
+					case EntityID.ItemID.RED_BANNER:
 						return "Red Banner";
-					case 338:
+					case EntityID.ItemID.GREEN_BANNER:
 						return "Green Banner";
-					case 339:
+					case EntityID.ItemID.BLUE_BANNER:
 						return "Blue Banner";
-					case 340:
+					case EntityID.ItemID.YELLOW_BANNER:
 						return "Yellow Banner";
-					case 341:
+					case EntityID.ItemID.LAMP_POST:
 						return "Lamp Post";
-					case 342:
+					case EntityID.ItemID.TIKI_TORCH:
 						return "Tiki Torch";
-					case 343:
+					case EntityID.ItemID.BARREL:
 						return "Barrel";
-					case 344:
+					case EntityID.ItemID.CHINESE_LANTERN:
 						return "Chinese Lantern";
-					case 345:
+					case EntityID.ItemID.COOKING_POT:
 						return "Cooking Pot";
-					case 346:
+					case EntityID.ItemID.SAFE:
 						return "Safe";
-					case 347:
+					case EntityID.ItemID.SKULL_LANTERN:
 						return "Skull Lantern";
-					case 348:
+					case EntityID.ItemID.TRASH_CAN:
 						return "Trash Can";
-					case 349:
+					case EntityID.ItemID.CANDELABRA:
 						return "Candelabra";
-					case 350:
+					case EntityID.ItemID.PINK_VASE:
 						return "Pink Vase";
-					case 351:
+					case EntityID.ItemID.MUG:
 						return "Mug";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Keg";
-					case 353:
+					case EntityID.ItemID.ALE:
 						return "Ale";
-					case 354:
+					case EntityID.ItemID.BOOKCASE:
 						return "Bookcase";
-					case 355:
+					case EntityID.ItemID.THRONE:
 						return "Throne";
-					case 356:
+					case EntityID.ItemID.BOWL:
 						return "Bowl";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Bowl of Soup";
-					case 358:
+					case EntityID.ItemID.TOILET:
 						return "Toilet";
-					case 359:
+					case EntityID.ItemID.GRANDFATHER_CLOCK:
 						return "Grandfather Clock";
-					case 360:
+					case EntityID.ItemID.STATUE:
 						return "Armor Statue";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Goblin Battle Standard";
-					case 362:
+					case EntityID.ItemID.TATTERED_CLOTH:
 						return "Tattered Cloth";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Sawmill";
-					case 364:
+					case EntityID.ItemID.COBALT_ORE:
 						return "Cobalt Ore";
-					case 365:
+					case EntityID.ItemID.MYTHRIL_ORE:
 						return "Mythril Ore";
-					case 366:
+					case EntityID.ItemID.ADAMANTITE_ORE:
 						return "Adamantite Ore";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Pwnhammer";
-					case 368:
+					case EntityID.ItemID.EXCALIBUR:
 						return "Excalibur";
-					case 369:
+					case EntityID.ItemID.HALLOWED_SEEDS:
 						return "Hallowed Seeds";
-					case 370:
+					case EntityID.ItemID.EBONSAND_BLOCK:
 						return "Ebonsand Block";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Cobalt Hat";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Cobalt Helmet";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Cobalt Mask";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Cobalt Breastplate";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Cobalt Leggings";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Mythril Hood";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Mythril Helmet";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Mythril Hat";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Mythril Chainmail";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Mythril Greaves";
-					case 381:
+					case EntityID.ItemID.COBALT_BAR:
 						return "Cobalt Bar";
-					case 382:
+					case EntityID.ItemID.MYTHRIL_BAR:
 						return "Mythril Bar";
-					case 383:
+					case EntityID.ItemID.COBALT_CHAINSAW:
 						return "Cobalt Chainsaw";
-					case 384:
+					case EntityID.ItemID.MYTHRIL_CHAINSAW:
 						return "Mythril Chainsaw";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Cobalt Drill";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Mythril Drill";
-					case 387:
+					case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 						return "Adamantite Chainsaw";
-					case 388:
+					case EntityID.ItemID.ADAMANTITE_DRILL:
 						return "Adamantite Drill";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Dao of Pow";
-					case 390:
+					case EntityID.ItemID.MYTHRIL_HALBERD:
 						return "Mythril Halberd";
-					case 391:
+					case EntityID.ItemID.ADAMANTITE_BAR:
 						return "Adamantite Bar";
-					case 392:
+					case EntityID.ItemID.GLASS_WALL:
 						return "Glass Wall";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Compass";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Diving Gear";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "GPS";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Obsidian Horseshoe";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Obsidian Shield";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Tinkerer's Workshop";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Cloud in a Balloon";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Adamantite Headgear";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Adamantite Helmet";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Adamantite Mask";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Adamantite Breastplate";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Adamantite Leggings";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Spectre Boots";
-					case 406:
+					case EntityID.ItemID.ADAMANTITE_GLAIVE:
 						return "Adamantite Glaive";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Toolbelt";
-					case 408:
+					case EntityID.ItemID.PEARLSAND_BLOCK:
 						return "Pearlsand Block";
-					case 409:
+					case EntityID.ItemID.PEARLSTONE_BLOCK:
 						return "Pearlstone Block";
-					case 410:
+					case EntityID.ItemID.MINING_SHIRT:
 						return "Mining Shirt";
-					case 411:
+					case EntityID.ItemID.MINING_PANTS:
 						return "Mining Pants";
-					case 412:
+					case EntityID.ItemID.PEARLSTONE_BRICK:
 						return "Pearlstone Brick";
-					case 413:
+					case EntityID.ItemID.IRIDESCENT_BRICK:
 						return "Iridescent Brick";
-					case 414:
+					case EntityID.ItemID.MUDSTONE_BRICK:
 						return "Mudstone Brick";
-					case 415:
+					case EntityID.ItemID.COBALT_BRICK:
 						return "Cobalt Brick";
-					case 416:
+					case EntityID.ItemID.MYTHRIL_BRICK:
 						return "Mythril Brick";
-					case 417:
+					case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 						return "Pearlstone Brick Wall";
-					case 418:
+					case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 						return "Iridescent Brick Wall";
-					case 419:
+					case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 						return "Mudstone Brick Wall";
-					case 420:
+					case EntityID.ItemID.COBALT_BRICK_WALL:
 						return "Cobalt Brick Wall";
-					case 421:
+					case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 						return "Mythril Brick Wall";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Holy Water";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Unholy Water";
-					case 424:
+					case EntityID.ItemID.SILT_BLOCK:
 						return "Silt Block";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Fairy Bell";
-					case 426:
+					case EntityID.ItemID.BREAKER_BLADE:
 						return "Breaker Blade";
-					case 427:
+					case EntityID.ItemID.BLUE_TORCH:
 						return "Blue Torch";
-					case 428:
+					case EntityID.ItemID.RED_TORCH:
 						return "Red Torch";
-					case 429:
+					case EntityID.ItemID.GREEN_TORCH:
 						return "Green Torch";
-					case 430:
+					case EntityID.ItemID.PURPLE_TORCH:
 						return "Purple Torch";
-					case 431:
+					case EntityID.ItemID.WHITE_TORCH:
 						return "White Torch";
-					case 432:
+					case EntityID.ItemID.YELLOW_TORCH:
 						return "Yellow Torch";
-					case 433:
+					case EntityID.ItemID.DEMON_TORCH:
 						return "Demon Torch";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Clockwork Assault Rifle";
-					case 435:
+					case EntityID.ItemID.COBALT_REPEATER:
 						return "Cobalt Repeater";
-					case 436:
+					case EntityID.ItemID.MYTHRIL_REPEATER:
 						return "Mythril Repeater";
-					case 437:
+					case EntityID.ItemID.DUAL_HOOK:
 						return "Dual Hook";
-					case 438:
+					case EntityID.ItemID.STAR_STATUE:
 						return "Star Statue";
-					case 439:
+					case EntityID.ItemID.SWORD_STATUE:
 						return "Sword Statue";
-					case 440:
+					case EntityID.ItemID.SLIME_STATUE:
 						return "Slime Statue";
-					case 441:
+					case EntityID.ItemID.GOBLIN_STATUE:
 						return "Goblin Statue";
-					case 442:
+					case EntityID.ItemID.SHIELD_STATUE:
 						return "Shield Statue";
-					case 443:
+					case EntityID.ItemID.BAT_STATUE:
 						return "Bat Statue";
-					case 444:
+					case EntityID.ItemID.FISH_STATUE:
 						return "Fish Statue";
-					case 445:
+					case EntityID.ItemID.BUNNY_STATUE:
 						return "Bunny Statue";
-					case 446:
+					case EntityID.ItemID.SKELETON_STATUE:
 						return "Skeleton Statue";
-					case 447:
+					case EntityID.ItemID.REAPER_STATUE:
 						return "Reaper Statue";
-					case 448:
+					case EntityID.ItemID.WOMAN_STATUE:
 						return "Woman Statue";
-					case 449:
+					case EntityID.ItemID.IMP_STATUE:
 						return "Imp Statue";
-					case 450:
+					case EntityID.ItemID.GARGOYLE_STATUE:
 						return "Gargoyle Statue";
-					case 451:
+					case EntityID.ItemID.GLOOM_STATUE:
 						return "Gloom Statue";
-					case 452:
+					case EntityID.ItemID.HORNET_STATUE:
 						return "Hornet Statue";
-					case 453:
+					case EntityID.ItemID.BOMB_STATUE:
 						return "Bomb Statue";
-					case 454:
+					case EntityID.ItemID.CRAB_STATUE:
 						return "Crab Statue";
-					case 455:
+					case EntityID.ItemID.HAMMER_STATUE:
 						return "Hammer Statue";
-					case 456:
+					case EntityID.ItemID.POTION_STATUE:
 						return "Potion Statue";
-					case 457:
+					case EntityID.ItemID.SPEAR_STATUE:
 						return "Spear Statue";
-					case 458:
+					case EntityID.ItemID.CROSS_STATUE:
 						return "Cross Statue";
-					case 459:
+					case EntityID.ItemID.JELLYFISH_STATUE:
 						return "Jellyfish Statue";
-					case 460:
+					case EntityID.ItemID.BOW_STATUE:
 						return "Bow Statue";
-					case 461:
+					case EntityID.ItemID.BOOMERANG_STATUE:
 						return "Boomerang Statue";
-					case 462:
+					case EntityID.ItemID.BOOT_STATUE:
 						return "Boot Statue";
-					case 463:
+					case EntityID.ItemID.CHEST_STATUE:
 						return "Chest Statue";
-					case 464:
+					case EntityID.ItemID.BIRD_STATUE:
 						return "Bird Statue";
-					case 465:
+					case EntityID.ItemID.AXE_STATUE:
 						return "Axe Statue";
-					case 466:
+					case EntityID.ItemID.CORRUPT_STATUE:
 						return "Corrupt Statue";
-					case 467:
+					case EntityID.ItemID.TREE_STATUE:
 						return "Tree Statue";
-					case 468:
+					case EntityID.ItemID.ANVIL_STATUE:
 						return "Anvil Statue";
-					case 469:
+					case EntityID.ItemID.PICKAXE_STATUE:
 						return "Pickaxe Statue";
-					case 470:
+					case EntityID.ItemID.MUSHROOM_STATUE:
 						return "Mushroom Statue";
-					case 471:
+					case EntityID.ItemID.EYEBALL_STATUE:
 						return "Eyeball Statue";
-					case 472:
+					case EntityID.ItemID.PILLAR_STATUE:
 						return "Pillar Statue";
-					case 473:
+					case EntityID.ItemID.HEART_STATUE:
 						return "Heart Statue";
-					case 474:
+					case EntityID.ItemID.POT_STATUE:
 						return "Pot Statue";
-					case 475:
+					case EntityID.ItemID.SUNFLOWER_STATUE:
 						return "Sunflower Statue";
-					case 476:
+					case EntityID.ItemID.KING_STATUE:
 						return "King Statue";
-					case 477:
+					case EntityID.ItemID.QUEEN_STATUE:
 						return "Queen Statue";
-					case 478:
+					case EntityID.ItemID.PIRANHA_STATUE:
 						return "Piranha Statue";
-					case 479:
+					case EntityID.ItemID.PLANKED_WALL:
 						return "Planked Wall";
-					case 480:
+					case EntityID.ItemID.WOODEN_BEAM:
 						return "Wooden Beam";
-					case 481:
+					case EntityID.ItemID.ADAMANTITE_REPEATER:
 						return "Adamantite Repeater";
-					case 482:
+					case EntityID.ItemID.ADAMANTITE_SWORD:
 						return "Adamantite Sword";
-					case 483:
+					case EntityID.ItemID.COBALT_SWORD:
 						return "Cobalt Sword";
-					case 484:
+					case EntityID.ItemID.MYTHRIL_SWORD:
 						return "Mythril Sword";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Moon Charm";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Ruler";
-					case 487:
+					case EntityID.ItemID.CRYSTAL_BALL:
 						return "Crystal Ball";
-					case 488:
+					case EntityID.ItemID.DISCO_BALL:
 						return "Disco Ball";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Sorcerer Emblem";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Warrior Emblem";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Ranger Emblem";
-					case 492:
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Demon Wings";
-					case 493:
+					case EntityID.ItemID.ANGEL_WINGS:
 						return "Angel Wings";
-					case 494:
+					case EntityID.ItemID.MAGICAL_HARP:
 						return "Magical Harp";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Rainbow Rod";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Ice Rod";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Neptune's Shell";
-					case 498:
+					case EntityID.ItemID.MANNEQUIN:
 						return "Mannequin";
-					case 499:
+					case EntityID.ItemID.GREATER_HEALING_POTION:
 						return "Greater Healing Potion";
-					case 500:
+					case EntityID.ItemID.GREATER_MANA_POTION:
 						return "Greater Mana Potion";
-					case 501:
+					case EntityID.ItemID.PIXIE_DUST:
 						return "Pixie Dust";
-					case 502:
+					case EntityID.ItemID.CRYSTAL_SHARD:
 						return "Crystal Shard";
-					case 503:
+					case EntityID.ItemID.CLOWN_HAT:
 						return "Clown Hat";
-					case 504:
+					case EntityID.ItemID.CLOWN_SHIRT:
 						return "Clown Shirt";
-					case 505:
+					case EntityID.ItemID.CLOWN_PANTS:
 						return "Clown Pants";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Flamethrower";
-					case 507:
+					case EntityID.ItemID.BELL:
 						return "Bell";
-					case 508:
+					case EntityID.ItemID.HARP:
 						return "Harp";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Wrench";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Wire Cutter";
-					case 511:
+					case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 						return "Active Stone Block";
-					case 512:
+					case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 						return "Inactive Stone Block";
-					case 513:
+					case EntityID.ItemID.LEVER:
 						return "Lever";
-					case 514:
+					case EntityID.ItemID.LASER_RIFLE:
 						return "Laser Rifle";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Crystal Bullet";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Holy Arrow";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Magic Dagger";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Crystal Storm";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Cursed Flames";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "Soul of Light";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "Soul of Night";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Cursed Flame";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Cursed Torch";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Adamantite Forge";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Mythril Anvil";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "Unicorn Horn";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "Dark Shard";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "Light Shard";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Red Pressure Plate";
-					case 530:
+					case EntityID.ItemID.WIRE:
 						return "Wire";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Spell Tome";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Star Cloak";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Megashark";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Shotgun";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Philosopher's Stone";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Titan Glove";
-					case 537:
+					case EntityID.ItemID.COBALT_NAGINATA:
 						return "Cobalt Naginata";
-					case 538:
+					case EntityID.ItemID.SWITCH:
 						return "Switch";
-					case 539:
+					case EntityID.ItemID.DART_TRAP:
 						return "Dart Trap";
-					case 540:
+					case EntityID.ItemID.BOULDER:
 						return "Boulder";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Green Pressure Plate";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Gray Pressure Plate";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Brown Pressure Plate";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Mechanical Eye";
-					case 545:
+					case EntityID.ItemID.CURSED_ARROW:
 						return "Cursed Arrow";
-					case 546:
+					case EntityID.ItemID.CURSED_BULLET:
 						return "Cursed Bullet";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "Soul of Fright";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "Soul of Might";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "Soul of Sight";
-					case 550:
+					case EntityID.ItemID.GUNGNIR:
 						return "Gungnir";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Hallowed Plate Mail";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Hallowed Greaves";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Hallowed Helmet";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Cross Necklace";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Mana Flower";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Mechanical Worm";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Mechanical Skull";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Hallowed Headgear";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Hallowed Mask";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Slime Crown";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Light Disc";
-					case 562:
+					case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 						return "Music Box (Overworld Day)";
-					case 563:
+					case EntityID.ItemID.MUSIC_BOX_EERIE:
 						return "Music Box (Eerie)";
-					case 564:
+					case EntityID.ItemID.MUSIC_BOX_NIGHT:
 						return "Music Box (Night)";
-					case 565:
+					case EntityID.ItemID.MUSIC_BOX_TITLE:
 						return "Music Box (Title)";
-					case 566:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 						return "Music Box (Underground)";
-					case 567:
+					case EntityID.ItemID.MUSIC_BOX_BOSS1:
 						return "Music Box (Boss 1)";
-					case 568:
+					case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 						return "Music Box (Jungle)";
-					case 569:
+					case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 						return "Music Box (Corruption)";
-					case 570:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 						return "Music Box (Underground Corruption)";
-					case 571:
+					case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 						return "Music Box (The Hallow)";
-					case 572:
+					case EntityID.ItemID.MUSIC_BOX_BOSS2:
 						return "Music Box (Boss 2)";
-					case 573:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 						return "Music Box (Underground Hallow)";
-					case 574:
+					case EntityID.ItemID.MUSIC_BOX_BOSS3:
 						return "Music Box (Boss 3)";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "Soul of Flight";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Music Box";
-					case 577:
+					case EntityID.ItemID.DEMONITE_BRICK:
 						return "Demonite Brick";
-					case 578:
+					case EntityID.ItemID.HALLOWED_REPEATER:
 						return "Hallowed Repeater";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "Hamdrax";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explosives";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Inlet Pump";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Outlet Pump";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "1 Second Timer";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "3 Second Timer";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "5 Second Timer";
-					case 586:
+					case EntityID.ItemID.CANDY_CANE_BLOCK:
 						return "Candy Cane Block";
-					case 587:
+					case EntityID.ItemID.CANDY_CANE_WALL:
 						return "Candy Cane Wall";
-					case 588:
+					case EntityID.ItemID.SANTA_HAT:
 						return "Santa Hat";
-					case 589:
+					case EntityID.ItemID.SANTA_SHIRT:
 						return "Santa Shirt";
-					case 590:
+					case EntityID.ItemID.SANTA_PANTS:
 						return "Santa Pants";
-					case 591:
+					case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 						return "Green Candy Cane Block";
-					case 592:
+					case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 						return "Green Candy Cane Wall";
-					case 593:
+					case EntityID.ItemID.SNOW_BLOCK:
 						return "Snow Block";
-					case 594:
+					case EntityID.ItemID.SNOW_BRICK:
 						return "Snow Brick";
-					case 595:
+					case EntityID.ItemID.SNOW_BRICK_WALL:
 						return "Snow Brick Wall";
-					case 596:
+					case EntityID.ItemID.BLUE_LIGHT:
 						return "Blue Light";
-					case 597:
+					case EntityID.ItemID.RED_LIGHT:
 						return "Red Light";
-					case 598:
+					case EntityID.ItemID.GREEN_LIGHT:
 						return "Green Light";
-					case 599:
+					case EntityID.ItemID.BLUE_PRESENT:
 						return "Blue Present";
-					case 600:
+					case EntityID.ItemID.GREEN_PRESENT:
 						return "Green Present";
-					case 601:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Yellow Present";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Snow Globe";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Cabbage";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Dragon Mask";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Titan Helmet";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Spectral Headgear";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Dragon Breastplate";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Titan Mail";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Spectral Armor";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Dragon Greaves";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Titan Leggings";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Spectral Subligar";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tizona";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Tonbogiri";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Sharanga";
-					case 616:
+					case EntityID.ItemID.SPECTRAL_ARROW:
 						return "Spectral Arrow";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Vulcan Repeater";
-					case 618:
+					case EntityID.ItemID.VULCAN_BOLT:
 						return "Vulcan Bolt";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Suspicious Looking Skull";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "Soul of Blight";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Petri Dish";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Honeycomb";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Vial of Blood";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Wolf Fang";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Brain";
-					case 626:
+					case EntityID.ItemID.MUSIC_BOX_DESERT:
 						return "Music Box (Desert)";
-					case 627:
+					case EntityID.ItemID.MUSIC_BOX_SPACE:
 						return "Music Box (Space)";
-					case 628:
+					case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 						return "Music Box (Tutorial)";
-					case 629:
+					case EntityID.ItemID.MUSIC_BOX_BOSS4:
 						return "Music Box (Boss 4)";
-					case 630:
+					case EntityID.ItemID.MUSIC_BOX_OCEAN:
 						return "Music Box (Ocean)";
-					case 631:
+					case EntityID.ItemID.MUSIC_BOX_SNOW:
 						return "Music Box (Snow)";
 #if VERSION_101
-					case 632:
+					case EntityID.ItemID.FABULOUS_RIBBON:
 						return "Fabulous Ribbon";
-					case 633:
+					case EntityID.ItemID.GEORGES_HAT:
 						return "George's Hat";
-					case 634:
+					case EntityID.ItemID.FABULOUS_TUTU:
 						return "Fabulous Tutu";
-					case 635:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 						return "George's Tuxedo Shirt";
-					case 636:
+					case EntityID.ItemID.FABULOUS_SLIPPERS:
 						return "Fabulous Slippers";
-					case 637:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "George's Tuxedo Pants";
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 						return "Sparkly Wings";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Campfire";
-					case 640:
+					case EntityID.ItemID.WOOD_HELMET:
 						return "Wood Helmet";
-					case 641:
+					case EntityID.ItemID.WOOD_BREASTPLATE:
 						return "Wood Breastplate";
-					case 642:
+					case EntityID.ItemID.WOOD_GREAVES:
 						return "Wood Greaves";
-					case 643:
+					case EntityID.ItemID.CACTUS_SWORD:
 						return "Cactus Sword";
-					case 644:
+					case EntityID.ItemID.CACTUS_PICKAXE:
 						return "Cactus Pickaxe";
-					case 645:
+					case EntityID.ItemID.CACTUS_HELMET:
 						return "Cactus Helmet";
-					case 646:
+					case EntityID.ItemID.CACTUS_BREASTPLATE:
 						return "Cactus Breastplate";
-					case 647:
+					case EntityID.ItemID.CACTUS_LEGGINGS:
 						return "Cactus Leggings";
-					case 648:
+					case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 						return "Purple Stained Glass";
-					case 649:
+					case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 						return "Yellow Stained Glass";
-					case 650:
+					case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 						return "Blue Stained Glass";
-					case 651:
+					case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 						return "Green Stained Glass";
-					case 652:
+					case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 						return "Red Stained Glass";
-					case 653:
+					case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 						return "Multicolored Stained Glass";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.GERMAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Goldspitzhacke";
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						return "Goldbreitschwert";
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						return "Goldkurzschwert";
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						return "Goldaxt";
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						return "Goldhammer";
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						return "Goldbogen";
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						return "Silberspitzhacke";
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						return "Silberbreitschwert";
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						return "Silberkurzschwert";
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						return "Silberaxt";
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						return "Silberhammer";
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						return "Silberbogen";
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						return "Kupferspitzhacke";
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						return "Kupferbreitschwert";
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						return "Kupferkurzschwert";
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						return "Kupferaxt";
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						return "Kupferhammer";
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						return "Kupferbogen";
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						return "Blaues Laserschwert";
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						return "Rotes Laserschwert";
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						return "Grünes Laserschwert";
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						return "Lila Laserschwert";
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						return "Weißes Laserschwert";
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						return "Gelbes Laserschwert";
-					case 1:
+					case EntityID.ItemID.IRON_PICKAXE:
 						return "Eisenspitzhacke";
-					case 2:
+					case EntityID.ItemID.DIRT_BLOCK:
 						return "Dreckblock";
-					case 3:
+					case EntityID.ItemID.STONE_BLOCK:
 						return "Steinblock";
-					case 4:
+					case EntityID.ItemID.IRON_BROADSWORD:
 						return "Eisenbreitschwert";
-					case 5:
+					case EntityID.ItemID.MUSHROOM:
 						return "Pilz";
-					case 6:
+					case EntityID.ItemID.IRON_SHORTSWORD:
 						return "Eisenkurzschwert";
-					case 7:
+					case EntityID.ItemID.IRON_HAMMER:
 						return "Eisenhammer";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Fackel";
-					case 9:
+					case EntityID.ItemID.WOOD:
 						return "Holz";
-					case 10:
+					case EntityID.ItemID.IRON_AXE:
 						return "Eisenaxt";
-					case 11:
+					case EntityID.ItemID.IRON_ORE:
 						return "Eisenerz";
-					case 12:
+					case EntityID.ItemID.COPPER_ORE:
 						return "Kupfererz";
-					case 13:
+					case EntityID.ItemID.GOLD_ORE:
 						return "Golderz";
-					case 14:
+					case EntityID.ItemID.SILVER_ORE:
 						return "Silbererz";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Kupferuhr";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Silberuhr";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Golduhr";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Taucheruhr";
-					case 19:
+					case EntityID.ItemID.GOLD_BAR:
 						return "Goldbarren";
-					case 20:
+					case EntityID.ItemID.COPPER_BAR:
 						return "Kupferbarren";
-					case 21:
+					case EntityID.ItemID.SILVER_BAR:
 						return "Silberbarren";
-					case 22:
+					case EntityID.ItemID.IRON_BAR:
 						return "Eisenbarren";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Glibber";
-					case 24:
+					case EntityID.ItemID.WOODEN_SWORD:
 						return "Holzschwert";
-					case 25:
+					case EntityID.ItemID.WOODEN_DOOR:
 						return "Holztür";
-					case 26:
+					case EntityID.ItemID.STONE_WALL:
 						return "Steinwand";
-					case 27:
+					case EntityID.ItemID.ACORN:
 						return "Eichel";
-					case 28:
+					case EntityID.ItemID.LESSER_HEALING_POTION:
 						return "Schwacher Heiltrank";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Lebenskristall";
-					case 30:
+					case EntityID.ItemID.DIRT_WALL:
 						return "Dreckwand";
-					case 31:
+					case EntityID.ItemID.BOTTLE:
 						return "Flasche";
-					case 32:
+					case EntityID.ItemID.WOODEN_TABLE:
 						return "Holztisch";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Schmelzofen";
-					case 34:
+					case EntityID.ItemID.WOODEN_CHAIR:
 						return "Holzstuhl";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Eisenamboss";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Werkbank";
-					case 37:
+					case EntityID.ItemID.GOGGLES:
 						return "Schutzbrille";
-					case 38:
+					case EntityID.ItemID.LENS:
 						return "Linse";
-					case 39:
+					case EntityID.ItemID.WOODEN_BOW:
 						return "Holzbogen";
-					case 40:
+					case EntityID.ItemID.WOODEN_ARROW:
 						return "Holzpfeil";
-					case 41:
+					case EntityID.ItemID.FLAMING_ARROW:
 						return "Flammenpfeil";
-					case 42:
+					case EntityID.ItemID.SHURIKEN:
 						return "Shuriken";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Verdächtig aussehendes Auge";
-					case 44:
+					case EntityID.ItemID.DEMON_BOW:
 						return "Dämonenbogen";
-					case 45:
+					case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 						return "Kriegsaxt der Nacht";
-					case 46:
+					case EntityID.ItemID.LIGHTS_BANE:
 						return "Schrecken des Tages";
-					case 47:
+					case EntityID.ItemID.UNHOLY_ARROW:
 						return "Unheiliger Pfeil";
-					case 48:
+					case EntityID.ItemID.CHEST:
 						return "Truhe";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Wiederbelebungsband";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Magischer Spiegel";
-					case 51:
+					case EntityID.ItemID.JESTERS_ARROW:
 						return "Jester's Pfeil";
-					case 52:
+					case EntityID.ItemID.ANGEL_STATUE:
 						return "Engelsstatue";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Wolke in einer Flasche";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Hermes-Stiefel";
-					case 55:
+					case EntityID.ItemID.ENCHANTED_BOOMERANG:
 						return "Verzauberter Bumerang";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "Dämoniterz";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "Dämonitbarren";
-					case 58:
+					case EntityID.ItemID.HEART:
 						return "Herz";
-					case 59:
+					case EntityID.ItemID.CORRUPT_SEEDS:
 						return "Verderbte Saat";
-					case 60:
+					case EntityID.ItemID.VILE_MUSHROOM:
 						return "Ekelpilz";
-					case 61:
+					case EntityID.ItemID.EBONSTONE_BLOCK:
 						return "Ebensteinblock";
-					case 62:
+					case EntityID.ItemID.GRASS_SEEDS:
 						return "Grassaat";
-					case 63:
+					case EntityID.ItemID.SUNFLOWER:
 						return "Sonnenblume";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Ekeldorn";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Sternenwut";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Reinigungspulver";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Ekelpulver";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "Verfaulter Fleischbrocken";
-					case 69:
+					case EntityID.ItemID.WORM_TOOTH:
 						return "Wurmzahn";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Wurmköder";
-					case 71:
+					case EntityID.ItemID.COPPER_COIN:
 						return "Kupfermünze";
-					case 72:
+					case EntityID.ItemID.SILVER_COIN:
 						return "Silbermünze";
-					case 73:
+					case EntityID.ItemID.GOLD_COIN:
 						return "Goldmünze";
-					case 74:
+					case EntityID.ItemID.PLATINUM_COIN:
 						return "Platinmünze";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Sternschnuppe";
-					case 76:
+					case EntityID.ItemID.COPPER_GREAVES:
 						return "Kupferbeinschützer";
-					case 77:
+					case EntityID.ItemID.IRON_GREAVES:
 						return "Eisenbeinschützer";
-					case 78:
+					case EntityID.ItemID.SILVER_GREAVES:
 						return "Silberbeinschützer";
-					case 79:
+					case EntityID.ItemID.GOLD_GREAVES:
 						return "Goldbeinschützer";
-					case 80:
+					case EntityID.ItemID.COPPER_CHAINMAIL:
 						return "Kupferkettenhemd";
-					case 81:
+					case EntityID.ItemID.IRON_CHAINMAIL:
 						return "Eisenkettenhemd";
-					case 82:
+					case EntityID.ItemID.SILVER_CHAINMAIL:
 						return "Silberkettenhemd";
-					case 83:
+					case EntityID.ItemID.GOLD_CHAINMAIL:
 						return "Goldkettenhemd";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "Greifhaken ";
-					case 85:
+					case EntityID.ItemID.CHAIN:
 						return "Eisenkette";
-					case 86:
+					case EntityID.ItemID.SHADOW_SCALE:
 						return "Schattenschuppe";
-					case 87:
+					case EntityID.ItemID.PIGGY_BANK:
 						return "Sparschwein";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Bergmannshelm";
-					case 89:
+					case EntityID.ItemID.COPPER_HELMET:
 						return "Kupferhelm";
-					case 90:
+					case EntityID.ItemID.IRON_HELMET:
 						return "Eisenhelm";
-					case 91:
+					case EntityID.ItemID.SILVER_HELMET:
 						return "Silberhelm";
-					case 92:
+					case EntityID.ItemID.GOLD_HELMET:
 						return "Goldhelm";
-					case 93:
+					case EntityID.ItemID.WOOD_WALL:
 						return "Holzwand";
-					case 94:
+					case EntityID.ItemID.WOOD_PLATFORM:
 						return "Holzklappe";
-					case 95:
+					case EntityID.ItemID.FLINTLOCK_PISTOL:
 						return "Steinschlosspistole";
-					case 96:
+					case EntityID.ItemID.MUSKET:
 						return "Muskete";
-					case 97:
+					case EntityID.ItemID.MUSKET_BALL:
 						return "Musketenkugel";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Minihai";
-					case 99:
+					case EntityID.ItemID.IRON_BOW:
 						return "Eisenbogen";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Schattenbeinschützer";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Schattenschuppenhemd";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Schattenhelm";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Albtraum-Spitzhacke";
-					case 104:
+					case EntityID.ItemID.THE_BREAKER:
 						return "Zerschmetterer";
-					case 105:
+					case EntityID.ItemID.CANDLE:
 						return "Kerze";
-					case 106:
+					case EntityID.ItemID.COPPER_CHANDELIER:
 						return "Kupferkronleuchter";
-					case 107:
+					case EntityID.ItemID.SILVER_CHANDELIER:
 						return "Silberkronleuchter";
-					case 108:
+					case EntityID.ItemID.GOLD_CHANDELIER:
 						return "Goldkronleuchter";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Mana-Kristall";
-					case 110:
+					case EntityID.ItemID.LESSER_MANA_POTION:
 						return "Schwacher Manatrank";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Sternenkraftband";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Feuerblume";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Magische Rakete";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Dreckrute";
 #if VERSION_INITIAL
-				case 115:
-					return "Lichtkugel";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Lichtkugel";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Schattenkugel";
 #endif
-					case 116:
+					case EntityID.ItemID.METEORITE:
 						return "Meteorit";
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Meteoritenbarren";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Haken";
-					case 119:
+					case EntityID.ItemID.FLAMARANG:
 						return "Flamarang";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Geschmolzene Wut";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "Feuriges Großschwert";
-					case 122:
+					case EntityID.ItemID.MOLTEN_PICKAXE:
 						return "Geschmolzene Spitzhacke";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Meteorhelm";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Meteoranzug";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Meteor Leggings";
-					case 126:
+					case EntityID.ItemID.BOTTLED_WATER:
 						return "Flaschenwasser";
-					case 127:
+					case EntityID.ItemID.SPACE_GUN:
 						return "Weltraumpistole";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Raketenstiefel";
-					case 129:
+					case EntityID.ItemID.GRAY_BRICK:
 						return "Grauer Ziegel";
-					case 130:
+					case EntityID.ItemID.GRAY_BRICK_WALL:
 						return "Graue Ziegelwand";
-					case 131:
+					case EntityID.ItemID.RED_BRICK:
 						return "Roter Ziegel";
-					case 132:
+					case EntityID.ItemID.RED_BRICK_WALL:
 						return "Rote Ziegelwand";
-					case 133:
+					case EntityID.ItemID.CLAY_BLOCK:
 						return "Lehmblock";
-					case 134:
+					case EntityID.ItemID.BLUE_BRICK:
 						return "Blauer Ziegel";
-					case 135:
+					case EntityID.ItemID.BLUE_BRICK_WALL:
 						return "Blaue Ziegelwand";
-					case 136:
+					case EntityID.ItemID.CHAIN_LANTERN:
 						return "Kettenlaterne";
-					case 137:
+					case EntityID.ItemID.GREEN_BRICK:
 						return "Grüner Ziegel";
-					case 138:
+					case EntityID.ItemID.GREEN_BRICK_WALL:
 						return "Grüne Ziegelwand";
-					case 139:
+					case EntityID.ItemID.PINK_BRICK:
 						return "Rosa Ziegel";
-					case 140:
+					case EntityID.ItemID.PINK_BRICK_WALL:
 						return "Rosa Ziegelwand";
-					case 141:
+					case EntityID.ItemID.GOLD_BRICK:
 						return "Goldziegel";
-					case 142:
+					case EntityID.ItemID.GOLD_BRICK_WALL:
 						return "Goldene Ziegelwand";
-					case 143:
+					case EntityID.ItemID.SILVER_BRICK:
 						return "Silberziegel";
-					case 144:
+					case EntityID.ItemID.SILVER_BRICK_WALL:
 						return "Silberne Ziegelwand";
-					case 145:
+					case EntityID.ItemID.COPPER_BRICK:
 						return "Kupferziegel";
-					case 146:
+					case EntityID.ItemID.COPPER_BRICK_WALL:
 						return "Kupferne Ziegelwand";
-					case 147:
+					case EntityID.ItemID.SPIKE:
 						return "Stachel";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Wasserkerze";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "Buch";
-					case 150:
+					case EntityID.ItemID.COBWEB:
 						return "Spinnennetz";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Nekrohelm";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Nekro-Brustplatte";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Nekro-Beinschützer";
-					case 154:
+					case EntityID.ItemID.BONE:
 						return "Knochen";
-					case 155:
+					case EntityID.ItemID.MURAMASA:
 						return "Muramasa";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Kobaltschild";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Aqua-Zepter";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Glückshufeisen";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Leuchtend roter Ballon";
-					case 160:
+					case EntityID.ItemID.HARPOON:
 						return "Harpune";
-					case 161:
+					case EntityID.ItemID.SPIKY_BALL:
 						return "Stachelball";
-					case 162:
+					case EntityID.ItemID.BALL_O_HURT:
 						return "Ball des Schmerzes";
-					case 163:
+					case EntityID.ItemID.BLUE_MOON:
 						return "Blauer Mond";
-					case 164:
+					case EntityID.ItemID.HANDGUN:
 						return "Pistole";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Wasserbolzen";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Bombe";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Dynamit";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Granate";
-					case 169:
+					case EntityID.ItemID.SAND_BLOCK:
 						return "Sandblock";
-					case 170:
+					case EntityID.ItemID.GLASS:
 						return "Glas";
-					case 171:
+					case EntityID.ItemID.SIGN:
 						return "Spruchschild";
-					case 172:
+					case EntityID.ItemID.ASH_BLOCK:
 						return "Aschenblock";
-					case 173:
+					case EntityID.ItemID.OBSIDIAN:
 						return "Obsidian";
-					case 174:
+					case EntityID.ItemID.HELLSTONE:
 						return "Höllenstein";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Höllenstein-Barren";
-					case 176:
+					case EntityID.ItemID.MUD_BLOCK:
 						return "Schlammblock";
-					case 177:
+					case EntityID.ItemID.SAPPHIRE:
 						return "Saphir";
-					case 178:
+					case EntityID.ItemID.RUBY:
 						return "Rubin";
-					case 179:
+					case EntityID.ItemID.EMERALD:
 						return "Smaragd";
-					case 180:
+					case EntityID.ItemID.TOPAZ:
 						return "Topas";
-					case 181:
+					case EntityID.ItemID.AMETHYST:
 						return "Amethyst";
-					case 182:
+					case EntityID.ItemID.DIAMOND:
 						return "Diamant";
-					case 183:
+					case EntityID.ItemID.GLOWING_MUSHROOM:
 						return "Glühender Pilz";
-					case 184:
+					case EntityID.ItemID.STAR:
 						return "Stern";
-					case 185:
+					case EntityID.ItemID.IVY_WHIP:
 						return "Efeupeitsche";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "Schilfrohr";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Flosse";
-					case 188:
+					case EntityID.ItemID.HEALING_POTION:
 						return "Heiltrank";
-					case 189:
+					case EntityID.ItemID.MANA_POTION:
 						return "Manatrank";
-					case 190:
+					case EntityID.ItemID.BLADE_OF_GRASS:
 						return "Grasklinge";
-					case 191:
+					case EntityID.ItemID.THORN_CHAKRAM:
 						return "Dornen-Chakram";
-					case 192:
+					case EntityID.ItemID.OBSIDIAN_BRICK:
 						return "Obsidianziegel";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Obsidianschädel";
-					case 194:
+					case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 						return "Pilzgras-Saat";
-					case 195:
+					case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 						return "Dschungelgras-Saat";
-					case 196:
+					case EntityID.ItemID.WOODEN_HAMMER:
 						return "Holzhammer";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Sternenkanone";
-					case 198:
+					case EntityID.ItemID.BLUE_PHASEBLADE:
 						return "Blaue Laserklinge";
-					case 199:
+					case EntityID.ItemID.RED_PHASEBLADE:
 						return "Rote Laserklinge";
-					case 200:
+					case EntityID.ItemID.GREEN_PHASEBLADE:
 						return "Grüne Laserklinge";
-					case 201:
+					case EntityID.ItemID.PURPLE_PHASEBLADE:
 						return "Lila Laserklinge";
-					case 202:
+					case EntityID.ItemID.WHITE_PHASEBLADE:
 						return "Weiße Laserklinge";
-					case 203:
+					case EntityID.ItemID.YELLOW_PHASEBLADE:
 						return "Gelbe Laserklinge";
-					case 204:
+					case EntityID.ItemID.METEOR_HAMAXE:
 						return "Meteor-Hamaxt";
-					case 205:
+					case EntityID.ItemID.EMPTY_BUCKET:
 						return "Leerer Eimer";
-					case 206:
+					case EntityID.ItemID.WATER_BUCKET:
 						return "Wassereimer";
-					case 207:
+					case EntityID.ItemID.LAVA_BUCKET:
 						return "Lavaeimer";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "Dschungelrose";
-					case 209:
+					case EntityID.ItemID.STINGER:
 						return "Hornissenstachel";
-					case 210:
+					case EntityID.ItemID.VINE:
 						return "Weinrebe";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Wilde Klauen";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Fusskette des Windes";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Stab des Nachwachsens";
-					case 214:
+					case EntityID.ItemID.HELLSTONE_BRICK:
 						return "Höllensteinziegel";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "Furzkissen";
-					case 216:
+					case EntityID.ItemID.SHACKLE:
 						return "Fessel";
-					case 217:
+					case EntityID.ItemID.MOLTEN_HAMAXE:
 						return "Geschmolzene Hamaxt";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Flammenpeitsche";
-					case 219:
+					case EntityID.ItemID.PHOENIX_BLASTER:
 						return "Phoenix-Blaster";
-					case 220:
+					case EntityID.ItemID.SUNFURY:
 						return "Sonnenwut";
-					case 221:
+					case EntityID.ItemID.HELLFORGE:
 						return "Höllenschmiede";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Tontopf";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Geschenk der Natur";
-					case 224:
+					case EntityID.ItemID.BED:
 						return "Bett";
-					case 225:
+					case EntityID.ItemID.SILK:
 						return "Seide";
-					case 226:
+					case EntityID.ItemID.LESSER_RESTORATION_POTION:
 						return "Schwacher Wiederherstellungstrank";
-					case 227:
+					case EntityID.ItemID.RESTORATION_POTION:
 						return "Wiederherstellungstrank";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Dschungelhut";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Dschungelhemd";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Dschungelhosen";
-					case 231:
+					case EntityID.ItemID.MOLTEN_HELMET:
 						return "Geschmolzener Helm";
-					case 232:
+					case EntityID.ItemID.MOLTEN_BREASTPLATE:
 						return "Geschmolzene Brustplatte";
-					case 233:
+					case EntityID.ItemID.MOLTEN_GREAVES:
 						return "Geschmolzene Beinschützer";
-					case 234:
+					case EntityID.ItemID.METEOR_SHOT:
 						return "Meteorenschuss";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "Haftbombe";
-					case 236:
+					case EntityID.ItemID.BLACK_LENS:
 						return "Schwarze Linsen";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "Sonnenbrille";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Zaubererhut";
-					case 239:
+					case EntityID.ItemID.TOP_HAT:
 						return "Zylinderhut";
-					case 240:
+					case EntityID.ItemID.TUXEDO_SHIRT:
 						return "Smokinghemd";
-					case 241:
+					case EntityID.ItemID.TUXEDO_PANTS:
 						return "Smokinghosen";
-					case 242:
+					case EntityID.ItemID.SUMMER_HAT:
 						return "Sommerhut";
-					case 243:
+					case EntityID.ItemID.BUNNY_HOOD:
 						return "Hasenkapuze";
-					case 244:
+					case EntityID.ItemID.PLUMBERS_HAT:
 						return "Klempnerhut";
-					case 245:
+					case EntityID.ItemID.PLUMBERS_SHIRT:
 						return "Klempnerhemd";
-					case 246:
+					case EntityID.ItemID.PLUMBERS_PANTS:
 						return "Klempnerhosen";
-					case 247:
+					case EntityID.ItemID.HEROS_HAT:
 						return "Heldenhut";
-					case 248:
+					case EntityID.ItemID.HEROS_SHIRT:
 						return "Heldenhemd";
-					case 249:
+					case EntityID.ItemID.HEROS_PANTS:
 						return "Heldenhosen";
-					case 250:
+					case EntityID.ItemID.FISH_BOWL:
 						return "Fischglas";
-					case 251:
+					case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 						return "Archäologenhut";
-					case 252:
+					case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 						return "Archäologenjacke";
-					case 253:
+					case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 						return "Archäologenhosen";
 
 #if VERSION_INITIAL
-				case 254:
-					return "Schwarzer Farbstoff";
-				case 255:
-					return "Violetter Farbstoff";
+					case EntityID.ItemID.BLACK_THREAD:
+						return "Schwarzer Farbstoff";
+					case EntityID.ItemID.PURPLE_THREAD:
+						return "Violetter Farbstoff";
 #else
-					case 254:
+					case EntityID.ItemID.BLACK_THREAD:
 						return "Schwarzer Faden";
-					case 255:
+					case EntityID.ItemID.PURPLE_THREAD:
 						return "Lila Faden";
 #endif
 
-					case 256:
+					case EntityID.ItemID.NINJA_HOOD:
 						return "Ninja-Kapuze";
-					case 257:
+					case EntityID.ItemID.NINJA_SHIRT:
 						return "Ninjahemd";
-					case 258:
+					case EntityID.ItemID.NINJA_PANTS:
 						return "Ninjahosen";
-					case 259:
+					case EntityID.ItemID.LEATHER:
 						return "Leder";
-					case 260:
+					case EntityID.ItemID.RED_HAT:
 						return "Roter Hut";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Goldfisch";
-					case 262:
+					case EntityID.ItemID.ROBE:
 						return "Robe";
-					case 263:
+					case EntityID.ItemID.ROBOT_HAT:
 						return "Roboterhut";
-					case 264:
+					case EntityID.ItemID.GOLD_CROWN:
 						return "Goldkrone";
-					case 265:
+					case EntityID.ItemID.HELLFIRE_ARROW:
 						return "Höllenfeuer-Pfeil";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "Sandgewehr";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "Guide-Voodoopuppe";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Taucherhelm";
-					case 269:
+					case EntityID.ItemID.FAMILIAR_SHIRT:
 						return "Vertrautes Hemd";
-					case 270:
+					case EntityID.ItemID.FAMILIAR_PANTS:
 						return "Vertraute Hosen";
-					case 271:
+					case EntityID.ItemID.FAMILIAR_WIG:
 						return "Vertraute Frisur";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Dämonensense";
-					case 273:
+					case EntityID.ItemID.NIGHTS_EDGE:
 						return "Klinge der Nacht";
-					case 274:
+					case EntityID.ItemID.DARK_LANCE:
 						return "Dunkle Lanze";
-					case 275:
+					case EntityID.ItemID.CORAL:
 						return "Koralle";
-					case 276:
+					case EntityID.ItemID.CACTUS:
 						return "Kaktus";
-					case 277:
+					case EntityID.ItemID.TRIDENT:
 						return "Dreizack";
-					case 278:
+					case EntityID.ItemID.SILVER_BULLET:
 						return "Silbergeschoss";
-					case 279:
+					case EntityID.ItemID.THROWING_KNIFE:
 						return "Wurfmesser";
-					case 280:
+					case EntityID.ItemID.SPEAR:
 						return "Speer";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Blasrohr";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Leuchtstab";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Saat";
-					case 284:
+					case EntityID.ItemID.WOODEN_BOOMERANG:
 						return "Holzbumerang";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Schnürsenkelkappe";
-					case 286:
+					case EntityID.ItemID.STICKY_GLOWSTICK:
 						return "Klebriger Leuchtstab";
-					case 287:
+					case EntityID.ItemID.POISONED_KNIFE:
 						return "Giftmesser";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Obsidianhaut-Trank";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Wiederbelebungstrank";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Flinkheitstrank";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Kiementrank";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Eisenhaut-Trank";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Mana-Wiederherstellungstrank";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Magiekraft-Trank";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Federsturz-Trank";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Höhlenforschertrank";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Unsichtbarkeitstrank";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Strahlentrank";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Nachteulentrank";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Kampftrank";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Dornentrank";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Wasserlauftrank";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Bogenschießtrank";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Jägertrank";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Gravitationstrank";
-					case 306:
+					case EntityID.ItemID.GOLD_CHEST:
 						return "Goldtruhe";
-					case 307:
+					case EntityID.ItemID.DAYBLOOM_SEEDS:
 						return "Tagesblumensaat";
-					case 308:
+					case EntityID.ItemID.MOONGLOW_SEEDS:
 						return "Mondscheinsaat";
-					case 309:
+					case EntityID.ItemID.BLINKROOT_SEEDS:
 						return "Leuchtwurzel-Saat";
-					case 310:
+					case EntityID.ItemID.DEATHWEED_SEEDS:
 						return "Todeskraut-Saat";
-					case 311:
+					case EntityID.ItemID.WATERLEAF_SEEDS:
 						return "Wasserblatt-Saat";
-					case 312:
+					case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 						return "Feuerblüten-Saat";
-					case 313:
+					case EntityID.ItemID.DAYBLOOM:
 						return "Tagesblume";
-					case 314:
+					case EntityID.ItemID.MOONGLOW:
 						return "Mondglanz";
-					case 315:
+					case EntityID.ItemID.BLINKROOT:
 						return "Leuchtwurzel";
-					case 316:
+					case EntityID.ItemID.DEATHWEED:
 						return "Todeskraut";
-					case 317:
+					case EntityID.ItemID.WATERLEAF:
 						return "Wasserblatt";
-					case 318:
+					case EntityID.ItemID.FIREBLOSSOM:
 						return "Feuerblüte";
-					case 319:
+					case EntityID.ItemID.SHARK_FIN:
 						return "Haifinne";
-					case 320:
+					case EntityID.ItemID.FEATHER:
 						return "Feder";
-					case 321:
+					case EntityID.ItemID.TOMBSTONE:
 						return "Grabstein";
-					case 322:
+					case EntityID.ItemID.MIME_MASK:
 						return "Pantomimen-Maske";
-					case 323:
+					case EntityID.ItemID.ANTLION_MANDIBLE:
 						return "Ameisenlöwenkiefer";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "Illegale Gewehrteile";
-					case 325:
+					case EntityID.ItemID.THE_DOCTORS_SHIRT:
 						return "Hemd des Arztes";
-					case 326:
+					case EntityID.ItemID.THE_DOCTORS_PANTS:
 						return "Hosen des Arztes";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Goldener Schlüssel";
-					case 328:
+					case EntityID.ItemID.SHADOW_CHEST:
 						return "Schattentruhe";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Schattenschlüssel";
-					case 330:
+					case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 						return "Obsidianziegelwand";
-					case 331:
+					case EntityID.ItemID.JUNGLE_SPORES:
 						return "Dschungelsporen";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Webstuhl";
-					case 333:
+					case EntityID.ItemID.PIANO:
 						return "Piano";
-					case 334:
+					case EntityID.ItemID.DRESSER:
 						return "Kommode";
-					case 335:
+					case EntityID.ItemID.BENCH:
 						return "Sitzbank";
-					case 336:
+					case EntityID.ItemID.BATHTUB:
 						return "Badewanne";
-					case 337:
+					case EntityID.ItemID.RED_BANNER:
 						return "Rotes Banner";
-					case 338:
+					case EntityID.ItemID.GREEN_BANNER:
 						return "Grünes Banner";
-					case 339:
+					case EntityID.ItemID.BLUE_BANNER:
 						return "Blaues Banner";
-					case 340:
+					case EntityID.ItemID.YELLOW_BANNER:
 						return "Gelbes Banner";
-					case 341:
+					case EntityID.ItemID.LAMP_POST:
 						return "Laternenpfahl";
-					case 342:
+					case EntityID.ItemID.TIKI_TORCH:
 						return "Petroleumfackel";
-					case 343:
+					case EntityID.ItemID.BARREL:
 						return "Fass";
-					case 344:
+					case EntityID.ItemID.CHINESE_LANTERN:
 						return "Chinesische Laterne";
-					case 345:
+					case EntityID.ItemID.COOKING_POT:
 						return "Kochtopf";
-					case 346:
+					case EntityID.ItemID.SAFE:
 						return "Tresor";
-					case 347:
+					case EntityID.ItemID.SKULL_LANTERN:
 						return "Schädellaterne";
-					case 348:
+					case EntityID.ItemID.TRASH_CAN:
 						return "Mülleimer";
-					case 349:
+					case EntityID.ItemID.CANDELABRA:
 						return "Kandelaber";
-					case 350:
+					case EntityID.ItemID.PINK_VASE:
 						return "Rosa Vase";
-					case 351:
+					case EntityID.ItemID.MUG:
 						return "Krug";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Gärbottich";
-					case 353:
+					case EntityID.ItemID.ALE:
 						return "Bier";
-					case 354:
+					case EntityID.ItemID.BOOKCASE:
 						return "Bücherregal";
-					case 355:
+					case EntityID.ItemID.THRONE:
 						return "Thron";
-					case 356:
+					case EntityID.ItemID.BOWL:
 						return "Schüssel";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Schüssel mit Suppe";
-					case 358:
+					case EntityID.ItemID.TOILET:
 						return "Toilette";
-					case 359:
+					case EntityID.ItemID.GRANDFATHER_CLOCK:
 						return "Standuhr";
-					case 360:
+					case EntityID.ItemID.STATUE:
 						return "Rüstungsstatue";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Goblin-Kampfstandarte";
-					case 362:
+					case EntityID.ItemID.TATTERED_CLOTH:
 						return "Zerfetzter Stoff";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Sägewerk";
-					case 364:
+					case EntityID.ItemID.COBALT_ORE:
 						return "Kobalterz";
-					case 365:
+					case EntityID.ItemID.MYTHRIL_ORE:
 						return "Mithrilerz";
-					case 366:
+					case EntityID.ItemID.ADAMANTITE_ORE:
 						return "Adamantiterz";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Pwnhammer";
-					case 368:
+					case EntityID.ItemID.EXCALIBUR:
 						return "Excalibur";
-					case 369:
+					case EntityID.ItemID.HALLOWED_SEEDS:
 						return "Heilige Saat";
-					case 370:
+					case EntityID.ItemID.EBONSAND_BLOCK:
 						return "Ebensandblock";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Kobalthut";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Kobalthelm";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Kobalt-Maske";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Kobalt-Brustplatte";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Kobalt-Gamaschen";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Mithril-Kapuze";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Mithril-Helm";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Mithrilhut";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Mithril-Kettenhemd";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Mithril-Beinschützer";
-					case 381:
+					case EntityID.ItemID.COBALT_BAR:
 						return "Kobaltbarren";
-					case 382:
+					case EntityID.ItemID.MYTHRIL_BAR:
 						return "Mithrilbarren";
-					case 383:
+					case EntityID.ItemID.COBALT_CHAINSAW:
 						return "Kobalt-Kettensäge";
-					case 384:
+					case EntityID.ItemID.MYTHRIL_CHAINSAW:
 						return "Mithril-Kettensäge";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Kobaltbohrer";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Mithrilbohrer";
-					case 387:
+					case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 						return "Adamantit-Kettensäge";
-					case 388:
+					case EntityID.ItemID.ADAMANTITE_DRILL:
 						return "Adamantitbohrer";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Dao von Pow";
-					case 390:
+					case EntityID.ItemID.MYTHRIL_HALBERD:
 						return "Mithril-Hellebarde";
-					case 391:
+					case EntityID.ItemID.ADAMANTITE_BAR:
 						return "Adamantitbarren";
-					case 392:
+					case EntityID.ItemID.GLASS_WALL:
 						return "Glaswand";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Kompass";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Tauchausrüstung";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "GPS";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Obsidian-Hufeisen";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Obsidianschild";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Tüftler-Werkstatt";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Wolke in einem Ballon";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Adamantit-Kopfschutz";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Adamantit-Helm";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Adamantit-Maske";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Adamantit-Brustplatte";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Adamantit-Gamaschen";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Geisterstiefel";
-					case 406:
+					case EntityID.ItemID.ADAMANTITE_GLAIVE:
 						return "Adamantit-Gleve";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Werkzeuggürtel";
-					case 408:
+					case EntityID.ItemID.PEARLSAND_BLOCK:
 						return "Perlsandblock";
-					case 409:
+					case EntityID.ItemID.PEARLSTONE_BLOCK:
 						return "Perlsteinblock";
-					case 410:
+					case EntityID.ItemID.MINING_SHIRT:
 						return "Bergbauhemd";
-					case 411:
+					case EntityID.ItemID.MINING_PANTS:
 						return "Bergbauhosen";
-					case 412:
+					case EntityID.ItemID.PEARLSTONE_BRICK:
 						return "Perlsteinziegel";
-					case 413:
+					case EntityID.ItemID.IRIDESCENT_BRICK:
 						return "Schillernder Ziegel";
-					case 414:
+					case EntityID.ItemID.MUDSTONE_BRICK:
 						return "Schlammsteinziegel";
-					case 415:
+					case EntityID.ItemID.COBALT_BRICK:
 						return "Kobaltziegel";
-					case 416:
+					case EntityID.ItemID.MYTHRIL_BRICK:
 						return "Mithrilziegel";
-					case 417:
+					case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 						return "Perlstein-Ziegelwand";
-					case 418:
+					case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 						return "Schillernde Ziegelwand";
-					case 419:
+					case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 						return "Schlammstein-Ziegelwand";
-					case 420:
+					case EntityID.ItemID.COBALT_BRICK_WALL:
 						return "Kobalt-Ziegelwand";
-					case 421:
+					case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 						return "Mithril-Ziegelwand";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Heiliges Wasser";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Unheiliges Wasser";
-					case 424:
+					case EntityID.ItemID.SILT_BLOCK:
 						return "Schlickblock";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Feenglocke";
-					case 426:
+					case EntityID.ItemID.BREAKER_BLADE:
 						return "Schmetterklinge";
-					case 427:
+					case EntityID.ItemID.BLUE_TORCH:
 						return "Blaue Fackel";
-					case 428:
+					case EntityID.ItemID.RED_TORCH:
 						return "Rote Fackel";
-					case 429:
+					case EntityID.ItemID.GREEN_TORCH:
 						return "Grüne Fackel";
-					case 430:
+					case EntityID.ItemID.PURPLE_TORCH:
 						return "Lila Fackel";
-					case 431:
+					case EntityID.ItemID.WHITE_TORCH:
 						return "Weiße Fackel";
-					case 432:
+					case EntityID.ItemID.YELLOW_TORCH:
 						return "Gelbe Fackel";
-					case 433:
+					case EntityID.ItemID.DEMON_TORCH:
 						return "Dämonenfackel";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Automatiksturmwaffe";
-					case 435:
+					case EntityID.ItemID.COBALT_REPEATER:
 						return "Kobaltrepetierer";
-					case 436:
+					case EntityID.ItemID.MYTHRIL_REPEATER:
 						return "Mithrilrepetierer";
-					case 437:
+					case EntityID.ItemID.DUAL_HOOK:
 						return "Doppel-Greifhaken";
-					case 438:
+					case EntityID.ItemID.STAR_STATUE:
 						return "Sternstatue";
-					case 439:
+					case EntityID.ItemID.SWORD_STATUE:
 						return "Schwertstatue";
-					case 440:
+					case EntityID.ItemID.SLIME_STATUE:
 						return "Schleimstatue";
-					case 441:
+					case EntityID.ItemID.GOBLIN_STATUE:
 						return "Goblinstatue";
-					case 442:
+					case EntityID.ItemID.SHIELD_STATUE:
 						return "Schildstatue";
-					case 443:
+					case EntityID.ItemID.BAT_STATUE:
 						return "Fledermausstatue";
-					case 444:
+					case EntityID.ItemID.FISH_STATUE:
 						return "Fischstatue";
-					case 445:
+					case EntityID.ItemID.BUNNY_STATUE:
 						return "Hasenstatue";
-					case 446:
+					case EntityID.ItemID.SKELETON_STATUE:
 						return "Skelettstatue";
-					case 447:
+					case EntityID.ItemID.REAPER_STATUE:
 						return "Sensenmannstatue";
-					case 448:
+					case EntityID.ItemID.WOMAN_STATUE:
 						return "Frauenstatue";
-					case 449:
+					case EntityID.ItemID.IMP_STATUE:
 						return "Impstatue";
-					case 450:
+					case EntityID.ItemID.GARGOYLE_STATUE:
 						return "Wasserspeier-Statue";
-					case 451:
+					case EntityID.ItemID.GLOOM_STATUE:
 						return "Vanitasstatue";
-					case 452:
+					case EntityID.ItemID.HORNET_STATUE:
 						return "Hornissenstatue";
-					case 453:
+					case EntityID.ItemID.BOMB_STATUE:
 						return "Bombenstatue";
-					case 454:
+					case EntityID.ItemID.CRAB_STATUE:
 						return "Krabbenstatue";
-					case 455:
+					case EntityID.ItemID.HAMMER_STATUE:
 						return "Hammerstatue";
-					case 456:
+					case EntityID.ItemID.POTION_STATUE:
 						return "Trankstatue";
-					case 457:
+					case EntityID.ItemID.SPEAR_STATUE:
 						return "Speerstatue";
-					case 458:
+					case EntityID.ItemID.CROSS_STATUE:
 						return "Kreuzstatue";
-					case 459:
+					case EntityID.ItemID.JELLYFISH_STATUE:
 						return "Quallenstatue";
-					case 460:
+					case EntityID.ItemID.BOW_STATUE:
 						return "Bogenstatue";
-					case 461:
+					case EntityID.ItemID.BOOMERANG_STATUE:
 						return "Bumerangstatue";
-					case 462:
+					case EntityID.ItemID.BOOT_STATUE:
 						return "Stiefelstatue";
-					case 463:
+					case EntityID.ItemID.CHEST_STATUE:
 						return "Truhenstatue";
-					case 464:
+					case EntityID.ItemID.BIRD_STATUE:
 						return "Vogelstatue";
-					case 465:
+					case EntityID.ItemID.AXE_STATUE:
 						return "Axtstatue";
-					case 466:
+					case EntityID.ItemID.CORRUPT_STATUE:
 						return "Verderbnisstatue";
-					case 467:
+					case EntityID.ItemID.TREE_STATUE:
 						return "Baumstatue";
-					case 468:
+					case EntityID.ItemID.ANVIL_STATUE:
 						return "Amboss-Statue";
-					case 469:
+					case EntityID.ItemID.PICKAXE_STATUE:
 						return "Spitzhackenstatue";
-					case 470:
+					case EntityID.ItemID.MUSHROOM_STATUE:
 						return "Pilzstatue";
-					case 471:
+					case EntityID.ItemID.EYEBALL_STATUE:
 						return "Augapfelstatue";
-					case 472:
+					case EntityID.ItemID.PILLAR_STATUE:
 						return "Säulenstatue";
-					case 473:
+					case EntityID.ItemID.HEART_STATUE:
 						return "Herzstatue";
-					case 474:
+					case EntityID.ItemID.POT_STATUE:
 						return "Topfstatue";
-					case 475:
+					case EntityID.ItemID.SUNFLOWER_STATUE:
 						return "Sonnenblumenstatue";
-					case 476:
+					case EntityID.ItemID.KING_STATUE:
 						return "Königstatue";
-					case 477:
+					case EntityID.ItemID.QUEEN_STATUE:
 						return "Königinstatue";
-					case 478:
+					case EntityID.ItemID.PIRANHA_STATUE:
 						return "Piranhastatue";
-					case 479:
+					case EntityID.ItemID.PLANKED_WALL:
 						return "Plankenwand";
-					case 480:
+					case EntityID.ItemID.WOODEN_BEAM:
 						return "Holzbalken";
-					case 481:
+					case EntityID.ItemID.ADAMANTITE_REPEATER:
 						return "Adamantitrepetierer";
-					case 482:
+					case EntityID.ItemID.ADAMANTITE_SWORD:
 						return "Adamantitschwert";
-					case 483:
+					case EntityID.ItemID.COBALT_SWORD:
 						return "Kobaltschwert";
-					case 484:
+					case EntityID.ItemID.MYTHRIL_SWORD:
 						return "Mithrilschwert";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Mondzauber";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Lineal";
-					case 487:
+					case EntityID.ItemID.CRYSTAL_BALL:
 						return "Kristallkugel";
-					case 488:
+					case EntityID.ItemID.DISCO_BALL:
 						return "Diskokugel";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Siegel des Magiers";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Siegel des Kriegers";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Siegel des Bogenschützen";
-					case 492:
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Dämonenflügel";
-					case 493:
+					case EntityID.ItemID.ANGEL_WINGS:
 						return "Engelsflügel";
-					case 494:
+					case EntityID.ItemID.MAGICAL_HARP:
 						return "Magische Harfe";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Regenbogenrute";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Eisrute";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Neptuns Muschel";
-					case 498:
+					case EntityID.ItemID.MANNEQUIN:
 						return "Schaufensterpuppe";
-					case 499:
+					case EntityID.ItemID.GREATER_HEALING_POTION:
 						return "Großer Heiltrank";
-					case 500:
+					case EntityID.ItemID.GREATER_MANA_POTION:
 						return "Großer Manatrank";
-					case 501:
+					case EntityID.ItemID.PIXIE_DUST:
 						return "Pixie-Staub";
-					case 502:
+					case EntityID.ItemID.CRYSTAL_SHARD:
 						return "Kristallscherbe";
-					case 503:
+					case EntityID.ItemID.CLOWN_HAT:
 						return "Clownshut";
-					case 504:
+					case EntityID.ItemID.CLOWN_SHIRT:
 						return "Clownshemd";
-					case 505:
+					case EntityID.ItemID.CLOWN_PANTS:
 						return "Clownshosen";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Flammenwerfer";
-					case 507:
+					case EntityID.ItemID.BELL:
 						return "Glocke";
-					case 508:
+					case EntityID.ItemID.HARP:
 						return "Harfe";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Schraubenschlüssel";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Kabelcutter";
-					case 511:
+					case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 						return "Aktiver Steinblock";
-					case 512:
+					case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 						return "Inaktiver Steinblock";
-					case 513:
+					case EntityID.ItemID.LEVER:
 						return "Hebel";
-					case 514:
+					case EntityID.ItemID.LASER_RIFLE:
 						return "Lasergewehr";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Kristallgeschoss";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Heiliger Pfeil";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Magischer Dolch";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Kristallsturm";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Verfluchte Flammen";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "Seele des Lichts";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "Seele der Nacht";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Verfluchte Flamme";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Verfluchte Fackel";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Adamantitschmiede";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Mithrilamboss";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "Horn des Einhorns";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "Dunkle Scherbe";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "Lichtscherbe";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Rote Druckplatte";
-					case 530:
+					case EntityID.ItemID.WIRE:
 						return "Kabel";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Buch der Flüche";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Sternenumhang";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Maxihai";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Schrotflinte";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Stein der Weisen";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Titanhandschuh";
-					case 537:
+					case EntityID.ItemID.COBALT_NAGINATA:
 						return "Kobalt-Naginata";
-					case 538:
+					case EntityID.ItemID.SWITCH:
 						return "Schalter";
-					case 539:
+					case EntityID.ItemID.DART_TRAP:
 						return "Pfeilfalle";
-					case 540:
+					case EntityID.ItemID.BOULDER:
 						return "Felsbrocken";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Grüne Druckplatte";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Graue Druckplatte";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Braune Druckplatte";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Mechanisches Auge";
-					case 545:
+					case EntityID.ItemID.CURSED_ARROW:
 						return "Verfluchter Pfeil";
-					case 546:
+					case EntityID.ItemID.CURSED_BULLET:
 						return "Verfluchtes Geschoss";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "Seele des Schreckens";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "Seele der Macht";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "Seele der Einsicht";
-					case 550:
+					case EntityID.ItemID.GUNGNIR:
 						return "Gungnir";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Heiliger Plattenpanzer";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Heilige Beinschützer";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Heiliger Helm";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Kreuzhalskette";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Mana-Blume";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Mechanischer Wurm";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Mechanischer Schaedel";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Heiliger Kopfschutz";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Heilige Maske";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Schleimkrone";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Lichtscheibe";
-					case 562:
+					case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 						return "Musikbox (Tag in der Oberwelt)";
-					case 563:
+					case EntityID.ItemID.MUSIC_BOX_EERIE:
 						return "Musikbox (Gespenstisch)";
-					case 564:
+					case EntityID.ItemID.MUSIC_BOX_NIGHT:
 						return "Musikbox (Nacht)";
-					case 565:
+					case EntityID.ItemID.MUSIC_BOX_TITLE:
 						return "Musikbox (Titel)";
-					case 566:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 						return "Musikbox (Unterirdisch)";
-					case 567:
+					case EntityID.ItemID.MUSIC_BOX_BOSS1:
 						return "Musikbox (Boss 1)";
-					case 568:
+					case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 						return "Musikbox (Dschungel)";
-					case 569:
+					case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 						return "Musikbox (Verderben)";
-					case 570:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 						return "Musikbox (Unterirdisches Verderben)";
-					case 571:
+					case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 						return "Musikbox (Das Heilige)";
-					case 572:
+					case EntityID.ItemID.MUSIC_BOX_BOSS2:
 						return "Musikbox (Boss 2)";
-					case 573:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 						return "Musikbox (Unterirdisches Heiliges)";
-					case 574:
+					case EntityID.ItemID.MUSIC_BOX_BOSS3:
 						return "Musikbox (Boss 3)";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "Seele des Flugs";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Musikbox";
-					case 577:
+					case EntityID.ItemID.DEMONITE_BRICK:
 						return "Dämonitziegel";
-					case 578:
+					case EntityID.ItemID.HALLOWED_REPEATER:
 						return "Heiliger Repetierer";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "Hamdrax";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Sprengstoffe";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Einlasspumpe";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Auslasspumpe";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "1-Sekunden-Timer";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "3-Sekunden-Timer";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "5-Sekunden-Timer";
-					case 586:
+					case EntityID.ItemID.CANDY_CANE_BLOCK:
 						return "Candy Cane-Block";
-					case 587:
+					case EntityID.ItemID.CANDY_CANE_WALL:
 						return "Candy Cane-Wand";
-					case 588:
+					case EntityID.ItemID.SANTA_HAT:
 						return "Weihnachtsmütze";
-					case 589:
+					case EntityID.ItemID.SANTA_SHIRT:
 						return "Santa Shirt";
-					case 590:
+					case EntityID.ItemID.SANTA_PANTS:
 						return "von Santa Pants";
-					case 591:
+					case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 						return "Grüner Candy Cane-Block";
-					case 592:
+					case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 						return "Grüne Candy Cane-Wand";
-					case 593:
+					case EntityID.ItemID.SNOW_BLOCK:
 						return "Schnee-Block";
-					case 594:
+					case EntityID.ItemID.SNOW_BRICK:
 						return "Schneeziegel";
-					case 595:
+					case EntityID.ItemID.SNOW_BRICK_WALL:
 						return "Schnee-Ziegelwand";
-					case 596:
+					case EntityID.ItemID.BLUE_LIGHT:
 						return "Blaues Licht";
-					case 597:
+					case EntityID.ItemID.RED_LIGHT:
 						return "Rotes Licht";
-					case 598:
+					case EntityID.ItemID.GREEN_LIGHT:
 						return "Grünes Licht";
-					case 599:
+					case EntityID.ItemID.BLUE_PRESENT:
 						return "Blaue Gegenwart";
-					case 600:
+					case EntityID.ItemID.GREEN_PRESENT:
 						return "Grüne Gegenwart";
-					case 601:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Gelbe Gegenwart";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Schneekugel";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Kohl";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Drachenmaske";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Titanhelm";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Spektral-Kopfbedeckung";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Drachen-Brustpanzer";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Titanrüstung";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Spektralrüstung";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Drachen-Beinschienen";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Titanleggings";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Spektralschurz";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tizona";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Tonbogiri";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Sharanga";
-					case 616:
+					case EntityID.ItemID.SPECTRAL_ARROW:
 						return "Spektralpfeil";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Vulkan Repeater";
-					case 618:
+					case EntityID.ItemID.VULCAN_BOLT:
 						return "Vulkanbolzen";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Verdächtig aussehender Schädel";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "Seele des Verderbens";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Petrischale";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Bienenwabe";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Phiole mit Blut";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Wolfszahn";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Gehirn";
-					case 626:
+					case EntityID.ItemID.MUSIC_BOX_DESERT:
 						return "Spieluhr (Wüste)";
-					case 627:
+					case EntityID.ItemID.MUSIC_BOX_SPACE:
 						return "Spieluhr (Weltall)";
-					case 628:
+					case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 						return "Spieluhr (Tutorial)";
-					case 629:
+					case EntityID.ItemID.MUSIC_BOX_BOSS4:
 						return "Spieluhr (Boss 4)";
-					case 630:
+					case EntityID.ItemID.MUSIC_BOX_OCEAN:
 						return "Spieluhr (Ozean)";
-					case 631:
+					case EntityID.ItemID.MUSIC_BOX_SNOW:
 						return "Spieluhr (Schnee)";
 #if VERSION_101
-					case 632:
+					case EntityID.ItemID.FABULOUS_RIBBON:
 						return "Fabelhafte Schleife";
-					case 633:
+					case EntityID.ItemID.GEORGES_HAT:
 						return "Georges Hut";
-					case 634:
+					case EntityID.ItemID.FABULOUS_TUTU:
 						return "Fabelhaftes Tutu";
-					case 635:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 						return "Georges Smoking-Hemd";
-					case 636:
+					case EntityID.ItemID.FABULOUS_SLIPPERS:
 						return "Fabelhafte Slipper";
-					case 637:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Georges Smoking-Hose";
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 						return "Funkelflügel";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Lagerfeuer";
-					case 640:
+					case EntityID.ItemID.WOOD_HELMET:
 						return "Holz-Helm";
-					case 641:
+					case EntityID.ItemID.WOOD_BREASTPLATE:
 						return "Holz-Brustpanzer";
-					case 642:
+					case EntityID.ItemID.WOOD_GREAVES:
 						return "Holz-Beinschienen";
-					case 643:
+					case EntityID.ItemID.CACTUS_SWORD:
 						return "Kaktus-Schwert";
-					case 644:
+					case EntityID.ItemID.CACTUS_PICKAXE:
 						return "Kaktus-Spitzhacke";
-					case 645:
+					case EntityID.ItemID.CACTUS_HELMET:
 						return "Kaktus-Helm";
-					case 646:
+					case EntityID.ItemID.CACTUS_BREASTPLATE:
 						return "Kaktus-Brustpanzer";
-					case 647:
+					case EntityID.ItemID.CACTUS_LEGGINGS:
 						return "Kaktus-Leggings";
-					case 648:
+					case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 						return "Lila Buntglas";
-					case 649:
+					case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 						return "Gelbes Buntglas";
-					case 650:
+					case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 						return "Blaues Buntglas";
-					case 651:
+					case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 						return "Grünes Buntglas";
-					case 652:
+					case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 						return "Rotes Buntglas";
-					case 653:
+					case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 						return "Mehrfarbiges Buntglas";
 
 #endif
@@ -13812,4124 +12189,4124 @@ namespace Terraria
 			}
 			else if (LangOption == (int)ID.ITALIAN)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Piccone d'oro";
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						return "Spadone d'oro";
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						return "Spada corta d'oro";
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						return "Ascia d'oro";
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						return "Martello d'oro";
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						return "Arco d'oro";
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						return "Piccone d'argento";
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						return "Spadone d'argento";
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						return "Spada corta d'argento";
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						return "Ascia d'argento";
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						return "Martello d'argento";
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						return "Arco d'argento";
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						return "Piccone di rame";
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						return "Spadone di rame";
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						return "Spada corta di rame";
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						return "Ascia di rame";
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						return "Martello di rame";
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						return "Arco di rame";
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						return "Spada laser blu";
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						return "Spada laser rossa";
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						return "Spada laser verde";
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						return "Spada laser viola";
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						return "Spada laser bianca";
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						return "Spada laser gialla";
-					case 1:
+					case EntityID.ItemID.IRON_PICKAXE:
 						return "Piccone di ferro";
-					case 2:
+					case EntityID.ItemID.DIRT_BLOCK:
 						return "Blocco di terra";
-					case 3:
+					case EntityID.ItemID.STONE_BLOCK:
 						return "Blocco di pietra";
-					case 4:
+					case EntityID.ItemID.IRON_BROADSWORD:
 						return "Spadone di ferro";
-					case 5:
+					case EntityID.ItemID.MUSHROOM:
 						return "Fungo";
-					case 6:
+					case EntityID.ItemID.IRON_SHORTSWORD:
 						return "Spada corta di ferro";
-					case 7:
+					case EntityID.ItemID.IRON_HAMMER:
 						return "Martello di ferro";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Torcia";
-					case 9:
+					case EntityID.ItemID.WOOD:
 						return "Legno";
-					case 10:
+					case EntityID.ItemID.IRON_AXE:
 						return "Ascia di ferro";
-					case 11:
+					case EntityID.ItemID.IRON_ORE:
 						return "Minerale di ferro";
-					case 12:
+					case EntityID.ItemID.COPPER_ORE:
 						return "Minerale di rame";
-					case 13:
+					case EntityID.ItemID.GOLD_ORE:
 						return "Minerale d'oro";
-					case 14:
+					case EntityID.ItemID.SILVER_ORE:
 						return "Minerale d'argento";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Orologio di rame";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Orologio d'argento";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Orologio d'oro";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Misuratore di profondità";
-					case 19:
+					case EntityID.ItemID.GOLD_BAR:
 						return "Barra d'oro";
-					case 20:
+					case EntityID.ItemID.COPPER_BAR:
 						return "Barra di rame";
-					case 21:
+					case EntityID.ItemID.SILVER_BAR:
 						return "Barra d'argento";
-					case 22:
+					case EntityID.ItemID.IRON_BAR:
 						return "Barra di ferro";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Gelatina";
-					case 24:
+					case EntityID.ItemID.WOODEN_SWORD:
 						return "Spada di legno";
-					case 25:
+					case EntityID.ItemID.WOODEN_DOOR:
 						return "Porta di legno";
-					case 26:
+					case EntityID.ItemID.STONE_WALL:
 						return "Muro di pietra";
-					case 27:
+					case EntityID.ItemID.ACORN:
 						return "Ghianda";
-					case 28:
+					case EntityID.ItemID.LESSER_HEALING_POTION:
 						return "Pozione curativa inferiore";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Cristallo di vita";
-					case 30:
+					case EntityID.ItemID.DIRT_WALL:
 						return "Muro di terra";
-					case 31:
+					case EntityID.ItemID.BOTTLE:
 						return "Bottiglia";
-					case 32:
+					case EntityID.ItemID.WOODEN_TABLE:
 						return "Tavolo di legno";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Fornace";
-					case 34:
+					case EntityID.ItemID.WOODEN_CHAIR:
 						return "Sedia di legno";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Incudine di ferro";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Banco da lavoro";
-					case 37:
+					case EntityID.ItemID.GOGGLES:
 						return "Occhiali protettivi";
-					case 38:
+					case EntityID.ItemID.LENS:
 						return "Lenti";
-					case 39:
+					case EntityID.ItemID.WOODEN_BOW:
 						return "Arco di legno";
-					case 40:
+					case EntityID.ItemID.WOODEN_ARROW:
 						return "Freccia di legno";
-					case 41:
+					case EntityID.ItemID.FLAMING_ARROW:
 						return "Freccia infuocata";
-					case 42:
+					case EntityID.ItemID.SHURIKEN:
 						return "Shuriken";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Occhio dallo sguardo sospetto";
-					case 44:
+					case EntityID.ItemID.DEMON_BOW:
 						return "Arco demoniaco";
-					case 45:
+					case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 						return "Ascia da guerra della notte";
-					case 46:
+					case EntityID.ItemID.LIGHTS_BANE:
 						return "Flagello di luce";
-					case 47:
+					case EntityID.ItemID.UNHOLY_ARROW:
 						return "Freccia empia";
-					case 48:
+					case EntityID.ItemID.CHEST:
 						return "Cassa";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Benda di rigenerazione";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Specchio magico";
-					case 51:
+					case EntityID.ItemID.JESTERS_ARROW:
 						return "Freccia del giullare";
-					case 52:
+					case EntityID.ItemID.ANGEL_STATUE:
 						return "Statua dell'angelo";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Nuvola in bottiglia";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Stivali di Ermes";
-					case 55:
+					case EntityID.ItemID.ENCHANTED_BOOMERANG:
 						return "Boomerang incantato";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "Minerale demoniaco";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "Barra demoniaca";
-					case 58:
+					case EntityID.ItemID.HEART:
 						return "Cuore";
-					case 59:
+					case EntityID.ItemID.CORRUPT_SEEDS:
 						return "Semi corrotti";
-					case 60:
+					case EntityID.ItemID.VILE_MUSHROOM:
 						return "Fungo disgustoso";
-					case 61:
+					case EntityID.ItemID.EBONSTONE_BLOCK:
 						return "Blocco pietra d'ebano";
-					case 62:
+					case EntityID.ItemID.GRASS_SEEDS:
 						return "Semi d'erba";
-					case 63:
+					case EntityID.ItemID.SUNFLOWER:
 						return "Girasole";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Spina vile";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Furia stellare";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Polvere purificatrice";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Polvere disgustosa";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "Ceppo marcio";
-					case 69:
+					case EntityID.ItemID.WORM_TOOTH:
 						return "Dente di verme";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Esca di verme";
-					case 71:
+					case EntityID.ItemID.COPPER_COIN:
 						return "Moneta di rame";
-					case 72:
+					case EntityID.ItemID.SILVER_COIN:
 						return "Moneta d'argento";
-					case 73:
+					case EntityID.ItemID.GOLD_COIN:
 						return "Moneta d'oro";
-					case 74:
+					case EntityID.ItemID.PLATINUM_COIN:
 						return "Moneta di platino";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Stella cadente";
-					case 76:
+					case EntityID.ItemID.COPPER_GREAVES:
 						return "Schiniere di rame ";
-					case 77:
+					case EntityID.ItemID.IRON_GREAVES:
 						return "Schiniere di ferro";
-					case 78:
+					case EntityID.ItemID.SILVER_GREAVES:
 						return "Schiniere d'argento";
-					case 79:
+					case EntityID.ItemID.GOLD_GREAVES:
 						return "Schiniere d'oro";
-					case 80:
+					case EntityID.ItemID.COPPER_CHAINMAIL:
 						return "Maglia metallica di rame";
-					case 81:
+					case EntityID.ItemID.IRON_CHAINMAIL:
 						return "Maglia metallica di ferro";
-					case 82:
+					case EntityID.ItemID.SILVER_CHAINMAIL:
 						return "Maglia metallica d'argento";
-					case 83:
+					case EntityID.ItemID.GOLD_CHAINMAIL:
 						return "Maglia metallica d'oro";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "Rampino";
-					case 85:
+					case EntityID.ItemID.CHAIN:
 						return "Catena di ferro";
-					case 86:
+					case EntityID.ItemID.SHADOW_SCALE:
 						return "Scaglia d'ombra";
-					case 87:
+					case EntityID.ItemID.PIGGY_BANK:
 						return "Salvadanaio";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Casco da minatore";
-					case 89:
+					case EntityID.ItemID.COPPER_HELMET:
 						return "Casco di rame";
-					case 90:
+					case EntityID.ItemID.IRON_HELMET:
 						return "Casco di ferro";
-					case 91:
+					case EntityID.ItemID.SILVER_HELMET:
 						return "Casco d'argento";
-					case 92:
+					case EntityID.ItemID.GOLD_HELMET:
 						return "Casco d'oro";
-					case 93:
+					case EntityID.ItemID.WOOD_WALL:
 						return "Muro di legno";
-					case 94:
+					case EntityID.ItemID.WOOD_PLATFORM:
 						return "Piattaforma di legno";
-					case 95:
+					case EntityID.ItemID.FLINTLOCK_PISTOL:
 						return "Pistola a pietra focaia";
-					case 96:
+					case EntityID.ItemID.MUSKET:
 						return "Moschetto";
-					case 97:
+					case EntityID.ItemID.MUSKET_BALL:
 						return "Palla di moschetto";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Minishark";
-					case 99:
+					case EntityID.ItemID.IRON_BOW:
 						return "Arco di ferro";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Schiniere ombra";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Armatura a scaglie ombra";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Casco ombra";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Piccone dell'incubo";
-					case 104:
+					case EntityID.ItemID.THE_BREAKER:
 						return "Il Distruttore";
-					case 105:
+					case EntityID.ItemID.CANDLE:
 						return "Candela";
-					case 106:
+					case EntityID.ItemID.COPPER_CHANDELIER:
 						return "Lampadario di rame";
-					case 107:
+					case EntityID.ItemID.SILVER_CHANDELIER:
 						return "Lampadario d'argento";
-					case 108:
+					case EntityID.ItemID.GOLD_CHANDELIER:
 						return "Lampadario d'oro";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Cristallo mana";
-					case 110:
+					case EntityID.ItemID.LESSER_MANA_POTION:
 						return "Pozione mana inferiore";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Benda della forza stellare";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Fiore di fuoco";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Missile magico";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Bastone di terra";
 #if VERSION_INITIAL
-				case 115:
-					return "Orbita di luce";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Orbita di luce";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Orbita d'ombra";
 #endif
-					case 116:
+					case EntityID.ItemID.METEORITE:
 						return "Meteorite";
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Barra di meteorite";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Uncino";
-					case 119:
+					case EntityID.ItemID.FLAMARANG:
 						return "Flamarang";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Furia fusa";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "Spadone di fuoco";
-					case 122:
+					case EntityID.ItemID.MOLTEN_PICKAXE:
 						return "Piccone fuso";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Casco meteorite";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Tunica di meteorite";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Gambali di meteorite";
-					case 126:
+					case EntityID.ItemID.BOTTLED_WATER:
 						return "Acqua imbottigliata";
-					case 127:
+					case EntityID.ItemID.SPACE_GUN:
 						return "Spazio pistola";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Stivali razzo";
-					case 129:
+					case EntityID.ItemID.GRAY_BRICK:
 						return "Mattone grigio";
-					case 130:
+					case EntityID.ItemID.GRAY_BRICK_WALL:
 						return "Muro grigio";
-					case 131:
+					case EntityID.ItemID.RED_BRICK:
 						return "Mattone rosso";
-					case 132:
+					case EntityID.ItemID.RED_BRICK_WALL:
 						return "Muro rosso";
-					case 133:
+					case EntityID.ItemID.CLAY_BLOCK:
 						return "Blocco d'argilla";
-					case 134:
+					case EntityID.ItemID.BLUE_BRICK:
 						return "Mattone blu";
-					case 135:
+					case EntityID.ItemID.BLUE_BRICK_WALL:
 						return "Muro blu";
-					case 136:
+					case EntityID.ItemID.CHAIN_LANTERN:
 						return "Lanterna con catena";
-					case 137:
+					case EntityID.ItemID.GREEN_BRICK:
 						return "Mattone verde";
-					case 138:
+					case EntityID.ItemID.GREEN_BRICK_WALL:
 						return "Muro verde";
-					case 139:
+					case EntityID.ItemID.PINK_BRICK:
 						return "Mattone rosa";
-					case 140:
+					case EntityID.ItemID.PINK_BRICK_WALL:
 						return "Muro rosa";
-					case 141:
+					case EntityID.ItemID.GOLD_BRICK:
 						return "Mattone d'oro";
-					case 142:
+					case EntityID.ItemID.GOLD_BRICK_WALL:
 						return "Muro d'oro";
-					case 143:
+					case EntityID.ItemID.SILVER_BRICK:
 						return "Mattone d'argento";
-					case 144:
+					case EntityID.ItemID.SILVER_BRICK_WALL:
 						return "Muro d'argento";
-					case 145:
+					case EntityID.ItemID.COPPER_BRICK:
 						return "Mattone di rame";
-					case 146:
+					case EntityID.ItemID.COPPER_BRICK_WALL:
 						return "Muro di rame";
-					case 147:
+					case EntityID.ItemID.SPIKE:
 						return "Spina";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Candela d'acqua";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "Libro";
-					case 150:
+					case EntityID.ItemID.COBWEB:
 						return "Ragnatela";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Casco funebre";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Pettorale funebre";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Gambali funebri";
-					case 154:
+					case EntityID.ItemID.BONE:
 						return "Osso";
-					case 155:
+					case EntityID.ItemID.MURAMASA:
 						return "Muramasa";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Scudo di cobalto";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Scettro d'acqua";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Ferro di cavallo fortunato";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Palloncino rosso brillante";
-					case 160:
+					case EntityID.ItemID.HARPOON:
 						return "Arpione";
-					case 161:
+					case EntityID.ItemID.SPIKY_BALL:
 						return "Palla chiodata";
-					case 162:
+					case EntityID.ItemID.BALL_O_HURT:
 						return "Palla del dolore";
-					case 163:
+					case EntityID.ItemID.BLUE_MOON:
 						return "Luna blu";
-					case 164:
+					case EntityID.ItemID.HANDGUN:
 						return "Pistola";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Dardo d'acqua";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Bomba";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Dinamite";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Granata";
-					case 169:
+					case EntityID.ItemID.SAND_BLOCK:
 						return "Blocco di sabbia";
-					case 170:
+					case EntityID.ItemID.GLASS:
 						return "Vetro";
-					case 171:
+					case EntityID.ItemID.SIGN:
 						return "Cartello";
-					case 172:
+					case EntityID.ItemID.ASH_BLOCK:
 						return "Blocco di cenere";
-					case 173:
+					case EntityID.ItemID.OBSIDIAN:
 						return "Ossidiana";
-					case 174:
+					case EntityID.ItemID.HELLSTONE:
 						return "Pietra infernale";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Barra di pietra infernale";
-					case 176:
+					case EntityID.ItemID.MUD_BLOCK:
 						return "Blocco di fango";
-					case 177:
+					case EntityID.ItemID.SAPPHIRE:
 						return "Zaffiro";
-					case 178:
+					case EntityID.ItemID.RUBY:
 						return "Rubino";
-					case 179:
+					case EntityID.ItemID.EMERALD:
 						return "Smeraldo";
-					case 180:
+					case EntityID.ItemID.TOPAZ:
 						return "Topazio";
-					case 181:
+					case EntityID.ItemID.AMETHYST:
 						return "Ametista";
-					case 182:
+					case EntityID.ItemID.DIAMOND:
 						return "Diamante";
-					case 183:
+					case EntityID.ItemID.GLOWING_MUSHROOM:
 						return "Fungo luminoso";
-					case 184:
+					case EntityID.ItemID.STAR:
 						return "Stella";
-					case 185:
+					case EntityID.ItemID.IVY_WHIP:
 						return "Frusta di edera";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "Canna per la respirazione";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Pinna";
-					case 188:
+					case EntityID.ItemID.HEALING_POTION:
 						return "Pozione curativa";
-					case 189:
+					case EntityID.ItemID.MANA_POTION:
 						return "Pozione mana";
-					case 190:
+					case EntityID.ItemID.BLADE_OF_GRASS:
 						return "Spada di erba";
-					case 191:
+					case EntityID.ItemID.THORN_CHAKRAM:
 						return "Artiglio di Chakram";
-					case 192:
+					case EntityID.ItemID.OBSIDIAN_BRICK:
 						return "Mattone di ossidiana";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Teschio di ossidiana";
-					case 194:
+					case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 						return "Semi di fungo";
-					case 195:
+					case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 						return "Semi dell'erba della giungla";
-					case 196:
+					case EntityID.ItemID.WOODEN_HAMMER:
 						return "Martello di legno";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Cannone stellare";
-					case 198:
+					case EntityID.ItemID.BLUE_PHASEBLADE:
 						return "Spada laser blu";
-					case 199:
+					case EntityID.ItemID.RED_PHASEBLADE:
 						return "Spada laser rossa";
-					case 200:
+					case EntityID.ItemID.GREEN_PHASEBLADE:
 						return "Spada laser verde";
-					case 201:
+					case EntityID.ItemID.PURPLE_PHASEBLADE:
 						return "Spada laser viola";
-					case 202:
+					case EntityID.ItemID.WHITE_PHASEBLADE:
 						return "Spada laser bianca";
-					case 203:
+					case EntityID.ItemID.YELLOW_PHASEBLADE:
 						return "Spada laser gialla";
-					case 204:
+					case EntityID.ItemID.METEOR_HAMAXE:
 						return "Maglio di meteorite";
-					case 205:
+					case EntityID.ItemID.EMPTY_BUCKET:
 						return "Secchio vuoto";
-					case 206:
+					case EntityID.ItemID.WATER_BUCKET:
 						return "Secchio d'acqua";
-					case 207:
+					case EntityID.ItemID.LAVA_BUCKET:
 						return "Secchio di lava";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "Rosa della giungla";
-					case 209:
+					case EntityID.ItemID.STINGER:
 						return "Artiglio";
-					case 210:
+					case EntityID.ItemID.VINE:
 						return "Vite";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Artigli bestiali";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Cavigliera del vento";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Bastone della ricrescita";
-					case 214:
+					case EntityID.ItemID.HELLSTONE_BRICK:
 						return "Mattone di pietra infernale";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "Cuscino rumoroso";
-					case 216:
+					case EntityID.ItemID.SHACKLE:
 						return "Grillo";
-					case 217:
+					case EntityID.ItemID.MOLTEN_HAMAXE:
 						return "Maglio fuso";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Lanciatore di fiamma";
-					case 219:
+					case EntityID.ItemID.PHOENIX_BLASTER:
 						return "Blaster della fenice";
-					case 220:
+					case EntityID.ItemID.SUNFURY:
 						return "Furia del sole";
-					case 221:
+					case EntityID.ItemID.HELLFORGE:
 						return "Creazione degli inferi";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Vaso di argilla";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Dono della natura";
-					case 224:
+					case EntityID.ItemID.BED:
 						return "Letto";
-					case 225:
+					case EntityID.ItemID.SILK:
 						return "Seta";
-					case 226:
+					case EntityID.ItemID.LESSER_RESTORATION_POTION:
 						return "Pozione di ripristino inferiore";
-					case 227:
+					case EntityID.ItemID.RESTORATION_POTION:
 						return "Pozione di ripristino";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Cappello della giungla";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Camicia della giungla";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Pantaloni della giungla";
-					case 231:
+					case EntityID.ItemID.MOLTEN_HELMET:
 						return "Casco fuso";
-					case 232:
+					case EntityID.ItemID.MOLTEN_BREASTPLATE:
 						return "Pettorale fuso";
-					case 233:
+					case EntityID.ItemID.MOLTEN_GREAVES:
 						return "Schiniere fuso";
-					case 234:
+					case EntityID.ItemID.METEOR_SHOT:
 						return "Sparo di meteorite";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "Bomba appiccicosa";
-					case 236:
+					case EntityID.ItemID.BLACK_LENS:
 						return "Lenti nere";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "Occhiali da sole";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Cappello dello stregone";
-					case 239:
+					case EntityID.ItemID.TOP_HAT:
 						return "Cilindro";
-					case 240:
+					case EntityID.ItemID.TUXEDO_SHIRT:
 						return "Camicia da smoking";
-					case 241:
+					case EntityID.ItemID.TUXEDO_PANTS:
 						return "Pantaloni da smoking";
-					case 242:
+					case EntityID.ItemID.SUMMER_HAT:
 						return "Cappello estivo";
-					case 243:
+					case EntityID.ItemID.BUNNY_HOOD:
 						return "Cappuccio da coniglio";
-					case 244:
+					case EntityID.ItemID.PLUMBERS_HAT:
 						return "Cappello da idraulico";
-					case 245:
+					case EntityID.ItemID.PLUMBERS_SHIRT:
 						return "Camicia da idraulico";
-					case 246:
+					case EntityID.ItemID.PLUMBERS_PANTS:
 						return "Pantaloni da idraulico";
-					case 247:
+					case EntityID.ItemID.HEROS_HAT:
 						return "Cappello da eroe";
-					case 248:
+					case EntityID.ItemID.HEROS_SHIRT:
 						return "Camicia da eroe";
-					case 249:
+					case EntityID.ItemID.HEROS_PANTS:
 						return "Pantaloni da eroe";
-					case 250:
+					case EntityID.ItemID.FISH_BOWL:
 						return "Boccia dei pesci rossi";
-					case 251:
+					case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 						return "Cappello da archeologo";
-					case 252:
+					case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 						return "Giacca da archeologo";
-					case 253:
+					case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 						return "Pantaloni da archeologo";
 
 #if VERSION_INITIAL
-				case 254:
-					return "Tintura nera";
-				case 255:
-					return "Tintura viola";
+					case EntityID.ItemID.BLACK_THREAD:
+						return "Tintura nera";
+					case EntityID.ItemID.PURPLE_THREAD:
+						return "Tintura viola";
 #else
-					case 254:
+					case EntityID.ItemID.BLACK_THREAD:
 						return "Abito nero";
-					case 255:
+					case EntityID.ItemID.PURPLE_THREAD:
 						return "Abito viola";
 #endif
 
-					case 256:
+					case EntityID.ItemID.NINJA_HOOD:
 						return "Cappuccio ninja";
-					case 257:
+					case EntityID.ItemID.NINJA_SHIRT:
 						return "Camicia ninja";
-					case 258:
+					case EntityID.ItemID.NINJA_PANTS:
 						return "Pantaloni ninja";
-					case 259:
+					case EntityID.ItemID.LEATHER:
 						return "Pelle";
-					case 260:
+					case EntityID.ItemID.RED_HAT:
 						return "Cappello rosso";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Pesce rosso";
-					case 262:
+					case EntityID.ItemID.ROBE:
 						return "Mantello";
-					case 263:
+					case EntityID.ItemID.ROBOT_HAT:
 						return "Cappello da robot";
-					case 264:
+					case EntityID.ItemID.GOLD_CROWN:
 						return "Corona d'oro";
-					case 265:
+					case EntityID.ItemID.HELLFIRE_ARROW:
 						return "Freccia di fuoco infernale";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "Pistola di sabbia";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "Bambola voodoo della guida";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Casco da sommozzatore";
-					case 269:
+					case EntityID.ItemID.FAMILIAR_SHIRT:
 						return "Camicia comune";
-					case 270:
+					case EntityID.ItemID.FAMILIAR_PANTS:
 						return "Pantaloni comuni";
-					case 271:
+					case EntityID.ItemID.FAMILIAR_WIG:
 						return "Parrucca comune";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Falce demoniaca";
-					case 273:
+					case EntityID.ItemID.NIGHTS_EDGE:
 						return "Confine della notte";
-					case 274:
+					case EntityID.ItemID.DARK_LANCE:
 						return "Lancia oscura";
-					case 275:
+					case EntityID.ItemID.CORAL:
 						return "Corallo";
-					case 276:
+					case EntityID.ItemID.CACTUS:
 						return "Cactus";
-					case 277:
+					case EntityID.ItemID.TRIDENT:
 						return "Tridente";
-					case 278:
+					case EntityID.ItemID.SILVER_BULLET:
 						return "Proiettile d'argento";
-					case 279:
+					case EntityID.ItemID.THROWING_KNIFE:
 						return "Coltello da lancio";
-					case 280:
+					case EntityID.ItemID.SPEAR:
 						return "Lancia";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Cerbottana";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Bastone luminoso";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Seme";
-					case 284:
+					case EntityID.ItemID.WOODEN_BOOMERANG:
 						return "Boomerang di legno";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Aghetto";
-					case 286:
+					case EntityID.ItemID.STICKY_GLOWSTICK:
 						return "Bastone luminoso appiccicoso";
-					case 287:
+					case EntityID.ItemID.POISONED_KNIFE:
 						return "Coltello avvelenato";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Pozione pelle d'ossidiana";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Pozione rigeneratrice";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Pozione della rapidità";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Pozione branchie";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Pozione pelle di ferro";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Pozione rigenerazione mana";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Pozione potenza magica";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Pozione caduta dolce";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Pozione speleologo";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Pozione invisibilità";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Pozione splendore";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Pozione civetta";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Pozione battaglia";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Pozione spine";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Pozione per camminare sull'acqua";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Pozione arciere";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Pozione cacciatore";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Pozione gravità";
-					case 306:
+					case EntityID.ItemID.GOLD_CHEST:
 						return "Cassa d'oro";
-					case 307:
+					case EntityID.ItemID.DAYBLOOM_SEEDS:
 						return "Semi Fiordigiorno";
-					case 308:
+					case EntityID.ItemID.MOONGLOW_SEEDS:
 						return "Semi Splendiluna";
-					case 309:
+					case EntityID.ItemID.BLINKROOT_SEEDS:
 						return "Semi Lampeggiaradice";
-					case 310:
+					case EntityID.ItemID.DEATHWEED_SEEDS:
 						return "Semi Erbamorte";
-					case 311:
+					case EntityID.ItemID.WATERLEAF_SEEDS:
 						return "Semi Acquafoglia";
-					case 312:
+					case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 						return "Semi Fiordifuoco";
-					case 313:
+					case EntityID.ItemID.DAYBLOOM:
 						return "Fiordigiorno";
-					case 314:
+					case EntityID.ItemID.MOONGLOW:
 						return "Splendiluna";
-					case 315:
+					case EntityID.ItemID.BLINKROOT:
 						return "Lampeggiaradice";
-					case 316:
+					case EntityID.ItemID.DEATHWEED:
 						return "Erbamorte";
-					case 317:
+					case EntityID.ItemID.WATERLEAF:
 						return "Acquafoglia";
-					case 318:
+					case EntityID.ItemID.FIREBLOSSOM:
 						return "Fiordifuoco";
-					case 319:
+					case EntityID.ItemID.SHARK_FIN:
 						return "Pinna di squalo";
-					case 320:
+					case EntityID.ItemID.FEATHER:
 						return "Piuma";
-					case 321:
+					case EntityID.ItemID.TOMBSTONE:
 						return "Lapide";
-					case 322:
+					case EntityID.ItemID.MIME_MASK:
 						return "Maschera sosia";
-					case 323:
+					case EntityID.ItemID.ANTLION_MANDIBLE:
 						return "Mandibola di formicaleone";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "Parti di pistola illegale";
-					case 325:
+					case EntityID.ItemID.THE_DOCTORS_SHIRT:
 						return "Camicia da medico";
-					case 326:
+					case EntityID.ItemID.THE_DOCTORS_PANTS:
 						return "Pantaloni da medico";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Chiave d'oro";
-					case 328:
+					case EntityID.ItemID.SHADOW_CHEST:
 						return "Cassa ombra";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Chiave ombra";
-					case 330:
+					case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 						return "Muro di ossidiana";
-					case 331:
+					case EntityID.ItemID.JUNGLE_SPORES:
 						return "Spore della giungla";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Telaio";
-					case 333:
+					case EntityID.ItemID.PIANO:
 						return "Pianoforte";
-					case 334:
+					case EntityID.ItemID.DRESSER:
 						return "Cassettone";
-					case 335:
+					case EntityID.ItemID.BENCH:
 						return "Panca";
-					case 336:
+					case EntityID.ItemID.BATHTUB:
 						return "Vasca da bagno";
-					case 337:
+					case EntityID.ItemID.RED_BANNER:
 						return "Stendardo rosso";
-					case 338:
+					case EntityID.ItemID.GREEN_BANNER:
 						return "Stendardo verde";
-					case 339:
+					case EntityID.ItemID.BLUE_BANNER:
 						return "Stendardo blu";
-					case 340:
+					case EntityID.ItemID.YELLOW_BANNER:
 						return "Stendardo giallo";
-					case 341:
+					case EntityID.ItemID.LAMP_POST:
 						return "Lampione";
-					case 342:
+					case EntityID.ItemID.TIKI_TORCH:
 						return "Torcia tiki";
-					case 343:
+					case EntityID.ItemID.BARREL:
 						return "Barile";
-					case 344:
+					case EntityID.ItemID.CHINESE_LANTERN:
 						return "Lanterna cinese";
-					case 345:
+					case EntityID.ItemID.COOKING_POT:
 						return "Pentola";
-					case 346:
+					case EntityID.ItemID.SAFE:
 						return "Caveau";
-					case 347:
+					case EntityID.ItemID.SKULL_LANTERN:
 						return "Lanterna-teschio";
-					case 348:
+					case EntityID.ItemID.TRASH_CAN:
 						return "Bidone";
-					case 349:
+					case EntityID.ItemID.CANDELABRA:
 						return "Candelabro";
-					case 350:
+					case EntityID.ItemID.PINK_VASE:
 						return "Vaso rosa";
-					case 351:
+					case EntityID.ItemID.MUG:
 						return "Boccale";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Barilotto";
-					case 353:
+					case EntityID.ItemID.ALE:
 						return "Birra";
-					case 354:
+					case EntityID.ItemID.BOOKCASE:
 						return "Scaffale";
-					case 355:
+					case EntityID.ItemID.THRONE:
 						return "Trono";
-					case 356:
+					case EntityID.ItemID.BOWL:
 						return "Ciotola";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Ciotola di zuppa";
-					case 358:
+					case EntityID.ItemID.TOILET:
 						return "Toilette";
-					case 359:
+					case EntityID.ItemID.GRANDFATHER_CLOCK:
 						return "Pendola";
-					case 360:
+					case EntityID.ItemID.STATUE:
 						return "Statua armatura";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Insegna di battaglia dei goblin";
-					case 362:
+					case EntityID.ItemID.TATTERED_CLOTH:
 						return "Abito a brandelli";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Segheria";
-					case 364:
+					case EntityID.ItemID.COBALT_ORE:
 						return "Minerale cobalto";
-					case 365:
+					case EntityID.ItemID.MYTHRIL_ORE:
 						return "Minerale mitrilio";
-					case 366:
+					case EntityID.ItemID.ADAMANTITE_ORE:
 						return "Minerale adamantio";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Martellone";
-					case 368:
+					case EntityID.ItemID.EXCALIBUR:
 						return "Excalibur";
-					case 369:
+					case EntityID.ItemID.HALLOWED_SEEDS:
 						return "Semi consacrati";
-					case 370:
+					case EntityID.ItemID.EBONSAND_BLOCK:
 						return "Blocco sabbia d'ebano";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Cappello di cobalto";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Casco di cobalto";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Maschera di cobalto";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Corrazza di cobalto";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Gambali di cobalto";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Cappuccio di mitrilio";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Casco di mitrilio";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Cappello di mitrilio";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Maglia metallica di mitrilio";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Schiniere di mitrilio";
-					case 381:
+					case EntityID.ItemID.COBALT_BAR:
 						return "Barra di cobalto";
-					case 382:
+					case EntityID.ItemID.MYTHRIL_BAR:
 						return "Barra di mitrilio";
-					case 383:
+					case EntityID.ItemID.COBALT_CHAINSAW:
 						return "Motosega di cobalto";
-					case 384:
+					case EntityID.ItemID.MYTHRIL_CHAINSAW:
 						return "Motosega di mitrilio";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Perforatrice di cobalto";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Perforatrice di mitrilio";
-					case 387:
+					case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 						return "Motosega di adamantio";
-					case 388:
+					case EntityID.ItemID.ADAMANTITE_DRILL:
 						return "Perforatrice di adamantio";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Frustona";
-					case 390:
+					case EntityID.ItemID.MYTHRIL_HALBERD:
 						return "Alabarda di mitrilio";
-					case 391:
+					case EntityID.ItemID.ADAMANTITE_BAR:
 						return "Barra di adamantio";
-					case 392:
+					case EntityID.ItemID.GLASS_WALL:
 						return "Muro di vetro";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Bussola";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Muta da sub";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "GPS";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Ferro di cavallo di ossidiana";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Scudo di ossidiana";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Laboratorio dell'inventore";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Nuvola in un palloncino";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Copricapo di adamantio";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Casco di adamantio";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Maschera di adamantio";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Corrazza di adamantio";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Gambali di adamantio";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Stivali da fantasma";
-					case 406:
+					case EntityID.ItemID.ADAMANTITE_GLAIVE:
 						return "Alabarda di adamantio";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Cintura porta attrezzi";
-					case 408:
+					case EntityID.ItemID.PEARLSAND_BLOCK:
 						return "Blocco sabbiaperla";
-					case 409:
+					case EntityID.ItemID.PEARLSTONE_BLOCK:
 						return "Blocco pietraperla";
-					case 410:
+					case EntityID.ItemID.MINING_SHIRT:
 						return "Camicia da minatore";
-					case 411:
+					case EntityID.ItemID.MINING_PANTS:
 						return "Pantaloni da minatore";
-					case 412:
+					case EntityID.ItemID.PEARLSTONE_BRICK:
 						return "Mattone pietraperla";
-					case 413:
+					case EntityID.ItemID.IRIDESCENT_BRICK:
 						return "Mattone iridescente";
-					case 414:
+					case EntityID.ItemID.MUDSTONE_BRICK:
 						return "Mattone pietrafango";
-					case 415:
+					case EntityID.ItemID.COBALT_BRICK:
 						return "Mattone cobalto";
-					case 416:
+					case EntityID.ItemID.MYTHRIL_BRICK:
 						return "Mattone mitrilio";
-					case 417:
+					case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 						return "Muro di pietraperla";
-					case 418:
+					case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 						return "Muro di mattoni iridescenti";
-					case 419:
+					case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 						return "Muro di pietrafango";
-					case 420:
+					case EntityID.ItemID.COBALT_BRICK_WALL:
 						return "Muro di mattoni di cobalto";
-					case 421:
+					case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 						return "Muro di mattoni di mitrilio";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Acquasanta";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Acqua profana";
-					case 424:
+					case EntityID.ItemID.SILT_BLOCK:
 						return "Blocco insabbiato";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Campana della fata";
-					case 426:
+					case EntityID.ItemID.BREAKER_BLADE:
 						return "Lama del distruttore";
-					case 427:
+					case EntityID.ItemID.BLUE_TORCH:
 						return "Torcia blu";
-					case 428:
+					case EntityID.ItemID.RED_TORCH:
 						return "Torcia rossa";
-					case 429:
+					case EntityID.ItemID.GREEN_TORCH:
 						return "Torcia verde";
-					case 430:
+					case EntityID.ItemID.PURPLE_TORCH:
 						return "Torcia viola";
-					case 431:
+					case EntityID.ItemID.WHITE_TORCH:
 						return "Torcia bianca";
-					case 432:
+					case EntityID.ItemID.YELLOW_TORCH:
 						return "Torcia gialla";
-					case 433:
+					case EntityID.ItemID.DEMON_TORCH:
 						return "Torcia demoniaca";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Fucile d'assalto automatico";
-					case 435:
+					case EntityID.ItemID.COBALT_REPEATER:
 						return "Balestra automatica di cobalto";
-					case 436:
+					case EntityID.ItemID.MYTHRIL_REPEATER:
 						return "Balestra automatica di mitrilio";
-					case 437:
+					case EntityID.ItemID.DUAL_HOOK:
 						return "Gancio doppio";
-					case 438:
+					case EntityID.ItemID.STAR_STATUE:
 						return "Statua stella";
-					case 439:
+					case EntityID.ItemID.SWORD_STATUE:
 						return "Statua spada";
-					case 440:
+					case EntityID.ItemID.SLIME_STATUE:
 						return "Statua slime";
-					case 441:
+					case EntityID.ItemID.GOBLIN_STATUE:
 						return "Statua goblin";
-					case 442:
+					case EntityID.ItemID.SHIELD_STATUE:
 						return "Statua scudo";
-					case 443:
+					case EntityID.ItemID.BAT_STATUE:
 						return "Statua pipistrello";
-					case 444:
+					case EntityID.ItemID.FISH_STATUE:
 						return "Statua pesce";
-					case 445:
+					case EntityID.ItemID.BUNNY_STATUE:
 						return "Statua coniglio";
-					case 446:
+					case EntityID.ItemID.SKELETON_STATUE:
 						return "Statua scheletro";
-					case 447:
+					case EntityID.ItemID.REAPER_STATUE:
 						return "Statua mietitore";
-					case 448:
+					case EntityID.ItemID.WOMAN_STATUE:
 						return "Statua donna";
-					case 449:
+					case EntityID.ItemID.IMP_STATUE:
 						return "Statua diavoletto";
-					case 450:
+					case EntityID.ItemID.GARGOYLE_STATUE:
 						return "Statua gargoyle";
-					case 451:
+					case EntityID.ItemID.GLOOM_STATUE:
 						return "Statua tenebre";
-					case 452:
+					case EntityID.ItemID.HORNET_STATUE:
 						return "Statua calabrone";
-					case 453:
+					case EntityID.ItemID.BOMB_STATUE:
 						return "Statua bomba";
-					case 454:
+					case EntityID.ItemID.CRAB_STATUE:
 						return "Statua granchio";
-					case 455:
+					case EntityID.ItemID.HAMMER_STATUE:
 						return "Statua martello";
-					case 456:
+					case EntityID.ItemID.POTION_STATUE:
 						return "Statua pozione";
-					case 457:
+					case EntityID.ItemID.SPEAR_STATUE:
 						return "Statua arpione";
-					case 458:
+					case EntityID.ItemID.CROSS_STATUE:
 						return "Statua croce";
-					case 459:
+					case EntityID.ItemID.JELLYFISH_STATUE:
 						return "Statua medusa";
-					case 460:
+					case EntityID.ItemID.BOW_STATUE:
 						return "Statua arco";
-					case 461:
+					case EntityID.ItemID.BOOMERANG_STATUE:
 						return "Statua boomerang";
-					case 462:
+					case EntityID.ItemID.BOOT_STATUE:
 						return "Statua stivali";
-					case 463:
+					case EntityID.ItemID.CHEST_STATUE:
 						return "Statua cassa";
-					case 464:
+					case EntityID.ItemID.BIRD_STATUE:
 						return "Statua Uccello";
-					case 465:
+					case EntityID.ItemID.AXE_STATUE:
 						return "Statua ascia";
-					case 466:
+					case EntityID.ItemID.CORRUPT_STATUE:
 						return "Statua corruzione";
-					case 467:
+					case EntityID.ItemID.TREE_STATUE:
 						return "Statua albero";
-					case 468:
+					case EntityID.ItemID.ANVIL_STATUE:
 						return "Statua incudine";
-					case 469:
+					case EntityID.ItemID.PICKAXE_STATUE:
 						return "Statua piccone";
-					case 470:
+					case EntityID.ItemID.MUSHROOM_STATUE:
 						return "Statua fungo";
-					case 471:
+					case EntityID.ItemID.EYEBALL_STATUE:
 						return "Statua bulbo oculare";
-					case 472:
+					case EntityID.ItemID.PILLAR_STATUE:
 						return "Statua colonna";
-					case 473:
+					case EntityID.ItemID.HEART_STATUE:
 						return "Statua cuore";
-					case 474:
+					case EntityID.ItemID.POT_STATUE:
 						return "Statua pentola";
-					case 475:
+					case EntityID.ItemID.SUNFLOWER_STATUE:
 						return "Statua girasole";
-					case 476:
+					case EntityID.ItemID.KING_STATUE:
 						return "Statua re";
-					case 477:
+					case EntityID.ItemID.QUEEN_STATUE:
 						return "Statua regina";
-					case 478:
+					case EntityID.ItemID.PIRANHA_STATUE:
 						return "Statua piranha";
-					case 479:
+					case EntityID.ItemID.PLANKED_WALL:
 						return "Muro impalcato";
-					case 480:
+					case EntityID.ItemID.WOODEN_BEAM:
 						return "Trave di legno";
-					case 481:
+					case EntityID.ItemID.ADAMANTITE_REPEATER:
 						return "Mietitore di adamantio";
-					case 482:
+					case EntityID.ItemID.ADAMANTITE_SWORD:
 						return "Spada di adamantio";
-					case 483:
+					case EntityID.ItemID.COBALT_SWORD:
 						return "Spada di cobalto";
-					case 484:
+					case EntityID.ItemID.MYTHRIL_SWORD:
 						return "Spada di mitrilio";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Amuleto della luna";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Righello";
-					case 487:
+					case EntityID.ItemID.CRYSTAL_BALL:
 						return "Sfera di cristallo";
-					case 488:
+					case EntityID.ItemID.DISCO_BALL:
 						return "Palla disco";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Emblema dell'incantatore";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Emblema del guerriero";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Emblema del guardiaboschi";
-					case 492:
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Ali del demone";
-					case 493:
+					case EntityID.ItemID.ANGEL_WINGS:
 						return "Ali dell'angelo";
-					case 494:
+					case EntityID.ItemID.MAGICAL_HARP:
 						return "Arpa magica";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Bastone dell'arcobaleno";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Bastone di ghiaccio";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Conchiglia di Nettuno";
-					case 498:
+					case EntityID.ItemID.MANNEQUIN:
 						return "Manichino";
-					case 499:
+					case EntityID.ItemID.GREATER_HEALING_POTION:
 						return "Pozione curativa superiore";
-					case 500:
+					case EntityID.ItemID.GREATER_MANA_POTION:
 						return "Pozione mana superiore";
-					case 501:
+					case EntityID.ItemID.PIXIE_DUST:
 						return "Polvere di fata";
-					case 502:
+					case EntityID.ItemID.CRYSTAL_SHARD:
 						return "Frammento di cristallo";
-					case 503:
+					case EntityID.ItemID.CLOWN_HAT:
 						return "Cappello da clown";
-					case 504:
+					case EntityID.ItemID.CLOWN_SHIRT:
 						return "Camicia da clown";
-					case 505:
+					case EntityID.ItemID.CLOWN_PANTS:
 						return "Pantaloni da clown";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Lanciafiamme";
-					case 507:
+					case EntityID.ItemID.BELL:
 						return "Campana";
-					case 508:
+					case EntityID.ItemID.HARP:
 						return "Arpa";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Chiave inglese";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Tagliacavi";
-					case 511:
+					case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 						return "Blocco di pietra attivo";
-					case 512:
+					case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 						return "Blocco di pietra non attivo";
-					case 513:
+					case EntityID.ItemID.LEVER:
 						return "Leva";
-					case 514:
+					case EntityID.ItemID.LASER_RIFLE:
 						return "Fucile laser";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Proiettile di cristallo";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Freccia sacra";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Pugnale magico";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Tempesta di cristallo";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Fiamme maledette";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "Anima della luce";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "Anima della notte";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Fiamma maledetta";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Torcia maledetta";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Forgia di adamantio";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Incudine di mitrilio";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "Corno di unicorno";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "Frammento oscuro";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "Frammento di luce";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Piastra a pressione rossa";
-					case 530:
+					case EntityID.ItemID.WIRE:
 						return "Cavo";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Tomo incantato";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Mantello stellato";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Megashark";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Fucile";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Pietra filosofale";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Guanto del Titano";
-					case 537:
+					case EntityID.ItemID.COBALT_NAGINATA:
 						return "Naginata di cobalto";
-					case 538:
+					case EntityID.ItemID.SWITCH:
 						return "Interruttore";
-					case 539:
+					case EntityID.ItemID.DART_TRAP:
 						return "Trappola dardi";
-					case 540:
+					case EntityID.ItemID.BOULDER:
 						return "Masso";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Piastra a pressione verde";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Piastra a pressione grigia";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Piastra a pressione marrone";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Occhio meccanico";
-					case 545:
+					case EntityID.ItemID.CURSED_ARROW:
 						return "Freccia maledetta";
-					case 546:
+					case EntityID.ItemID.CURSED_BULLET:
 						return "Proiettile maledetto";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "Anima del terrore";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "Anima del potere";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "Anima della visione";
-					case 550:
+					case EntityID.ItemID.GUNGNIR:
 						return "Gungnir";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Armatura sacra";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Schiniere sacro";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Casco sacro";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Collana con croce";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Fiore di mana";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Verme meccanico";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Teschio meccanico";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Copricapo sacro";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Maschera sacra";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Corona slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Disco di luce";
-					case 562:
+					case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 						return "Carillon (Giornata mondiale)";
-					case 563:
+					case EntityID.ItemID.MUSIC_BOX_EERIE:
 						return "Carillon (Mistero)";
-					case 564:
+					case EntityID.ItemID.MUSIC_BOX_NIGHT:
 						return "Carillon (Notte)";
-					case 565:
+					case EntityID.ItemID.MUSIC_BOX_TITLE:
 						return "Carillon (Titolo)";
-					case 566:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 						return "Carillon (Sotterraneo)";
-					case 567:
+					case EntityID.ItemID.MUSIC_BOX_BOSS1:
 						return "Carillon (Boss 1)";
-					case 568:
+					case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 						return "Carillon (Giungla)";
-					case 569:
+					case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 						return "Carillon (Corruzione)";
-					case 570:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 						return "Carillon (Corruzione sotterranea)";
-					case 571:
+					case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 						return "Carillon (La Consacrazione)";
-					case 572:
+					case EntityID.ItemID.MUSIC_BOX_BOSS2:
 						return "Carillon (Boss 2)";
-					case 573:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 						return "Carillon (Consacrazione sotterranea)";
-					case 574:
+					case EntityID.ItemID.MUSIC_BOX_BOSS3:
 						return "Carillon (Boss 3)";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "Anima del volo";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Carillon";
-					case 577:
+					case EntityID.ItemID.DEMONITE_BRICK:
 						return "Mattone demoniaco";
-					case 578:
+					case EntityID.ItemID.HALLOWED_REPEATER:
 						return "Balestra automatica consacrata";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "Perforascia";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Esplosivi";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Pompa interna";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Pompa esterna";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Timer 1 secondo";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Timer 3 secondi";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Timer 5 secondi";
-					case 586:
+					case EntityID.ItemID.CANDY_CANE_BLOCK:
 						return "Blocco Candy Cane";
-					case 587:
+					case EntityID.ItemID.CANDY_CANE_WALL:
 						return "Muro Candy Cane";
-					case 588:
+					case EntityID.ItemID.SANTA_HAT:
 						return "Cappello di Babbo Natale";
-					case 589:
+					case EntityID.ItemID.SANTA_SHIRT:
 						return "Camicia di Babbo Natale";
-					case 590:
+					case EntityID.ItemID.SANTA_PANTS:
 						return "Pantaloni di Babbo Natale";
-					case 591:
+					case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 						return "Blocco verde Candy Cane";
-					case 592:
+					case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 						return "Muro verde Candy Cane";
-					case 593:
+					case EntityID.ItemID.SNOW_BLOCK:
 						return "Blocco di neve";
-					case 594:
+					case EntityID.ItemID.SNOW_BRICK:
 						return "Mattone di neve";
-					case 595:
+					case EntityID.ItemID.SNOW_BRICK_WALL:
 						return "Muro di mattoni di neve";
-					case 596:
+					case EntityID.ItemID.BLUE_LIGHT:
 						return "Luce blu";
-					case 597:
+					case EntityID.ItemID.RED_LIGHT:
 						return "Luce rossa";
-					case 598:
+					case EntityID.ItemID.GREEN_LIGHT:
 						return "Luce verde";
-					case 599:
+					case EntityID.ItemID.BLUE_PRESENT:
 						return "Regalo blu";
-					case 600:
+					case EntityID.ItemID.GREEN_PRESENT:
 						return "Regalo verde";
-					case 601:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Regalo giallo ";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Sfera di neve";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Cavolo";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Maschera del Drago";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Casco del Titano";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Copricapo spettrale";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Corazza del Drago";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Armatura del Titano";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Armatura spettrale";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Schinieri del Drago";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Gambali del Titano";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Subligar spettrale";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tizona";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Tonbogiri";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Sharanga";
-					case 616:
+					case EntityID.ItemID.SPECTRAL_ARROW:
 						return "Freccia spettrale";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Balestra vulcanica";
-					case 618:
+					case EntityID.ItemID.VULCAN_BOLT:
 						return "Dardo vulcanico";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Teschio dallo sguardo sospetto";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "Anima della luce";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Capsula di Petri";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Nido d'ape";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Fiala di sangue";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Zanna di lupo";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Cervello";
-					case 626:
+					case EntityID.ItemID.MUSIC_BOX_DESERT:
 						return "Carillon (Deserto)";
-					case 627:
+					case EntityID.ItemID.MUSIC_BOX_SPACE:
 						return "Carillon (Spazio)";
-					case 628:
+					case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 						return "Carillon (Tutorial)";
-					case 629:
+					case EntityID.ItemID.MUSIC_BOX_BOSS4:
 						return "Carillon (Boss 4)";
-					case 630:
+					case EntityID.ItemID.MUSIC_BOX_OCEAN:
 						return "Carillon (Oceano)";
-					case 631:
+					case EntityID.ItemID.MUSIC_BOX_SNOW:
 						return "Carillon (Neve)";
 #if VERSION_101
-					case 632:
+					case EntityID.ItemID.FABULOUS_RIBBON:
 						return "Nastro favoloso";
-					case 633:
+					case EntityID.ItemID.GEORGES_HAT:
 						return "Cappello di George";
-					case 634:
+					case EntityID.ItemID.FABULOUS_TUTU:
 						return "Tutù favoloso";
-					case 635:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 						return "Camicia da smoking di George";
-					case 636:
+					case EntityID.ItemID.FABULOUS_SLIPPERS:
 						return "Pantofole favolose";
-					case 637:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Pantaloni da smoking di George";
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 						return "Ali scintillanti";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Fuoco di bivacco";
-					case 640:
+					case EntityID.ItemID.WOOD_HELMET:
 						return "Casco di legno";
-					case 641:
+					case EntityID.ItemID.WOOD_BREASTPLATE:
 						return "Pettorale di legno";
-					case 642:
+					case EntityID.ItemID.WOOD_GREAVES:
 						return "Schiniere di legno";
-					case 643:
+					case EntityID.ItemID.CACTUS_SWORD:
 						return "Spada di cactus";
-					case 644:
+					case EntityID.ItemID.CACTUS_PICKAXE:
 						return "Piccone di cactus";
-					case 645:
+					case EntityID.ItemID.CACTUS_HELMET:
 						return "Casco di cactus";
-					case 646:
+					case EntityID.ItemID.CACTUS_BREASTPLATE:
 						return "Pettorale di cactus";
-					case 647:
+					case EntityID.ItemID.CACTUS_LEGGINGS:
 						return "Gambali di cactus";
-					case 648:
+					case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 						return "Vetro viola";
-					case 649:
+					case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 						return "Vetro giallo";
-					case 650:
+					case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 						return "Vetro blu";
-					case 651:
+					case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 						return "Vetro verde";
-					case 652:
+					case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 						return "Vetro rosso";
-					case 653:
+					case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 						return "Vetro variopinto";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.FRENCH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Pioche en or";
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						return "Épée longue en or";
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						return "Épée courte en or";
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						return "Hache en or";
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						return "Marteau en or";
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						return "Arc en or";
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						return "Pioche en argent";
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						return "Épée longue en argent";
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						return "Épée courte en argent";
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						return "Hache en argent";
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						return "Marteau en argent";
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						return "Arc en argent";
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						return "Pioche en cuivre";
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						return "Épée longue en cuivre";
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						return "Épée courte en cuivre";
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						return "Hache en cuivre";
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						return "Marteau en cuivre";
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						return "Arc en cuivre";
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						return "Sabre laser bleu";
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						return "Sabre laser rouge";
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						return "Sabre laser vert";
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						return "Sabre laser violet";
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						return "Sabre laser blanc";
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						return "Sabre laser jaune";
-					case 1:
+					case EntityID.ItemID.IRON_PICKAXE:
 						return "Pioche en fer";
-					case 2:
+					case EntityID.ItemID.DIRT_BLOCK:
 						return "Bloc de terre";
-					case 3:
+					case EntityID.ItemID.STONE_BLOCK:
 						return "Bloc de pierre";
-					case 4:
+					case EntityID.ItemID.IRON_BROADSWORD:
 						return "Épée longue en fer";
-					case 5:
+					case EntityID.ItemID.MUSHROOM:
 						return "Champignon";
-					case 6:
+					case EntityID.ItemID.IRON_SHORTSWORD:
 						return "Épée courte en fer";
-					case 7:
+					case EntityID.ItemID.IRON_HAMMER:
 						return "Marteau en fer";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Torche";
-					case 9:
+					case EntityID.ItemID.WOOD:
 						return "Bois";
-					case 10:
+					case EntityID.ItemID.IRON_AXE:
 						return "Hache en fer";
-					case 11:
+					case EntityID.ItemID.IRON_ORE:
 						return "Minerai de fer";
-					case 12:
+					case EntityID.ItemID.COPPER_ORE:
 						return "Minerai de cuivre";
-					case 13:
+					case EntityID.ItemID.GOLD_ORE:
 						return "Minerai d'or";
-					case 14:
+					case EntityID.ItemID.SILVER_ORE:
 						return "Minerai d'argent";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Montre en cuivre";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Montre en argent";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Montre en or";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Altimètre";
-					case 19:
+					case EntityID.ItemID.GOLD_BAR:
 						return "Lingot d'or";
-					case 20:
+					case EntityID.ItemID.COPPER_BAR:
 						return "Lingot de cuivre";
-					case 21:
+					case EntityID.ItemID.SILVER_BAR:
 						return "Lingot d'argent";
-					case 22:
+					case EntityID.ItemID.IRON_BAR:
 						return "Lingot de fer";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Gel";
-					case 24:
+					case EntityID.ItemID.WOODEN_SWORD:
 						return "Épée en bois";
-					case 25:
+					case EntityID.ItemID.WOODEN_DOOR:
 						return "Porte en bois";
-					case 26:
+					case EntityID.ItemID.STONE_WALL:
 						return "Mur en pierre";
-					case 27:
+					case EntityID.ItemID.ACORN:
 						return "Gland";
-					case 28:
+					case EntityID.ItemID.LESSER_HEALING_POTION:
 						return "Faible potion de soin";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Cristal de vie";
-					case 30:
+					case EntityID.ItemID.DIRT_WALL:
 						return "Mur en terre";
-					case 31:
+					case EntityID.ItemID.BOTTLE:
 						return "Bouteille";
-					case 32:
+					case EntityID.ItemID.WOODEN_TABLE:
 						return "Table en bois";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Fournaise";
-					case 34:
+					case EntityID.ItemID.WOODEN_CHAIR:
 						return "Chaise en bois";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Enclume";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Établi";
-					case 37:
+					case EntityID.ItemID.GOGGLES:
 						return "Lunettes";
-					case 38:
+					case EntityID.ItemID.LENS:
 						return "Lentille";
-					case 39:
+					case EntityID.ItemID.WOODEN_BOW:
 						return "Arc en bois";
-					case 40:
+					case EntityID.ItemID.WOODEN_ARROW:
 						return "Flèche en bois";
-					case 41:
+					case EntityID.ItemID.FLAMING_ARROW:
 						return "Flèche enflammée";
-					case 42:
+					case EntityID.ItemID.SHURIKEN:
 						return "Shuriken";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Œil observateur suspicieux";
-					case 44:
+					case EntityID.ItemID.DEMON_BOW:
 						return "Arc démoniaque";
-					case 45:
+					case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 						return "Hache de guerre de la nuit";
-					case 46:
+					case EntityID.ItemID.LIGHTS_BANE:
 						return "Fléau de lumière";
-					case 47:
+					case EntityID.ItemID.UNHOLY_ARROW:
 						return "Flèche impie";
-					case 48:
+					case EntityID.ItemID.CHEST:
 						return "Coffre";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Anneau de régénération";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Miroir magique";
-					case 51:
+					case EntityID.ItemID.JESTERS_ARROW:
 						return "Flèche du bouffon";
-					case 52:
+					case EntityID.ItemID.ANGEL_STATUE:
 						return "Statue d'ange";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Nuage en bouteille";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Bottes d'Hermès";
-					case 55:
+					case EntityID.ItemID.ENCHANTED_BOOMERANG:
 						return "Boomerang enchanté";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "Barre de démonite";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "Lingot de démonite";
-					case 58:
+					case EntityID.ItemID.HEART:
 						return "Pilier";
-					case 59:
+					case EntityID.ItemID.CORRUPT_SEEDS:
 						return "Graines corrompues";
-					case 60:
+					case EntityID.ItemID.VILE_MUSHROOM:
 						return "Champignon infect";
-					case 61:
+					case EntityID.ItemID.EBONSTONE_BLOCK:
 						return "Bloc d'ébonite";
-					case 62:
+					case EntityID.ItemID.GRASS_SEEDS:
 						return "Graines d'herbe";
-					case 63:
+					case EntityID.ItemID.SUNFLOWER:
 						return "Tournesols";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Vileronce";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Furie stellaire";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Poudre de purification";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Poudre infecte";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "Morceau pourri";
-					case 69:
+					case EntityID.ItemID.WORM_TOOTH:
 						return "Dent de ver";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Nourriture pour ver";
-					case 71:
+					case EntityID.ItemID.COPPER_COIN:
 						return "Pièce de cuivre";
-					case 72:
+					case EntityID.ItemID.SILVER_COIN:
 						return "Pièce d'argent";
-					case 73:
+					case EntityID.ItemID.GOLD_COIN:
 						return "Pièce d'or";
-					case 74:
+					case EntityID.ItemID.PLATINUM_COIN:
 						return "Pièce de platine";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Étoile filante";
-					case 76:
+					case EntityID.ItemID.COPPER_GREAVES:
 						return "Jambières en cuivre";
-					case 77:
+					case EntityID.ItemID.IRON_GREAVES:
 						return "Jambières en fer";
-					case 78:
+					case EntityID.ItemID.SILVER_GREAVES:
 						return "Jambières en argent";
-					case 79:
+					case EntityID.ItemID.GOLD_GREAVES:
 						return "Jambière en or";
-					case 80:
+					case EntityID.ItemID.COPPER_CHAINMAIL:
 						return "Cotte de mailles en cuivre";
-					case 81:
+					case EntityID.ItemID.IRON_CHAINMAIL:
 						return "Cotte de mailles en fer";
-					case 82:
+					case EntityID.ItemID.SILVER_CHAINMAIL:
 						return "Cotte de mailles en argent";
-					case 83:
+					case EntityID.ItemID.GOLD_CHAINMAIL:
 						return "Cotte de mailles en or";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "Grappin";
-					case 85:
+					case EntityID.ItemID.CHAIN:
 						return "Chaîne en fer";
-					case 86:
+					case EntityID.ItemID.SHADOW_SCALE:
 						return "Écaille sombre";
-					case 87:
+					case EntityID.ItemID.PIGGY_BANK:
 						return "Tirelire";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Casque de mineur";
-					case 89:
+					case EntityID.ItemID.COPPER_HELMET:
 						return "Casque en cuivre";
-					case 90:
+					case EntityID.ItemID.IRON_HELMET:
 						return "Casque en fer";
-					case 91:
+					case EntityID.ItemID.SILVER_HELMET:
 						return "Casque en argent";
-					case 92:
+					case EntityID.ItemID.GOLD_HELMET:
 						return "Casque en or";
-					case 93:
+					case EntityID.ItemID.WOOD_WALL:
 						return "Mur en bois";
-					case 94:
+					case EntityID.ItemID.WOOD_PLATFORM:
 						return "Plateforme en bois";
-					case 95:
+					case EntityID.ItemID.FLINTLOCK_PISTOL:
 						return "Pistolet à silex";
-					case 96:
+					case EntityID.ItemID.MUSKET:
 						return "Mousquet";
-					case 97:
+					case EntityID.ItemID.MUSKET_BALL:
 						return "Balle de mousquet";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Minishark";
-					case 99:
+					case EntityID.ItemID.IRON_BOW:
 						return "Arc en fer";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Jambières de l'ombre";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Armure d'écailles de l'ombre";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Casque de l'ombre";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Pioche cauchemardesque";
-					case 104:
+					case EntityID.ItemID.THE_BREAKER:
 						return "Le briseur";
-					case 105:
+					case EntityID.ItemID.CANDLE:
 						return "Bougie";
-					case 106:
+					case EntityID.ItemID.COPPER_CHANDELIER:
 						return "Chandelier en cuivre";
-					case 107:
+					case EntityID.ItemID.SILVER_CHANDELIER:
 						return "Chandelier en argent";
-					case 108:
+					case EntityID.ItemID.GOLD_CHANDELIER:
 						return "Chandelier en or";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Cristal de mana";
-					case 110:
+					case EntityID.ItemID.LESSER_MANA_POTION:
 						return "Faible potion de mana";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Anneau de pouvoir stellaire";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Fleur de feu";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Missile magique";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Bâtonnet de terre";
 #if VERSION_INITIAL
-				case 115:
-					return "Orbe de lumière";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Orbe de lumière";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Orbe d'ombre";
 #endif
-					case 116:
+					case EntityID.ItemID.METEORITE:
 						return "Météorite";
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Barre de météorite";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Crochet";
-					case 119:
+					case EntityID.ItemID.FLAMARANG:
 						return "Flamarang";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Furie en fusion";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "Grande épée ardente";
-					case 122:
+					case EntityID.ItemID.MOLTEN_PICKAXE:
 						return "Pioche en fusion";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Casque de météore";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Costume de météore";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Leggings de météores";
-					case 126:
+					case EntityID.ItemID.BOTTLED_WATER:
 						return "Eau en bouteille";
-					case 127:
+					case EntityID.ItemID.SPACE_GUN:
 						return "Arme d'espace";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Bottes-fusées";
-					case 129:
+					case EntityID.ItemID.GRAY_BRICK:
 						return "Brique grise";
-					case 130:
+					case EntityID.ItemID.GRAY_BRICK_WALL:
 						return "Mur de briques grises";
-					case 131:
+					case EntityID.ItemID.RED_BRICK:
 						return "Brique rouge";
-					case 132:
+					case EntityID.ItemID.RED_BRICK_WALL:
 						return "Mur de briques rouges";
-					case 133:
+					case EntityID.ItemID.CLAY_BLOCK:
 						return "Bloc d'argile";
-					case 134:
+					case EntityID.ItemID.BLUE_BRICK:
 						return "Brique bleue";
-					case 135:
+					case EntityID.ItemID.BLUE_BRICK_WALL:
 						return "Mur de briques bleues";
-					case 136:
+					case EntityID.ItemID.CHAIN_LANTERN:
 						return "Lanterne à chaîne";
-					case 137:
+					case EntityID.ItemID.GREEN_BRICK:
 						return "Brique verte";
-					case 138:
+					case EntityID.ItemID.GREEN_BRICK_WALL:
 						return "Mur de briques vertes";
-					case 139:
+					case EntityID.ItemID.PINK_BRICK:
 						return "Brique rose";
-					case 140:
+					case EntityID.ItemID.PINK_BRICK_WALL:
 						return "Mur de briques roses";
-					case 141:
+					case EntityID.ItemID.GOLD_BRICK:
 						return "Brique dorée";
-					case 142:
+					case EntityID.ItemID.GOLD_BRICK_WALL:
 						return "Mur de briques dorées";
-					case 143:
+					case EntityID.ItemID.SILVER_BRICK:
 						return "Brique argentée";
-					case 144:
+					case EntityID.ItemID.SILVER_BRICK_WALL:
 						return "Mur de briques argentées";
-					case 145:
+					case EntityID.ItemID.COPPER_BRICK:
 						return "Brique cuivrée";
-					case 146:
+					case EntityID.ItemID.COPPER_BRICK_WALL:
 						return "Mur de briques cuivrées";
-					case 147:
+					case EntityID.ItemID.SPIKE:
 						return "Pointe";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Bougie d'eau";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "Livre";
-					case 150:
+					case EntityID.ItemID.COBWEB:
 						return "Toile d'araignée";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Casque nécro";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Plastron nécro";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Jambières nécro";
-					case 154:
+					case EntityID.ItemID.BONE:
 						return "Os";
-					case 155:
+					case EntityID.ItemID.MURAMASA:
 						return "Muramasa";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Bouclier de cobalt";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Sceptre aquatique";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Fer à cheval porte-bonheur";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Ballon rouge brillant";
-					case 160:
+					case EntityID.ItemID.HARPOON:
 						return "Harpon";
-					case 161:
+					case EntityID.ItemID.SPIKY_BALL:
 						return "Balle hérissée";
-					case 162:
+					case EntityID.ItemID.BALL_O_HURT:
 						return "Ball O' Hurt";
-					case 163:
+					case EntityID.ItemID.BLUE_MOON:
 						return "Lune bleue";
-					case 164:
+					case EntityID.ItemID.HANDGUN:
 						return "Pistolet";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Trait d'eau";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Bombe";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Dynamite";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Grenade";
-					case 169:
+					case EntityID.ItemID.SAND_BLOCK:
 						return "Bloc de sable";
-					case 170:
+					case EntityID.ItemID.GLASS:
 						return "Verre";
-					case 171:
+					case EntityID.ItemID.SIGN:
 						return "Panneau";
-					case 172:
+					case EntityID.ItemID.ASH_BLOCK:
 						return "Bloc de cendre";
-					case 173:
+					case EntityID.ItemID.OBSIDIAN:
 						return "Obsidienne";
-					case 174:
+					case EntityID.ItemID.HELLSTONE:
 						return "Pierre de l'enfer";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Barre de pierre de l'enfer";
-					case 176:
+					case EntityID.ItemID.MUD_BLOCK:
 						return "Bloc de boue";
-					case 177:
+					case EntityID.ItemID.SAPPHIRE:
 						return "Saphir";
-					case 178:
+					case EntityID.ItemID.RUBY:
 						return "Rubis";
-					case 179:
+					case EntityID.ItemID.EMERALD:
 						return "Émeraude";
-					case 180:
+					case EntityID.ItemID.TOPAZ:
 						return "Topaze";
-					case 181:
+					case EntityID.ItemID.AMETHYST:
 						return "Améthyste";
-					case 182:
+					case EntityID.ItemID.DIAMOND:
 						return "Diamant";
-					case 183:
+					case EntityID.ItemID.GLOWING_MUSHROOM:
 						return "Champignon lumineux";
-					case 184:
+					case EntityID.ItemID.STAR:
 						return "Étoile";
-					case 185:
+					case EntityID.ItemID.IVY_WHIP:
 						return "Grappin à lianes";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "Tuba";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Palmes";
-					case 188:
+					case EntityID.ItemID.HEALING_POTION:
 						return "Potion de soins";
-					case 189:
+					case EntityID.ItemID.MANA_POTION:
 						return "Potion de mana";
-					case 190:
+					case EntityID.ItemID.BLADE_OF_GRASS:
 						return "Lame d'herbe";
-					case 191:
+					case EntityID.ItemID.THORN_CHAKRAM:
 						return "Chakram d'épines";
-					case 192:
+					case EntityID.ItemID.OBSIDIAN_BRICK:
 						return "Brique d'obsidienne";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Crâne d'obsidienne";
-					case 194:
+					case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 						return "Graines de champignon";
-					case 195:
+					case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 						return "Graines de la jungle";
-					case 196:
+					case EntityID.ItemID.WOODEN_HAMMER:
 						return "Marteau en bois";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Canon à étoiles";
-					case 198:
+					case EntityID.ItemID.BLUE_PHASEBLADE:
 						return "Sabre laser bleu";
-					case 199:
+					case EntityID.ItemID.RED_PHASEBLADE:
 						return "Sabre laser rouge";
-					case 200:
+					case EntityID.ItemID.GREEN_PHASEBLADE:
 						return "Sabre laser vert";
-					case 201:
+					case EntityID.ItemID.PURPLE_PHASEBLADE:
 						return "Sabre laser violet";
-					case 202:
+					case EntityID.ItemID.WHITE_PHASEBLADE:
 						return "Sabre laser blanc";
-					case 203:
+					case EntityID.ItemID.YELLOW_PHASEBLADE:
 						return "Sabre laser jaune";
-					case 204:
+					case EntityID.ItemID.METEOR_HAMAXE:
 						return "Martache en météorite";
-					case 205:
+					case EntityID.ItemID.EMPTY_BUCKET:
 						return "Seau vide";
-					case 206:
+					case EntityID.ItemID.WATER_BUCKET:
 						return "Seau d'eau";
-					case 207:
+					case EntityID.ItemID.LAVA_BUCKET:
 						return "Seau de lave";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "Rose de la jungle";
-					case 209:
+					case EntityID.ItemID.STINGER:
 						return "Dard";
-					case 210:
+					case EntityID.ItemID.VINE:
 						return "Vigne";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Griffes sauvages";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Bracelet du vent";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Crosse de repousse";
-					case 214:
+					case EntityID.ItemID.HELLSTONE_BRICK:
 						return "Brique de pierre de l'enfer";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "Coussin péteur";
-					case 216:
+					case EntityID.ItemID.SHACKLE:
 						return "Manille";
-					case 217:
+					case EntityID.ItemID.MOLTEN_HAMAXE:
 						return "Martache en fusion";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Mèche enflammée";
-					case 219:
+					case EntityID.ItemID.PHOENIX_BLASTER:
 						return "Blaster phénix";
-					case 220:
+					case EntityID.ItemID.SUNFURY:
 						return "Furie solaire";
-					case 221:
+					case EntityID.ItemID.HELLFORGE:
 						return "Forge infernale";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Pot d'argile";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Don de la nature";
-					case 224:
+					case EntityID.ItemID.BED:
 						return "Lit";
-					case 225:
+					case EntityID.ItemID.SILK:
 						return "Soie";
-					case 226:
+					case EntityID.ItemID.LESSER_RESTORATION_POTION:
 						return "Faible potion de restauration";
-					case 227:
+					case EntityID.ItemID.RESTORATION_POTION:
 						return "Potion de restauration";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Casque de la jungle";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Plastron de la jungle";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Jambières de la jungle";
-					case 231:
+					case EntityID.ItemID.MOLTEN_HELMET:
 						return "Casque en fusion";
-					case 232:
+					case EntityID.ItemID.MOLTEN_BREASTPLATE:
 						return "Plastron en fusion";
-					case 233:
+					case EntityID.ItemID.MOLTEN_GREAVES:
 						return "Jambières en fusion";
-					case 234:
+					case EntityID.ItemID.METEOR_SHOT:
 						return "Balle météore";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "Bombe collante";
-					case 236:
+					case EntityID.ItemID.BLACK_LENS:
 						return "Lentille noire";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "Lunettes de soleil";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Chapeau de magicien";
-					case 239:
+					case EntityID.ItemID.TOP_HAT:
 						return "Haut de forme";
-					case 240:
+					case EntityID.ItemID.TUXEDO_SHIRT:
 						return "Veste de smoking";
-					case 241:
+					case EntityID.ItemID.TUXEDO_PANTS:
 						return "Pantalon de smoking";
-					case 242:
+					case EntityID.ItemID.SUMMER_HAT:
 						return "Chapeau d'été";
-					case 243:
+					case EntityID.ItemID.BUNNY_HOOD:
 						return "Capuche de lapin";
-					case 244:
+					case EntityID.ItemID.PLUMBERS_HAT:
 						return "Casquette de plombier";
-					case 245:
+					case EntityID.ItemID.PLUMBERS_SHIRT:
 						return "Veste de plombier";
-					case 246:
+					case EntityID.ItemID.PLUMBERS_PANTS:
 						return "Pantalon de plombier";
-					case 247:
+					case EntityID.ItemID.HEROS_HAT:
 						return "Capuche de héros";
-					case 248:
+					case EntityID.ItemID.HEROS_SHIRT:
 						return "Veste de héros";
-					case 249:
+					case EntityID.ItemID.HEROS_PANTS:
 						return "Pantalon de héros";
-					case 250:
+					case EntityID.ItemID.FISH_BOWL:
 						return "Bocal à poissons";
-					case 251:
+					case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 						return "Chapeau d'archéologue";
-					case 252:
+					case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 						return "Veste d'archéologue";
-					case 253:
+					case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 						return "Pantalon d'archéologue";
 #if VERSION_INITIAL
-				case 254:
-					return "Teinture noire";
-				case 255:
-					return "Teinture mauve";
+					case EntityID.ItemID.BLACK_THREAD:
+						return "Teinture noire";
+					case EntityID.ItemID.PURPLE_THREAD:
+						return "Teinture mauve";
 #else
-					case 254:
+					case EntityID.ItemID.BLACK_THREAD:
 						return "Fil noir";
-					case 255:
+					case EntityID.ItemID.PURPLE_THREAD:
 						return "Fil violet";
 #endif
-					case 256:
+					case EntityID.ItemID.NINJA_HOOD:
 						return "Cagoule de ninja";
-					case 257:
+					case EntityID.ItemID.NINJA_SHIRT:
 						return "Veste de ninja";
-					case 258:
+					case EntityID.ItemID.NINJA_PANTS:
 						return "Pantalon de ninja";
-					case 259:
+					case EntityID.ItemID.LEATHER:
 						return "Cuir";
-					case 260:
+					case EntityID.ItemID.RED_HAT:
 						return "Chapeau rouge";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Poisson rouge";
-					case 262:
+					case EntityID.ItemID.ROBE:
 						return "Robe";
-					case 263:
+					case EntityID.ItemID.ROBOT_HAT:
 						return "Chapeau de robot";
-					case 264:
+					case EntityID.ItemID.GOLD_CROWN:
 						return "Couronne d'or";
-					case 265:
+					case EntityID.ItemID.HELLFIRE_ARROW:
 						return "Flèche du feu de l'enfer";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "Canon à sable";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "Poupée vaudou du guide";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Casque de plongée";
-					case 269:
+					case EntityID.ItemID.FAMILIAR_SHIRT:
 						return "Chemise familière";
-					case 270:
+					case EntityID.ItemID.FAMILIAR_PANTS:
 						return "Pantalon familier";
-					case 271:
+					case EntityID.ItemID.FAMILIAR_WIG:
 						return "Perruque familière";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Faux de démon";
-					case 273:
+					case EntityID.ItemID.NIGHTS_EDGE:
 						return "Fil des Ténèbres";
-					case 274:
+					case EntityID.ItemID.DARK_LANCE:
 						return "Lance sombre";
-					case 275:
+					case EntityID.ItemID.CORAL:
 						return "Corail";
-					case 276:
+					case EntityID.ItemID.CACTUS:
 						return "Cactus";
-					case 277:
+					case EntityID.ItemID.TRIDENT:
 						return "Trident";
-					case 278:
+					case EntityID.ItemID.SILVER_BULLET:
 						return "Balle d'argent";
-					case 279:
+					case EntityID.ItemID.THROWING_KNIFE:
 						return "Couteau de lancer";
-					case 280:
+					case EntityID.ItemID.SPEAR:
 						return "Lance";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Sarbacane";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Bâton lumineux";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Graine";
-					case 284:
+					case EntityID.ItemID.WOODEN_BOOMERANG:
 						return "Boomerang en bois";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Embout de lacet";
-					case 286:
+					case EntityID.ItemID.STICKY_GLOWSTICK:
 						return "Bâton lumineux collant";
-					case 287:
+					case EntityID.ItemID.POISONED_KNIFE:
 						return "Couteau empoisonné";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Potion de peau d'obsidienne";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Potion de régénération";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Potion de rapidité";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Potion de branchies";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Potion de peau de fer";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Potion de régénération de mana";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Potion de pouvoir magique";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Potion de poids plume";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Potion de spéléologue";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Potion d'invisibilité";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Potion de brillance";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Potion de vision nocturne";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Potion de bataille";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Potion d'épines";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Potion de marche sur l'eau";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Potion de tir à l'arc";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Potion du chasseur";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Potion de gravité";
-					case 306:
+					case EntityID.ItemID.GOLD_CHEST:
 						return "Coffre d'or";
-					case 307:
+					case EntityID.ItemID.DAYBLOOM_SEEDS:
 						return "Graines de floraison du jour";
-					case 308:
+					case EntityID.ItemID.MOONGLOW_SEEDS:
 						return "Graines de lueur de lune";
-					case 309:
+					case EntityID.ItemID.BLINKROOT_SEEDS:
 						return "Graines de racine clignotante";
-					case 310:
+					case EntityID.ItemID.DEATHWEED_SEEDS:
 						return "Graines de mauvaise herbe morte";
-					case 311:
+					case EntityID.ItemID.WATERLEAF_SEEDS:
 						return "Graines de feuilles de l'eau";
-					case 312:
+					case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 						return "Graines de fleur de feu";
-					case 313:
+					case EntityID.ItemID.DAYBLOOM:
 						return "Floraison du jour";
-					case 314:
+					case EntityID.ItemID.MOONGLOW:
 						return "Lueur de lune";
-					case 315:
+					case EntityID.ItemID.BLINKROOT:
 						return "Racine clignotante";
-					case 316:
+					case EntityID.ItemID.DEATHWEED:
 						return "Mauvaise herbe morte";
-					case 317:
+					case EntityID.ItemID.WATERLEAF:
 						return "Feuille de l'eau";
-					case 318:
+					case EntityID.ItemID.FIREBLOSSOM:
 						return "Fleur de feu";
-					case 319:
+					case EntityID.ItemID.SHARK_FIN:
 						return "Aileron de requin";
-					case 320:
+					case EntityID.ItemID.FEATHER:
 						return "Plume";
-					case 321:
+					case EntityID.ItemID.TOMBSTONE:
 						return "Pierre tombale";
-					case 322:
+					case EntityID.ItemID.MIME_MASK:
 						return "Masque du mime";
-					case 323:
+					case EntityID.ItemID.ANTLION_MANDIBLE:
 						return "Mandibule de fourmilion";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "Pièces détachées";
-					case 325:
+					case EntityID.ItemID.THE_DOCTORS_SHIRT:
 						return "Veste du docteur";
-					case 326:
+					case EntityID.ItemID.THE_DOCTORS_PANTS:
 						return "Pantalon du docteur";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Clé dorée";
-					case 328:
+					case EntityID.ItemID.SHADOW_CHEST:
 						return "Coffre sombre";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Clé sombre";
-					case 330:
+					case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 						return "Mur de briques d'obsidienne";
-					case 331:
+					case EntityID.ItemID.JUNGLE_SPORES:
 						return "Spores de la jungle";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Métier à tisser";
-					case 333:
+					case EntityID.ItemID.PIANO:
 						return "Piano";
-					case 334:
+					case EntityID.ItemID.DRESSER:
 						return "Commode";
-					case 335:
+					case EntityID.ItemID.BENCH:
 						return "Banc";
-					case 336:
+					case EntityID.ItemID.BATHTUB:
 						return "Baignoire";
-					case 337:
+					case EntityID.ItemID.RED_BANNER:
 						return "Bannière rouge";
-					case 338:
+					case EntityID.ItemID.GREEN_BANNER:
 						return "Bannière verte";
-					case 339:
+					case EntityID.ItemID.BLUE_BANNER:
 						return "Bannière bleue";
-					case 340:
+					case EntityID.ItemID.YELLOW_BANNER:
 						return "Bannière jaune";
-					case 341:
+					case EntityID.ItemID.LAMP_POST:
 						return "Lampadaire";
-					case 342:
+					case EntityID.ItemID.TIKI_TORCH:
 						return "Torche de tiki";
-					case 343:
+					case EntityID.ItemID.BARREL:
 						return "Baril";
-					case 344:
+					case EntityID.ItemID.CHINESE_LANTERN:
 						return "Lanterne chinoise";
-					case 345:
+					case EntityID.ItemID.COOKING_POT:
 						return "Marmite";
-					case 346:
+					case EntityID.ItemID.SAFE:
 						return "Coffre-fort";
-					case 347:
+					case EntityID.ItemID.SKULL_LANTERN:
 						return "Lanterne crâne";
-					case 348:
+					case EntityID.ItemID.TRASH_CAN:
 						return "Poubelle";
-					case 349:
+					case EntityID.ItemID.CANDELABRA:
 						return "Candélabre";
-					case 350:
+					case EntityID.ItemID.PINK_VASE:
 						return "Vase rose";
-					case 351:
+					case EntityID.ItemID.MUG:
 						return "Chope";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Tonnelet";
-					case 353:
+					case EntityID.ItemID.ALE:
 						return "Bière";
-					case 354:
+					case EntityID.ItemID.BOOKCASE:
 						return "Bibliothèque";
-					case 355:
+					case EntityID.ItemID.THRONE:
 						return "Trône";
-					case 356:
+					case EntityID.ItemID.BOWL:
 						return "Bol";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Bol de soupe";
-					case 358:
+					case EntityID.ItemID.TOILET:
 						return "Toilettes";
-					case 359:
+					case EntityID.ItemID.GRANDFATHER_CLOCK:
 						return "Horloge de grand-père";
-					case 360:
+					case EntityID.ItemID.STATUE:
 						return "Statue d'armure";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Étendard de bataille gobelin";
-					case 362:
+					case EntityID.ItemID.TATTERED_CLOTH:
 						return "Vêtements en lambeaux";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Scierie";
-					case 364:
+					case EntityID.ItemID.COBALT_ORE:
 						return "Minerai de cobalt";
-					case 365:
+					case EntityID.ItemID.MYTHRIL_ORE:
 						return "Minerai de mythril";
-					case 366:
+					case EntityID.ItemID.ADAMANTITE_ORE:
 						return "Minerai d'adamantine";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Pwnhammer";
-					case 368:
+					case EntityID.ItemID.EXCALIBUR:
 						return "Excalibur";
-					case 369:
+					case EntityID.ItemID.HALLOWED_SEEDS:
 						return "Graines sacrées";
-					case 370:
+					case EntityID.ItemID.EBONSAND_BLOCK:
 						return "Bloc de sable d'ébène";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Chapeau de cobalt";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Casque de cobalt";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Masque de cobalt";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Plastron de cobalt";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Jambières de cobalt";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Capuche de mythril";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Casque de mythril";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Chapeau de mythril";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Cotte de mailles de mythril";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Jambières de mythril";
-					case 381:
+					case EntityID.ItemID.COBALT_BAR:
 						return "Barre de cobalt";
-					case 382:
+					case EntityID.ItemID.MYTHRIL_BAR:
 						return "Barre de mythril";
-					case 383:
+					case EntityID.ItemID.COBALT_CHAINSAW:
 						return "Tronçonneuse de cobalt";
-					case 384:
+					case EntityID.ItemID.MYTHRIL_CHAINSAW:
 						return "Tronçonneuse de mythril";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Perceuse de cobalt";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Perceuse de mythril";
-					case 387:
+					case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 						return "Tronçonneuse d'adamantine";
-					case 388:
+					case EntityID.ItemID.ADAMANTITE_DRILL:
 						return "Perceuse d'adamantine";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Dao de Pow";
-					case 390:
+					case EntityID.ItemID.MYTHRIL_HALBERD:
 						return "Hallebarde de mythril";
-					case 391:
+					case EntityID.ItemID.ADAMANTITE_BAR:
 						return "Barre d'amantine";
-					case 392:
+					case EntityID.ItemID.GLASS_WALL:
 						return "Mur de verre";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Boussole";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Équipement de plongée";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "GPS";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Fer à cheval d'obsidienne";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Bouclier d'obsidienne";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Atelier du bricoleur";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Nuage dans un ballon";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Coiffe d'adamantine";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Casque d'adamantine";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Masque d'adamantine";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Plastron d'adamantine";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Jambières en adamantine";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Bottes spectrales";
-					case 406:
+					case EntityID.ItemID.ADAMANTITE_GLAIVE:
 						return "Glaive d'adamantine";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Ceinture à outils";
-					case 408:
+					case EntityID.ItemID.PEARLSAND_BLOCK:
 						return "Bloc de sable de perle";
-					case 409:
+					case EntityID.ItemID.PEARLSTONE_BLOCK:
 						return "Bloc de pierre de perle";
-					case 410:
+					case EntityID.ItemID.MINING_SHIRT:
 						return "Veste de mineur";
-					case 411:
+					case EntityID.ItemID.MINING_PANTS:
 						return "Pantalon de mineur";
-					case 412:
+					case EntityID.ItemID.PEARLSTONE_BRICK:
 						return "Brique de pierre de perle";
-					case 413:
+					case EntityID.ItemID.IRIDESCENT_BRICK:
 						return "Brique iridescente";
-					case 414:
+					case EntityID.ItemID.MUDSTONE_BRICK:
 						return "Brique de pierre de terre";
-					case 415:
+					case EntityID.ItemID.COBALT_BRICK:
 						return "Brique de cobalt";
-					case 416:
+					case EntityID.ItemID.MYTHRIL_BRICK:
 						return "Brique de mythril";
-					case 417:
+					case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 						return "Mur de briques de pierre de perle";
-					case 418:
+					case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 						return "Mur de briques iridescentes";
-					case 419:
+					case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 						return "Mur de briques de pierre de terre";
-					case 420:
+					case EntityID.ItemID.COBALT_BRICK_WALL:
 						return "Mur de briques de cobalt";
-					case 421:
+					case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 						return "Mur de briques de mythril";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Eau bénite";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Eau impie";
-					case 424:
+					case EntityID.ItemID.SILT_BLOCK:
 						return "Bloc de limon";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Clochette de fée";
-					case 426:
+					case EntityID.ItemID.BREAKER_BLADE:
 						return "Lame du briseur";
-					case 427:
+					case EntityID.ItemID.BLUE_TORCH:
 						return "Torche bleue";
-					case 428:
+					case EntityID.ItemID.RED_TORCH:
 						return "Torche rouge";
-					case 429:
+					case EntityID.ItemID.GREEN_TORCH:
 						return "Torche verte";
-					case 430:
+					case EntityID.ItemID.PURPLE_TORCH:
 						return "Torche violette";
-					case 431:
+					case EntityID.ItemID.WHITE_TORCH:
 						return "Torche blanche";
-					case 432:
+					case EntityID.ItemID.YELLOW_TORCH:
 						return "Torche jaune";
-					case 433:
+					case EntityID.ItemID.DEMON_TORCH:
 						return "Torche du démon";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Fusil d'assaut mécanique";
-					case 435:
+					case EntityID.ItemID.COBALT_REPEATER:
 						return "Arbalète en cobalt";
-					case 436:
+					case EntityID.ItemID.MYTHRIL_REPEATER:
 						return "Arbalète en mythril";
-					case 437:
+					case EntityID.ItemID.DUAL_HOOK:
 						return "Crochet Double";
-					case 438:
+					case EntityID.ItemID.STAR_STATUE:
 						return "Statue d'étoile";
-					case 439:
+					case EntityID.ItemID.SWORD_STATUE:
 						return "Statue d'épée";
-					case 440:
+					case EntityID.ItemID.SLIME_STATUE:
 						return "Statue de slime";
-					case 441:
+					case EntityID.ItemID.GOBLIN_STATUE:
 						return "Statue de gobelin";
-					case 442:
+					case EntityID.ItemID.SHIELD_STATUE:
 						return "Statue de bouclier";
-					case 443:
+					case EntityID.ItemID.BAT_STATUE:
 						return "Statue de chauve-souris";
-					case 444:
+					case EntityID.ItemID.FISH_STATUE:
 						return "Statue de poisson";
-					case 445:
+					case EntityID.ItemID.BUNNY_STATUE:
 						return "Statue de lapin";
-					case 446:
+					case EntityID.ItemID.SKELETON_STATUE:
 						return "Statue de squelette";
-					case 447:
+					case EntityID.ItemID.REAPER_STATUE:
 						return "Statue de faucheur";
-					case 448:
+					case EntityID.ItemID.WOMAN_STATUE:
 						return "Statue de femme";
-					case 449:
+					case EntityID.ItemID.IMP_STATUE:
 						return "Statue de diablotin";
-					case 450:
+					case EntityID.ItemID.GARGOYLE_STATUE:
 						return "Statue de gargouille";
-					case 451:
+					case EntityID.ItemID.GLOOM_STATUE:
 						return "Statue de morosité";
-					case 452:
+					case EntityID.ItemID.HORNET_STATUE:
 						return "Statue de frelon";
-					case 453:
+					case EntityID.ItemID.BOMB_STATUE:
 						return "Statue de bombe";
-					case 454:
+					case EntityID.ItemID.CRAB_STATUE:
 						return "Statue de crabe";
-					case 455:
+					case EntityID.ItemID.HAMMER_STATUE:
 						return "Statue de marteau";
-					case 456:
+					case EntityID.ItemID.POTION_STATUE:
 						return "Statue de potion";
-					case 457:
+					case EntityID.ItemID.SPEAR_STATUE:
 						return "Statue de lance";
-					case 458:
+					case EntityID.ItemID.CROSS_STATUE:
 						return "Statue de croix";
-					case 459:
+					case EntityID.ItemID.JELLYFISH_STATUE:
 						return "Statue de méduse";
-					case 460:
+					case EntityID.ItemID.BOW_STATUE:
 						return "Statue d'arc";
-					case 461:
+					case EntityID.ItemID.BOOMERANG_STATUE:
 						return "Statue de boomerang";
-					case 462:
+					case EntityID.ItemID.BOOT_STATUE:
 						return "Statue de botte";
-					case 463:
+					case EntityID.ItemID.CHEST_STATUE:
 						return "Statue de coffre";
-					case 464:
+					case EntityID.ItemID.BIRD_STATUE:
 						return "Statue d'oiseau";
-					case 465:
+					case EntityID.ItemID.AXE_STATUE:
 						return "Statue de hache";
-					case 466:
+					case EntityID.ItemID.CORRUPT_STATUE:
 						return "Statue corrompue";
-					case 467:
+					case EntityID.ItemID.TREE_STATUE:
 						return "Statue d'arbre";
-					case 468:
+					case EntityID.ItemID.ANVIL_STATUE:
 						return "Statue d'enclume";
-					case 469:
+					case EntityID.ItemID.PICKAXE_STATUE:
 						return "Statue de pioche";
-					case 470:
+					case EntityID.ItemID.MUSHROOM_STATUE:
 						return "Statue de champignon";
-					case 471:
+					case EntityID.ItemID.EYEBALL_STATUE:
 						return "Statue d'œil";
-					case 472:
+					case EntityID.ItemID.PILLAR_STATUE:
 						return "Statue de pilier";
-					case 473:
+					case EntityID.ItemID.HEART_STATUE:
 						return "Statue de cœur";
-					case 474:
+					case EntityID.ItemID.POT_STATUE:
 						return "Statue de pot";
-					case 475:
+					case EntityID.ItemID.SUNFLOWER_STATUE:
 						return "Statue de tournesol";
-					case 476:
+					case EntityID.ItemID.KING_STATUE:
 						return "Statue de roi";
-					case 477:
+					case EntityID.ItemID.QUEEN_STATUE:
 						return "Statue de reine";
-					case 478:
+					case EntityID.ItemID.PIRANHA_STATUE:
 						return "Statue de piranha";
-					case 479:
+					case EntityID.ItemID.PLANKED_WALL:
 						return "Mur de planches";
-					case 480:
+					case EntityID.ItemID.WOODEN_BEAM:
 						return "Poutre de bois";
-					case 481:
+					case EntityID.ItemID.ADAMANTITE_REPEATER:
 						return "Arbalète d'adamantine";
-					case 482:
+					case EntityID.ItemID.ADAMANTITE_SWORD:
 						return "Épée d'adamantine";
-					case 483:
+					case EntityID.ItemID.COBALT_SWORD:
 						return "Épée de cobalt";
-					case 484:
+					case EntityID.ItemID.MYTHRIL_SWORD:
 						return "Épée de mythril";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Sortilège lunaire";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Règle";
-					case 487:
+					case EntityID.ItemID.CRYSTAL_BALL:
 						return "Boule de cristal";
-					case 488:
+					case EntityID.ItemID.DISCO_BALL:
 						return "Boule à facettes";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Emblème sorcier";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Emblème guerrier";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Emblème ranger";
-					case 492:
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Ailes de démon";
-					case 493:
+					case EntityID.ItemID.ANGEL_WINGS:
 						return "Ailes d'ange";
-					case 494:
+					case EntityID.ItemID.MAGICAL_HARP:
 						return "Harpe magique";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Bâton d'arc-en-ciel";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Bâton de glace";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Coquillage de Neptune";
-					case 498:
+					case EntityID.ItemID.MANNEQUIN:
 						return "Mannequin";
-					case 499:
+					case EntityID.ItemID.GREATER_HEALING_POTION:
 						return "Potion de soins supérieure";
-					case 500:
+					case EntityID.ItemID.GREATER_MANA_POTION:
 						return "Potion de mana supérieure";
-					case 501:
+					case EntityID.ItemID.PIXIE_DUST:
 						return "Poudre de fée";
-					case 502:
+					case EntityID.ItemID.CRYSTAL_SHARD:
 						return "Éclat de cristal";
-					case 503:
+					case EntityID.ItemID.CLOWN_HAT:
 						return "Chapeau de clown";
-					case 504:
+					case EntityID.ItemID.CLOWN_SHIRT:
 						return "Veste de clown";
-					case 505:
+					case EntityID.ItemID.CLOWN_PANTS:
 						return "Pantalon de clown";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Lance-flammes";
-					case 507:
+					case EntityID.ItemID.BELL:
 						return "Cloche";
-					case 508:
+					case EntityID.ItemID.HARP:
 						return "Harpe";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Clé à molette";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Pince coupante";
-					case 511:
+					case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 						return "Bloc de pierre actif";
-					case 512:
+					case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 						return "Bloc de pierre inactif";
-					case 513:
+					case EntityID.ItemID.LEVER:
 						return "Levier";
-					case 514:
+					case EntityID.ItemID.LASER_RIFLE:
 						return "Fusil laser";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Balle de cristal";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Flèche bénite";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Dague magique";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Tempête de cristal";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Flammes maudites";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "Âme de lumière";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "Âme de la nuit";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Flamme maudite";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Torche maudite";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Forge en adamantine";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Enclume en mythril";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "Corne de licorne";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "Éclat sombre";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "Éclat de lumière";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Plaque de pression rouge";
-					case 530:
+					case EntityID.ItemID.WIRE:
 						return "Câble";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Livre de sorts";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Cape stellaire";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Mégashark";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Fusil à pompe";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Pierre du philosophe";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Gant du titan";
-					case 537:
+					case EntityID.ItemID.COBALT_NAGINATA:
 						return "Naginata en cobalt";
-					case 538:
+					case EntityID.ItemID.SWITCH:
 						return "Interrupteur";
-					case 539:
+					case EntityID.ItemID.DART_TRAP:
 						return "Piège à fléchette";
-					case 540:
+					case EntityID.ItemID.BOULDER:
 						return "Rocher";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Plaque de pression verte";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Plaque de pression grise";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Plaque de pression marron";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Œil mécanique";
-					case 545:
+					case EntityID.ItemID.CURSED_ARROW:
 						return "Flèche maudite";
-					case 546:
+					case EntityID.ItemID.CURSED_BULLET:
 						return "Balle maudite";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "Âme d'effroi";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "Âme de pouvoir";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "Âme de vision";
-					case 550:
+					case EntityID.ItemID.GUNGNIR:
 						return "Gungnir";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Armure de plaques sacrée";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Jambières sacrées";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Casque sacré";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Pendentif en croix";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Fleur de mana";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Ver mécanique";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Crâne mécanique";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Coiffe sacrée";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Masque sacré";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Couronne de slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Disque de lumière";
-					case 562:
+					case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 						return "Boîte à musique (Jour du monde supérieur)";
-					case 563:
+					case EntityID.ItemID.MUSIC_BOX_EERIE:
 						return "Boîte à musique (Surnaturel)";
-					case 564:
+					case EntityID.ItemID.MUSIC_BOX_NIGHT:
 						return "Boîte à musique (Nuit)";
-					case 565:
+					case EntityID.ItemID.MUSIC_BOX_TITLE:
 						return "Boîte à musique (Titre)";
-					case 566:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 						return "Boîte à musique (Souterrain)";
-					case 567:
+					case EntityID.ItemID.MUSIC_BOX_BOSS1:
 						return "Boîte à musique (Boss 1)";
-					case 568:
+					case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 						return "Boîte à musique (Jungle)";
-					case 569:
+					case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 						return "Boîte à musique(Corruption)";
-					case 570:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 						return "Boîte à musique (Corruption du souterrain)";
-					case 571:
+					case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 						return "Boîte à musique (La Sainteté)";
-					case 572:
+					case EntityID.ItemID.MUSIC_BOX_BOSS2:
 						return "Boîte à musique (Boss 2)";
-					case 573:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 						return "Boîte à musique (Sainteté du souterrain)";
-					case 574:
+					case EntityID.ItemID.MUSIC_BOX_BOSS3:
 						return "Boîte à musique (Boss 3)";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "Âme du vol";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Boîte à musique";
-					case 577:
+					case EntityID.ItemID.DEMONITE_BRICK:
 						return "Brique de démonite";
-					case 578:
+					case EntityID.ItemID.HALLOWED_REPEATER:
 						return "Arbalète bénie";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "Martache-perce";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explosifs";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Poste de pompage";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Sortie de pompage";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Minuteur d'une seconde";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Minuteur de 3 secondes";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Minuteur de 5 secondes";
-					case 586:
+					case EntityID.ItemID.CANDY_CANE_BLOCK:
 						return "Bloc de sucrerie";
-					case 587:
+					case EntityID.ItemID.CANDY_CANE_WALL:
 						return "Mur de sucrerie";
-					case 588:
+					case EntityID.ItemID.SANTA_HAT:
 						return "Bonnet de père Noël";
-					case 589:
+					case EntityID.ItemID.SANTA_SHIRT:
 						return "Veste de père Noël";
-					case 590:
+					case EntityID.ItemID.SANTA_PANTS:
 						return "Pantalon de père Noël";
-					case 591:
+					case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 						return "Bloc de sucrerie vert";
-					case 592:
+					case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 						return "Mur de sucrerie vert ";
-					case 593:
+					case EntityID.ItemID.SNOW_BLOCK:
 						return "bloc de neige";
-					case 594:
+					case EntityID.ItemID.SNOW_BRICK:
 						return "brique de neige";
-					case 595:
+					case EntityID.ItemID.SNOW_BRICK_WALL:
 						return "Mur de briques de neige";
-					case 596:
+					case EntityID.ItemID.BLUE_LIGHT:
 						return "Lumière bleue";
-					case 597:
+					case EntityID.ItemID.RED_LIGHT:
 						return "Lumière rouge";
-					case 598:
+					case EntityID.ItemID.GREEN_LIGHT:
 						return "Lumière verte";
-					case 599:
+					case EntityID.ItemID.BLUE_PRESENT:
 						return "Cadeau bleu";
-					case 600:
+					case EntityID.ItemID.GREEN_PRESENT:
 						return "Cadeau vert";
-					case 601:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Cadeau jaune";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Globe de neige";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Chou";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Masque de dragon";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Casque de titan";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Coiffe spectrale";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Plastron de dragon";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Cotte de mailles de titan";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Armure spectrale";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Jambières de dragon";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Jambières de titan";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Subligar spectral";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tizona";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Tonbogiri";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Sharanga";
-					case 616:
+					case EntityID.ItemID.SPECTRAL_ARROW:
 						return "Flèche spectrale";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Arbalète de Vulcain";
-					case 618:
+					case EntityID.ItemID.VULCAN_BOLT:
 						return "Éclair de Vulcain";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Crâne à l'air douteux";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "Âme du fléau";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Boîte de Petri";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Nid d'abeille";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Fiole de sang";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Croc de loup";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Cervelle";
-					case 626:
+					case EntityID.ItemID.MUSIC_BOX_DESERT:
 						return "Boîte à musique (Désert)";
-					case 627:
+					case EntityID.ItemID.MUSIC_BOX_SPACE:
 						return "Boîte à musique (Espace)";
-					case 628:
+					case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 						return "Boîte à musique (Tutoriel)";
-					case 629:
+					case EntityID.ItemID.MUSIC_BOX_BOSS4:
 						return "Boîte à musique (Boss 4)";
-					case 630:
+					case EntityID.ItemID.MUSIC_BOX_OCEAN:
 						return "Boîte à musique (Océan)";
-					case 631:
+					case EntityID.ItemID.MUSIC_BOX_SNOW:
 						return "Boîte à musique (Neige)";
 #if VERSION_101
-					case 632:
+					case EntityID.ItemID.FABULOUS_RIBBON:
 						return "Ruban somptueux";
-					case 633:
+					case EntityID.ItemID.GEORGES_HAT:
 						return "Chapeau de George";
-					case 634:
+					case EntityID.ItemID.FABULOUS_TUTU:
 						return "Tutu somptueux";
-					case 635:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 						return "Veste de smoking de George";
-					case 636:
+					case EntityID.ItemID.FABULOUS_SLIPPERS:
 						return "Chaussons somptueux";
-					case 637:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Pantalon de smoking de George";
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 						return "Ailes brillantes";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Feu de camp";
-					case 640:
+					case EntityID.ItemID.WOOD_HELMET:
 						return "Casque en bois";
-					case 641:
+					case EntityID.ItemID.WOOD_BREASTPLATE:
 						return "Plastron en bois";
-					case 642:
+					case EntityID.ItemID.WOOD_GREAVES:
 						return "Jambières en bois";
-					case 643:
+					case EntityID.ItemID.CACTUS_SWORD:
 						return "Épée cactus";
-					case 644:
+					case EntityID.ItemID.CACTUS_PICKAXE:
 						return "Pioche cactus";
-					case 645:
+					case EntityID.ItemID.CACTUS_HELMET:
 						return "Casque cactus";
-					case 646:
+					case EntityID.ItemID.CACTUS_BREASTPLATE:
 						return "Plastron cactus";
-					case 647:
+					case EntityID.ItemID.CACTUS_LEGGINGS:
 						return "Jambières cactus ";
-					case 648:
+					case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 						return "Vitrail violet";
-					case 649:
+					case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 						return "Vitrail jaune";
-					case 650:
+					case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 						return "Vitrail bleu";
-					case 651:
+					case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 						return "Vitrail vert";
-					case 652:
+					case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 						return "Vitrail rouge";
-					case 653:
+					case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 						return "Vitrail multicolore";
 #endif
 				}
 			}
 			else if (LangOption == (int)ID.SPANISH)
 			{
-				switch (l)
+				switch ((EntityID.ItemID)l)
 				{
-					case -1:
+					case EntityID.ItemID.GOLD_PICKAXE:
 						return "Pico de oro";
-					case -2:
+					case EntityID.ItemID.GOLD_BROADSWORD:
 						return "Espada larga de oro";
-					case -3:
+					case EntityID.ItemID.GOLD_SHORTSWORD:
 						return "Espada corta de oro";
-					case -4:
+					case EntityID.ItemID.GOLD_AXE:
 						return "Hacha de oro";
-					case -5:
+					case EntityID.ItemID.GOLD_HAMMER:
 						return "Martillo de oro";
-					case -6:
+					case EntityID.ItemID.GOLD_BOW:
 						return "Arco de oro";
-					case -7:
+					case EntityID.ItemID.SILVER_PICKAXE:
 						return "Pico de plata";
-					case -8:
+					case EntityID.ItemID.SILVER_BROADSWORD:
 						return "Espada larga de plata";
-					case -9:
+					case EntityID.ItemID.SILVER_SHORTSWORD:
 						return "Espada corta de plata";
-					case -10:
+					case EntityID.ItemID.SILVER_AXE:
 						return "Hacha de plata";
-					case -11:
+					case EntityID.ItemID.SILVER_HAMMER:
 						return "Martillo de plata";
-					case -12:
+					case EntityID.ItemID.SILVER_BOW:
 						return "Arco de plata";
-					case -13:
+					case EntityID.ItemID.COPPER_PICKAXE:
 						return "Pico de cobre";
-					case -14:
+					case EntityID.ItemID.COPPER_BROADSWORD:
 						return "Espada larga de cobre";
-					case -15:
+					case EntityID.ItemID.COPPER_SHORTSWORD:
 						return "Espada corta de cobre";
-					case -16:
+					case EntityID.ItemID.COPPER_AXE:
 						return "Hacha de cobre";
-					case -17:
+					case EntityID.ItemID.COPPER_HAMMER:
 						return "Martillo de cobre";
-					case -18:
+					case EntityID.ItemID.COPPER_BOW:
 						return "Arco de cobre";
-					case -19:
+					case EntityID.ItemID.BLUE_PHASESABER:
 						return "Sable de luz azul";
-					case -20:
+					case EntityID.ItemID.RED_PHASESABER:
 						return "Sable de luz rojo";
-					case -21:
+					case EntityID.ItemID.GREEN_PHASESABER:
 						return "Sable de luz verde";
-					case -22:
+					case EntityID.ItemID.PURPLE_PHASESABER:
 						return "Sable de luz morado";
-					case -23:
+					case EntityID.ItemID.WHITE_PHASESABER:
 						return "Sable de luz blanco";
-					case -24:
+					case EntityID.ItemID.YELLOW_PHASESABER:
 						return "Sable de luz amarillo";
-					case 1:
+					case EntityID.ItemID.IRON_PICKAXE:
 						return "Pico de hierro";
-					case 2:
+					case EntityID.ItemID.DIRT_BLOCK:
 						return "Bloque de tierra";
-					case 3:
+					case EntityID.ItemID.STONE_BLOCK:
 						return "Bloque de piedra";
-					case 4:
+					case EntityID.ItemID.IRON_BROADSWORD:
 						return "Espada larga de hierro";
-					case 5:
+					case EntityID.ItemID.MUSHROOM:
 						return "Champiñón";
-					case 6:
+					case EntityID.ItemID.IRON_SHORTSWORD:
 						return "Espada corta de hierro";
-					case 7:
+					case EntityID.ItemID.IRON_HAMMER:
 						return "Martillo de hierro";
-					case 8:
+					case EntityID.ItemID.TORCH:
 						return "Antorcha";
-					case 9:
+					case EntityID.ItemID.WOOD:
 						return "Madera";
-					case 10:
+					case EntityID.ItemID.IRON_AXE:
 						return "Hacha de hierro";
-					case 11:
+					case EntityID.ItemID.IRON_ORE:
 						return "Mineral de hierro";
-					case 12:
+					case EntityID.ItemID.COPPER_ORE:
 						return "Mineral de cobre";
-					case 13:
+					case EntityID.ItemID.GOLD_ORE:
 						return "Mineral de oro";
-					case 14:
+					case EntityID.ItemID.SILVER_ORE:
 						return "Mineral de plata";
-					case 15:
+					case EntityID.ItemID.COPPER_WATCH:
 						return "Reloj de cobre";
-					case 16:
+					case EntityID.ItemID.SILVER_WATCH:
 						return "Reloj de plata";
-					case 17:
+					case EntityID.ItemID.GOLD_WATCH:
 						return "Reloj de oro";
-					case 18:
+					case EntityID.ItemID.DEPTH_METER:
 						return "Medidor de profundidad";
-					case 19:
+					case EntityID.ItemID.GOLD_BAR:
 						return "Lingote de oro";
-					case 20:
+					case EntityID.ItemID.COPPER_BAR:
 						return "Lingote de cobre";
-					case 21:
+					case EntityID.ItemID.SILVER_BAR:
 						return "Lingote de plata";
-					case 22:
+					case EntityID.ItemID.IRON_BAR:
 						return "Lingote de hierro";
-					case 23:
+					case EntityID.ItemID.GEL:
 						return "Gel";
-					case 24:
+					case EntityID.ItemID.WOODEN_SWORD:
 						return "Espada de madera";
-					case 25:
+					case EntityID.ItemID.WOODEN_DOOR:
 						return "Puerta de madera";
-					case 26:
+					case EntityID.ItemID.STONE_WALL:
 						return "Pared de piedra";
-					case 27:
+					case EntityID.ItemID.ACORN:
 						return "Bellota";
-					case 28:
+					case EntityID.ItemID.LESSER_HEALING_POTION:
 						return "Poción curativa menor";
-					case 29:
+					case EntityID.ItemID.LIFE_CRYSTAL:
 						return "Cristal de vida";
-					case 30:
+					case EntityID.ItemID.DIRT_WALL:
 						return "Pared de tierra";
-					case 31:
+					case EntityID.ItemID.BOTTLE:
 						return "Botella";
-					case 32:
+					case EntityID.ItemID.WOODEN_TABLE:
 						return "Mesa de madera";
-					case 33:
+					case EntityID.ItemID.FURNACE:
 						return "Forja";
-					case 34:
+					case EntityID.ItemID.WOODEN_CHAIR:
 						return "Silla de madera";
-					case 35:
+					case EntityID.ItemID.IRON_ANVIL:
 						return "Yunque de hierro";
-					case 36:
+					case EntityID.ItemID.WORK_BENCH:
 						return "Banco de trabajo";
-					case 37:
+					case EntityID.ItemID.GOGGLES:
 						return "Gafas de protección";
-					case 38:
+					case EntityID.ItemID.LENS:
 						return "Lentes";
-					case 39:
+					case EntityID.ItemID.WOODEN_BOW:
 						return "Arco de madera";
-					case 40:
+					case EntityID.ItemID.WOODEN_ARROW:
 						return "Flecha de madera";
-					case 41:
+					case EntityID.ItemID.FLAMING_ARROW:
 						return "Flecha ardiente";
-					case 42:
+					case EntityID.ItemID.SHURIKEN:
 						return "Estrellas ninja";
-					case 43:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_EYE:
 						return "Ojo de aspecto sospechoso";
-					case 44:
+					case EntityID.ItemID.DEMON_BOW:
 						return "Arco demoníaco";
-					case 45:
+					case EntityID.ItemID.WAR_AXE_OF_THE_NIGHT:
 						return "Hacha de la noche";
-					case 46:
+					case EntityID.ItemID.LIGHTS_BANE:
 						return "Azote de la luz";
-					case 47:
+					case EntityID.ItemID.UNHOLY_ARROW:
 						return "Flecha infame";
-					case 48:
+					case EntityID.ItemID.CHEST:
 						return "Cofre";
-					case 49:
+					case EntityID.ItemID.BAND_OF_REGENERATION:
 						return "Banda de regeneración";
-					case 50:
+					case EntityID.ItemID.MAGIC_MIRROR:
 						return "Espejo mágico";
-					case 51:
+					case EntityID.ItemID.JESTERS_ARROW:
 						return "Flecha de bufón";
-					case 52:
+					case EntityID.ItemID.ANGEL_STATUE:
 						return "Estatua de ángel";
-					case 53:
+					case EntityID.ItemID.CLOUD_IN_A_BOTTLE:
 						return "Nube en botella";
-					case 54:
+					case EntityID.ItemID.HERMES_BOOTS:
 						return "Botas de Hermes";
-					case 55:
+					case EntityID.ItemID.ENCHANTED_BOOMERANG:
 						return "Bumerán encantado";
-					case 56:
+					case EntityID.ItemID.DEMONITE_ORE:
 						return "Mineral endemoniado";
-					case 57:
+					case EntityID.ItemID.DEMONITE_BAR:
 						return "Lingote endemoniado";
-					case 58:
+					case EntityID.ItemID.HEART:
 						return "Corazón";
-					case 59:
+					case EntityID.ItemID.CORRUPT_SEEDS:
 						return "Semillas corrompidas";
-					case 60:
+					case EntityID.ItemID.VILE_MUSHROOM:
 						return "Champiñón vil";
-					case 61:
+					case EntityID.ItemID.EBONSTONE_BLOCK:
 						return "Bloque de piedra de ébano";
-					case 62:
+					case EntityID.ItemID.GRASS_SEEDS:
 						return "Semillas de césped";
-					case 63:
+					case EntityID.ItemID.SUNFLOWER:
 						return "Girasol";
-					case 64:
+					case EntityID.ItemID.VILETHORN:
 						return "Lanzador de espina vil";
-					case 65:
+					case EntityID.ItemID.STARFURY:
 						return "Furia de estrellas";
-					case 66:
+					case EntityID.ItemID.PURIFICATION_POWDER:
 						return "Polvo de purificación";
-					case 67:
+					case EntityID.ItemID.VILE_POWDER:
 						return "Polvo vil";
-					case 68:
+					case EntityID.ItemID.ROTTEN_CHUNK:
 						return "Trozo podrido";
-					case 69:
+					case EntityID.ItemID.WORM_TOOTH:
 						return "Diente de gusano";
-					case 70:
+					case EntityID.ItemID.WORM_FOOD:
 						return "Cebo de gusanos";
-					case 71:
+					case EntityID.ItemID.COPPER_COIN:
 						return "Moneda de cobre";
-					case 72:
+					case EntityID.ItemID.SILVER_COIN:
 						return "Moneda de plata";
-					case 73:
+					case EntityID.ItemID.GOLD_COIN:
 						return "Moneda de oro";
-					case 74:
+					case EntityID.ItemID.PLATINUM_COIN:
 						return "Moneda de platino";
-					case 75:
+					case EntityID.ItemID.FALLEN_STAR:
 						return "Estrella fugaz";
-					case 76:
+					case EntityID.ItemID.COPPER_GREAVES:
 						return "Grebas de cobre";
-					case 77:
+					case EntityID.ItemID.IRON_GREAVES:
 						return "Grebas de hierro";
-					case 78:
+					case EntityID.ItemID.SILVER_GREAVES:
 						return "Grebas de plata";
-					case 79:
+					case EntityID.ItemID.GOLD_GREAVES:
 						return "Grebas de oro";
-					case 80:
+					case EntityID.ItemID.COPPER_CHAINMAIL:
 						return "Cota de malla de cobre";
-					case 81:
+					case EntityID.ItemID.IRON_CHAINMAIL:
 						return "Cota de malla de hierro";
-					case 82:
+					case EntityID.ItemID.SILVER_CHAINMAIL:
 						return "Cota de malla de plata";
-					case 83:
+					case EntityID.ItemID.GOLD_CHAINMAIL:
 						return "Cota de malla de oro";
-					case 84:
+					case EntityID.ItemID.GRAPPLING_HOOK:
 						return "Garfio de escalada";
-					case 85:
+					case EntityID.ItemID.CHAIN:
 						return "Cadena de hierro";
-					case 86:
+					case EntityID.ItemID.SHADOW_SCALE:
 						return "Escama de las sombras";
-					case 87:
+					case EntityID.ItemID.PIGGY_BANK:
 						return "Hucha";
-					case 88:
+					case EntityID.ItemID.MINING_HELMET:
 						return "Casco de minero";
-					case 89:
+					case EntityID.ItemID.COPPER_HELMET:
 						return "Casco de cobre";
-					case 90:
+					case EntityID.ItemID.IRON_HELMET:
 						return "Casco de hierro";
-					case 91:
+					case EntityID.ItemID.SILVER_HELMET:
 						return "Casco de plata";
-					case 92:
+					case EntityID.ItemID.GOLD_HELMET:
 						return "Casco de oro";
-					case 93:
+					case EntityID.ItemID.WOOD_WALL:
 						return "Pared de madera";
-					case 94:
+					case EntityID.ItemID.WOOD_PLATFORM:
 						return "Plataforma de madera";
-					case 95:
+					case EntityID.ItemID.FLINTLOCK_PISTOL:
 						return "Pistola de pedernal";
-					case 96:
+					case EntityID.ItemID.MUSKET:
 						return "Mosquete";
-					case 97:
+					case EntityID.ItemID.MUSKET_BALL:
 						return "Bala de mosquete";
-					case 98:
+					case EntityID.ItemID.MINISHARK:
 						return "Minitiburón";
-					case 99:
+					case EntityID.ItemID.IRON_BOW:
 						return "Arco de hierro";
-					case 100:
+					case EntityID.ItemID.SHADOW_GREAVES:
 						return "Grebas de las sombras";
-					case 101:
+					case EntityID.ItemID.SHADOW_SCALEMAIL:
 						return "Cota de escamas de las sombras";
-					case 102:
+					case EntityID.ItemID.SHADOW_HELMET:
 						return "Casco de las sombras";
-					case 103:
+					case EntityID.ItemID.NIGHTMARE_PICKAXE:
 						return "Pico de pesadilla";
-					case 104:
+					case EntityID.ItemID.THE_BREAKER:
 						return "La Despedazadora";
-					case 105:
+					case EntityID.ItemID.CANDLE:
 						return "Vela";
-					case 106:
+					case EntityID.ItemID.COPPER_CHANDELIER:
 						return "Lámpara araña de cobre";
-					case 107:
+					case EntityID.ItemID.SILVER_CHANDELIER:
 						return "Lámpara araña de plata";
-					case 108:
+					case EntityID.ItemID.GOLD_CHANDELIER:
 						return "Lámpara araña de oro";
-					case 109:
+					case EntityID.ItemID.MANA_CRYSTAL:
 						return "Cristal de maná";
-					case 110:
+					case EntityID.ItemID.LESSER_MANA_POTION:
 						return "Poción de maná menor";
-					case 111:
+					case EntityID.ItemID.BAND_OF_STARPOWER:
 						return "Banda de polvo de estrellas";
-					case 112:
+					case EntityID.ItemID.FLOWER_OF_FIRE:
 						return "Flor de fuego";
-					case 113:
+					case EntityID.ItemID.MAGIC_MISSILE:
 						return "Proyectil mágico";
-					case 114:
+					case EntityID.ItemID.DIRT_ROD:
 						return "Varita de tierra";
 #if VERSION_INITIAL
-				case 115:
-					return "Orbe de luz";
+					case EntityID.ItemID.SHADOW_ORB:
+						return "Orbe de luz";
 #else
-					case 115:
+					case EntityID.ItemID.SHADOW_ORB:
 						return "Orbe sombrío";
 #endif
-					case 116:
+					case EntityID.ItemID.METEORITE:
 						return "Meteorito";
-					case 117:
+					case EntityID.ItemID.METEORITE_BAR:
 						return "Lingote de meteorito";
-					case 118:
+					case EntityID.ItemID.HOOK:
 						return "Gancho";
-					case 119:
+					case EntityID.ItemID.FLAMARANG:
 						return "Bumerán de llamas";
-					case 120:
+					case EntityID.ItemID.MOLTEN_FURY:
 						return "Furia fundida";
-					case 121:
+					case EntityID.ItemID.FIERY_GREATSWORD:
 						return "Espadón ardiente";
-					case 122:
+					case EntityID.ItemID.MOLTEN_PICKAXE:
 						return "Pico fundido";
-					case 123:
+					case EntityID.ItemID.METEOR_HELMET:
 						return "Casco de meteorito";
-					case 124:
+					case EntityID.ItemID.METEOR_SUIT:
 						return "Cota de meteorito";
-					case 125:
+					case EntityID.ItemID.METEOR_LEGGINGS:
 						return "Perneras de meteorito";
-					case 126:
+					case EntityID.ItemID.BOTTLED_WATER:
 						return "Agua embotellada";
-					case 127:
+					case EntityID.ItemID.SPACE_GUN:
 						return "Pistola espacial";
-					case 128:
+					case EntityID.ItemID.ROCKET_BOOTS:
 						return "Botas cohete";
-					case 129:
+					case EntityID.ItemID.GRAY_BRICK:
 						return "Ladrillo gris";
-					case 130:
+					case EntityID.ItemID.GRAY_BRICK_WALL:
 						return "Pared de ladrillo gris";
-					case 131:
+					case EntityID.ItemID.RED_BRICK:
 						return "Ladrillo rojo";
-					case 132:
+					case EntityID.ItemID.RED_BRICK_WALL:
 						return "Pared de ladrillo rojo";
-					case 133:
+					case EntityID.ItemID.CLAY_BLOCK:
 						return "Bloque de arcilla";
-					case 134:
+					case EntityID.ItemID.BLUE_BRICK:
 						return "Ladrillo azul";
-					case 135:
+					case EntityID.ItemID.BLUE_BRICK_WALL:
 						return "Pared de ladrillo azul";
-					case 136:
+					case EntityID.ItemID.CHAIN_LANTERN:
 						return "Farolillo";
-					case 137:
+					case EntityID.ItemID.GREEN_BRICK:
 						return "Ladrillo verde";
-					case 138:
+					case EntityID.ItemID.GREEN_BRICK_WALL:
 						return "Pared de ladrillo verde";
-					case 139:
+					case EntityID.ItemID.PINK_BRICK:
 						return "Ladrillo rosa";
-					case 140:
+					case EntityID.ItemID.PINK_BRICK_WALL:
 						return "Pared de ladrillo rosa";
-					case 141:
+					case EntityID.ItemID.GOLD_BRICK:
 						return "Ladrillo dorado";
-					case 142:
+					case EntityID.ItemID.GOLD_BRICK_WALL:
 						return "Pared de ladrillo dorado";
-					case 143:
+					case EntityID.ItemID.SILVER_BRICK:
 						return "Ladrillo plateado";
-					case 144:
+					case EntityID.ItemID.SILVER_BRICK_WALL:
 						return "Pared de ladrillo plateado";
-					case 145:
+					case EntityID.ItemID.COPPER_BRICK:
 						return "Ladrillo cobrizo";
-					case 146:
+					case EntityID.ItemID.COPPER_BRICK_WALL:
 						return "Pared de ladrillo cobrizo";
-					case 147:
+					case EntityID.ItemID.SPIKE:
 						return "Púa";
-					case 148:
+					case EntityID.ItemID.WATER_CANDLE:
 						return "Vela de agua";
-					case 149:
+					case EntityID.ItemID.BOOK:
 						return "Libro";
-					case 150:
+					case EntityID.ItemID.COBWEB:
 						return "Telaraña";
-					case 151:
+					case EntityID.ItemID.NECRO_HELMET:
 						return "Casco de los muertos";
-					case 152:
+					case EntityID.ItemID.NECRO_BREASTPLATE:
 						return "Peto de los muertos";
-					case 153:
+					case EntityID.ItemID.NECRO_GREAVES:
 						return "Grebas de los muertos";
-					case 154:
+					case EntityID.ItemID.BONE:
 						return "Hueso";
-					case 155:
+					case EntityID.ItemID.MURAMASA:
 						return "Muramasa";
-					case 156:
+					case EntityID.ItemID.COBALT_SHIELD:
 						return "Escudo de cobalto";
-					case 157:
+					case EntityID.ItemID.AQUA_SCEPTER:
 						return "Cetro de agua";
-					case 158:
+					case EntityID.ItemID.LUCKY_HORSESHOE:
 						return "Herradura de la suerte";
-					case 159:
+					case EntityID.ItemID.SHINY_RED_BALLOON:
 						return "Globo rojo brillante";
-					case 160:
+					case EntityID.ItemID.HARPOON:
 						return "Arpón";
-					case 161:
+					case EntityID.ItemID.SPIKY_BALL:
 						return "Bola con pinchos";
-					case 162:
+					case EntityID.ItemID.BALL_O_HURT:
 						return "Flagelo con bola";
-					case 163:
+					case EntityID.ItemID.BLUE_MOON:
 						return "Luna azul";
-					case 164:
+					case EntityID.ItemID.HANDGUN:
 						return "Pistola";
-					case 165:
+					case EntityID.ItemID.WATER_BOLT:
 						return "Proyectil de agua";
-					case 166:
+					case EntityID.ItemID.BOMB:
 						return "Bomba";
-					case 167:
+					case EntityID.ItemID.DYNAMITE:
 						return "Dinamita";
-					case 168:
+					case EntityID.ItemID.GRENADE:
 						return "Granada";
-					case 169:
+					case EntityID.ItemID.SAND_BLOCK:
 						return "Bloque de arena";
-					case 170:
+					case EntityID.ItemID.GLASS:
 						return "Cristal";
-					case 171:
+					case EntityID.ItemID.SIGN:
 						return "Cartel";
-					case 172:
+					case EntityID.ItemID.ASH_BLOCK:
 						return "Bloque de ceniza";
-					case 173:
+					case EntityID.ItemID.OBSIDIAN:
 						return "Obsidiana";
-					case 174:
+					case EntityID.ItemID.HELLSTONE:
 						return "Piedra infernal";
-					case 175:
+					case EntityID.ItemID.HELLSTONE_BAR:
 						return "Lingote de piedra infernal";
-					case 176:
+					case EntityID.ItemID.MUD_BLOCK:
 						return "Bloque de lodo";
-					case 177:
+					case EntityID.ItemID.SAPPHIRE:
 						return "Zafiro";
-					case 178:
+					case EntityID.ItemID.RUBY:
 						return "Rubí";
-					case 179:
+					case EntityID.ItemID.EMERALD:
 						return "Esmeralda";
-					case 180:
+					case EntityID.ItemID.TOPAZ:
 						return "Topacio";
-					case 181:
+					case EntityID.ItemID.AMETHYST:
 						return "Amatista";
-					case 182:
+					case EntityID.ItemID.DIAMOND:
 						return "Diamante";
-					case 183:
+					case EntityID.ItemID.GLOWING_MUSHROOM:
 						return "Champiñón brillante";
-					case 184:
+					case EntityID.ItemID.STAR:
 						return "Estrella";
-					case 185:
+					case EntityID.ItemID.IVY_WHIP:
 						return "Látigo de hiedra";
-					case 186:
+					case EntityID.ItemID.BREATHING_REED:
 						return "Caña para respirar";
-					case 187:
+					case EntityID.ItemID.FLIPPER:
 						return "Aletas";
-					case 188:
+					case EntityID.ItemID.HEALING_POTION:
 						return "Poción curativa";
-					case 189:
+					case EntityID.ItemID.MANA_POTION:
 						return "Poción de maná";
-					case 190:
+					case EntityID.ItemID.BLADE_OF_GRASS:
 						return "Espada de hierba";
-					case 191:
+					case EntityID.ItemID.THORN_CHAKRAM:
 						return "Chakram de espinas";
-					case 192:
+					case EntityID.ItemID.OBSIDIAN_BRICK:
 						return "Ladrillo de obsidiana";
-					case 193:
+					case EntityID.ItemID.OBSIDIAN_SKULL:
 						return "Calavera obsidiana";
-					case 194:
+					case EntityID.ItemID.MUSHROOM_GRASS_SEEDS:
 						return "Semillas de césped-champiñón";
-					case 195:
+					case EntityID.ItemID.JUNGLE_GRASS_SEEDS:
 						return "Semillas de césped selvático";
-					case 196:
+					case EntityID.ItemID.WOODEN_HAMMER:
 						return "Martillo de madera";
-					case 197:
+					case EntityID.ItemID.STAR_CANNON:
 						return "Cañón de estrellas";
-					case 198:
+					case EntityID.ItemID.BLUE_PHASEBLADE:
 						return "Espada de luz azul";
-					case 199:
+					case EntityID.ItemID.RED_PHASEBLADE:
 						return "Espada de luz roja";
-					case 200:
+					case EntityID.ItemID.GREEN_PHASEBLADE:
 						return "Espada de luz verde";
-					case 201:
+					case EntityID.ItemID.PURPLE_PHASEBLADE:
 						return "Espada de luz morada";
-					case 202:
+					case EntityID.ItemID.WHITE_PHASEBLADE:
 						return "Espada de luz blanca";
-					case 203:
+					case EntityID.ItemID.YELLOW_PHASEBLADE:
 						return "Espada de luz amarilla";
-					case 204:
+					case EntityID.ItemID.METEOR_HAMAXE:
 						return "Hacha-martillo de meteorito";
-					case 205:
+					case EntityID.ItemID.EMPTY_BUCKET:
 						return "Cubo vacío";
-					case 206:
+					case EntityID.ItemID.WATER_BUCKET:
 						return "Cubo de agua";
-					case 207:
+					case EntityID.ItemID.LAVA_BUCKET:
 						return "Cubo de lava";
-					case 208:
+					case EntityID.ItemID.JUNGLE_ROSE:
 						return "Rosa de la selva";
-					case 209:
+					case EntityID.ItemID.STINGER:
 						return "Aguijón";
-					case 210:
+					case EntityID.ItemID.VINE:
 						return "Enredadera";
-					case 211:
+					case EntityID.ItemID.FERAL_CLAWS:
 						return "Garras de bestia";
-					case 212:
+					case EntityID.ItemID.ANKLET_OF_THE_WIND:
 						return "Tobillera de viento";
-					case 213:
+					case EntityID.ItemID.STAFF_OF_REGROWTH:
 						return "Báculo de regeneración";
-					case 214:
+					case EntityID.ItemID.HELLSTONE_BRICK:
 						return "Ladrillo de piedra infernal";
-					case 215:
+					case EntityID.ItemID.WHOOPIE_CUSHION:
 						return "Cojín flatulento";
-					case 216:
+					case EntityID.ItemID.SHACKLE:
 						return "Argolla";
-					case 217:
+					case EntityID.ItemID.MOLTEN_HAMAXE:
 						return "Hacha-martillo fundido";
-					case 218:
+					case EntityID.ItemID.FLAMELASH:
 						return "Látigo de llamas";
-					case 219:
+					case EntityID.ItemID.PHOENIX_BLASTER:
 						return "Desintegrador Fénix";
-					case 220:
+					case EntityID.ItemID.SUNFURY:
 						return "Furia solar";
-					case 221:
+					case EntityID.ItemID.HELLFORGE:
 						return "Forja infernal";
-					case 222:
+					case EntityID.ItemID.CLAY_POT:
 						return "Recipiente de barro";
-					case 223:
+					case EntityID.ItemID.NATURES_GIFT:
 						return "Don de la naturaleza";
-					case 224:
+					case EntityID.ItemID.BED:
 						return "Cama";
-					case 225:
+					case EntityID.ItemID.SILK:
 						return "Seda";
-					case 226:
+					case EntityID.ItemID.LESSER_RESTORATION_POTION:
 						return "Poción de recuperación menor";
-					case 227:
+					case EntityID.ItemID.RESTORATION_POTION:
 						return "Poción de recuperación";
-					case 228:
+					case EntityID.ItemID.JUNGLE_HAT:
 						return "Casco para la selva";
-					case 229:
+					case EntityID.ItemID.JUNGLE_SHIRT:
 						return "Camisa para la selva";
-					case 230:
+					case EntityID.ItemID.JUNGLE_PANTS:
 						return "Pantalones para la selva";
-					case 231:
+					case EntityID.ItemID.MOLTEN_HELMET:
 						return "Casco fundido";
-					case 232:
+					case EntityID.ItemID.MOLTEN_BREASTPLATE:
 						return "Peto fundido";
-					case 233:
+					case EntityID.ItemID.MOLTEN_GREAVES:
 						return "Grebas fundidas";
-					case 234:
+					case EntityID.ItemID.METEOR_SHOT:
 						return "Proyectil de meteorito";
-					case 235:
+					case EntityID.ItemID.STICKY_BOMB:
 						return "Bomba lapa";
-					case 236:
+					case EntityID.ItemID.BLACK_LENS:
 						return "Lentes negras";
-					case 237:
+					case EntityID.ItemID.SUNGLASSES:
 						return "Gafas de sol";
-					case 238:
+					case EntityID.ItemID.WIZARD_HAT:
 						return "Sombrero de mago";
-					case 239:
+					case EntityID.ItemID.TOP_HAT:
 						return "Sombrero de copa";
-					case 240:
+					case EntityID.ItemID.TUXEDO_SHIRT:
 						return "Camisa de esmoquin";
-					case 241:
+					case EntityID.ItemID.TUXEDO_PANTS:
 						return "Pantalones de esmoquin";
-					case 242:
+					case EntityID.ItemID.SUMMER_HAT:
 						return "Sombrero veraniego";
-					case 243:
+					case EntityID.ItemID.BUNNY_HOOD:
 						return "Máscara de conejito";
-					case 244:
+					case EntityID.ItemID.PLUMBERS_HAT:
 						return "Gorra de fontanero";
-					case 245:
+					case EntityID.ItemID.PLUMBERS_SHIRT:
 						return "Camisa de fontanero";
-					case 246:
+					case EntityID.ItemID.PLUMBERS_PANTS:
 						return "Pantalones de fontanero";
-					case 247:
+					case EntityID.ItemID.HEROS_HAT:
 						return "Gorro de héroe";
-					case 248:
+					case EntityID.ItemID.HEROS_SHIRT:
 						return "Camisa de héroe";
-					case 249:
+					case EntityID.ItemID.HEROS_PANTS:
 						return "Pantalones de héroe";
-					case 250:
+					case EntityID.ItemID.FISH_BOWL:
 						return "Pecera";
-					case 251:
+					case EntityID.ItemID.ARCHAEOLOGISTS_HAT:
 						return "Sombrero de arqueólogo";
-					case 252:
+					case EntityID.ItemID.ARCHAEOLOGISTS_JACKET:
 						return "Chaqueta de arqueólogo";
-					case 253:
+					case EntityID.ItemID.ARCHAEOLOGISTS_PANTS:
 						return "Pantalones de arqueólogo";
 #if VERSION_INITIAL
-				case 254:
-					return "Tinte negro";
-				case 255:
-					return "Tinte violeta";
+					case EntityID.ItemID.BLACK_THREAD:
+						return "Tinte negro";
+					case EntityID.ItemID.PURPLE_THREAD:
+						return "Tinte violeta";
 #else
-					case 254:
+					case EntityID.ItemID.BLACK_THREAD:
 						return "Hilo negro";
-					case 255:
+					case EntityID.ItemID.PURPLE_THREAD:
 						return "Hilo morado";
 #endif
-					case 256:
+					case EntityID.ItemID.NINJA_HOOD:
 						return "Gorro de ninja";
-					case 257:
+					case EntityID.ItemID.NINJA_SHIRT:
 						return "Camisa de ninja";
-					case 258:
+					case EntityID.ItemID.NINJA_PANTS:
 						return "Pantalones de ninja";
-					case 259:
+					case EntityID.ItemID.LEATHER:
 						return "Cuero";
-					case 260:
+					case EntityID.ItemID.RED_HAT:
 						return "Sombrero rojo";
-					case 261:
+					case EntityID.ItemID.GOLDFISH:
 						return "Pececillo";
-					case 262:
+					case EntityID.ItemID.ROBE:
 						return "Vestido";
-					case 263:
+					case EntityID.ItemID.ROBOT_HAT:
 						return "Sombrero de robot";
-					case 264:
+					case EntityID.ItemID.GOLD_CROWN:
 						return "Corona de oro";
-					case 265:
+					case EntityID.ItemID.HELLFIRE_ARROW:
 						return "Flecha de fuego infernal";
-					case 266:
+					case EntityID.ItemID.SANDGUN:
 						return "Pistola de arena";
-					case 267:
+					case EntityID.ItemID.GUIDE_VOODOO_DOLL:
 						return "Muñeco vudú del guía";
-					case 268:
+					case EntityID.ItemID.DIVING_HELMET:
 						return "Casco de buceo";
-					case 269:
+					case EntityID.ItemID.FAMILIAR_SHIRT:
 						return "Camisa informal";
-					case 270:
+					case EntityID.ItemID.FAMILIAR_PANTS:
 						return "Pantalones informales";
-					case 271:
+					case EntityID.ItemID.FAMILIAR_WIG:
 						return "Peluca informal";
-					case 272:
+					case EntityID.ItemID.DEMON_SCYTHE:
 						return "Guadaña demoníaca";
-					case 273:
+					case EntityID.ItemID.NIGHTS_EDGE:
 						return "Espada de la noche";
-					case 274:
+					case EntityID.ItemID.DARK_LANCE:
 						return "Lanza de la oscuridad";
-					case 275:
+					case EntityID.ItemID.CORAL:
 						return "Coral";
-					case 276:
+					case EntityID.ItemID.CACTUS:
 						return "Cactus";
-					case 277:
+					case EntityID.ItemID.TRIDENT:
 						return "Tridente";
-					case 278:
+					case EntityID.ItemID.SILVER_BULLET:
 						return "Bala de plata";
-					case 279:
+					case EntityID.ItemID.THROWING_KNIFE:
 						return "Cuchillo arrojadizo";
-					case 280:
+					case EntityID.ItemID.SPEAR:
 						return "Lanza";
-					case 281:
+					case EntityID.ItemID.BLOWPIPE:
 						return "Cerbatana";
-					case 282:
+					case EntityID.ItemID.GLOWSTICK:
 						return "Varita luminosa";
-					case 283:
+					case EntityID.ItemID.SEED:
 						return "Semilla";
-					case 284:
+					case EntityID.ItemID.WOODEN_BOOMERANG:
 						return "Bumerán de madera";
-					case 285:
+					case EntityID.ItemID.AGLET:
 						return "Herrete";
-					case 286:
+					case EntityID.ItemID.STICKY_GLOWSTICK:
 						return "Varita luminosa adhesiva";
-					case 287:
+					case EntityID.ItemID.POISONED_KNIFE:
 						return "Cuchillo envenenado";
-					case 288:
+					case EntityID.ItemID.OBSIDIAN_SKIN_POTION:
 						return "Poción de piel obsidiana";
-					case 289:
+					case EntityID.ItemID.REGENERATION_POTION:
 						return "Poción de regeneración";
-					case 290:
+					case EntityID.ItemID.SWIFTNESS_POTION:
 						return "Poción de rapidez";
-					case 291:
+					case EntityID.ItemID.GILLS_POTION:
 						return "Poción de agallas";
-					case 292:
+					case EntityID.ItemID.IRONSKIN_POTION:
 						return "Poción de piel de hierro";
-					case 293:
+					case EntityID.ItemID.MANA_REGENERATION_POTION:
 						return "Poción de regeneración de maná";
-					case 294:
+					case EntityID.ItemID.MAGIC_POWER_POTION:
 						return "Poción de poder mágico";
-					case 295:
+					case EntityID.ItemID.FEATHERFALL_POTION:
 						return "Poción de caída de pluma";
-					case 296:
+					case EntityID.ItemID.SPELUNKER_POTION:
 						return "Poción de espeleólogo";
-					case 297:
+					case EntityID.ItemID.INVISIBILITY_POTION:
 						return "Poción de invisibilidad";
-					case 298:
+					case EntityID.ItemID.SHINE_POTION:
 						return "Poción de brillo";
-					case 299:
+					case EntityID.ItemID.NIGHT_OWL_POTION:
 						return "Poción de noctámbulo";
-					case 300:
+					case EntityID.ItemID.BATTLE_POTION:
 						return "Poción de batalla";
-					case 301:
+					case EntityID.ItemID.THORNS_POTION:
 						return "Poción de espinas";
-					case 302:
+					case EntityID.ItemID.WATER_WALKING_POTION:
 						return "Poción de flotación";
-					case 303:
+					case EntityID.ItemID.ARCHERY_POTION:
 						return "Poción de tiro con arco";
-					case 304:
+					case EntityID.ItemID.HUNTER_POTION:
 						return "Poción de cazador";
-					case 305:
+					case EntityID.ItemID.GRAVITATION_POTION:
 						return "Poción de gravedad";
-					case 306:
+					case EntityID.ItemID.GOLD_CHEST:
 						return "Cofre de oro";
-					case 307:
+					case EntityID.ItemID.DAYBLOOM_SEEDS:
 						return "Semillas de resplandor diurno";
-					case 308:
+					case EntityID.ItemID.MOONGLOW_SEEDS:
 						return "Semillas de luz de luna";
-					case 309:
+					case EntityID.ItemID.BLINKROOT_SEEDS:
 						return "Semillas de raíz intermitente";
-					case 310:
+					case EntityID.ItemID.DEATHWEED_SEEDS:
 						return "Semillas de malahierba";
-					case 311:
+					case EntityID.ItemID.WATERLEAF_SEEDS:
 						return "Semillas de hoja de agua";
-					case 312:
+					case EntityID.ItemID.FIREBLOSSOM_SEEDS:
 						return "Semillas de resplandor de fuego";
-					case 313:
+					case EntityID.ItemID.DAYBLOOM:
 						return "Resplandor diurno";
-					case 314:
+					case EntityID.ItemID.MOONGLOW:
 						return "Luz de luna";
-					case 315:
+					case EntityID.ItemID.BLINKROOT:
 						return "Raíz intermitente";
-					case 316:
+					case EntityID.ItemID.DEATHWEED:
 						return "Malahierba";
-					case 317:
+					case EntityID.ItemID.WATERLEAF:
 						return "Hoja de agua";
-					case 318:
+					case EntityID.ItemID.FIREBLOSSOM:
 						return "Resplandor de fuego";
-					case 319:
+					case EntityID.ItemID.SHARK_FIN:
 						return "Aleta de tiburón";
-					case 320:
+					case EntityID.ItemID.FEATHER:
 						return "Pluma";
-					case 321:
+					case EntityID.ItemID.TOMBSTONE:
 						return "Lápida";
-					case 322:
+					case EntityID.ItemID.MIME_MASK:
 						return "Máscara de mimo";
-					case 323:
+					case EntityID.ItemID.ANTLION_MANDIBLE:
 						return "Mandíbula de hormiga león";
-					case 324:
+					case EntityID.ItemID.ILLEGAL_GUN_PARTS:
 						return "Piezas de arma ilegales";
-					case 325:
+					case EntityID.ItemID.THE_DOCTORS_SHIRT:
 						return "Camisa del doctor";
-					case 326:
+					case EntityID.ItemID.THE_DOCTORS_PANTS:
 						return "Pantalones del doctor";
-					case 327:
+					case EntityID.ItemID.GOLDEN_KEY:
 						return "Llave dorada";
-					case 328:
+					case EntityID.ItemID.SHADOW_CHEST:
 						return "Cofre de las sombras";
-					case 329:
+					case EntityID.ItemID.SHADOW_KEY:
 						return "Llave de las sombras";
-					case 330:
+					case EntityID.ItemID.OBSIDIAN_BRICK_WALL:
 						return "Pared de ladrillo de obsidiana";
-					case 331:
+					case EntityID.ItemID.JUNGLE_SPORES:
 						return "Esporas de la selva";
-					case 332:
+					case EntityID.ItemID.LOOM:
 						return "Telar";
-					case 333:
+					case EntityID.ItemID.PIANO:
 						return "Piano";
-					case 334:
+					case EntityID.ItemID.DRESSER:
 						return "Aparador";
-					case 335:
+					case EntityID.ItemID.BENCH:
 						return "Banco";
-					case 336:
+					case EntityID.ItemID.BATHTUB:
 						return "Bañera";
-					case 337:
+					case EntityID.ItemID.RED_BANNER:
 						return "Estandarte rojo";
-					case 338:
+					case EntityID.ItemID.GREEN_BANNER:
 						return "Estandarte verde";
-					case 339:
+					case EntityID.ItemID.BLUE_BANNER:
 						return "Estandarte azul";
-					case 340:
+					case EntityID.ItemID.YELLOW_BANNER:
 						return "Estandarte amarillo";
-					case 341:
+					case EntityID.ItemID.LAMP_POST:
 						return "Farola";
-					case 342:
+					case EntityID.ItemID.TIKI_TORCH:
 						return "Antorcha tiki";
-					case 343:
+					case EntityID.ItemID.BARREL:
 						return "Barril";
-					case 344:
+					case EntityID.ItemID.CHINESE_LANTERN:
 						return "Farolillo de papel";
-					case 345:
+					case EntityID.ItemID.COOKING_POT:
 						return "Perol";
-					case 346:
+					case EntityID.ItemID.SAFE:
 						return "Caja fuerte";
-					case 347:
+					case EntityID.ItemID.SKULL_LANTERN:
 						return "Cráneo con vela";
-					case 348:
+					case EntityID.ItemID.TRASH_CAN:
 						return "Cubo de basura";
-					case 349:
+					case EntityID.ItemID.CANDELABRA:
 						return "Candelabro";
-					case 350:
+					case EntityID.ItemID.PINK_VASE:
 						return "Recipiente rosa";
-					case 351:
+					case EntityID.ItemID.MUG:
 						return "Taza";
-					case 352:
+					case EntityID.ItemID.KEG:
 						return "Barrica";
-					case 353:
+					case EntityID.ItemID.ALE:
 						return "Cerveza";
-					case 354:
+					case EntityID.ItemID.BOOKCASE:
 						return "Librería";
-					case 355:
+					case EntityID.ItemID.THRONE:
 						return "Trono";
-					case 356:
+					case EntityID.ItemID.BOWL:
 						return "Cuenco";
-					case 357:
+					case EntityID.ItemID.BOWL_OF_SOUP:
 						return "Cuenco de sopa";
-					case 358:
+					case EntityID.ItemID.TOILET:
 						return "Retrete";
-					case 359:
+					case EntityID.ItemID.GRANDFATHER_CLOCK:
 						return "Reloj de pie";
-					case 360:
+					case EntityID.ItemID.STATUE:
 						return "Estatua de armadura";
-					case 361:
+					case EntityID.ItemID.GOBLIN_BATTLE_STANDARD:
 						return "Estandarte de batalla duende";
-					case 362:
+					case EntityID.ItemID.TATTERED_CLOTH:
 						return "Harapos";
-					case 363:
+					case EntityID.ItemID.SAWMILL:
 						return "Serrería";
-					case 364:
+					case EntityID.ItemID.COBALT_ORE:
 						return "Mineral de cobalto";
-					case 365:
+					case EntityID.ItemID.MYTHRIL_ORE:
 						return "Mineral de mithril";
-					case 366:
+					case EntityID.ItemID.ADAMANTITE_ORE:
 						return "Mineral de adamantita";
-					case 367:
+					case EntityID.ItemID.PWNHAMMER:
 						return "Gran martillo";
-					case 368:
+					case EntityID.ItemID.EXCALIBUR:
 						return "Excalibur";
-					case 369:
+					case EntityID.ItemID.HALLOWED_SEEDS:
 						return "Semillas sagradas";
-					case 370:
+					case EntityID.ItemID.EBONSAND_BLOCK:
 						return "Bloque de arena de ébano";
-					case 371:
+					case EntityID.ItemID.COBALT_HAT:
 						return "Gorro de cobalto";
-					case 372:
+					case EntityID.ItemID.COBALT_HELMET:
 						return "Casco de cobalto";
-					case 373:
+					case EntityID.ItemID.COBALT_MASK:
 						return "Máscara de cobalto";
-					case 374:
+					case EntityID.ItemID.COBALT_BREASTPLATE:
 						return "Peto de cobalto";
-					case 375:
+					case EntityID.ItemID.COBALT_LEGGINGS:
 						return "Perneras de cobalto";
-					case 376:
+					case EntityID.ItemID.MYTHRIL_HOOD:
 						return "Caperuza de mithril";
-					case 377:
+					case EntityID.ItemID.MYTHRIL_HELMET:
 						return "Casco de mithril";
-					case 378:
+					case EntityID.ItemID.MYTHRIL_HAT:
 						return "Gorro de mithril";
-					case 379:
+					case EntityID.ItemID.MYTHRIL_CHAINMAIL:
 						return "Cota de malla de mithril";
-					case 380:
+					case EntityID.ItemID.MYTHRIL_GREAVES:
 						return "Grebas de mithril";
-					case 381:
+					case EntityID.ItemID.COBALT_BAR:
 						return "Lingote de cobalto";
-					case 382:
+					case EntityID.ItemID.MYTHRIL_BAR:
 						return "Lingote de mithril";
-					case 383:
+					case EntityID.ItemID.COBALT_CHAINSAW:
 						return "Motosierra de cobalto";
-					case 384:
+					case EntityID.ItemID.MYTHRIL_CHAINSAW:
 						return "Motosierra de mithril";
-					case 385:
+					case EntityID.ItemID.COBALT_DRILL:
 						return "Taladro de cobalto";
-					case 386:
+					case EntityID.ItemID.MYTHRIL_DRILL:
 						return "Taladro de mithril";
-					case 387:
+					case EntityID.ItemID.ADAMANTITE_CHAINSAW:
 						return "Motosierra de adamantita";
-					case 388:
+					case EntityID.ItemID.ADAMANTITE_DRILL:
 						return "Taladro de adamantita";
-					case 389:
+					case EntityID.ItemID.DAO_OF_POW:
 						return "Flagelo Taoísta";
-					case 390:
+					case EntityID.ItemID.MYTHRIL_HALBERD:
 						return "Alabarda de mithril";
-					case 391:
+					case EntityID.ItemID.ADAMANTITE_BAR:
 						return "Lingote de adamantita";
-					case 392:
+					case EntityID.ItemID.GLASS_WALL:
 						return "Pared de cristal";
-					case 393:
+					case EntityID.ItemID.COMPASS:
 						return "Brújula";
-					case 394:
+					case EntityID.ItemID.DIVING_GEAR:
 						return "Equipo de buceo";
-					case 395:
+					case EntityID.ItemID.GPS:
 						return "GPS";
-					case 396:
+					case EntityID.ItemID.OBSIDIAN_HORSESHOE:
 						return "Herradura de obsidiana";
-					case 397:
+					case EntityID.ItemID.OBSIDIAN_SHIELD:
 						return "Escudo de obsidiana";
-					case 398:
+					case EntityID.ItemID.TINKERERS_WORKSHOP:
 						return "Taller de chapuzas";
-					case 399:
+					case EntityID.ItemID.CLOUD_IN_A_BALLOON:
 						return "Nube en globo";
-					case 400:
+					case EntityID.ItemID.ADAMANTITE_HEADGEAR:
 						return "Tocado de adamantita";
-					case 401:
+					case EntityID.ItemID.ADAMANTITE_HELMET:
 						return "Casco de adamantita";
-					case 402:
+					case EntityID.ItemID.ADAMANTITE_MASK:
 						return "Máscara de adamantita";
-					case 403:
+					case EntityID.ItemID.ADAMANTITE_BREASTPLATE:
 						return "Peto de adamantita";
-					case 404:
+					case EntityID.ItemID.ADAMANTITE_LEGGINGS:
 						return "Polainas de adamantita";
-					case 405:
+					case EntityID.ItemID.SPECTRE_BOOTS:
 						return "Botas de espectro";
-					case 406:
+					case EntityID.ItemID.ADAMANTITE_GLAIVE:
 						return "Guja de adamantita";
-					case 407:
+					case EntityID.ItemID.TOOLBELT:
 						return "Cinturón de herramientas";
-					case 408:
+					case EntityID.ItemID.PEARLSAND_BLOCK:
 						return "Bloque de arena perlada";
-					case 409:
+					case EntityID.ItemID.PEARLSTONE_BLOCK:
 						return "Bloque de piedra perlada";
-					case 410:
+					case EntityID.ItemID.MINING_SHIRT:
 						return "Camisa de minero";
-					case 411:
+					case EntityID.ItemID.MINING_PANTS:
 						return "Pantalones de minero";
-					case 412:
+					case EntityID.ItemID.PEARLSTONE_BRICK:
 						return "Ladrillo de piedra perlada";
-					case 413:
+					case EntityID.ItemID.IRIDESCENT_BRICK:
 						return "Ladrillo tornasol";
-					case 414:
+					case EntityID.ItemID.MUDSTONE_BRICK:
 						return "Ladrillo de lutita";
-					case 415:
+					case EntityID.ItemID.COBALT_BRICK:
 						return "Ladrillo de cobalto";
-					case 416:
+					case EntityID.ItemID.MYTHRIL_BRICK:
 						return "Ladrillo de mithril";
-					case 417:
+					case EntityID.ItemID.PEARLSTONE_BRICK_WALL:
 						return "Pared de ladrillo de piedra perlada";
-					case 418:
+					case EntityID.ItemID.IRIDESCENT_BRICK_WALL:
 						return "Pared de ladrillo tornasol";
-					case 419:
+					case EntityID.ItemID.MUDSTONE_BRICK_WALL:
 						return "Pared de ladrillo de lutita";
-					case 420:
+					case EntityID.ItemID.COBALT_BRICK_WALL:
 						return "Pared de ladrillo de cobalto";
-					case 421:
+					case EntityID.ItemID.MYTHRIL_BRICK_WALL:
 						return "Pared de ladrillo de mithril";
-					case 422:
+					case EntityID.ItemID.HOLY_WATER:
 						return "Agua sagrada";
-					case 423:
+					case EntityID.ItemID.UNHOLY_WATER:
 						return "Agua impura";
-					case 424:
+					case EntityID.ItemID.SILT_BLOCK:
 						return "Bloque de limo";
-					case 425:
+					case EntityID.ItemID.FAIRY_BELL:
 						return "Campana de hada";
-					case 426:
+					case EntityID.ItemID.BREAKER_BLADE:
 						return "Espada despedazadora";
-					case 427:
+					case EntityID.ItemID.BLUE_TORCH:
 						return "Antorcha azul";
-					case 428:
+					case EntityID.ItemID.RED_TORCH:
 						return "Antorcha roja";
-					case 429:
+					case EntityID.ItemID.GREEN_TORCH:
 						return "Antorcha verde";
-					case 430:
+					case EntityID.ItemID.PURPLE_TORCH:
 						return "Antorcha morada";
-					case 431:
+					case EntityID.ItemID.WHITE_TORCH:
 						return "Antorcha blanca";
-					case 432:
+					case EntityID.ItemID.YELLOW_TORCH:
 						return "Antorcha amarilla";
-					case 433:
+					case EntityID.ItemID.DEMON_TORCH:
 						return "Antorcha demoníaca";
-					case 434:
+					case EntityID.ItemID.CLOCKWORK_ASSAULT_RIFLE:
 						return "Fusil de asalto de precisión";
-					case 435:
+					case EntityID.ItemID.COBALT_REPEATER:
 						return "Repetidor de cobalto";
-					case 436:
+					case EntityID.ItemID.MYTHRIL_REPEATER:
 						return "Repetidor de mithril";
-					case 437:
+					case EntityID.ItemID.DUAL_HOOK:
 						return "Gancho doble";
-					case 438:
+					case EntityID.ItemID.STAR_STATUE:
 						return "Estatua de estrella";
-					case 439:
+					case EntityID.ItemID.SWORD_STATUE:
 						return "Estatua de espada";
-					case 440:
+					case EntityID.ItemID.SLIME_STATUE:
 						return "Estatua de slime";
-					case 441:
+					case EntityID.ItemID.GOBLIN_STATUE:
 						return "Estatua de duende";
-					case 442:
+					case EntityID.ItemID.SHIELD_STATUE:
 						return "Estatua de escudo";
-					case 443:
+					case EntityID.ItemID.BAT_STATUE:
 						return "Estatua de murciélago";
-					case 444:
+					case EntityID.ItemID.FISH_STATUE:
 						return "Estatua de pez";
-					case 445:
+					case EntityID.ItemID.BUNNY_STATUE:
 						return "Estatua de conejito";
-					case 446:
+					case EntityID.ItemID.SKELETON_STATUE:
 						return "Estatua de esqueleto";
-					case 447:
+					case EntityID.ItemID.REAPER_STATUE:
 						return "Estatua de la Muerte";
-					case 448:
+					case EntityID.ItemID.WOMAN_STATUE:
 						return "Estatua de mujer";
-					case 449:
+					case EntityID.ItemID.IMP_STATUE:
 						return "Estatua de diablillo";
-					case 450:
+					case EntityID.ItemID.GARGOYLE_STATUE:
 						return "Estatua de gárgola";
-					case 451:
+					case EntityID.ItemID.GLOOM_STATUE:
 						return "Estatua melancólica";
-					case 452:
+					case EntityID.ItemID.HORNET_STATUE:
 						return "Estatua de avispón";
-					case 453:
+					case EntityID.ItemID.BOMB_STATUE:
 						return "Estatua de bomba";
-					case 454:
+					case EntityID.ItemID.CRAB_STATUE:
 						return "Estatua de cangrejo";
-					case 455:
+					case EntityID.ItemID.HAMMER_STATUE:
 						return "Estatua de martilla";
-					case 456:
+					case EntityID.ItemID.POTION_STATUE:
 						return "Estatua de poción";
-					case 457:
+					case EntityID.ItemID.SPEAR_STATUE:
 						return "Estatua de lanza";
-					case 458:
+					case EntityID.ItemID.CROSS_STATUE:
 						return "Estatua de cruz";
-					case 459:
+					case EntityID.ItemID.JELLYFISH_STATUE:
 						return "Estatua de medusa";
-					case 460:
+					case EntityID.ItemID.BOW_STATUE:
 						return "Estatua de arco";
-					case 461:
+					case EntityID.ItemID.BOOMERANG_STATUE:
 						return "Estatua de bumerán";
-					case 462:
+					case EntityID.ItemID.BOOT_STATUE:
 						return "Estatua de bota";
-					case 463:
+					case EntityID.ItemID.CHEST_STATUE:
 						return "Estatua de cofre";
-					case 464:
+					case EntityID.ItemID.BIRD_STATUE:
 						return "Estatua de pájaro";
-					case 465:
+					case EntityID.ItemID.AXE_STATUE:
 						return "Estatua de hacha";
-					case 466:
+					case EntityID.ItemID.CORRUPT_STATUE:
 						return "Estatua de corrupción";
-					case 467:
+					case EntityID.ItemID.TREE_STATUE:
 						return "Estatua de árbol";
-					case 468:
+					case EntityID.ItemID.ANVIL_STATUE:
 						return "Estatua de yunque";
-					case 469:
+					case EntityID.ItemID.PICKAXE_STATUE:
 						return "Estatua de pico";
-					case 470:
+					case EntityID.ItemID.MUSHROOM_STATUE:
 						return "Estatua de champiñón";
-					case 471:
+					case EntityID.ItemID.EYEBALL_STATUE:
 						return "Estatua de ojo";
-					case 472:
+					case EntityID.ItemID.PILLAR_STATUE:
 						return "Estatua de columna";
-					case 473:
+					case EntityID.ItemID.HEART_STATUE:
 						return "Estatua de corazón";
-					case 474:
+					case EntityID.ItemID.POT_STATUE:
 						return "Estatua de marmita";
-					case 475:
+					case EntityID.ItemID.SUNFLOWER_STATUE:
 						return "Estatua de girasol";
-					case 476:
+					case EntityID.ItemID.KING_STATUE:
 						return "Estatua de rey";
-					case 477:
+					case EntityID.ItemID.QUEEN_STATUE:
 						return "Estatua de reina";
-					case 478:
+					case EntityID.ItemID.PIRANHA_STATUE:
 						return "Estatua de piraña";
-					case 479:
+					case EntityID.ItemID.PLANKED_WALL:
 						return "Pared de tablones";
-					case 480:
+					case EntityID.ItemID.WOODEN_BEAM:
 						return "Viga de madera";
-					case 481:
+					case EntityID.ItemID.ADAMANTITE_REPEATER:
 						return "Repetidor de adamantita";
-					case 482:
+					case EntityID.ItemID.ADAMANTITE_SWORD:
 						return "Espada de adamantita";
-					case 483:
+					case EntityID.ItemID.COBALT_SWORD:
 						return "Espada de cobalto";
-					case 484:
+					case EntityID.ItemID.MYTHRIL_SWORD:
 						return "Espada de mithril";
-					case 485:
+					case EntityID.ItemID.MOON_CHARM:
 						return "Hechizo de luna";
-					case 486:
+					case EntityID.ItemID.RULER:
 						return "Regla";
-					case 487:
+					case EntityID.ItemID.CRYSTAL_BALL:
 						return "Bola de cristal";
-					case 488:
+					case EntityID.ItemID.DISCO_BALL:
 						return "Bola de discoteca";
-					case 489:
+					case EntityID.ItemID.SORCERER_EMBLEM:
 						return "Emblema de hechicero";
-					case 490:
+					case EntityID.ItemID.WARRIOR_EMBLEM:
 						return "Emblema de guerrero";
-					case 491:
+					case EntityID.ItemID.RANGER_EMBLEM:
 						return "Emblema de guardián";
-					case 492:
+					case EntityID.ItemID.DEMON_WINGS:
 						return "Alas demoníacas";
-					case 493:
+					case EntityID.ItemID.ANGEL_WINGS:
 						return "Alas de ángel";
-					case 494:
+					case EntityID.ItemID.MAGICAL_HARP:
 						return "Arpa mágica";
-					case 495:
+					case EntityID.ItemID.RAINBOW_ROD:
 						return "Varita multicolor";
-					case 496:
+					case EntityID.ItemID.ICE_ROD:
 						return "Varita helada";
-					case 497:
+					case EntityID.ItemID.NEPTUNES_SHELL:
 						return "Concha de Neptuno";
-					case 498:
+					case EntityID.ItemID.MANNEQUIN:
 						return "Maniquí";
-					case 499:
+					case EntityID.ItemID.GREATER_HEALING_POTION:
 						return "Poción curativa mayor";
-					case 500:
+					case EntityID.ItemID.GREATER_MANA_POTION:
 						return "Poción de maná mayor";
-					case 501:
+					case EntityID.ItemID.PIXIE_DUST:
 						return "Polvo de hada";
-					case 502:
+					case EntityID.ItemID.CRYSTAL_SHARD:
 						return "Fragmento de cristal";
-					case 503:
+					case EntityID.ItemID.CLOWN_HAT:
 						return "Sombrero de payaso";
-					case 504:
+					case EntityID.ItemID.CLOWN_SHIRT:
 						return "Camisa de payaso";
-					case 505:
+					case EntityID.ItemID.CLOWN_PANTS:
 						return "Pantalones de payaso";
-					case 506:
+					case EntityID.ItemID.FLAMETHROWER:
 						return "Lanzallamas";
-					case 507:
+					case EntityID.ItemID.BELL:
 						return "Campana";
-					case 508:
+					case EntityID.ItemID.HARP:
 						return "Arpa";
-					case 509:
+					case EntityID.ItemID.WRENCH:
 						return "Llave inglesa";
-					case 510:
+					case EntityID.ItemID.WIRE_CUTTER:
 						return "Alicates";
-					case 511:
+					case EntityID.ItemID.ACTIVE_STONE_BLOCK:
 						return "Bloque de piedra activo";
-					case 512:
+					case EntityID.ItemID.INACTIVE_STONE_BLOCK:
 						return "Bloque de piedra inactivo";
-					case 513:
+					case EntityID.ItemID.LEVER:
 						return "Palanca";
-					case 514:
+					case EntityID.ItemID.LASER_RIFLE:
 						return "Fusil láser";
-					case 515:
+					case EntityID.ItemID.CRYSTAL_BULLET:
 						return "Bala de cristal";
-					case 516:
+					case EntityID.ItemID.HOLY_ARROW:
 						return "Flecha sagrada";
-					case 517:
+					case EntityID.ItemID.MAGIC_DAGGER:
 						return "Daga mágica";
-					case 518:
+					case EntityID.ItemID.CRYSTAL_STORM:
 						return "Tormenta de cristal";
-					case 519:
+					case EntityID.ItemID.CURSED_FLAMES:
 						return "Llamas malditas";
-					case 520:
+					case EntityID.ItemID.SOUL_OF_LIGHT:
 						return "Alma de luz";
-					case 521:
+					case EntityID.ItemID.SOUL_OF_NIGHT:
 						return "Alma de noche";
-					case 522:
+					case EntityID.ItemID.CURSED_FLAME:
 						return "Llama maldita";
-					case 523:
+					case EntityID.ItemID.CURSED_TORCH:
 						return "Antorcha maldita";
-					case 524:
+					case EntityID.ItemID.ADAMANTITE_FORGE:
 						return "Forja de adamantita";
-					case 525:
+					case EntityID.ItemID.MYTHRIL_ANVIL:
 						return "Yunque de mithril";
-					case 526:
+					case EntityID.ItemID.UNICORN_HORN:
 						return "Cuerno de unicornio";
-					case 527:
+					case EntityID.ItemID.DARK_SHARD:
 						return "Fragmento de oscuridad";
-					case 528:
+					case EntityID.ItemID.LIGHT_SHARD:
 						return "Fragmento de luz";
-					case 529:
+					case EntityID.ItemID.RED_PRESSURE_PLATE:
 						return "Placa de presión roja";
-					case 530:
+					case EntityID.ItemID.WIRE:
 						return "Alambre";
-					case 531:
+					case EntityID.ItemID.SPELL_TOME:
 						return "Tomo encantado";
-					case 532:
+					case EntityID.ItemID.STAR_CLOAK:
 						return "Manto de estrellas";
-					case 533:
+					case EntityID.ItemID.MEGASHARK:
 						return "Megatiburón";
-					case 534:
+					case EntityID.ItemID.SHOTGUN:
 						return "Escopeta";
-					case 535:
+					case EntityID.ItemID.PHILOSOPHERS_STONE:
 						return "Piedra filosofal";
-					case 536:
+					case EntityID.ItemID.TITAN_GLOVE:
 						return "Guante de titán";
-					case 537:
+					case EntityID.ItemID.COBALT_NAGINATA:
 						return "Naginata de cobalto";
-					case 538:
+					case EntityID.ItemID.SWITCH:
 						return "Interruptor";
-					case 539:
+					case EntityID.ItemID.DART_TRAP:
 						return "Trampa de dardos";
-					case 540:
+					case EntityID.ItemID.BOULDER:
 						return "Roca";
-					case 541:
+					case EntityID.ItemID.GREEN_PRESSURE_PLATE:
 						return "Placa de presión verde";
-					case 542:
+					case EntityID.ItemID.GRAY_PRESSURE_PLATE:
 						return "Placa de presión gris";
-					case 543:
+					case EntityID.ItemID.BROWN_PRESSURE_PLATE:
 						return "Placa de presión marrón";
-					case 544:
+					case EntityID.ItemID.MECHANICAL_EYE:
 						return "Ojo mecánico";
-					case 545:
+					case EntityID.ItemID.CURSED_ARROW:
 						return "Flecha maldita";
-					case 546:
+					case EntityID.ItemID.CURSED_BULLET:
 						return "Bala maldita";
-					case 547:
+					case EntityID.ItemID.SOUL_OF_FRIGHT:
 						return "Alma de terror";
-					case 548:
+					case EntityID.ItemID.SOUL_OF_MIGHT:
 						return "Alma de poder";
-					case 549:
+					case EntityID.ItemID.SOUL_OF_SIGHT:
 						return "Alma de visión";
-					case 550:
+					case EntityID.ItemID.GUNGNIR:
 						return "Gungnir";
-					case 551:
+					case EntityID.ItemID.HALLOWED_PLATE_MAIL:
 						return "Cota de placas sagrada";
-					case 552:
+					case EntityID.ItemID.HALLOWED_GREAVES:
 						return "Grebas sagradas";
-					case 553:
+					case EntityID.ItemID.HALLOWED_HELMET:
 						return "Casco sagrado";
-					case 554:
+					case EntityID.ItemID.CROSS_NECKLACE:
 						return "Collar con cruz";
-					case 555:
+					case EntityID.ItemID.MANA_FLOWER:
 						return "Flor de maná";
-					case 556:
+					case EntityID.ItemID.MECHANICAL_WORM:
 						return "Gusano mecánico";
-					case 557:
+					case EntityID.ItemID.MECHANICAL_SKULL:
 						return "Cráneo mecánico";
-					case 558:
+					case EntityID.ItemID.HALLOWED_HEADGEAR:
 						return "Tocado sagrado";
-					case 559:
+					case EntityID.ItemID.HALLOWED_MASK:
 						return "Máscara sagrada";
-					case 560:
+					case EntityID.ItemID.SLIME_CROWN:
 						return "Corona de slime";
-					case 561:
+					case EntityID.ItemID.LIGHT_DISC:
 						return "Disco de luz";
-					case 562:
+					case EntityID.ItemID.MUSIC_BOX_OVERWORLD_DAY:
 						return "Caja de música (Superficie de día)";
-					case 563:
+					case EntityID.ItemID.MUSIC_BOX_EERIE:
 						return "Caja de música (Sobrecogedor)";
-					case 564:
+					case EntityID.ItemID.MUSIC_BOX_NIGHT:
 						return "Caja de música (Noche)";
-					case 565:
+					case EntityID.ItemID.MUSIC_BOX_TITLE:
 						return "Caja de música (Título)";
-					case 566:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND:
 						return "Caja de música (Subsuelo)";
-					case 567:
+					case EntityID.ItemID.MUSIC_BOX_BOSS1:
 						return "Caja de música (Jefe 1)";
-					case 568:
+					case EntityID.ItemID.MUSIC_BOX_JUNGLE:
 						return "Caja de música (Selva)";
-					case 569:
+					case EntityID.ItemID.MUSIC_BOX_CORRUPTION:
 						return "Caja de música (Corrupción)";
-					case 570:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_CORRUPTION:
 						return "Caja de música (Corrupción en el subsuelo)";
-					case 571:
+					case EntityID.ItemID.MUSIC_BOX_THE_HALLOW:
 						return "Caja de música (Terreno sagrado)";
-					case 572:
+					case EntityID.ItemID.MUSIC_BOX_BOSS2:
 						return "Caja de música (Jefe 2)";
-					case 573:
+					case EntityID.ItemID.MUSIC_BOX_UNDERGROUND_HALLOW:
 						return "Caja de música (Subsuelo sagrado)";
-					case 574:
+					case EntityID.ItemID.MUSIC_BOX_BOSS3:
 						return "Caja de música (Jefe 3)";
-					case 575:
+					case EntityID.ItemID.SOUL_OF_FLIGHT:
 						return "Alma de vuelo";
-					case 576:
+					case EntityID.ItemID.MUSIC_BOX:
 						return "Caja de música";
-					case 577:
+					case EntityID.ItemID.DEMONITE_BRICK:
 						return "Ladrillo endemoniado";
-					case 578:
+					case EntityID.ItemID.HALLOWED_REPEATER:
 						return "Repetidor sagrado";
-					case 579:
+					case EntityID.ItemID.HAMDRAX:
 						return "Martitaladrahacha";
-					case 580:
+					case EntityID.ItemID.EXPLOSIVES:
 						return "Explosivos";
-					case 581:
+					case EntityID.ItemID.INLET_PUMP:
 						return "Colector de entrada";
-					case 582:
+					case EntityID.ItemID.OUTLET_PUMP:
 						return "Colector de salida";
-					case 583:
+					case EntityID.ItemID.ONE_SECOND_TIMER:
 						return "Temporizador de 1 segundo";
-					case 584:
+					case EntityID.ItemID.THREE_SECOND_TIMER:
 						return "Temporizador de 3 segundos";
-					case 585:
+					case EntityID.ItemID.FIVE_SECOND_TIMER:
 						return "Temporizador de 5 segundos";
-					case 586:
+					case EntityID.ItemID.CANDY_CANE_BLOCK:
 						return "Bloque de caramelo";
-					case 587:
+					case EntityID.ItemID.CANDY_CANE_WALL:
 						return "Pared de caramelo";
-					case 588:
+					case EntityID.ItemID.SANTA_HAT:
 						return "Gorro de Papá Noel";
-					case 589:
+					case EntityID.ItemID.SANTA_SHIRT:
 						return "Camisa de Papá Noel";
-					case 590:
+					case EntityID.ItemID.SANTA_PANTS:
 						return "Pantalones Papá Noel";
-					case 591:
+					case EntityID.ItemID.GREEN_CANDY_CANE_BLOCK:
 						return "Bloque de caramelo verde";
-					case 592:
+					case EntityID.ItemID.GREEN_CANDY_CANE_WALL:
 						return "Pared de caramelo verde";
-					case 593:
+					case EntityID.ItemID.SNOW_BLOCK:
 						return "Bloque de nieve";
-					case 594:
+					case EntityID.ItemID.SNOW_BRICK:
 						return "Ladrillo de nieve";
-					case 595:
+					case EntityID.ItemID.SNOW_BRICK_WALL:
 						return "Pared de ladrillos de nieve";
-					case 596:
+					case EntityID.ItemID.BLUE_LIGHT:
 						return "Luz azul";
-					case 597:
+					case EntityID.ItemID.RED_LIGHT:
 						return "Luz roja";
-					case 598:
+					case EntityID.ItemID.GREEN_LIGHT:
 						return "Luz verde";
-					case 599:
+					case EntityID.ItemID.BLUE_PRESENT:
 						return "Regalo azul";
-					case 600:
+					case EntityID.ItemID.GREEN_PRESENT:
 						return "Regalo verde";
-					case 601:
+					case EntityID.ItemID.YELLOW_PRESENT:
 						return "Regalo amarillo";
-					case 602:
+					case EntityID.ItemID.SNOW_GLOBE:
 						return "Globo de nieve";
-					case 603:
+					case EntityID.ItemID.PET_SPAWN_1:
 						return "Repollo";
-					case 604:
+					case EntityID.ItemID.DRAGON_MASK:
 						return "Máscara de dragón";
-					case 605:
+					case EntityID.ItemID.TITAN_HELMET:
 						return "Casco de titán";
-					case 606:
+					case EntityID.ItemID.SPECTRAL_HEADGEAR:
 						return "Tocado espectral";
-					case 607:
+					case EntityID.ItemID.DRAGON_BREASTPLATE:
 						return "Peto de dragón";
-					case 608:
+					case EntityID.ItemID.TITAN_MAIL:
 						return "Malla de titán";
-					case 609:
+					case EntityID.ItemID.SPECTRAL_ARMOR:
 						return "Armadura espectral";
-					case 610:
+					case EntityID.ItemID.DRAGON_GREAVES:
 						return "Grebas de dragón";
-					case 611:
+					case EntityID.ItemID.TITAN_LEGGINGS:
 						return "Perneras de titán";
-					case 612:
+					case EntityID.ItemID.SPECTRAL_SUBLIGAR:
 						return "Liguero espectral";
-					case 613:
+					case EntityID.ItemID.TIZONA:
 						return "Tizona";
-					case 614:
+					case EntityID.ItemID.TONBOGIRI:
 						return "Tonbogiri";
-					case 615:
+					case EntityID.ItemID.SHARANGA:
 						return "Sharanga";
-					case 616:
+					case EntityID.ItemID.SPECTRAL_ARROW:
 						return "Flecha espectral";
-					case 617:
+					case EntityID.ItemID.VULCAN_REPEATER:
 						return "Repetidor volcánico";
-					case 618:
+					case EntityID.ItemID.VULCAN_BOLT:
 						return "Relámpago volcánico";
-					case 619:
+					case EntityID.ItemID.SUSPICIOUS_LOOKING_SKULL:
 						return "Calavera de aspecto sospechoso";
-					case 620:
+					case EntityID.ItemID.SOUL_OF_BLIGHT:
 						return "Alma enfermiza";
-					case 621:
+					case EntityID.ItemID.PET_SPAWN_2:
 						return "Placa de Petri";
-					case 622:
+					case EntityID.ItemID.PET_SPAWN_3:
 						return "Panal";
-					case 623:
+					case EntityID.ItemID.PET_SPAWN_4:
 						return "Vial de sangre";
-					case 624:
+					case EntityID.ItemID.PET_SPAWN_5:
 						return "Colmillo de lobo";
-					case 625:
+					case EntityID.ItemID.PET_SPAWN_6:
 						return "Cerebro";
-					case 626:
+					case EntityID.ItemID.MUSIC_BOX_DESERT:
 						return "Caja de música (Desierto)";
-					case 627:
+					case EntityID.ItemID.MUSIC_BOX_SPACE:
 						return "Caja de música (Espacio)";
-					case 628:
+					case EntityID.ItemID.MUSIC_BOX_TUTORIAL:
 						return "Caja de música (Tutorial)";
-					case 629:
+					case EntityID.ItemID.MUSIC_BOX_BOSS4:
 						return "Caja de música (Enemigo final 4)";
-					case 630:
+					case EntityID.ItemID.MUSIC_BOX_OCEAN:
 						return "Caja de música (Océano)";
-					case 631:
+					case EntityID.ItemID.MUSIC_BOX_SNOW:
 						return "Caja de música (Nieve)";
 #if VERSION_101
-					case 632:
+					case EntityID.ItemID.FABULOUS_RIBBON:
 						return "Pajarita fabulosa";
-					case 633:
+					case EntityID.ItemID.GEORGES_HAT:
 						return "Sombrero de George";
-					case 634:
+					case EntityID.ItemID.FABULOUS_TUTU:
 						return "Tutú fabuloso";
-					case 635:
+					case EntityID.ItemID.GEORGES_TUXEDO_SHIRT:
 						return "Camisa de esmoquin de George";
-					case 636:
+					case EntityID.ItemID.FABULOUS_SLIPPERS:
 						return "Zapatillas fabulosas";
-					case 637:
+					case EntityID.ItemID.GEORGES_TUXEDO_PANTS:
 						return "Pantalones de esmoquin de George";
-					case 638:
+					case EntityID.ItemID.SPARKLY_WINGS:
 						return "Alas brillantes";
-					case 639:
+					case EntityID.ItemID.CAMPFIRE:
 						return "Hoguera";
-					case 640:
+					case EntityID.ItemID.WOOD_HELMET:
 						return "Casco de madera";
-					case 641:
+					case EntityID.ItemID.WOOD_BREASTPLATE:
 						return "Peto de madera";
-					case 642:
+					case EntityID.ItemID.WOOD_GREAVES:
 						return "Grebas de madera";
-					case 643:
+					case EntityID.ItemID.CACTUS_SWORD:
 						return "Espada de cactus"; // This wasn't in the spanish strings file, so I don't know how it managed the name for the Cactus sword, if it did at all.
-					case 644:
+					case EntityID.ItemID.CACTUS_PICKAXE:
 						return "Pico de cactus";
-					case 645:
+					case EntityID.ItemID.CACTUS_HELMET:
 						return "Casco de cactus";
-					case 646:
+					case EntityID.ItemID.CACTUS_BREASTPLATE:
 						return "Peto de cactus";
-					case 647:
+					case EntityID.ItemID.CACTUS_LEGGINGS:
 						return "Perneras de cactus";
-					case 648:
+					case EntityID.ItemID.PURPLE_STAINED_GLASS_WALL:
 						return "Vidriera morada";
-					case 649:
+					case EntityID.ItemID.YELLOW_STAINED_GLASS_WALL:
 						return "Vidriera amarilla";
-					case 650:
+					case EntityID.ItemID.BLUE_STAINED_GLASS_WALL:
 						return "Vidriera azul";
-					case 651:
+					case EntityID.ItemID.GREEN_STAINED_GLASS_WALL:
 						return "Vidriera verde";
-					case 652:
+					case EntityID.ItemID.RED_STAINED_GLASS_WALL:
 						return "Vidriera roja";
-					case 653:
+					case EntityID.ItemID.MULTICOLORED_STAINED_GLASS_WALL:
 						return "Vidriera de colores";
 #endif
 				}
@@ -18356,112 +16733,112 @@ namespace Terraria
 					DeathText[1] = " couldn't put the fire out.";
 					DeathText[2] = " tried to escape.";
 					DeathText[3] = " was licked.";
-					Buff.BuffName[1] = "Obsidian Skin";
-					Buff.BuffTip[1] = "Immune to lava";
-					Buff.BuffName[2] = "Regeneration";
-					Buff.BuffTip[2] = "Provides life regeneration";
-					Buff.BuffName[3] = "Swiftness";
-					Buff.BuffTip[3] = "25% increased movement speed";
-					Buff.BuffName[4] = "Gills";
-					Buff.BuffTip[4] = "Breathe water instead of air";
-					Buff.BuffName[5] = "Ironskin";
-					Buff.BuffTip[5] = "Increase defense by 8";
-					Buff.BuffName[6] = "Mana Regeneration";
-					Buff.BuffTip[6] = "Increased mana regeneration";
-					Buff.BuffName[7] = "Magic Power";
-					Buff.BuffTip[7] = "20% increased magic damage";
-					Buff.BuffName[8] = "Featherfall";
-					Buff.BuffTip[8] = "Press UP or DOWN to control speed of descent";
-					Buff.BuffName[9] = "Spelunker";
-					Buff.BuffTip[9] = "Shows the location of treasure and ore";
-					Buff.BuffName[10] = "Invisibility";
-					Buff.BuffTip[10] = "Grants invisibility";
-					Buff.BuffName[11] = "Shine";
-					Buff.BuffTip[11] = "Emitting light";
-					Buff.BuffName[12] = "Night Owl";
-					Buff.BuffTip[12] = "Increased night vision";
-					Buff.BuffName[13] = "Battle";
-					Buff.BuffTip[13] = "Increased enemy spawn rate";
-					Buff.BuffName[14] = "Thorns";
-					Buff.BuffTip[14] = "Attackers also take damage";
-					Buff.BuffName[15] = "Water Walking";
-					Buff.BuffTip[15] = "Press DOWN to enter water";
-					Buff.BuffName[16] = "Archery";
-					Buff.BuffTip[16] = "20% increased arrow damage and speed";
-					Buff.BuffName[17] = "Hunter";
-					Buff.BuffTip[17] = "Shows the location of enemies";
-					Buff.BuffName[18] = "Gravitation";
-					Buff.BuffTip[18] = "Press UP or DOWN to reverse gravity";
-					Buff.BuffName[19] = "Orb of Light";
-					Buff.BuffTip[19] = "A magical orb that provides light";
-					Buff.BuffName[20] = "Poisoned";
-					Buff.BuffTip[20] = "Slowly losing life";
-					Buff.BuffName[21] = "Potion Sickness";
-					Buff.BuffTip[21] = "Cannot consume anymore healing items";
-					Buff.BuffName[22] = "Darkness";
-					Buff.BuffTip[22] = "Decreased light vision";
-					Buff.BuffName[23] = "Cursed";
-					Buff.BuffTip[23] = "Cannot use any items";
-					Buff.BuffName[24] = "On Fire!";
-					Buff.BuffTip[24] = "Slowly losing life";
-					Buff.BuffName[25] = "Tipsy";
-					Buff.BuffTip[25] = "Increased melee abilities, lowered defense";
-					Buff.BuffName[26] = "Well Fed";
-					Buff.BuffTip[26] = "Minor improvements to all stats";
-					Buff.BuffName[27] = "Fairy";
-					Buff.BuffTip[27] = "A fairy is following you";
-					Buff.BuffName[28] = "Werewolf";
-					Buff.BuffTip[28] = "Physical abilities are increased";
-					Buff.BuffName[29] = "Clairvoyance";
-					Buff.BuffTip[29] = "Magic powers are increased";
-					Buff.BuffName[30] = "Bleeding";
-					Buff.BuffTip[30] = "Cannot regenerate life";
-					Buff.BuffName[31] = "Confused";
-					Buff.BuffTip[31] = "Movement is reversed";
-					Buff.BuffName[32] = "Slow";
-					Buff.BuffTip[32] = "Movement speed is reduced";
-					Buff.BuffName[33] = "Weak";
-					Buff.BuffTip[33] = "Physical abilities are decreased";
-					Buff.BuffName[34] = "Merfolk";
-					Buff.BuffTip[34] = "Can breathe and move easily underwater";
-					Buff.BuffName[35] = "Silenced";
-					Buff.BuffTip[35] = "Cannot use items that require mana";
-					Buff.BuffName[36] = "Broken Armor";
-					Buff.BuffTip[36] = "Defense is cut in half";
-					Buff.BuffName[37] = "Horrified";
-					Buff.BuffTip[37] = "You have seen something nasty, there is no escape.";
-					Buff.BuffName[38] = "The Tongue";
-					Buff.BuffTip[38] = "You are being sucked into the mouth";
-					Buff.BuffName[39] = "Cursed Inferno";
-					Buff.BuffTip[39] = "Losing life";
-					Buff.BuffName[40] = "Pet Guinea Pig";
-					Buff.BuffTip[40] = "Simply adorable";
-					Buff.BuffName[41] = "Pet Slime";
-					Buff.BuffTip[41] = "A real slime ball";
-					Buff.BuffName[42] = "Pet Tiphia";
-					Buff.BuffTip[42] = "Wants all the honeys";
-					Buff.BuffName[43] = "Pet Bat";
-					Buff.BuffTip[43] = "Out for blood";
-					Buff.BuffName[44] = "Pet Werewolf";
-					Buff.BuffTip[44] = "Man's best friend";
-					Buff.BuffName[45] = "Pet Zombie";
-					Buff.BuffTip[45] = "Eats brains";
-					Main.TileNames[13] = "Bottle";
-					Main.TileNames[14] = "Table";
-					Main.TileNames[15] = "Chair";
-					Main.TileNames[16] = "Anvil";
-					Main.TileNames[17] = "Furnace";
-					Main.TileNames[18] = "Work Bench";
-					Main.TileNames[26] = "Demon Altar";
-					Main.TileNames[77] = "Hellforge";
-					Main.TileNames[86] = "Loom";
-					Main.TileNames[94] = "Keg";
-					Main.TileNames[96] = "Cooking Pot";
-					Main.TileNames[101] = "Bookcase";
-					Main.TileNames[106] = "Sawmill";
-					Main.TileNames[114] = "Tinkerer's Workshop";
-					Main.TileNames[133] = "Adamantite Forge";
-					Main.TileNames[134] = "Mythril Anvil";
+					Buff.BuffName[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Obsidian Skin";
+					Buff.BuffTip[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Immune to lava";
+					Buff.BuffName[(byte)EntityID.BuffID.LIFE_REGEN] = "Regeneration";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIFE_REGEN] = "Provides life regeneration";
+					Buff.BuffName[(byte)EntityID.BuffID.HASTE] = "Swiftness";
+					Buff.BuffTip[(byte)EntityID.BuffID.HASTE] = "25% increased movement speed";
+					Buff.BuffName[(byte)EntityID.BuffID.GILLS] = "Gills";
+					Buff.BuffTip[(byte)EntityID.BuffID.GILLS] = "Breathe water instead of air";
+					Buff.BuffName[(byte)EntityID.BuffID.IRONSKIN] = "Ironskin";
+					Buff.BuffTip[(byte)EntityID.BuffID.IRONSKIN] = "Increase defense by 8";
+					Buff.BuffName[(byte)EntityID.BuffID.MANA_REGEN] = "Mana Regeneration";
+					Buff.BuffTip[(byte)EntityID.BuffID.MANA_REGEN] = "Increased mana regeneration";
+					Buff.BuffName[(byte)EntityID.BuffID.MAGIC_POWER] = "Magic Power";
+					Buff.BuffTip[(byte)EntityID.BuffID.MAGIC_POWER] = "20% increased magic damage";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOWFALL] = "Featherfall";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOWFALL] = "Press UP or DOWN to control speed of descent";
+					Buff.BuffName[(byte)EntityID.BuffID.FIND_TREASURE] = "Spelunker";
+					Buff.BuffTip[(byte)EntityID.BuffID.FIND_TREASURE] = "Shows the location of treasure and ore";
+					Buff.BuffName[(byte)EntityID.BuffID.INVISIBLE] = "Invisibility";
+					Buff.BuffTip[(byte)EntityID.BuffID.INVISIBLE] = "Grants invisibility";
+					Buff.BuffName[(byte)EntityID.BuffID.SHINE] = "Shine";
+					Buff.BuffTip[(byte)EntityID.BuffID.SHINE] = "Emitting light";
+					Buff.BuffName[(byte)EntityID.BuffID.NIGHTVISION] = "Night Owl";
+					Buff.BuffTip[(byte)EntityID.BuffID.NIGHTVISION] = "Increased night vision";
+					Buff.BuffName[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Battle";
+					Buff.BuffTip[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Increased enemy spawn rate";
+					Buff.BuffName[(byte)EntityID.BuffID.THORNS] = "Thorns";
+					Buff.BuffTip[(byte)EntityID.BuffID.THORNS] = "Attackers also take damage";
+					Buff.BuffName[(byte)EntityID.BuffID.WATER_WALK] = "Water Walking";
+					Buff.BuffTip[(byte)EntityID.BuffID.WATER_WALK] = "Press DOWN to enter water";
+					Buff.BuffName[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Archery";
+					Buff.BuffTip[(byte)EntityID.BuffID.RANGED_DAMAGE] = "20% increased arrow damage and speed";
+					Buff.BuffName[(byte)EntityID.BuffID.DETECT_CREATURE] = "Hunter";
+					Buff.BuffTip[(byte)EntityID.BuffID.DETECT_CREATURE] = "Shows the location of enemies";
+					Buff.BuffName[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Gravitation";
+					Buff.BuffTip[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Press UP or DOWN to reverse gravity";
+					Buff.BuffName[(byte)EntityID.BuffID.LIGHT_ORB] = "Orb of Light";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIGHT_ORB] = "A magical orb that provides light";
+					Buff.BuffName[(byte)EntityID.BuffID.POISONED] = "Poisoned";
+					Buff.BuffTip[(byte)EntityID.BuffID.POISONED] = "Slowly losing life";
+					Buff.BuffName[(byte)EntityID.BuffID.POTION_DELAY] = "Potion Sickness";
+					Buff.BuffTip[(byte)EntityID.BuffID.POTION_DELAY] = "Cannot consume anymore healing items";
+					Buff.BuffName[(byte)EntityID.BuffID.BLIND] = "Darkness";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLIND] = "Decreased light vision";
+					Buff.BuffName[(byte)EntityID.BuffID.NO_ITEMS] = "Cursed";
+					Buff.BuffTip[(byte)EntityID.BuffID.NO_ITEMS] = "Cannot use any items";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE] = "On Fire!";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE] = "Slowly losing life";
+					Buff.BuffName[(byte)EntityID.BuffID.DRUNK] = "Tipsy";
+					Buff.BuffTip[(byte)EntityID.BuffID.DRUNK] = "Increased melee abilities, lowered defense";
+					Buff.BuffName[(byte)EntityID.BuffID.WELL_FED] = "Well Fed";
+					Buff.BuffTip[(byte)EntityID.BuffID.WELL_FED] = "Minor improvements to all stats";
+					Buff.BuffName[(byte)EntityID.BuffID.FAIRY] = "Fairy";
+					Buff.BuffTip[(byte)EntityID.BuffID.FAIRY] = "A fairy is following you";
+					Buff.BuffName[(byte)EntityID.BuffID.WEREWOLF] = "Werewolf";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEREWOLF] = "Physical abilities are increased";
+					Buff.BuffName[(byte)EntityID.BuffID.CLARAVOYANCE] = "Clairvoyance";
+					Buff.BuffTip[(byte)EntityID.BuffID.CLARAVOYANCE] = "Magic powers are increased";
+					Buff.BuffName[(byte)EntityID.BuffID.BLEED] = "Bleeding";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLEED] = "Cannot regenerate life";
+					Buff.BuffName[(byte)EntityID.BuffID.CONFUSED] = "Confused";
+					Buff.BuffTip[(byte)EntityID.BuffID.CONFUSED] = "Movement is reversed";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOW] = "Slow";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOW] = "Movement speed is reduced";
+					Buff.BuffName[(byte)EntityID.BuffID.WEAK] = "Weak";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEAK] = "Physical abilities are decreased";
+					Buff.BuffName[(byte)EntityID.BuffID.MERFOLK] = "Merfolk";
+					Buff.BuffTip[(byte)EntityID.BuffID.MERFOLK] = "Can breathe and move easily underwater";
+					Buff.BuffName[(byte)EntityID.BuffID.SILENCE] = "Silenced";
+					Buff.BuffTip[(byte)EntityID.BuffID.SILENCE] = "Cannot use items that require mana";
+					Buff.BuffName[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Broken Armor";
+					Buff.BuffTip[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Defense is cut in half";
+					Buff.BuffName[(byte)EntityID.BuffID.HORRIFIED] = "Horrified";
+					Buff.BuffTip[(byte)EntityID.BuffID.HORRIFIED] = "You have seen something nasty, there is no escape.";
+					Buff.BuffName[(byte)EntityID.BuffID.TONGUED] = "The Tongue";
+					Buff.BuffTip[(byte)EntityID.BuffID.TONGUED] = "You are being sucked into the mouth";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE_2] = "Cursed Inferno";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE_2] = "Losing life";
+					Buff.BuffName[(byte)EntityID.BuffID.PET] = "Pet Guinea Pig";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET] = "Simply adorable";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 1] = "Pet Slime";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 1] = "A real slime ball";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 2] = "Pet Tiphia";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 2] = "Wants all the honeys";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 3] = "Pet Bat";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 3] = "Out for blood";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 4] = "Pet Werewolf";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 4] = "Man's best friend";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 5] = "Pet Zombie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 5] = "Eats brains";
+					Main.TileNames[(int)EntityID.TileID.BOTTLE] = "Bottle";
+					Main.TileNames[(int)EntityID.TileID.TABLE] = "Table";
+					Main.TileNames[(int)EntityID.TileID.CHAIR] = "Chair";
+					Main.TileNames[(int)EntityID.TileID.ANVIL] = "Anvil";
+					Main.TileNames[(int)EntityID.TileID.FURNACE] = "Furnace";
+					Main.TileNames[(int)EntityID.TileID.WORK_BENCH] = "Work Bench";
+					Main.TileNames[(int)EntityID.TileID.DEMON_ALTAR] = "Demon Altar";
+					Main.TileNames[(int)EntityID.TileID.HELLFORGE] = "Hellforge";
+					Main.TileNames[(int)EntityID.TileID.LOOM] = "Loom";
+					Main.TileNames[(int)EntityID.TileID.KEG] = "Keg";
+					Main.TileNames[(int)EntityID.TileID.COOKING_POT] = "Cooking Pot";
+					Main.TileNames[(int)EntityID.TileID.BOOKCASE] = "Bookcase";
+					Main.TileNames[(int)EntityID.TileID.SAWMILL] = "Sawmill";
+					Main.TileNames[(int)EntityID.TileID.TINKERERS_WORKSHOP] = "Tinkerer's Workshop";
+					Main.TileNames[(int)EntityID.TileID.ADAMANTITE_FORGE] = "Adamantite Forge";
+					Main.TileNames[(int)EntityID.TileID.MYTHRIL_ANVIL] = "Mythril Anvil";
 				}
 				else if (LangOption == (int)ID.GERMAN)
 				{
@@ -18810,112 +17187,112 @@ namespace Terraria
 					DeathText[1] = " konnte das Feuer nicht löschen.";
 					DeathText[2] = " hat versucht, zu fliehen";
 					DeathText[3] = " wurde abgeleckt";
-					Buff.BuffName[1] = "Obsidianhaut";
-					Buff.BuffTip[1] = "Immun gegen Lava";
-					Buff.BuffName[2] = "Wiederbelebung";
-					Buff.BuffTip[2] = "Belebt wieder";
-					Buff.BuffName[3] = "Wendigkeit";
-					Buff.BuffTip[3] = "Erhöht Bewegungstempo um 25%";
-					Buff.BuffName[4] = "Kiemen";
-					Buff.BuffTip[4] = "Wasser statt Luft atmen";
-					Buff.BuffName[5] = "Eisenhaut";
-					Buff.BuffTip[5] = "Erhöht die Abwehr um 8";
-					Buff.BuffName[6] = "Mana-Wiederherstellung";
-					Buff.BuffTip[6] = "Erhöhte Mana-Wiederherstellung";
-					Buff.BuffName[7] = "Magiekraft";
-					Buff.BuffTip[7] = "Erhöht magischen Schaden um 20%";
-					Buff.BuffName[8] = "Federsturz";
-					Buff.BuffTip[8] = "Zur Kontrolle der Sinkgeschwindigkeit Hoch oder Hinunter drücken";
-					Buff.BuffName[9] = "Höhlenforscher";
-					Buff.BuffTip[9] = "Zeigt den Fundort von Schatz und Erz";
-					Buff.BuffName[10] = "Unsichtbarkeit";
-					Buff.BuffTip[10] = "Macht unsichtbar";
-					Buff.BuffName[11] = "Glanz";
-					Buff.BuffTip[11] = "Strahlt Licht aus";
-					Buff.BuffName[12] = "Nachteule";
-					Buff.BuffTip[12] = "Erhöhte Nachtsicht";
-					Buff.BuffName[13] = "Kampf";
-					Buff.BuffTip[13] = "Erhöhte Feind-Spawnrate";
-					Buff.BuffName[14] = "Dornen";
-					Buff.BuffTip[14] = "Auch die Angreifer erleiden Schaden";
-					Buff.BuffName[15] = "Wasserlaufen";
-					Buff.BuffTip[15] = "HINUNTER drücken, um aufs Wasser zu gehen";
-					Buff.BuffName[16] = "Bogenschießen";
-					Buff.BuffTip[16] = "Um 20% erhöhter Pfeilschaden und -tempo";
-					Buff.BuffName[17] = "Jäger";
-					Buff.BuffTip[17] = "Zeigt die Position von Feinden";
-					Buff.BuffName[18] = "Gravitation";
-					Buff.BuffTip[18] = "Zum Umkehren der Schwerkraft HOCH oder HINUNTER drücken";
-					Buff.BuffName[19] = "Lichtkugel";
-					Buff.BuffTip[19] = "Eine magische Kugel, die Licht verströmt";
-					Buff.BuffName[20] = "Vergiftet";
-					Buff.BuffTip[20] = "Langsam entweicht das Leben";
-					Buff.BuffName[21] = "Krankheitstrank";
-					Buff.BuffTip[21] = "Kann keine Heil-Items mehr verbrauchen";
-					Buff.BuffName[22] = "Dunkelheit";
-					Buff.BuffTip[22] = "Schlechtere Sicht durch weniger Licht";
-					Buff.BuffName[23] = "Verflucht";
-					Buff.BuffTip[23] = "Kann keine Items verwenden";
-					Buff.BuffName[24] = "Flammenmeer!";
-					Buff.BuffTip[24] = "Langsam entweicht das Leben";
-					Buff.BuffName[25] = "Beschwipst";
-					Buff.BuffTip[25] = "Erhöhte Nahkampffähigkeiten, verminderte Abwehr";
-					Buff.BuffName[26] = "Kleine Stärkung";
-					Buff.BuffTip[26] = "Geringe Anhebung aller Werte";
-					Buff.BuffName[27] = "Fee";
-					Buff.BuffTip[27] = "Eine Fee folgt dir";
-					Buff.BuffName[28] = "Werwolf";
-					Buff.BuffTip[28] = "Körperliche Fähigkeiten sind gestiegen";
-					Buff.BuffName[29] = "Hellsehen";
-					Buff.BuffTip[29] = "Magiekräfte werden erhöht";
-					Buff.BuffName[30] = "Bluted";
-					Buff.BuffTip[30] = "Kann sich nicht mehr erholen";
-					Buff.BuffName[31] = "Verwirrt";
-					Buff.BuffTip[31] = "Bewegt sich in die falsche Richtung";
-					Buff.BuffName[32] = "Langsam";
-					Buff.BuffTip[32] = "Bewegungstempo ist herabgesetzt";
-					Buff.BuffName[33] = "Schwach";
-					Buff.BuffTip[33] = "Körperliche Leistungsfähigkeit ist reduziert";
-					Buff.BuffName[34] = "Meermenschen";
-					Buff.BuffTip[34] = "Können unter Wasser leicht atmen und sich bewegen ";
-					Buff.BuffName[35] = "Zum Schweigen gebracht";
-					Buff.BuffTip[35] = "Kann keine Items nutzen, die Mana erfordern";
-					Buff.BuffName[36] = "Beschädigte Rüstung";
-					Buff.BuffTip[36] = "Die Abwehr ist um die Hälfte reduziert";
-					Buff.BuffName[37] = "Entsetzt";
-					Buff.BuffTip[37] = "Du hast etwas Schlimmes gesehen. Da gibt es keinen Weg dran vorbei.";
-					Buff.BuffName[38] = "Die Zunge";
-					Buff.BuffTip[38] = "Du wirst in den Mund gesogen";
-					Buff.BuffName[39] = "Verfluchtes Inferno";
-					Buff.BuffTip[39] = "Leben geht verloren";
-					Buff.BuffName[40] = "Haustier-Meerschweinchen";
-					Buff.BuffTip[40] = "Zum Verlieben";
-					Buff.BuffName[41] = "Haustier-Schleim";
-					Buff.BuffTip[41] = "Ein echter Schleimball";
-					Buff.BuffName[42] = "Haustier-Tiphia";
-					Buff.BuffTip[42] = "Will alles, was süß ist";
-					Buff.BuffName[43] = "Haustier-Fledermaus";
-					Buff.BuffTip[43] = "Auf der Jagd nach Blut";
-					Buff.BuffName[44] = "Haustier-Werwolf";
-					Buff.BuffTip[44] = "Der beste Freund des Menschen";
-					Buff.BuffName[45] = "Haustier-Zombie";
-					Buff.BuffTip[45] = "Verspeist Gehirne";
-					Main.TileNames[13] = "Flasche";
-					Main.TileNames[14] = "Tabelle";
-					Main.TileNames[15] = "Stuhl";
-					Main.TileNames[16] = "Amboss";
-					Main.TileNames[17] = "Schmelzofen";
-					Main.TileNames[18] = "Werkbank";
-					Main.TileNames[26] = "Dämon-Altar";
-					Main.TileNames[77] = "Höllenschmiede";
-					Main.TileNames[86] = "Webstuhl";
-					Main.TileNames[94] = "Gärbottich";
-					Main.TileNames[96] = "Kochtopf";
-					Main.TileNames[101] = "Bücherregal";
-					Main.TileNames[106] = "Sägewerk";
-					Main.TileNames[114] = "Tüftler-Werkstatt";
-					Main.TileNames[133] = "Adamantitschmiede";
-					Main.TileNames[134] = "Mithrilamboss";
+					Buff.BuffName[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Obsidianhaut";
+					Buff.BuffTip[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Immun gegen Lava";
+					Buff.BuffName[(byte)EntityID.BuffID.LIFE_REGEN] = "Wiederbelebung";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIFE_REGEN] = "Belebt wieder";
+					Buff.BuffName[(byte)EntityID.BuffID.HASTE] = "Wendigkeit";
+					Buff.BuffTip[(byte)EntityID.BuffID.HASTE] = "Erhöht Bewegungstempo um 25%";
+					Buff.BuffName[(byte)EntityID.BuffID.GILLS] = "Kiemen";
+					Buff.BuffTip[(byte)EntityID.BuffID.GILLS] = "Wasser statt Luft atmen";
+					Buff.BuffName[(byte)EntityID.BuffID.IRONSKIN] = "Eisenhaut";
+					Buff.BuffTip[(byte)EntityID.BuffID.IRONSKIN] = "Erhöht die Abwehr um 8";
+					Buff.BuffName[(byte)EntityID.BuffID.MANA_REGEN] = "Mana-Wiederherstellung";
+					Buff.BuffTip[(byte)EntityID.BuffID.MANA_REGEN] = "Erhöhte Mana-Wiederherstellung";
+					Buff.BuffName[(byte)EntityID.BuffID.MAGIC_POWER] = "Magiekraft";
+					Buff.BuffTip[(byte)EntityID.BuffID.MAGIC_POWER] = "Erhöht magischen Schaden um 20%";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOWFALL] = "Federsturz";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOWFALL] = "Zur Kontrolle der Sinkgeschwindigkeit Hoch oder Hinunter drücken";
+					Buff.BuffName[(byte)EntityID.BuffID.FIND_TREASURE] = "Höhlenforscher";
+					Buff.BuffTip[(byte)EntityID.BuffID.FIND_TREASURE] = "Zeigt den Fundort von Schatz und Erz";
+					Buff.BuffName[(byte)EntityID.BuffID.INVISIBLE] = "Unsichtbarkeit";
+					Buff.BuffTip[(byte)EntityID.BuffID.INVISIBLE] = "Macht unsichtbar";
+					Buff.BuffName[(byte)EntityID.BuffID.SHINE] = "Glanz";
+					Buff.BuffTip[(byte)EntityID.BuffID.SHINE] = "Strahlt Licht aus";
+					Buff.BuffName[(byte)EntityID.BuffID.NIGHTVISION] = "Nachteule";
+					Buff.BuffTip[(byte)EntityID.BuffID.NIGHTVISION] = "Erhöhte Nachtsicht";
+					Buff.BuffName[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Kampf";
+					Buff.BuffTip[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Erhöhte Feind-Spawnrate";
+					Buff.BuffName[(byte)EntityID.BuffID.THORNS] = "Dornen";
+					Buff.BuffTip[(byte)EntityID.BuffID.THORNS] = "Auch die Angreifer erleiden Schaden";
+					Buff.BuffName[(byte)EntityID.BuffID.WATER_WALK] = "Wasserlaufen";
+					Buff.BuffTip[(byte)EntityID.BuffID.WATER_WALK] = "HINUNTER drücken, um aufs Wasser zu gehen";
+					Buff.BuffName[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Bogenschießen";
+					Buff.BuffTip[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Um 20% erhöhter Pfeilschaden und -tempo";
+					Buff.BuffName[(byte)EntityID.BuffID.DETECT_CREATURE] = "Jäger";
+					Buff.BuffTip[(byte)EntityID.BuffID.DETECT_CREATURE] = "Zeigt die Position von Feinden";
+					Buff.BuffName[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Gravitation";
+					Buff.BuffTip[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Zum Umkehren der Schwerkraft HOCH oder HINUNTER drücken";
+					Buff.BuffName[(byte)EntityID.BuffID.LIGHT_ORB] = "Lichtkugel";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIGHT_ORB] = "Eine magische Kugel, die Licht verströmt";
+					Buff.BuffName[(byte)EntityID.BuffID.POISONED] = "Vergiftet";
+					Buff.BuffTip[(byte)EntityID.BuffID.POISONED] = "Langsam entweicht das Leben";
+					Buff.BuffName[(byte)EntityID.BuffID.POTION_DELAY] = "Krankheitstrank";
+					Buff.BuffTip[(byte)EntityID.BuffID.POTION_DELAY] = "Kann keine Heil-Items mehr verbrauchen";
+					Buff.BuffName[(byte)EntityID.BuffID.BLIND] = "Dunkelheit";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLIND] = "Schlechtere Sicht durch weniger Licht";
+					Buff.BuffName[(byte)EntityID.BuffID.NO_ITEMS] = "Verflucht";
+					Buff.BuffTip[(byte)EntityID.BuffID.NO_ITEMS] = "Kann keine Items verwenden";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE] = "Flammenmeer!";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE] = "Langsam entweicht das Leben";
+					Buff.BuffName[(byte)EntityID.BuffID.DRUNK] = "Beschwipst";
+					Buff.BuffTip[(byte)EntityID.BuffID.DRUNK] = "Erhöhte Nahkampffähigkeiten, verminderte Abwehr";
+					Buff.BuffName[(byte)EntityID.BuffID.WELL_FED] = "Kleine Stärkung";
+					Buff.BuffTip[(byte)EntityID.BuffID.WELL_FED] = "Geringe Anhebung aller Werte";
+					Buff.BuffName[(byte)EntityID.BuffID.FAIRY] = "Fee";
+					Buff.BuffTip[(byte)EntityID.BuffID.FAIRY] = "Eine Fee folgt dir";
+					Buff.BuffName[(byte)EntityID.BuffID.WEREWOLF] = "Werwolf";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEREWOLF] = "Körperliche Fähigkeiten sind gestiegen";
+					Buff.BuffName[(byte)EntityID.BuffID.CLARAVOYANCE] = "Hellsehen";
+					Buff.BuffTip[(byte)EntityID.BuffID.CLARAVOYANCE] = "Magiekräfte werden erhöht";
+					Buff.BuffName[(byte)EntityID.BuffID.BLEED] = "Bluted";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLEED] = "Kann sich nicht mehr erholen";
+					Buff.BuffName[(byte)EntityID.BuffID.CONFUSED] = "Verwirrt";
+					Buff.BuffTip[(byte)EntityID.BuffID.CONFUSED] = "Bewegt sich in die falsche Richtung";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOW] = "Langsam";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOW] = "Bewegungstempo ist herabgesetzt";
+					Buff.BuffName[(byte)EntityID.BuffID.WEAK] = "Schwach";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEAK] = "Körperliche Leistungsfähigkeit ist reduziert";
+					Buff.BuffName[(byte)EntityID.BuffID.MERFOLK] = "Meermenschen";
+					Buff.BuffTip[(byte)EntityID.BuffID.MERFOLK] = "Können unter Wasser leicht atmen und sich bewegen ";
+					Buff.BuffName[(byte)EntityID.BuffID.SILENCE] = "Zum Schweigen gebracht";
+					Buff.BuffTip[(byte)EntityID.BuffID.SILENCE] = "Kann keine Items nutzen, die Mana erfordern";
+					Buff.BuffName[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Beschädigte Rüstung";
+					Buff.BuffTip[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Die Abwehr ist um die Hälfte reduziert";
+					Buff.BuffName[(byte)EntityID.BuffID.HORRIFIED] = "Entsetzt";
+					Buff.BuffTip[(byte)EntityID.BuffID.HORRIFIED] = "Du hast etwas Schlimmes gesehen. Da gibt es keinen Weg dran vorbei.";
+					Buff.BuffName[(byte)EntityID.BuffID.TONGUED] = "Die Zunge";
+					Buff.BuffTip[(byte)EntityID.BuffID.TONGUED] = "Du wirst in den Mund gesogen";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE_2] = "Verfluchtes Inferno";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE_2] = "Leben geht verloren";
+					Buff.BuffName[(byte)EntityID.BuffID.PET] = "Haustier-Meerschweinchen";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET] = "Zum Verlieben";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 1] = "Haustier-Schleim";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 1] = "Ein echter Schleimball";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 2] = "Haustier-Tiphia";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 2] = "Will alles, was süß ist";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 3] = "Haustier-Fledermaus";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 3] = "Auf der Jagd nach Blut";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 4] = "Haustier-Werwolf";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 4] = "Der beste Freund des Menschen";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 5] = "Haustier-Zombie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 5] = "Verspeist Gehirne";
+					Main.TileNames[(int)EntityID.TileID.BOTTLE] = "Flasche";
+					Main.TileNames[(int)EntityID.TileID.TABLE] = "Tabelle";
+					Main.TileNames[(int)EntityID.TileID.CHAIR] = "Stuhl";
+					Main.TileNames[(int)EntityID.TileID.ANVIL] = "Amboss";
+					Main.TileNames[(int)EntityID.TileID.FURNACE] = "Schmelzofen";
+					Main.TileNames[(int)EntityID.TileID.WORK_BENCH] = "Werkbank";
+					Main.TileNames[(int)EntityID.TileID.DEMON_ALTAR] = "Dämon-Altar";
+					Main.TileNames[(int)EntityID.TileID.HELLFORGE] = "Höllenschmiede";
+					Main.TileNames[(int)EntityID.TileID.LOOM] = "Webstuhl";
+					Main.TileNames[(int)EntityID.TileID.KEG] = "Gärbottich";
+					Main.TileNames[(int)EntityID.TileID.COOKING_POT] = "Kochtopf";
+					Main.TileNames[(int)EntityID.TileID.BOOKCASE] = "Bücherregal";
+					Main.TileNames[(int)EntityID.TileID.SAWMILL] = "Sägewerk";
+					Main.TileNames[(int)EntityID.TileID.TINKERERS_WORKSHOP] = "Tüftler-Werkstatt";
+					Main.TileNames[(int)EntityID.TileID.ADAMANTITE_FORGE] = "Adamantitschmiede";
+					Main.TileNames[(int)EntityID.TileID.MYTHRIL_ANVIL] = "Mithrilamboss";
 				}
 				else if (LangOption == (int)ID.ITALIAN)
 				{
@@ -19264,112 +17641,112 @@ namespace Terraria
 					DeathText[1] = " non ha spento il fuoco.";
 					DeathText[2] = " ha tentato di scappare.";
 					DeathText[3] = "è stato battuto. ";
-					Buff.BuffName[1] = "Pelle ossidiana";
-					Buff.BuffTip[1] = "Immune alla lava";
-					Buff.BuffName[2] = "Rigenerazione";
-					Buff.BuffTip[2] = "Rigenera la vita";
-					Buff.BuffName[3] = "Velocità";
-					Buff.BuffTip[3] = "Velocità di movimento aumentata del 25%";
-					Buff.BuffName[4] = "Branchie";
-					Buff.BuffTip[4] = "Respira acqua invece di aria";
-					Buff.BuffName[5] = "Pelle di ferro";
-					Buff.BuffTip[5] = "Aumenta la difesa di 8";
-					Buff.BuffName[6] = "Rigenerazione mana";
-					Buff.BuffTip[6] = "Aumenta la rigenerazione del mana";
-					Buff.BuffName[7] = "Potere magico";
-					Buff.BuffTip[7] = "Danno magico aumentato del 20%";
-					Buff.BuffName[8] = "Cascata di piume";
-					Buff.BuffTip[8] = "Premi UP o DOWN per controllare la velocità di discesa";
-					Buff.BuffName[9] = "Speleologo";
-					Buff.BuffTip[9] = "Mostra l'ubicazione di tesori e minerali";
-					Buff.BuffName[10] = "Invisibilità";
-					Buff.BuffTip[10] = "Rende invisibili";
-					Buff.BuffName[11] = "Brillantezza";
-					Buff.BuffTip[11] = "Emette luce";
-					Buff.BuffName[12] = "Civetta notturna";
-					Buff.BuffTip[12] = "Visione notturna aumentata";
-					Buff.BuffName[13] = "Battaglia";
-					Buff.BuffTip[13] = "Ritmo generazione nemici aumentato";
-					Buff.BuffName[14] = "Spine";
-					Buff.BuffTip[14] = "Anche gli aggressori subiscono danni";
-					Buff.BuffName[15] = "Camminata nell'acqua";
-					Buff.BuffTip[15] = "Premi DOWN per entrare nell'acqua";
-					Buff.BuffName[16] = "Arco";
-					Buff.BuffTip[16] = "Danno e velocià freccia aumentati del 20%";
-					Buff.BuffName[17] = "Cacciatore";
-					Buff.BuffTip[17] = "Mostra la posizione dei nemici";
-					Buff.BuffName[18] = "Gravità";
-					Buff.BuffTip[18] = "Premi UP o DOWN per invertire la gravità";
-					Buff.BuffName[19] = "Orbita di luce";
-					Buff.BuffTip[19] = "Sfera magica che fornisce luce";
-					Buff.BuffName[20] = "Avvelenato";
-					Buff.BuffTip[20] = "Perdi lentamente la vita";
-					Buff.BuffName[21] = "Malattia pozione";
-					Buff.BuffTip[21] = "Non si possono più consumare oggetti curativi";
-					Buff.BuffName[22] = "Oscurità";
-					Buff.BuffTip[22] = "Visione della luce diminuita";
-					Buff.BuffName[23] = "Maledetto";
-					Buff.BuffTip[23] = "Non si possono più utilizzare oggetti";
-					Buff.BuffName[24] = "A fuoco!";
-					Buff.BuffTip[24] = "Perdi lentamente la vita";
-					Buff.BuffName[25] = "Brillo";
-					Buff.BuffTip[25] = "Abilità corpo a corpo aumentata, difesa abbassata";
-					Buff.BuffName[26] = "Ben nutrito";
-					Buff.BuffTip[26] = "Migliorie minori a tutti i parametri";
-					Buff.BuffName[27] = "Fata";
-					Buff.BuffTip[27] = "Una fata ti sta seguendo";
-					Buff.BuffName[28] = "Lupo mannaro";
-					Buff.BuffTip[28] = "Abilità fisiche aumentate";
-					Buff.BuffName[29] = "Chiaroveggenza";
-					Buff.BuffTip[29] = "Poteri magici aumentati";
-					Buff.BuffName[30] = "Sanguinamento";
-					Buff.BuffTip[30] = "Impossibile rigenerare vita";
-					Buff.BuffName[31] = "Confuso";
-					Buff.BuffTip[31] = "Movimento invertito";
-					Buff.BuffName[32] = "Lento";
-					Buff.BuffTip[32] = "Velocità movimento ridotta";
-					Buff.BuffName[33] = "Debole";
-					Buff.BuffTip[33] = "Abilità fisiche diminuite";
-					Buff.BuffName[34] = "Tritone";
-					Buff.BuffTip[34] = "Può respirare e muoversi facilmente sott'acqua";
-					Buff.BuffName[35] = "Tacere";
-					Buff.BuffTip[35] = "Non possono utilizzare gli elementi che richiedono mana";
-					Buff.BuffName[36] = "Armatura rotta";
-					Buff.BuffTip[36] = "La difesa è dimezzata";
-					Buff.BuffName[37] = "Inorridito";
-					Buff.BuffTip[37] = "Hai visto qualcosa di orribile, non c'è via di scampo.";
-					Buff.BuffName[38] = "La Lingua";
-					Buff.BuffTip[38] = "Sei stato succhiato nella bocca";
-					Buff.BuffName[39] = "Inferno maledetto";
-					Buff.BuffTip[39] = "Perdi la vita";
-					Buff.BuffName[40] = "Porcellino d'India";
-					Buff.BuffTip[40] = "Semplicemente adorabile";
-					Buff.BuffName[41] = "Slime";
-					Buff.BuffTip[41] = "Una vera palla di slime";
-					Buff.BuffName[42] = "Vespa";
-					Buff.BuffTip[42] = "Vuole tutto il miele";
-					Buff.BuffName[43] = "Pipistrello";
-					Buff.BuffTip[43] = "A caccia di sangue";
-					Buff.BuffName[44] = "Lupo mannaro";
-					Buff.BuffTip[44] = "Il migliore amico dell'uomo";
-					Buff.BuffName[45] = "Zombie";
-					Buff.BuffTip[45] = "Mangia cervelli";
-					Main.TileNames[13] = "Bottiglia";
-					Main.TileNames[14] = "Tavolo";
-					Main.TileNames[15] = "Sedia";
-					Main.TileNames[16] = "Incudine";
-					Main.TileNames[17] = "Fornace";
-					Main.TileNames[18] = "Banco da lavoro";
-					Main.TileNames[26] = "Altare dei demoni";
-					Main.TileNames[77] = "Creazione degli inferi";
-					Main.TileNames[86] = "Telaio";
-					Main.TileNames[94] = "Barilotto";
-					Main.TileNames[96] = "Pentola";
-					Main.TileNames[101] = "Scaffale";
-					Main.TileNames[106] = "Segheria";
-					Main.TileNames[114] = "Laboratorio dell'inventore";
-					Main.TileNames[133] = "Forgia di adamantio";
-					Main.TileNames[134] = "Incudine di mitrilio";
+					Buff.BuffName[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Pelle ossidiana";
+					Buff.BuffTip[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Immune alla lava";
+					Buff.BuffName[(byte)EntityID.BuffID.LIFE_REGEN] = "Rigenerazione";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIFE_REGEN] = "Rigenera la vita";
+					Buff.BuffName[(byte)EntityID.BuffID.HASTE] = "Velocità";
+					Buff.BuffTip[(byte)EntityID.BuffID.HASTE] = "Velocità di movimento aumentata del 25%";
+					Buff.BuffName[(byte)EntityID.BuffID.GILLS] = "Branchie";
+					Buff.BuffTip[(byte)EntityID.BuffID.GILLS] = "Respira acqua invece di aria";
+					Buff.BuffName[(byte)EntityID.BuffID.IRONSKIN] = "Pelle di ferro";
+					Buff.BuffTip[(byte)EntityID.BuffID.IRONSKIN] = "Aumenta la difesa di 8";
+					Buff.BuffName[(byte)EntityID.BuffID.MANA_REGEN] = "Rigenerazione mana";
+					Buff.BuffTip[(byte)EntityID.BuffID.MANA_REGEN] = "Aumenta la rigenerazione del mana";
+					Buff.BuffName[(byte)EntityID.BuffID.MAGIC_POWER] = "Potere magico";
+					Buff.BuffTip[(byte)EntityID.BuffID.MAGIC_POWER] = "Danno magico aumentato del 20%";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOWFALL] = "Cascata di piume";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOWFALL] = "Premi UP o DOWN per controllare la velocità di discesa";
+					Buff.BuffName[(byte)EntityID.BuffID.FIND_TREASURE] = "Speleologo";
+					Buff.BuffTip[(byte)EntityID.BuffID.FIND_TREASURE] = "Mostra l'ubicazione di tesori e minerali";
+					Buff.BuffName[(byte)EntityID.BuffID.INVISIBLE] = "Invisibilità";
+					Buff.BuffTip[(byte)EntityID.BuffID.INVISIBLE] = "Rende invisibili";
+					Buff.BuffName[(byte)EntityID.BuffID.SHINE] = "Brillantezza";
+					Buff.BuffTip[(byte)EntityID.BuffID.SHINE] = "Emette luce";
+					Buff.BuffName[(byte)EntityID.BuffID.NIGHTVISION] = "Civetta notturna";
+					Buff.BuffTip[(byte)EntityID.BuffID.NIGHTVISION] = "Visione notturna aumentata";
+					Buff.BuffName[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Battaglia";
+					Buff.BuffTip[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Ritmo generazione nemici aumentato";
+					Buff.BuffName[(byte)EntityID.BuffID.THORNS] = "Spine";
+					Buff.BuffTip[(byte)EntityID.BuffID.THORNS] = "Anche gli aggressori subiscono danni";
+					Buff.BuffName[(byte)EntityID.BuffID.WATER_WALK] = "Camminata nell'acqua";
+					Buff.BuffTip[(byte)EntityID.BuffID.WATER_WALK] = "Premi DOWN per entrare nell'acqua";
+					Buff.BuffName[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Arco";
+					Buff.BuffTip[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Danno e velocià freccia aumentati del 20%";
+					Buff.BuffName[(byte)EntityID.BuffID.DETECT_CREATURE] = "Cacciatore";
+					Buff.BuffTip[(byte)EntityID.BuffID.DETECT_CREATURE] = "Mostra la posizione dei nemici";
+					Buff.BuffName[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Gravità";
+					Buff.BuffTip[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Premi UP o DOWN per invertire la gravità";
+					Buff.BuffName[(byte)EntityID.BuffID.LIGHT_ORB] = "Orbita di luce";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIGHT_ORB] = "Sfera magica che fornisce luce";
+					Buff.BuffName[(byte)EntityID.BuffID.POISONED] = "Avvelenato";
+					Buff.BuffTip[(byte)EntityID.BuffID.POISONED] = "Perdi lentamente la vita";
+					Buff.BuffName[(byte)EntityID.BuffID.POTION_DELAY] = "Malattia pozione";
+					Buff.BuffTip[(byte)EntityID.BuffID.POTION_DELAY] = "Non si possono più consumare oggetti curativi";
+					Buff.BuffName[(byte)EntityID.BuffID.BLIND] = "Oscurità";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLIND] = "Visione della luce diminuita";
+					Buff.BuffName[(byte)EntityID.BuffID.NO_ITEMS] = "Maledetto";
+					Buff.BuffTip[(byte)EntityID.BuffID.NO_ITEMS] = "Non si possono più utilizzare oggetti";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE] = "A fuoco!";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE] = "Perdi lentamente la vita";
+					Buff.BuffName[(byte)EntityID.BuffID.DRUNK] = "Brillo";
+					Buff.BuffTip[(byte)EntityID.BuffID.DRUNK] = "Abilità corpo a corpo aumentata, difesa abbassata";
+					Buff.BuffName[(byte)EntityID.BuffID.WELL_FED] = "Ben nutrito";
+					Buff.BuffTip[(byte)EntityID.BuffID.WELL_FED] = "Migliorie minori a tutti i parametri";
+					Buff.BuffName[(byte)EntityID.BuffID.FAIRY] = "Fata";
+					Buff.BuffTip[(byte)EntityID.BuffID.FAIRY] = "Una fata ti sta seguendo";
+					Buff.BuffName[(byte)EntityID.BuffID.WEREWOLF] = "Lupo mannaro";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEREWOLF] = "Abilità fisiche aumentate";
+					Buff.BuffName[(byte)EntityID.BuffID.CLARAVOYANCE] = "Chiaroveggenza";
+					Buff.BuffTip[(byte)EntityID.BuffID.CLARAVOYANCE] = "Poteri magici aumentati";
+					Buff.BuffName[(byte)EntityID.BuffID.BLEED] = "Sanguinamento";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLEED] = "Impossibile rigenerare vita";
+					Buff.BuffName[(byte)EntityID.BuffID.CONFUSED] = "Confuso";
+					Buff.BuffTip[(byte)EntityID.BuffID.CONFUSED] = "Movimento invertito";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOW] = "Lento";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOW] = "Velocità movimento ridotta";
+					Buff.BuffName[(byte)EntityID.BuffID.WEAK] = "Debole";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEAK] = "Abilità fisiche diminuite";
+					Buff.BuffName[(byte)EntityID.BuffID.MERFOLK] = "Tritone";
+					Buff.BuffTip[(byte)EntityID.BuffID.MERFOLK] = "Può respirare e muoversi facilmente sott'acqua";
+					Buff.BuffName[(byte)EntityID.BuffID.SILENCE] = "Tacere";
+					Buff.BuffTip[(byte)EntityID.BuffID.SILENCE] = "Non possono utilizzare gli elementi che richiedono mana";
+					Buff.BuffName[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Armatura rotta";
+					Buff.BuffTip[(byte)EntityID.BuffID.BROKEN_ARMOR] = "La difesa è dimezzata";
+					Buff.BuffName[(byte)EntityID.BuffID.HORRIFIED] = "Inorridito";
+					Buff.BuffTip[(byte)EntityID.BuffID.HORRIFIED] = "Hai visto qualcosa di orribile, non c'è via di scampo.";
+					Buff.BuffName[(byte)EntityID.BuffID.TONGUED] = "La Lingua";
+					Buff.BuffTip[(byte)EntityID.BuffID.TONGUED] = "Sei stato succhiato nella bocca";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE_2] = "Inferno maledetto";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE_2] = "Perdi la vita";
+					Buff.BuffName[(byte)EntityID.BuffID.PET] = "Porcellino d'India";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET] = "Semplicemente adorabile";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 1] = "Slime";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 1] = "Una vera palla di slime";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 2] = "Vespa";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 2] = "Vuole tutto il miele";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 3] = "Pipistrello";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 3] = "A caccia di sangue";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 4] = "Lupo mannaro";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 4] = "Il migliore amico dell'uomo";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 5] = "Zombie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 5] = "Mangia cervelli";
+					Main.TileNames[(int)EntityID.TileID.BOTTLE] = "Bottiglia";
+					Main.TileNames[(int)EntityID.TileID.TABLE] = "Tavolo";
+					Main.TileNames[(int)EntityID.TileID.CHAIR] = "Sedia";
+					Main.TileNames[(int)EntityID.TileID.ANVIL] = "Incudine";
+					Main.TileNames[(int)EntityID.TileID.FURNACE] = "Fornace";
+					Main.TileNames[(int)EntityID.TileID.WORK_BENCH] = "Banco da lavoro";
+					Main.TileNames[(int)EntityID.TileID.DEMON_ALTAR] = "Altare dei demoni";
+					Main.TileNames[(int)EntityID.TileID.HELLFORGE] = "Creazione degli inferi";
+					Main.TileNames[(int)EntityID.TileID.LOOM] = "Telaio";
+					Main.TileNames[(int)EntityID.TileID.KEG] = "Barilotto";
+					Main.TileNames[(int)EntityID.TileID.COOKING_POT] = "Pentola";
+					Main.TileNames[(int)EntityID.TileID.BOOKCASE] = "Scaffale";
+					Main.TileNames[(int)EntityID.TileID.SAWMILL] = "Segheria";
+					Main.TileNames[(int)EntityID.TileID.TINKERERS_WORKSHOP] = "Laboratorio dell'inventore";
+					Main.TileNames[(int)EntityID.TileID.ADAMANTITE_FORGE] = "Forgia di adamantio";
+					Main.TileNames[(int)EntityID.TileID.MYTHRIL_ANVIL] = "Incudine di mitrilio";
 				}
 				else if (LangOption == (int)ID.FRENCH)
 				{
@@ -19718,112 +18095,112 @@ namespace Terraria
 					DeathText[1] = " n'a pas réussi à éteindre l'incendie.";
 					DeathText[2] = " a essayé de s'échapper.";
 					DeathText[3] = " s'est fait lécher.";
-					Buff.BuffName[1] = "Peau d'obsidienne";
-					Buff.BuffTip[1] = "Immunise contre la lave";
-					Buff.BuffName[2] = "Régénération";
-					Buff.BuffTip[2] = "Régénère la vie";
-					Buff.BuffName[3] = "Rapidité";
-					Buff.BuffTip[3] = "Vitesse de déplacement augmentée de 25\u00a0%";
-					Buff.BuffName[4] = "Branchies";
-					Buff.BuffTip[4] = "Permet de respirer sous l'eau comme dans l'air";
-					Buff.BuffName[5] = "Peau de fer";
-					Buff.BuffTip[5] = "Augmente la défense de 8";
-					Buff.BuffName[6] = "Régénération de mana";
-					Buff.BuffTip[6] = "Régénération de mana augmentée";
-					Buff.BuffName[7] = "Pouvoir magique";
-					Buff.BuffTip[7] = "Dégâts magiques augmentés de 20\u00a0%";
-					Buff.BuffName[8] = "Poids plume";
-					Buff.BuffTip[8] = "Appuyer sur Bas ou Haut pour contrôler la vitesse de descente";
-					Buff.BuffName[9] = "Spéléologue";
-					Buff.BuffTip[9] = "Indique l'emplacement des trésors et du minerai";
-					Buff.BuffName[10] = "Invisibilité";
-					Buff.BuffTip[10] = "Procure l'invisibilité";
-					Buff.BuffName[11] = "Brillance";
-					Buff.BuffTip[11] = "Émet une aura de lumière";
-					Buff.BuffName[12] = "Vision nocturne";
-					Buff.BuffTip[12] = "Améliore la vision de nuit";
-					Buff.BuffName[13] = "Bataille";
-					Buff.BuffTip[13] = "Augmente la vitesse d'apparition des ennemis";
-					Buff.BuffName[14] = "Épines";
-					Buff.BuffTip[14] = "Les attaquants subissent aussi des dégâts";
-					Buff.BuffName[15] = "Marche sur l'eau";
-					Buff.BuffTip[15] = "Appuyer sur Bas pour entrer dans l'eau";
-					Buff.BuffName[16] = "Tir à l'arc";
-					Buff.BuffTip[16] = "La vitesse et les dégâts des flèches augmentent de 20 %";
-					Buff.BuffName[17] = "Chasseur";
-					Buff.BuffTip[17] = "Indique l'emplacement des ennemis";
-					Buff.BuffName[18] = "Gravitation";
-					Buff.BuffTip[18] = "Appuyer sur Haut ou Bas pour inverser la gravité";
-					Buff.BuffName[19] = "Orbe de lumière";
-					Buff.BuffTip[19] = "Un orbe magique qui émet de la lumière";
-					Buff.BuffName[20] = "Empoisonnement";
-					Buff.BuffTip[20] = "Perte lente de vie";
-					Buff.BuffName[21] = "Maladie des potions";
-					Buff.BuffTip[21] = "Ne peut plus consommer de potions de soin";
-					Buff.BuffName[22] = "Obscurité";
-					Buff.BuffTip[22] = "Diminue la vision de nuit";
-					Buff.BuffName[23] = "Malédiction";
-					Buff.BuffTip[23] = "Ne peut utiliser aucun objet";
-					Buff.BuffName[24] = "En feu !";
-					Buff.BuffTip[24] = "Perte lente de vie";
-					Buff.BuffName[25] = "Ivresse";
-					Buff.BuffTip[25] = "Aptitudes de mêlée augmentées, défense réduite";
-					Buff.BuffName[26] = "Bien nourri";
-					Buff.BuffTip[26] = "Amélioration mineure de toutes les stats.";
-					Buff.BuffName[27] = "Fée";
-					Buff.BuffTip[27] = "Une fée vous suit";
-					Buff.BuffName[28] = "Loup-garou";
-					Buff.BuffTip[28] = "Les aptitudes physiques sont augmentées";
-					Buff.BuffName[29] = "Clairvoyance";
-					Buff.BuffTip[29] = "Les pouvoirs magiques sont augmentés";
-					Buff.BuffName[30] = "Saignement";
-					Buff.BuffTip[30] = "Ne peut régénérer la vie";
-					Buff.BuffName[31] = "Confusion";
-					Buff.BuffTip[31] = "Les mouvements sont inversés";
-					Buff.BuffName[32] = "Ralentissement";
-					Buff.BuffTip[32] = "La vitesse de déplacement est réduite";
-					Buff.BuffName[33] = "Faiblesse";
-					Buff.BuffTip[33] = "Les aptitudes physiques sont diminuées";
-					Buff.BuffName[34] = "Peuple des mers";
-					Buff.BuffTip[34] = "Peut respirer et se déplacer sous l'eau facilement";
-					Buff.BuffName[35] = "Silencieux";
-					Buff.BuffTip[35] = "Ne peut pas utiliser des éléments qui nécessitent de mana";
-					Buff.BuffName[36] = "Armure brisée";
-					Buff.BuffTip[36] = "La défense est réduite de moitié";
-					Buff.BuffName[37] = "Peur panique";
-					Buff.BuffTip[37] = "Vous avez vu quelque chose de terrible et vous ne pouvez vous échapper.";
-					Buff.BuffName[38] = "La langue";
-					Buff.BuffTip[38] = "Vous vous êtes fait aspirer dans la bouche";
-					Buff.BuffName[39] = "Brasier maudit";
-					Buff.BuffTip[39] = "Perte de vie";
-					Buff.BuffName[40] = "Cochon d'Inde de compagnie";
-					Buff.BuffTip[40] = "Simplement adorable";
-					Buff.BuffName[41] = "Slime de compagnie";
-					Buff.BuffTip[41] = "Un vrai pot de colle";
-					Buff.BuffName[42] = "Tiphia de compagnie";
-					Buff.BuffTip[42] = "Veut récupérer tout le miel";
-					Buff.BuffName[43] = "Chauve-souris de compagnie";
-					Buff.BuffTip[43] = "Veut du sang";
-					Buff.BuffName[44] = "Loup-garou de compagnie";
-					Buff.BuffTip[44] = "Le meilleur ami de l'homme";
-					Buff.BuffName[45] = "Zombie de compagnie";
-					Buff.BuffTip[45] = "Mange de la cervelle";
-					Main.TileNames[13] = "Bouteille";
-					Main.TileNames[14] = "Table";
-					Main.TileNames[15] = "Chaise";
-					Main.TileNames[16] = "Enclume";
-					Main.TileNames[17] = "Fournaise";
-					Main.TileNames[18] = "Établi";
-					Main.TileNames[26] = "Autel de démon";
-					Main.TileNames[77] = "Forge infernale";
-					Main.TileNames[86] = "Métier à tisser";
-					Main.TileNames[94] = "Tonnelet";
-					Main.TileNames[96] = "Marmite";
-					Main.TileNames[101] = "Bibliothèque";
-					Main.TileNames[106] = "Scierie";
-					Main.TileNames[114] = "Atelier du bricoleur";
-					Main.TileNames[133] = "Forge en adamantine";
-					Main.TileNames[134] = "Enclume en mythril";
+					Buff.BuffName[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Peau d'obsidienne";
+					Buff.BuffTip[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Immunise contre la lave";
+					Buff.BuffName[(byte)EntityID.BuffID.LIFE_REGEN] = "Régénération";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIFE_REGEN] = "Régénère la vie";
+					Buff.BuffName[(byte)EntityID.BuffID.HASTE] = "Rapidité";
+					Buff.BuffTip[(byte)EntityID.BuffID.HASTE] = "Vitesse de déplacement augmentée de 25\u00a0%";
+					Buff.BuffName[(byte)EntityID.BuffID.GILLS] = "Branchies";
+					Buff.BuffTip[(byte)EntityID.BuffID.GILLS] = "Permet de respirer sous l'eau comme dans l'air";
+					Buff.BuffName[(byte)EntityID.BuffID.IRONSKIN] = "Peau de fer";
+					Buff.BuffTip[(byte)EntityID.BuffID.IRONSKIN] = "Augmente la défense de 8";
+					Buff.BuffName[(byte)EntityID.BuffID.MANA_REGEN] = "Régénération de mana";
+					Buff.BuffTip[(byte)EntityID.BuffID.MANA_REGEN] = "Régénération de mana augmentée";
+					Buff.BuffName[(byte)EntityID.BuffID.MAGIC_POWER] = "Pouvoir magique";
+					Buff.BuffTip[(byte)EntityID.BuffID.MAGIC_POWER] = "Dégâts magiques augmentés de 20\u00a0%";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOWFALL] = "Poids plume";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOWFALL] = "Appuyer sur Bas ou Haut pour contrôler la vitesse de descente";
+					Buff.BuffName[(byte)EntityID.BuffID.FIND_TREASURE] = "Spéléologue";
+					Buff.BuffTip[(byte)EntityID.BuffID.FIND_TREASURE] = "Indique l'emplacement des trésors et du minerai";
+					Buff.BuffName[(byte)EntityID.BuffID.INVISIBLE] = "Invisibilité";
+					Buff.BuffTip[(byte)EntityID.BuffID.INVISIBLE] = "Procure l'invisibilité";
+					Buff.BuffName[(byte)EntityID.BuffID.SHINE] = "Brillance";
+					Buff.BuffTip[(byte)EntityID.BuffID.SHINE] = "Émet une aura de lumière";
+					Buff.BuffName[(byte)EntityID.BuffID.NIGHTVISION] = "Vision nocturne";
+					Buff.BuffTip[(byte)EntityID.BuffID.NIGHTVISION] = "Améliore la vision de nuit";
+					Buff.BuffName[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Bataille";
+					Buff.BuffTip[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Augmente la vitesse d'apparition des ennemis";
+					Buff.BuffName[(byte)EntityID.BuffID.THORNS] = "Épines";
+					Buff.BuffTip[(byte)EntityID.BuffID.THORNS] = "Les attaquants subissent aussi des dégâts";
+					Buff.BuffName[(byte)EntityID.BuffID.WATER_WALK] = "Marche sur l'eau";
+					Buff.BuffTip[(byte)EntityID.BuffID.WATER_WALK] = "Appuyer sur Bas pour entrer dans l'eau";
+					Buff.BuffName[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Tir à l'arc";
+					Buff.BuffTip[(byte)EntityID.BuffID.RANGED_DAMAGE] = "La vitesse et les dégâts des flèches augmentent de 20 %";
+					Buff.BuffName[(byte)EntityID.BuffID.DETECT_CREATURE] = "Chasseur";
+					Buff.BuffTip[(byte)EntityID.BuffID.DETECT_CREATURE] = "Indique l'emplacement des ennemis";
+					Buff.BuffName[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Gravitation";
+					Buff.BuffTip[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Appuyer sur Haut ou Bas pour inverser la gravité";
+					Buff.BuffName[(byte)EntityID.BuffID.LIGHT_ORB] = "Orbe de lumière";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIGHT_ORB] = "Un orbe magique qui émet de la lumière";
+					Buff.BuffName[(byte)EntityID.BuffID.POISONED] = "Empoisonnement";
+					Buff.BuffTip[(byte)EntityID.BuffID.POISONED] = "Perte lente de vie";
+					Buff.BuffName[(byte)EntityID.BuffID.POTION_DELAY] = "Maladie des potions";
+					Buff.BuffTip[(byte)EntityID.BuffID.POTION_DELAY] = "Ne peut plus consommer de potions de soin";
+					Buff.BuffName[(byte)EntityID.BuffID.BLIND] = "Obscurité";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLIND] = "Diminue la vision de nuit";
+					Buff.BuffName[(byte)EntityID.BuffID.NO_ITEMS] = "Malédiction";
+					Buff.BuffTip[(byte)EntityID.BuffID.NO_ITEMS] = "Ne peut utiliser aucun objet";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE] = "En feu !";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE] = "Perte lente de vie";
+					Buff.BuffName[(byte)EntityID.BuffID.DRUNK] = "Ivresse";
+					Buff.BuffTip[(byte)EntityID.BuffID.DRUNK] = "Aptitudes de mêlée augmentées, défense réduite";
+					Buff.BuffName[(byte)EntityID.BuffID.WELL_FED] = "Bien nourri";
+					Buff.BuffTip[(byte)EntityID.BuffID.WELL_FED] = "Amélioration mineure de toutes les stats.";
+					Buff.BuffName[(byte)EntityID.BuffID.FAIRY] = "Fée";
+					Buff.BuffTip[(byte)EntityID.BuffID.FAIRY] = "Une fée vous suit";
+					Buff.BuffName[(byte)EntityID.BuffID.WEREWOLF] = "Loup-garou";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEREWOLF] = "Les aptitudes physiques sont augmentées";
+					Buff.BuffName[(byte)EntityID.BuffID.CLARAVOYANCE] = "Clairvoyance";
+					Buff.BuffTip[(byte)EntityID.BuffID.CLARAVOYANCE] = "Les pouvoirs magiques sont augmentés";
+					Buff.BuffName[(byte)EntityID.BuffID.BLEED] = "Saignement";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLEED] = "Ne peut régénérer la vie";
+					Buff.BuffName[(byte)EntityID.BuffID.CONFUSED] = "Confusion";
+					Buff.BuffTip[(byte)EntityID.BuffID.CONFUSED] = "Les mouvements sont inversés";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOW] = "Ralentissement";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOW] = "La vitesse de déplacement est réduite";
+					Buff.BuffName[(byte)EntityID.BuffID.WEAK] = "Faiblesse";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEAK] = "Les aptitudes physiques sont diminuées";
+					Buff.BuffName[(byte)EntityID.BuffID.MERFOLK] = "Peuple des mers";
+					Buff.BuffTip[(byte)EntityID.BuffID.MERFOLK] = "Peut respirer et se déplacer sous l'eau facilement";
+					Buff.BuffName[(byte)EntityID.BuffID.SILENCE] = "Silencieux";
+					Buff.BuffTip[(byte)EntityID.BuffID.SILENCE] = "Ne peut pas utiliser des éléments qui nécessitent de mana";
+					Buff.BuffName[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Armure brisée";
+					Buff.BuffTip[(byte)EntityID.BuffID.BROKEN_ARMOR] = "La défense est réduite de moitié";
+					Buff.BuffName[(byte)EntityID.BuffID.HORRIFIED] = "Peur panique";
+					Buff.BuffTip[(byte)EntityID.BuffID.HORRIFIED] = "Vous avez vu quelque chose de terrible et vous ne pouvez vous échapper.";
+					Buff.BuffName[(byte)EntityID.BuffID.TONGUED] = "La langue";
+					Buff.BuffTip[(byte)EntityID.BuffID.TONGUED] = "Vous vous êtes fait aspirer dans la bouche";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE_2] = "Brasier maudit";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE_2] = "Perte de vie";
+					Buff.BuffName[(byte)EntityID.BuffID.PET] = "Cochon d'Inde de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET] = "Simplement adorable";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 1] = "Slime de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 1] = "Un vrai pot de colle";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 2] = "Tiphia de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 2] = "Veut récupérer tout le miel";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 3] = "Chauve-souris de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 3] = "Veut du sang";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 4] = "Loup-garou de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 4] = "Le meilleur ami de l'homme";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 5] = "Zombie de compagnie";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 5] = "Mange de la cervelle";
+					Main.TileNames[(int)EntityID.TileID.BOTTLE] = "Bouteille";
+					Main.TileNames[(int)EntityID.TileID.TABLE] = "Table";
+					Main.TileNames[(int)EntityID.TileID.CHAIR] = "Chaise";
+					Main.TileNames[(int)EntityID.TileID.ANVIL] = "Enclume";
+					Main.TileNames[(int)EntityID.TileID.FURNACE] = "Fournaise";
+					Main.TileNames[(int)EntityID.TileID.WORK_BENCH] = "Établi";
+					Main.TileNames[(int)EntityID.TileID.DEMON_ALTAR] = "Autel de démon";
+					Main.TileNames[(int)EntityID.TileID.HELLFORGE] = "Forge infernale";
+					Main.TileNames[(int)EntityID.TileID.LOOM] = "Métier à tisser";
+					Main.TileNames[(int)EntityID.TileID.KEG] = "Tonnelet";
+					Main.TileNames[(int)EntityID.TileID.COOKING_POT] = "Marmite";
+					Main.TileNames[(int)EntityID.TileID.BOOKCASE] = "Bibliothèque";
+					Main.TileNames[(int)EntityID.TileID.SAWMILL] = "Scierie";
+					Main.TileNames[(int)EntityID.TileID.TINKERERS_WORKSHOP] = "Atelier du bricoleur";
+					Main.TileNames[(int)EntityID.TileID.ADAMANTITE_FORGE] = "Forge en adamantine";
+					Main.TileNames[(int)EntityID.TileID.MYTHRIL_ANVIL] = "Enclume en mythril";
 				}
 				else if (LangOption == (int)ID.SPANISH)
 				{
@@ -20180,112 +18557,112 @@ namespace Terraria
 					DeathText[1] = " no pudo extinguir el fuego.";
 					DeathText[2] = " intentó escapar.";
 					DeathText[3] = " recibió una paliza.";
-					Buff.BuffName[1] = "Piel obsidiana";
-					Buff.BuffTip[1] = "Inmune a la lava";
-					Buff.BuffName[2] = "Regeneración";
-					Buff.BuffTip[2] = "Regenera la vida";
-					Buff.BuffName[3] = "Rapidez";
-					Buff.BuffTip[3] = "Aumenta en un 25% la velocidad de movimiento";
-					Buff.BuffName[4] = "Agallas";
-					Buff.BuffTip[4] = "Permite respirar agua en lugar de aire";
-					Buff.BuffName[5] = "Piel de hierro";
-					Buff.BuffTip[5] = "Aumenta la defensa en 8";
-					Buff.BuffName[6] = "Regeneración de maná";
-					Buff.BuffTip[6] = "Aumenta la regeneración de maná";
-					Buff.BuffName[7] = "Poder mágico";
-					Buff.BuffTip[7] = "Aumenta el daño mágico en un 20%";
-					Buff.BuffName[8] = "Caída de pluma";
-					Buff.BuffTip[8] = "Pulsa ARRIBA o ABAJO para controlar la velocidad de descenso";
-					Buff.BuffName[9] = "Espeleólogo";
-					Buff.BuffTip[9] = "Muestra la ubicación de tesoros y minerales";
-					Buff.BuffName[10] = "Invisibilidad";
-					Buff.BuffTip[10] = "Proporciona invisibilidad";
-					Buff.BuffName[11] = "Brillo";
-					Buff.BuffTip[11] = "Emite luz";
-					Buff.BuffName[12] = "Noctámbulo";
-					Buff.BuffTip[12] = "Mejora la visión nocturna";
-					Buff.BuffName[13] = "Batalla";
-					Buff.BuffTip[13] = "Aumenta la velocidad de regeneración del enemigo";
-					Buff.BuffName[14] = "Espinas";
-					Buff.BuffTip[14] = "Los atacantes también sufren daños";
-					Buff.BuffName[15] = "Flotación";
-					Buff.BuffTip[15] = "Pulsa ABAJO para sumergirte";
-					Buff.BuffName[16] = "Tiro con arco";
-					Buff.BuffTip[16] = "Aumenta en un 20% la velocidad y el daño de las flechas";
-					Buff.BuffName[17] = "Cazador";
-					Buff.BuffTip[17] = "Muestra la ubicación de los enemigos";
-					Buff.BuffName[18] = "Gravedad";
-					Buff.BuffTip[18] = "Pulsa ARRIBA o ABAJO para invertir la gravedad";
-					Buff.BuffName[19] = "Orbe de luz";
-					Buff.BuffTip[19] = "Orbe mágico que proporciona luz";
-					Buff.BuffName[20] = "Veneno";
-					Buff.BuffTip[20] = "Reduce el nivel de vida lentamente";
-					Buff.BuffName[21] = "Enfermedad de poción";
-					Buff.BuffTip[21] = "Impide seguir consumiendo remedios curativos";
-					Buff.BuffName[22] = "Oscuridad";
-					Buff.BuffTip[22] = "Disminuye la claridad";
-					Buff.BuffName[23] = "Maldición";
-					Buff.BuffTip[23] = "No se puede usar ningún objeto";
-					Buff.BuffName[24] = "Llamas";
-					Buff.BuffTip[24] = "Reduce el nivel de vida lentamente";
-					Buff.BuffName[25] = "Beodo";
-					Buff.BuffTip[25] = "Mejora el ataque cuerpo a cuerpo pero reduce la defensa";
-					Buff.BuffName[26] = "Bien alimentado";
-					Buff.BuffTip[26] = "Pequeñas mejoras a todas las estadísticas";
-					Buff.BuffName[27] = "Hada";
-					Buff.BuffTip[27] = "Un hada te acompaña";
-					Buff.BuffName[28] = "Hombre lobo";
-					Buff.BuffTip[28] = "Aumenta la capacidad física";
-					Buff.BuffName[29] = "Clarividencia";
-					Buff.BuffTip[29] = "Aumenta los poderes mágicos";
-					Buff.BuffName[30] = "Hemorragia";
-					Buff.BuffTip[30] = "No se puede recuperar vida";
-					Buff.BuffName[31] = "Confusión";
-					Buff.BuffTip[31] = "Invierte los movimientos";
-					Buff.BuffName[32] = "Lentitud";
-					Buff.BuffTip[32] = "Disminuye la velocidad de movimiento";
-					Buff.BuffName[33] = "Debilidad";
-					Buff.BuffTip[33] = "Disminuye la capacidad física";
-					Buff.BuffName[34] = "Tritón";
-					Buff.BuffTip[34] = "Respira y se mueve bajo el agua con facilidad";
-					Buff.BuffName[35] = "Silencio";
-					Buff.BuffTip[35] = "No puede utilizar los artículos que requieren maná";
-					Buff.BuffName[36] = "Armadura rota";
-					Buff.BuffTip[36] = "La defensa disminuye hasta la mitad";
-					Buff.BuffName[37] = "Terror";
-					Buff.BuffTip[37] = "Has visto algo horrible... ¡No hay escapatoria!";
-					Buff.BuffName[38] = "La Lengua";
-					Buff.BuffTip[38] = "Te succiona hacia la Boca";
-					Buff.BuffName[39] = "El Averno";
-					Buff.BuffTip[39] = "Reduce el nivel de vida progresivamente";
-					Buff.BuffName[40] = "Conejilla de Indias mascota";
-					Buff.BuffTip[40] = "Simplementa entrañable";
-					Buff.BuffName[41] = "Slime mascota";
-					Buff.BuffTip[41] = "Una verdadera pelotita slime";
-					Buff.BuffName[42] = "Avispa mascota";
-					Buff.BuffTip[42] = "Quiere toda la miel";
-					Buff.BuffName[43] = "Murciélago mascota";
-					Buff.BuffTip[43] = "En busca de sangre";
-					Buff.BuffName[44] = "Hombre lobo mascota";
-					Buff.BuffTip[44] = "El mejor amigo del hombre";
-					Buff.BuffName[45] = "Zombi mascota";
-					Buff.BuffTip[45] = "Come cerebros";
-					Main.TileNames[13] = "Botella";
-					Main.TileNames[14] = "Mesa";
-					Main.TileNames[15] = "Silla";
-					Main.TileNames[16] = "Yunque";
-					Main.TileNames[17] = "Forja";
-					Main.TileNames[18] = "Banco de trabajo";
-					Main.TileNames[26] = "Altar demoníaco";
-					Main.TileNames[77] = "Forja infernal";
-					Main.TileNames[86] = "Telar";
-					Main.TileNames[94] = "Barrica";
-					Main.TileNames[96] = "Perol";
-					Main.TileNames[101] = "Librería";
-					Main.TileNames[106] = "Serrería";
-					Main.TileNames[114] = "Taller de chapuzas";
-					Main.TileNames[133] = "Forja de adamantita";
-					Main.TileNames[134] = "Yunque de mithril";
+					Buff.BuffName[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Piel obsidiana";
+					Buff.BuffTip[(byte)EntityID.BuffID.LAVA_IMMUNE] = "Inmune a la lava";
+					Buff.BuffName[(byte)EntityID.BuffID.LIFE_REGEN] = "Regeneración";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIFE_REGEN] = "Regenera la vida";
+					Buff.BuffName[(byte)EntityID.BuffID.HASTE] = "Rapidez";
+					Buff.BuffTip[(byte)EntityID.BuffID.HASTE] = "Aumenta en un 25% la velocidad de movimiento";
+					Buff.BuffName[(byte)EntityID.BuffID.GILLS] = "Agallas";
+					Buff.BuffTip[(byte)EntityID.BuffID.GILLS] = "Permite respirar agua en lugar de aire";
+					Buff.BuffName[(byte)EntityID.BuffID.IRONSKIN] = "Piel de hierro";
+					Buff.BuffTip[(byte)EntityID.BuffID.IRONSKIN] = "Aumenta la defensa en 8";
+					Buff.BuffName[(byte)EntityID.BuffID.MANA_REGEN] = "Regeneración de maná";
+					Buff.BuffTip[(byte)EntityID.BuffID.MANA_REGEN] = "Aumenta la regeneración de maná";
+					Buff.BuffName[(byte)EntityID.BuffID.MAGIC_POWER] = "Poder mágico";
+					Buff.BuffTip[(byte)EntityID.BuffID.MAGIC_POWER] = "Aumenta el daño mágico en un 20%";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOWFALL] = "Caída de pluma";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOWFALL] = "Pulsa ARRIBA o ABAJO para controlar la velocidad de descenso";
+					Buff.BuffName[(byte)EntityID.BuffID.FIND_TREASURE] = "Espeleólogo";
+					Buff.BuffTip[(byte)EntityID.BuffID.FIND_TREASURE] = "Muestra la ubicación de tesoros y minerales";
+					Buff.BuffName[(byte)EntityID.BuffID.INVISIBLE] = "Invisibilidad";
+					Buff.BuffTip[(byte)EntityID.BuffID.INVISIBLE] = "Proporciona invisibilidad";
+					Buff.BuffName[(byte)EntityID.BuffID.SHINE] = "Brillo";
+					Buff.BuffTip[(byte)EntityID.BuffID.SHINE] = "Emite luz";
+					Buff.BuffName[(byte)EntityID.BuffID.NIGHTVISION] = "Noctámbulo";
+					Buff.BuffTip[(byte)EntityID.BuffID.NIGHTVISION] = "Mejora la visión nocturna";
+					Buff.BuffName[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Batalla";
+					Buff.BuffTip[(byte)EntityID.BuffID.ENEMY_SPAWNS] = "Aumenta la velocidad de regeneración del enemigo";
+					Buff.BuffName[(byte)EntityID.BuffID.THORNS] = "Espinas";
+					Buff.BuffTip[(byte)EntityID.BuffID.THORNS] = "Los atacantes también sufren daños";
+					Buff.BuffName[(byte)EntityID.BuffID.WATER_WALK] = "Flotación";
+					Buff.BuffTip[(byte)EntityID.BuffID.WATER_WALK] = "Pulsa ABAJO para sumergirte";
+					Buff.BuffName[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Tiro con arco";
+					Buff.BuffTip[(byte)EntityID.BuffID.RANGED_DAMAGE] = "Aumenta en un 20% la velocidad y el daño de las flechas";
+					Buff.BuffName[(byte)EntityID.BuffID.DETECT_CREATURE] = "Cazador";
+					Buff.BuffTip[(byte)EntityID.BuffID.DETECT_CREATURE] = "Muestra la ubicación de los enemigos";
+					Buff.BuffName[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Gravedad";
+					Buff.BuffTip[(byte)EntityID.BuffID.GRAVITY_CONTROL] = "Pulsa ARRIBA o ABAJO para invertir la gravedad";
+					Buff.BuffName[(byte)EntityID.BuffID.LIGHT_ORB] = "Orbe de luz";
+					Buff.BuffTip[(byte)EntityID.BuffID.LIGHT_ORB] = "Orbe mágico que proporciona luz";
+					Buff.BuffName[(byte)EntityID.BuffID.POISONED] = "Veneno";
+					Buff.BuffTip[(byte)EntityID.BuffID.POISONED] = "Reduce el nivel de vida lentamente";
+					Buff.BuffName[(byte)EntityID.BuffID.POTION_DELAY] = "Enfermedad de poción";
+					Buff.BuffTip[(byte)EntityID.BuffID.POTION_DELAY] = "Impide seguir consumiendo remedios curativos";
+					Buff.BuffName[(byte)EntityID.BuffID.BLIND] = "Oscuridad";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLIND] = "Disminuye la claridad";
+					Buff.BuffName[(byte)EntityID.BuffID.NO_ITEMS] = "Maldición";
+					Buff.BuffTip[(byte)EntityID.BuffID.NO_ITEMS] = "No se puede usar ningún objeto";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE] = "Llamas";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE] = "Reduce el nivel de vida lentamente";
+					Buff.BuffName[(byte)EntityID.BuffID.DRUNK] = "Beodo";
+					Buff.BuffTip[(byte)EntityID.BuffID.DRUNK] = "Mejora el ataque cuerpo a cuerpo pero reduce la defensa";
+					Buff.BuffName[(byte)EntityID.BuffID.WELL_FED] = "Bien alimentado";
+					Buff.BuffTip[(byte)EntityID.BuffID.WELL_FED] = "Pequeñas mejoras a todas las estadísticas";
+					Buff.BuffName[(byte)EntityID.BuffID.FAIRY] = "Hada";
+					Buff.BuffTip[(byte)EntityID.BuffID.FAIRY] = "Un hada te acompaña";
+					Buff.BuffName[(byte)EntityID.BuffID.WEREWOLF] = "Hombre lobo";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEREWOLF] = "Aumenta la capacidad física";
+					Buff.BuffName[(byte)EntityID.BuffID.CLARAVOYANCE] = "Clarividencia";
+					Buff.BuffTip[(byte)EntityID.BuffID.CLARAVOYANCE] = "Aumenta los poderes mágicos";
+					Buff.BuffName[(byte)EntityID.BuffID.BLEED] = "Hemorragia";
+					Buff.BuffTip[(byte)EntityID.BuffID.BLEED] = "No se puede recuperar vida";
+					Buff.BuffName[(byte)EntityID.BuffID.CONFUSED] = "Confusión";
+					Buff.BuffTip[(byte)EntityID.BuffID.CONFUSED] = "Invierte los movimientos";
+					Buff.BuffName[(byte)EntityID.BuffID.SLOW] = "Lentitud";
+					Buff.BuffTip[(byte)EntityID.BuffID.SLOW] = "Disminuye la velocidad de movimiento";
+					Buff.BuffName[(byte)EntityID.BuffID.WEAK] = "Debilidad";
+					Buff.BuffTip[(byte)EntityID.BuffID.WEAK] = "Disminuye la capacidad física";
+					Buff.BuffName[(byte)EntityID.BuffID.MERFOLK] = "Tritón";
+					Buff.BuffTip[(byte)EntityID.BuffID.MERFOLK] = "Respira y se mueve bajo el agua con facilidad";
+					Buff.BuffName[(byte)EntityID.BuffID.SILENCE] = "Silencio";
+					Buff.BuffTip[(byte)EntityID.BuffID.SILENCE] = "No puede utilizar los artículos que requieren maná";
+					Buff.BuffName[(byte)EntityID.BuffID.BROKEN_ARMOR] = "Armadura rota";
+					Buff.BuffTip[(byte)EntityID.BuffID.BROKEN_ARMOR] = "La defensa disminuye hasta la mitad";
+					Buff.BuffName[(byte)EntityID.BuffID.HORRIFIED] = "Terror";
+					Buff.BuffTip[(byte)EntityID.BuffID.HORRIFIED] = "Has visto algo horrible... ¡No hay escapatoria!";
+					Buff.BuffName[(byte)EntityID.BuffID.TONGUED] = "La Lengua";
+					Buff.BuffTip[(byte)EntityID.BuffID.TONGUED] = "Te succiona hacia la Boca";
+					Buff.BuffName[(byte)EntityID.BuffID.ON_FIRE_2] = "El Averno";
+					Buff.BuffTip[(byte)EntityID.BuffID.ON_FIRE_2] = "Reduce el nivel de vida progresivamente";
+					Buff.BuffName[(byte)EntityID.BuffID.PET] = "Conejilla de Indias mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET] = "Simplementa entrañable";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 1] = "Slime mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 1] = "Una verdadera pelotita slime";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 2] = "Avispa mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 2] = "Quiere toda la miel";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 3] = "Murciélago mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 3] = "En busca de sangre";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 4] = "Hombre lobo mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 4] = "El mejor amigo del hombre";
+					Buff.BuffName[(byte)EntityID.BuffID.PET + 5] = "Zombi mascota";
+					Buff.BuffTip[(byte)EntityID.BuffID.PET + 5] = "Come cerebros";
+					Main.TileNames[(int)EntityID.TileID.BOTTLE] = "Botella";
+					Main.TileNames[(int)EntityID.TileID.TABLE] = "Mesa";
+					Main.TileNames[(int)EntityID.TileID.CHAIR] = "Silla";
+					Main.TileNames[(int)EntityID.TileID.ANVIL] = "Yunque";
+					Main.TileNames[(int)EntityID.TileID.FURNACE] = "Forja";
+					Main.TileNames[(int)EntityID.TileID.WORK_BENCH] = "Banco de trabajo";
+					Main.TileNames[(int)EntityID.TileID.DEMON_ALTAR] = "Altar demoníaco";
+					Main.TileNames[(int)EntityID.TileID.HELLFORGE] = "Forja infernal";
+					Main.TileNames[(int)EntityID.TileID.LOOM] = "Telar";
+					Main.TileNames[(int)EntityID.TileID.KEG] = "Barrica";
+					Main.TileNames[(int)EntityID.TileID.COOKING_POT] = "Perol";
+					Main.TileNames[(int)EntityID.TileID.BOOKCASE] = "Librería";
+					Main.TileNames[(int)EntityID.TileID.SAWMILL] = "Serrería";
+					Main.TileNames[(int)EntityID.TileID.TINKERERS_WORKSHOP] = "Taller de chapuzas";
+					Main.TileNames[(int)EntityID.TileID.ADAMANTITE_FORGE] = "Forja de adamantita";
+					Main.TileNames[(int)EntityID.TileID.MYTHRIL_ANVIL] = "Yunque de mithril";
 				}
 			}
 		}
