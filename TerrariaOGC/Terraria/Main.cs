@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Terraria.Achievements;
+using Terraria.Leaderboards;
 
 #if !USE_ORIGINAL_CODE
 using Keys = Microsoft.Xna.Framework.Input.Keys;
@@ -73,7 +74,7 @@ namespace Terraria
 
 		public static int ResolutionHeight;
 
-		internal const string OGCVersion = "TerrariaOGC v1.02";
+		internal const string OGCVersion = "TerrariaOGC v1.03";
 #endif
 
 		public const int SmallWorldW = 4200;
@@ -157,7 +158,11 @@ namespace Terraria
 		public const string VersionNumber = "Xbox360 v1.09";
 #endif
 
+#if !DEBUG
 		public const int WorldRate = 1;
+#else
+		public static int WorldRate = 1;
+#endif
 
 		public const bool IgnoreErrors = false;
 
@@ -208,9 +213,9 @@ namespace Terraria
 
 		private const int SplashDelayRating = 240;
 
-		private const int UpsellNumScreens = 1; // Could there have been more than 1?
+		private const int UpsellNumScreens = 1; // Thanks to the leaked prototype, it is confirmed there was 2 upsell images initially (simple shots from the PC version) which cycled between them.
 
-		private const int UpsellDelay = 600; // This does not appear to have a use in the code.
+		private const int UpsellDelay = 600; // This does no longer appear to have a use in the code, as there is only 1 upsell image, meaning there is no need to cycle them.
 
 		private static readonly string[] MusicCueNames = new string[MaxNumMusic]
 		{
@@ -601,7 +606,7 @@ namespace Terraria
 
 		public static int NetPlayCounter;
 
-		public static int LastItemUpdate; // Unused
+		public static int LastItemUpdate; // Removed reference in the network version update, which did not even affect the NETWORK_VERSION variable according to the prototype.
 
 		private static int SaveIconCounter = 0;
 
@@ -694,8 +699,27 @@ namespace Terraria
 		private float ZoomLevel;
 		public static Stopwatch FPSTimer = new Stopwatch();
 		public static short FPS, FPSCount;
-		KeyboardState CurrentKeyState;
-		KeyboardState PrevKeyState;
+		internal static KeyboardState CurrentKeyState;
+		internal static KeyboardState PrevKeyState;
+
+#if DEBUG
+		// Fresh from what is labelled as 'Xbox360 v0.3.5', Debug settings!
+		public static bool chatMode = false;
+		public static bool chatRelease = false;
+		public static ChatLine ChatBuffer = new ChatLine();
+		public static string chatText = "";
+		public static bool osd = true;
+		public static bool debugMode = false;
+		public static bool lightTiles = false;
+		public static bool stopSpawns = false;
+		public static int alwaysSpawn = 0;
+		public static bool godMode = false;
+		public static int debugCursorMode = 0;
+		public static int debugCursorType = 0;
+		public static int debugCursorSize = 1;
+		public static bool debugRelease = false;
+		public static bool killFriends = false; // Unimplemented. No seriously, even the debug version had it as a placeholder.
+#endif
 
 		public static Stopwatch RunTimer = new Stopwatch();
 
@@ -1567,10 +1591,98 @@ namespace Terraria
 			{
 				SoundResponse = UsedManager.MatchCounted(Window.Handle);
 			}
+			CheckKeyStates();
 #endif
 			WorldGen.ToDestroyObject = false;
 			UpdateMusic(UI.MainUI.ActivePlayer);
-			HasFocus = IsActive;
+
+#if DEBUG && !USE_ORIGINAL_CODE
+			if (chatMode)
+			{
+				if (CurrentKeyState.IsKeyDown(Keys.Escape))
+				{
+					Main.chatMode = false;
+					UI.MainUI.inputTextCanceled = true;
+					Main.PlaySound(11);
+				}
+				string text = chatText;
+				Main.chatText = UI.MainUI.GetInputText(Main.chatText, null, UI.MainUI.ActivePlayer.Name + ":").UserText;
+
+				while (UI.BoldSmallFont.MeasureString(Main.chatText).X > 470f)
+				{
+					Main.chatText = Main.chatText.Substring(0, Main.chatText.Length - 1);
+				}
+				if (text != Main.chatText)
+				{
+					Main.PlaySound(12);
+				}
+				if (UI.MainUI.inputTextEnter)
+				{
+					if (!UI.MainUI.inputTextCanceled)
+					{
+						Main.PlaySound(11);
+						Main.devCommands();
+						if (Main.chatText.Length > 0)
+						{
+							for (int LineIdx = 1; LineIdx < MaxNumChatLines; ++LineIdx)
+							{
+								ChatLineSet[LineIdx - 1] = ChatLineSet[LineIdx];
+							}
+							Main.NewText(Main.chatText, 255, 255, 255);
+							Main.chatText = "";
+						}
+					}
+					TextInputEXT.StopTextInput();
+					TextInputEXT.TextInput -= UI.MainUI.OnTextInput;
+					Main.chatMode = false;
+					UI.MainUI.ClearInput();
+					Main.chatRelease = false;
+					UI.MainUI.ActivePlayer.releaseHook = false;
+
+					if (ChatLineSet[1].ShowTime > 0 && ChatLineSet[0].Text == "")
+					{
+						for (int LineIdx = 1; LineIdx < MaxNumChatLines; ++LineIdx)
+						{
+							ChatLineSet[LineIdx - 1] = ChatLineSet[LineIdx];
+						}
+						ChatLineSet[6] = Main.ChatBuffer;
+					}
+				}
+			}
+
+			if (IsGameStarted && CurrentKeyState.IsKeyDown(Keys.Enter) && !CurrentKeyState.IsKeyDown(Keys.LeftAlt) && !CurrentKeyState.IsKeyDown(Keys.RightAlt))
+			{
+				if (Main.chatRelease && !Main.chatMode && !UI.MainUI.editSign && !CurrentKeyState.IsKeyDown(Keys.Escape))
+				{
+					Main.PlaySound(10);
+					Main.chatMode = true;
+					UI.MainUI.ClearInput();
+					Main.chatText = "";
+
+					if (ChatLineSet[0].ShowTime > 0)
+					{
+						Main.ChatBuffer = ChatLineSet[6];
+						for (int LineIdx = MaxNumChatLines - 1; LineIdx > 0; LineIdx--)
+						{
+							ref ChatLine reference = ref ChatLineSet[LineIdx];
+							reference = ChatLineSet[LineIdx - 1];
+						}
+						ChatLineSet[0].Text = "";
+#if VERSION_101
+						ChatLineSet[0].Size = UI.BoldSmallFont.MeasureString(" ");
+#endif
+					}
+				}
+				Main.chatRelease = false;
+			}
+			else
+			{
+				Main.chatRelease = true;
+			}
+			UpdateDebug();
+#endif
+
+						HasFocus = IsActive;
 			IsGamePaused = !HasFocus && NetMode == (byte)NetModeSetting.LOCAL;
 			if (IsGamePaused)
 			{
@@ -1585,13 +1697,20 @@ namespace Terraria
 				FPSTimer.Restart();
 			}
 
-			CheckKeyStates();
+#if DEBUG
+			if (HasKeyBeenPressed(Keys.F) && !Main.chatMode)
+#else
 			if (HasKeyBeenPressed(Keys.F))
+#endif
 			{
 				GraphicsGame.ToggleFullScreen();
 			}
 
+#if DEBUG
+			if (IsGameStarted && !Main.chatMode)
+#else
 			if (IsGameStarted)
+#endif
 			{
 				if (CurrentKeyState.IsKeyDown(Keys.OemPlus))
 				{
@@ -1869,6 +1988,16 @@ namespace Terraria
 					PlayerSet[PlayerIdx].UpdatePlayer(PlayerIdx);
 				}
 			}
+
+#if DEBUG
+			if (Main.godMode)
+			{
+				UI.MainUI.ActivePlayer.statLife = UI.MainUI.ActivePlayer.StatLifeMax;
+				UI.MainUI.ActivePlayer.statMana = UI.MainUI.ActivePlayer.statManaMax2;
+				UI.MainUI.ActivePlayer.breath = 200;
+			}
+#endif
+
 			if (NetMode != (byte)NetModeSetting.CLIENT && TutorialState >= Tutorial.THE_END)
 			{
 				NPC.SpawnNPC();
@@ -1925,6 +2054,8 @@ namespace Terraria
 
 		private void DrawSplash(GameTime GTime)
 		{
+			// Tragic downgrades in the splash department, as initially they were modelled after PC's, meaning they had trees and NPCs in the image too.
+
 			GraphicsDevice.Clear(default);
 			base.Draw(GTime);
 			if (SplashCounter == SplashDelay + 16 + 16)
@@ -1978,6 +2109,9 @@ namespace Terraria
 
 		public void DrawUpsell()
 		{
+			// While inferior to the released upsell for the console versions, the leaked prototype showed they may have tried (or at the very least thought of) engine-rendered text next to an image.
+			// When viewing them, the image has larger Terraria-styled buttons to overlap the normal controls display, with smaller images of (PC) gameplay to the right, leaving a lot of unused space to the left.
+
 			SplashCounter++;
 			int FadeVal = ((SplashCounter >= 16) ? 255 : (SplashCounter * 255 / 16));
 #if USE_ORIGINAL_CODE // Unsurprisingly, the upsell sprite is 960x540, so Engine only needed to display it as-is on the Xbox 360 version...
@@ -1985,7 +2119,7 @@ namespace Terraria
 			Position.X = ResolutionWidth - SplashTextures[SplashLogo].Width >> 1;
 			Position.Y = ResolutionHeight - SplashTextures[SplashLogo].Height >> 1;
 			SpriteBatch.Draw(SplashTextures[SplashLogo], Position, new Color(FadeVal, FadeVal, FadeVal, FadeVal));
-#else	   // But since I'm allowing for greater screen resolutions, we draw with a rectangle, which will display perfectly on 540p, or stretch with higher resolutions.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							
+#else	  // But since I'm allowing for greater screen resolutions, we draw with a rectangle, which will display perfectly on 540p, or stretch with higher resolutions.
 			SpriteBatch.Draw(SplashTextures[SplashLogo], new Rectangle(0, 0, ResolutionWidth, ResolutionHeight), new Color(FadeVal, FadeVal, FadeVal, FadeVal));
 #endif
 		}
@@ -2084,6 +2218,17 @@ namespace Terraria
 #endif
 				SpriteSheet<_sheetSprites>.Draw(SaveIconSprite, IconX, IconY, IconColour, (float)(SaveIconCounter * (Math.PI / 60.0)), 1f);
 			}
+
+#if DEBUG
+			if (Main.osd)
+			{
+				Vector2 origin = UI.BoldSmallFont.MeasureString(VersionNumber);
+				origin.X *= 0.5f;
+				origin.Y *= 0.5f;
+				Main.SpriteBatch.DrawString(UI.BoldSmallFont, VersionNumber + " Debug", new Vector2(origin.X + (10f * ScreenMultiplier), ResolutionHeight - origin.Y - 2f), Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
+			}
+#endif
+
 			SpriteBatch.End();
 		}
 
@@ -2786,6 +2931,787 @@ namespace Terraria
 			{
 			}
 		}
+
+#if DEBUG && !USE_ORIGINAL_CODE
+		private static void devCommands()
+		{
+			ChatLine Buffer = ChatLineSet[6];
+
+			// For accuracy-sake, gonna keep this as an if-else instead of a structure check for valid commands.
+			if (Main.chatText == "/help")
+			{
+				Main.NewText("/osd /light, /nospawns, /godmode, /debug, /bm, /invade, /killfriends", 250, 250, 0);
+				Main.NewText("/npcspawn <#>, /item <#>, /rate <#>, /time <#>, /lang <#>", 250, 250, 0);
+				Main.NewText("/clearenemies, /clearitems, /clearnpcs, /meteor, /spawn, /hard, /ore, /altar", 250, 250, 0);
+				Main.NewText("/dawn, /noon, /dusk, /midnight", 250, 250, 0);
+				Main.NewText("/npc <#>, /tile <#>, /erase, /water, /lava, /size <#>, /stop, /cactus, /mushroom, /caverer, /shroompatch, /mine", 250, 250, 0);
+				Main.NewText("/remove, /boss <#>, /boost, /incr_stats, /buff", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/osd")
+			{
+				if (Main.osd)
+				{
+					Main.osd = false;
+					Main.NewText("On Screen Display disabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.osd = true;
+					Main.NewText("On Screen Display enabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/boost")
+			{
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.SPECTRE_BOOTS);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.HAMDRAX);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.MINING_HELMET);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.MAGIC_MIRROR);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.VULCAN_REPEATER);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.GUNGNIR);	// You're baiting me? No way they spawn in a Vulcan Repeater but leave out the Tizona & Tonbogiri?
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.EXCALIBUR);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.ANGEL_WINGS);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.PLATINUM_COIN);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.OBSIDIAN_HORSESHOE);
+				Item.NewItem(UI.MainUI.ActivePlayer.XYWH.X, UI.MainUI.ActivePlayer.XYWH.Y, Player.width, Player.height, (int)EntityID.ItemID.GRAPPLING_HOOK);
+				Main.NewText("Feeling better?", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/buff")
+			{
+				UI.MainUI.ActivePlayer.AddBuff(Main.Rand.Next((int)EntityID.BuffID.NUM_BUFFS), 3600);
+				Main.NewText("Random buff applied...", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/wof")
+			{
+				if (NPC.SpawnWOF(ref UI.MainUI.ActivePlayer.Position, true))
+				{
+					Main.NewText("Spawned WoF", 250, 250, 0);
+				}
+				else
+				{
+					Main.NewText("Spawning WoF failed", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/incr_stats")
+			{
+				Main.NewText("Boosting statistics for player " + Netplay.Session.AllGamers[0].Gamertag, 250, 250, 0);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.GroundTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.AirTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.AirTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.WaterTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.WaterTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.WaterTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.LavaTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.LavaTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.LavaTravel);
+				UI.MainUI.Statistics.IncreaseStat(StatisticEntry.LavaTravel);
+				LeaderboardInfo.SubmitStatistics(UI.MainUI.Statistics, Netplay.Session.AllGamers[0]);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/dawn")
+			{
+				Main.GameTime.DayTime = true;
+				Main.GameTime.WorldTime = 0f;
+				NetMessage.CreateMessage0((int)NetMessageId.CLIENT_WORLD_DATA);
+				NetMessage.SendMessage();
+				Main.NewText("Time changed to dawn", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/dusk")
+			{
+				Main.GameTime.DayTime = false;
+				Main.GameTime.WorldTime = 0f;
+				NetMessage.CreateMessage0((int)NetMessageId.CLIENT_WORLD_DATA);
+				NetMessage.SendMessage();
+				Main.NewText("Time changed to dusk", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/noon")
+			{
+				Main.GameTime.DayTime = true;
+				Main.GameTime.WorldTime = 27000f;
+				NetMessage.CreateMessage0((int)NetMessageId.CLIENT_WORLD_DATA);
+				NetMessage.SendMessage();
+				Main.NewText("Time changed to noon", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/midnight")
+			{
+				Main.GameTime.DayTime = false;
+				Main.GameTime.WorldTime = 16200f;
+				NetMessage.CreateMessage0((int)NetMessageId.CLIENT_WORLD_DATA);
+				NetMessage.SendMessage();
+				Main.NewText("Time changed to midnight", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/bm")
+			{
+				if (!Main.GameTime.IsBloodMoon)
+				{
+					if (Main.GameTime.DayTime)
+					{
+						Main.GameTime.DayTime = false;
+						Main.GameTime.WorldTime = 0f;
+					}
+					Main.GameTime.IsBloodMoon = true;
+					Main.NewText("Bloodmoon started", 250, 250, 0);
+				}
+				else
+				{
+					Main.GameTime.IsBloodMoon = false;
+					Main.NewText("Bloodmoon stopped", 250, 250, 0);
+				}
+				NetMessage.CreateMessage0((int)NetMessageId.CLIENT_WORLD_DATA);
+				NetMessage.SendMessage();
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/debug")
+			{
+				if (Main.debugMode)
+				{
+					Main.debugMode = false;
+					Main.NewText("Debug disabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.debugMode = true;
+					Main.NewText("Debug enabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/killfriends")
+			{
+				if (Main.killFriends)
+				{
+					Main.killFriends = false;
+					Main.NewText("Kill friends disabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.killFriends = true;
+					Main.NewText("Kill friends enabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/light")
+			{
+				if (Main.lightTiles)
+				{
+					Main.lightTiles = false;
+					Main.NewText("Lighting enabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.lightTiles = true;
+					Main.NewText("Lighting disabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/godmode")
+			{
+				if (Main.godMode)
+				{
+					Main.godMode = false;
+					Main.NewText("Godmode disabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.godMode = true;
+					Main.NewText("Godmode enabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/nospawns")
+			{
+				if (Main.stopSpawns)
+				{
+					Main.stopSpawns = false;
+					Main.NewText("Enemy spawns enabled", 250, 250, 0);
+				}
+				else
+				{
+					Main.stopSpawns = true;
+					Main.NewText("Enemy spawns disabled", 250, 250, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/spawn")
+			{
+				UI.MainUI.ActivePlayer.Spawn(); // This is more of a debug magic mirror, rather than an instant respawn, since you can just press a button for that upon death.
+				Main.NewText("Respawning...", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/hard")
+			{
+				if (!Main.InHardMode)
+				{
+					WorldGen.StartHardmode();
+					Main.NewText("Hardmode enabled", 250, 250, 0);
+					NetMessage.CreateMessage0(7);
+					NetMessage.SendMessage();
+				}
+				else
+				{
+					Main.NewText("Hardmode already active...", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/item ")
+			{
+				string text = Main.chatText.Substring(6);
+				try
+				{
+					int num = Convert.ToInt32(text);
+					int num2 = 0;
+					if (num < (int)EntityID.ItemID.NUM_TYPES)
+					{
+						if (num < 0)
+						{
+							Item item = default;
+							item.SetDefaults(Lang.ItemName(num));
+							num2 = Item.NewItem((int)UI.MainUI.ActivePlayer.Position.X, (int)UI.MainUI.ActivePlayer.Position.Y, Player.width, Player.height, item.Type);
+							Main.ItemSet[num2].SetDefaults(Lang.ItemName(num));
+						}
+						else
+						{
+							num2 = Item.NewItem((int)UI.MainUI.ActivePlayer.Position.X, (int)UI.MainUI.ActivePlayer.Position.Y, Player.width, Player.height, num);
+						}
+
+						Main.ItemSet[num2].Stack = Main.ItemSet[num2].MaxStack;
+						NetMessage.CreateMessage2((int)NetMessageId.MSG_SYNC_ITEM, UI.MainUI.MyPlayer, num2);
+						NetMessage.SendMessage();
+						Main.NewText(Lang.ItemName(Main.ItemSet[num2].NetID) + " created", 250, 250, 0);
+					}
+				}
+				catch (FormatException)
+				{
+					Item item = default;
+					int num3 = 0;
+					item.SetDefaults(text);
+					if (item.Type > 0)
+					{
+						num3 = Item.NewItem((int)UI.MainUI.ActivePlayer.Position.X, (int)UI.MainUI.ActivePlayer.Position.Y, Player.width, Player.height, item.Type);
+						Main.ItemSet[num3].SetDefaults(text);
+						Main.ItemSet[num3].Stack = Main.ItemSet[num3].MaxStack;
+						NetMessage.CreateMessage2((int)NetMessageId.MSG_SYNC_ITEM, UI.MainUI.MyPlayer, num3);
+						NetMessage.SendMessage();
+						Main.NewText(Lang.ItemName(Main.ItemSet[num3].NetID) + " created", 250, 250, 0);
+					}
+					else
+					{
+						Main.NewText("Could not create item. Try another ID.", 250, 0, 0);
+					}
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText.Length > 10 && Main.chatText.Substring(0, 10) == "/npcspawn ")
+			{
+				if (Main.NetMode != (int)NetModeSetting.CLIENT)
+				{
+					string value = Main.chatText.Substring(10);
+					try
+					{
+						int num4 = Convert.ToInt32(value);
+						if (num4 < (int)EntityID.NPCID.NUM_TYPES)
+						{
+							Main.alwaysSpawn = num4;
+							if (num4 == 0)
+							{
+								Main.NewText("Spawning mode set to normal", 250, 250, 0);
+							}
+							else
+							{
+								NPC nPC = new NPC();
+								nPC.SetDefaults(num4);
+								Main.NewText("Spawning " + nPC.TypeName + " only", 250, 250, 0);
+							}
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText("Name-based spawning not supported...", 250, 0, 0);
+					}
+				}
+				else
+				{
+					Main.NewText("<error>", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/boss ")
+			{
+				if (Main.NetMode != (int)NetModeSetting.CLIENT)
+				{
+					string value2 = Main.chatText.Substring(6);
+					try
+					{
+						int num5 = Convert.ToInt32(value2);
+						if (num5 < (int)EntityID.NPCID.NUM_TYPES && num5 > 0)
+						{
+							NPC.SpawnOnPlayer(UI.MainUI.ActivePlayer, num5);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText("Name-based spawning not supported...", 250, 0, 0);
+					}
+				}
+				else
+				{
+					Main.NewText("<error>", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/invade")
+			{
+				if (NetMode != (int)NetModeSetting.CLIENT)
+				{
+					if (Main.InvasionType == 0)
+					{
+						Main.InvasionDelay = 0;
+						Main.NewText("Invasion started", 250, 250, 0);
+						Main.StartInvasion();
+					}
+					else
+					{
+						Main.InvasionType = 0;
+						Main.NewText("Invasion stopped", 250, 250, 0);
+					}
+				}
+				else
+				{
+					Main.NewText("<error>", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/meteor")
+			{
+				if (NetMode != (int)NetModeSetting.CLIENT)
+				{
+					WorldGen.DropMeteor();
+					Main.NewText("Meteor spawned", 250, 250, 0);
+				}
+				else
+				{
+					Main.NewText("<error>", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/lang ")
+			{
+				string value3 = Main.chatText.Substring(6);
+				try
+				{
+					int num6 = Convert.ToInt32(value3);
+					if (num6 >= 0 && num6 <= (int)Lang.ID.SPANISH)
+					{
+						Lang.SetLang(num6);
+						if (Lang.LangOption <= (int)Lang.ID.ENGLISH)
+						{
+							Main.NewText("Language set to English", 250, 250, 0);
+						}
+						if (Lang.LangOption == (int)Lang.ID.GERMAN)
+						{
+							Main.NewText("Sprache auf Deutsch eingestellt", 250, 250, 0);
+						}
+						if (Lang.LangOption == (int)Lang.ID.ITALIAN)
+						{
+							Main.NewText("Lingua impostata su Italiano", 250, 250, 0);
+						}
+						if (Lang.LangOption == (int)Lang.ID.FRENCH)
+						{
+							Main.NewText("Langue définie sur le Français", 250, 250, 0);
+						}
+						if (Lang.LangOption == (int)Lang.ID.SPANISH)
+						{
+							Main.NewText("Idioma configurado en Español", 250, 250, 0);
+						}
+					}
+				}
+				catch (FormatException)
+				{
+					Main.NewText("Name-based language definition not supported...", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/altar")
+			{
+				int num7 = 0;
+				for (int i = 0; i < Main.MaxTilesX; i++)
+				{
+					for (int j = 0; j < Main.MaxTilesY; j++)
+					{
+						if (Main.TileSet[i, j].IsActive != 0 && Main.TileSet[i, j].Type == (byte)EntityID.TileID.DEMON_ALTAR)
+						{
+							WorldGen.KillTile(i, j);
+							num7++;
+						}
+					}
+				}
+				Main.NewText("Smashed " + num7 + " altars.", 250, 250, 0);
+				Main.chatText = "";
+			}
+			else if (Main.chatText == "/ore")
+			{
+				if (NetMode != (int)NetModeSetting.CLIENT)
+				{
+					WorldGen.countOre();
+				}
+				else
+				{
+					Main.NewText("<error>", 250, 0, 0);
+				}
+				Main.chatText = "";
+			}
+			else
+			{
+				if (NetMode != (int)NetModeSetting.LOCAL)
+				{
+					return;
+				}
+				if (Main.chatText == "/clearenemies")
+				{
+					for (int k = 0; k < NPC.MaxNumNPCs; k++)
+					{
+						if (!Main.NPCSet[k].IsTownNPC)
+						{
+							Main.NPCSet[k].Active = 0;
+						}
+					}
+					Main.NewText("All enemies removed", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/clearnpcs")
+				{
+					for (int l = 0; l < NPC.MaxNumNPCs; l++)
+					{
+						if (Main.NPCSet[l].IsTownNPC)
+						{
+							Main.NPCSet[l].Active = 0;
+						}
+					}
+					Main.NewText("All NPCs removed", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/clearitems")
+				{
+					for (int m = 0; m < MaxNumItems; m++)
+					{
+						Main.ItemSet[m].Active = 0;
+					}
+					Main.NewText("All items removed", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/rate ")
+				{
+					string value4 = Main.chatText.Substring(6);
+					try
+					{
+						int num8 = Convert.ToInt32(value4);
+						if (num8 > 0 && num8 <= 200)
+						{
+							Main.WorldRate = num8;
+							Main.NewText("World update rate set to " + num8 + "X", 250, 250, 0);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText("Rate must be between 1 and 200", 250, 0, 0);
+					}
+					Main.chatText = "";
+				}
+				else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/time ")
+				{
+					string value5 = Main.chatText.Substring(6);
+					try
+					{
+						int num9 = Convert.ToInt32(value5);
+						if (num9 > 0 && num9 <= 1000)
+						{
+							Main.GameTime.DayRate = num9;
+							Main.NewText("Time speed set to " + num9 + "X", 250, 250, 0);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText("Speed must be between 1 and 1000", 250, 0, 0);
+					}
+					Main.chatText = "";
+				}
+				else if (Main.chatText.Length > 5 && Main.chatText.Substring(0, 5) == "/npc ")
+				{
+					string value6 = Main.chatText.Substring(5);
+					try
+					{
+						int num10 = Convert.ToInt32(value6);
+						if (num10 < (int)EntityID.NPCID.NUM_TYPES && num10 > 0)
+						{
+							Main.debugCursorMode = 1;
+							Main.debugCursorType = num10;
+							NPC nPC2 = new NPC();
+							nPC2.SetDefaults(num10);
+							Main.NewText("Cursor set to spawn " + nPC2.TypeName, 250, 250, 0);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText($"NPC type must be between 1 and {(int)EntityID.NPCID.NUM_TYPES}", 250, 0, 0);
+					}
+					Main.chatText = "";
+				}
+				else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/tile ")
+				{
+					string value7 = Main.chatText.Substring(5);
+					try
+					{
+						int num11 = Convert.ToInt32(value7);
+						if (num11 < (int)EntityID.TileID.NUM_TILESETS && num11 >= 0)
+						{
+							Main.debugCursorMode = 2;
+							Main.debugCursorType = num11;
+							Main.NewText("Cursor set to add tile " + num11, 250, 250, 0);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText($"Tile type must be between 1 and {(int)EntityID.TileID.NUM_TILESETS}", 250, 0, 0);
+					}
+					Main.chatText = "";
+				}
+				else if (Main.chatText.Length > 6 && Main.chatText.Substring(0, 6) == "/size ")
+				{
+					string text2 = Main.chatText.Substring(5);
+					try
+					{
+						int num12 = Convert.ToInt32(text2);
+						if (num12 > 0)
+						{
+							Main.debugCursorSize = num12;
+							Main.NewText("Cursor size set to " + text2, 250, 250, 0);
+						}
+					}
+					catch (FormatException)
+					{
+						Main.NewText("Cursor size must be set to 1 or higher", 250, 0, 0);
+					}
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/water")
+				{
+					Main.debugCursorMode = 4;
+					Main.debugCursorType = 0;
+					Main.NewText("Cursor set add water", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/lava")
+				{
+					Main.debugCursorMode = 4;
+					Main.debugCursorType = 1;
+					Main.NewText("Cursor set to add lava", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/erase")
+				{
+					Main.debugCursorMode = 3;
+					Main.debugCursorType = 0;
+					Main.NewText("Cursor set to erase tiles", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/cactus")
+				{
+					Main.debugCursorMode = 5;
+					Main.debugCursorType = 1;
+					Main.NewText("Cursor set to grow cactus", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/mushroom")
+				{
+					Main.debugCursorMode = 5;
+					Main.debugCursorType = 2;
+					Main.NewText("Cursor set to grow mushrooms", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/caverer")
+				{
+					Main.debugCursorMode = 5;
+					Main.debugCursorType = 3;
+					Main.NewText("Cursor set to caverer", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/shroompatch")
+				{
+					Main.debugCursorMode = 5;
+					Main.debugCursorType = 4;
+					Main.NewText("Cursor set to shroompatch", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/mine")
+				{
+					Main.debugCursorMode = 5;
+					Main.debugCursorType = 5;
+					Main.NewText("Cursor set to mine", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/remove")
+				{
+					Main.debugCursorMode = 6;
+					Main.debugCursorType = 0;
+					Main.NewText("Cursor set to deactivate tiles", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/stop")
+				{
+					Main.debugCursorMode = 0;
+					Main.debugCursorType = 0;
+					Main.NewText("Cursor set to do nothing", 250, 250, 0);
+					Main.chatText = "";
+				}
+				else if (Main.chatText == "/ogc")
+				{
+					Main.NewText("Thank you for playing!   - PPrism :)", 0, 250, 250);  // C'mon, I wanted to do something and I didn't wanna change the credits; it felt wrong.
+					Main.chatText = "";
+				}
+			}
+
+			if (ChatLineSet[1].Text == "")
+			{
+				for (int LineIdx = 2; LineIdx < MaxNumChatLines; ++LineIdx)
+				{
+					ChatLineSet[LineIdx - 1] = ChatLineSet[LineIdx];
+				}
+				ChatLineSet[6] = Buffer;
+			}
+		}
+
+		private static void UpdateDebug()
+		{
+			if (Main.NetMode != (int)NetModeSetting.LOCAL)
+			{
+				Main.debugCursorMode = 0;
+				Main.debugCursorSize = 1;
+				Main.debugCursorType = 0;
+				Main.stopSpawns = false;
+				Main.alwaysSpawn = 0;
+			}
+			if (!Main.debugMode)
+			{
+				return;
+			}
+			if (Main.debugCursorMode > 0)
+			{
+				UI.MainUI.ActivePlayer.releaseUseItem = false;
+			}
+			int num = 0;
+			int num2 = 0;
+			num = (UI.MainUI.MouseX + UI.MainUI.CurrentView.ScreenPosition.X) / 16;
+			num2 = (UI.MainUI.MouseY + UI.MainUI.CurrentView.ScreenPosition.Y) / 16;
+			if (UI.MainUI.MouseX >= Main.ResolutionWidth || UI.MainUI.MouseY >= Main.ResolutionHeight || num < 0 || num2 < 0 || num >= Main.MaxTilesX || num2 >= Main.MaxTilesY)
+			{
+				return;
+			}
+			Lighting.AddLight(num, num2, Vector3.One);
+			if (UI.MainUI.PadState.IsButtonDown(Buttons.RightTrigger))
+			{
+				Vector2 position = UI.MainUI.ActivePlayer.Position;
+				UI.MainUI.ActivePlayer.Position.X = UI.MainUI.MouseX + UI.MainUI.CurrentView.ScreenPosition.X - (Player.width / 2);
+				UI.MainUI.ActivePlayer.Position.Y = UI.MainUI.MouseY + UI.MainUI.CurrentView.ScreenPosition.Y - Player.height;
+				UI.MainUI.ActivePlayer.velocity = default;
+				UI.MainUI.ActivePlayer.fallStart = (short)(UI.MainUI.ActivePlayer.XYWH.Y >> 4);
+				if (position != UI.MainUI.ActivePlayer.Position)
+				{
+					NetMessage.CreateMessage1((int)NetMessageId.CLIENT_PLAYER_CONTROLS, UI.MainUI.MyPlayer);
+					NetMessage.SendMessage();
+				}
+			}
+			if (UI.MainUI.PadState.IsButtonDown(Buttons.LeftTrigger) && Main.NetMode == (int)NetModeSetting.LOCAL)
+			{
+				if (Main.debugCursorMode == 1 && Main.debugRelease)
+				{
+					NPC.NewNPC(UI.MainUI.MouseX + UI.MainUI.CurrentView.ScreenPosition.X, UI.MainUI.MouseY + UI.MainUI.CurrentView.ScreenPosition.Y, Main.debugCursorType, 1);
+				}
+				int num3 = Main.debugCursorSize / 2;
+				int num4 = num - num3;
+				int num5 = num + num3 + 1;
+				int num6 = num2 - num3;
+				int num7 = num2 + num3 + 1;
+				for (int i = num4; i < num5; i++)
+				{
+					for (int j = num6; j < num7; j++)
+					{
+						if (Main.debugCursorMode == 2)
+						{
+							if (Main.TileSet[i, j].IsActive != 0)
+							{
+								Main.TileSet[i, j].Type = (byte)Main.debugCursorType;
+								WorldGen.SquareTileFrame(i, j);
+							}
+							else
+							{
+								WorldGen.PlaceTile(i, j, Main.debugCursorType);
+							}
+						}
+						else if (Main.debugCursorMode == 3)
+						{
+							Main.TileSet[i, j].Lava = 0;
+							Main.TileSet[i, j].Liquid = 0;
+							WorldGen.KillTile(i, j);
+							WorldGen.KillWall(i, j);
+							WorldGen.SquareTileFrame(i, j);
+						}
+						else if (Main.debugCursorMode == 4)
+						{
+							if (Main.debugCursorType == 1)
+							{
+								Main.TileSet[i, j].Lava = 32;
+							}
+							else
+							{
+								Main.TileSet[i, j].Lava = 0;
+							}
+							Main.TileSet[i, j].Liquid = byte.MaxValue;
+							WorldGen.SquareTileFrame(i, j);
+						}
+						else if (Main.debugCursorMode == 5)
+						{
+							if (Main.debugCursorType == 1)
+							{
+								WorldGen.GrowCactus(i, j);
+							}
+							else if (Main.debugCursorType == 2)
+							{
+								WorldGen.GrowShroom(i, j);
+							}
+							else if (Main.debugCursorType == 3 && Main.debugRelease)
+							{
+								WorldGen.Caverer(i, j);
+							}
+							else if (Main.debugCursorType == 4 && Main.debugRelease)
+							{
+								WorldGen.ShroomPatch(i, j);
+							}
+							else if (Main.debugCursorType == 5 && Main.debugRelease)
+							{
+								WorldGen.MineHouse(i, j);
+							}
+						}
+						else if (Main.debugCursorMode == 6)
+						{
+							Main.TileSet[i, j].IsActive = 0;
+						}
+					}
+				}
+				Main.debugRelease = false;
+			}
+			else
+			{
+				Main.debugRelease = true;
+			}
+		}
+#endif
 
 		private static void UpdateTutorial()
 		{
@@ -3495,7 +4421,7 @@ namespace Terraria
 		{
 			Player NewPlayer = new Player();
 			NewPlayer.Name = UI.MainUI.SignedInGamer.Gamertag; // All references to the .Gamertag property being used for .name are removed in 1.01+, but this leaves the death message blank in the tutorial.
-															   // I will be changing this up so the Gamertag remains in all versions for non-CharacterName uses.
+			// I will be changing this up so the Gamertag remains in all versions for non-CharacterName uses.
 			NewPlayer.SelectedItem = 1;
 			UI.MainUI.CreateCharacterGUI.Randomize(NewPlayer);
 			UI.MainUI.SetPlayer(NewPlayer);

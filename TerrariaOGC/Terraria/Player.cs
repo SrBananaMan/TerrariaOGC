@@ -1068,7 +1068,12 @@ namespace Terraria
 			{
 				noThrow--;
 			}
+
+#if DEBUG
+			if (noThrow == 0 && ((controlThrow && Inventory[SelectedItem].Type > 0 && !Main.chatMode) || ((ui.InventoryMode == 0 || ui.IsButtonUntriggered(UI.BTN_DROP)) && ui.mouseItem.Type > 0 && ui.mouseItem.Stack > 0)))
+#else
 			if (noThrow == 0 && ((controlThrow && Inventory[SelectedItem].Type > 0) || ((ui.InventoryMode == 0 || ui.IsButtonUntriggered(UI.BTN_DROP)) && ui.mouseItem.Type > 0 && ui.mouseItem.Stack > 0)))
+#endif
 			{
 				Item item = default;
 				bool flag = false;
@@ -1480,7 +1485,12 @@ namespace Terraria
 			IsControlDown = false;
 			controlRight = false;
 			controlJump = false;
+
+#if DEBUG
+			if (Main.HasFocus && !Main.chatMode && ui.CurMenuType == MenuType.NONE && sign < 0)
+#else
 			if (Main.HasFocus && ui.CurMenuType == MenuType.NONE && sign < 0)
+#endif
 			{
 				if (ui.PadState.ThumbSticks.Left.Y < -UI.GpDeadZone)
 				{
@@ -1779,7 +1789,11 @@ namespace Terraria
 						}
 						if (ui.InventoryMode == 0)
 						{
+#if DEBUG
+							if (!Main.chatMode && sign < 0 && TalkNPC < 0)
+#else
 							if (sign < 0 && TalkNPC < 0)
+#endif
 							{
 								if (ui.PadState.ThumbSticks.Left.Y < -UI.LEFT_STICK_VERTICAL_THRESHOLD)
 								{
@@ -6123,6 +6137,13 @@ namespace Terraria
 
 		public unsafe double Hurt(int Damage, int hitDirection, bool pvp, bool quiet, uint deathText, bool Crit = false)
 		{
+#if DEBUG
+			if (Main.godMode && isLocal())
+			{
+				return 0.0;
+			}
+#endif
+
 			if (!immune)
 			{
 				int num = Damage;
@@ -6239,10 +6260,18 @@ namespace Terraria
 
 		public unsafe void KillMe(double dmg, int hitDirection, bool pvp, uint deathText)
 		{
+#if DEBUG
+			if ((isLocal() && Main.godMode) || IsDead)
+			{
+				return;
+			}
+#else
 			if (IsDead)
 			{
 				return;
 			}
+#endif
+
 			if (pvp)
 			{
 				pvpDeath = true;

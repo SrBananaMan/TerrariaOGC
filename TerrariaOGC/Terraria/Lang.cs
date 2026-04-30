@@ -937,7 +937,7 @@ namespace Terraria
 						new ControlDesc(2, 1323, 572, MenuLabels[9]),	// Jump
 						new ControlDesc(2, 1323, 531, MenuLabels[10]),	// Use
 						new ControlDesc(2, 1323, 619, MenuLabels[11]),	// Drop
-						new ControlDesc(2, 1323, 491, MenuLabels[12])   // Inventory
+						new ControlDesc(2, 1323, 491, MenuLabels[12])	// Inventory
 					};
 					return ControlLayout;
 				}
@@ -16326,7 +16326,7 @@ namespace Terraria
 						ItemName = ItemPrefix(PrefixID) + " " + ItemName;
 					}
 					else
-					{   // This is a lesser known Old-Gen console addition; Any item with 'The' at the start of its name will have the prefix added after 'The' for gramatical correctness.
+					{	// This is a lesser known Old-Gen console addition; Any item with 'The' at the start of its name will have the prefix added after 'The' for gramatical correctness.
 						ItemName = "The " + ItemPrefix(PrefixID) + ItemName.Remove(0, 3); // Since in versions below 1.02, it only happens with 'The Breaker', this is more notable in 1.02 and above.
 					}
 

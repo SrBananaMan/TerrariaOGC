@@ -611,6 +611,12 @@ namespace Terraria
 							RenderBlack();
 						}
 						RenderSolidTiles();
+#if DEBUG
+						if (Main.lightTiles)
+						{
+							RenderWater();
+						}
+#endif
 						break;
 					case 3:
 						RenderWalls();

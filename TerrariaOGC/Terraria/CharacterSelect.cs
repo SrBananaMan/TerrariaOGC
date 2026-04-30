@@ -61,7 +61,7 @@ namespace Terraria
 		}
 
 		public static void UpdateCursor(int dy)
-		{   
+		{
 			// This function doesn't appear to exist, as the code is implanted in UpdateMouse() directly.
 			// I just did it for consistency with current code. A few other functions also get this treatment.
 

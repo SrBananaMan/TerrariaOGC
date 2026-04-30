@@ -11,8 +11,9 @@ namespace Terraria
 			// v1 had Engine begin to save active pet data.
 			// v2 is when they probably implemented the console-exclusive crafting system, as item and recipe knowledge began to be saved.
 			// Similarly, v3 had them save crafting station data, so the system could adapt and show you different recipes depending on the station.
-			// We don't really know much about v4, except that it read a 4-byte integer after the health and mana, but we do not know what this determined or if it was padding. v5 presumably removed this.
-			
+			// We don't really know much about v4, except that it read a 4-byte integer after the health and mana, but we do not know what this determined or if it was padding.
+			// Either way, the leaked prototype confirmed that v5 removed it.
+			OLD = 5,
 			INITIAL = 6,
 			V101 = 8,
 			V103 = 12,
@@ -22,7 +23,7 @@ namespace Terraria
 		public enum WorldID : byte
 		{
 			// Regarding prior versions of the world file, we know very little, as there are only 3 distinct differences we know of.
-			// The first is that there are 2 different structures, an old and new structure. The old structure was likely a placeholder until they figured out a proper way to save console worlds, as it bears the most resemblance to PC 1.1.2.
+			// The first is that there are 2 different structures, an old and new structure. The old structure was likely a placeholder until they figured out a proper way to save console worlds, as it bears the most resemblance to PC 1.1.2. This was in the leaked prototype.
 			// The second is that data on signs are saved differently in the new structure, as the old structure had the text saved before the position, and vice-versa with the new structure.
 			// The third change we know of, is regarding the CRC check, which was not in the old structure at all, and dropped in v1.01 and future versions of the game.
 			OLD = 46,
@@ -37,9 +38,10 @@ namespace Terraria
 			// Regarding prior versions of the settings file, we know about all of its versions prior to 1.0.
 			// v1 is likely when they just made the console settings structure, as it is wildly different from PC 1.1.2.
 			// v2 was likely when multiplayer-related settings were saved.
-			// v3 had them begin to save data related to achievements.
+			// v3 had them begin to save data related to achievements. This was featured in the leaked prototype and that also confirmed they were originally gonna save the language setting, but they scrapped it.
 			// v4 was when alterate grapple controls could actually be saved instead of disabling on-load, and the CRC check was added as well.
 			// Finally, v5 or the initial release brought blacklisting data to the save files. Due to the time, I wonder if this was a requirement enforced by Microsoft or 505, or Engine just implemented it late.
+			OLD = 3,
 			INITIAL = 5,
 			V101 = 6,
 			V103 = 12,
@@ -1183,7 +1185,7 @@ namespace Terraria
 			ARCHAEOLOGISTS_HAT,
 			ARCHAEOLOGISTS_JACKET,
 			ARCHAEOLOGISTS_PANTS,
-			BLACK_THREAD,			   // Changed in version 1.01, but the codebase reflected it properly in Console 1.2 onwards.
+			BLACK_THREAD,				// Changed in version 1.01, but the codebase reflected it properly in Console 1.2 onwards.
 			PURPLE_THREAD,
 			NINJA_HOOD,
 			NINJA_SHIRT,
@@ -3771,7 +3773,7 @@ namespace Terraria
 
 		public enum NPCID
 		{
-			SLIMELING2 = -69,		   // Since I need this to be the first entry, akin to the usual console-exclusive entries, and negatives cannot be auto-assigned, we're going with the funny number.
+			SLIMELING2 = -69,			// Since I need this to be the first entry, akin to the usual console-exclusive entries, and negatives cannot be auto-assigned, we're going with the funny number.
 
 #if VERSION_103 || VERSION_FINAL
 			BIG_HORNET_STINGY = -65,
@@ -4296,7 +4298,7 @@ namespace Terraria
 			ANTLION,
 			SPIKE_BALL,
 			BLAZE_WHEEL,  // Nothing else uses this, even in PC, so I cannot say why the function is called 'Gravity Disk'.
-			HOVERING,	   // C'mon, let's have some effort and not call it 'More Flyer'.
+			HOVERING,		// C'mon, let's have some effort and not call it 'More Flyer'.
 			ENCHANTED_WEAPON,
 			BIRD,
 			MIMIC,
@@ -4900,7 +4902,7 @@ namespace Terraria
 			ORANGE,
 			LIGHT_RED,
 			PINK,
-			LIGHT_PURPLE,   // Nothing pre-1.2 has this as a base, but the best modifiers on Pink use it.
+			LIGHT_PURPLE,	// Nothing pre-1.2 has this as a base, but the best modifiers on Pink use it.
 
 #if VERSION_103 || VERSION_FINAL
 			LIME,
@@ -6430,8 +6432,8 @@ namespace Terraria
 			TileID.TORCH,
 			TileID.CANDLE,
 			TileID.CHANDELIER,
-			TileID.JACK_O_LANTERN,   // Silver Chandelier in v1.01 and the initial versions.
-			TileID.PRESENT,		  // Gold Chandelier in v1.01 and the initial versions.
+			TileID.JACK_O_LANTERN,	// Silver Chandelier in v1.01 and the initial versions.
+			TileID.PRESENT,			// Gold Chandelier in v1.01 and the initial versions.
 			TileID.CHAIN_LANTERN,
 			TileID.WATER_CANDLE,
 			TileID.TIKI_TORCH,

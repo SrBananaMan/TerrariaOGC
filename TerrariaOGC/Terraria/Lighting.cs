@@ -501,6 +501,14 @@ namespace Terraria
 
 					for (int Y = FTLY; Y < OffY; Y++)
 					{
+#if DEBUG
+						if (Main.lightTiles)
+						{
+							ref Vector3 reference = ref Colour[X - FirstTileX + OffScreenTiles, Y - FirstTileY + OffScreenTiles];
+							reference = new Vector3(1f, 1f, 1f);
+						}
+#endif
+
 						int ColourX = X - FirstToLightX;
 						int ColourY = Y - FirstToLightY;
 						fixed (Vector3* ActiveColour = &Colour2[ColourX, ColourY])
@@ -1362,6 +1370,13 @@ namespace Terraria
 
 		private unsafe void DoColors()
 		{
+#if DEBUG
+			if (Main.lightTiles)
+			{
+				return;
+			}
+#endif
+
 			fixed (Vector3* ActiveColour = Colour2)
 			{
 				int LightCol = MinimumX7 * ColourH;

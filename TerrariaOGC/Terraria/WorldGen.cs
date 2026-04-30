@@ -13188,6 +13188,61 @@ namespace Terraria
 			return flag;
 		}
 
+#if DEBUG
+		public static void countOre()
+		{
+			int Copper = 0;
+			int Iron = 0;
+			int Silver = 0;
+			int Gold = 0;
+			int Cobalt = 0;
+			int Mythril = 0;
+			int Adamantite = 0;
+
+			for (int i = 0; i < Main.MaxTilesX; i++)
+			{
+				for (int j = 0; j < Main.MaxTilesY; j++)
+				{
+					int OreType = 0;
+					if (Main.TileSet[i, j].IsActive != 0)
+					{
+						OreType = Main.TileSet[i, j].Type;
+						if (OreType == (int)EntityID.TileID.COPPER_ORE)
+						{
+							Copper++;
+						}
+						if (OreType == (int)EntityID.TileID.IRON_ORE)
+						{
+							Iron++;
+						}
+						if (OreType == (int)EntityID.TileID.SILVER_ORE)
+						{
+							Silver++;
+						}
+						if (OreType == (int)EntityID.TileID.GOLD_ORE)
+						{
+							Gold++;
+						}
+						if (OreType == (int)EntityID.TileID.COBALT_ORE)
+						{
+							Cobalt++;
+						}
+						if (OreType == (int)EntityID.TileID.MYTHRIL_ORE)
+						{
+							Mythril++;
+						}
+						if (OreType == (int)EntityID.TileID.ADAMANTITE_ORE)
+						{
+							Adamantite++;
+						}
+					}
+				}
+			}
+			Main.NewText("Copper: " + $"{Copper:0,0}" + " Iron: " + $"{Iron:0,0}" + " Silver: " + $"{Silver:0,0}" + " Gold:" + $"{Gold:0,0}", 250, 250, 0);
+			Main.NewText("Cobalt: " + $"{Cobalt:0,0}" + " Mythril: " + $"{Mythril:0,0}" + " Adamantite: " + $"{Adamantite:0,0}", 250, 250, 0);
+		}
+#endif
+
 		public static void UpdateMech()
 		{
 			for (int num = numMechs - 1; num >= 0; num--)

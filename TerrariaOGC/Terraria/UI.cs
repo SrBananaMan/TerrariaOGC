@@ -15,7 +15,6 @@ using System.Reflection;
 using System.Threading;
 using Terraria.Achievements;
 using Terraria.Leaderboards;
-using static Terraria.Tile;
 
 namespace Terraria
 {
@@ -1962,6 +1961,13 @@ namespace Terraria
 					CurrentView.DrawWorld();
 					DrawCursor();
 					CurrentView.SetScreenView();
+
+#if DEBUG
+					if (Main.chatMode)
+					{
+						DrawInput();
+					}
+#endif
 				}
 				DrawTopLayer();
 				if (CurMenuType != MenuType.NONE)
@@ -4024,10 +4030,18 @@ namespace Terraria
 
 		private void DrawControls()
 		{
+#if DEBUG
+			if (!Main.osd || CurMenuType == MenuType.NONE)
+			{
+				return;
+			}
+#else
 			if (CurMenuType == MenuType.NONE)
 			{
 				return;
 			}
+#endif
+
 			Main.StrBuilder.Length = 0;
 			if (saveIconMessageTime > 0)
 			{
@@ -4636,7 +4650,8 @@ namespace Terraria
 			if (Main.ScreenHeightPtr == 0)
 			{
 				num *= inventoryScale; // BUG: In the initial and patched 1.0 versions, items were incorrectly scaled due to limiting post-scale, which you can see if you get a mushroom in your hotbar and compare between 1.0 and 1.01.
-			}							   // Moving the *= to after the 1.25f limit fixes this, leading to items being more uniform with their scaled appearance in the inventory, hotbar, etc.
+			}
+			// Moving the *= to after the 1.25f limit fixes this, leading to items being more uniform with their scaled appearance in the inventory, hotbar, etc.
 			if (num > 1.25f)
 			{
 				num = 1.25f;
@@ -5093,12 +5108,98 @@ namespace Terraria
 			inputTextCanceled = false;
 		}
 
+#if DEBUG && !USE_ORIGINAL_CODE
+		internal void OnTextInput(char c)
+		{
+			if (c == '\r')
+			{
+				inputTextEnter = true;
+			}
+			else if (c == '\b')
+			{
+				if (Main.chatText.Length > 0)
+				{
+					Main.chatText = Main.chatText.Substring(0, Main.chatText.Length - 1);
+				}
+			}
+			else
+			{
+				Main.chatText += c.ToString();
+			}
+			
+		}
+
+		private void DrawInput()
+		{
+			float LineWidth = 0f;
+			int PosX = 48;
+			int PosY = 440;
+
+			switch (Main.ScreenHeightPtr)
+			{
+				case ScreenHeights.HD:
+					PosX = 66;
+					PosY = 620;
+					break;
+				case ScreenHeights.FHD:
+					PosX = 98;
+					PosY = 980;
+					break;
+			}
+
+			float ChatX = PosX + 6;
+			int ChatY = PosY + 6;
+			Vector2 StringSize;
+			if (Main.chatText == "")
+			{
+				StringSize = UI.BoldSmallFont.MeasureString(" ");
+			}
+			else
+			{
+				StringSize = UI.BoldSmallFont.MeasureString(Main.chatText);
+			} 
+
+			if (StringSize.X > LineWidth)
+			{
+				LineWidth = StringSize.X;
+			}
+
+			Main.DrawRect(new Rectangle(PosX, PosY - (int)StringSize.Y, (int)LineWidth + 12, (int)StringSize.Y + 12), new Color(64, 64, 64, 64));
+			float Alpha = UI.MouseTextBrightness * (1f / 255f);
+			Main.SpriteBatch.DrawString(UI.BoldSmallFont, Main.chatText, new Vector2(ChatX, ChatY - StringSize.Y), new Color((byte)(255 * Alpha), (byte)(255 * Alpha), (byte)(255 * Alpha), UI.MouseTextBrightness));
+
+		}
+#endif
+
 		public UserString GetInputText(UserString oldString, string title = null, string desc = null, bool validate = true)
 		{
 			if (!inputTextEnter && oldString.IsEditable())
 			{
 				if (!Guide.IsVisible)
 				{
+#if DEBUG && !USE_ORIGINAL_CODE
+					if (Main.chatMode || inputTextCanceled)
+					{
+						inputTextEnter = false;
+
+						TextInputEXT.TextInput -= OnTextInput;
+						TextInputEXT.TextInput += OnTextInput;
+						TextInputEXT.StartTextInput();
+						oldString = Main.chatText; 
+						return oldString;
+					}
+					else
+					{
+						try
+						{
+							kbResult = Guide.BeginShowKeyboardInput(controller, title, desc, oldString.IsCensored ? "" : oldString.UserText, null, null);
+						}
+						catch (GuideAlreadyVisibleException)
+						{
+							return oldString;
+						}
+					}
+#else
 					try
 					{
 						kbResult = Guide.BeginShowKeyboardInput(controller, title, desc, oldString.IsCensored ? "" : oldString.UserText, null, null);
@@ -5110,6 +5211,7 @@ namespace Terraria
 					{
 						return oldString;
 					}
+#endif
 				}
 				if (kbResult != null && kbResult.IsCompleted)
 				{
@@ -6243,8 +6345,8 @@ namespace Terraria
 
 					if (Main.SettingsDataVersion >= (int)EntityID.SettingsID.V101)
 					{
-						binaryWriter.Write(IsOnline); // This is not what is written but 1.01 accounts for 2 new booleans; I currently do not know what they are.
-						binaryWriter.Write(IsInviteOnly);
+						binaryWriter.Write(IsOnline); // Not featured in OGC due to not being implemented, but this is for the EULA
+						binaryWriter.Write(IsInviteOnly);	// The above is whether the EULA was accepted, and this one is if it was presented.
 					}
 
 					num = blacklist.Count;
@@ -6406,7 +6508,7 @@ namespace Terraria
 										autoSave = binaryReader.ReadBoolean();
 										ShowItemText = binaryReader.ReadBoolean();
 										alternateGrappleControls = binaryReader.ReadBoolean();
-										if (num <= 3)
+										if (num <= (int)EntityID.SettingsID.OLD)
 										{
 											alternateGrappleControls = false;
 										}
@@ -6421,7 +6523,7 @@ namespace Terraria
 										Statistics.Deserialize(stream2);
 										if (num >= 2)
 										{
-											if (num >= 3)
+											if (num >= (int)EntityID.SettingsID.OLD)
 											{
 												totalSteps = binaryReader.ReadUInt32();
 												TotalOrePicked = binaryReader.ReadUInt32();
@@ -6854,10 +6956,18 @@ namespace Terraria
 
 		private unsafe void DrawControlsIngame()
 		{
+#if DEBUG
+			if (!Main.osd || CurMenuType != MenuType.NONE)
+			{
+				return;
+			}
+#else
 			if (CurMenuType != MenuType.NONE)
 			{
 				return;
 			}
+#endif
+
 			Main.StrBuilder.Length = 0;
 			if (!Main.TutorialMaskY)
 			{
@@ -6916,10 +7026,18 @@ namespace Terraria
 
 		private void DrawControlsInventory()
 		{
+#if DEBUG
+			if (!Main.osd || CurMenuType != MenuType.NONE)
+			{
+				return;
+			}
+#else
 			if (CurMenuType != MenuType.NONE)
 			{
 				return;
 			}
+#endif
+
 			Main.StrBuilder.Length = 0;
 #if !VERSION_INITIAL
 			Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.CLOSE));
@@ -7086,10 +7204,18 @@ namespace Terraria
 
 		private void DrawControlsShop()
 		{
+#if DEBUG
+			if (!Main.osd || CurMenuType != MenuType.NONE)
+			{
+				return;
+			}
+#else
 			if (CurMenuType != MenuType.NONE)
 			{
 				return;
 			}
+#endif
+
 			Main.StrBuilder.Length = 0;
 #if !VERSION_INITIAL
 			Main.StrBuilder.Append(Lang.Controls(Lang.CONTROLS.CLOSE));
@@ -7129,7 +7255,11 @@ namespace Terraria
 
 		private void DrawControlsCrafting()
 		{
+#if DEBUG
+			if (Main.osd && CurMenuType == MenuType.NONE)
+#else
 			if (CurMenuType == MenuType.NONE)
+#endif
 			{
 				Main.StrBuilder.Length = 0;
 #if !VERSION_INITIAL
@@ -7167,7 +7297,11 @@ namespace Terraria
 
 		private void DrawControlsHousing()
 		{
+#if DEBUG
+			if (Main.osd && CurMenuType == MenuType.NONE)
+#else
 			if (CurMenuType == MenuType.NONE)
+#endif
 			{
 				Main.StrBuilder.Length = 0;
 #if !VERSION_INITIAL
@@ -7245,7 +7379,7 @@ namespace Terraria
 			int HeightOffset = 30;
 			int WrapWidth = 470;
 			int ChatBackTexSize = 500; // As previously mentioned, the 1.2 versions stopped using the Chat_Back texture, including when running in 540p mode.
-									   // For clarity purposes, most instances of chatBackTexture.Width/Height will be replaced with 500 if 540p mode is detected, since the result will be the same.
+			// For clarity purposes, most instances of chatBackTexture.Width/Height will be replaced with 500 if 540p mode is detected, since the result will be the same.
 			switch (Main.ScreenHeightPtr)
 			{
 				case ScreenHeights.HD:
@@ -8801,7 +8935,8 @@ namespace Terraria
 			Color c = new Color(alpha, alpha, alpha, alpha);
 #if USE_ORIGINAL_CODE
 			SpriteSheet<_sheetSprites>.Draw((int)_sheetSprites.ID.DPAD, x, y, color); // This draws the D-Pad graphic from the actual spritesheet; Later versions had this as a separate file.
-#else	   // 1080p mode uses a larger sprite but since we are assuming X360 assets, this is the best we can do.																											
+#else
+			// 1080p mode uses a larger sprite but since we are assuming X360 assets, this is the best we can do.
 			int xOff = 56;
 			switch (Main.ScreenHeightPtr)
 			{

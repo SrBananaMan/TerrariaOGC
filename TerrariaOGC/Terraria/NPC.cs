@@ -16333,6 +16333,13 @@ namespace Terraria
 
 		public static void SpawnNPC()
 		{
+#if DEBUG
+			if (Main.stopSpawns)
+			{
+				return;
+			}
+#endif
+
 			if (NoSpawnCycle)
 			{
 				NoSpawnCycle = false;
@@ -16527,6 +16534,14 @@ namespace Terraria
 						MaxSpawns = (int)((double)(float)MaxSpawns * 0.6);
 					}
 				}
+
+#if DEBUG
+				if (Main.alwaysSpawn > 0)
+				{
+					SpawnRate = 1;
+				}
+#endif
+
 				if (Main.PlayerSet[PlayerIdx].ActiveNPCs < MaxSpawns && Main.Rand.Next(SpawnRate) == 0)
 				{
 					int PlayerX = Main.PlayerSet[PlayerIdx].XYWH.X >> 4;
@@ -16663,6 +16678,15 @@ namespace Terraria
 				int num23 = MaxNumNPCs;
 				int x = (num << 4) + 8;
 				int y = num2 << 4;
+
+#if DEBUG
+				if (Main.alwaysSpawn > 0)
+				{
+					NewNPC(x, y, Main.alwaysSpawn, 1);
+					break;
+				}
+#endif
+
 				if (flag2)
 				{
 					if (Main.InHardMode && Main.Rand.Next(10) == 0 && !AnyNPCs((int)EntityID.NPCID.WYVERN_HEAD, (int)EntityID.NPCID.ARCH_WYVERN_HEAD))

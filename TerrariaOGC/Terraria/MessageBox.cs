@@ -104,7 +104,7 @@ namespace Terraria
 						{
 							MessBoxResult = Guide.BeginShowMessageBox((PlayerIndex)CurrentMess.PlayerIdx, CurrentMess.Caption, CurrentMess.Contents, CurrentMess.CurOptions, 0, MessageBoxIcon.None, null, null);
 #if !USE_ORIGINAL_CODE
-							if (MessBoxResult != null && MessBoxResult.IsCompleted)   // Removed asynchronicity to get it working
+							if (MessBoxResult != null && MessBoxResult.IsCompleted)		// Removed asynchronicity to get it working
 							{
 								UserChoice = Guide.EndShowMessageBox(MessBoxResult);
 								MessBoxResult = null;
