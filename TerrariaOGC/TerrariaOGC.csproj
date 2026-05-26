@@ -73,9 +73,9 @@
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-	<ProjectReference Include="..\FNA\FNA.NetFramework.csproj">
-	  <Private>True</Private>
-	</ProjectReference>
+	  <ProjectReference Include="..\external\FNA\FNA.NetFramework.csproj">
+		  <Private>True</Private>
+	  </ProjectReference>
   </ItemGroup>
   <ItemGroup>
 	<None Update="TerrariaOGC.png">
@@ -84,4 +84,189 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
   </ItemGroup>
+	<Target Name="BuildAndCopyFNANativeDlls" AfterTargets="Build">
+		<PropertyGroup>
+			<RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+
+			<SDLRoot>$(RootDir)\external\SDL</SDLRoot>
+			<FNA3DRoot>$(RootDir)\external\FNA3D</FNA3DRoot>
+			<FAudioRoot>$(RootDir)\external\FAudio</FAudioRoot>
+
+			<OutputDir>$(TargetDir)</OutputDir>
+
+			<!-- Build projects -->
+			<SDLProject>$(SDLRoot)\VisualC\SDL\SDL.vcxproj</SDLProject>
+			<FNA3DProject>$(FNA3DRoot)\visualc\FNA3D.vcxproj</FNA3DProject>
+			<FAudioProject>$(FAudioRoot)\visualc\FAudio.vcxproj</FAudioProject>
+
+			<!-- SDL -->
+			<SDLDll0>$(RootDir)\x64\Release\SDL3.dll</SDLDll0>
+			<SDLDll1>$(SDLRoot)\VisualC\x64\Release\SDL3.dll</SDLDll1>
+			<SDLDll2>$(SDLRoot)\VisualC\SDL\x64\Release\SDL3.dll</SDLDll2>
+			<SDLDll3>$(SDLRoot)\build\Release\SDL3.dll</SDLDll3>
+			<SDLDll4>$(SDLRoot)\build\SDL3.dll</SDLDll4>
+
+			<!-- FNA3D -->
+			<FNA3DDll0>$(RootDir)\x64\Release\FNA3D.dll</FNA3DDll0>
+			<FNA3DDll1>$(FNA3DRoot)\visualc\x64\Release\FNA3D.dll</FNA3DDll1>
+			<FNA3DDll2>$(FNA3DRoot)\visualc\FNA3D\x64\Release\FNA3D.dll</FNA3DDll2>
+			<FNA3DDll3>$(FNA3DRoot)\build\Release\FNA3D.dll</FNA3DDll3>
+			<FNA3DDll4>$(FNA3DRoot)\build\FNA3D.dll</FNA3DDll4>
+
+			<!-- FAudio -->
+			<FAudioDll0>$(RootDir)\x64\Release\FAudio.dll</FAudioDll0>
+			<FAudioDll1>$(FAudioRoot)\visualc\x64\Release\FAudio.dll</FAudioDll1>
+			<FAudioDll2>$(FAudioRoot)\visualc\FAudio\x64\Release\FAudio.dll</FAudioDll2>
+			<FAudioDll3>$(FAudioRoot)\build\Release\FAudio.dll</FAudioDll3>
+			<FAudioDll4>$(FAudioRoot)\build\FAudio.dll</FAudioDll4>
+		</PropertyGroup>
+
+		<Message Text="Building native FNA runtime DLLs..." Importance="high" />
+		<Message Text="TerrariaOGC target output directory: $(OutputDir)" Importance="high" />
+
+		<Error
+		  Condition="!Exists('$(SDLRoot)')"
+		  Text="SDL folder not found. Expected: $(SDLRoot)" />
+
+		<Error
+		  Condition="!Exists('$(FNA3DRoot)')"
+		  Text="FNA3D folder not found. Expected: $(FNA3DRoot)" />
+
+		<Error
+		  Condition="!Exists('$(FAudioRoot)')"
+		  Text="FAudio folder not found. Expected: $(FAudioRoot)" />
+
+		<Error
+		  Condition="!Exists('$(SDLProject)')"
+		  Text="SDL project not found. Expected: $(SDLProject)" />
+
+		<Error
+		  Condition="!Exists('$(FNA3DProject)')"
+		  Text="FNA3D project not found. Expected: $(FNA3DProject)" />
+
+		<Error
+		  Condition="!Exists('$(FAudioProject)')"
+		  Text="FAudio project not found. Expected: $(FAudioProject)" />
+
+		<MSBuild
+		  Projects="$(SDLProject)"
+		  Targets="Build"
+		  Properties="Configuration=Release;Platform=x64;PlatformToolset=v143" />
+
+		<MSBuild
+		  Projects="$(FNA3DProject)"
+		  Targets="Build"
+		  Properties="Configuration=Release;Platform=x64;PlatformToolset=v143" />
+
+		<MSBuild
+		  Projects="$(FAudioProject)"
+		  Targets="Build"
+		  Properties="Configuration=Release;Platform=x64;PlatformToolset=v143" />
+
+		<MakeDir Directories="$(OutputDir)" />
+
+		<Copy
+		  Condition="Exists('$(SDLDll0)')"
+		  SourceFiles="$(SDLDll0)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\SDL3.dll') And Exists('$(SDLDll1)')"
+		  SourceFiles="$(SDLDll1)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\SDL3.dll') And Exists('$(SDLDll2)')"
+		  SourceFiles="$(SDLDll2)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\SDL3.dll') And Exists('$(SDLDll3)')"
+		  SourceFiles="$(SDLDll3)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\SDL3.dll') And Exists('$(SDLDll4)')"
+		  SourceFiles="$(SDLDll4)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="Exists('$(FNA3DDll0)')"
+		  SourceFiles="$(FNA3DDll0)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FNA3D.dll') And Exists('$(FNA3DDll1)')"
+		  SourceFiles="$(FNA3DDll1)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FNA3D.dll') And Exists('$(FNA3DDll2)')"
+		  SourceFiles="$(FNA3DDll2)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FNA3D.dll') And Exists('$(FNA3DDll3)')"
+		  SourceFiles="$(FNA3DDll3)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FNA3D.dll') And Exists('$(FNA3DDll4)')"
+		  SourceFiles="$(FNA3DDll4)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="Exists('$(FAudioDll0)')"
+		  SourceFiles="$(FAudioDll0)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FAudio.dll') And Exists('$(FAudioDll1)')"
+		  SourceFiles="$(FAudioDll1)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FAudio.dll') And Exists('$(FAudioDll2)')"
+		  SourceFiles="$(FAudioDll2)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FAudio.dll') And Exists('$(FAudioDll3)')"
+		  SourceFiles="$(FAudioDll3)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Copy
+		  Condition="!Exists('$(OutputDir)\FAudio.dll') And Exists('$(FAudioDll4)')"
+		  SourceFiles="$(FAudioDll4)"
+		  DestinationFolder="$(OutputDir)"
+		  SkipUnchangedFiles="true" />
+
+		<Error
+		  Condition="!Exists('$(OutputDir)\SDL3.dll')"
+		  Text="SDL3.dll was not copied. SDL built, but the DLL was not found in any known output path." />
+
+		<Error
+		  Condition="!Exists('$(OutputDir)\FNA3D.dll')"
+		  Text="FNA3D.dll was not copied. FNA3D built, but the DLL was not found in any known output path." />
+
+		<Error
+		  Condition="!Exists('$(OutputDir)\FAudio.dll')"
+		  Text="FAudio.dll was not copied. FAudio built, but the DLL was not found in any known output path." />
+
+		<Message Text="Copied SDL3.dll, FNA3D.dll, and FAudio.dll to $(OutputDir)" Importance="high" />
+	</Target>
 </Project>

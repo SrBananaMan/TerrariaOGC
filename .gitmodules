@@ -1,0 +1,15 @@
+[submodule "external/FNA"]
+	path = external/FNA
+	url = https://github.com/FNA-XNA/FNA.git
+
+[submodule "external/SDL"]
+	path = external/SDL
+	url = https://github.com/libsdl-org/SDL.git
+
+[submodule "external/FNA3D"]
+	path = external/FNA3D
+	url = https://github.com/FNA-XNA/FNA3D.git
+	
+[submodule "external/FAudio"]
+	path = external/FAudio
+	url = https://github.com/FNA-XNA/FAudio.git
