@@ -1,0 +1,51 @@
+name: Build TerrariaOGC
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - Debug
+          - Initial Release
+          - Patched Release
+          - Version 1.01 (1.1.2+)
+          # - Version 1.03 (1.2.1.2)
+          # - Version 1.09 (1.2.4.1)
+
+    env:
+      Solution_Name: TerrariaOGC.sln
+      Platform: x64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: msbuild $env:Solution_Name /t:Restore /p:Configuration="${{ matrix.configuration }}" /p:Platform=$env:Platform
+
+      - name: Build
+        run: msbuild $env:Solution_Name /m /p:Configuration="${{ matrix.configuration }}" /p:Platform=$env:Platform /p:PlatformToolset=v143
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: TerrariaOGC-${{ matrix.configuration }}-x64
+          path: |
+            **/bin/**
+            !**/obj/**
