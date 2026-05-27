@@ -1,0 +1,21 @@
+<Project>
+
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'FNA.NetFramework'">
+
+    <Compile Include="$(MSBuildThisFileDirectory)TerrariaOGC\Dependencies\GamerServices\**\*.cs">
+      <Link>GamerServices\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+
+    <Compile Include="$(MSBuildThisFileDirectory)TerrariaOGC\Dependencies\Net\**\*.cs">
+      <Link>Net\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+
+    <Reference Include="Lidgren.Network">
+      <HintPath>$(MSBuildThisFileDirectory)TerrariaOGC\Dependencies\Lidgren.Network.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+
+    <Reference Include="System.Windows.Forms" />
+
+  </ItemGroup>
+</Project>

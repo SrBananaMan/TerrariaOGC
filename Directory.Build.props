@@ -1,0 +1,44 @@
+<Project>
+  <ItemDefinitionGroup Condition="'$(MSBuildProjectName)' == 'FNA3D'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(MSBuildThisFileDirectory)external\SDL\include;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+
+    <Link>
+      <AdditionalLibraryDirectories>
+        $(MSBuildThisFileDirectory)x64\Release;
+        $(MSBuildThisFileDirectory)SDL\VisualC\x64\Release;
+        %(AdditionalLibraryDirectories)
+      </AdditionalLibraryDirectories>
+
+      <AdditionalDependencies>
+        SDL3.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(MSBuildProjectName)' == 'FAudio'">
+		<ClCompile>
+			<AdditionalIncludeDirectories>
+				$(MSBuildThisFileDirectory)external\SDL\include;
+				%(AdditionalIncludeDirectories)
+			</AdditionalIncludeDirectories>
+		</ClCompile>
+
+		<Link>
+			<AdditionalLibraryDirectories>
+				$(MSBuildThisFileDirectory)x64\Release;
+				$(MSBuildThisFileDirectory)external\SDL\VisualC\x64\Release;
+				%(AdditionalLibraryDirectories)
+			</AdditionalLibraryDirectories>
+
+			<AdditionalDependencies>
+				SDL3.lib;
+				%(AdditionalDependencies)
+			</AdditionalDependencies>
+		</Link>
+	</ItemDefinitionGroup>
+</Project>

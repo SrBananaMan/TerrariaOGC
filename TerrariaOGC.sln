@@ -5,7 +5,7 @@ VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TerrariaOGC", "TerrariaOGC\TerrariaOGC.csproj", "{1AFFDFE4-EAF5-4198-9367-E71F49A0E327}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FNA.NetFramework", "FNA\FNA.NetFramework.csproj", "{CE90D7D0-E9BC-42D3-8862-2E8EFA887D60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FNA.NetFramework", "external\FNA\FNA.NetFramework.csproj", "{CE90D7D0-E9BC-42D3-8862-2E8EFA887D60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
