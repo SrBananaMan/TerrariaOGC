@@ -3,7 +3,6 @@ using ExtractStfs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -20,8 +19,6 @@ namespace TerrariaOGC
         private Dictionary<UiSound, SoundPlayer> sounds;
         private PrivateFontCollection privateFonts;
         private FontFamily andyFontFamily;
-        private string tccsExePath;
-        private const string TccsVersion = "1.01";
         private readonly string baseDir = AppDomain.CurrentDomain.BaseDirectory;
         private string tccsDir;
 
@@ -35,12 +32,11 @@ namespace TerrariaOGC
         private string selectedIsoPath;
         private TextBox[] fileTextBoxes;
         private Control[] fileBrowseButtons;
-        private BackgroundWorker extractionWorker;
 
         private readonly string[] requiredFiles =
         {
             "msvcp71.dll", "msvcr71.dll", "xWMAEncode.exe",
-            "unbundler.exe", "xbdecompress.exe", "xbdm.dll"
+            "unbundler.exe", "xbdecompress.exe", "xbdm.dll", "ffmpeg.exe"
         };
 
         private enum UiSound { Click, Hover, Success }
@@ -49,7 +45,6 @@ namespace TerrariaOGC
         {
             Icon = Properties.Resources.TerrariaOGC;
             tccsDir = Path.Combine(baseDir, "tools", "TCCS");
-            tccsExePath = Path.Combine(tccsDir, "TCCS.exe");
             fileBrowseButtons = new Control[requiredFiles.Length];
             fileTextBoxes = new TextBox[requiredFiles.Length];
             LoadEmbeddedAndyFont();
@@ -133,7 +128,9 @@ namespace TerrariaOGC
         {
             Text = "TerrariaOGC";
             Width = 800;
-            Height = 580;
+            const int prerequisiteRowHeight = 38;
+            int filesPanelHeight = requiredFiles.Length * prerequisiteRowHeight + 22;
+            Height = 580 + filesPanelHeight - 240;
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -175,7 +172,7 @@ namespace TerrariaOGC
                 Left = 30,
                 Top = 130,
                 Width = 740,
-                Height = 240,
+                Height = filesPanelHeight,
                 ColumnCount = 3,
                 RowCount = requiredFiles.Length,
                 BackColor = Color.White,
@@ -187,12 +184,15 @@ namespace TerrariaOGC
             filesPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
 
             for (int i = 0; i < requiredFiles.Length; i++)
+            {
+                filesPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, prerequisiteRowHeight));
                 AddRequiredFileRow(i, requiredFiles[i]);
+            }
 
             var isoPanel = new Panel
             {
                 Left = 30,
-                Top = 410,
+                Top = filesPanel.Bottom + 40,
                 Width = 740,
                 Height = 40,
                 BackColor = Color.White,
@@ -235,7 +235,7 @@ namespace TerrariaOGC
             {
                 Text = "Extract Content",
                 Left = 30,
-                Top = 470,
+                Top = filesPanel.Bottom + 100,
                 Width = 740,
                 Height = 42,
                 Enabled = false,
@@ -254,7 +254,7 @@ namespace TerrariaOGC
             progressBar = new ProgressBar
             {
                 Left = 30,
-                Top = 465,
+                Top = filesPanel.Bottom + 95,
                 Width = 740,
                 Height = 42,
                 Style = ProgressBarStyle.Marquee,
@@ -267,7 +267,7 @@ namespace TerrariaOGC
             statusLabel = new Label
             {
                 Left = 30,
-                Top = 515,
+                Top = filesPanel.Bottom + 145,
                 Width = 740,
                 Height = 20,
                 Font = AndyFont(9),
@@ -283,7 +283,7 @@ namespace TerrariaOGC
             {
                 Text = "Xbox 360 Game ISO:",
                 Left = 30,
-                Top = 385,
+                Top = filesPanel.Bottom + 15,
                 Width = 740,
                 Height = 25,
                 Font = AndyFont(14),
@@ -411,23 +411,23 @@ namespace TerrariaOGC
 
         private void UpdateExtractButton()
         {
-            bool allFilesReady = true;
+            string missingFile = null;
             for (int i = 0; i < requiredFiles.Length; i++)
             {
                 if (!File.Exists(Path.Combine(tccsDir, requiredFiles[i])))
                 {
-                    allFilesReady = false;
+                    missingFile = requiredFiles[i];
                     break;
                 }
             }
 
             bool isoReady = !string.IsNullOrEmpty(selectedIsoPath) && File.Exists(selectedIsoPath);
-            extractButton.Enabled = allFilesReady && isoReady;
+            extractButton.Enabled = missingFile == null && isoReady;
             extractButton.BackColor = extractButton.Enabled
                 ? Color.FromArgb(46, 204, 113)
                 : Color.FromArgb(149, 165, 166);
 
-            statusLabel.Text = !allFilesReady ? "Provide every TCCS file to continue."
+            statusLabel.Text = missingFile != null ? $"Missing prerequisite: {missingFile}"
                              : !isoReady ? "Select an Xbox 360 ISO to continue."
                                               : "Ready to extract.";
             statusLabel.Visible = true;
@@ -436,9 +436,20 @@ namespace TerrariaOGC
         private void ExtractButton_Click(object sender, EventArgs e)
         {
             PlaySound(UiSound.Click);
+            string prereqDir = Path.Combine(baseDir, "Prerequisites");
+            var missingAssets = TccsConverter.GetMissingAssets(prereqDir);
+            if (missingAssets.Count > 0)
+            {
+                MessageBox.Show(this,
+                    $"Copy the Content folder from the TCCS Prerequisites bundle into:\n{prereqDir}\n\n" +
+                    $"Missing items:\n{string.Join("\n", missingAssets)}",
+                    "Missing Prerequisite Assets", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             SetUiExtracting(true);
 
-            extractionWorker = new BackgroundWorker { WorkerReportsProgress = true };
+            var extractionWorker = new BackgroundWorker { WorkerReportsProgress = true };
             extractionWorker.DoWork += ExtractionWorker_DoWork;
             extractionWorker.ProgressChanged += ExtractionWorker_ProgressChanged;
             extractionWorker.RunWorkerCompleted += ExtractionWorker_RunWorkerCompleted;
@@ -452,10 +463,7 @@ namespace TerrariaOGC
             if (e.UserState is string msg && !string.IsNullOrEmpty(msg))
                 statusLabel.Text = msg;
         }
-        private static readonly string[] ValidIsoHashes =
-        {
-            "B8920EA80780C9E778CB8DEA4754F21A984A5746"
-        };
+        private const string ValidIsoHash = "B8920EA80780C9E778CB8DEA4754F21A984A5746";
 
         private static string ComputeSha1(string path)
         {
@@ -490,138 +498,51 @@ namespace TerrariaOGC
             worker?.ReportProgress(3, "Verifying ISO...");
 
             string isoHash = ComputeSha1(iso);
-            bool validHash = false;
-
-            foreach (string hash in ValidIsoHashes)
-            {
-                if (string.Equals(isoHash, hash, StringComparison.OrdinalIgnoreCase))
-                {
-                    validHash = true;
-                    break;
-                }
-            }
-
-            if (!validHash)
+            if (!string.Equals(isoHash, ValidIsoHash, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException(
                     $"ISO hash mismatch.\n\nComputed: {isoHash}\nThis may be the wrong game or version.");
-            
-            
 
-            worker?.ReportProgress(0, "Starting extraction...");
+            string prereqDir = Path.Combine(baseDir, "Prerequisites");
 
-            if (!Directory.Exists(Path.Combine(baseDir, "Prerequisites"))) 
-            throw new DirectoryNotFoundException("The Prerequisites folder was not found.");
-
-            string extractedIsoDir = Path.Combine(baseDir, "extractedISO");
-            string extractedContentDir = Path.Combine(baseDir, "extractedContent");
-            string finalContentDir = Path.Combine(baseDir, "Content");
-            string stfsPackagePath = Path.Combine(
-                extractedIsoDir, "Content", "0000000000000000",
-                "5841128F", "000D0000",
+            string stagingDir = Path.Combine(baseDir, "extraction-" + Guid.NewGuid().ToString("N"));
+            string isoDir = Path.Combine(stagingDir, "ISO");
+            string packagePath = Path.Combine(
+                "Content", "0000000000000000", "5841128F", "000D0000",
                 "A6A68560509F43FCD231E4D1147E7902BDC9C30B58");
+            string stfsPackagePath = Path.Combine(isoDir, packagePath);
+            string stfsDir = Path.Combine(stagingDir, "STFS");
+            string stagedContentDir = Path.Combine(stfsDir, "Content");
+            string finalContentDir = Path.Combine(baseDir, "Content");
 
-            worker?.ReportProgress(5, "Cleaning old extraction folders...");
-            DeleteDirectoryIfExists(extractedIsoDir);
-            DeleteDirectoryIfExists(extractedContentDir);
-
-            var outputWriter = new StringWriter();
-            var errorWriter = new StringWriter();
-
-            TextWriter oldOut = Console.Out;
-            TextWriter oldError = Console.Error;
-            Console.SetOut(outputWriter);
-            Console.SetError(errorWriter);
-            bool success = false;
             try
             {
-                worker?.ReportProgress(10, "Extracting Xbox 360 ISO...");
-                int isoExitCode = ExtractIsoApp.Run(iso, extractedIsoDir);
-
-                if (isoExitCode != 0)
-                    throw new ApplicationException(
-                        $"ISO extraction failed with exit code {isoExitCode}.\n\n" +
-                        $"Output:\n{outputWriter}\n\nError:\n{errorWriter}");
-
-                worker?.ReportProgress(45, "Finding STFS content package...");
+                worker?.ReportProgress(10, "Extracting STFS package from Xbox 360 ISO...");
+                new XisoTool().Extract(iso, isoDir, packagePath);
 
                 if (!File.Exists(stfsPackagePath))
-                    throw new FileNotFoundException("The STFS content package was not found after ISO extraction.", stfsPackagePath);
+                    throw new FileNotFoundException("The STFS content package was not found in the ISO.", stfsPackagePath);
 
                 worker?.ReportProgress(50, "Extracting STFS content package...");
-                StfsExtractor.Extract(stfsPackagePath, extractedContentDir);
+                StfsExtractor.Extract(stfsPackagePath, stfsDir);
+                Directory.Delete(isoDir, true);
 
-                worker?.ReportProgress(75, "Cleaning extracted ISO folder...");
-                DeleteDirectoryIfExists(extractedIsoDir);
+                if (!Directory.Exists(stagedContentDir))
+                    throw new DirectoryNotFoundException("The STFS package did not contain a Content folder.");
 
-                string extractedContentContentDir = Path.Combine(extractedContentDir, "Content");
+                worker?.ReportProgress(80, "Running TCCS conversion...");
+                TccsConverter.Run(stagedContentDir, prereqDir, tccsDir, version: 1,
+                    progress: (pct, msg) => worker?.ReportProgress(80 + pct * 19 / 100, msg));
 
-                if (!Directory.Exists(extractedContentContentDir))
-                    throw new DirectoryNotFoundException(
-                        "STFS extraction completed, but extractedContent\\Content was not found: " + extractedContentContentDir);
-
-                worker?.ReportProgress(80, "Moving Content folder...");
-                DeleteDirectoryIfExists(finalContentDir);
-                Directory.Move(extractedContentContentDir, finalContentDir);
-                DeleteDirectoryIfExists(extractedContentDir);
-
-                worker?.ReportProgress(90, "Running TCCS conversion...");
-                TccsConverter.Run(contentDir: Path.Combine(baseDir, "Content"), prereqDir: Path.Combine(baseDir, "Prerequisites"), toolsDir: tccsDir, version: 1, blockAlignment: 128, progress: (pct, msg) => worker?.ReportProgress(90 + pct / 10, msg));
-
-                worker?.ReportProgress(100, "Extraction complete.");
-                success = true;
+                Directory.Move(stagedContentDir, finalContentDir);
             }
             finally
             {
-                Console.SetOut(oldOut);
-                Console.SetError(oldError);
-                outputWriter.Dispose();
-                errorWriter.Dispose();
-
-                if (!success)
-                {
-                    DeleteDirectoryIfExists(extractedIsoDir);
-                    DeleteDirectoryIfExists(extractedContentDir);
-                    DeleteDirectoryIfExists(finalContentDir);
-                }
+                if (Directory.Exists(stagingDir))
+                    Directory.Delete(stagingDir, true);
             }
+
+            worker?.ReportProgress(100, "Extraction complete.");
         }
-
-        private void RunTccs()
-        {
-            string contentDir = Path.Combine(baseDir, "Content");
-
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = tccsExePath,
-                Arguments = $"--version {TccsVersion} --decompress no --block 128 --content {Quote(contentDir)} --yes",
-                WorkingDirectory = tccsDir,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-            startInfo.EnvironmentVariables["PATH"] = tccsDir + ";" + startInfo.EnvironmentVariables["PATH"];
-
-            using (var process = Process.Start(startInfo))
-            {
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                if (process.ExitCode != 0)
-                    throw new ApplicationException(
-                        $"TCCS failed with exit code {process.ExitCode}.\n\nOutput:\n{output}\n\nError:\n{error}");
-            }
-        }
-
-        private static void DeleteDirectoryIfExists(string path)
-        {
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
-        }
-
-        private static string Quote(string value) =>
-            "\"" + (value ?? "").Replace("\"", "\\\"") + "\"";
 
         private void ExtractionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

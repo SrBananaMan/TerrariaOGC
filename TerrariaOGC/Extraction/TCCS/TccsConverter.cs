@@ -1,5 +1,5 @@
 ﻿using System;
-using System;
+using System.Collections.Generic;
 using System.IO;
 using TCCS.EndianUtils;
 using TCCS.Handlers;
@@ -9,6 +9,29 @@ namespace TCCS
 {
     public static class TccsConverter
     {
+        private static readonly string[] AssetDirectories = { "Fonts", "Achievements", "Images", "UI" };
+        private static readonly string[] AssetFiles = { "ACB.tga", "PEGI.xnb", "USK.xnb" };
+
+        internal static List<string> GetMissingAssets(string prereqDir)
+        {
+            string content = Path.Combine(prereqDir, "Content");
+            var missing = new List<string>();
+
+            foreach (string directory in AssetDirectories)
+            {
+                if (!Directory.Exists(Path.Combine(content, directory)))
+                    missing.Add(Path.Combine("Content", directory));
+            }
+
+            foreach (string file in AssetFiles)
+            {
+                if (!File.Exists(Path.Combine(content, file)))
+                    missing.Add(Path.Combine("Content", file));
+            }
+
+            return missing;
+        }
+
         public static ushort BlockSetting { get; private set; } = 128;
 
         public static void Run(
@@ -28,6 +51,9 @@ namespace TCCS
                 Report(progress, 5, "Decompressing content files...");
                 DecompressContent(contentDir, toolsDir);
             }
+
+            Report(progress, 30, "Converting sound effects...");
+            SoundEffectConverter.ConvertDirectory(Path.Combine(contentDir, "Sounds"), toolsDir);
 
             Report(progress, 40, "Reading music files...");
             WBEntry[] entries;
@@ -209,14 +235,11 @@ namespace TCCS
             if (Directory.Exists(fonts) && !Directory.Exists(fontsOld))
                 Directory.Move(fonts, fontsOld);
 
-            CopyDirectory(Path.Combine(prereqContent, "Fonts"), Path.Combine(contentDir, "Fonts"));
-            CopyDirectory(Path.Combine(prereqContent, "Achievements"), Path.Combine(contentDir, "Achievements"));
-            CopyDirectory(Path.Combine(prereqContent, "Images"), Path.Combine(contentDir, "Images"));
-            CopyDirectory(Path.Combine(prereqContent, "UI"), Path.Combine(contentDir, "UI"));
+            foreach (string directory in AssetDirectories)
+                CopyDirectory(Path.Combine(prereqContent, directory), Path.Combine(contentDir, directory));
 
-            File.Copy(Path.Combine(prereqContent, "ACB.tga"), Path.Combine(contentDir, "ACB.tga"), true);
-            File.Copy(Path.Combine(prereqContent, "PEGI.xnb"), Path.Combine(contentDir, "PEGI.xnb"), true);
-            File.Copy(Path.Combine(prereqContent, "USK.xnb"), Path.Combine(contentDir, "USK.xnb"), true);
+            foreach (string file in AssetFiles)
+                File.Copy(Path.Combine(prereqContent, file), Path.Combine(contentDir, file), true);
         }
 
         private static void RunTool(string toolsDir, string exe, string args)

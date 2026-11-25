@@ -57,7 +57,7 @@ namespace ExtractIso
         private readonly byte[] _buffer = new byte[XisoConstants.BufferSize];
         private long _seekOffset;
 
-        public void Extract(string isoPath, string outputDirectory)
+        public void Extract(string isoPath, string outputDirectory, string relativeFilePath = null)
         {
             using (var xiso = File.Open(isoPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -68,7 +68,8 @@ namespace ExtractIso
                 Directory.CreateDirectory(outputDirectory);
 
                 long rootStart = rootSector * XisoConstants.SectorSize + _seekOffset;
-                TraverseDirectory(xiso, rootStart, outputDirectory, new HashSet<long>());
+                string target = relativeFilePath == null ? null : Path.Combine(outputDirectory, relativeFilePath);
+                ProcessNode(xiso, rootStart, 0, outputDirectory, new HashSet<long>(), target);
             }
         }
 
@@ -90,12 +91,7 @@ namespace ExtractIso
             throw new InvalidDataException(name + " is not a valid Xbox ISO.");
         }
 
-        private void TraverseDirectory(FileStream xiso, long dirStart, string outputDir, HashSet<long> visited)
-        {
-            ProcessNode(xiso, dirStart, 0, outputDir, visited);
-        }
-
-        private void ProcessNode(FileStream xiso, long dirStart, ushort offsetDwords, string outputDir, HashSet<long> visited)
+        private void ProcessNode(FileStream xiso, long dirStart, ushort offsetDwords, string outputDir, HashSet<long> visited, string target)
         {
             long pos = dirStart + offsetDwords * 4L;
             if (!visited.Add(pos)) return;
@@ -104,28 +100,31 @@ namespace ExtractIso
             var entry = ReadEntry(xiso);
             if (entry == null) return;
 
-            if (entry.LeftOffsetDwords != 0) ProcessNode(xiso, dirStart, entry.LeftOffsetDwords, outputDir, visited);
+            if (entry.LeftOffsetDwords != 0) ProcessNode(xiso, dirStart, entry.LeftOffsetDwords, outputDir, visited, target);
 
-            ProcessEntry(xiso, entry, outputDir, visited);
+            ProcessEntry(xiso, entry, outputDir, visited, target);
 
-            if (entry.RightOffsetDwords != 0) ProcessNode(xiso, dirStart, entry.RightOffsetDwords, outputDir, visited);
+            if (entry.RightOffsetDwords != 0) ProcessNode(xiso, dirStart, entry.RightOffsetDwords, outputDir, visited, target);
         }
 
-        private void ProcessEntry(FileStream xiso, XisoEntry entry, string outputDir, HashSet<long> visited)
+        private void ProcessEntry(FileStream xiso, XisoEntry entry, string outputDir, HashSet<long> visited, string target)
         {
             string entryPath = Path.Combine(outputDir, entry.FileName);
 
             if (entry.IsDirectory)
             {
+                if (target != null && !target.StartsWith(entryPath + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                    return;
+
                 Directory.CreateDirectory(entryPath);
 
                 if (entry.FileSize > 0)
                 {
                     long subStart = entry.StartSector * XisoConstants.SectorSize + _seekOffset;
-                    TraverseDirectory(xiso, subStart, entryPath, visited);
+                    ProcessNode(xiso, subStart, 0, entryPath, visited, target);
                 }
             }
-            else
+            else if (target == null || string.Equals(entryPath, target, StringComparison.OrdinalIgnoreCase))
             {
                 ExtractFile(xiso, entry, entryPath);
             }
